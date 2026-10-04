@@ -1,0 +1,40 @@
+import { randomUUID } from 'node:crypto';
+import type { Transaction } from '../database/transaction';
+import { reference, safeData, type DataContract } from '../execution/context';
+export class OutboxRepository {
+  async insert(
+    transaction: Transaction,
+    contract: DataContract,
+    idempotencyKey: string,
+    payload: unknown,
+  ) {
+    return transaction.required(async () => {
+      const data = safeData(contract, payload);
+      const key = reference(idempotencyKey);
+      const id = randomUUID();
+      const { actor, target, correlationId } = transaction.context;
+      await transaction.query(
+        `INSERT INTO public.outbox_work
+      (id, work_type, schema_version, idempotency_key, actor_kind, actor_reference, identity_plane, actor_tenant_id, system_reason, target_type, target_reference, tenant_id, correlation_id, payload)
+      VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14)`,
+        [
+          id,
+          contract.type,
+          contract.version,
+          key,
+          actor.kind,
+          actor.reference,
+          actor.plane,
+          actor.tenantId,
+          actor.kind === 'system' ? actor.reason : null,
+          target.type,
+          target.reference,
+          target.tenantId,
+          correlationId,
+          data,
+        ],
+      );
+      return id;
+    });
+  }
+}

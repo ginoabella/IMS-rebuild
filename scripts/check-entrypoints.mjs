@@ -56,6 +56,15 @@ async function check(entrypoint) {
       );
     });
     assert.equal(message.entrypoint, entrypoint);
+    if (entrypoint === 'worker') {
+      assert.equal(message.state, 'failed');
+      const [code] = await exit;
+      assert.equal(code, 1);
+      console.log(
+        'PASS: worker fails clearly without a provisioned database and opens no listener',
+      );
+      return;
+    }
     assert.equal(
       message.state,
       entrypoint === 'deployment' ? 'complete' : 'ready',

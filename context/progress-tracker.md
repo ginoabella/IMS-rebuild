@@ -9,7 +9,9 @@ using its nine phases and numbered implementation units. The delivery plan exist
 P1-U2 is complete: workspace, app skeletons and required quality checks pass.
 P1-U3 is complete: shared services, baseline migrations, typed backend
 configuration and health are verified. P1-U4 is complete: shared web primitives
-and distinct platform/command-center shells are verified. P1-U5 is next.
+and distinct platform/command-center shells are verified. P1-U5a transactional audit/outbox and P1-U5b durable worker delivery are complete;
+P1-U5c recovery verification/operational handoff and parent P1-U5 are complete.
+P1-U6 shared file storage is next, subject to its provider/access decision.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
 and short questions only when a feature needs a decision.
@@ -18,6 +20,18 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 
 ## Completed
+
+- P1-U5c and parent P1-U5 recovery/operational handoff: integrated real-PostgreSQL
+  process/outage/drain matrix, focused command, CI wiring and full Docker checks
+  passed. See [P1-U5c evidence](../docs/status/p1-u5c-evidence.md).
+
+- P1-U5b durable pg-boss workers, atomic queue handoff, idempotent sample delivery,
+  bounded retries and retained outcomes; focused PostgreSQL and full Docker checks
+  passed. See [P1-U5b evidence](../docs/status/p1-u5b-evidence.md).
+
+- P1-U5a transactional audit/outbox, trusted attribution, append-only runtime
+  protections and safe logging; focused PostgreSQL and full Docker checks passed.
+  See [P1-U5a evidence](../docs/status/p1-u5a-evidence.md).
 
 - P1-U4 shared theme, accessible primitives and platform/command-center shells;
   all 12 production browser checks and full workspace/foundation checks passed.
@@ -38,7 +52,7 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None. P1-U4 completed on 2026-10-04 18:18 +08:00; P1-U5 is next.
+None. P1-U5c and parent P1-U5 completed 2026-10-04 20:18 +08:00 (Asia/Manila).
 
 ## Unit Checkpoints
 
@@ -163,22 +177,121 @@ None. P1-U4 completed on 2026-10-04 18:18 +08:00; P1-U5 is next.
   checks and production accessibility certification are unverified; deferred
   product decisions remain unapproved.
 
+### P1-U5 — Transactional audit and durable execution
+
+- **Status:** complete; 2026-10-04 20:18 +08:00 (Asia/Manila).
+- **Requirement:** Phase 1 P1-U5; dependency P1-U3 is complete.
+- **Scope and acceptance:** [parent feature spec](feature-specs/p1-u5-transactional-audit-and-durable-execution.md)
+  and its a/b/c subunits define AC-01–10.
+- **Completed:** atomic sample/audit/outbox writes, trusted context, append-only
+  runtime protections, coordinated pg-boss provisioning/handoff, idempotent
+  delivery, bounded retries, retained results, process/database recovery and
+  bounded drain; operational runbook, architecture decisions and CI integration.
+- **Required checks and verification:** `./dev exec pnpm check:durability` and
+  `./dev check` passed with exit status 0. Real PostgreSQL/PostGIS and independent
+  workers passed the full AC-01–10 matrix. Two Docker replicas reported ready with
+  no published ports and drained to exit 0; HTTP health stayed 200. See
+  [integrated evidence](../docs/status/p1-u5c-evidence.md) and its retained snapshots.
+- **Decisions:** pg-boss 10.4.2/schema 24, shared-transaction handoff, retained
+  result/receipt ownership, safe checked-out client errors, awaited public queue
+  pull/ack APIs and shared shutdown deadline; see
+  [worker contract](../docs/architecture/durable-worker-delivery.md).
+- **Remaining:** none within this foundation boundary. Authentication, actual
+  adapters, retention/manual recovery permissions and production HA remain with
+  their owning units. The isolated connection outage does not prove server crash,
+  disk recovery or live PBX/SMS/storage behavior. Hosted CI execution is unverified.
+
+### P1-U5a — Transactional audit and outbox
+
+- **Status:** complete; 2026-10-04 19:11 +08:00 (Asia/Manila).
+- **Scope, dependencies and acceptance:** [feature spec](feature-specs/p1-u5a-transactional-audit-and-outbox.md)
+  owns the detailed boundary and scoped parent acceptance criteria.
+- **Completed:** explicit same-connection transaction handle; immutable trusted
+  actor/target context; event-specific safe metadata/payload validation; audit write
+  port and SQL repository; outbox repository; versioned constraints/indexes/grants;
+  safe structured logging/correlation and disposable database fixture checks.
+- **Required checks and verification:** `./dev exec pnpm check:audit-outbox` and
+  `./dev check` passed with exit status 0. Real PostgreSQL commit/open-transaction
+  invisibility, rollback, independent audit/outbox failures, caught-error rollback,
+  attribution/SQL constraints, actual runtime INSERT and append-only/bypass denial,
+  sentinel exclusion, fresh/rerun migrations and existing configuration/entry-point
+  isolation checks passed. `./dev migrate` and `./dev health` passed.
+  [Commands, assertions and limitations](../docs/status/p1-u5a-evidence.md).
+- **Decisions:** module-owned SQL, frozen actor scope separate from target scope,
+  code-owned primitive field allowlists, database timestamps, immutable outbox
+  intent and separately mutable pending/accepted handoff. See the
+  [write contract](../docs/architecture/transactional-audit-outbox.md).
+- **Remaining:** none within P1-U5a. Authentication/domain authorization remain
+  with P2/domain units. Worker delivery and integrated recovery/CI wiring are now verified in P1-U5b/c;
+  parent P1-U5 is complete.
+
+### P1-U5b — Durable worker delivery
+
+- **Status:** complete; 2026-10-04 19:45 +08:00 (Asia/Manila).
+- **Scope, dependencies and acceptance:** [feature spec](feature-specs/p1-u5b-durable-worker-delivery.md)
+  owns the detailed boundary and scoped parent acceptance criteria.
+- **Completed:** pinned pg-boss 10.4.2, deployment-owned schema provisioning,
+  atomic queue/outbox handoff, independent worker, retained results/receipts and
+  durable sample sink. Worker settings and runtime grants are bounded.
+- **Completed verification:** real PostgreSQL handoff crash barriers, two OS
+  workers, restart-safe sink acknowledgement, duplicate delivery, bounded retry,
+  terminal failures, scoped keys and safe logging passed. Audit/outbox regressions
+  passed; two runtime-only Docker replicas reported ready with no published ports.
+  Added worker contract, settings/startup/recovery runbook and safe status command.
+- **Verification:** `./dev exec pnpm check:worker-delivery`,
+  `./dev exec pnpm check:audit-outbox`, frozen install and `./dev check` passed
+  with exit status 0. Timeout exhaustion, isolated PostgreSQL connectivity
+  interruption/backoff, actor/correlation traces, sentinel exclusion and runtime
+  permissions passed. Both Docker replicas drained and exited 0; HTTP remained ready.
+  Scoped lint/format, documentation links and whitespace passed.
+  [Commands, assertions and limitations](../docs/status/p1-u5b-evidence.md).
+- **Decisions:** atomic handoff through pg-boss same-connection adapter; scoped
+  tenant/work-type keys; queue owns scheduling, retained outcomes own execution
+  facts; no automatic retention cleanup. See the
+  [worker contract](../docs/architecture/durable-worker-delivery.md) and
+  [runbook](../docs/runbooks/durable-workers.md).
+- **Remaining:** none within P1-U5b. Combined recovery rehearsal, integrated
+  `check:durability`/CI wiring and parent completion are now verified in P1-U5c.
+
+### P1-U5c — Recovery verification and operational handoff
+
+- **Status:** complete; 2026-10-04 20:18 +08:00 (Asia/Manila).
+- **Scope, dependencies and acceptance:** [feature spec](feature-specs/p1-u5c-recovery-verification-and-operational-handoff.md)
+  owns AC-07/10 and integrated confirmation of AC-01–09; a/b were reverified.
+- **Completed:** focused command/foundation/CI wiring; controlled SIGKILL at
+  handoff/execution/accepted sink; real PostgreSQL connectivity outage at three
+  boundaries; completed/exhausted state and attribution across restart; successful
+  and forced bounded drains; safe snapshots and operational owner/escalation docs.
+- **Recovery fixes:** safe errors for checked-out database clients; awaited public
+  pg-boss fetch/complete/fail and consumer/dispatch drain before pool close;
+  shared deadline; startup queue capability checks. Preserved a/b contracts.
+- **Verification:** `./dev exec pnpm check:durability` and full `./dev check` exited
+  0. Final drain exited 0 in 183ms; stalled drain exited 1 at 7014ms and recovered
+  with one effect/receipt. Both Docker replicas reported ready without ports,
+  drained/closed connections and exited 0. HTTP live/ready stayed 200; development
+  backlog was empty. Scoped lint/format, relative links and whitespace passed.
+  [Evidence and limitations](../docs/status/p1-u5c-evidence.md).
+- **Remaining:** none within P1-U5c. Fixture sink/local connection interruption
+  does not prove production HA, PostgreSQL host/disk recovery or live adapters.
+  Audit/failures remain retained; manual retry and retention policy are deferred.
+
 ## Next Up
 
-P1-U5 transactional audit and durable execution, following its scope in the
-implementation plan.
-Ask one focused product question only when the next dependent feature needs it.
+[P1-U6 — shared file storage access](implementation-plan.md#p1-u6--establish-shared-file-storage-access).
+Its storage provider/access decision remains unapproved; P1-U6 has not started.
+P1-U5a/b/c and the parent acceptance matrix are complete.
+Ask one focused product question only when the next dependent feature starts.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; the other 46 units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 is `complete`; the other 45 units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
 
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
-| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; others planned | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
+| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5 complete; P1-U6 planned | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1, P2-U2, P2-U3, P2-U4 | planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
@@ -248,6 +361,39 @@ recommendations in P1-U1 remain unapproved.
 
 
 ## Session Notes
+
+- 2026-10-04 20:18 +08:00 (Asia/Manila) — Completed P1-U5c and parent P1-U5. Focused
+  durability and full Docker checks passed AC-01–10. Corrected checked-out
+  connection errors and unawaited pg-boss acknowledgements; verified queue
+  readiness, process/database recovery, retained terminal states and bounded
+  drain. Two Docker replicas exited 0; HTTP stayed ready. Saved safe snapshots,
+  runbook and evidence; cleared active work. P1-U6 requires its storage decision.
+
+- 2026-10-04 19:45 +08:00 (Asia/Manila) — Completed P1-U5b. Atomic pg-boss handoff,
+  independent workers, restart-safe sample sink, scoped keys, bounded retries and
+  retained failures passed focused real-PostgreSQL checks. Frozen install,
+  audit/outbox regressions and full `./dev check` passed. Verified two Docker worker
+  replicas, graceful exit 0 and independent HTTP health; added contract, runbook
+  and evidence. Cleared active work. P1-U5c remains planned; parent remains incomplete.
+
+- 2026-10-04 19:11 +08:00 (Asia/Manila) — Completed P1-U5a. Transaction-bound
+  audit/outbox writes, structural attribution, append-only grants/trigger and safe
+  metadata/logging passed focused real-PostgreSQL checks. Full `./dev check`,
+  deployment migration and health passed. Added write/handoff contract and evidence;
+  cleared active work. P1-U5b/c remain planned and parent P1-U5 remains incomplete.
+
+
+- 2026-10-04 18:40 +08:00 (Asia/Manila) — Split P1-U5 into three separate feature specs at the user's
+  request. Parent now holds shared scope and acceptance matrix; a/b/c own detailed
+  contracts and sequential verification boundaries. Updated tracker/index links.
+  Documentation link, acceptance coverage and whitespace checks passed;
+  runtime implementation remains planned.
+
+- 2026-10-04 18:33 +08:00 — Drafted P1-U5 feature spec from repository guidance,
+  Phase 1, required context and current backend/migration boundaries. Recommended
+  three sequential subunits with explicit transaction, delivery and recovery
+  checks. Relative-file links, acceptance coverage and whitespace checks passed.
+  Documentation only; P1-U5 and its proposed subunits remain planned.
 
 - 2026-10-04 18:18 +08:00 — Completed the approved three-subunit P1-U4 sequence.
   Shared theme/primitives and distinct operations shells passed 12 production

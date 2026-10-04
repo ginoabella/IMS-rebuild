@@ -216,7 +216,7 @@ services:
       - runtime_postgres_password
       - session_redis_auth
       - realtime_redis_auth
-    volumes:
+    volumes: &runtime-volumes
       - ../../services/backend:/workspace/services/backend:ro
       - ../../packages/config:/workspace/packages/config:ro
       - ../../packages/contracts:/workspace/packages/contracts:ro
@@ -246,6 +246,30 @@ services:
       timeout: 5s
       retries: 12
       start_period: 15s
+
+  worker:
+    profiles: [workers]
+    image: myims-rebuild-dev-workspace
+    build: *workspace-build
+    restart: unless-stopped
+    stop_grace_period: 40s
+    environment:
+      MYIMS_OWNER_PATH: /workspace/services/backend
+      DATABASE_URL: postgresql://myims_runtime@postgres:5432/myims
+      DATABASE_PASSWORD_FILE: /run/secrets/runtime_postgres_password
+      WORKER_BATCH: ${WORKER_BATCH:-20}
+      WORKER_CONCURRENCY: ${WORKER_CONCURRENCY:-2}
+      WORKER_POLL_MS: ${WORKER_POLL_MS:-1000}
+      WORKER_ATTEMPTS: ${WORKER_ATTEMPTS:-3}
+      WORKER_RETRY_SECONDS: ${WORKER_RETRY_SECONDS:-2}
+      WORKER_TIMEOUT_SECONDS: ${WORKER_TIMEOUT_SECONDS:-30}
+      WORKER_SHUTDOWN_MS: ${WORKER_SHUTDOWN_MS:-10000}
+    secrets: [runtime_postgres_password]
+    volumes: *runtime-volumes
+    command:
+      ['node', '/workspace/services/backend/dist/entrypoints/worker/main.js']
+    depends_on:
+      postgres: { condition: service_healthy }
 
 secrets:
   runtime_postgres_password:

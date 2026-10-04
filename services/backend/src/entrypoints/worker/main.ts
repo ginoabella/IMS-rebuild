@@ -1,30 +1,32 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
+import { parseDatabaseConfig, parseWorkerConfig } from '@myims/config';
+import { resolveConnection } from '../../infrastructure/configuration';
+import { DeliveryWorker } from '../../infrastructure/worker/delivery';
+import { installWorkerShutdown } from '../../infrastructure/worker/shutdown';
 import { WorkerModule } from './worker.module';
-
 async function main() {
+  const settings = parseWorkerConfig(process.env);
+  const url = resolveConnection(parseDatabaseConfig(process.env), 'DATABASE');
   const app = await NestFactory.createApplicationContext(WorkerModule, {
     logger: false,
   });
-  const keepAlive = setInterval(() => {}, 60_000);
-  const shutdown = () => {
-    clearInterval(keepAlive);
-    void app.close().catch(() => {
-      process.exitCode = 1;
-    });
-  };
-  process.once('SIGINT', shutdown);
-  process.once('SIGTERM', shutdown);
-  console.log(
+  const worker = new DeliveryWorker(url, settings);
+  try {
+    await worker.start();
+  } catch (error) {
+    await app.close();
+    throw error;
+  }
+  installWorkerShutdown(worker, () => app.close());
+}
+void main().catch(() => {
+  console.error(
     JSON.stringify({
       entrypoint: 'worker',
-      state: 'ready',
-      capabilities: 'pending',
+      state: 'failed',
+      failureCode: 'startup_failed',
     }),
   );
-}
-
-void main().catch(() => {
-  console.error('Worker foundation startup failed');
   process.exitCode = 1;
 });

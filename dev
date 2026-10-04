@@ -36,13 +36,17 @@ case "$action" in
   health) workspace_exec node scripts/health-status.mjs ;;
   foundation-check) workspace_exec pnpm check:foundation ;;
   backend) compose logs -f backend ;;
+  worker-up) workspace_exec pnpm build:backend; workspace_exec pnpm db:migrate
+      compose --profile workers up -d --scale "worker=${1:-1}" worker ;;
+  worker-down) compose --profile workers stop worker ;;
+  worker-logs) compose --profile workers logs -f worker ;;
   command|platform|public|responder|public-mobile)
       workspace_exec pnpm "dev:$action" ;;
   check) workspace_exec pnpm check; workspace_exec pnpm check:foundation ;;
   exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
       workspace_exec "$@" ;;
   status) compose --profile workspace ps ;;
-  down) compose --profile workspace down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|health|foundation-check}'
+  down) compose --profile workspace --profile workers down ;;
+  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|health|foundation-check|worker-up|worker-down|worker-logs}'
      [ "$action" = help ] || exit 1 ;;
 esac

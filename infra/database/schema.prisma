@@ -1,4 +1,6 @@
-// No feature models yet. Owning units add their domain schema and SQL migrations.
+// Module-owned audit/outbox/results/receipt SQL lives in versioned migrations.
+// pg-boss owns its queue schema; trusted deployment provisions it under the same lock.
+// No generated Prisma client consumer exists yet.
 datasource db {
   provider = "postgresql"
 }

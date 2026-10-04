@@ -74,6 +74,20 @@ before startup. `/health/live` is process-only, while `/health/ready` checks the
 baseline/PostGIS and both authenticated Redis services with bounded timeouts.
 See the [backend runbook](../docs/runbooks/backend-foundation.md).
 
+P1-U5a adds explicit same-connection transaction handles, module-owned append-only
+SQL audit and immutable PostgreSQL outbox intent with separately mutable handoff
+status. The [write contract](../docs/architecture/transactional-audit-outbox.md)
+defines attribution, safe metadata/logging, grants and the P1-U5b handoff. Runtime entry points never migrate. P1-U5b adds independent pg-boss workers,
+transactional queue/outbox handoff, retained results/receipts and a durable sample
+destination. The [worker contract](../docs/architecture/durable-worker-delivery.md)
+defines queue ownership, scoped idempotency and runtime grants;
+[worker operations](../docs/runbooks/durable-workers.md) defines startup/settings.
+P1-U5c adds integrated real-database recovery checks to the foundation/CI sequence
+and shares the bounded worker shutdown policy with its process fixture. Database
+interruption uses an isolated test-only connection proxy; the production topology
+is unchanged. Identity authorization, live adapters and retention policies remain
+with their owners.
+
 ## System Boundaries
 
 ### Applications

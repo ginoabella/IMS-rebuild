@@ -31,3 +31,20 @@ Web foundation: [P1-U4 feature spec](../context/feature-specs/p1-u4-web-primitiv
 [preview and browser checks](runbooks/web-ui.md).
 
 P1-U4 is complete; see [verification evidence and limits](status/p1-u4-evidence.md).
+
+Durability foundation: [P1-U5 parent overview and acceptance matrix](../context/feature-specs/p1-u5-transactional-audit-and-durable-execution.md).
+P1-U5a/b/c and the parent acceptance matrix are verified and complete.
+
+Separate P1-U5 implementation specs:
+
+- [P1-U5a — Transactional audit and outbox](../context/feature-specs/p1-u5a-transactional-audit-and-outbox.md)
+- [P1-U5b — Durable worker delivery](../context/feature-specs/p1-u5b-durable-worker-delivery.md)
+- [P1-U5c — Recovery verification and operational handoff](../context/feature-specs/p1-u5c-recovery-verification-and-operational-handoff.md)
+
+- [Transactional audit/outbox write contract](architecture/transactional-audit-outbox.md)
+- [P1-U5a verification evidence](status/p1-u5a-evidence.md)
+
+- [Durable worker delivery contract](architecture/durable-worker-delivery.md)
+- [Durable worker runbook](runbooks/durable-workers.md)
+- [P1-U5b verification evidence](status/p1-u5b-evidence.md)
+- [P1-U5c integrated recovery evidence](status/p1-u5c-evidence.md)

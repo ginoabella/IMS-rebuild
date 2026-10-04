@@ -1,0 +1,354 @@
+{
+  "verifiedAt": "2026-10-04 20:18 +08:00 (Asia/Manila)",
+  "environment": {
+    "runtime": "Docker workspace",
+    "node": "22.23.3",
+    "pnpm": "10.12.1",
+    "postgres": "17/PostGIS",
+    "pg": "8.23.1",
+    "pgBoss": "10.4.2",
+    "queueSchema": 24
+  },
+  "commands": [
+    {
+      "command": "./dev exec pnpm check:durability",
+      "exitCode": 0
+    },
+    {
+      "command": "./dev check",
+      "exitCode": 0
+    }
+  ],
+  "fixtureSettings": {
+    "pollMs": 100,
+    "retrySeconds": 1,
+    "timeoutSeconds": 5,
+    "concurrency": 2,
+    "attempts": 3,
+    "shutdownMs": 1000,
+    "outerShutdownGraceMs": 6000
+  },
+  "workerDeployment": {
+    "replicas": 2,
+    "publishedPorts": [],
+    "ready": true,
+    "shutdownExitCodes": [0, 0],
+    "httpLiveStatus": 200,
+    "httpReadyStatus": 200
+  },
+  "assertions": [
+    "PASS: http starts independently and shuts down cleanly",
+    "PASS: worker fails clearly without a provisioned database and opens no listener",
+    "PASS: telephony starts independently and shuts down cleanly",
+    "PASS: deployment starts independently and shuts down cleanly",
+    "PASS: fresh database is unready while liveness remains available",
+    "PASS: fresh migration, concurrent deployment, safe rerun, PostGIS and restricted runtime role",
+    "PASS: database outage returns 503, liveness stays 200, recovery restores readiness",
+    "PASS: sessionRedis outage returns 503, liveness stays 200, recovery restores readiness",
+    "PASS: realtimeRedis outage returns 503, liveness stays 200, recovery restores readiness",
+    "PASS: backend shutdown/restart retains baseline and reconnects",
+    "PASS: missing/invalid configuration and unreadable credentials fail clearly",
+    "PASS: responses and process logs contain no credentials",
+    "PASS: fresh deployment and rerun apply four versioned migrations; fixtures exist only in disposable database",
+    "PASS: same-connection writes invisible while transaction held; commit retains trusted attribution, correlation and pending intent without delivery",
+    "PASS: explicit rollback, forced audit failure, forced outbox failure and swallowed SQL failure cannot return committed success",
+    "PASS: platform/staff/system attribution and tenant separation; invalid structural combinations fail before transaction action",
+    "PASS: database constraints independently reject invalid actor/scope combinations; runtime cannot override initial pending state",
+    "PASS: actual runtime credentials INSERT succeeds; audit rewrite/truncate, timestamp override, trigger/owner bypass and owner-role acquisition denied; intent immutable",
+    "PASS: event-specific field allowlists reject secret/personal sentinels; captured logs sanitize arbitrary exceptions and retain safe correlation/work/attempt fields",
+    "PASS: handoff status is separately mutable while audit history and initiating intent remain retained",
+    "PASS: fresh/rerun coordinated queue schema 24, runtime no DDL/functions/receipt deletion, bounded settings",
+    "PASS: stopped-worker persistence; two independent OS workers deliver; production entrypoint has no listener and drains",
+    "PASS: hard death before/after enqueue rolls back job and handoff together; restart loses no work",
+    "PASS: sink-acceptance death converges across restart, sequential/concurrent duplicates yield one effect, tenant/work keys independent",
+    "PASS: expired hard-crash exhaustion retains failed acknowledgement evidence; malformed queue IDs terminally fail",
+    "PASS: transient retry, bounded exhaustion, unknown type/version, permanent/malformed terminal outcomes and end-to-end sentinel omission",
+    "PASS: worker readiness rejects missing queue claim/acknowledgement capability without listener",
+    "PASS: active handler SIGKILL/restart recovers from shared state; completed and exhausted outcomes/audit survive restart",
+    "PASS: SIGTERM stops new dispatch, finishes in-flight effect or exits within shared deadline leaving recoverable work",
+    "PASS: worker PostgreSQL connectivity interruption retains pending work, reports degradation, backs off and recovers",
+    "PASS: real PostgreSQL interruption at handoff, active execution and accepted effect; no false success, unchanged attribution, restored one effect/receipt; sentinel exclusion"
+  ],
+  "snapshots": [
+    {
+      "scenario": "terminal-before-restart",
+      "succeeded": {
+        "handoff_status": "accepted",
+        "outcome": "succeeded",
+        "attempts": 1,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 1
+      },
+      "exhausted": {
+        "handoff_status": "accepted",
+        "outcome": "failed",
+        "attempts": 3,
+        "failure_code": "retry_exhausted",
+        "effects": 0,
+        "receipts": 0
+      },
+      "attribution": {
+        "succeeded": [
+          {
+            "actor_reference": "fixture-staff",
+            "actor_kind": "tenant_staff",
+            "actor_tenant_id": "tenant-a",
+            "tenant_id": "tenant-a",
+            "correlation_id": "cfc14614-3b37-4ce6-9ced-5f4d0161d350",
+            "metadata": {
+              "revision": 1
+            },
+            "recorded_at": "2026-10-04T12:14:36.953Z"
+          }
+        ],
+        "exhausted": [
+          {
+            "actor_reference": "fixture-staff",
+            "actor_kind": "tenant_staff",
+            "actor_tenant_id": "tenant-a",
+            "tenant_id": "tenant-a",
+            "correlation_id": "f168605e-4e15-4695-94a0-921c583cd2d8",
+            "metadata": {
+              "revision": 1
+            },
+            "recorded_at": "2026-10-04T12:14:52.552Z"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "active-before-kill",
+      "workId": "f362f77e-9d58-493e-9e22-392aa039a889",
+      "handoff_status": "accepted",
+      "outcome": null,
+      "attempts": null,
+      "failure_code": null,
+      "effects": 0,
+      "receipts": 0,
+      "attribution": [
+        {
+          "actor_reference": "fixture-staff",
+          "actor_kind": "tenant_staff",
+          "actor_tenant_id": "tenant-a",
+          "tenant_id": "tenant-a",
+          "correlation_id": "6a08c19b-5638-47ae-b568-53419e7b4006",
+          "metadata": {
+            "revision": 1
+          },
+          "recorded_at": "2026-10-04T12:15:07.497Z"
+        }
+      ]
+    },
+    {
+      "scenario": "active-after-restart",
+      "workId": "f362f77e-9d58-493e-9e22-392aa039a889",
+      "handoff_status": "accepted",
+      "outcome": "succeeded",
+      "attempts": 2,
+      "failure_code": null,
+      "effects": 1,
+      "receipts": 1,
+      "attribution": [
+        {
+          "actor_reference": "fixture-staff",
+          "actor_kind": "tenant_staff",
+          "actor_tenant_id": "tenant-a",
+          "tenant_id": "tenant-a",
+          "correlation_id": "6a08c19b-5638-47ae-b568-53419e7b4006",
+          "metadata": {
+            "revision": 1
+          },
+          "recorded_at": "2026-10-04T12:15:07.497Z"
+        }
+      ]
+    },
+    {
+      "scenario": "terminal-after-restart",
+      "succeeded": {
+        "handoff_status": "accepted",
+        "outcome": "succeeded",
+        "attempts": 1,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 1
+      },
+      "exhausted": {
+        "handoff_status": "accepted",
+        "outcome": "failed",
+        "attempts": 3,
+        "failure_code": "retry_exhausted",
+        "effects": 0,
+        "receipts": 0
+      },
+      "attribution": {
+        "succeeded": [
+          {
+            "actor_reference": "fixture-staff",
+            "actor_kind": "tenant_staff",
+            "actor_tenant_id": "tenant-a",
+            "tenant_id": "tenant-a",
+            "correlation_id": "cfc14614-3b37-4ce6-9ced-5f4d0161d350",
+            "metadata": {
+              "revision": 1
+            },
+            "recorded_at": "2026-10-04T12:14:36.953Z"
+          }
+        ],
+        "exhausted": [
+          {
+            "actor_reference": "fixture-staff",
+            "actor_kind": "tenant_staff",
+            "actor_tenant_id": "tenant-a",
+            "tenant_id": "tenant-a",
+            "correlation_id": "f168605e-4e15-4695-94a0-921c583cd2d8",
+            "metadata": {
+              "revision": 1
+            },
+            "recorded_at": "2026-10-04T12:14:52.552Z"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "graceful-drain",
+      "exitCode": 0,
+      "elapsedMs": 183,
+      "newWork": {
+        "handoff_status": "pending",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 0,
+        "receipts": 0
+      }
+    },
+    {
+      "scenario": "bounded-drain-deadline",
+      "exitCode": 1,
+      "elapsedMs": 7014,
+      "recovered": {
+        "handoff_status": "accepted",
+        "outcome": "succeeded",
+        "attempts": 2,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 1
+      }
+    },
+    {
+      "scenario": "postgres-interruption-before_enqueue",
+      "workId": "80f18020-4690-41f1-a8d3-b4518b61e8cd",
+      "before": {
+        "handoff_status": "pending",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 0,
+        "receipts": 0
+      },
+      "during": {
+        "handoff_status": "pending",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 0,
+        "receipts": 0
+      },
+      "after": {
+        "handoff_status": "accepted",
+        "outcome": "succeeded",
+        "attempts": 1,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 1
+      },
+      "attribution": [
+        {
+          "actor_reference": "fixture-staff",
+          "correlation_id": "fa02401c-4c1a-41a8-9ca6-323c51d8faa4",
+          "metadata": {
+            "revision": 1
+          }
+        }
+      ],
+      "exitCode": 0
+    },
+    {
+      "scenario": "postgres-interruption-before_sink",
+      "workId": "def5b5fd-d958-4e50-be5c-442853acaa67",
+      "before": {
+        "handoff_status": "accepted",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 0,
+        "receipts": 0
+      },
+      "during": {
+        "handoff_status": "accepted",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 0,
+        "receipts": 0
+      },
+      "after": {
+        "handoff_status": "accepted",
+        "outcome": "succeeded",
+        "attempts": 2,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 1
+      },
+      "attribution": [
+        {
+          "actor_reference": "fixture-staff",
+          "correlation_id": "e49bf813-e73a-4c9d-9a17-7ce23379da85",
+          "metadata": {
+            "revision": 1
+          }
+        }
+      ],
+      "exitCode": 0
+    },
+    {
+      "scenario": "postgres-interruption-after_sink",
+      "workId": "9fd96d71-a1e9-426e-bf8e-3a0822b79ed1",
+      "before": {
+        "handoff_status": "accepted",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 0
+      },
+      "during": {
+        "handoff_status": "accepted",
+        "outcome": null,
+        "attempts": null,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 0
+      },
+      "after": {
+        "handoff_status": "accepted",
+        "outcome": "succeeded",
+        "attempts": 2,
+        "failure_code": null,
+        "effects": 1,
+        "receipts": 1
+      },
+      "attribution": [
+        {
+          "actor_reference": "fixture-staff",
+          "correlation_id": "6bd29c33-2f58-4700-8fcc-a04fb0db3dfb",
+          "metadata": {
+            "revision": 1
+          }
+        }
+      ],
+      "exitCode": 0
+    }
+  ]
+}

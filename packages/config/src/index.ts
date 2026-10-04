@@ -140,3 +140,15 @@ export function parseBackendConfig(env: Environment): BackendConfig {
     databasePoolMax: integer(env, 'DATABASE_POOL_MAX', 5, 1, 20),
   };
 }
+
+export function parseWorkerConfig(env: Environment) {
+  return {
+    batch: integer(env, 'WORKER_BATCH', 20, 1, 100),
+    concurrency: integer(env, 'WORKER_CONCURRENCY', 2, 1, 10),
+    pollMs: integer(env, 'WORKER_POLL_MS', 1000, 100, 30000),
+    attempts: integer(env, 'WORKER_ATTEMPTS', 3, 1, 10),
+    retrySeconds: integer(env, 'WORKER_RETRY_SECONDS', 2, 1, 60),
+    timeoutSeconds: integer(env, 'WORKER_TIMEOUT_SECONDS', 30, 5, 300),
+    shutdownMs: integer(env, 'WORKER_SHUTDOWN_MS', 10000, 1000, 30000),
+  };
+}

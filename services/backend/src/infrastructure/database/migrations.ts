@@ -5,6 +5,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 import { Client } from 'pg';
 import { ConfigurationError } from '@myims/config';
 import { loadMigrationConfig } from '../configuration';
+import { provisionQueue } from '../worker/queue';
 const execute = promisify(execFile);
 const DEPLOYMENT_LOCK = 846258113;
 export class DeploymentError extends Error {}
@@ -85,6 +86,7 @@ export async function migrate() {
     } catch (error) {
       throw failure(error, 'Baseline migration');
     }
+    await provisionQueue(client);
     await client.query('BEGIN');
     await client.query(
       "SELECT set_config('myims.runtime_password', $1, true)",
