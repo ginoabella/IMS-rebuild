@@ -7,8 +7,8 @@
 Deliver MyIMS according to [implementation-plan.md](implementation-plan.md),
 using its nine phases and numbered implementation units. The delivery plan exists;
 P1-U2 is complete: workspace, app skeletons and required quality checks pass.
-P1-U3 is in progress: containerize shared services, then establish baseline
-migrations, backend configuration and health.
+P1-U3 is complete: shared services, baseline migrations, typed backend
+configuration and health are verified. P1-U4 is the next planned unit.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
 and short questions only when a feature needs a decision.
@@ -21,6 +21,10 @@ authorizes routine foundation choices, not approval of proposed product rules.
 - P1-U2 workspace and quality checks; detailed evidence and limitations are recorded
   in its checkpoint below and `docs/status/p1-u2-evidence.md`.
 
+- P1-U3 shared services, baseline migration, typed configuration and backend
+  health; complete Docker checks and acceptance rehearsal passed. See
+  `docs/status/p1-u3-evidence.md` and its checkpoint below.
+
 - Created the implementation plan from the project overview and required context.
   Each unit defines its goal, scope, dependencies, result/acceptance criteria, and
   verification. The plan maps all ten overview success criteria to delivery units.
@@ -29,8 +33,7 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-P1-U3 — shared containers, baseline database and health.
-Current increment: Docker PostgreSQL/PostGIS, two Redis services and Asterisk.
+None. P1-U3 completed on 2026-10-04 16:56 +08:00; P1-U4 is next.
 
 ## Unit Checkpoints
 
@@ -65,6 +68,7 @@ Current increment: Docker PostgreSQL/PostGIS, two Redis services and Asterisk.
 ### P1-U2 — Workspace and quality checks
 
 - **Status:** complete.
+- **Completion date:** 2026-10-04 (Asia/Manila); explicitly confirmed in the tracker at the user's request.
 - **Requirement:** implementation plan P1-U2; existing architecture boundaries.
 - **Scope:** five application skeletons, four shared packages, independent NestJS
   entry points, pinned pnpm/Node, strict TypeScript, lint/format/build graph, CI, docs.
@@ -87,43 +91,62 @@ Current increment: Docker PostgreSQL/PostGIS, two Redis services and Asterisk.
 
 ### P1-U3 — Shared services and baseline database
 
-- **Status:** in progress.
+- **Status:** complete; 2026-10-04 16:56 +08:00 (Asia/Manila).
 - **Requirement:** implementation plan P1-U3 and user request to run shared
   services, including Asterisk, in Docker without installing their runtimes locally.
-- **Scope:** Compose, persistent volumes, generated database secret, health checks,
-  commands and docs; later in this unit: baseline migrations, configuration and
-  backend health. Asterisk scope is runtime bootstrap only, not P3 administration.
-- **Acceptance for this increment:** one command starts four healthy containers;
-  database/PostGIS, both Redis instances and Asterisk CLI respond; database/session
-  data survive stop/start; Redis services remain isolated; no feature tables seeded.
-- **Required checks:** `pnpm services:up`, `pnpm services:check`, stop/start with
-  temporary persistence fixtures, service status, focused lint/format checks.
-- **Completed:** four healthy containers started; service checks, stop/start
-  persistence, Redis isolation, authenticated host access and unauthenticated
-  rejection passed. Added generated PostgreSQL/Redis secrets and setup/runbook.
-- **Verification:** [container evidence](../docs/status/p1-u3-shared-services-evidence.md)
-  records actual commands, environment, corrected failures and limits. Focused
-  lint/format, ignored-credential paths and whitespace checks passed.
-- **Remaining:** baseline migrations, typed backend configuration,
-  liveness/readiness and full P1-U3 acceptance remain incomplete.
-- **Decisions:** keep development service ports on loopback, use separate volumes
-  and digest-pinned images. Asterisk AMI/ARI and tenant traffic wait for P3.
+- **Scope:** Compose, persistence/secrets, PostGIS baseline SQL migration with
+  Prisma history, coordinated deployment, typed configuration, backend connections
+  and liveness/readiness. Asterisk scope is runtime bootstrap only.
+- **Acceptance:** `./dev up` starts database/backend, applies the baseline through
+  deployment and waits for readiness. Invalid configuration fails clearly; HTTP
+  does not migrate. No feature tables are seeded. Dependencies recover after outage.
+- **Required checks:** `./dev up`, `./dev check`, `./dev health`; prior shared-service
+  stop/start persistence, authentication and Redis isolation checks.
+- **Completed:** four shared services, Docker workspace and separate backend;
+  PostGIS migration, restricted runtime role, distinct deployment/runtime secrets,
+  configuration validation and bounded dependency health checks. Full workspace
+  lint/format/types/builds, entry-point/configuration checks and live foundation
+  rehearsal passed. Concurrent migration, rerun, runtime privileges, fresh database,
+  each dependency outage/recovery and backend restart all passed.
+- **Verification:** [full P1-U3 evidence](../docs/status/p1-u3-evidence.md) and
+  [shared-container evidence](../docs/status/p1-u3-shared-services-evidence.md).
+  Documented startup rerun with frozen install and automatic backend readiness
+  passed. Hosted CI, production HA, native devices and live PBX calls are unverified.
+- **Remaining:** none within P1-U3. Domain schemas, sessions, jobs, PBX
+  administration and operational features belong to their planned units.
+- **Decisions:** loopback service/backend ports, separate Redis services,
+  digest-pinned images and deployment-only migrations. Runtime backend mounts
+  exclude migration secrets and host credential directory. Product gates remain pending.
+
+### Docker development workspace — Approved foundation increment
+
+- **Status:** complete; P1-U3 overall remains in progress.
+- **Requirement:** user's approval to containerize the development platform and document it.
+- **Scope:** pinned Node/pnpm workspace, separate dependency/cache volumes, host
+  launcher, Dev Containers configuration, Docker-based CI workflow and runbook.
+- **Acceptance:** develop/check without host Node/pnpm; source reloads in the web
+  app; backend is reachable through its published port; service data is retained.
+- **Verification:** complete `./dev check` passed in Docker, web/backend smoke and
+  source reload passed, service networking/authentication and credential lifecycle
+  passed. [Detailed evidence and limits](../docs/status/development-container-evidence.md).
+- **Decisions:** default container web ports 3100–3102 and backend 4100; retain the
+  optional host workflow; mobile device/emulator tooling remains external.
 
 ## Next Up
 
-Finish shared-container checks, then P1-U3 baseline migrations and backend health.
+P1-U4 shared web primitives and platform/command-center operations shells.
 Ask one focused product question only when the next dependent feature needs it.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2 is `complete`; P1-U3 is `in progress`; the other 47 units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2 and P1-U3 are `complete`; the other 47 units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
-linked plan. P1-U2 scaffolding and the P1-U3 container increment have been verified.
+linked plan. P1-U2 scaffolding and full P1-U3 foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
 
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
-| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2 complete; P1-U3 in progress; others planned | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
+| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3 complete; others planned | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1, P2-U2, P2-U3, P2-U4 | planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
@@ -174,7 +197,8 @@ recommendations in P1-U1 remain unapproved.
   source copy. Web HTTP smoke and both mobile platforms' bundle artifact checks
   passed. Hosted CI and native devices were not exercised. At that checkpoint, no
   database, sessions, jobs, PBX or operational feature was implemented. P1-U3 now
-  has shared containers; application integration and domain features remain pending.
+  has shared containers, baseline migration, backend connectivity and health;
+  domain features remain pending.
 
 - P1-U1 draft: relative-file-link checks passed across five changed/new documents;
   decision IDs D-01–D-13 and overview criteria 1–10 are present. Manual consistency
@@ -192,6 +216,34 @@ recommendations in P1-U1 remain unapproved.
 
 
 ## Session Notes
+
+- 2026-10-04 16:56 +08:00 — Resumed and completed P1-U3. Full `./dev check`
+  passed after correcting README formatting; fresh/concurrent/rerun migration,
+  restricted runtime role, backend restart, configuration failures and individual
+  dependency outages/recovery passed. `./dev up` rerun and backend health passed.
+  Recorded evidence and synchronized runbooks/tracker. P1-U4 is next; operational
+  features and deferred product decisions remain pending.
+
+- 2026-10-04 — User requested marking P1-U2 completed. Confirmed its existing
+  complete status and added an explicit completion date to its checkpoint.
+  P1-U3 remains in progress. Documentation-only update; whitespace check passed.
+
+- 2026-10-04 — Corrected server preview access: the workspace had localhost-only
+  binding and no application process. Added a separate command-center bind setting
+  and explicit root `.env` loading in launchers. This server selects public port
+  3100 only; other workspace/service ports remain local. Started the command-center
+  preview in Docker and verified HTTP 200 at `172.16.7.53:3100`. Added LAN/public
+  development origins. Public access depends on the firewall's TCP 3100 forwarding
+  to this LAN address. The public URL also returned HTTP 200 from this server;
+  an independent external browser remains unverified.
+
+- 2026-10-04 — User approved the complete Docker development workspace and requested
+  documentation. Added Docker-only host launcher, isolated dependencies/caches,
+  non-root workspace, optional VS Code integration and Docker CI commands.
+  Full Docker check, application/source-reload smoke, networking and credential
+  checks passed. Updated setup, architecture, workflow and verification docs.
+  Hosted CI, VS Code UI, other operating systems and native devices are unverified.
+  P1-U3 remains in progress for baseline migrations and backend health.
 
 - 2026-10-04 14:39 +08:00 — Shared-container increment verified: four healthy services,
   restart persistence, Redis isolation and authenticated host access passed.

@@ -6,19 +6,11 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-    env:
-      CI: '1'
-      NEXT_TELEMETRY_DISABLED: '1'
-      EXPO_NO_TELEMETRY: '1'
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 10.12.1
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm check
+      - run: ./dev up
+      - run: ./dev exec env CI=1 pnpm check
+      - run: ./dev foundation-check
+      - if: always()
+        run: ./dev down

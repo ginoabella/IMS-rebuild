@@ -1,2 +1,5 @@
-// This package boundary is ready; feature exports belong to later units.
-export {};
+export type {
+  DependencyState,
+  LivenessResponse,
+  ReadinessResponse,
+} from './health.js';

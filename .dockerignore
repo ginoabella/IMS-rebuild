@@ -1,0 +1,10 @@
+.git
+.local
+.env
+.env.*
+**/node_modules
+**/.next
+**/.expo
+**/dist
+**/*.tsbuildinfo
+.pnpm-store

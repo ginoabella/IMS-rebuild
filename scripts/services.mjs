@@ -1,11 +1,16 @@
+import { initializeServiceSecrets } from './init-services.mjs';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
-import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const composeArgs = ['compose', '-f', `${root}infra/docker/compose.yaml`];
+const composeArgs = [
+  'compose',
+  ...(existsSync(`${root}.env`) ? ['--env-file', `${root}.env`] : []),
+  '-f',
+  `${root}infra/docker/compose.yaml`,
+];
 const actions = new Set(['up', 'down', 'status', 'check']);
 const action = process.argv[2];
 
@@ -27,39 +32,14 @@ try {
     );
   docker(['info', '--format', '{{.ServerVersion}}'], true);
   if (action === 'up') {
-    const secret = `${root}.local/shared-services/postgres-password`;
-    if (!existsSync(secret)) {
-      let volumeExists = false;
-      try {
-        docker(['volume', 'inspect', 'myims-rebuild-dev_postgres-data'], true);
-        volumeExists = true;
-      } catch {
-        /* A fresh installation has no volume. */
-      }
-      if (volumeExists)
-        throw new Error(
-          'Restore .local/shared-services/postgres-password before using the existing database volume',
-        );
-      mkdirSync(`${root}.local/shared-services`, {
-        recursive: true,
-        mode: 0o700,
-      });
-      writeFileSync(secret, randomBytes(32).toString('hex'), {
-        flag: 'wx',
-        mode: 0o600,
-      });
+    let volumeExists = false;
+    try {
+      docker(['volume', 'inspect', 'myims-rebuild-dev_postgres-data'], true);
+      volumeExists = true;
+    } catch {
+      /* Fresh installation. */
     }
-    for (const name of ['session', 'realtime']) {
-      const authFile = `${root}.local/shared-services/${name}-redis-auth.conf`;
-      if (!existsSync(authFile)) {
-        // The parent directory is owner-only; mounted files must be readable by Redis.
-        writeFileSync(
-          authFile,
-          `requirepass ${randomBytes(32).toString('hex')}\n`,
-          { flag: 'wx', mode: 0o444 },
-        );
-      }
-    }
+    initializeServiceSecrets(root, volumeExists);
     compose(['config', '--quiet']);
     compose(['up', '-d', '--wait', '--wait-timeout', '120']);
     console.log(

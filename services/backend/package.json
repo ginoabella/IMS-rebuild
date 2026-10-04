@@ -3,10 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint src",
+    "lint": "eslint src prisma.config.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "dev:http": "tsx src/entrypoints/http/main.ts",
+    "dev:http": "tsx watch src/entrypoints/http/main.ts",
     "start:http": "node dist/entrypoints/http/main.js",
     "start:worker": "node dist/entrypoints/worker/main.js",
     "start:telephony": "node dist/entrypoints/telephony/main.js",
@@ -19,10 +19,14 @@
     "reflect-metadata": "0.2.2",
     "rxjs": "7.8.2",
     "@myims/config": "workspace:*",
-    "@myims/contracts": "workspace:*"
+    "@myims/contracts": "workspace:*",
+    "pg": "8.23.1",
+    "redis": "6.3.0"
   },
   "devDependencies": {
     "tsx": "4.21.0",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "prisma": "7.10.0",
+    "@types/pg": "8.23.1"
   }
 }

@@ -20,6 +20,7 @@ export default tseslint.config(
         AbortSignal: 'readonly',
         Buffer: 'readonly',
         require: 'readonly',
+        __dirname: 'readonly',
       },
     },
   },

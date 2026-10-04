@@ -41,6 +41,14 @@ a recommended option at the point it affects the feature. Pause only work that
 needs the answer and continue independent authorized work. Do not treat missing
 answers as approval of proposed product behavior.
 
+## Default Development Environment
+
+Use the Docker workspace for development, installs, builds and checks. From a host
+terminal run `./dev up`, the selected app command, and `./dev check`. In a container
+terminal use pnpm directly. Keep shared services in their own containers, retain
+local secrets/data during normal stops, and document environment changes in the
+[development runbook](../docs/runbooks/development-container.md).
+
 ## Resolve Context and Conflicts
 
 - Follow applicable instruction precedence; explicit user decisions take precedence over project guidance within that authority.

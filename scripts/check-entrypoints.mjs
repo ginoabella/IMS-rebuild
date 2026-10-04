@@ -11,7 +11,17 @@ async function check(entrypoint) {
   args.push(`${root}services/backend/dist/entrypoints/${entrypoint}/main.js`);
   const child = spawn(process.execPath, args, {
     cwd: root,
-    env: { ...process.env, PORT: '0' },
+    env: {
+      ...process.env,
+      PORT: '0',
+      HOST: '127.0.0.1',
+      DATABASE_URL: 'postgresql://test:test@127.0.0.1:1/myims',
+      DATABASE_PASSWORD_FILE: undefined,
+      SESSION_REDIS_URL: 'redis://:test@127.0.0.1:2',
+      SESSION_REDIS_AUTH_FILE: undefined,
+      REALTIME_REDIS_URL: 'redis://:test@127.0.0.1:3',
+      REALTIME_REDIS_AUTH_FILE: undefined,
+    },
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   const exit = once(child, 'exit');
@@ -26,7 +36,11 @@ async function check(entrypoint) {
       child.on('error', reject);
       child.stdout.on('data', (data) => {
         output += data;
-        const line = output.split('\n').find((item) => item.startsWith('{'));
+        const line = output
+          .split('\n')
+          .find(
+            (item) => item.startsWith('{') && item.includes('"entrypoint"'),
+          );
         if (line) {
           try {
             resolve(JSON.parse(line));

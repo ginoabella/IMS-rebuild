@@ -54,10 +54,25 @@ points while keeping authoritative state in shared backing services.
 
 Development PostgreSQL/PostGIS, session Redis, realtime Redis and Asterisk run in
 Docker Compose, without installing those service runtimes on the host. Application
-processes continue through the pnpm workspace during development. The
+processes run through pnpm inside a separate Docker workspace by default. Node,
+pnpm, dependency volumes and build caches are isolated from host installations.
+Git/editor/browser and mobile devices or emulators remain on the host. The
+[development runbook](../docs/runbooks/development-container.md) defines launch
+commands, ports and workstation portability. The
 [shared-services runbook](../docs/runbooks/shared-services.md) defines local ports,
 volumes, bootstrap configuration and pinned images. Asterisk runtime bootstrap
 does not complete PBX administration or live telephony verification in Phase 3.
+
+The development backend runs in a separate container with runtime-only secrets
+and read-only source/dependencies. `./dev up` builds and migrates through the trusted
+workspace/deployment path before starting the backend. Prisma owns versioned SQL
+migration history; deployment locking covers schema application and runtime
+credential provisioning, and HTTP never migrates. The baseline installs PostGIS
+and grants a limited `myims_runtime` role access to migration metadata; domain
+schemas/grants belong to their owning units. Typed configuration fails clearly
+before startup. `/health/live` is process-only, while `/health/ready` checks the
+baseline/PostGIS and both authenticated Redis services with bounded timeouts.
+See the [backend runbook](../docs/runbooks/backend-foundation.md).
 
 ## System Boundaries
 

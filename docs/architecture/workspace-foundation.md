@@ -33,3 +33,15 @@ schemas, tokens, external providers and product rules remain in their owning
 units. P1-U1 is deferred until relevant product answers are needed; it is not
 marked complete. The user's instruction authorizes this independent foundation
 work without requiring a separate review of every draft decision ID.
+
+## Container development decision
+
+The user approved containerizing the full development platform on 2026-10-04.
+One non-root workspace runs pinned Node/pnpm and the existing build graph; shared
+services retain separate containers. Bind-mounted source supports normal editing,
+while per-project dependency and Next cache volumes isolate host installations.
+Host defaults 3100–3102 and 4100 avoid the prior 3000 conflict. Optional Dev
+Containers integration uses the same Compose service. No Docker socket is mounted.
+The CLI works without host Node/pnpm. CI now invokes that CLI as well.
+See the [runbook](../runbooks/development-container.md) and
+[verification record](../status/development-container-evidence.md).

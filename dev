@@ -1,0 +1,48 @@
+#!/bin/sh
+set -eu
+cd "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+compose() {
+  if [ -f .env ]; then
+    docker compose --env-file .env -p myims-rebuild-dev -f infra/docker/compose.yaml "$@"
+  else
+    docker compose -p myims-rebuild-dev -f infra/docker/compose.yaml "$@"
+  fi
+}
+workspace_exec() {
+  if [ -t 0 ] && [ -t 1 ]; then compose exec --user node workspace "$@";
+  else compose exec -T --user node workspace "$@"; fi
+}
+prepare() {
+  docker info --format '{{.ServerVersion}}' >/dev/null
+  existing_database=
+  if docker volume inspect myims-rebuild-dev_postgres-data >/dev/null 2>&1; then existing_database=--existing-database; fi
+  docker run --rm --user "$(id -u):$(id -g)" --mount "type=bind,src=$(pwd),dst=/workspace" -w /workspace \
+    node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c \
+    node scripts/init-services.mjs $existing_database
+  compose config --quiet
+}
+action=${1:-help}
+[ "$#" -eq 0 ] || shift
+case "$action" in
+  prepare) prepare ;;
+  up) prepare; compose up -d --build --wait --wait-timeout 120 workspace
+      workspace_exec pnpm install --frozen-lockfile
+      workspace_exec pnpm build:backend
+      workspace_exec pnpm db:migrate
+      compose up -d --force-recreate --wait --wait-timeout 120 backend
+      echo 'Ready. Run ./dev command (http://localhost:3100), ./dev shell, or ./dev check.' ;;
+  shell) workspace_exec bash ;;
+  migrate) workspace_exec pnpm build:backend; workspace_exec pnpm db:migrate ;;
+  health) workspace_exec node scripts/health-status.mjs ;;
+  foundation-check) workspace_exec pnpm check:foundation ;;
+  backend) compose logs -f backend ;;
+  command|platform|public|responder|public-mobile)
+      workspace_exec pnpm "dev:$action" ;;
+  check) workspace_exec pnpm check; workspace_exec pnpm check:foundation ;;
+  exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
+      workspace_exec "$@" ;;
+  status) compose --profile workspace ps ;;
+  down) compose --profile workspace down ;;
+  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|health|foundation-check}'
+     [ "$action" = help ] || exit 1 ;;
+esac

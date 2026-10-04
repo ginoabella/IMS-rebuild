@@ -18,4 +18,10 @@ See [verification evidence](status/p1-u2-evidence.md). See [local setup and chec
 and [foundation decisions](architecture/workspace-foundation.md). Operational
 features and their guides remain pending. The tracker records actual check results.
 
+Development: [Docker workspace runbook](runbooks/development-container.md)
+and [verified results and limits](status/development-container-evidence.md).
+
 Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-services.md).
+
+Backend foundation: [startup, migrations and health](runbooks/backend-foundation.md)
+and [P1-U3 verification evidence](status/p1-u3-evidence.md).

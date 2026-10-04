@@ -1,0 +1,4 @@
+// No feature models yet. Owning units add their domain schema and SQL migrations.
+datasource db {
+  provider = "postgresql"
+}

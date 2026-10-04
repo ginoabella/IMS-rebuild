@@ -1,15 +1,17 @@
+import { ConfigurationError } from '@myims/config';
+import { loadBackendConfig } from '../../infrastructure/configuration';
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { HttpModule } from './http.module';
 
 async function main() {
-  const port = Number(process.env.PORT ?? 4000);
-  if (!Number.isInteger(port) || port < 0 || port > 65535) {
-    throw new Error('PORT must be an integer between 0 and 65535');
-  }
-  const app = await NestFactory.create(HttpModule, { logger: false });
+  const config = loadBackendConfig();
+  const app = await NestFactory.create(HttpModule.register(config), {
+    logger: false,
+    abortOnError: false,
+  });
   app.enableShutdownHooks();
-  await app.listen(port, '127.0.0.1');
+  await app.listen(config.http.port, config.http.host);
   console.log(
     JSON.stringify({
       entrypoint: 'http',
@@ -19,7 +21,11 @@ async function main() {
   );
 }
 
-void main().catch(() => {
-  console.error('HTTP foundation startup failed');
+void main().catch((error: unknown) => {
+  console.error(
+    error instanceof ConfigurationError
+      ? error.message
+      : 'HTTP foundation startup failed',
+  );
   process.exitCode = 1;
 });

@@ -2,6 +2,7 @@ name: myims-rebuild-dev
 
 services:
   postgres:
+    platform: linux/amd64
     image: postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6
     restart: unless-stopped
     environment:
@@ -89,7 +90,166 @@ services:
       retries: 20
       start_period: 20s
 
+  workspace:
+    profiles: [workspace]
+    image: myims-rebuild-dev-workspace
+    build: &workspace-build
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.dev
+    environment: &backend-environment
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://myims_runtime@postgres:5432/myims?schema=public
+      DATABASE_PASSWORD_FILE: /run/secrets/runtime_postgres_password
+      MIGRATION_DATABASE_URL: postgresql://myims@postgres:5432/myims?schema=public
+      MIGRATION_DATABASE_PASSWORD_FILE: /run/secrets/postgres_password
+      SESSION_REDIS_URL: redis://session-redis:6379
+      SESSION_REDIS_AUTH_FILE: /run/secrets/session_redis_auth
+      REALTIME_REDIS_URL: redis://realtime-redis:6379
+      REALTIME_REDIS_AUTH_FILE: /run/secrets/realtime_redis_auth
+      npm_config_store_dir: /home/node/.local/share/pnpm/store
+      NEXT_TELEMETRY_DISABLED: '1'
+      EXPO_NO_TELEMETRY: '1'
+    depends_on:
+      postgres: { condition: service_healthy }
+      session-redis: { condition: service_healthy }
+      realtime-redis: { condition: service_healthy }
+      asterisk: { condition: service_healthy }
+    ports:
+      - '${MYIMS_COMMAND_BIND:-${MYIMS_WEB_BIND:-127.0.0.1}}:${MYIMS_COMMAND_PORT:-3100}:3000'
+      - '${MYIMS_WEB_BIND:-127.0.0.1}:${MYIMS_PLATFORM_PORT:-3101}:3001'
+      - '${MYIMS_WEB_BIND:-127.0.0.1}:${MYIMS_PUBLIC_PORT:-3102}:3002'
+      - '${MYIMS_WEB_BIND:-127.0.0.1}:${MYIMS_METRO_PORT:-8081}:8081'
+    secrets: &backend-secrets
+      - postgres_password
+      - runtime_postgres_password
+      - session_redis_auth
+      - realtime_redis_auth
+    volumes: &workspace-volumes
+      - ../..:/workspace
+      - type: volume
+        source: workspace-deps-0
+        target: /workspace/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-1
+        target: /workspace/apps/command-center-web/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-2
+        target: /workspace/apps/platform-console-web/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-3
+        target: /workspace/apps/public-web/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-4
+        target: /workspace/apps/responder-mobile/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-5
+        target: /workspace/apps/public-mobile/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-6
+        target: /workspace/packages/config/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-7
+        target: /workspace/packages/contracts/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-8
+        target: /workspace/packages/ui-web/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-9
+        target: /workspace/packages/testkit/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-deps-10
+        target: /workspace/services/backend/node_modules
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-cache-11
+        target: /workspace/apps/command-center-web/.next
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-cache-12
+        target: /workspace/apps/platform-console-web/.next
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-cache-13
+        target: /workspace/apps/public-web/.next
+        volume:
+          nocopy: true
+      - type: volume
+        source: workspace-cache-14
+        target: /home/node/.local/share/pnpm/store
+        volume:
+          nocopy: true
+
+  backend:
+    profiles: [workspace]
+    image: myims-rebuild-dev-workspace
+    build: *workspace-build
+    restart: unless-stopped
+    environment:
+      <<: *backend-environment
+      MYIMS_OWNER_PATH: /workspace/services/backend
+      MIGRATION_DATABASE_URL: ''
+      MIGRATION_DATABASE_PASSWORD_FILE: ''
+    secrets:
+      - runtime_postgres_password
+      - session_redis_auth
+      - realtime_redis_auth
+    volumes:
+      - ../../services/backend:/workspace/services/backend:ro
+      - ../../packages/config:/workspace/packages/config:ro
+      - ../../packages/contracts:/workspace/packages/contracts:ro
+      - ../../package.json:/workspace/package.json:ro
+      - ../../pnpm-workspace.yaml:/workspace/pnpm-workspace.yaml:ro
+      - ../../tsconfig.base.json:/workspace/tsconfig.base.json:ro
+      - workspace-deps-0:/workspace/node_modules:ro
+      - workspace-deps-10:/workspace/services/backend/node_modules:ro
+      - workspace-deps-6:/workspace/packages/config/node_modules:ro
+      - workspace-deps-7:/workspace/packages/contracts/node_modules:ro
+    command: ['pnpm', '--filter', '@myims/backend', 'dev:http']
+    ports:
+      - '127.0.0.1:${MYIMS_BACKEND_PORT:-4100}:4000'
+    depends_on:
+      postgres: { condition: service_healthy }
+      session-redis: { condition: service_healthy }
+      realtime-redis: { condition: service_healthy }
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4000/health/ready').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 15s
+
 secrets:
+  runtime_postgres_password:
+    file: ../../.local/shared-services/runtime-postgres-password
   session_redis_auth:
     file: ../../.local/shared-services/session-redis-auth.conf
   realtime_redis_auth:
@@ -106,3 +266,18 @@ volumes:
   asterisk-phoneprov:
   asterisk-spool:
   asterisk-logs:
+  workspace-deps-0:
+  workspace-deps-1:
+  workspace-deps-2:
+  workspace-deps-3:
+  workspace-deps-4:
+  workspace-deps-5:
+  workspace-deps-6:
+  workspace-deps-7:
+  workspace-deps-8:
+  workspace-deps-9:
+  workspace-deps-10:
+  workspace-cache-11:
+  workspace-cache-12:
+  workspace-cache-13:
+  workspace-cache-14:

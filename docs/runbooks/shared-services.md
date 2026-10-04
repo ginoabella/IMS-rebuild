@@ -2,8 +2,10 @@
 
 PostgreSQL/PostGIS, session Redis, realtime Redis and Asterisk run in four Docker
 containers. Install only Docker Engine and Compose for these services; do not
-install their runtimes or CLI tools on the host. The existing application workspace
-continues to use Node/pnpm during development.
+install their runtimes or CLI tools on the host. The default application workspace
+also runs Node/pnpm in Docker; use `./dev up`, `./dev status`, and `./dev down`.
+See the [development workspace runbook](development-container.md). The commands
+below remain available for developers choosing the optional host Node workflow.
 
 ## Start, inspect and stop
 
@@ -36,7 +38,7 @@ needs registry access. These scripts add no new application dependencies.
 | Asterisk SIP       | `127.0.0.1:5062/udp`        | `asterisk:5060/udp`   | Named PBX data, spool and log volumes       |
 | Asterisk RTP       | `127.0.0.1:10020–10039/udp` | Same UDP range        | Media is live runtime state                 |
 
-Host bindings are local development connections; backend containers later use
+Host bindings are local development connections; the development workspace uses
 Compose service names. The DB name and user are `myims`. Its random password is
 in `.local/shared-services/postgres-password`, excluded from Git, with owner-only
 file permissions. Compose mounts it as a secret; no password is committed or
@@ -91,5 +93,5 @@ Image updates must deliberately change the digest and repeat the service checks.
 The current environment is Linux amd64; other host architectures are unverified.
 The Compose setup is development infrastructure, not production availability.
 Backend connections, baseline versioned migrations, typed runtime configuration
-and backend liveness/readiness are still unfinished P1-U3 work. No incident,
+and liveness/readiness are implemented by the [backend foundation](backend-foundation.md). No incident,
 identity or tenant schema is created by this increment.
