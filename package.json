@@ -10,7 +10,7 @@
     "lint": "eslint scripts eslint.config.mjs && pnpm -r --workspace-concurrency=1 lint",
     "format:check": "prettier --check .",
     "format": "prettier --write .",
-    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
+    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck && tsc --project scripts/ui/tsconfig.json",
     "build": "pnpm -r --workspace-concurrency=1 build",
     "check:entrypoints": "pnpm --filter @myims/backend build && node scripts/check-entrypoints.mjs",
     "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm check:entrypoints && pnpm check:config",
@@ -27,14 +27,17 @@
     "build:backend": "pnpm --filter @myims/config build && pnpm --filter @myims/contracts build && pnpm --filter @myims/backend build",
     "db:migrate": "pnpm --filter @myims/backend exec node dist/entrypoints/deployment/main.js migrate",
     "check:config": "pnpm --filter @myims/config build && node --test scripts/config.test.mjs",
-    "check:foundation": "pnpm build:backend && node scripts/check-foundation.mjs"
+    "check:foundation": "pnpm build:backend && node scripts/check-foundation.mjs",
+    "check:ui": "playwright test --config scripts/ui/playwright.config.ts"
   },
   "devDependencies": {
-    "typescript": "5.9.3",
-    "eslint": "10.12.0",
+    "@axe-core/playwright": "4.13.0",
     "@eslint/js": "10.0.1",
-    "typescript-eslint": "8.71.0",
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.19.15",
+    "eslint": "10.12.0",
     "prettier": "3.9.9",
-    "@types/node": "22.19.15"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.0"
   }
 }

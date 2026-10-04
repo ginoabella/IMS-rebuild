@@ -25,3 +25,9 @@ Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-
 
 Backend foundation: [startup, migrations and health](runbooks/backend-foundation.md)
 and [P1-U3 verification evidence](status/p1-u3-evidence.md).
+
+Web foundation: [P1-U4 feature spec](../context/feature-specs/p1-u4-web-primitives-and-operations-shell.md),
+[shared UI conventions](architecture/web-ui-foundation.md) and
+[preview and browser checks](runbooks/web-ui.md).
+
+P1-U4 is complete; see [verification evidence and limits](status/p1-u4-evidence.md).

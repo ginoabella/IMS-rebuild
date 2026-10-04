@@ -1,0 +1,100 @@
+@import 'tailwindcss' source(none);
+@import '@fontsource/inter/latin-400.css';
+@import '@fontsource/inter/latin-500.css';
+@import '@fontsource/inter/latin-600.css';
+@import '@fontsource/barlow-semi-condensed/latin-500.css';
+@import '@fontsource/barlow-semi-condensed/latin-600.css';
+@import '@fontsource/jetbrains-mono/latin-400.css';
+
+:root {
+  color-scheme: dark;
+  --bg-base: #09111b;
+  --bg-elevated: #0f1a26;
+  --bg-surface: #132131;
+  --bg-surface-active: #1a2b3d;
+  --text-primary: #e8f0f7;
+  --text-secondary: #b7c6d5;
+  --text-muted: #7f93a8;
+  --accent-primary: #00b8d9;
+  --accent-primary-strong: #00d2f7;
+  --state-warning: #f4b942;
+  --state-error: #e45454;
+  --state-success: #2fbf71;
+  --state-info: #4da3ff;
+  --border-default: #223548;
+  --border-strong: #314a62;
+  --focus-ring: #7de3f7;
+  --map-incident: #ff6b57;
+  --map-responder: #2fbf71;
+  --map-geofence: #4da3ff;
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Barlow Semi Condensed', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@theme inline {
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--bg-surface);
+  --color-elevated: var(--bg-elevated);
+  --color-muted: var(--bg-surface-active);
+  --color-muted-foreground: var(--text-secondary);
+  --color-subtle: var(--text-muted);
+  --color-primary: var(--accent-primary);
+  --color-primary-strong: var(--accent-primary-strong);
+  --color-primary-foreground: var(--bg-base);
+  --color-destructive: var(--state-error);
+  --color-success: var(--state-success);
+  --color-warning: var(--state-warning);
+  --color-info: var(--state-info);
+  --color-border: var(--border-default);
+  --color-ring: var(--focus-ring);
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Barlow Semi Condensed', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--border-default);
+  }
+  body {
+    margin: 0;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 3px;
+  }
+  ::selection {
+    background: var(--accent-primary);
+    color: var(--bg-base);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

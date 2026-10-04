@@ -12,5 +12,8 @@ jobs:
       - run: ./dev up
       - run: ./dev exec env CI=1 pnpm check
       - run: ./dev foundation-check
+      - run: ./dev exec pnpm exec playwright install chromium
+      - run: docker compose -p myims-rebuild-dev -f infra/docker/compose.yaml exec -T --user root workspace pnpm exec playwright install-deps chromium
+      - run: ./dev exec pnpm check:ui
       - if: always()
         run: ./dev down

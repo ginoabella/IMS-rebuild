@@ -8,7 +8,8 @@ Deliver MyIMS according to [implementation-plan.md](implementation-plan.md),
 using its nine phases and numbered implementation units. The delivery plan exists;
 P1-U2 is complete: workspace, app skeletons and required quality checks pass.
 P1-U3 is complete: shared services, baseline migrations, typed backend
-configuration and health are verified. P1-U4 is the next planned unit.
+configuration and health are verified. P1-U4 is complete: shared web primitives
+and distinct platform/command-center shells are verified. P1-U5 is next.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
 and short questions only when a feature needs a decision.
@@ -17,6 +18,10 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 
 ## Completed
+
+- P1-U4 shared theme, accessible primitives and platform/command-center shells;
+  all 12 production browser checks and full workspace/foundation checks passed.
+  See [P1-U4 evidence](../docs/status/p1-u4-evidence.md).
 
 - P1-U2 workspace and quality checks; detailed evidence and limitations are recorded
   in its checkpoint below and `docs/status/p1-u2-evidence.md`.
@@ -33,7 +38,7 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None. P1-U3 completed on 2026-10-04 16:56 +08:00; P1-U4 is next.
+None. P1-U4 completed on 2026-10-04 18:18 +08:00; P1-U5 is next.
 
 ## Unit Checkpoints
 
@@ -132,21 +137,48 @@ None. P1-U3 completed on 2026-10-04 16:56 +08:00; P1-U4 is next.
 - **Decisions:** default container web ports 3100–3102 and backend 4100; retain the
   optional host workflow; mobile device/emulator tooling remains external.
 
+### P1-U4 — Web primitives and operations shell
+
+- **Status:** complete; 2026-10-04 18:18 +08:00 (Asia/Manila).
+- **Requirement:** implementation plan P1-U4; existing UI context and P1-U2.
+- **Scope and acceptance:** [feature spec](feature-specs/p1-u4-web-primitives-and-operations-shell.md)
+  defines shared theme, accessible primitives, distinct app shells and AC-01–09.
+- **Delivery sequence:** user-approved P1-U4a shared theme, P1-U4b accessible
+  primitives, P1-U4c app shells/final integration; all three are complete.
+- **Completed:** shared tokens/local fonts, Tailwind/PostCSS pipeline, ESM UI
+  exports, native controls and Radix overlays/tabs/menus, interactive previews,
+  distinct app-owned navigation/homes, responsive shells, browser checks and CI wiring.
+- **Required checks:** `./dev check` sequence and `./dev exec pnpm check:ui`,
+  keyboard/contrast/responsive and visual review.
+- **Verification:** full workspace and backend-foundation sequence passed with
+  logged exit status 0 after terminal interruptions; 12 production browser checks
+  passed. Desktop/tablet/narrow, 320px reflow, 200% CSS zoom, invalid-input state,
+  focus and reduced-motion checks passed. Documentation links and whitespace passed.
+  Commands, artifacts and limits are in [P1-U4 evidence](../docs/status/p1-u4-evidence.md).
+- **Decisions:** local Fontsource assets, shared ESM/CSS exports, manual shadcn
+  composition conventions, and Webpack development after a stale-route Turbopack
+  panic. Use elevated error surfaces and stronger control borders for contrast.
+- **Remaining:** none within P1-U4. Authentication, operational data and domain
+  actions remain with their later units. Hosted CI, native device/screen-reader
+  checks and production accessibility certification are unverified; deferred
+  product decisions remain unapproved.
+
 ## Next Up
 
-P1-U4 shared web primitives and platform/command-center operations shells.
+P1-U5 transactional audit and durable execution, following its scope in the
+implementation plan.
 Ask one focused product question only when the next dependent feature needs it.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2 and P1-U3 are `complete`; the other 47 units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; the other 46 units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
-linked plan. P1-U2 scaffolding and full P1-U3 foundation have been verified.
+linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
 
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
-| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3 complete; others planned | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
+| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; others planned | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1, P2-U2, P2-U3, P2-U4 | planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
@@ -216,6 +248,17 @@ recommendations in P1-U1 remain unapproved.
 
 
 ## Session Notes
+
+- 2026-10-04 18:18 +08:00 — Completed the approved three-subunit P1-U4 sequence.
+  Shared theme/primitives and distinct operations shells passed 12 production
+  browser checks, contrast/keyboard/visual review and the full workspace/backend
+  foundation checks. Terminal connections interrupted earlier attempts; final
+  Docker-detached check logged exit status 0. Updated spec, UI guide, runbook,
+  evidence and CI. Operational/authentication features remain pending; P1-U5 is next.
+
+- 2026-10-04 17:18 +08:00 — Drafted P1-U4 feature spec from repository guidance,
+  Phase 1 and existing UI skeletons. Recommended three sequential subunits with
+  explicit acceptance/check boundaries. Documentation only; P1-U4 remains planned.
 
 - 2026-10-04 16:56 +08:00 — Resumed and completed P1-U3. Full `./dev check`
   passed after correcting README formatting; fresh/concurrent/rerun migration,

@@ -3,22 +3,24 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3000",
+    "dev": "pnpm --filter @myims/ui-web build && next dev --webpack --port 3000",
     "start": "next start --port 3000",
     "lint": "eslint app next.config.ts",
     "typecheck": "tsc --noEmit",
     "build": "next build --webpack"
   },
   "dependencies": {
+    "@myims/contracts": "workspace:*",
+    "@myims/ui-web": "workspace:*",
     "next": "16.3.8",
     "react": "19.2.0",
-    "react-dom": "19.2.0",
-    "@myims/ui-web": "workspace:*",
-    "@myims/contracts": "workspace:*"
+    "react-dom": "19.2.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "4.3.3",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.3",
+    "postcss": "8.5.28",
     "typescript": "5.9.3"
   }
 }
