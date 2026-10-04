@@ -1,0 +1,108 @@
+name: myims-rebuild-dev
+
+services:
+  postgres:
+    image: postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: myims
+      POSTGRES_USER: myims
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+      POSTGRES_INITDB_ARGS: --auth-host=scram-sha-256
+    secrets:
+      - postgres_password
+    ports:
+      - '127.0.0.1:${MYIMS_DB_PORT:-5433}:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    shm_size: 128mb
+    mem_limit: 1g
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U myims -d myims']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+  session-redis:
+    image: redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
+    restart: unless-stopped
+    command: ['redis-server', '/usr/local/etc/redis/redis.conf']
+    secrets:
+      - source: session_redis_auth
+        target: redis_auth
+    ports:
+      - '127.0.0.1:${MYIMS_SESSION_REDIS_PORT:-6380}:6379'
+    volumes:
+      - ../redis/session.conf:/usr/local/etc/redis/redis.conf:ro
+      - session-data:/data
+    mem_limit: 256m
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - REDISCLI_AUTH="$$(sed -n 's/^requirepass //p' /run/secrets/redis_auth)" redis-cli ping
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  realtime-redis:
+    image: redis:8-alpine@sha256:3811787313eba226a2ef38658c6ccb91cd5e110edc89c37767de373120a0e5a0
+    restart: unless-stopped
+    command: ['redis-server', '/usr/local/etc/redis/redis.conf']
+    secrets:
+      - source: realtime_redis_auth
+        target: redis_auth
+    ports:
+      - '127.0.0.1:${MYIMS_REALTIME_REDIS_PORT:-6381}:6379'
+    volumes:
+      - ../redis/realtime.conf:/usr/local/etc/redis/redis.conf:ro
+    mem_limit: 256m
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - REDISCLI_AUTH="$$(sed -n 's/^requirepass //p' /run/secrets/redis_auth)" redis-cli ping
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  asterisk:
+    image: andrius/asterisk:22.10.1_debian-trixie@sha256:212326bd3f973a597be9e4747be5d6653802e4950159e95aa7d728e394de2012
+    restart: unless-stopped
+    entrypoint: ['/usr/sbin/asterisk']
+    command: ['-f', '-U', 'asterisk']
+    ports:
+      - '127.0.0.1:${MYIMS_SIP_PORT:-5062}:5060/udp'
+      - '127.0.0.1:10020-10039:10020-10039/udp'
+    volumes:
+      - ../asterisk/bootstrap:/etc/asterisk:ro
+      - asterisk-lib:/var/lib/asterisk
+      - asterisk-sounds:/var/lib/asterisk/sounds
+      - asterisk-keys:/var/lib/asterisk/keys
+      - asterisk-phoneprov:/var/lib/asterisk/phoneprov
+      - asterisk-spool:/var/spool/asterisk
+      - asterisk-logs:/var/log/asterisk
+    mem_limit: 512m
+    healthcheck:
+      test: ['CMD', 'asterisk', '-rx', 'core show uptime']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 20s
+
+secrets:
+  session_redis_auth:
+    file: ../../.local/shared-services/session-redis-auth.conf
+  realtime_redis_auth:
+    file: ../../.local/shared-services/realtime-redis-auth.conf
+  postgres_password:
+    file: ../../.local/shared-services/postgres-password
+
+volumes:
+  postgres-data:
+  session-data:
+  asterisk-lib:
+  asterisk-sounds:
+  asterisk-keys:
+  asterisk-phoneprov:
+  asterisk-spool:
+  asterisk-logs:

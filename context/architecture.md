@@ -50,6 +50,15 @@ points while keeping authoritative state in shared backing services.
 
 
 
+## Development service containers
+
+Development PostgreSQL/PostGIS, session Redis, realtime Redis and Asterisk run in
+Docker Compose, without installing those service runtimes on the host. Application
+processes continue through the pnpm workspace during development. The
+[shared-services runbook](../docs/runbooks/shared-services.md) defines local ports,
+volumes, bootstrap configuration and pinned images. Asterisk runtime bootstrap
+does not complete PBX administration or live telephony verification in Phase 3.
+
 ## System Boundaries
 
 ### Applications

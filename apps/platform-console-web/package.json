@@ -1,0 +1,24 @@
+{
+  "name": "@myims/platform-console-web",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3001",
+    "start": "next start --port 3001",
+    "lint": "eslint app next.config.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "next build --webpack"
+  },
+  "dependencies": {
+    "next": "16.3.8",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "@myims/ui-web": "workspace:*",
+    "@myims/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.3",
+    "typescript": "5.9.3"
+  }
+}

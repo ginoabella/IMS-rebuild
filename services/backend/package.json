@@ -1,0 +1,28 @@
+{
+  "name": "@myims/backend",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "lint": "eslint src",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "dev:http": "tsx src/entrypoints/http/main.ts",
+    "start:http": "node dist/entrypoints/http/main.js",
+    "start:worker": "node dist/entrypoints/worker/main.js",
+    "start:telephony": "node dist/entrypoints/telephony/main.js",
+    "start:deployment": "node dist/entrypoints/deployment/main.js"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.2.7",
+    "@nestjs/core": "11.2.7",
+    "@nestjs/platform-express": "11.2.7",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "@myims/config": "workspace:*",
+    "@myims/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

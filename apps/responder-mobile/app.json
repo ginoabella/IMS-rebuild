@@ -1,0 +1,8 @@
+{
+  "expo": {
+    "name": "MyIMS Responder",
+    "slug": "myims-responder-mobile",
+    "version": "0.0.0",
+    "platforms": ["android", "ios"]
+  }
+}

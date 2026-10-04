@@ -1,0 +1,36 @@
+{
+  "name": "myims",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=22.23.3 <23"
+  },
+  "scripts": {
+    "lint": "eslint scripts eslint.config.mjs && pnpm -r --workspace-concurrency=1 lint",
+    "format:check": "prettier --check .",
+    "format": "prettier --write .",
+    "typecheck": "pnpm -r --workspace-concurrency=1 typecheck",
+    "build": "pnpm -r --workspace-concurrency=1 build",
+    "check:entrypoints": "pnpm --filter @myims/backend build && node scripts/check-entrypoints.mjs",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm build && pnpm check:entrypoints",
+    "dev:command": "pnpm --filter @myims/command-center-web dev",
+    "dev:platform": "pnpm --filter @myims/platform-console-web dev",
+    "dev:public": "pnpm --filter @myims/public-web dev",
+    "dev:backend": "pnpm --filter @myims/backend dev:http",
+    "dev:responder": "pnpm --filter @myims/responder-mobile dev",
+    "dev:public-mobile": "pnpm --filter @myims/public-mobile dev",
+    "services:up": "node scripts/services.mjs up",
+    "services:down": "node scripts/services.mjs down",
+    "services:status": "node scripts/services.mjs status",
+    "services:check": "node scripts/services.mjs check"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "eslint": "10.12.0",
+    "@eslint/js": "10.0.1",
+    "typescript-eslint": "8.71.0",
+    "prettier": "3.9.9",
+    "@types/node": "22.19.15"
+  }
+}

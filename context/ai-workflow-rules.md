@@ -20,6 +20,27 @@ Always implement against the available project context.
 Do not assume undocumented product behavior or expand the project beyond the defined requirements.
 Work from the current project state rather than treating each request as an isolated task.
 
+## Build, Review, Improve
+
+Use this agreed collaboration process for application development:
+
+1. The agent builds one working step at a time.
+2. The agent handles routine technical choices.
+3. The user reviews the result and requests changes.
+4. The agent asks a short question only when a feature needs the user's decision.
+
+Keep implementation units, dependency checks and decision records as internal
+working structure. Present the user with the working result, a simple way to try
+it, the checks performed and the next step. Verify the step before presenting it
+as complete, and incorporate review feedback into the relevant scope.
+
+Continue authorized work without requiring separate approval of every plan item
+or routine technical choice. Resolve choices using the established architecture
+and conventions. When a product decision is needed, ask one focused question with
+a recommended option at the point it affects the feature. Pause only work that
+needs the answer and continue independent authorized work. Do not treat missing
+answers as approval of proposed product behavior.
+
 ## Resolve Context and Conflicts
 
 - Follow applicable instruction precedence; explicit user decisions take precedence over project guidance within that authority.

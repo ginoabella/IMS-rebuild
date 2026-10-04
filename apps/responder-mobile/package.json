@@ -1,0 +1,22 @@
+{
+  "name": "@myims/responder-mobile",
+  "version": "0.0.0",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "expo start",
+    "lint": "eslint App.tsx index.ts",
+    "typecheck": "tsc --noEmit",
+    "build": "expo export --platform android --platform ios --max-workers 2 --output-dir dist"
+  },
+  "dependencies": {
+    "expo": "55.0.31",
+    "react": "19.2.0",
+    "react-native": "0.83.10",
+    "@myims/contracts": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.18",
+    "typescript": "5.9.3"
+  }
+}
