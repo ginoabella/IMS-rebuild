@@ -17,6 +17,12 @@ const sentinels = [
   'Failure_SENTINEL',
   'Rollback_SENTINEL',
   'password_hash',
+  'Bootstrap_PASSWORD_SENTINEL',
+  'Rerun_PASSWORD_SENTINEL',
+  'bootstrap_identity_sentinel',
+  'infrastructure/password',
+  'bootstrap-operator',
+  '$scrypt$v=1$',
   'modules/identity/adapters/db',
   'modules/platform/adapters/db',
 ];

@@ -2,7 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** planned; implementation has not started.
+- **Status:** complete; C-01–08 passed 2026-10-05 17:04 +08:00 (Asia/Manila).
+- **Evidence:** [c and parent verification](../../docs/status/p2-u1c-evidence.md).
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [P2-U1 parent scope and acceptance matrix](p2-u1-canonical-identities-and-tenancy-admission.md).
 - **Goal:** securely provision one initial tenantless operator and verify the

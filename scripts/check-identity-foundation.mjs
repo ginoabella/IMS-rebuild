@@ -1,3 +1,4 @@
+import { checkBootstrap } from './check-operator-bootstrap.mjs';
 import { checkAuthority } from './check-identity-authority.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
@@ -8,8 +9,8 @@ const selection = process.argv.slice(2);
 assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
-      ['--storage', '--authority'].includes(selection[0])),
-  'Supported selections: --storage, --authority (includes storage regressions)',
+      ['--storage', '--authority', '--bootstrap'].includes(selection[0])),
+  'Supported selections: --storage, --authority, --bootstrap (default: all)',
 );
 const backend = createRequire(
   new URL('../services/backend/package.json', import.meta.url),
@@ -854,15 +855,22 @@ try {
   console.log(
     'PASS: runtime least privilege and retained audit; real connection failure returns unavailable; diagnostic/hash sentinels absent',
   );
-  if (selection.length === 0 || selection[0] === '--authority') {
+  if (selection.length === 0 || selection[0] !== '--storage') {
     phase = 'authority checks';
     await checkAuthority({ appUrl, owner, runtime, run, rejected, logs });
+  }
+  if (selection.length === 0 || selection[0] === '--bootstrap') {
+    phase = 'bootstrap checks';
+    await checkBootstrap();
   }
 } catch (error) {
   console.error(`FAIL: identity foundation acceptance during ${phase}`);
   // Assertion/phase summaries are safe; never print raw database errors.
   if (error.cause?.code === 'ERR_ASSERTION') console.error(error.cause.message);
-  if (error.message?.startsWith('Authority acceptance failed'))
+  if (
+    error.message?.startsWith('Authority acceptance failed') ||
+    error.message?.startsWith('Bootstrap acceptance failed')
+  )
     console.error(error.message);
   process.exitCode = 1;
 } finally {

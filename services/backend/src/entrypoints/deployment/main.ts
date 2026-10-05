@@ -1,3 +1,4 @@
+import { bootstrap } from './bootstrap';
 import { ConfigurationError } from '@myims/config';
 import {
   migrate,
@@ -9,6 +10,10 @@ import { DeploymentModule } from './deployment.module';
 
 async function main() {
   const command = process.argv[2];
+  if (command === 'bootstrap-operator') {
+    await bootstrap(process.argv.slice(3));
+    return;
+  }
   if (command !== undefined && command !== 'migrate')
     throw new ConfigurationError('Unknown deployment command; use migrate');
   if (command === 'migrate') await migrate();

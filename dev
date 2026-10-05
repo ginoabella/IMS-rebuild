@@ -48,6 +48,7 @@ case "$action" in
       echo 'Ready. Run ./dev command (http://localhost:3100), ./dev shell, or ./dev check.' ;;
   shell) workspace_exec bash ;;
   migrate) workspace_exec pnpm build:backend; workspace_exec pnpm db:migrate ;;
+  bootstrap-operator) workspace_exec pnpm build:backend; workspace_exec pnpm --filter @myims/backend exec node dist/entrypoints/deployment/main.js bootstrap-operator "$@" ;;
   health) workspace_exec node scripts/health-status.mjs ;;
   foundation-check) workspace_exec pnpm check:foundation ;;
   backend) compose logs -f backend ;;
@@ -62,6 +63,6 @@ case "$action" in
       workspace_exec "$@" ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'
      [ "$action" = help ] || exit 1 ;;
 esac

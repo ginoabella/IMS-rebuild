@@ -112,8 +112,15 @@ no hash/change timestamp; ready requires both; creation has no state defaults.
 That scoped handoff permitted a's persistence constraints. The user subsequently
 approved b's eligibility: active account plus coherent ready credential, valid
 authority and positive versions, independently in each plane. The
-recommendations below, authentication, password policy,
-setup/reset tokens, sessions and bootstrap execution remain pending for their
+user has now approved [c's review sections 1–2](p2-u1c-bootstrap-contract-review.md):
+bootstrap passwords contain 15–128 Unicode code points and at most 512 UTF-8 bytes,
+permit spaces/Unicode, reject malformed UTF-8/NUL/line breaks, require no composition
+mixture and preserve exact bytes. Hidden interactive input requires confirmation;
+protected automation input supplies the password once. Initial operator creation
+uses explicit active/ready, tenantless platform authority and versions 1/1.
+This is c's scoped D-05/P1-U1 handoff, not approval of broader setup/reset policy.
+The recommendations below, authentication, setup/reset tokens, sessions,
+delivery/recovery and last-administrator policies remain pending for their
 owning units. P1-U1 remains deferred.
 
 Recommend lowercase trim normalization for tenant code and username, preserving
@@ -140,8 +147,8 @@ Block removal/disablement of the last active credential-ready tenant administrat
 Staff cannot grant platform roles. Propose 30-minute idle/12-hour absolute web
 sessions and 24-hour idle/7-day absolute mobile sessions, with server-side canonical
 checks and cross-replica revocation as already required. These lifetimes need
-review for long command-center shifts. Exact password policy and setup/reset UI
-must be approved with this decision before dependent implementation.
+review for long command-center shifts. Broader setup/reset password policy and setup/reset UI
+must be approved before their dependent implementation; c's scoped bootstrap policy is approved.
 
 ## 6. D-06 — Tenant lifecycle
 

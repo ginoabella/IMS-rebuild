@@ -142,8 +142,9 @@ recorded. Historical actor/target references remain retained by foundation audit
 `./dev exec pnpm check:identity-foundation --authority` runs a's storage regressions
 plus b's authority suite in one isolated real PostgreSQL database, using actual
 runtime grants and trusted disposable-fixture administration. Omitting a selection
-also runs both; `--storage` retains a-only selection. `check:foundation` now selects
-`--authority`, so `./dev check` and existing Docker CI include it.
+runs a/b/c, including bootstrap; `--storage` retains a-only selection.
+`check:foundation` selects that complete default, so `./dev check` and existing
+Docker CI include all three.
 
 Independent read/writer connections and barriers prove old committed visibility,
 repeatable-read coherence across committed tenant/role changes, and a lock-blocked
@@ -156,7 +157,10 @@ hash/identity sentinels and private database adapter exclusions.
 
 c receives these approved operator eligibility, credential isolation, bounded
 snapshot and atomic authority/audit contracts, plus combined a/b checks. Password
-policy/usable hashing and trusted operator bootstrap remain c. P2-U2 must reload
+policy/usable hashing and trusted operator bootstrap are now supplied by
+[c's handoff](canonical-operator-bootstrap.md); integrated results are in
+[parent evidence](../status/p2-u1c-evidence.md). P2-U2 must reload
 canonical versions/status instead of trusting cached session roles. This unit
 proves no password/session/Redis/socket/telephony or two-replica authentication
-behavior, and does not complete parent P2-U1.
+behavior. b alone did not complete the parent; c and its integrated evidence now
+complete P2-U1.

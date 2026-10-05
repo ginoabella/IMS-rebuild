@@ -67,14 +67,17 @@ Separate P1-U6 implementation specs, in the adopted sequence:
 - [P1-U6b access/recovery and parent acceptance evidence](status/p1-u6b-evidence.md)
 
 Identity foundation: [P2-U1 feature spec and sub-unit review](../context/feature-specs/p2-u1-canonical-identities-and-tenancy-admission.md).
-P2-U1 remains incomplete; a storage and b roles/admission are complete and verified;
-c remains planned.
+P2-U1a/b/c and parent P2-U1 are complete and verified.
+[Integrated evidence](status/p2-u1c-evidence.md) maps every parent acceptance criterion.
 The user adopted three sequential implementation sub-units;
 D-05 storage representation is approved for a; b's scoped role/admission contract
 is approved with creator closure. Other credential/lifecycle decisions remain pending.
 
 [P2-U1b role and admission contract — review for approval](planning/p2-u1b-contract-review.md)
 records the approved scoped D-01/D-05/D-06 decision and creator-closure revision.
+
+[P2-U1c secure operator bootstrap contract — review for approval](planning/p2-u1c-bootstrap-contract-review.md)
+records the approved scoped password policy and initial-account handoff.
 
 Separate P2-U1 implementation specs:
 
@@ -89,3 +92,7 @@ Separate P2-U1 implementation specs:
 - [Canonical authority/admission contract and b handoff](architecture/canonical-authority-admission.md)
 
 - [P2-U1b acceptance evidence and limits](status/p2-u1b-evidence.md)
+
+- [Canonical operator bootstrap and credential handoff](architecture/canonical-operator-bootstrap.md)
+- [Initial operator bootstrap runbook](runbooks/operator-bootstrap.md)
+- [P2-U1c and parent acceptance evidence](status/p2-u1c-evidence.md)

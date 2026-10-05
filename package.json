@@ -27,7 +27,7 @@
     "build:backend": "pnpm --filter @myims/config build && pnpm --filter @myims/contracts build && pnpm --filter @myims/backend build",
     "db:migrate": "pnpm --filter @myims/backend exec node dist/entrypoints/deployment/main.js migrate",
     "check:config": "pnpm --filter @myims/config build && node --test scripts/config.test.mjs",
-    "check:foundation": "pnpm build:backend && node scripts/check-foundation.mjs && pnpm check:durability && pnpm check:storage && pnpm check:identity-foundation --authority",
+    "check:foundation": "pnpm build:backend && node scripts/check-foundation.mjs && pnpm check:durability && pnpm check:storage && pnpm check:identity-foundation",
     "check:ui": "playwright test --config scripts/ui/playwright.config.ts",
     "check:audit-outbox": "pnpm build:backend && node scripts/check-audit-outbox.mjs",
     "check:worker-delivery": "pnpm build:backend && node scripts/check-worker-delivery.mjs",

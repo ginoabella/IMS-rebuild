@@ -115,7 +115,9 @@ units implementing each contract.
 
 Unresolved decisions below remain **pending user review**. The scoped D-05
 storage handoff for a and D-01/D-05/D-06 handoff for b are approved; see the
-[P2-U1b contract review](p2-u1b-contract-review.md). The user owns approval; Codex
+[P2-U1b contract review](p2-u1b-contract-review.md). c's scoped password policy
+and initial-account handoff are also approved in
+[bootstrap review sections 1–2](p2-u1c-bootstrap-contract-review.md). The user owns approval; Codex
 records approved outcomes and verifies implementation. Infrastructure credentials
 and access must be supplied by a user-designated operator; none is assumed.
 
@@ -128,7 +130,7 @@ and access must be supplied by a user-designated operator; none is assumed.
 | D-02 | Incident lifecycle and closure, section 2 | P5-U6–P5-U7, P6-U2 | Approved transitions and closure safeguards |
 | D-03 | Assignment/eligibility/concurrency, section 3 | P5-U2, P5-U7, P6-U1–P6-U2 | Approved responder eligibility and terminal states |
 | D-04 | Categories/priorities, section 4 | P5-U1, P5-U4, P5-U6 | Approved category validation and priority meanings |
-| D-05 | Credentials and administrator safeguards, section 5 | P2-U4, P4-U1, P4-U4 | Approved delivery, expiry, recovery and last-admin policy |
+| D-05 | Credentials and administrator safeguards, section 5 | P2-U4, P4-U1, P4-U4 | Storage, b eligibility and c bootstrap policy approved; delivery, expiry, recovery and last-admin policy remain pending |
 | D-06 | Tenant lifecycle, section 6 | P2-U1, P4-U3, P5–P6 | Admission approved for b; outstanding-work, transitions and routing effects remain pending |
 | D-07 | Coordinates/drafts, section 7 | P4-U1, P5-U4–P5-U6 | Approved default ownership, bounds, draft persistence/conflicts; map provider chosen |
 | D-08 | Mobile/location policy, section 8 | P6-U1–P6-U3 | Supported targets and consent/frequency/freshness/retention agreed |

@@ -541,3 +541,16 @@ user guides explain browser/mobile actions; runbooks include prerequisites,
 commands, verification, rollback, and an owner/escalation point. Keep
 `docs/status/current.md` limited to what works, what is blocked, and what is next.
 Archive historical implementation notes instead of requiring phase history.
+
+## Canonical initial operator bootstrap
+
+P2-U1c extends the existing trusted deployment entry point with explicit
+`./dev bootstrap-operator` provisioning. Protected hidden/file input and private
+bounded scrypt hashing precede the creation transaction. PostgreSQL singleton
+provenance and transaction locking serialize processes; account/credential and
+trusted system audit commit atomically. Reruns preserve credentials/versions;
+ambiguous commit transport requires durable-state inspection. No implicit startup
+bootstrap or public endpoint is added. See the
+[bootstrap contract](../docs/architecture/canonical-operator-bootstrap.md) and
+[runbook](../docs/runbooks/operator-bootstrap.md). This foundation adds no
+sign-in, sessions, reset/recovery or production provisioning acceptance.
