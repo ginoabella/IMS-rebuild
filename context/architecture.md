@@ -88,6 +88,12 @@ interruption uses an isolated test-only connection proxy; the production topolog
 is unchanged. Identity authorization, live adapters and retention policies remain
 with their owners.
 
+P1-U6a uses user-approved Garage as a single-node S3-compatible Docker service
+for development. Garage owns persistent metadata/data volumes; application replicas
+use its private endpoint and have no disk fallback. Internal development HTTP is
+approved; production hosting/TLS and P1-U6b access decisions remain pending.
+See [storage contract](../docs/architecture/shared-storage.md).
+
 ## System Boundaries
 
 ### Applications

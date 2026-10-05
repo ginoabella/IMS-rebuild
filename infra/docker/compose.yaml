@@ -90,6 +90,27 @@ services:
       retries: 20
       start_period: 20s
 
+  garage:
+    image: dxflrs/garage:v2.3.0@sha256:866bd13ed2038ba7e7190e840482bc27234c4afaf77be8cfa439ae088c1e4690
+    restart: unless-stopped
+    command: ['/garage', 'server', '--single-node']
+    environment:
+      RUST_LOG: error
+    secrets: [garage_rpc_secret]
+    ports:
+      - '127.0.0.1:${MYIMS_STORAGE_PORT:-3900}:3900'
+    volumes:
+      - ./garage.toml:/etc/garage.toml:ro
+      - garage-meta:/var/lib/garage/meta
+      - garage-data:/var/lib/garage/data
+    mem_limit: 512m
+    healthcheck:
+      test: ['CMD', '/garage', 'status']
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
+
   workspace:
     profiles: [workspace]
     image: myims-rebuild-dev-workspace
@@ -97,6 +118,12 @@ services:
       context: ../..
       dockerfile: infra/docker/Dockerfile.dev
     environment: &backend-environment
+      STORAGE_ENABLED: 'false'
+      STORAGE_ENDPOINT: http://garage:3900
+      STORAGE_LOCAL_HTTP: 'true'
+      STORAGE_BUCKET: myims-artifacts
+      STORAGE_REGION: garage
+      STORAGE_CREDENTIALS_FILE: /run/secrets/storage_runtime
       HOST: 0.0.0.0
       DATABASE_URL: postgresql://myims_runtime@postgres:5432/myims?schema=public
       DATABASE_PASSWORD_FILE: /run/secrets/runtime_postgres_password
@@ -114,12 +141,16 @@ services:
       session-redis: { condition: service_healthy }
       realtime-redis: { condition: service_healthy }
       asterisk: { condition: service_healthy }
+      garage: { condition: service_healthy }
     ports:
       - '${MYIMS_COMMAND_BIND:-${MYIMS_WEB_BIND:-127.0.0.1}}:${MYIMS_COMMAND_PORT:-3100}:3000'
       - '${MYIMS_WEB_BIND:-127.0.0.1}:${MYIMS_PLATFORM_PORT:-3101}:3001'
       - '${MYIMS_WEB_BIND:-127.0.0.1}:${MYIMS_PUBLIC_PORT:-3102}:3002'
       - '${MYIMS_WEB_BIND:-127.0.0.1}:${MYIMS_METRO_PORT:-8081}:8081'
     secrets: &backend-secrets
+      - storage_runtime
+      - storage_fixture
+      - storage_denied
       - postgres_password
       - runtime_postgres_password
       - session_redis_auth
@@ -213,6 +244,7 @@ services:
       MIGRATION_DATABASE_URL: ''
       MIGRATION_DATABASE_PASSWORD_FILE: ''
     secrets:
+      - storage_runtime
       - runtime_postgres_password
       - session_redis_auth
       - realtime_redis_auth
@@ -272,6 +304,14 @@ services:
       postgres: { condition: service_healthy }
 
 secrets:
+  garage_rpc_secret:
+    file: ../../.local/shared-services/garage-rpc-secret
+  storage_runtime:
+    file: ../../.local/shared-services/storage-runtime.json
+  storage_fixture:
+    file: ../../.local/shared-services/storage-fixture.json
+  storage_denied:
+    file: ../../.local/shared-services/storage-denied.json
   runtime_postgres_password:
     file: ../../.local/shared-services/runtime-postgres-password
   session_redis_auth:
@@ -282,6 +322,8 @@ secrets:
     file: ../../.local/shared-services/postgres-password
 
 volumes:
+  garage-meta:
+  garage-data:
   postgres-data:
   session-data:
   asterisk-lib:

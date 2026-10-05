@@ -48,3 +48,17 @@ Separate P1-U5 implementation specs:
 - [Durable worker runbook](runbooks/durable-workers.md)
 - [P1-U5b verification evidence](status/p1-u5b-evidence.md)
 - [P1-U5c integrated recovery evidence](status/p1-u5c-evidence.md)
+
+Shared storage foundation: [P1-U6 parent overview and acceptance matrix](../context/feature-specs/p1-u6-shared-file-storage-access.md).
+Local Garage provider/setup is approved; P1-U6a is complete and verified.
+P1-U6b access approval remains pending.
+
+Separate P1-U6 implementation specs, in the adopted sequence:
+
+- [P1-U6a — Shared storage adapter and configuration](../context/feature-specs/p1-u6a-shared-storage-adapter-and-configuration.md)
+- [P1-U6b — Tenant-checked references and recovery verification](../context/feature-specs/p1-u6b-tenant-checked-references-and-recovery-verification.md)
+
+- [Shared storage ADR/adapter contract](architecture/shared-storage.md)
+- [Storage setup and recovery runbook](runbooks/shared-storage.md)
+
+- [P1-U6a acceptance evidence and limits](status/p1-u6a-evidence.md)

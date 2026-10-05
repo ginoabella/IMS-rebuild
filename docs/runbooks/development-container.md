@@ -20,7 +20,7 @@ cd IMS-rebuild
 ```
 
 Open http://localhost:3100. `up` prepares local credentials, builds the pinned
-Node 22.23.3/pnpm 10.12.1 workspace, waits for four healthy shared services, and
+Node 22.23.3/pnpm 10.12.1 workspace, waits for five healthy shared services and provisions private Garage storage, and
 installs dependencies from the frozen lockfile inside Docker. It is safe to rerun.
 The backend starts automatically after its baseline migration. Web/mobile processes
 start when you run their command, in the foreground.
@@ -49,7 +49,8 @@ shared-container management commands from a host terminal.
 ## VS Code
 
 Install VS Code's Dev Containers extension. Open the repository and choose
-**Dev Containers: Reopen in Container**. The configuration prepares credentials
+**Dev Containers: Reopen in Container**. Run `./dev up` first on the host to
+provision Garage buckets/keys through trusted tooling. The configuration prepares credentials
 on the host, starts the workspace and dependencies, installs frozen dependencies,
 and opens `/workspace` as the non-root `node` user. ESLint and Prettier extensions
 are configured. Closing VS Code leaves the stack running; `./dev down` stops it.
@@ -66,14 +67,14 @@ Next.js caches remain separate, including the existing app on host port 3000.
 Other generated files such as TypeScript `dist` remain ignored repository artifacts.
 
 The Compose project name is `myims-rebuild-dev`. `./dev down` retains dependencies,
-database/session/PBX volumes and `.local/shared-services` credentials. Avoid
+database/session/PBX/Garage volumes and `.local/shared-services` credentials. Avoid
 `docker compose down -v` for routine work: it deletes data and dependency volumes.
 If the database volume exists but its password file is missing, startup refuses
 to replace it; restore the original password file. See the
 [shared-services runbook](shared-services.md) for secrets and persistence details.
 
 The workspace connects through Docker service names: `postgres:5432`,
-`session-redis:6379`, `realtime-redis:6379`, and `asterisk:5060/udp`.
+`session-redis:6379`, `realtime-redis:6379`, `asterisk:5060/udp`, and `garage:3900`.
 Backend adapters and typed secret configuration now connect to PostgreSQL and both
 Redis services. Run `./dev health` for actual liveness/readiness; see the
 [backend foundation runbook](backend-foundation.md).
@@ -171,3 +172,6 @@ the development workspace retains trusted deployment access. Closing an app
 terminal does not stop the backend container. `./dev down` stops the complete stack.
 VS Code workspace users should run `./dev up` from a host terminal for complete
 backend startup; its port 4100 belongs to the separate backend container.
+
+Garage storage uses internal HTTP and private persistent volumes; no HTTPS setup is
+required for local adapter checks. See [storage operations](shared-storage.md).

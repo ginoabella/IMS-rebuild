@@ -1,3 +1,5 @@
+import { parseStorageConfig, type StorageConfig } from './storage';
+export { parseStorageConfig, type StorageConfig } from './storage';
 export type Environment = Record<string, string | undefined>;
 export class ConfigurationError extends Error {
   constructor(message: string) {
@@ -10,6 +12,7 @@ export interface ConnectionConfig {
   secretFile?: string;
 }
 export interface BackendConfig {
+  storage?: StorageConfig;
   http: { host: string; port: number };
   database: ConnectionConfig;
   sessionRedis: ConnectionConfig;
@@ -126,6 +129,7 @@ export function parseBackendConfig(env: Environment): BackendConfig {
   if (!host || !/^[a-zA-Z0-9:.%-]+$/.test(host))
     throw new ConfigurationError('HOST must be a valid bind address');
   return {
+    storage: parseStorageConfig(env),
     http: { host, port: integer(env, 'PORT', 4000, 0, 65535) },
     database,
     sessionRedis,

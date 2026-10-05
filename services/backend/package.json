@@ -13,6 +13,7 @@
     "start:deployment": "node dist/entrypoints/deployment/main.js"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.1146.0",
     "@myims/config": "workspace:*",
     "@myims/contracts": "workspace:*",
     "@nestjs/common": "11.2.7",

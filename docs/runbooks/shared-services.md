@@ -1,7 +1,7 @@
 # Shared services in Docker
 
-PostgreSQL/PostGIS, session Redis, realtime Redis and Asterisk run in four Docker
-containers. Install only Docker Engine and Compose for these services; do not
+PostgreSQL/PostGIS, session Redis, realtime Redis, Asterisk and Garage run in five
+Docker containers. Install only Docker Engine and Compose for these services; do not
 install their runtimes or CLI tools on the host. The default application workspace
 also runs Node/pnpm in Docker; use `./dev up`, `./dev status`, and `./dev down`.
 See the [development workspace runbook](development-container.md). The commands
@@ -19,7 +19,7 @@ pnpm services:down
 ```
 
 `up` downloads the pinned images if needed, generates service passwords once,
-starts all four containers and waits for health checks. `check` queries real
+starts all five containers and provisions private Garage storage and waits for health checks. `check` queries real
 PostgreSQL/PostGIS, pings both Redis services, checks Asterisk 22 and verifies its
 SIP transport. `down` stops/removes only this Compose project's containers/network;
 it retains named data volumes and the generated password. Run `up` again to resume.
@@ -32,6 +32,7 @@ needs registry access. These scripts add no new application dependencies.
 
 | Service            | Host connection             | Container connection  | Persistence                                 |
 | ------------------ | --------------------------- | --------------------- | ------------------------------------------- |
+| Garage S3          | `127.0.0.1:3900`            | `garage:3900`         | Named provider metadata/data volumes        |
 | PostgreSQL/PostGIS | `127.0.0.1:5433`            | `postgres:5432`       | Named database volume                       |
 | Session Redis      | `127.0.0.1:6380`            | `session-redis:6379`  | Named volume, AOF every second, no eviction |
 | Realtime Redis     | `127.0.0.1:6381`            | `realtime-redis:6379` | Ephemeral notification transport            |
@@ -47,7 +48,7 @@ an existing database volume remains, startup refuses to generate a different
 password; restore the original file. Deleting volumes is not part of normal stop.
 
 Port overrides: `MYIMS_DB_PORT`, `MYIMS_SESSION_REDIS_PORT`,
-`MYIMS_REALTIME_REDIS_PORT`, and `MYIMS_SIP_PORT`. For example:
+`MYIMS_REALTIME_REDIS_PORT`, `MYIMS_SIP_PORT`, and `MYIMS_STORAGE_PORT`. For example:
 
 ```sh
 MYIMS_DB_PORT=5434 pnpm services:up
@@ -95,3 +96,6 @@ The Compose setup is development infrastructure, not production availability.
 Backend connections, baseline versioned migrations, typed runtime configuration
 and liveness/readiness are implemented by the [backend foundation](backend-foundation.md). No incident,
 identity or tenant schema is created by this increment.
+
+Garage settings, credentials, access limits and recovery are documented in the
+[shared-storage runbook](shared-storage.md).

@@ -14,18 +14,33 @@ workspace_exec() {
 }
 prepare() {
   docker info --format '{{.ServerVersion}}' >/dev/null
+  existing_storage=
+  if docker volume inspect myims-rebuild-dev_garage-meta >/dev/null 2>&1; then existing_storage=--existing-storage; fi
   existing_database=
   if docker volume inspect myims-rebuild-dev_postgres-data >/dev/null 2>&1; then existing_database=--existing-database; fi
   docker run --rm --user "$(id -u):$(id -g)" --mount "type=bind,src=$(pwd),dst=/workspace" -w /workspace \
     node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c \
-    node scripts/init-services.mjs $existing_database
+    node scripts/init-services.mjs $existing_database $existing_storage
   compose config --quiet
+}
+provision_storage() {
+  storage_docker_binary=$(command -v docker)
+  docker run --rm --user "$(id -u):$(id -g)" --group-add "$(stat -c %g /var/run/docker.sock)" \
+    -e "STORAGE_HOST_PROJECT_ROOT=$(pwd)" \
+    --mount "type=bind,src=$(pwd),dst=/workspace" \
+    --mount "type=bind,src=$storage_docker_binary,dst=/usr/bin/docker,readonly" \
+    --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock -w /workspace \
+    node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c \
+    node "${1:-scripts/provision-storage.mjs}"
 }
 action=${1:-help}
 [ "$#" -eq 0 ] || shift
 case "$action" in
   prepare) prepare ;;
+  storage-provision) provision_storage ;;
+  storage-deployment-check) workspace_exec pnpm build:backend; provision_storage scripts/check-storage-deployment.mjs ;;
   up) prepare; compose up -d --build --wait --wait-timeout 120 workspace
+      provision_storage
       workspace_exec pnpm install --frozen-lockfile
       workspace_exec pnpm build:backend
       workspace_exec pnpm db:migrate
@@ -42,11 +57,11 @@ case "$action" in
   worker-logs) compose --profile workers logs -f worker ;;
   command|platform|public|responder|public-mobile)
       workspace_exec pnpm "dev:$action" ;;
-  check) workspace_exec pnpm check; workspace_exec pnpm check:foundation ;;
+  check) workspace_exec pnpm check; workspace_exec pnpm check:foundation; workspace_exec pnpm check:storage-clients; provision_storage scripts/check-storage-deployment.mjs ;;
   exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
       workspace_exec "$@" ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|health|foundation-check|worker-up|worker-down|worker-logs}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'
      [ "$action" = help ] || exit 1 ;;
 esac

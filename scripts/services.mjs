@@ -39,9 +39,17 @@ try {
     } catch {
       /* Fresh installation. */
     }
-    initializeServiceSecrets(root, volumeExists);
+    let storageVolumeExists = false;
+    try {
+      docker(['volume', 'inspect', 'myims-rebuild-dev_garage-meta'], true);
+      storageVolumeExists = true;
+    } catch {
+      /* Fresh storage. */
+    }
+    initializeServiceSecrets(root, volumeExists, storageVolumeExists);
     compose(['config', '--quiet']);
     compose(['up', '-d', '--wait', '--wait-timeout', '120']);
+    execFileSync(`${root}dev`, ['storage-provision'], { stdio: 'inherit' });
     console.log(
       'Shared containers are healthy. Run pnpm services:check to verify them.',
     );

@@ -131,7 +131,7 @@ and access must be supplied by a user-designated operator; none is assumed.
 | D-07 | Coordinates/drafts, section 7 | P4-U1, P5-U4–P5-U6 | Approved default ownership, bounds, draft persistence/conflicts; map provider chosen |
 | D-08 | Mobile/location policy, section 8 | P6-U1–P6-U3 | Supported targets and consent/frequency/freshness/retention agreed |
 | D-09 | PBX environment and policy | P3-U1–P3-U5, P4-U2–P4-U3, P5-U3 | Controlled PBX, secret references, allowed commands, routing precedence, active-call policy and test destinations supplied/approved |
-| D-10 | Shared files and evidence | P1-U6, P8-U1–P8-U2, P8-U11, P9-U1 | Provider, access lifetime, allowed files, retention and recovery approved |
+| D-10 | Shared files and evidence | P1-U6, P8-U1–P8-U2, P8-U11, P9-U1 | Local Garage/Docker private storage with internal HTTP approved 2026-10-05; access lifetime, allowed files, retention and production recovery still pending. See [storage ADR](../architecture/shared-storage.md). |
 | D-11 | Public channels and launch scope | P8-U3–P8-U7, P9-U1 | Mapping/handoff/feedback, SMS/voice provider contracts and deployment scope approved |
 | D-12 | Later tools | P8-U8–P8-U11 | Browser calling credential flow, recovery permissions, report/export definitions and retention approved |
 | D-13 | Production readiness | P9-U1–P9-U5 | Platform/HA, measurable capacity/latency/security/accessibility/RPO/RTO, recovery and accountable operators agreed |

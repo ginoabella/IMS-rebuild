@@ -1,3 +1,4 @@
+import { resolveStorageConfig } from './storage/configuration';
 import { readFileSync } from 'node:fs';
 import {
   ConfigurationError,
@@ -33,6 +34,7 @@ export function resolveConnection(
 }
 export function loadBackendConfig(env: Environment = process.env) {
   const config = parseBackendConfig(env);
+  if (config.storage) resolveStorageConfig(config.storage);
   return {
     ...config,
     database: { url: resolveConnection(config.database, 'DATABASE') },

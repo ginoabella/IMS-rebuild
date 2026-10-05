@@ -54,6 +54,10 @@ The applications remain foundation placeholders. Backend `/` returns
 units. Asterisk has a bootstrap SIP transport; extensions, trunks and live calling
 are later work. See [shared-service details](docs/runbooks/shared-services.md).
 
+Shared artifact storage uses private Garage in Docker with internal HTTP.
+See [storage setup and recovery](docs/runbooks/shared-storage.md) for the adapter
+contract, focused checks and development limits.
+
 The complete Docker check builds three web apps, shared packages, the backend,
 and Android/iOS Expo JavaScript bundles, then rehearses the foundation on a
 disposable database with real-service connections. Native device behavior,
