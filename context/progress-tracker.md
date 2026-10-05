@@ -354,9 +354,32 @@ None. P1-U6b and parent P1-U6 completed 2026-10-05 10:52 +08:00 (Asia/Manila).
   coarse bucket write/delete permission is documented; tenant access, signing,
   lifetime/revocation, production hosting/TLS/HA, backup and retention remain gated.
 
+### P2-U1 — Canonical identities and tenancy admission
+
+- **Status:** planned; parent and three child specs prepared, implementation pending.
+- **Requirement and scope:** [P2-U1 parent spec](feature-specs/p2-u1-canonical-identities-and-tenancy-admission.md);
+  canonical stores/ownership, role contracts/admission and secure operator bootstrap.
+- **Sequence:** [P2-U1a](feature-specs/p2-u1a-canonical-identity-stores-and-ownership-constraints.md),
+  [P2-U1b](feature-specs/p2-u1b-role-contracts-and-canonical-tenancy-admission.md),
+  [P2-U1c](feature-specs/p2-u1c-secure-operator-bootstrap-and-foundation-handoff.md);
+  user adopted the split on 2026-10-05. All children remain planned.
+- **Acceptance and checks:** parent AC-01–11; child A-01–07, B-01–07 and C-01–08.
+  Provisional identity-foundation command plus `./dev check` during implementation;
+  documentation consistency, relative links, coverage and whitespace checked now.
+- **Remaining and gates:** record the relevant P1-U1 partial handoff and resolve
+  D-01/D-05/D-06 portions before dependent implementation. No runtime work or
+  identity/session acceptance has been performed. Split approval does not approve
+  pending product rules.
+
 ## Next Up
 
 [P2-U1 — canonical identities and tenancy admission](implementation-plan.md#p2-u1--implement-canonical-identities-and-tenancy-admission).
+The [P2-U1 feature spec](feature-specs/p2-u1-canonical-identities-and-tenancy-admission.md)
+is prepared and reviewed, with AC-01–11 and an adopted three-sub-unit sequence:
+canonical stores/constraints, role contracts/admission, and secure operator
+bootstrap. Child specs are prepared; runtime implementation has not started. P1-U1 remains
+deferred; record its relevant partial handoff and resolve D-01, D-06 and the
+identity/bootstrap portion of D-05 before dependent implementation.
 P1-U6a/b and parent AC-01–09 are complete. The
 [storage contract](../docs/architecture/shared-storage.md) and
 [verified evidence](../docs/status/p1-u6b-evidence.md) are available to later consumers.
@@ -444,6 +467,22 @@ recommendations in P1-U1 remain unapproved.
 
 
 ## Session Notes
+
+- 2026-10-05 +08:00 (Asia/Manila) — Created the user-requested P2-U1a/b/c
+  child feature specs with sequential dependencies, detailed contracts, scoped
+  acceptance criteria and parent AC-01–11 coverage. Updated parent, tracker and
+  docs index to record the adopted split. Documentation consistency, relative
+  links, acceptance coverage and whitespace checked; all units remain planned.
+  Product decisions and runtime implementation remain pending.
+
+- 2026-10-05 +08:00 (Asia/Manila) — Prepared and reviewed the P2-U1 feature
+  spec after reading AGENT.md, required context, Phase 2, existing specs and
+  source boundaries. Defined canonical ownership/normalization, role/admission
+  ports, authority versions, credential metadata and secure retry-safe bootstrap;
+  recommended three sequential sub-units with AC-01–11 coverage. P1-U1 partial
+  handoff and relevant D-01/D-05/D-06 decisions remain pending. Documentation
+  consistency, relative links and whitespace checked; no runtime changes/checks
+  or Phase 2 completion claimed. P2-U1 remains planned.
 
 - 2026-10-05 10:52 +08:00 (Asia/Manila) — Completed P1-U6b and parent P1-U6
   after explicit approval of GET bearer access, a 120-second default and hard
