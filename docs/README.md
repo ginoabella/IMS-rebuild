@@ -96,3 +96,14 @@ Separate P2-U1 implementation specs:
 - [Canonical operator bootstrap and credential handoff](architecture/canonical-operator-bootstrap.md)
 - [Initial operator bootstrap runbook](runbooks/operator-bootstrap.md)
 - [P2-U1c and parent acceptance evidence](status/p2-u1c-evidence.md)
+
+Session foundation: [P2-U2 parent spec and adopted sub-unit review](../context/feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
+P2-U2 and all children remain planned. The user adopted three sequential
+implementation sub-units; session lifetimes and limiter policy remain unapproved.
+No session runtime or Phase 2 authentication gate is claimed.
+
+Separate P2-U2 implementation specs:
+
+- [P2-U2a — Shared session lifecycle and recovery fencing](../context/feature-specs/p2-u2a-shared-session-lifecycle-and-recovery-fencing.md)
+- [P2-U2b — Canonical authority validation and HTTP guards](../context/feature-specs/p2-u2b-canonical-authority-validation-and-http-guards.md)
+- [P2-U2c — Distributed rate limits and integrated recovery handoff](../context/feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md)

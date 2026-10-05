@@ -87,6 +87,42 @@ None. P2-U1c and parent P2-U1 completed 2026-10-05 17:04 +08:00 (Asia/Manila).
 
 ## Unit Checkpoints
 
+### P2-U2 — Shared session store and authorization guards
+
+- **Status:** planned; specification/review prepared 2026-10-05, Asia/Manila (+08:00).
+- **Requirement:** [P2-U2 feature spec](feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
+- **Scope:** hashed opaque-token lookup, shared Redis lifecycle, canonical
+  status/version validation, plane/permission guards, distributed rate limits
+  and two-replica outage/restored-data verification.
+- **Acceptance:** AC-01–11 define lifecycle, concurrency, canonical invalidation,
+  cross-plane/tenant rejection, shared limits and recovery checks. Proposed
+  `./dev exec pnpm check:session-foundation` is not implemented; eventual focused
+  and full `./dev check` results are required.
+- **Sequence:** user adopted three sequential child specs on 2026-10-05:
+  [a — lifecycle/recovery fencing](feature-specs/p2-u2a-shared-session-lifecycle-and-recovery-fencing.md),
+  [b — canonical HTTP guards](feature-specs/p2-u2b-canonical-authority-validation-and-http-guards.md),
+  [c — distributed limits/integrated recovery](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md).
+  All children and the parent remain planned; no runtime implementation started.
+- **Gates:** session lifetimes/activity and limiter policy remain unapproved.
+  Recovery design must prevent restored revoked/rotated sessions from becoming
+  valid; Redis-only deletion does not prove that guarantee. See spec gate table.
+- **Verification:** documentation consistency, acceptance coverage, relative links
+  and whitespace reviewed; no runtime changes/checks or Phase 2 completion claimed.
+- **Remaining:** resolve scoped product policies, implement a/b/c sequentially,
+  and verify all acceptance criteria using real services and two replicas.
+
+
+### P2-U2 implementation sub-units
+
+| Unit | Status | Scope and verification |
+| --- | --- | --- |
+| [P2-U2a — Shared session lifecycle and recovery fencing](feature-specs/p2-u2a-shared-session-lifecycle-and-recovery-fencing.md) | planned | Lifecycle, expiry/rotation/revocation and recovery fencing; A-01–07 with real-service independent-process checks. |
+| [P2-U2b — Canonical authority validation and HTTP guards](feature-specs/p2-u2b-canonical-authority-validation-and-http-guards.md) | planned | Canonical principals, plane/permission guards and transactional authority boundary; B-01–07 with two HTTP replicas after a. |
+| [P2-U2c — Distributed rate limits and integrated recovery handoff](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md) | planned | Distributed limits, integrated outage/restore checks and combined parent handoff; C-01–07 and parent AC-01–11 after a/b. |
+
+Parent completion requires all children and AC-01–11. The split preserves
+top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
+
 ### P2-U1c — Secure operator bootstrap and foundation handoff
 
 - **Status:** complete; 2026-10-05 17:04 +08:00 (Asia/Manila).
@@ -485,7 +521,7 @@ None. P2-U1c and parent P2-U1 completed 2026-10-05 17:04 +08:00 (Asia/Manila).
 
 ## Next Up
 
-[P2-U2 — shared session store and authorization guards](implementation-plan.md#p2-u2--implement-the-shared-session-store-and-authorization-guards).
+[P2-U2 — shared session store and authorization guards](feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
 P2-U1 is complete. Use its canonical plane-specific identity/admission/version
 ports and [bootstrap handoff](../docs/architecture/canonical-operator-bootstrap.md).
 P1-U1 remains deferred outside approved a/b/c handoffs. Session lifetimes and other
@@ -518,6 +554,8 @@ identifies the required answers and affected units. Current unresolved areas are
 
 - Later evidence/recovery permissions, lifecycle transitions, closure safeguards, dispatch concurrency,
   responder eligibility/availability, and category/priority semantics.
+- Session idle/absolute lifetimes and renewal activity, distributed limiter policy,
+  and the implementation recovery design for restored revoked/rotated Redis state.
 - Credential setup/reset/recovery, administrator safeguards, and tenant lifecycle
   effects on access, routes, and active work.
 - Default coordinate configuration, service-area behavior, map tiles/search,
@@ -577,6 +615,23 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-05 (Asia/Manila, +08:00) — Adopted the user-requested P2-U2 split and
+  created a/b/c feature specs with sequential dependencies, scoped contracts,
+  acceptance criteria and complete parent AC-01–11 coverage. Updated parent,
+  tracker and docs index. Documentation consistency, relative links, acceptance
+  coverage and whitespace checked. All children/parent remain planned; session
+  and limiter policies remain pending and no runtime changes/checks are claimed.
+
+
+- 2026-10-05 (Asia/Manila, +08:00) — Prepared and reviewed the requested P2-U2
+  feature spec after reading AGENT.md, required context, Phase 2 and current
+  authority/Redis boundaries. Defined lifecycle, canonical guards, shared limits,
+  failure/recovery contracts and AC-01–11; recommended three sequential sub-units
+  with complete acceptance coverage. Session/limiter policies remain unapproved;
+  recovery fencing/reset must be designed before implementation. Documentation
+  consistency, relative links and whitespace checked; P2-U2 remains planned.
+
 
 - 2026-10-05 17:04 +08:00 (Asia/Manila) — Completed P2-U1c and parent P2-U1 under
   approved review sections 1–2. Protected input/private scrypt, atomic PostgreSQL
