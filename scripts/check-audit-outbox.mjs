@@ -140,7 +140,7 @@ try {
   const history = await observer.query(
     'SELECT count(*)::int AS count FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
   );
-  assert.equal(history.rows[0].count, 5);
+  assert.equal(history.rows[0].count, 6);
   await owner.query(`CREATE SCHEMA audit_fixture;
     CREATE TABLE audit_fixture.sample (id text PRIMARY KEY);
     CREATE TABLE audit_fixture.delivery_sink (id text PRIMARY KEY);

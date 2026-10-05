@@ -1,3 +1,4 @@
+import { canonicalRoles, type StaffRole } from '../../domain/roles';
 import { storageFailure } from './storage-failure';
 import type { Transaction } from '../../../../infrastructure/database/transaction';
 import { AuditRepository } from '../../../audit/adapters/db/audit-repository';
@@ -12,6 +13,7 @@ import {
 export interface StaffRecord {
   id: string;
   tenant_id: string;
+  roles: StaffRole[];
   status: AccountStatus;
   credential_state: CredentialState;
   credential_changed_at: Date | null;
@@ -26,7 +28,7 @@ export interface StaffReference {
   staffId: string;
 }
 const columns =
-  'id,tenant_id,status,credential_state,credential_changed_at,version,authentication_version,created_at,updated_at';
+  'id,tenant_id,roles,status,credential_state,credential_changed_at,version,authentication_version,created_at,updated_at';
 const event = {
   type: 'identity.storage.changed',
   version: 1,
@@ -83,6 +85,7 @@ export class StaffRepository {
       id: string;
       tenantId: string;
       username: unknown;
+      roles: StaffRole[];
       status: AccountStatus;
       credentialState: CredentialState;
       passwordHash: string | null;
@@ -90,6 +93,7 @@ export class StaffRepository {
     },
   ): Promise<StorageResult<StaffRecord>> {
     const username = normalizeUsername(input.username);
+    const roles = canonicalRoles(input.roles);
     const ready =
       input.credentialState === 'ready' &&
       typeof input.passwordHash === 'string' &&
@@ -107,6 +111,7 @@ export class StaffRepository {
       transaction.context.target.reference !== input.id ||
       !uuid(input.tenantId) ||
       !username ||
+      !roles ||
       !['active', 'disabled'].includes(input.status) ||
       (!ready && !unset) ||
       transaction.context.target.tenantId !== input.tenantId ||
@@ -116,7 +121,7 @@ export class StaffRepository {
     try {
       return await transaction.required(async () => {
         const result = await transaction.query<StaffRecord>(
-          `INSERT INTO public.staff_users (id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING ${columns}`,
+          `INSERT INTO public.staff_users (id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING ${columns}`,
           [
             input.id,
             input.tenantId,
@@ -125,6 +130,7 @@ export class StaffRepository {
             input.credentialState,
             input.passwordHash,
             input.credentialChangedAt,
+            roles,
           ],
         );
         await new AuditRepository().append(transaction, event, {

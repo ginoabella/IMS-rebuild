@@ -113,7 +113,9 @@ units implementing each contract.
 
 ## Decisions to record before dependent implementation
 
-All decisions below are **pending user review**. The user owns approval; Codex
+Unresolved decisions below remain **pending user review**. The scoped D-05
+storage handoff for a and D-01/D-05/D-06 handoff for b are approved; see the
+[P2-U1b contract review](p2-u1b-contract-review.md). The user owns approval; Codex
 records approved outcomes and verifies implementation. Infrastructure credentials
 and access must be supplied by a user-designated operator; none is assumed.
 
@@ -122,12 +124,12 @@ and access must be supplied by a user-designated operator; none is assumed.
 | F-01 | Workspace boundary, package ownership and graph above | P1-U2 | User agrees or edits the foundation scope |
 | F-02 | Scaffolding acceptance and check procedures above | P1-U2 | User agrees the acceptance boundary |
 | F-03 | Partial P1-U1 handoff above | P1-U1, P1-U2 | User agrees the switch or approves all P1-U1 contracts |
-| D-01 | Role matrix, contract section 1 | P2-U1, P4-U4, P5–P6 | Approved role grants and combinations |
+| D-01 | Role matrix, contract section 1 | P2-U1, P4-U4, P5–P6 | Approved for P2-U1b: fixed combinations/grants and creator closure; see scoped review |
 | D-02 | Incident lifecycle and closure, section 2 | P5-U6–P5-U7, P6-U2 | Approved transitions and closure safeguards |
 | D-03 | Assignment/eligibility/concurrency, section 3 | P5-U2, P5-U7, P6-U1–P6-U2 | Approved responder eligibility and terminal states |
 | D-04 | Categories/priorities, section 4 | P5-U1, P5-U4, P5-U6 | Approved category validation and priority meanings |
 | D-05 | Credentials and administrator safeguards, section 5 | P2-U4, P4-U1, P4-U4 | Approved delivery, expiry, recovery and last-admin policy |
-| D-06 | Tenant lifecycle, section 6 | P2-U1, P4-U3, P5–P6 | Approved admission, outstanding-work and routing effects |
+| D-06 | Tenant lifecycle, section 6 | P2-U1, P4-U3, P5–P6 | Admission approved for b; outstanding-work, transitions and routing effects remain pending |
 | D-07 | Coordinates/drafts, section 7 | P4-U1, P5-U4–P5-U6 | Approved default ownership, bounds, draft persistence/conflicts; map provider chosen |
 | D-08 | Mobile/location policy, section 8 | P6-U1–P6-U3 | Supported targets and consent/frequency/freshness/retention agreed |
 | D-09 | PBX environment and policy | P3-U1–P3-U5, P4-U2–P4-U3, P5-U3 | Controlled PBX, secret references, allowed commands, routing precedence, active-call policy and test destinations supplied/approved |

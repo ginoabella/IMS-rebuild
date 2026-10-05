@@ -13,7 +13,7 @@ completed by fixture-only demonstrations.
 | A-02 | Start local shared services, migrate twice, restart; then remove DB | Reproducible schema; safe rerun; liveness/readiness distinguish unavailable dependencies | Existing plan; P1-U3 |
 | A-03 | Same username in tenants A/B; login and try foreign/other-plane IDs | Correct tenant identity; same-tenant duplicates reject; foreign and other-plane access deny | D-01/D-05; P2-U1–P2-U4 |
 | A-04 | Replica A login; replica B request; revoke/reset/change role/suspend; Redis outage | Shared access, revoked authority rejected everywhere; outage returns retryable unavailability | D-05/D-06; P2-U2, P7-U2 |
-| A-05 | Tenant admin has no operational role; try dispatch and shared PBX edit | Both denied; call taker + dispatcher may close under closure rules | D-01; P4-U4, P5-U6–P5-U7 |
+| A-05 | Tenant admin has no operational role; try dispatch and shared PBX edit | Both denied; canonical staff creator may close without an additional dispatcher role; dispatchers may close under closure rules | D-01; P4-U4, P5-U6–P5-U7 |
 | A-06 | Setup/reset exchange; expired/reused/reissued token; last-admin disable | Approved credential handoff; no URL/log leakage; invalid token rejected; last admin retained | D-05; P2-U4, P4-U4 |
 | A-07 | Operator saves PBX revision; validation/apply fails; observer loses lease | Save stays desired only; failed apply restores known-good; stale owner cannot publish/apply | D-09; P3-U1–P3-U5 |
 | A-08 | Two tenants on one PBX; overlapping allocation; pending/foreign extension assignment | Exclusive ownership; only verified tenant inventory assigned; trusted calls map correctly | D-09; P4-U2/P4-U5, P7-U1 |
@@ -45,7 +45,7 @@ completed by fixture-only demonstrations.
 | Success criterion 2: tenant-qualified identity/planes | A-03; P2-U1–P2-U4, P7-U1 |
 | Success criterion 3: browser PBX apply/recovery/attribution | A-07/A-08; P3, P4-U2, P5-U3 |
 | Success criterion 4: two tenants, routing and extension exclusivity | A-08/A-09; P4, P7-U1 |
-| Success criterion 5: intake, refresh, closure, mobile progress | A-11–A-16; P5/P6/P7-U1; call-taker closure needs D-01 approval |
+| Success criterion 5: intake, refresh, closure, mobile progress | A-11–A-16; P5/P6/P7-U1; creator closure grant approved for P2-U1b; D-02/D-03 safeguards remain with owning units |
 | Success criterion 6: cross-replica convergence/reconnect | A-17; P6-U4, P7-U2 |
 | Success criterion 7: shared revocation/outage/surviving replica | A-04/A-17; P2/P4/P7-U2, P9-U2–P9-U3 |
 | Success criterion 8: retained actors and runnable documented milestones | A-18; P1-U5, all feature units, P7-U1–P7-U3 |

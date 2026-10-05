@@ -1,14 +1,20 @@
 # P1-U1 proposed product contracts
 
-**Draft; pending user review.** All new behavior below is a recommendation.
+**Partial approval recorded.** D-01 and the scoped D-05/D-06 eligibility/admission
+contract were approved for P2-U1b on 2026-10-05 (Asia/Manila, +08:00), with creator
+closure as stated below. Other behavior remains a recommendation.
 Existing architecture invariants remain mandatory. Decisions and unit gates are
 listed in the [foundation review](p1-u1-review-draft.md).
 
 ## 1. D-01 — Permissions
 
-Recommend fixed permission bundles with multiple roles per staff account; grants
+Approved fixed roles `tenant_admin`, `call_taker`, `dispatcher`, `responder`: one
+to four distinct roles, any nonempty combination, no duplicates/custom/platform
+roles. Separate tenantless operators have `platform_operator` authority.
+Fixed permission bundles combine only within the canonical tenant. See the
+[approved P2-U1b review](p2-u1b-contract-review.md). Grants
 combine only within the account's tenant. Tenant administrator authority does not
-implicitly grant dispatch or incident closure. Backend authorization is decisive.
+implicitly grant dispatch or closure of another creator's incident. Backend authorization is decisive.
 
 | Action | Platform operator | Tenant admin | Call taker | Dispatcher | Responder |
 | --- | --- | --- | --- | --- | --- |
@@ -17,15 +23,17 @@ implicitly grant dispatch or incident closure. Backend authorization is decisive
 | Operational incident queues/details/timeline | No | Only with operational role | Own tenant | Own tenant | Assigned incident's operational subset |
 | Own intake drafts; create incident | No | Only with call-taker role | Yes | No | No |
 | Edit open incident and correct saved location | No | Only with operational role | Yes | Yes | No |
-| Dispatch, cancel assignment, close incident | No | Only with dispatcher role | No | Yes | No |
+| Dispatch, cancel assignment | No | Only with dispatcher role | No | Yes | No |
+| Close incident | No | Creator, or with dispatcher role | Creator | Own tenant | Creator |
 | Accept/progress/complete assignment | No | Only with responder role | No | No | Own assignment |
 | Set own availability/share own foreground position | No | Only with responder role | No | No | Yes |
 | Set another responder's availability | No | Yes, audited reason | No | Yes, audited reason | No |
 
-Incident closure is a dispatcher action. This needs explicit approval: the overview
-mentions call-taker closure acceptance, so that actor must also hold dispatcher
-permission in the proposed acceptance fixture. If call takers should close by
-default, revise this grant before P5-U6. No platform impersonation is proposed.
+Incident closure is permitted for the canonical staff creator without requiring
+an additional dispatcher role, and for dispatchers within their tenant. Both paths
+remain subject to D-02/D-03 closure-state, outstanding-work, audit and other
+safeguards. This grant approval does not approve those later safeguards. No
+platform impersonation is approved.
 Responders receive required dispatch details, not the tenant's full incident list
 or unrestricted reporter/audit data. Exact mobile field disclosure must be approved
 before P6-U1. Evidence, recording and recovery permissions remain later gates.
@@ -39,7 +47,7 @@ separately rather than inventing duplicate incident progress states.
 | --- | --- | --- |
 | Create from draft | Valid tenant-owned draft and enabled category | One open incident; draft marked converted atomically |
 | Edit/correct location | Open incident, authorized actor, current version | Version increments; timeline and audit retained |
-| Close | Open, dispatcher permission, no nonterminal assignment, closure reason | Closed with actor/time/reason |
+| Close | Open, creator or dispatcher permission, no nonterminal assignment, closure reason | Closed with actor/time/reason |
 | Repeated close | Same idempotency key and payload | Original success; no duplicate history |
 | Reopen/edit closed | Closed | Reject; reopening deferred pending separate approved requirement |
 
@@ -101,8 +109,10 @@ P2-U1a account vocabulary `active`/`disabled`, credential vocabulary
 `unset`/`ready` and the associated
 [storage rules](../architecture/canonical-identity-storage.md). Unset requires
 no hash/change timestamp; ready requires both; creation has no state defaults.
-This scoped P1-U1 handoff permits a's persistence constraints only. The
-recommendations below, roles, admission, authentication, password policy,
+That scoped handoff permitted a's persistence constraints. The user subsequently
+approved b's eligibility: active account plus coherent ready credential, valid
+authority and positive versions, independently in each plane. The
+recommendations below, authentication, password policy,
 setup/reset tokens, sessions and bootstrap execution remain pending for their
 owning units. P1-U1 remains deferred.
 
@@ -134,6 +144,14 @@ review for long command-center shifts. Exact password policy and setup/reset UI
 must be approved with this decision before dependent implementation.
 
 ## 6. D-06 — Tenant lifecycle
+
+**Scoped approval for P2-U1b, 2026-10-05 (Asia/Manila, +08:00):** ordinary
+staff eligibility requires canonical active tenant, active account, ready
+credential, valid approved roles and positive versions. Draft, suspended and
+retired deny ordinary admission; platform eligibility is tenant-independent.
+Missing/malformed authority denies; canonical read failure is unavailable, with
+no authority. No draft setup exception, transition/PBX/active-work effects or
+session policy is approved by this handoff.
 
 Recommend draft → active; active → suspended; suspended → active; draft/suspended
 → retired. Retired is terminal. Only active tenants admit ordinary staff sessions.

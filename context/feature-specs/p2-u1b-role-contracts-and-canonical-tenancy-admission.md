@@ -2,7 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** planned; implementation has not started.
+- **Status:** complete; B-01–07 passed, 2026-10-05 15:32 +08:00 (Asia/Manila).
+- **Evidence:** [focused a/b and full Docker checks](../../docs/status/p2-u1b-evidence.md).
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [P2-U1 parent scope and acceptance matrix](p2-u1-canonical-identities-and-tenancy-admission.md).
 - **Goal:** supply canonical, plane-specific eligibility and authority snapshots
@@ -22,11 +23,12 @@ and its canonical stores, normalization, versions, ownership constraints and gra
 Reuse P1-U5's transaction, audit and safe diagnostic interfaces without duplicating
 them. Recheck a's evidence and the current schema before starting.
 
-Resolve D-01 role names, combinations/cardinality and permission bundles; relevant
-D-05 account/credential eligibility; and D-06 admission/lifecycle contract. Record
-the approved P1-U1 partial handoff. The existing architecture already requires
-active-only ordinary tenant staff admission; the proposed role matrix and draft
-setup exception remain unapproved. Delivery/recovery, active-call coordination
+The user approved D-01 and relevant D-05/D-06 in
+[review sections 1–4](../../docs/planning/p2-u1b-contract-review.md), with creator
+closure requiring no additional dispatcher role and remaining subject to owning
+D-02/D-03 safeguards. The scoped P1-U1 handoff is recorded in product contracts.
+Active-only ordinary admission, fixed role combinations and active/ready accounts
+are approved; no draft setup exception is approved. Delivery/recovery, active-call coordination
 and other later policies are not silently adopted by this child.
 
 ## Scope and ownership

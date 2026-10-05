@@ -34,3 +34,7 @@ export function positiveVersion(input: unknown): input is number {
     input < 2147483647
   );
 }
+
+export function onlyFields(input: object, fields: readonly string[]): boolean {
+  return Object.keys(input).every((key) => fields.includes(key));
+}

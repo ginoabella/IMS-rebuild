@@ -339,8 +339,13 @@ storage repositories. D-05 storage representation is user-approved: account
 The [identity storage contract](../docs/architecture/canonical-identity-storage.md)
 defines ASCII normalization/bounds, plane-qualified reads, version protections,
 caller-owned tenancy registry port and deployment-only bootstrap provenance.
-Role persistence, admission, password policy, authentication and bootstrap
-execution remain with b/c and their decisions; sessions remain P2-U2.
+P2-U1b implements the approved fixed role/admission contracts, bounded primary
+PostgreSQL repeatable-read authority snapshots, private verifier material and
+atomic role/status/credential/tenant-status version/audit mutations. The
+[authority contract](../docs/architecture/canonical-authority-admission.md)
+records the scoped P1-U1 handoff, creator-closure grant, required explicit role
+persistence and downstream authentication boundary. Password policy, usable
+hashing and operator bootstrap remain c; sessions remain P2-U2.
 
 ### Shared Session Management
 

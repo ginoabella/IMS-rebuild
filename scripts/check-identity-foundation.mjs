@@ -1,3 +1,4 @@
+import { checkAuthority } from './check-identity-authority.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -6,8 +7,9 @@ import { once } from 'node:events';
 const selection = process.argv.slice(2);
 assert.ok(
   selection.length === 0 ||
-    (selection.length === 1 && selection[0] === '--storage'),
-  'Supported selection: --storage',
+    (selection.length === 1 &&
+      ['--storage', '--authority'].includes(selection[0])),
+  'Supported selections: --storage, --authority (includes storage regressions)',
 );
 const backend = createRequire(
   new URL('../services/backend/package.json', import.meta.url),
@@ -131,7 +133,7 @@ async function count(table, id) {
 const tenantInsert =
   'INSERT INTO public.tenants (id,normalized_code,display_name,status) VALUES ($1,$2,$3,$4)';
 const staffInsert =
-  'INSERT INTO public.staff_users (id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at) VALUES ($1,$2,$3,$4,$5,$6,$7)';
+  "INSERT INTO public.staff_users (id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES ($1,$2,$3,$4,$5,$6,$7,ARRAY['call_taker'])";
 const operatorInsert =
   'INSERT INTO public.platform_operators (id,normalized_username,status,credential_state,password_hash,credential_changed_at) VALUES ($1,$2,$3,$4,$5,$6)';
 const staffInput = (
@@ -145,6 +147,7 @@ const staffInput = (
   tenantId,
   username,
   status,
+  roles: ['call_taker'],
   credentialState: 'unset',
   passwordHash: null,
   credentialChangedAt: null,
@@ -236,7 +239,7 @@ try {
         'SELECT count(*)::int AS n FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
       )
     ).rows[0].n,
-    5,
+    6,
   );
   for (const table of [
     'tenants',
@@ -261,7 +264,7 @@ try {
   assert.equal(collations.length, 3);
   assert.ok(collations.every((row) => row.collation_name === 'C'));
   console.log(
-    'PASS: fresh/rerun five migrations; no production identity seeds; canonical ASCII normalization and bounds',
+    'PASS: fresh/rerun six migrations; no production identity seeds; canonical ASCII normalization and bounds',
   );
   phase = 'tenant constraints';
   const t1 = randomUUID(),
@@ -851,8 +854,16 @@ try {
   console.log(
     'PASS: runtime least privilege and retained audit; real connection failure returns unavailable; diagnostic/hash sentinels absent',
   );
-} catch {
-  console.error(`FAIL: identity storage acceptance during ${phase}`);
+  if (selection.length === 0 || selection[0] === '--authority') {
+    phase = 'authority checks';
+    await checkAuthority({ appUrl, owner, runtime, run, rejected, logs });
+  }
+} catch (error) {
+  console.error(`FAIL: identity foundation acceptance during ${phase}`);
+  // Assertion/phase summaries are safe; never print raw database errors.
+  if (error.cause?.code === 'ERR_ASSERTION') console.error(error.cause.message);
+  if (error.message?.startsWith('Authority acceptance failed'))
+    console.error(error.message);
   process.exitCode = 1;
 } finally {
   await pool.end();

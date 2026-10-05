@@ -14,8 +14,9 @@ P1-U5c recovery verification/operational handoff and parent P1-U5 are complete.
 P1-U6a shared storage adapter/configuration is complete with user-approved local
 Garage. P1-U6b tenant-checked references/recovery and parent P1-U6 are complete:
 120-second default, hard 300-second ceiling and full local acceptance verified.
-P2-U1a canonical identity storage is complete; b/c role/admission/bootstrap
-acceptance, real evidence authorization and production decisions remain pending.
+P2-U1a canonical storage and P2-U1b roles/admission are complete and verified;
+c bootstrap, parent acceptance, real evidence authorization and production
+decisions remain pending.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
 and short questions only when a feature needs a decision.
@@ -24,6 +25,11 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 
 ## Completed
+
+- P2-U1b approved role bundles and creator-closure grant, canonical plane-specific
+  admission snapshots, isolated credential ports and atomic authority-version/audit
+  mutations: B-01–07, focused real-PostgreSQL a/b checks and full Docker checks
+  passed. See [P2-U1b evidence](../docs/status/p2-u1b-evidence.md).
 
 - P2-U1a canonical identity stores and ownership constraints: approved D-05
   storage states, tenant/staff/operator separation, immutable ownership, audited
@@ -71,10 +77,49 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None. P2-U1a completed 2026-10-05 14:07 +08:00 (Asia/Manila).
-P2-U1b/c and parent acceptance remain incomplete.
+None. P2-U1b completed 2026-10-05 15:32 +08:00 (Asia/Manila).
+P2-U1c and parent acceptance remain incomplete.
 
 ## Unit Checkpoints
+
+### P2-U1b — Role contracts and canonical tenancy admission
+
+- **Status:** complete; 2026-10-05 15:32 +08:00 (Asia/Manila).
+- **Requirement:** [P2-U1b specification](feature-specs/p2-u1b-role-contracts-and-canonical-tenancy-admission.md).
+- **Scope:** approved role persistence, private plane-specific authority snapshots,
+  canonical admission and atomic authority-version/audit mutations.
+- **Required acceptance/checks:** B-01–07; focused real-PostgreSQL checks with a regressions,
+  independent connection/concurrency checks and full `./dev check`.
+- **Completed:** read AGENT.md, feature spec and mandatory project context;
+  inspected a's evidence, storage contract, migration, transaction handle and
+  existing owner repositories. Re-ran a's real-PostgreSQL prerequisite successfully.
+- **Prerequisite recheck:** `./dev exec pnpm check:identity-foundation --storage` passed,
+  exit 0: fresh/rerun migrations, ownership, qualified collisions, runtime grants,
+  audit/version rollback and safe unavailable/sentinel checks. This earlier
+  recheck covers a; final combined verification is recorded below.
+- **Approved decision:** [P2-U1b contract review](../docs/planning/p2-u1b-contract-review.md)
+  sections 1–4 approved, including fixed role names/cardinality/combinations,
+  permission bundles and active/ready/active-tenant admission. Creator closure
+  needs no additional dispatcher role and remains subject to D-02/D-03 safeguards.
+  Recorded in [product contracts](../docs/planning/p1-u1-product-contracts.md).
+- **Implemented:** approved role schema/bundles and creator grant, private coherent
+  primary snapshot/verifier ports, owner authority mutations, event-specific audit,
+  and focused authority selection with storage regressions and client sentinels.
+- **Acceptance:** B-01–07 passed. Final focused `--authority` PostgreSQL suite
+  includes a regressions; full `./dev check` passed, exit 0. Final runtime source
+  lint/typecheck/format and document links/whitespace passed. Local migration,
+  zero identity seeds, runtime role grant, live/ready HTTP 200 and fixture teardown
+  verified. See [b evidence](../docs/status/p2-u1b-evidence.md) and
+  [authority handoff](../docs/architecture/canonical-authority-admission.md).
+- **Review corrections:** sparse role arrays and infinite credential timestamps
+  deny; restored exact fixture constraints. Updated audit/foundation migration
+  count assertions to six; final full rerun passed after the initial audit count
+  failure. A focused run overlapped source edits; the rebuilt final run passed.
+- **Remaining:** none within b. c owns usable hashing/bootstrap; P2-U2 must reload
+  canonical account/tenant status and authority versions. No password/session/
+  Redis/socket/PBX or parent completion is claimed. Hosted CI not run locally.
+- **Deferred:** P1-U1 remains incomplete; credential policy/bootstrap, setup/reset/
+  recovery, lifecycle transitions, PBX and active-work/session effects remain later.
 
 ### P2-U1a — Canonical identity stores and ownership constraints
 
@@ -115,8 +160,8 @@ P2-U1b/c and parent acceptance remain incomplete.
   D-01–D-08; explicit later gates D-09–D-13; acceptance examples and overview mapping.
 - **Remaining:** user approval/modifications, synchronize approved authoritative
   context and decision records, reconcile the matrix; then complete or record a
-  partial handoff. Only the explicit P2-U1a D-05 storage handoff is approved; other
-  recommendations remain pending.
+  partial handoff. P2-U1a D-05 storage and P2-U1b D-01/D-05/D-06
+  role/eligibility/admission handoffs are approved; other recommendations remain pending.
 - **Required checks:** documentation consistency and relative-link review, decision
   owner/unit/resume-condition coverage, all ten success criteria mapped. Runtime
   checks do not apply to this draft.
@@ -389,35 +434,35 @@ P2-U1b/c and parent acceptance remain incomplete.
 
 ### P2-U1 — Canonical identities and tenancy admission
 
-- **Status:** in progress; a complete, b/c planned and parent acceptance incomplete.
+- **Status:** in progress; a/b complete, c planned and parent acceptance incomplete.
 - **Requirement and scope:** [P2-U1 parent spec](feature-specs/p2-u1-canonical-identities-and-tenancy-admission.md);
   canonical stores/ownership, role contracts/admission and secure operator bootstrap.
 - **Sequence:** [P2-U1a](feature-specs/p2-u1a-canonical-identity-stores-and-ownership-constraints.md),
   [P2-U1b](feature-specs/p2-u1b-role-contracts-and-canonical-tenancy-admission.md),
   [P2-U1c](feature-specs/p2-u1c-secure-operator-bootstrap-and-foundation-handoff.md);
-  user adopted the split on 2026-10-05. P2-U1a is complete; b/c remain planned.
+  user adopted the split on 2026-10-05. P2-U1a/b are complete and verified; c remains planned.
 - **Acceptance and checks:** parent AC-01–11; child A-01–07, B-01–07 and C-01–08.
-  `./dev exec pnpm check:identity-foundation --storage` and `./dev check`
-  passed a's checks. Parent acceptance remains incomplete.
+  `./dev exec pnpm check:identity-foundation --authority` and `./dev check`
+  passed A-01–07 and B-01–07. Parent acceptance remains incomplete.
 - **Remaining and gates:** D-05 storage representation and its scoped P1-U1
-  handoff are approved. b/c require their D-01/D-05/D-06 decisions before
-  dependent behavior. No admission/session/bootstrap acceptance is claimed.
+  handoff are approved. b's role/eligibility/admission handoff is also approved;
+  c still needs bootstrap credential policy. B-01–07 passed;
+  no session/bootstrap acceptance is claimed.
 
 ## Next Up
 
-[P2-U1b — role contracts and canonical tenancy admission](feature-specs/p2-u1b-role-contracts-and-canonical-tenancy-admission.md),
-after its D-01 and relevant D-05/D-06 decisions. P2-U1a is complete; its
-[storage contract](../docs/architecture/canonical-identity-storage.md) and
-[verified evidence](../docs/status/p2-u1a-evidence.md) provide normalization,
-qualified repositories, canonical IDs/versions, grants and isolated fixtures.
-The D-05 storage-only handoff is approved; P1-U1 remains deferred. b's role
-representation is intentionally not frozen by a; c's password/bootstrap policy
-and execution remain pending. No session/admission/bootstrap acceptance or
-parent completion is claimed. P2-U2 waits for parent P2-U1 completion.
+[P2-U1c — secure operator bootstrap and foundation handoff](feature-specs/p2-u1c-secure-operator-bootstrap-and-foundation-handoff.md),
+after its bootstrap credential policy decision. a/b are complete: canonical
+storage, approved role/eligibility/admission and private credential/snapshot/
+mutation ports are verified. See [b's authority contract](../docs/architecture/canonical-authority-admission.md)
+and [combined a/b evidence](../docs/status/p2-u1b-evidence.md).
+P1-U1 remains deferred outside its approved a/b handoffs. Password policy/usable
+hashing, trusted bootstrap and parent acceptance remain c; P2-U2 waits for parent
+P2-U1 completion. Session/socket/telephony enforcement remains with later owners.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 is `in progress` (a complete; b/c planned); the other 43 units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 is `in progress` (a/b complete; c planned); the other 43 units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
@@ -440,7 +485,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 The [decision-gate table](implementation-plan.md#decisions-required-before-dependent-implementation)
 identifies the required answers and affected units. Current unresolved areas are:
 
-- Operational permissions, lifecycle transitions, closure, dispatch concurrency,
+- Later evidence/recovery permissions, lifecycle transitions, closure safeguards, dispatch concurrency,
   responder eligibility/availability, and category/priority semantics.
 - Credential setup/reset/recovery, administrator safeguards, and tenant lifecycle
   effects on access, routes, and active work.
@@ -459,7 +504,9 @@ identifies the required answers and affected units. Current unresolved areas are
 These questions block dependent implementation. Proposed answers and gates are
 listed in the [P1-U1 decision register](../docs/planning/p1-u1-review-draft.md#decisions-to-record-before-dependent-implementation).
 The user owns approval of all decisions; D-05 storage representation and its
-associated rules are approved for P2-U1a. Other proposed answers remain pending. P1-U1
+associated rules are approved for P2-U1a; D-01 and relevant D-05/D-06
+role/eligibility/admission rules, including creator closure, are approved for b.
+Other proposed answers remain pending. P1-U1
 is deferred; P1-U2 independent foundation implementation is complete.
 
 
@@ -469,8 +516,8 @@ User-authorized independent foundation work follows the existing stack, module
 boundaries and shared-state invariants. Routine P1-U2 choices use pnpm ordering,
 pinned compatible dependencies and isolated Nest modules; see
 [workspace decisions](../docs/architecture/workspace-foundation.md). The scoped D-05 storage
-representation handoff is approved; other P1-U1 product recommendations remain
-unapproved.
+representation handoff and b's scoped role/admission/creator-closure handoff are
+approved; other P1-U1 product recommendations remain unapproved.
 
 
 ## Verification and Limitations
@@ -498,6 +545,34 @@ unapproved.
 
 
 ## Session Notes
+
+- 2026-10-05 15:32 +08:00 (Asia/Manila) — Completed P2-U1b B-01–07 under the user's
+  approved role/admission contract and revised creator-closure grant. Implemented
+  explicit role constraints, coherent bounded primary snapshots, private verifier
+  ports and audited authority mutations. Final focused a/b PostgreSQL checks and
+  full Docker rerun passed, exit 0; corrected the legacy audit migration count.
+  Local migration, zero seeds, runtime grant, health and fixture teardown passed.
+  Recorded evidence/handoff, synchronized context and cleared active work.
+  c/bootstrap, password policy, sessions and parent acceptance remain incomplete.
+
+- 2026-10-05 (Asia/Manila, +08:00) — User approved P2-U1b review sections
+  1–4 with creator closure independent of dispatcher role, subject to owning
+  D-02/D-03 safeguards, and instructed implementation to continue. Recorded the
+  scoped P1-U1 handoff in product contracts/review and resumed b in progress.
+
+- 2026-10-05 (Asia/Manila, +08:00) — Created the user-requested P2-U1b
+  approval review document with fixed role codes/cardinality/combinations, full
+  permission matrix, account/credential and four-state tenant admission matrices,
+  scoped P1-U1 handoff and explicit later gates. Linked it from the docs index
+  and tracker. Proposal remains unapproved; b remains blocked and incomplete.
+
+- 2026-10-05 14:23 +08:00 (Asia/Manila) — Started P2-U1b at the user's
+  request and marked it in progress. Read AGENT.md, mandatory context and spec;
+  rechecked storage migration/repositories/transaction/audit contracts and re-ran
+  `./dev exec pnpm check:identity-foundation --storage` successfully (exit 0).
+  Prepared and asked the spec-required scoped D-01/D-05/D-06 contract decision.
+  Independent preparation complete; b is blocked awaiting that decision, with
+  no runtime/schema changes or completion claim. P1-U1 remains deferred.
 
 - 2026-10-05 14:07 +08:00 (Asia/Manila) — Completed P2-U1a A-01–07 after D-05 approval.
   Focused real-PostgreSQL checks, full Docker checks, local migration and health

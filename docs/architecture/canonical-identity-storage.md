@@ -6,7 +6,10 @@ The user explicitly approved D-05 account/credential representation and associat
 storage rules for this unit on 2026-10-05. This is the scoped P1-U1 handoff for a;
 P1-U1 remains deferred. Roles, admission, authentication, password policy,
 setup/reset tokens, sessions and bootstrap execution remain with their later
-units and decisions. Check results are recorded separately as acceptance evidence.
+units and decisions. Check results are recorded separately as acceptance evidence. Subsequent b
+adds approved roles/admission and full authority mutations; see the
+[authority contract](canonical-authority-admission.md). The a-only boundary
+below records what a delivered at its checkpoint.
 
 ## Identifier contract
 
@@ -75,7 +78,7 @@ A read failure must not return missing or grant authority.
 ## Verification plan and handoff
 
 Run `./dev exec pnpm check:identity-foundation --storage` for this unit
-(or omit `--storage`, currently the same selection). It is integrated into
+(`--storage` selects a regressions; the default now includes b authority checks). It is integrated into
 `check:foundation`, and therefore `./dev check` and existing CI. Use unique disposable PostgreSQL databases, the real
 deployment entry point for fresh/rerun migration, runtime credential assertions,
 independent connections and held transactions as race barriers. Teardown must
@@ -100,7 +103,9 @@ Verified handoff to b: canonical normalization,
 qualified repository ports, IDs/versions, grants and isolated fixtures.
 See [acceptance evidence](../status/p2-u1a-evidence.md). c consumes
 the operator credential/provenance contract through b's verified foundation.
-Roles, admission, authentication, sessions and bootstrap remain unimplemented.
+At a's checkpoint roles, admission, authentication, sessions and bootstrap
+were unimplemented. b adds roles/admission; authentication, sessions and
+bootstrap remain later.
 
 ## Repository contract for b
 

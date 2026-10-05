@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** in progress; a complete with A-01–07 evidence, b/c remain planned; parent acceptance incomplete.
+- **Status:** in progress; a/b complete with A-01–07/B-01–07 evidence; c planned; parent acceptance incomplete.
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [Phase 2, P2-U1](../implementation-plan.md#p2-u1--implement-canonical-identities-and-tenancy-admission).
 - **Goal:** establish canonical identity, tenant ownership and admission rules for
@@ -27,7 +27,10 @@ deployment-coordinated migrations, restricted runtime credentials, explicit
 transaction handles, safe logging, append-only audit and durable execution.
 
 P1-U1 remains deferred. Its [decision register](../../docs/planning/p1-u1-review-draft.md#decisions-to-record-before-dependent-implementation)
-and [product contracts](../../docs/planning/p1-u1-product-contracts.md) are drafts.
+and [product contracts](../../docs/planning/p1-u1-product-contracts.md) retain
+unresolved decisions. a's D-05 storage handoff and b's D-01/D-05/D-06
+role/eligibility/admission handoff are approved; see
+[b's revised creator-closure review](../../docs/planning/p2-u1b-contract-review.md).
 D-01 role grants/combinations and D-06 lifecycle rules explicitly affect P2-U1.
 D-05's credential policy also affects a usable bootstrap credential. Resolve the
 relevant portions before dependent implementation; unrelated incident, dispatch,
@@ -254,7 +257,7 @@ relative-link, acceptance-coverage and whitespace review, not runtime tests.
 canonical authority rules and trusted provisioning have distinct completion paths.
 Each can be verified independently, while the parent retains the combined outcome.
 The user adopted this split on 2026-10-05. The three child specs below define the
-sequential implementation boundaries; a is complete, b/c remain planned. Approval of the split
+sequential implementation boundaries; a/b are complete and verified; c remains planned. Approval of the split
 does not approve pending product decisions or start runtime implementation.
 
 | Unit | Starting state and scope | Result, checks and acceptance coverage |

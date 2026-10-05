@@ -12,6 +12,8 @@ const sentinels = [
   'STORAGE_REFERENCE_DEFAULT_SECONDS',
   'X-Amz-Signature',
   'HASH_SENTINEL_Secret:MiXeD',
+  'AUTHORITY_HASH_SENTINEL_Private:MiXeD',
+  'authority_identity_sentinel',
   'Failure_SENTINEL',
   'Rollback_SENTINEL',
   'password_hash',
