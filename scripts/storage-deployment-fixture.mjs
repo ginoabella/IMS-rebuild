@@ -1,3 +1,4 @@
+import { fixturePorts } from './storage-access-fixtures.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -8,6 +9,9 @@ const {
 const {
   loadStorageConfig,
 } = require('./dist/infrastructure/storage/configuration.js');
+const {
+  ArtifactAccess,
+} = require('./dist/infrastructure/storage/artifact-access.js');
 const config = loadStorageConfig({
   ...process.env,
   STORAGE_ENABLED: 'true',
@@ -16,7 +20,7 @@ const config = loadStorageConfig({
 });
 // Endpoint override is confined to trusted isolated-provider acceptance tooling.
 const storage = new GarageStorage(
-  { ...config, endpoint: process.argv[3] },
+  { ...config, endpoint: process.argv[3], referenceEndpoint: process.argv[3] },
   () => {},
 );
 const bytes = Buffer.from('STORAGE_DEPLOYMENT_CONTENT_SENTINEL');
@@ -31,6 +35,34 @@ try {
   assert.deepEqual(
     await storage.read(reference, { correlationId: randomUUID() }),
     bytes,
+  );
+  const actor = {
+    plane: 'tenant',
+    actorId: randomUUID(),
+    tenantId: reference.scopeId,
+  };
+  const artifactId = randomUUID();
+  const ports = fixturePorts(
+    [{ artifactId, tenantId: reference.scopeId, reference }],
+    [actor.actorId],
+  );
+  const access = new ArtifactAccess(
+    ports.ownership,
+    ports.permission,
+    storage,
+    config.maxBytes,
+  );
+  const signed = await access.reference(actor, artifactId, {
+    correlationId: randomUUID(),
+  });
+  const response = await fetch(signed.url, {
+    signal: AbortSignal.timeout(3000),
+    redirect: 'error',
+  });
+  assert.equal(response.status, 200);
+  assert.ok(
+    Buffer.from(await response.arrayBuffer()).equals(bytes),
+    'Restarted provider reference must retrieve exact bytes',
   );
   console.log(JSON.stringify(reference));
 } catch {

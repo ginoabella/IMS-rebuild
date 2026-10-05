@@ -12,8 +12,9 @@ configuration and health are verified. P1-U4 is complete: shared web primitives
 and distinct platform/command-center shells are verified. P1-U5a transactional audit/outbox and P1-U5b durable worker delivery are complete;
 P1-U5c recovery verification/operational handoff and parent P1-U5 are complete.
 P1-U6a shared storage adapter/configuration is complete with user-approved local
-Garage. P1-U6b access and later production decisions remain pending; parent P1-U6
-remains in progress until its access matrix is verified.
+Garage. P1-U6b tenant-checked references/recovery and parent P1-U6 are complete:
+120-second default, hard 300-second ceiling and full local acceptance verified.
+Real identity/evidence authorization and later production decisions remain pending.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
 and short questions only when a feature needs a decision.
@@ -22,6 +23,11 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 
 ## Completed
+
+- P1-U6b and parent P1-U6 tenant-checked GET references and recovery: canonical
+  ownership/permission ports, 120-second default/hard 300-second ceiling, real
+  Garage expiry/tampering and integrated outage/restart matrix; focused and full
+  Docker checks passed. See [P1-U6b evidence](../docs/status/p1-u6b-evidence.md).
 
 - P1-U6a private Garage provider, bounded shared adapter, optional configuration,
   trusted provisioning and same-identity recovery: real-provider independent
@@ -59,8 +65,7 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None. P1-U6a completed 2026-10-05 09:43 +08:00 (Asia/Manila). P1-U6b remains planned;
-parent P1-U6 is incomplete pending its access/lifetime decision and verification.
+None. P1-U6b and parent P1-U6 completed 2026-10-05 10:52 +08:00 (Asia/Manila).
 
 ## Unit Checkpoints
 
@@ -283,6 +288,37 @@ parent P1-U6 is incomplete pending its access/lifetime decision and verification
   does not prove production HA, PostgreSQL host/disk recovery or live adapters.
   Audit/failures remain retained; manual retry and retention policy are deferred.
 
+### P1-U6b — Tenant-checked references and recovery verification
+
+- **Status:** complete; 2026-10-05 10:52 +08:00 (Asia/Manila); parent P1-U6 complete.
+- **Requirement:** [P1-U6b spec](feature-specs/p1-u6b-tenant-checked-references-and-recovery-verification.md);
+  B-01–07 and parent AC-01–09.
+- **Scope:** caller-owned ownership/permission ports, tenant-checked access,
+  approved reference signing/configuration and integrated recovery verification.
+- **Preparation:** read AGENT.md, required context and storage specs; inspected
+  existing Garage adapter/configuration, fixtures, ADR and runbook. P1-U6a
+  evidence was complete at the initial preparation checkpoint; final checks also
+  reverified the adapter foundation with access integrated.
+- **Verification:** B-01–07 and parent AC-01–09 passed. `./dev up`, focused storage,
+  isolated storage deployment and full `./dev check` exited 0; all five client scans,
+  independent reference readers, provider/process restart, runtime privileges and
+  unchanged health policy passed. Final live/ready are 200. Garage expiry returns
+  400; tampering returns 403. [Evidence](../docs/status/p1-u6b-evidence.md).
+- **Decision:** user approved GET-only bearer references, explicit reachable host,
+  expiry without immediate revocation, a 120-second default and hard 300-second
+  maximum. See [storage ADR](../docs/architecture/shared-storage.md#approved-p1-u6b-access-contract).
+- **Required checks:** focused `./dev exec pnpm check:storage`, deployment/client
+  checks and `./dev check`; two trusted tenants, deny-before-provider ordering,
+  actual provider expiry/tampering and interrupted access recovery.
+- **Implementation checkpoint:** caller-owned ownership/permission ports and access
+  service, explicit signing host/configuration and adapter GET signing with bounded
+  byte verification exist. Trusted two-tenant, independent-process, expiry/tampering
+  and access interruption checks extend the existing focused command.
+- **Remaining:** none within b or parent P1-U6. P2/P8 must provide real identity,
+  canonical metadata and role/session authorization; external HTTPS, production HA,
+  file policy, retention and recovery remain with their owning units. Issued bearers
+  remain valid until expiry; no immediate revocation, public route or schema added.
+
 ### P1-U6a — Shared storage adapter and configuration
 
 - **Status:** complete; 2026-10-05 09:43 +08:00 (Asia/Manila).
@@ -320,26 +356,23 @@ parent P1-U6 is incomplete pending its access/lifetime decision and verification
 
 ## Next Up
 
-[P1-U6 — shared file storage access](implementation-plan.md#p1-u6--establish-shared-file-storage-access).
-P1-U6a is complete with user-approved local Garage in Docker. P1-U6b is next.
-The [parent feature spec](feature-specs/p1-u6-shared-file-storage-access.md) defines
-AC-01–09. The user adopted two sequential implementation specs:
-[P1-U6a — shared adapter/configuration](feature-specs/p1-u6a-shared-storage-adapter-and-configuration.md), then
-[P1-U6b — tenant-checked references and recovery verification](feature-specs/p1-u6b-tenant-checked-references-and-recovery-verification.md).
-P1-U6a is complete; P1-U6b remains planned with access/lifetime approval pending. Provider/setup is approved for local development.
-P1-U5a/b/c and the parent acceptance matrix are complete.
-Ask one focused product question only when the next dependent feature starts.
+[P2-U1 — canonical identities and tenancy admission](implementation-plan.md#p2-u1--implement-canonical-identities-and-tenancy-admission).
+P1-U6a/b and parent AC-01–09 are complete. The
+[storage contract](../docs/architecture/shared-storage.md) and
+[verified evidence](../docs/status/p1-u6b-evidence.md) are available to later consumers.
+Product/session decisions remain owned by the user; ask one focused question when
+starting the next dependent feature. No Phase 2 implementation has started.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 is `complete`; P1-U6 is `in progress` with P1-U6a complete and P1-U6b planned; the other 44 units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); the other 44 units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
 
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
-| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5 complete; P1-U6 in progress | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
+| 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1, P2-U2, P2-U3, P2-U4 | planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
@@ -363,8 +396,9 @@ identifies the required answers and affected units. Current unresolved areas are
   draft ownership/conflicts, mobile targets, and foreground-location policies.
 - Controlled PBX access, secret management, routing semantics, validation/reload
   commands, active-call changes, and live test destinations.
-- Storage reference lifetime/revocation, evidence/recording access, retention, and
-  production recovery policies; local Garage provider/setup is approved.
+- Real evidence/recording authorization, allowed files, retention and production
+  recovery policies; local Garage setup and foundation reference lifetime/revocation
+  contract are approved.
 - Public channel mappings/handoff/feedback, SMS provider, voice behavior, browser
   calling design, report definitions, and permitted recovery actions.
 - Production platform/HA decisions, measurable readiness/recovery targets, owners,
@@ -410,6 +444,26 @@ recommendations in P1-U1 remain unapproved.
 
 
 ## Session Notes
+
+- 2026-10-05 10:52 +08:00 (Asia/Manila) — Completed P1-U6b and parent P1-U6
+  after explicit approval of GET bearer access, a 120-second default and hard
+  300-second ceiling. Added tenant ownership/permission ports, bounded verified
+  reference issuance, reachable signing configuration and real Garage access/
+  expiry/tampering/recovery checks. Focused, fresh provider and full Docker checks
+  passed; all five client scans and live/ready 200 passed. Corrected rejection
+  expectations for Garage HTTP 400 without weakening lifetime enforcement. One
+  workspace refresh interrupted an earlier check; its two verified exact fixtures
+  were removed, and final runs passed. Added evidence/runbook/ADR handoff and
+  cleared active work. Real identity/evidence and production gates remain open.
+
+- 2026-10-05 (Asia/Manila) — Started P1-U6b at the user's request and marked it
+  in progress. Read repository instructions and required context; inspected a's
+  adapter/configuration and verification boundaries. Prepared a concrete pending
+  access proposal in the storage ADR and asked the required D-10 decision. The
+  spec explicitly forbids inferring access approval from provider/spec approval.
+  Recorded the unit as blocked after independent preparation; resume upon explicit
+  access-contract approval or revision. Relative-file links and whitespace passed;
+  no runtime implementation or acceptance completion is claimed.
 
 - 2026-10-05 09:43 +08:00 (Asia/Manila) — Completed P1-U6a after explicit Garage approval.
   Implemented pinned private provider, runtime/fixture credential separation,

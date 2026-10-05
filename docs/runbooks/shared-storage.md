@@ -41,18 +41,20 @@ the runtime backend. Cleanup is test tooling, not an application retention polic
 
 ## Settings and secrets
 
-| Setting                    | Value / limits                                                  |
-| -------------------------- | --------------------------------------------------------------- |
-| `STORAGE_ENABLED`          | `false` by default; explicitly `true` for a storage consumer    |
-| `STORAGE_ENDPOINT`         | Trusted service origin; no credentials, path, query or fragment |
-| `STORAGE_LOCAL_HTTP`       | `true` permits HTTP only for `garage` or loopback hosts         |
-| `STORAGE_BUCKET`           | `myims-artifacts` for runtime                                   |
-| `STORAGE_REGION`           | `garage`                                                        |
-| `STORAGE_CREDENTIALS_FILE` | `/run/secrets/storage_runtime`                                  |
-| `STORAGE_MAX_BYTES`        | 8 MiB default; maximum 16 MiB                                   |
-| `STORAGE_CONCURRENCY`      | 4 default; maximum 16; excess calls return busy                 |
-| `STORAGE_TIMEOUT_MS`       | 5000 default; maximum 30000; one operation-wide deadline        |
-| `STORAGE_ATTEMPTS`         | 2 default; maximum 3, including the first attempt               |
+| Setting                             | Value / limits                                                  |
+| ----------------------------------- | --------------------------------------------------------------- |
+| `STORAGE_ENABLED`                   | `false` by default; explicitly `true` for a storage consumer    |
+| `STORAGE_ENDPOINT`                  | Trusted service origin; no credentials, path, query or fragment |
+| `STORAGE_LOCAL_HTTP`                | `true` permits HTTP only for `garage` or loopback hosts         |
+| `STORAGE_BUCKET`                    | `myims-artifacts` for runtime                                   |
+| `STORAGE_REGION`                    | `garage`                                                        |
+| `STORAGE_CREDENTIALS_FILE`          | `/run/secrets/storage_runtime`                                  |
+| `STORAGE_MAX_BYTES`                 | 8 MiB default; maximum 16 MiB                                   |
+| `STORAGE_CONCURRENCY`               | 4 default; maximum 16; excess calls return busy                 |
+| `STORAGE_TIMEOUT_MS`                | 5000 default; maximum 30000; one operation-wide deadline        |
+| `STORAGE_ATTEMPTS`                  | 2 default; maximum 3, including the first attempt               |
+| `STORAGE_REFERENCE_ENDPOINT`        | Explicit consumer-reachable origin; required for references     |
+| `STORAGE_REFERENCE_DEFAULT_SECONDS` | 120 default; 1–300; hard lifetime ceiling is 300                |
 
 Enabled configuration/credential failures stop HTTP before it listens; disabled
 entry points need no storage credentials. Foundation HTTP has no artifact consumer,
@@ -66,6 +68,39 @@ is owner-only; mounted credential files are readable by the non-root runtime.
 Preserve the originals with provider volumes. Startup refuses replacement if storage
 volumes exist and required secrets are missing. Restore files from the development
 operator's retained originals; do not regenerate identities against existing data.
+
+## Reference issuance and expiry
+
+Use the owning consumer's `ArtifactAccess` service with a trusted tenant actor,
+opaque artifact ID, canonical ownership resolver and read-permission port. Never
+pass a request's tenant ID/object key directly to the provider adapter. The owning
+module persists internal object references alongside canonical metadata; signed URLs
+are temporary delivery data and must never be saved in metadata, logs or tickets.
+
+Compose supplies `STORAGE_REFERENCE_ENDPOINT=http://garage:3900` for Docker
+consumers and a 120-second default. If a consumer runs on the host, explicitly sign
+for its reachable `http://127.0.0.1:<published port>` origin instead. Backend access
+can continue using the internal Garage origin. External consumers require HTTPS.
+Do not rewrite a URL's signed Host/path/query or expose the service publicly as a
+routine development setup change. The application accepts neither a request-supplied
+signing endpoint nor arbitrary provider keys.
+
+`reference(actor, artifactId, call, lifetimeSeconds?)` checks ownership/permission,
+then verifies object bytes and signs GET only. It returns transient `{ url, expiresAt }`;
+omitting the lifetime uses 120 seconds, and invalid/noninteger/nonpositive values
+or values above 300 fail with `invalid_input` before provider calls. Configuration
+can lower/change the default within 1–300 but cannot raise the hard ceiling.
+Missing signing configuration also fails safely. Authorized missing objects return
+`missing`; malformed/foreign/unresolved/denied ownership returns the same `forbidden`.
+Permission/ownership dependency exceptions return `unavailable` without raw errors.
+
+A bearer can forward/download the URL until expiry. Later logout, role change or
+suspension must prevent new issuance in the real owning consumer but do not revoke
+an already-issued URL. There is no immediate revocation or authenticated download
+gateway in this foundation. A new request after expiry fails (Garage reports 400
+for expiry locally; signature/object/expiry tampering reports 403). Expiry does not
+withdraw downloaded bytes or cancel a stream already started. Fetch a fresh reference
+only through renewed authorization; never extend an existing query manually.
 
 ## Outage and ambiguous-write recovery
 
@@ -82,6 +117,14 @@ Retry within the configured bounds and escalate continuing failure to the mainta
 A conflict requires investigation of identity/bytes or another privileged writer.
 Never allocate a replacement identity merely because a response timed out.
 
+Reference issuance uses the same operation-wide timeout/retry/concurrency limits
+and cancellation as reads. An unavailable provider yields `unavailable`; a stalled
+read/issuance yields `timeout`; saturation yields `busy`. None returns a reference
+as success. A previously issued reference can also fail during provider interruption;
+signing is no promise of availability. Restore provider access, read the original
+identity and request a fresh authorized reference if needed. No file or metadata
+identity changes and no replica-local fallback are part of this recovery.
+
 The owning business module will maintain metadata/partial-completion state and use
 committed-decision/durable-execution conventions when required. This infrastructure
 unit supplies no automatic retry job, metadata recovery table or cleanup schedule.
@@ -92,7 +135,12 @@ unit supplies no automatic retry job, metadata recovery table or cleanup schedul
 directories and one unique fixture scope. A private forwarding proxy creates bounded
 write-acknowledgement, read-stream and availability barriers; the shared service
 remains running. Only exact assigned keys from that run's fixture scope are deleted.
-No runtime artifact bucket cleanup occurs.
+No runtime artifact bucket cleanup occurs. The access matrix adds two independent
+trusted tenant scopes, explicit platform/denied/unknown cases, GET-only and expiry/
+tampering checks, distinct signing-host reachability and interrupted issuance and
+reference downloads. Its subprocesses retrieve through their own issued reference
+and return only digest/length, never bytes or URLs. The fixture ownership resolver
+uses a canonical map independent of the requesting tenant ID.
 
 `storage-deployment-check` creates uniquely named provider containers/volumes,
 provisions fresh private buckets twice, writes through the workspace, stops/starts
@@ -113,4 +161,6 @@ Compose configuration will not manage those retained resources automatically.
 Local checks do not establish hosted-provider compatibility, authenticated tenant
 access, remote reference reachability, production HA, backup/restore or retention.
 Garage single-node data depends on this host. HTTPS for externally reachable
-consumers and P1-U6b signing/lifetime/revocation decisions remain separate gates.
+consumers remains a deployment gate. The approved foundation reference policy uses
+a 120-second default, hard 300-second ceiling and expiry without immediate revocation;
+real ownership/session/role enforcement remains with P2/P8 consumers.

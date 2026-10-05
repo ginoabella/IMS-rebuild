@@ -6,6 +6,11 @@ const sentinels = [
   'STORAGE_DEPLOYMENT_CONTENT_SENTINEL',
   'STORAGE_CREDENTIALS_FILE',
   '@aws-sdk/client-s3',
+  '@aws-sdk/s3-request-presigner',
+  'STORAGE_ACCESS_CONTENT_SENTINEL',
+  'STORAGE_REFERENCE_ENDPOINT',
+  'STORAGE_REFERENCE_DEFAULT_SECONDS',
+  'X-Amz-Signature',
 ];
 for (const role of ['runtime', 'fixture', 'denied']) {
   const credentials = JSON.parse(

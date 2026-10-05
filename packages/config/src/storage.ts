@@ -9,6 +9,8 @@ export interface StorageConfig {
   concurrency: number;
   timeoutMs: number;
   attempts: number;
+  referenceEndpoint?: string;
+  referenceDefaultSeconds: number;
 }
 function limit(env: Environment, key: string, fallback: number, max: number) {
   const value = env[key] ?? String(fallback);
@@ -24,20 +26,12 @@ function limit(env: Environment, key: string, fallback: number, max: number) {
     );
   return parsed;
 }
-export function parseStorageConfig(
-  env: Environment,
-): StorageConfig | undefined {
-  if (env.STORAGE_ENABLED === undefined || env.STORAGE_ENABLED === 'false')
-    return undefined;
-  if (env.STORAGE_ENABLED !== 'true')
-    throw new ConfigurationError('STORAGE_ENABLED must be true or false');
+function origin(env: Environment, key: string): string {
   let endpoint: URL;
   try {
-    endpoint = new URL(env.STORAGE_ENDPOINT ?? '');
+    endpoint = new URL(env[key] ?? '');
   } catch {
-    throw new ConfigurationError(
-      'STORAGE_ENDPOINT must be a valid service URL',
-    );
+    throw new ConfigurationError(`${key} must be a valid service URL`);
   }
   if (
     !['https:', 'http:'].includes(endpoint.protocol) ||
@@ -50,7 +44,7 @@ export function parseStorageConfig(
     endpoint.port === '0'
   )
     throw new ConfigurationError(
-      'STORAGE_ENDPOINT must be a credential-free service origin',
+      `${key} must be a credential-free service origin`,
     );
   // HTTP is restricted to the approved local service or loopback test proxies.
   if (
@@ -61,13 +55,27 @@ export function parseStorageConfig(
       ))
   )
     throw new ConfigurationError(
-      'STORAGE_ENDPOINT requires HTTPS outside approved local development',
+      `${key} requires HTTPS outside approved local development`,
     );
   if (
     env.STORAGE_LOCAL_HTTP !== undefined &&
     !['true', 'false'].includes(env.STORAGE_LOCAL_HTTP)
   )
     throw new ConfigurationError('STORAGE_LOCAL_HTTP must be true or false');
+  return endpoint.origin;
+}
+export function parseStorageConfig(
+  env: Environment,
+): StorageConfig | undefined {
+  if (env.STORAGE_ENABLED === undefined || env.STORAGE_ENABLED === 'false')
+    return undefined;
+  if (env.STORAGE_ENABLED !== 'true')
+    throw new ConfigurationError('STORAGE_ENABLED must be true or false');
+  const endpoint = origin(env, 'STORAGE_ENDPOINT');
+  const referenceEndpoint =
+    env.STORAGE_REFERENCE_ENDPOINT === undefined
+      ? undefined
+      : origin(env, 'STORAGE_REFERENCE_ENDPOINT');
   const bucket = env.STORAGE_BUCKET ?? '';
   if (!/^[a-z][a-z0-9-]{1,61}[a-z0-9]$/.test(bucket))
     throw new ConfigurationError('STORAGE_BUCKET must be a valid bucket name');
@@ -80,7 +88,14 @@ export function parseStorageConfig(
       'STORAGE_CREDENTIALS_FILE must be an absolute file path',
     );
   return {
-    endpoint: endpoint.origin,
+    endpoint,
+    referenceEndpoint,
+    referenceDefaultSeconds: limit(
+      env,
+      'STORAGE_REFERENCE_DEFAULT_SECONDS',
+      120,
+      300,
+    ),
     bucket,
     region,
     credentialsFile,

@@ -2,8 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** parent overview for two adopted implementation specs; implementation
-  in progress; P1-U6a complete, local Garage setup approved, P1-U6b access decision pending.
+- **Status:** complete; P1-U6a/b and AC-01–09 verified 2026-10-05 10:52 +08:00
+  (Asia/Manila). See [parent completion evidence](../../docs/status/p1-u6b-evidence.md).
 - **Prepared:** 2026-10-05 08:24 +08:00 (Asia/Manila).
 - **Requirement:** [Phase 1, P1-U6](../implementation-plan.md#p1-u6--establish-shared-file-storage-access).
 - **Goal:** provide one shared object-storage boundary before evidence features use it.
@@ -27,7 +27,7 @@ safe correlation/logging plus durable execution conventions for future consumers
 P1-U6's required plan dependency remains P1-U3; it need not introduce jobs merely
 because the worker foundation exists.
 
-Source inspection found no object-storage adapter, storage configuration or
+At specification preparation, source inspection found no object-storage adapter, storage configuration or
 storage service in the current foundation. Configuration is owned by
 `packages/config` and backend infrastructure; lasting foundation decisions currently
 live under `docs/architecture`. Recheck source and previous evidence before
@@ -125,7 +125,8 @@ documentation-only implementation unit is unnecessary.
 These specs refine P1-U6 without changing top-level plan IDs or Phase 1 order.
 The split itself did not approve D-10. Subsequent explicit user approval selected
 local Garage with private Docker storage and internal HTTP; P1-U6a is complete
-and P1-U6b remains planned. The parent completes only after both child specs and every AC pass. Completion of a proves provider integration;
+and P1-U6b is complete after explicit access approval and AC-01–09 verification.
+The parent completes only after both child specs and every AC pass. Completion of a proves provider integration;
 it does not imply completion of tenant-checked access or the parent. Do not split
 provider writes from their ambiguous-outcome recovery, or signing from ownership
 checks and expiry verification.
@@ -138,8 +139,8 @@ environment, private access and credential model, reference delivery mechanism,
 maximum lifetime and revocation expectations in a storage ADR. Operator-supplied
 access is required for a hosted environment; no credentials or infrastructure
 availability are assumed. Local Garage setup is now approved in the
-[storage ADR](../../docs/architecture/shared-storage.md); numerical lifetime and
-revocation remain pending for P1-U6b.
+[storage ADR](../../docs/architecture/shared-storage.md); GET-only bearer access is approved for P1-U6b with a 120-second default, hard
+300-second ceiling and no immediate revocation.
 
 D-10 also includes later file-policy, retention and recovery decisions. P1-U6 does
 not implement those behaviors; record their remaining gates for P8-U1–U2, P8-U11
@@ -150,5 +151,7 @@ implementation rather than replacing it with a fixture claim.
 
 Local Garage provider/setup is approved and P1-U6a is complete with
 [verified evidence](../../docs/status/p1-u6a-evidence.md).
-P1-U6b waits for its access decision; recheck the baseline, record the active
-unit and required checks, and begin the adopted first implementation boundary.
+P1-U6b and parent P1-U6 are complete with
+[verified access/recovery evidence](../../docs/status/p1-u6b-evidence.md). Real
+identity/evidence consumers must supply canonical ownership and role/session policy
+in their owning units; no hosted-provider or production readiness is claimed.

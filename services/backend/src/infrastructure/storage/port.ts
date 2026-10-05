@@ -28,6 +28,10 @@ export interface StorageCall {
   signal?: AbortSignal;
   correlationId: string;
 }
+export interface ExpiringReadReference {
+  readonly url: string;
+  readonly expiresAt: string;
+}
 export interface SharedStorage {
   assign(scopeId: string, bytes: Uint8Array): ObjectReference;
   write(
@@ -36,6 +40,11 @@ export interface SharedStorage {
     call: StorageCall,
   ): Promise<void>;
   read(reference: ObjectReference, call: StorageCall): Promise<Uint8Array>;
+  reference(
+    reference: ObjectReference,
+    call: StorageCall,
+    lifetimeSeconds?: number,
+  ): Promise<ExpiringReadReference>;
   inspect(call: StorageCall): Promise<void>;
   close(): void;
 }

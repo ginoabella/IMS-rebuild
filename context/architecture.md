@@ -91,7 +91,11 @@ with their owners.
 P1-U6a uses user-approved Garage as a single-node S3-compatible Docker service
 for development. Garage owns persistent metadata/data volumes; application replicas
 use its private endpoint and have no disk fallback. Internal development HTTP is
-approved; production hosting/TLS and P1-U6b access decisions remain pending.
+approved; production hosting/TLS remain pending. P1-U6b uses explicitly approved GET-only
+bearer references with a 120-second default and hard 300-second ceiling, issued
+after canonical tenant ownership and consumer permission checks. Existing references
+remain usable until expiry after logout/role/suspension changes; no immediate
+revocation is promised. Fixture ports do not establish real identity enforcement.
 See [storage contract](../docs/architecture/shared-storage.md).
 
 ## System Boundaries

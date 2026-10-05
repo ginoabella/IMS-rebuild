@@ -32,7 +32,7 @@
     "check:audit-outbox": "pnpm build:backend && node scripts/check-audit-outbox.mjs",
     "check:worker-delivery": "pnpm build:backend && node scripts/check-worker-delivery.mjs",
     "check:durability": "pnpm build:backend && node scripts/check-audit-outbox.mjs && node scripts/check-worker-delivery.mjs --recovery",
-    "check:storage": "pnpm build:backend && node scripts/check-storage.mjs",
+    "check:storage": "pnpm build:backend && node scripts/check-storage.mjs && node scripts/check-storage-access.mjs",
     "check:storage-clients": "node scripts/check-storage-clients.mjs"
   },
   "devDependencies": {

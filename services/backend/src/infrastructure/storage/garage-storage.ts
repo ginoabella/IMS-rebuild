@@ -4,6 +4,7 @@ import {
   PutObjectCommand,
   HeadBucketCommand,
 } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Agent as HttpAgent } from 'node:http';
 import { Agent as HttpsAgent } from 'node:https';
 import { Readable } from 'node:stream';
@@ -32,6 +33,7 @@ const outcomes: StorageOutcome[] = [
 ];
 export class GarageStorage implements SharedStorage {
   private readonly client: S3Client;
+  private readonly signingClient?: S3Client;
   private active = 0;
   private closed = false;
   constructor(
@@ -59,6 +61,14 @@ export class GarageStorage implements SharedStorage {
         }),
       },
     });
+    if (config.referenceEndpoint)
+      this.signingClient = new S3Client({
+        endpoint: config.referenceEndpoint,
+        region: config.region,
+        credentials: config.credentials,
+        forcePathStyle: true,
+        maxAttempts: 1,
+      });
   }
   assign(scopeId: string, bytes: Uint8Array) {
     return assignObject(scopeId, bytes, this.config.maxBytes);
@@ -101,7 +111,7 @@ export class GarageStorage implements SharedStorage {
     return new StorageError('unavailable');
   }
   private async run<T>(
-    operation: 'read' | 'write' | 'inspect',
+    operation: 'read' | 'write' | 'inspect' | 'reference',
     call: StorageCall,
     work: (signal: AbortSignal) => Promise<T>,
   ): Promise<T> {
@@ -245,6 +255,38 @@ export class GarageStorage implements SharedStorage {
     const key = objectKey(reference, this.config.maxBytes);
     return this.run('read', call, (signal) => this.get(reference, key, signal));
   }
+  async reference(
+    reference: ObjectReference,
+    call: StorageCall,
+    lifetimeSeconds = this.config.referenceDefaultSeconds,
+  ) {
+    const key = objectKey(reference, this.config.maxBytes);
+    const signer = this.signingClient;
+    if (
+      !signer ||
+      !Number.isSafeInteger(lifetimeSeconds) ||
+      lifetimeSeconds < 1 ||
+      lifetimeSeconds > 300
+    )
+      throw new StorageError('invalid_input');
+    return this.run('reference', call, async (signal) => {
+      // Signing is local. Verify actual bytes first, within the same deadline.
+      await this.get(reference, key, signal);
+      const signingDate = new Date(Math.floor(Date.now() / 1000) * 1000);
+      const url = await getSignedUrl(
+        signer,
+        new GetObjectCommand({ Bucket: this.config.bucket, Key: key }),
+        { expiresIn: lifetimeSeconds, signingDate },
+      );
+      if (signal.aborted) throw new StorageError('cancelled');
+      return Object.freeze({
+        url,
+        expiresAt: new Date(
+          signingDate.getTime() + lifetimeSeconds * 1000,
+        ).toISOString(),
+      });
+    });
+  }
   async inspect(call: StorageCall): Promise<void> {
     await this.run('inspect', call, async (signal) => {
       await this.client.send(
@@ -256,5 +298,6 @@ export class GarageStorage implements SharedStorage {
   close() {
     this.closed = true;
     this.client.destroy();
+    this.signingClient?.destroy();
   }
 }

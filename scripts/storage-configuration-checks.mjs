@@ -74,6 +74,13 @@ export async function checkStorageStartup(root, env, captured, outageEndpoint) {
   }
   try {
     await launch({ STORAGE_ENDPOINT: '' });
+    await launch({ STORAGE_REFERENCE_ENDPOINT: '' });
+    await launch({ STORAGE_REFERENCE_DEFAULT_SECONDS: '301' });
+    await launch({ STORAGE_REFERENCE_DEFAULT_SECONDS: '0' });
+    await launch({
+      STORAGE_REFERENCE_ENDPOINT:
+        'https://user:STARTUP_SECRET_SENTINEL@example.test',
+    });
     await launch({ STORAGE_CREDENTIALS_FILE: invalid });
     await launch({ STORAGE_CREDENTIALS_FILE: '/missing-startup-secret' });
     await launch({ STORAGE_ENDPOINT: outageEndpoint }, true);

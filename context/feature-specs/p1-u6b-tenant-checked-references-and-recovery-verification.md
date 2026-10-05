@@ -2,7 +2,10 @@
 
 ## Status and purpose
 
-- **Status:** planned; depends on P1-U6a and access/expiry approval.
+- **Status:** complete; 2026-10-05 10:52 +08:00 (Asia/Manila). P1-U6a remains
+  verified; approved access uses a 120-second default and hard 300-second ceiling.
+- **Verification:** B-01–07 and parent AC-01–09 passed; see
+  [completion evidence](../../docs/status/p1-u6b-evidence.md).
 - **Prepared:** 2026-10-05 (Asia/Manila).
 - **Requirement:** [P1-U6 parent scope and acceptance matrix](p1-u6-shared-file-storage-access.md).
 - **Goal:** issue expiring artifact references only after tenant ownership and

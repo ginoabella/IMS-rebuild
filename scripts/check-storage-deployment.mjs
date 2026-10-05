@@ -103,7 +103,7 @@ try {
   provision();
   assert.deepEqual(fixture('read', reference), reference);
   console.log(
-    'PASS: fresh isolated volumes, provisioning reruns and ordinary provider stop/start retain identical bytes across new application processes',
+    'PASS: fresh isolated volumes, provisioning reruns and ordinary provider stop/start retain identical bytes through tenant-checked references across new application processes',
   );
 
   const backend = JSON.parse(
@@ -155,6 +155,8 @@ try {
       assert.ok(!logs.join('\n').includes(value));
   }
   assert.ok(!logs.join('\n').includes('STORAGE_DEPLOYMENT_CONTENT_SENTINEL'));
+  assert.ok(!logs.join('\n').includes('X-Amz-Signature'));
+  assert.ok(!logs.join('\n').includes('X-Amz-Credential'));
   console.log(
     'PASS: captured provisioning/provider/process evidence excludes content and credential sentinels',
   );

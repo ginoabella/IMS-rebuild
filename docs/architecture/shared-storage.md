@@ -1,8 +1,9 @@
-# Shared storage — P1-U6a
+# Shared storage — P1-U6
 
 Date: 2026-10-05 (Asia/Manila). Status: approved development provider/setup;
-P1-U6a implementation and A-01–07 verification complete. See
-[acceptance evidence](../status/p1-u6a-evidence.md).
+P1-U6a A-01–07 and P1-U6b B-01–07 verification complete; parent AC-01–09 passed.
+See [adapter evidence](../status/p1-u6a-evidence.md) and
+[access/recovery evidence](../status/p1-u6b-evidence.md).
 
 The user approved Garage after reviewing Docker deployment, private storage,
 separate runtime/provisioning credentials and internal HTTP. This implements the
@@ -29,16 +30,48 @@ per-object IAM enforcement or tenant authorization.
 
 ## Remaining gates
 
-P1-U6b owns reference mechanism, client-reachable endpoint, lifetime and revocation
-approval. Production hosting, TLS, redundancy, backup/restore, file policy and
+P1-U6b reference mechanism, client-reachable endpoint, lifetime and revocation
+semantics are approved below. Production hosting, TLS, redundancy, backup/restore, file policy and
 retention remain with their planned units. Single-node development verifies no
 production availability guarantee.
 
+## Approved P1-U6b access contract
+
+Status: explicitly approved by the user; 2026-10-05 (Asia/Manila). The user
+confirmed a hard 300-second ceiling with a 120-second default. Implementation and
+local provider verification are complete.
+
+- Mechanism: private S3 Signature V4 GET-only bearer references, issued only after
+  canonical ownership resolution and consumer permission approval. Platform identity
+  alone grants no tenant access. Foreign, unresolved and denied cases share a safe
+  forbidden outcome and reach neither provider reads nor signing.
+- Host: explicitly configured consumer-reachable signing origin, distinct from the
+  backend service origin when necessary. Local foundation verification uses Docker
+  or loopback HTTP; external consumers require HTTPS and their own reachable host.
+  Preserve the signed host during retrieval; do not rewrite issued URLs.
+- Lifetime: default 120 seconds, hard maximum 300 seconds; reject noninteger, nonpositive or excessive
+  requested lifetimes. Return explicit expiration information. Actual provider
+  expiry and tampering rejection must be verified before claiming completion.
+- Revocation: a bearer can forward the reference. Ownership/permission checks at
+  issuance do not revalidate later downloads. Logout, role change or suspension
+  prevents new issuance through the eventual owning consumer; existing references
+  remain usable until expiry. Immediate revocation is not promised. A requirement
+  for immediate revocation introduces an authenticated gateway/P2 dependency.
+- Availability: signing alone proves no object existence or availability. Authorized
+  issuance should verify the resolved object through the existing bounded adapter;
+  subsequent retrieval can still fail if availability changes. Missing, unavailable
+  and timeout retain distinct safe outcomes. Recovery reuses the assigned identity.
+- Sensitivity: never retain signed references as canonical metadata or evidence;
+  omit query strings, raw errors, credentials and artifact bytes from diagnostics.
+
+Production hosting/TLS/HA, real identity/session and evidence authorization, file
+policy, retention and backup/restore remain gated in their owning later units.
+
 ## Typed adapter and object identity
 
-`SharedStorage` exposes assign, bounded write/read, bucket availability inspection
-and close. `GarageStorage` implements it with pinned AWS SDK for JavaScript v3
-3.1146.0; SDK types stay server-side. Optional `loadStorageConfig` returns undefined
+`SharedStorage` exposes assign, bounded write/read/reference issuance, bucket
+availability inspection and close. `GarageStorage` implements it with pinned AWS SDK for JavaScript v3
+3.1146.0, including the matching S3 request presigner; SDK types stay server-side. Optional `loadStorageConfig` returns undefined
 when disabled. A storage consumer explicitly loads configuration and owns closing
 its adapter. HTTP validates enabled settings/secret loading before listening; HTTP,
 worker and telephony have no artifact consumer in this unit. Storage is therefore
@@ -70,6 +103,51 @@ bytes. Do not mint another reference. Conflict requires owner investigation; do
 not silently accept mismatched bytes. PostgreSQL transactions cannot roll back
 provider effects.
 
+## Access service and owning-consumer handoff
+
+`ArtifactAccess` accepts a trusted `ArtifactActor`, opaque UUID v4 artifact ID and
+`StorageCall`. The caller owns `ArtifactOwnership.resolve(artifactId)` and
+`ArtifactReadPermission.permits(actor, artifactId)`. Ownership resolution never
+accepts a request tenant ID. Canonical `tenantId` must match both the trusted actor
+and the internal reference's scope; malformed references are denied. This foundation
+requires tenant actors; a platform actor has no implicit evidence grant. An owning
+feature requiring a future explicit platform grant must define and verify that
+policy in its own unit.
+
+Both `read` and `reference` authorize ownership and permission before any provider
+operation. Malformed IDs, foreign objects, unresolved ownership and denied reads
+share `forbidden`, preventing an ownership/existence oracle. Raw resolver/permission
+exceptions become safe `unavailable`. Only an authorized canonical artifact can
+expose a provider `missing`, `timeout` or `unavailable` outcome. Snapshot the actor
+and validated reference across asynchronous permission checks.
+
+`GarageStorage.reference` is an internal trusted port, like `read`; user-facing
+consumers must use `ArtifactAccess`. It verifies the complete bounded object through
+the existing adapter before GET signing, using one deadline/retry/concurrency slot.
+A missing object is `missing` even though signing itself is local. Signing/retrieval
+can still fail after this verification; no reference is an availability guarantee.
+The returned `{ url, expiresAt }` is transient sensitive delivery data. Expiration
+matches the second-precision SigV4 signing time plus the requested lifetime. Invalid
+lifetimes are rejected before provider calls. Garage rejects expired queries with
+HTTP 400 in local verification; signature/path/expiry tampering fails with 403.
+GET references reject writes (400/403) and the object remains unchanged.
+
+`STORAGE_REFERENCE_ENDPOINT` is explicit; omission supports adapter-only consumers
+but causes reference issuance to fail safely with `invalid_input`. It need not equal
+`STORAGE_ENDPOINT`: one is consumer reachable, the other serves backend operations.
+Neither accepts credentials, paths, queries or fragments. Both require HTTPS outside
+approved Garage/loopback HTTP. Compose configures `http://garage:3900` for Docker
+consumers; host consumers must select their reachable loopback origin. No proxy
+may rewrite the signed Host/path/query. Local checks verify separate backend and
+consumer origins with a private forwarding fixture, preserving the signed Host.
+
+`STORAGE_REFERENCE_DEFAULT_SECONDS` defaults to 120 and validates in 1–300.
+The 300-second maximum is hardcoded enforcement, not an operator-adjustable ceiling.
+Disabled storage remains optional and credential-free; HTTP validates enabled access
+settings before listening, but has no artifact consumer or new health dependency.
+P8-U1 must supply canonical metadata and real role/session authorization. No fixture
+context establishes authentication, tenant foreign keys or production evidence policy.
+
 ## Bounds and safe outcomes
 
 Default maximum bytes: 8 MiB (ceiling 16 MiB); concurrent operations: 4 (ceiling 16);
@@ -95,7 +173,9 @@ is logged. No client application receives credentials or SDK administration acce
 
 ## References
 
-[Garage setup](https://garagehq.deuxfleurs.fr/documentation/quick-start/),
+[AWS SDK presigning](https://github.com/aws/aws-sdk-js-v3/tree/main/packages/s3-request-presigner)
+defines the SDK call; provider acceptance is proven against Garage rather than
+assuming AWS behavior. [Garage setup](https://garagehq.deuxfleurs.fr/documentation/quick-start/),
 [configuration](https://garagehq.deuxfleurs.fr/documentation/reference-manual/configuration/)
 and [S3 compatibility](https://garagehq.deuxfleurs.fr/documentation/reference-manual/s3-compatibility/)
 explain provider deployment and protocol limits. This contract relies on actual

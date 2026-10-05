@@ -51,7 +51,8 @@ Separate P1-U5 implementation specs:
 
 Shared storage foundation: [P1-U6 parent overview and acceptance matrix](../context/feature-specs/p1-u6-shared-file-storage-access.md).
 Local Garage provider/setup is approved; P1-U6a is complete and verified.
-P1-U6b access approval remains pending.
+P1-U6b access is approved: 120-second default, hard 300-second maximum;
+implementation and combined recovery verification are complete; parent P1-U6 is complete.
 
 Separate P1-U6 implementation specs, in the adopted sequence:
 
@@ -62,3 +63,5 @@ Separate P1-U6 implementation specs, in the adopted sequence:
 - [Storage setup and recovery runbook](runbooks/shared-storage.md)
 
 - [P1-U6a acceptance evidence and limits](status/p1-u6a-evidence.md)
+
+- [P1-U6b access/recovery and parent acceptance evidence](status/p1-u6b-evidence.md)

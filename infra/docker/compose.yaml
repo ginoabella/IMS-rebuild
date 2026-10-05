@@ -120,6 +120,8 @@ services:
     environment: &backend-environment
       STORAGE_ENABLED: 'false'
       STORAGE_ENDPOINT: http://garage:3900
+      STORAGE_REFERENCE_ENDPOINT: http://garage:3900
+      STORAGE_REFERENCE_DEFAULT_SECONDS: '120'
       STORAGE_LOCAL_HTTP: 'true'
       STORAGE_BUCKET: myims-artifacts
       STORAGE_REGION: garage
