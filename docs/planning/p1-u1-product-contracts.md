@@ -96,6 +96,16 @@ any different vocabulary before P5-U4/P5-U6.
 
 ## 5. D-05 — Credentials and administrator safeguards
 
+**Partial approval, 2026-10-05 (Asia/Manila, +08:00):** the user approved
+P2-U1a account vocabulary `active`/`disabled`, credential vocabulary
+`unset`/`ready` and the associated
+[storage rules](../architecture/canonical-identity-storage.md). Unset requires
+no hash/change timestamp; ready requires both; creation has no state defaults.
+This scoped P1-U1 handoff permits a's persistence constraints only. The
+recommendations below, roles, admission, authentication, password policy,
+setup/reset tokens, sessions and bootstrap execution remain pending for their
+owning units. P1-U1 remains deferred.
+
 Recommend lowercase trim normalization for tenant code and username, preserving
 password input exactly. Staff login remains exactly tenant code, username,
 password; all invalid identity/status combinations return `Invalid credentials`.

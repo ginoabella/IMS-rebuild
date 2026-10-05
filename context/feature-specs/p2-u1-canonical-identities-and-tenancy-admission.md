@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; specification prepared and reviewed, implementation pending.
+- **Status:** in progress; a complete with A-01–07 evidence, b/c remain planned; parent acceptance incomplete.
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [Phase 2, P2-U1](../implementation-plan.md#p2-u1--implement-canonical-identities-and-tenancy-admission).
 - **Goal:** establish canonical identity, tenant ownership and admission rules for
@@ -254,7 +254,7 @@ relative-link, acceptance-coverage and whitespace review, not runtime tests.
 canonical authority rules and trusted provisioning have distinct completion paths.
 Each can be verified independently, while the parent retains the combined outcome.
 The user adopted this split on 2026-10-05. The three child specs below define the
-sequential implementation boundaries; all remain planned. Approval of the split
+sequential implementation boundaries; a is complete, b/c remain planned. Approval of the split
 does not approve pending product decisions or start runtime implementation.
 
 | Unit | Starting state and scope | Result, checks and acceptance coverage |

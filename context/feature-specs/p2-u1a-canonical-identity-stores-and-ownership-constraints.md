@@ -2,7 +2,9 @@
 
 ## Status and purpose
 
-- **Status:** planned; implementation has not started.
+- **Status:** complete; A-01–07 passed 2026-10-05 14:07 +08:00 (Asia/Manila).
+- **Evidence:** [P2-U1a verification](../../docs/status/p2-u1a-evidence.md);
+  [approved storage contract and scoped handoff](../../docs/architecture/canonical-identity-storage.md).
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [P2-U1 parent scope and acceptance matrix](p2-u1-canonical-identities-and-tenancy-admission.md).
 - **Goal:** establish database-enforced tenant-qualified identities and a separate

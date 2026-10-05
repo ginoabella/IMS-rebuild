@@ -11,6 +11,12 @@ const sentinels = [
   'STORAGE_REFERENCE_ENDPOINT',
   'STORAGE_REFERENCE_DEFAULT_SECONDS',
   'X-Amz-Signature',
+  'HASH_SENTINEL_Secret:MiXeD',
+  'Failure_SENTINEL',
+  'Rollback_SENTINEL',
+  'password_hash',
+  'modules/identity/adapters/db',
+  'modules/platform/adapters/db',
 ];
 for (const role of ['runtime', 'fixture', 'denied']) {
   const credentials = JSON.parse(
@@ -46,6 +52,6 @@ for (const app of [
   const count = await scan(`/workspace/apps/${app}/${directory}`);
   assert.ok(count > 0, 'Build client artifacts before running this check');
   console.log(
-    `PASS: ${app} built client artifacts exclude storage credential/content/configuration and SDK import sentinels (${count} files)`,
+    `PASS: ${app} built client artifacts exclude storage and identity credential/content/configuration/import sentinels (${count} files)`,
   );
 }

@@ -67,11 +67,17 @@ Separate P1-U6 implementation specs, in the adopted sequence:
 - [P1-U6b access/recovery and parent acceptance evidence](status/p1-u6b-evidence.md)
 
 Identity foundation: [P2-U1 feature spec and sub-unit review](../context/feature-specs/p2-u1-canonical-identities-and-tenancy-admission.md).
-P2-U1 remains planned. The user adopted three sequential implementation sub-units;
-relevant P1-U1 role, admission and credential decisions remain pending.
+P2-U1 remains incomplete; P2-U1a storage is complete and verified; b/c remain planned.
+The user adopted three sequential implementation sub-units;
+D-05 account/credential representation is approved for a; role, admission
+and other credential decisions remain pending.
 
 Separate P2-U1 implementation specs:
 
 - [P2-U1a — Canonical identity stores and ownership constraints](../context/feature-specs/p2-u1a-canonical-identity-stores-and-ownership-constraints.md)
 - [P2-U1b — Role contracts and canonical tenancy admission](../context/feature-specs/p2-u1b-role-contracts-and-canonical-tenancy-admission.md)
 - [P2-U1c — Secure operator bootstrap and foundation handoff](../context/feature-specs/p2-u1c-secure-operator-bootstrap-and-foundation-handoff.md)
+
+- [Canonical identity storage contract and scoped D-05 approval](architecture/canonical-identity-storage.md)
+
+- [P2-U1a acceptance evidence and limits](status/p2-u1a-evidence.md)

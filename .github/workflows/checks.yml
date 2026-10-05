@@ -11,9 +11,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: ./dev up
       - run: ./dev exec env CI=1 pnpm check
-      - name: Foundation, durability and storage (isolated fixtures)
+      - name: Foundation, durability, storage and identities (isolated fixtures)
         run: ./dev foundation-check
-      - name: Storage exclusion from built clients
+      - name: Server credential exclusion from built clients
         run: ./dev exec pnpm check:storage-clients
       - name: Fresh storage provisioning and restart
         run: ./dev storage-deployment-check

@@ -332,6 +332,16 @@ After login, a client-supplied tenant ID is never authorization authority.
 Credential setup, reset, recovery, audit, and administrative updates must target
 a tenant-qualified user ID, never a username alone.
 
+P2-U1a implements the canonical tenant, staff and separate operator stores with
+database ownership/normalization constraints, restrictive grants and audited
+storage repositories. D-05 storage representation is user-approved: account
+`active`/`disabled`, credential `unset`/`ready`, with no state creation defaults.
+The [identity storage contract](../docs/architecture/canonical-identity-storage.md)
+defines ASCII normalization/bounds, plane-qualified reads, version protections,
+caller-owned tenancy registry port and deployment-only bootstrap provenance.
+Role persistence, admission, password policy, authentication and bootstrap
+execution remain with b/c and their decisions; sessions remain P2-U2.
+
 ### Shared Session Management
 
 The identity module creates, validates, renews, and revokes sessions through a
