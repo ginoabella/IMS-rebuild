@@ -28,7 +28,17 @@ const { TenantAdmissionRepository } = backend(
   './dist/modules/tenancy/adapters/db/admission-read.js',
 );
 const { SafeLogger } = backend('./dist/infrastructure/execution/logging.js');
-let lifecycle, records, fences, database, http;
+const { RedisDistributedLimiter } = backend(
+  './dist/modules/identity/adapters/redis/limiter.js',
+);
+const { Admission } = backend(
+  './dist/modules/identity/application/admission.js',
+);
+const { TrustedSource } = backend(
+  './dist/modules/identity/adapters/http/trusted-source.js',
+);
+const { parseLimiterConfig } = backend('@myims/config');
+let lifecycle, records, fences, database, http, limiter;
 process.on('message', async (message) => {
   try {
     if (message.operation === 'init') {
@@ -50,15 +60,34 @@ process.on('message', async (message) => {
         new CanonicalSessionAuthority(staff, platform),
         config,
       );
-      if (message.http)
-        http = await openHttp({ lifecycle, staff, platform, runtimeUrl });
+      if (message.http) {
+        const limiterConfig = message.limiterConfig ?? parseLimiterConfig({});
+        limiter = new RedisDistributedLimiter(
+          message.limiterUrl ?? redisUrl,
+          config,
+          limiterConfig,
+        );
+        await limiter.connect();
+        http = await openHttp({
+          lifecycle,
+          staff,
+          platform,
+          runtimeUrl,
+          admission: new Admission(limiter),
+          source: new TrustedSource(limiterConfig.trustedProxies),
+        });
+      }
       process.send({
         id: message.id,
         result: { ready: true, ...(http ? { url: http.url } : {}) },
       });
       return;
     }
-    if (['prepare', 'release', 'barrier'].includes(message.operation)) {
+    if (
+      ['prepare', 'release', 'barrier', 'stats', 'metrics'].includes(
+        message.operation,
+      )
+    ) {
       process.send({
         id: message.id,
         result: http.control(message.operation, ...message.args),
@@ -68,6 +97,7 @@ process.on('message', async (message) => {
     if (message.operation === 'close') {
       if (http) await http.close();
       records.close();
+      limiter?.close();
       await fences.close();
       await database.close();
       process.send({ id: message.id, closed: true });

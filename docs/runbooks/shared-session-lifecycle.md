@@ -86,3 +86,6 @@ cleanup; never purge operational PostgreSQL/Redis data or broad container patter
 Owning UI/transport units must preserve unfinished incident work during expiry
 and required reauthentication, with identity/tenant isolation and no expired
 submissions. This is a required handoff, not a completed UI flow.
+
+P2-U2c's [integrated runbook](session-foundation.md) extends these steps with shared
+limits, bounded new-operation reconnection and counter-rollback quarantine.

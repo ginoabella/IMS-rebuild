@@ -1,3 +1,4 @@
+import { checkDistributedLimits } from './check-session-limits.mjs';
 import { checkHttpAuthority } from './check-session-authority.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
@@ -11,8 +12,8 @@ const selection = process.argv.slice(2);
 assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
-      ['--lifecycle', '--authority'].includes(selection[0])),
-  'Supported selections: --lifecycle, --authority (default: both)',
+      ['--lifecycle', '--authority', '--limits'].includes(selection[0])),
+  'Supported selections: --lifecycle, --authority, --limits (default: all)',
 );
 const backend = createRequire(
   new URL('../services/backend/package.json', import.meta.url),
@@ -350,6 +351,18 @@ try {
       secrets,
       appUrl: app.href,
     });
+  if (selection.length === 0 || selection[0] === '--limits')
+    await checkDistributedLimits({
+      owner,
+      worker,
+      redis,
+      issue,
+      key,
+      ref,
+      secrets,
+      appUrl: app.href,
+      proxy,
+    });
   const a = await worker(),
     b = await worker();
   const s = await issue(a),
@@ -366,7 +379,13 @@ try {
   assert.ok(!raw.includes('session.operator'));
   assert.ok(!raw.includes('credential-sentinel'));
   const allKeys = await redis.keys('*');
-  assert.ok(allKeys.every((k) => /^myims:session:v1:[a-f0-9]{64}$/.test(k)));
+  assert.ok(
+    allKeys.every(
+      (k) =>
+        /^myims:session:v1:[a-f0-9]{64}$/.test(k) ||
+        /^myims:limiter:v1:(platform|tenant)\.(sign-in|protected)$/.test(k),
+    ),
+  );
   for (const value of [
     null,
     '',
@@ -822,8 +841,18 @@ try {
     assert.equal(result.kind, 'unavailable');
     assert.ok(!('token' in result));
     assert.equal(p.seen(), true);
-    if (operation === 'issue')
-      assert.equal((await redis.keys('*')).length, keysBefore.length + 1);
+    if (operation === 'issue') {
+      // Earlier fixture records may expire naturally during the combined suite.
+      // Prove this ambiguous write created exactly one new record, independently
+      // of unrelated TTL deletions, rather than comparing total database size.
+      const newKeys = (await redis.keys('myims:session:v1:*')).filter(
+        (k) => !keysBefore.includes(k),
+      );
+      assert.equal(newKeys.length, 1);
+      const persisted = JSON.parse(await redis.get(newKeys[0]));
+      assert.equal(persisted.identityId, platform.identityId);
+      assert.equal(persisted.plane, 'platform');
+    }
     if (operation === 'rotate') {
       assert.equal(await redis.get(key(session.token)), null);
       assert.ok((await redis.keys('*')).some((k) => !keysBefore.includes(k)));

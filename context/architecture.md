@@ -386,7 +386,16 @@ document fail-closed recovery and the expiry/reauthentication draft-preservation
 handoff to P2-U3/U4. P2-U2b adds [canonical HTTP principals and explicit global guards](../docs/architecture/canonical-http-authority.md),
 post-success conditional activity renewal and typed owner transaction locks for
 sensitive-write revalidation. Bearer fixtures are separate from production wiring;
-c owns distributed limits and integrated recovery, U3/U4 own sign-in transports.
+P2-U2c adds [approved distributed admission](../docs/architecture/distributed-admission.md)
+and [integrated recovery operations](../docs/runbooks/session-foundation.md).
+Independent source/identity fixed-window counters use bounded expiring hashes in
+session Redis; protected HTTP applies limits after canonical guards and before
+work. Sign-in consumers use the same typed admission before credential lookup/
+verification/issuance. Configured trusted proxies alone determine forwarding
+trust. New operations reconnect through bounded authenticated/capacity validation;
+ambiguous writes are never replayed. The 120/minute protected identity default and
+8,192-counter ceiling require realistic traffic/combined-memory review before
+production. U3/U4 own sign-in transports and the Phase 2 gate remains incomplete.
 
 ### Platform Operators and Public Intake
 

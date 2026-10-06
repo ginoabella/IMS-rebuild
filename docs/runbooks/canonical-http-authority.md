@@ -10,7 +10,7 @@ Run from the host in the existing Docker workspace:
 
 `--authority` runs real two-process Nest HTTP authority checks followed by a's
 lifecycle regressions. `--lifecycle` retains a-only checks. Omitting the selection
-runs both, including the final session step of `./dev check`. The launcher creates
+runs all a/b/c checks, including the final session step of `./dev check`. The launcher creates
 an authenticated, bounded isolated Redis container; the suite creates/migrates a
 unique PostgreSQL database and applies actual runtime grants. Issuance and barriers
 travel over private fixture IPC, never HTTP. Replicas use independent canonical
@@ -40,3 +40,6 @@ recovery must continue consulting canonical versions and durable fencing. See
 [contract and transport limits](../architecture/canonical-http-authority.md) and
 [existing lifecycle recovery operations](shared-session-lifecycle.md).
 Distributed limits and integrated reconnect/recovery acceptance remain P2-U2c.
+
+The [integrated session runbook](session-foundation.md) adds approved shared limits,
+`--limits`, automatic bounded new-operation reconnection and restore quarantine.

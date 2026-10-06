@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned.
+- **Status:** complete; 2026-10-06 11:12 +08:00 (Asia/Manila). C-01–07 passed.
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [P2-U2 parent scope and acceptance matrix](p2-u2-shared-session-store-and-authorization-guards.md).
 - **Goal:** enforce distributed admission limits and prove the complete shared-session HTTP boundary under failure and recovery.
@@ -23,7 +23,8 @@ and P1-U3 shared services; do not reimplement lifecycle or canonical repositorie
 
 Before product limits are implemented, obtain the parent's scoped limiter policy:
 operation coverage, budgets/windows, source/identity dimensions and counting rules.
-Prepare a concrete policy proposal when implementation reaches this gate. Do not
+The [concrete policy review](../../docs/planning/p2-u2c-limiter-contract-review.md)
+records explicit section 1 approval and production traffic/capacity review conditions. Do not
 turn fixture limits into product defaults. Document trusted proxy configuration;
 resolve undefined deployment origins/cross-site behavior only where it affects
 this unit. P1-U1 and broader credential/recovery/production decisions stay deferred.
@@ -120,6 +121,10 @@ actual results. A command name in this spec does not establish its existence or
 success. Documentation-only preparation requires consistency/link/whitespace review.
 
 ## Completion and parent handoff
+
+Implemented and verified under approved policy; [central evidence](../../docs/status/p2-u2c-evidence.md)
+maps C-01–07 and parent AC-01–11 to actual focused/full results and a/b proof.
+Production traffic/capacity review and owning transport gates remain explicit.
 
 Complete c and parent P2-U2 only when C-01–07, a/b criteria and all parent AC-01–11
 pass. Centralize the parent acceptance mapping in the final evidence, with links

@@ -63,8 +63,8 @@ case "$action" in
   exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
       if [ "$1" = pnpm ] && [ "${2:-}" = check:session-foundation ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ] && [ "$1" != --authority ]; }; then
-          echo 'Supported session selections: --lifecycle, --authority' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ] && [ "$1" != --authority ] && [ "$1" != --limits ]; }; then
+          echo 'Supported session selections: --lifecycle, --authority, --limits' >&2; exit 1
         fi
         provision_storage scripts/check-session-deployment.mjs "$@"
       else workspace_exec "$@"; fi ;;

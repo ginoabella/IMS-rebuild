@@ -108,3 +108,28 @@ test('file references and trusted migration credentials are distinct', () => {
     'deployment',
   );
 });
+test('approved limiter budgets, shortened settings and bounded trusted proxies', () => {
+  const config = parseBackendConfig(valid);
+  assert.deepEqual(config.limiter.policies['tenant.protected'], {
+    source: 600,
+    identity: 120,
+    windowMs: 60000,
+  });
+  assert.equal(config.limiter.capacity, 8192);
+  assert.deepEqual(config.limiter.trustedProxies, []);
+  assert.equal(
+    parseBackendConfig({ ...valid, LIMITER_TENANT_PROTECTED_IDENTITY: '100' })
+      .limiter.policies['tenant.protected'].identity,
+    100,
+  );
+  for (const env of [
+    { LIMITER_TENANT_PROTECTED_IDENTITY: '121' },
+    { LIMITER_CAPACITY: '8193' },
+    { LIMITER_TENANT_SIGN_IN_WINDOW_SECONDS: '901' },
+    { LIMITER_TRUSTED_PROXIES: 'arbitrary-host' },
+  ])
+    assert.throws(
+      () => parseBackendConfig({ ...valid, ...env }),
+      ConfigurationError,
+    );
+});

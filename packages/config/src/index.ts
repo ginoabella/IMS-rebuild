@@ -1,3 +1,11 @@
+import { parseLimiterConfig, type LimiterConfig } from './limiter';
+export {
+  parseLimiterConfig,
+  limiterOperations,
+  type LimiterConfig,
+  type LimiterOperation,
+  type LimiterPolicy,
+} from './limiter';
 import { parseSessionConfig, type SessionConfig } from './session';
 export { parseSessionConfig, type SessionConfig } from './session';
 import { parseStorageConfig, type StorageConfig } from './storage';
@@ -16,6 +24,7 @@ export interface ConnectionConfig {
 export interface BackendConfig {
   storage?: StorageConfig;
   sessions: SessionConfig;
+  limiter: LimiterConfig;
   http: { host: string; port: number };
   database: ConnectionConfig;
   sessionRedis: ConnectionConfig;
@@ -134,6 +143,7 @@ export function parseBackendConfig(env: Environment): BackendConfig {
   return {
     storage: parseStorageConfig(env),
     sessions: parseSessionConfig(env),
+    limiter: parseLimiterConfig(env),
     http: { host, port: integer(env, 'PORT', 4000, 0, 65535) },
     database,
     sessionRedis,

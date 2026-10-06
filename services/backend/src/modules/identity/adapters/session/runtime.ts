@@ -1,3 +1,6 @@
+import { Admission } from '../../application/admission';
+import { RedisDistributedLimiter } from '../redis/limiter';
+import { TrustedSource } from '../http/trusted-source';
 import type { BackendConfig } from '@myims/config';
 import { SnapshotDatabase } from '../../../../infrastructure/database/read-snapshot';
 import { SharedSessionLifecycle } from '../../application/session-lifecycle';
@@ -22,7 +25,13 @@ export async function sessionRuntime(
     config.sessionRedis.url,
     config.sessions,
   );
+  const limiter = new RedisDistributedLimiter(
+    config.sessionRedis.url,
+    config.sessions,
+    config.limiter,
+  );
   const close = async () => {
+    limiter.close();
     records.close();
     await Promise.all([fences.close(), database.close()]);
   };
@@ -32,9 +41,10 @@ export async function sessionRuntime(
   // Await bounded connection/capacity validation before exposing the lifecycle.
   // HTTP still starts on failure so public health remains available.
   try {
-    await records.connect();
+    await Promise.all([records.connect(), limiter.connect()]);
   } catch {
     records.close();
+    limiter.close();
     if (requireReady) {
       await close();
       throw new Error('Session dependencies unavailable');
@@ -48,6 +58,8 @@ export async function sessionRuntime(
   );
   return {
     lifecycle,
+    admission: new Admission(limiter),
+    source: new TrustedSource(config.limiter.trustedProxies),
     authority: new RequestAuthority(lifecycle, staff, platform),
     transactionAuthority: new TransactionAuthority(staff, platform),
     fences,

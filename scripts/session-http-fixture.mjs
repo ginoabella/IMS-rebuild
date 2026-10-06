@@ -22,7 +22,17 @@ const { HttpAccess } = load('modules/identity/adapters/http/policy');
 const { Transaction } = load('infrastructure/database/transaction');
 const { SafeLogger } = load('infrastructure/execution/logging');
 const { AuditRepository } = load('modules/audit/adapters/db/audit-repository');
-export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
+const { Admission } = load('modules/identity/application/admission');
+const { TrustedSource } = load('modules/identity/adapters/http/trusted-source');
+const { enforceAdmission } = load('modules/identity/adapters/http/guards');
+export async function openHttp({
+  lifecycle,
+  staff,
+  platform,
+  runtimeUrl,
+  admission,
+  source,
+}) {
   const pool = new Pool({
     connectionString: runtimeUrl,
     max: 4,
@@ -33,9 +43,16 @@ export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
   const authority = new RequestAuthority(lifecycle, staff, platform);
   const transactionAuthority = new TransactionAuthority(staff, platform);
   let barrier = null;
+  const stats = { protected: 0, verification: 0 };
+  const consumeProtected = admission.protected.bind(admission);
+  admission.protected = async (...args) => {
+    await wait('admission');
+    return consumeProtected(...args);
+  };
   async function wait(stage) {
     if (barrier?.stage !== stage) return;
     barrier.entered = true;
+    barrier.count++;
     await barrier.promise;
   }
   function own(p, tenantId) {
@@ -80,16 +97,36 @@ export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
     health() {
       return { status: 'alive' };
     }
+    platformActivity(req) {
+      return this.platform(req);
+    }
+    async signIn(req) {
+      await wait('sign-in');
+      enforceAdmission(
+        await admission.signIn({
+          plane: req.params.plane,
+          source: source.extract(req),
+          username: req.body?.username,
+          tenantCode: req.body?.tenantCode,
+        }),
+        req.res,
+      );
+      // Test-only verification sentinel: never issues a token or checks a password.
+      stats.verification++;
+      return { verifiedFixture: true };
+    }
     unclassified() {
       throw new Error('Unclassified handler executed');
     }
     platform(req) {
+      stats.protected++;
       return {
         principal: requestPrincipal(req),
         actor: principalActor(requestPrincipal(req)),
       };
     }
     staff(req) {
+      stats.protected++;
       const p = requestPrincipal(req);
       own(p, req.params.tenantId);
       return { principal: p, actor: principalActor(p) };
@@ -111,6 +148,7 @@ export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
   Controller()(FixtureController);
   const routes = [
     ['health', Get, 'health/live', { access: 'public' }],
+    ['signIn', Post, 'fixture/sign-in/:plane', { access: 'public' }],
     ['unclassified', Get, 'unclassified', null],
     [
       'platform',
@@ -121,6 +159,17 @@ export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
         plane: 'platform',
         permissions: ['platform_operator'],
         activity: 'passive',
+      },
+    ],
+    [
+      'platformActivity',
+      Post,
+      'platform/activity',
+      {
+        access: 'protected',
+        plane: 'platform',
+        permissions: ['platform_operator'],
+        activity: 'operational',
       },
     ],
     [
@@ -194,6 +243,8 @@ export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
     controllers: [FixtureController],
     providers: [
       { provide: RequestAuthority, useValue: authority },
+      { provide: Admission, useValue: admission },
+      { provide: TrustedSource, useValue: source },
       { provide: APP_GUARD, useClass: AuthorityGuard },
       { provide: APP_INTERCEPTOR, useClass: ActivityInterceptor },
     ],
@@ -203,15 +254,17 @@ export async function openHttp({ lifecycle, staff, platform, runtimeUrl }) {
   return {
     url: await app.getUrl(),
     control(operation, stage) {
+      if (operation === 'metrics') return admission.metrics();
+      if (operation === 'stats') return { ...stats };
       if (operation === 'prepare') {
         let release;
         const promise = new Promise((r) => {
           release = r;
         });
-        barrier = { stage, promise, release, entered: false };
+        barrier = { stage, promise, release, entered: false, count: 0 };
       }
       if (operation === 'release') barrier?.release();
-      return { entered: barrier?.entered ?? false };
+      return { entered: barrier?.entered ?? false, count: barrier?.count ?? 0 };
     },
     async close() {
       barrier?.release();

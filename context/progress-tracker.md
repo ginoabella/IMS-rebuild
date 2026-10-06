@@ -16,9 +16,10 @@ Garage. P1-U6b tenant-checked references/recovery and parent P1-U6 are complete:
 120-second default, hard 300-second ceiling and full local acceptance verified.
 P2-U1a/b/c and parent P2-U1 are complete and verified: canonical storage,
 role/admission/version contracts and secure initial operator bootstrap.
-Shared lifecycle/recovery fencing and canonical HTTP guards are complete in
-P2-U2a/b. Distributed limits, sign-in, real evidence authorization and production
-decisions remain pending.
+P2-U2a/b/c and parent P2-U2 are complete and verified: shared lifecycle/fencing,
+canonical HTTP guards, distributed admission and integrated controlled recovery.
+Real sign-in, evidence authorization and production decisions remain pending.
+Protected traffic/capacity validation remains mandatory before production.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
 and short questions only when a feature needs a decision.
@@ -28,12 +29,19 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## Completed
 
+- P2-U2c distributed admission/integrated recovery and parent P2-U2: approved
+  independent source/identity limits, bounded expiring atomic Redis registries,
+  trusted proxy extraction, protected 429/503 and new-operation reconnection without
+  write replay. C-01–07, all a/b regressions, parent AC-01–11, complete focused and
+  full Docker checks passed. See [combined evidence](../docs/status/p2-u2c-evidence.md).
+  Production realistic traffic/capacity review and U3/U4/Phase 2 transport remain.
+
 - P2-U2b canonical HTTP authority and guards: current primary canonical versions,
   frozen plane-qualified principals/approved grants, explicit global route policy,
   safe 401/403/503, post-success conditional renewal and typed transactional owner
   locks. B-01–07, real two-HTTP-replica authority/lifecycle checks and full Docker
   checks passed. See [b evidence](../docs/status/p2-u2b-evidence.md).
-  c and parent remain pending; browser/mobile sign-in remain U3/U4.
+  c and parent are subsequently complete; browser/mobile sign-in remain U3/U4.
 
 - P2-U2a shared session lifecycle and durable recovery fencing: approved web
   60-minute/12-hour and mobile 24-hour/7-day policy, qualifying activity only,
@@ -41,7 +49,7 @@ authorizes routine foundation choices, not approval of proposed product rules.
   revocation fencing, bounded Redis scripts/configuration/maintenance and
   independent-process real-service expiry/race/uncertain-write/stale-restore
   checks. A-01–07, final focused and full Docker checks passed. See
-  [lifecycle evidence](../docs/status/p2-u2a-evidence.md). c and parent remain pending.
+  [lifecycle evidence](../docs/status/p2-u2a-evidence.md). c and parent are subsequently complete.
 
 - P2-U1c secure initial operator bootstrap and parent P2-U1: approved scoped
   D-05 policy, protected input/private hashing, atomic system audit/provenance,
@@ -100,40 +108,52 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None. P2-U2b completed 2026-10-06 09:48 +08:00 (Asia/Manila).
+None. P2-U2c and parent P2-U2 completed 2026-10-06 11:12 +08:00 (Asia/Manila).
 
 ## Unit Checkpoints
 
 ### P2-U2 — Shared session store and authorization guards
 
-- **Status:** planned; specification/review prepared 2026-10-05, Asia/Manila (+08:00).
-- **Requirement:** [P2-U2 feature spec](feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
-- **Scope:** hashed opaque-token lookup, shared Redis lifecycle, canonical
-  status/version validation, plane/permission guards, distributed rate limits
-  and two-replica outage/restored-data verification.
-- **Acceptance:** AC-01–11 define lifecycle, concurrency, canonical invalidation,
-  cross-plane/tenant rejection, shared limits and recovery checks. Proposed
-  `./dev exec pnpm check:session-foundation --lifecycle` is implemented and
-  verified with full Docker checks for a. `--authority` runs b plus a regressions;
-  the default runs both and is included in full Docker checks. c/parent verification
-  remains required.
-- **Sequence:** user adopted three sequential child specs on 2026-10-05:
-  [a — lifecycle/recovery fencing](feature-specs/p2-u2a-shared-session-lifecycle-and-recovery-fencing.md),
-  [b — canonical HTTP guards](feature-specs/p2-u2b-canonical-authority-validation-and-http-guards.md),
-  [c — distributed limits/integrated recovery](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md).
-  a/b completed 2026-10-06; c and the parent remain planned.
-  Lifecycle/recovery fencing is verified under approved scoped policy.
-- **Gates:** session lifetimes/activity and selective durable fencing are approved;
-  limiter policy remains unapproved.
-  Recovery design must prevent restored revoked/rotated sessions from becoming
-  valid; Redis-only deletion does not prove that guarantee. See spec gate table.
-- **Verification:** a A-01–07, focused lifecycle and full Docker checks passed;
-  see [a evidence](../docs/status/p2-u2a-evidence.md). b B-01–07 also passed;
-  see [b evidence](../docs/status/p2-u2b-evidence.md). Parent integrated/limiter
-  acceptance and Phase 2 completion remain unproved.
-- **Remaining:** implement c, resolve its limiter policy and verify
-  parent AC-01–11 using real services and two HTTP replicas.
+- **Status:** complete; 2026-10-06 11:12 +08:00 (Asia/Manila).
+- **Requirement:** [parent specification](feature-specs/p2-u2-shared-session-store-and-authorization-guards.md); AC-01–11.
+- **Implemented:** a shared lifecycle/durable recovery fences, b canonical HTTP
+  authority/transaction guards and c approved distributed admission plus integrated
+  failure/recovery. All three sequential children are complete.
+- **Approval:** scoped lifetimes/activity/selective fencing and c limiter policy
+  are approved. The protected 120/minute default and 8,192-counter ceiling retain
+  mandatory realistic traffic/combined memory validation before production.
+- **Verification:** complete focused `./dev exec pnpm check:session-foundation`
+  and `./dev check` passed, exit 0, using actual Redis/PostgreSQL/runtime grants
+  and independent HTTP processes. [Central evidence](../docs/status/p2-u2c-evidence.md)
+  maps every parent AC to c's checks and [a proof](../docs/status/p2-u2a-evidence.md)/
+  [b proof](../docs/status/p2-u2b-evidence.md). Health live/ready HTTP 200; exact
+  fixture cleanup, client sentinels and docs/launcher checks passed.
+- **Remaining:** none within parent scope. U3/U4 own actual sign-in/logout,
+  cookies/CSRF/mobile storage and isolated unfinished-work reauthentication.
+  Production HA/TLS/joint-store rollback and Phase 2 gate remain incomplete.
 
+### P2-U2c — Distributed rate limits and integrated recovery handoff
+
+- **Status:** complete; 2026-10-06 11:12 +08:00 (Asia/Manila).
+- **Requirement:** [c specification](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md); C-01–07 and parent AC-01–11.
+- **Approval:** [section 1](../docs/planning/p2-u2c-limiter-contract-review.md#1-approved-product-policy)
+  approved with realistic polling/operator/future mobile traffic and capacity gates.
+- **Implemented:** typed pre-verification admission; independent source/identity
+  fixed windows, bounded 8,192-field expiring Redis registries, hashed identities,
+  validated config/proxy extraction, finite private metrics, protected 400/429/503
+  and bounded new-operation reconnection without ambiguous write replay.
+- **Verification:** focused `--limits`, complete default and full Docker passed,
+  exit 0, including a/b regressions, barriers, ACL/OOM/response-loss/timeout, actual
+  Redis restart/stale restore and interrupted primary recovery on both HTTP
+  replicas. Full registry measured 876,709 bytes. Health/cleanup and docs passed;
+  [evidence](../docs/status/p2-u2c-evidence.md) records corrected fixture assertions
+  and exact results. Hosted CI remains unexecuted locally.
+- **Handoff:** [admission contract](../docs/architecture/distributed-admission.md)
+  and [integrated operations](../docs/runbooks/session-foundation.md) define U3/U4
+  issuance/renew/revoke/errors, restore quarantine/fencing, private credentials,
+  noeviction/capacity and mandatory production traffic review.
+- **Remaining:** none within c. Excluded credential-recovery/public-intake/socket
+  limiter policies, browser/device journeys and Phase 2 acceptance remain pending.
 
 ### P2-U2b — Canonical authority validation and HTTP guards
 
@@ -152,8 +172,8 @@ None. P2-U2b completed 2026-10-06 09:48 +08:00 (Asia/Manila).
   relative links, formatting, launcher syntax and whitespace verified. See
   [b evidence](../docs/status/p2-u2b-evidence.md).
 - **Remaining:** none within b. c receives guards/principals/errors/transaction ports
-  and HTTP fixtures; c/parent, limits, sign-in and production decisions remain
-  incomplete. U3/U4 own credential channels and expired-work preservation.
+  and HTTP fixtures; c/parent/limits are subsequently complete. Sign-in and
+  production decisions remain incomplete. U3/U4 own credential channels and expired-work preservation.
 
 ### P2-U2a — Shared session lifecycle and recovery fencing
 
@@ -185,8 +205,8 @@ None. P2-U2b completed 2026-10-06 09:48 +08:00 (Asia/Manila).
 - **Handoff:** b receives typed lookup/lifecycle and canonical bridge, conditional
   renewal and fencing; c receives bounded failure/restore/restart fixtures/settings.
   P2-U3/U4 must verify expiry/reauthentication with preservation and isolation of
-  unfinished incident work. No protected HTTP/sign-in, parent or Phase 2 completion
-  is claimed.
+  unfinished incident work. a alone does not establish HTTP/sign-in acceptance; b/c and parent are now
+  verified separately. Sign-in and Phase 2 remain incomplete.
 
 ### P2-U2 implementation sub-units
 
@@ -194,7 +214,7 @@ None. P2-U2b completed 2026-10-06 09:48 +08:00 (Asia/Manila).
 | --- | --- | --- |
 | [P2-U2a — Shared session lifecycle and recovery fencing](feature-specs/p2-u2a-shared-session-lifecycle-and-recovery-fencing.md) | complete | Lifecycle, expiry/rotation/revocation and recovery fencing; A-01–07 with real-service independent-process checks. |
 | [P2-U2b — Canonical authority validation and HTTP guards](feature-specs/p2-u2b-canonical-authority-validation-and-http-guards.md) | complete | Canonical principals, plane/permission guards and transactional authority boundary; B-01–07 with two HTTP replicas after a. |
-| [P2-U2c — Distributed rate limits and integrated recovery handoff](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md) | planned | Distributed limits, integrated outage/restore checks and combined parent handoff; C-01–07 and parent AC-01–11 after a/b. |
+| [P2-U2c — Distributed rate limits and integrated recovery handoff](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md) | complete | Distributed limits, integrated outage/restore checks and combined parent handoff; C-01–07 and parent AC-01–11 after a/b. |
 
 Parent completion requires all children and AC-01–11. The split preserves
 top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
@@ -597,16 +617,14 @@ top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
 
 ## Next Up
 
-[P2-U2c — distributed rate limits and integrated recovery handoff](feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md),
-after completed [a lifecycle/fencing](../docs/status/p2-u2a-evidence.md) and
-[b canonical HTTP guards](../docs/status/p2-u2b-evidence.md).
-Resolve c's explicit limiter policy gate before dependent implementation.
-P1-U1 remains deferred outside approved identity and session handoffs. Other
-later policies retain their decision gates; no later unit has started automatically.
+[P2-U3 — Deliver platform operator sign-in](implementation-plan.md#p2-u3--deliver-platform-operator-sign-in),
+after completed P2-U2 infrastructure. No later unit has started automatically.
+P1-U1 remains deferred outside approved scoped handoffs; U3/U4 preserve explicit
+transport/credential decisions and unfinished-work reauthentication requirements.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 is `complete` (a/b/c complete); the other 43 units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); the other 42 units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
@@ -614,7 +632,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
 | 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
-| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1 complete; P2-U2a/b complete; c and U3/U4 planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
+| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2 complete; U3/U4 planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1, P5-U2, P5-U3, P5-U4, P5-U5, P5-U6, P5-U7 | planned | [Staff intake and dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
@@ -631,7 +649,9 @@ identifies the required answers and affected units. Current unresolved areas are
 
 - Later evidence/recovery permissions, lifecycle transitions, closure safeguards, dispatch concurrency,
   responder eligibility/availability, and category/priority semantics.
-- Distributed limiter policy and production/joint-store recovery remain pending;
+- Distributed limiter policy is approved in [c review section 1](../docs/planning/p2-u2c-limiter-contract-review.md#1-approved-product-policy);
+  realistic protected traffic and combined session/limiter capacity need production validation;
+  production/joint-store recovery remains pending;
   scoped session lifetimes/activity and selective durable fencing are approved.
 - Credential setup/reset/recovery, administrator safeguards, and tenant lifecycle
   effects on access, routes, and active work.
@@ -669,6 +689,12 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 ## Verification and Limitations
 
+- P2-U2c and parent: C-01–07, a/b regressions, complete focused and full Docker
+  checks passed. Central [AC-01–11 evidence](../docs/status/p2-u2c-evidence.md)
+  records topology, safe results, exact cleanup and corrected fixture assertions.
+  Mandatory realistic traffic/combined memory, production TLS/HA/joint rollback
+  and U3/U4 browser/CSRF/mobile/socket/reauthentication gates remain incomplete.
+
 - P2-U2a: A-01–07 and required focused/full checks passed. Lifecycle document
   links and new UI/transport handoffs passed review. The implementation plan has
   six pre-existing `context/...` source links that resolve incorrectly relative
@@ -698,6 +724,65 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-06 11:12 +08:00 (Asia/Manila) — Completed P2-U2c and parent P2-U2 under approved
+  limiter policy/production review conditions. Final full Docker and standalone
+  complete session checks passed, exit 0; C-01–07/all a/b/parent AC-01–11 mapped
+  in central evidence. Redis registry memory 876,709 bytes; health live/ready 200,
+  exact fixture cleanup and final docs/config/launcher checks passed. Cleared
+  active work. Realistic traffic/capacity/HA and U3/U4/Phase 2 gates remain open.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — Full Docker check passed, including
+  current combined session/limiter/recovery and finite metric privacy checks.
+  The subsequent standalone complete rerun exposed an inherited total-key-count
+  assertion racing expiry of earlier fixture records. Replaced it with direct
+  proof of exactly one newly created expected issuance record. Required final
+  complete rerun remains in progress; c/parent are not yet marked complete.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — Focused c `--limits` passed, exit 0,
+  including a/b regressions, real A/B concurrent admission and TTL/capacity,
+  proxy/identity bounds, limiter response loss/ACL/OOM, actual restart/stale
+  restore and interrupted primary recovery. Full-size registry measured 876,709
+  bytes. Added integrated contract/runbook and preserved mandatory realistic
+  traffic/production capacity gates. Complete focused/full Docker verification
+  remains in progress; no c/parent completion yet.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — Implemented approved typed admission,
+  atomic expiring bounded Redis registry, validated policy/proxy configuration,
+  trusted source extraction and protected HTTP 400/429/503 wiring. Shared session
+  connection handling now reconnects only for new operations without ambiguous
+  write replay. Backend build passed; real two-HTTP limiter/outage/recovery fixture
+  and combined CI selections are implemented and under verification. c remains
+  in progress until required integrated and full Docker acceptance passes.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — User approved c review section 1 and
+  the 8,192 active-counter ceiling. Resumed implementation. Protected 120/minute
+  identity default is subject to realistic web/polling/operator/future mobile
+  traffic validation and budget re-review before production if normal behavior
+  reaches it. Omitted recovery/public-intake/socket policies remain unapproved.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — Prepared the user-requested
+  [P2-U2c approval document](../docs/planning/p2-u2c-limiter-contract-review.md).
+  Section 1 defines the required policy decision; sections 2–3 document source
+  trust/resource bounds and implementation/verification. Existing real-service
+  `./dev exec pnpm check:session-foundation --authority` passed, exit 0,
+  including lifecycle/recovery regressions and two HTTP replicas. Documentation
+  consistency/relative links/formatting/whitespace checked. Independent preparation
+  is complete; c is blocked until explicit section 1 approval/revision under the
+  parent's limiter gate. No runtime limiter or c/parent completion is claimed.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — Started P2-U2c at the user's request.
+  Read AGENT.md, required context and child/parent specifications. a/b are
+  complete; preparing a concrete limiter policy review and rechecking their
+  real-service fixtures. Product limiter coverage/budgets/counting require explicit
+  approval under the parent gate; no proposed values or completion claimed.
+
 
 - 2026-10-06 09:48 +08:00 (Asia/Manila) — Completed requested P2-U2b B-01–07. Canonical
   request principals, explicit global HTTP policies, safe failures, activity renewal

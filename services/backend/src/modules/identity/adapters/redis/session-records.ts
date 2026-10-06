@@ -1,4 +1,4 @@
-import { createClient } from 'redis';
+import { SessionRedisConnection } from './connection';
 import type { SessionConfig } from '@myims/config';
 import type { SessionRecords } from '../../application/session-ports';
 import type { SessionRecord } from '../../domain/session';
@@ -30,63 +30,21 @@ redis.call('SET',KEYS[2],ARGV[2],'PX',duration,'NX')
 redis.call('DEL',KEYS[1])
 return 1`;
 export class RedisSessionRecords implements SessionRecords {
-  private readonly client;
+  private readonly connection: SessionRedisConnection;
   constructor(
     url: string,
     private readonly config: SessionConfig,
   ) {
-    const parsed = new URL(url);
-    if (!['redis:', 'rediss:'].includes(parsed.protocol) || !parsed.password)
-      throw new Error('Authenticated session Redis required');
-    this.client = createClient({
-      url,
-      disableOfflineQueue: true,
-      socket: { connectTimeout: config.timeoutMs, reconnectStrategy: false },
-    });
-    this.client.on('error', () => {});
+    this.connection = new SessionRedisConnection(url, config);
   }
-  async connect() {
-    await this.bounded(this.client.connect());
-    try {
-      const settings = await this.bounded(
-        this.command().configGet(['maxmemory', 'maxmemory-policy']),
-      );
-      if (
-        settings['maxmemory-policy'] !== 'noeviction' ||
-        !Number.isSafeInteger(Number(settings.maxmemory)) ||
-        Number(settings.maxmemory) < 1
-      )
-        throw new Error('Session capacity configuration unavailable');
-    } catch {
-      this.close();
-      throw new Error('Session capacity configuration unavailable');
-    }
-  }
-  private async bounded<T>(work: Promise<T>): Promise<T> {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    try {
-      return await Promise.race([
-        work,
-        new Promise<never>((_, reject) => {
-          timer = setTimeout(() => {
-            this.close();
-            reject(new Error('Session store unavailable'));
-          }, this.config.timeoutMs);
-        }),
-      ]);
-    } finally {
-      if (timer) clearTimeout(timer);
-    }
-  }
-  private command() {
-    if (!this.client.isReady) throw new Error('Session store unavailable');
-    return this.client.withCommandOptions({
-      abortSignal: AbortSignal.timeout(this.config.timeoutMs),
-    });
+  connect() {
+    return this.connection.connect();
   }
   async get(key: string) {
     // GETRANGE bounds memory even for attacker/malformed oversized stored values.
-    const bytes = await this.bounded(this.command().getRange(key, 0, 2048));
+    const bytes = await this.connection.run((client) =>
+      client.getRange(key, 0, 2048),
+    );
     if (bytes === null || bytes === '') return null;
     if (Buffer.byteLength(bytes) > 2048) return 'invalid';
     return bytes;
@@ -98,8 +56,8 @@ export class RedisSessionRecords implements SessionRecords {
     next: SessionRecord,
     now: number,
   ) {
-    const result = await this.bounded(
-      this.command().eval(script, {
+    const result = await this.connection.run((client) =>
+      client.eval(script, {
         keys,
         arguments: [
           previous,
@@ -129,9 +87,9 @@ export class RedisSessionRecords implements SessionRecords {
     return this.write(rotate, [oldKey, newKey], previous, next, now);
   }
   async delete(key: string) {
-    await this.bounded(this.command().del(key));
+    await this.connection.run((client) => client.del(key));
   }
   close() {
-    if (this.client.isOpen) this.client.destroy();
+    this.connection.close();
   }
 }

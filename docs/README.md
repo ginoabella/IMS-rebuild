@@ -99,9 +99,9 @@ Separate P2-U1 implementation specs:
 
 Session foundation: [P2-U2 parent spec and adopted sub-unit review](../context/feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
 P2-U2a is complete and verified under approved lifecycle/recovery policy with
-web 60-minute idle lifetime. P2-U2b is complete and verified; c and the parent remain planned. The user adopted three sequential
+web 60-minute idle lifetime. P2-U2b is complete and verified; c and parent P2-U2 are complete and verified under approved limiter policy. The user adopted three sequential
 implementation sub-units; a's lifecycle/recovery policy is approved and limiter
-policy remains unapproved.
+policy is approved subject to production traffic/capacity validation.
 Lifecycle completion does not establish protected HTTP access, sign-in or the
 Phase 2 authentication gate.
 
@@ -123,3 +123,10 @@ is prepared; the user approved revised section 1 and durable recovery fencing on
 - [Two-replica HTTP authority verification](runbooks/canonical-http-authority.md)
 
 - [P2-U2b HTTP authority verification evidence and limits](status/p2-u2b-evidence.md)
+
+- [P2-U2c approved limiter policy and production review conditions](planning/p2-u2c-limiter-contract-review.md)
+
+- [Distributed admission contract and U3/U4 handoff](architecture/distributed-admission.md)
+- [Integrated session recovery and capacity/traffic gates](runbooks/session-foundation.md)
+
+- [P2-U2c and parent AC-01–11 integrated evidence](status/p2-u2c-evidence.md)

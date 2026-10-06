@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; three sequential child specs adopted; a/b complete, c planned.
+- **Status:** complete; 2026-10-06 11:12 +08:00 (Asia/Manila). All children and AC-01–11 passed.
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [Phase 2, P2-U2](../implementation-plan.md#p2-u2--implement-the-shared-session-store-and-authorization-guards).
 - **Goal:** enforce the same session authority on every HTTP replica.
@@ -227,7 +227,7 @@ consistency, acceptance coverage, relative-link and whitespace review only.
 canonical HTTP authorization and distributed admission/recovery each have a clear
 observable boundary. The user adopted the split on 2026-10-05. The linked child
 specs define the sequential implementation boundaries; a is complete under explicit lifecycle/recovery approval; b is complete with
-[HTTP authority evidence](../../docs/status/p2-u2b-evidence.md); c remains planned.
+[HTTP authority evidence](../../docs/status/p2-u2b-evidence.md); c is complete with [combined AC-01–11 evidence](../../docs/status/p2-u2c-evidence.md).
 Adopting the split does not approve pending product policies or start runtime work.
 
 | Unit | Starting state and scope | Result and acceptance coverage |
@@ -249,7 +249,7 @@ on the combined P2-U2 result. Retain top-level plan IDs and Phase 2 order.
 | Gate | Owner and required resolution | Dependent work / resume condition |
 | --- | --- | --- |
 | Session policy, scoped D-05 | User approved 2026-10-06: web 60-minute idle/12-hour absolute; mobile 24-hour idle/7-day absolute; successful authorized operational activity only. Renewal/rotation keep the original absolute deadline. See [approved review](../../docs/planning/p2-u2a-session-contract-review.md). | a's scoped policy handoff is recorded; implement and verify A-01–07. Owning UI/transport units must preserve unfinished incident work across expiry/reauthentication. |
-| Limiter policy | User; approve protected/authentication operation coverage, budgets/windows, source/identity dimensions and counting behavior. | c and later sign-in integration; propose concrete values in a review before dependent implementation. No arbitrary defaults or implicit account lockout. |
+| Limiter policy | User approved section 1 on 2026-10-06, including 120/minute protected identity default subject to pre-production realistic traffic review and the 8,192-counter ceiling subject to capacity validation. | c and later sign-in integration follow [c review section 1](../../docs/planning/p2-u2c-limiter-contract-review.md#1-approved-product-policy) and preserve its production review gates. No arbitrary defaults or implicit account lockout. |
 | Recovery design | Implementation owner; document how acknowledged revocation/rotation survives stale Redis restoration, any minimal durable metadata, time basis and fail-closed reset/fencing sequence. | a design and AC-05/AC-10; do not postpone the solution until final testing. User decision is needed only if the design changes product behavior such as revoking other devices. |
 | Cookie/proxy deployment contract | Implementation owner for trusted proxy configuration; user for deployment origins or cross-site behavior not yet defined. | c source extraction and P2-U3/U4 cookie/CSRF transport. Protected fixture HTTP checks do not approve browser policy. |
 

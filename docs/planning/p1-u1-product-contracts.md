@@ -227,4 +227,18 @@ polling, health, heartbeats and merely open apps do not. Renewal and rotation
 never extend the original verified-sign-in absolute deadline. Durable PostgreSQL
 generation/revocation fencing and fail-closed authority checks are approved.
 P2-U3/U4 own expiry/reauthentication with preservation of unfinished incident work.
-Other D-05 and limiter decisions remain pending.
+Other D-05 decisions remain pending; the scoped limiter approval is below.
+
+### P2-U2c scoped limiter handoff approved 2026-10-06
+
+User approved [limiter review section 1](p2-u2c-limiter-contract-review.md#1-approved-product-policy):
+separate source and identity dimensions, sign-in 60/source and 10/identity per
+15-minute fixed window, protected HTTP 600/source and 120/canonical identity per
+minute, all admission attempts counted without refunds and fail-closed 429/503.
+Tenant and platform namespaces remain separate; staff identities are tenant-qualified.
+The 8,192 active-counter technical ceiling may proceed subject to memory/capacity
+validation. Validate realistic aggregate passive polling/operator/future mobile
+traffic before production; if normal traffic can reach 120/minute, bring a revised
+budget for review. Browser/CSRF/mobile and other Phase 2 transport acceptance
+remain U3/U4. Recovery, public intake, sockets and other omitted operation policies
+are explicitly outside this approval. Broader P1-U1 decisions remain deferred.

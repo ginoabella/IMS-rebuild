@@ -1,3 +1,5 @@
+import { Admission, type AdmissionResult } from '../../application/admission';
+import { TrustedSource, type SourceRequest } from './trusted-source';
 import {
   Inject,
   Injectable,
@@ -15,7 +17,7 @@ import {
 } from '../../application/request-authority';
 import type { SessionRecord } from '../../domain/session';
 import { HTTP_POLICY, type HttpPolicy } from './policy';
-interface HttpRequest {
+interface HttpRequest extends SourceRequest {
   headers: Record<string, string | string[] | undefined>;
   rawHeaders: string[];
 }
@@ -36,18 +38,34 @@ export function requestPrincipal(request: object): Principal {
   if (!state) throw httpFailure(401);
   return state.principal;
 }
-export function httpFailure(status: 401 | 403 | 503) {
+export function httpFailure(status: 400 | 401 | 403 | 429 | 503) {
   return new HttpException(
     {
       statusCode: status,
       message:
-        status === 401
-          ? 'Authentication required'
-          : status === 403
-            ? 'Access denied'
-            : 'Service unavailable',
+        status === 400
+          ? 'Invalid request'
+          : status === 429
+            ? 'Too many requests'
+            : status === 401
+              ? 'Authentication required'
+              : status === 403
+                ? 'Access denied'
+                : 'Service unavailable',
     },
     status,
+  );
+}
+export function enforceAdmission(
+  result: AdmissionResult,
+  response: HttpResponse,
+): void {
+  if (result.kind === 'admitted') return;
+  if (result.kind === 'limited')
+    response.setHeader('Retry-After', String(result.retrySeconds));
+  if (result.kind === 'unavailable') response.setHeader('Retry-After', '1');
+  throw httpFailure(
+    result.kind === 'limited' ? 429 : result.kind === 'invalid' ? 400 : 503,
   );
 }
 function bearer(request: HttpRequest): string | null {
@@ -71,6 +89,8 @@ export class AuthorityGuard implements CanActivate {
   constructor(
     @Inject(Reflector) private readonly reflector: Reflector,
     @Inject(RequestAuthority) private readonly authority: RequestAuthority,
+    @Inject(Admission) private readonly admission: Admission,
+    @Inject(TrustedSource) private readonly source: TrustedSource,
   ) {}
   async canActivate(context: ExecutionContext) {
     const policy = this.reflector.getAllAndOverride<HttpPolicy>(HTTP_POLICY, [
@@ -104,6 +124,13 @@ export class AuthorityGuard implements CanActivate {
       )
     )
       throw httpFailure(403);
+    enforceAdmission(
+      await this.admission.protected(
+        this.source.extract(request),
+        result.principal,
+      ),
+      response,
+    );
     authorized.set(request, {
       token,
       principal: result.principal,

@@ -1,3 +1,5 @@
+import { Admission } from '../../application/admission';
+import { TrustedSource } from './trusted-source';
 import {
   Module,
   type DynamicModule,
@@ -22,6 +24,18 @@ export class IdentityHttpModule {
     return {
       module: IdentityHttpModule,
       providers: [
+        {
+          provide: Admission,
+          inject: [runtime],
+          useFactory: (r: Awaited<ReturnType<typeof sessionRuntime>>) =>
+            r.admission,
+        },
+        {
+          provide: TrustedSource,
+          inject: [runtime],
+          useFactory: (r: Awaited<ReturnType<typeof sessionRuntime>>) =>
+            r.source,
+        },
         { provide: runtime, useFactory: () => sessionRuntime(config, false) },
         {
           provide: RequestAuthority,
@@ -44,7 +58,12 @@ export class IdentityHttpModule {
         { provide: APP_GUARD, useClass: AuthorityGuard },
         { provide: APP_INTERCEPTOR, useClass: ActivityInterceptor },
       ],
-      exports: [RequestAuthority, TransactionAuthority],
+      exports: [
+        RequestAuthority,
+        TransactionAuthority,
+        Admission,
+        TrustedSource,
+      ],
     };
   }
 }

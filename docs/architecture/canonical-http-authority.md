@@ -58,9 +58,10 @@ must throw/map unsuccessful application results before operational success.
 
 HTTP starts even when session Redis cannot connect, so public health remains
 available. Protected access fails closed. The existing bounded Redis adapter
-closes broken connections; restart an affected HTTP replica to establish a fresh
-validated connection. Automatic recovery/reconnect and comprehensive outage
-integration belong to c's handoff; there is no memory-session fallback.
+closes broken connections; a later new operation establishes a bounded fresh
+authenticated/capacity-validated connection. c adds
+[distributed admission and integrated recovery](distributed-admission.md), without
+ambiguous write replay or memory-session fallback.
 
 ## Sensitive transaction boundary
 
@@ -101,6 +102,6 @@ incident work with identity/tenant isolation and block expired submissions durin
 reauthentication, per a's approved handoff.
 
 c receives reusable guards, principals, safe HTTP errors, activity integration,
-transaction ports and two-replica protected fixtures. Add approved shared 429
-limits there; b has no local limiter. Sign-in/logout, admin routes, sockets,
+transaction ports and two-replica protected fixtures. c integrates approved shared 429
+limits before protected work; b has no local limiter. Sign-in/logout, admin routes, sockets,
 tenant lifecycle effects and production ingress remain their owning units.
