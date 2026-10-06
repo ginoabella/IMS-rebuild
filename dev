@@ -58,9 +58,15 @@ case "$action" in
   worker-logs) compose --profile workers logs -f worker ;;
   command|platform|public|responder|public-mobile)
       workspace_exec pnpm "dev:$action" ;;
-  check) workspace_exec pnpm check; workspace_exec pnpm check:foundation; workspace_exec pnpm check:storage-clients; provision_storage scripts/check-storage-deployment.mjs ;;
+  check) workspace_exec pnpm check; workspace_exec pnpm check:foundation; workspace_exec pnpm check:storage-clients; provision_storage scripts/check-storage-deployment.mjs; provision_storage scripts/check-session-deployment.mjs ;;
   exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
-      workspace_exec "$@" ;;
+      if [ "$1" = pnpm ] && [ "${2:-}" = check:session-foundation ]; then
+        shift 2
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ]; }; then
+          echo 'Supported session selection: --lifecycle' >&2; exit 1
+        fi
+        provision_storage scripts/check-session-deployment.mjs
+      else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
   *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'

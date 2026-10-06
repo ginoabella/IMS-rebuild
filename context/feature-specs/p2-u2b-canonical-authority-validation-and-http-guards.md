@@ -127,3 +127,13 @@ Complete b only when B-01–07 pass. Hand
 principals, consistent HTTP errors and two-replica protected fixtures. Keep limiter
 integration and comprehensive HTTP outage/recovery proof with c. b completion does
 not establish sign-in, browser CSRF, mobile storage or parent completion.
+
+### Approved expiry/reauthentication handoff from a
+
+The [approved P2-U2a contract](../../docs/planning/p2-u2a-session-contract-review.md)
+requires successful authorized operational activity only for renewal; passive
+polling, health, heartbeats and merely open applications must not renew. Preserve
+the original absolute deadline through rotation and renewal. b hands generic
+expired/invalid authentication outcomes to P2-U3/U4 so those owning UI/transport
+units preserve unfinished incident work with identity/tenant isolation and block
+expired submissions during reauthentication. This does not add UI work to b.

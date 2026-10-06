@@ -2,7 +2,8 @@
 
 **Partial approval recorded.** D-01 and the scoped D-05/D-06 eligibility/admission
 contract were approved for P2-U1b on 2026-10-05 (Asia/Manila, +08:00), with creator
-closure as stated below. Other behavior remains a recommendation.
+closure as stated below. Scoped bootstrap and P2-U2a session policy/recovery
+handoffs are also approved as recorded in D-05. Other behavior remains a recommendation.
 Existing architecture invariants remain mandatory. Decisions and unit gates are
 listed in the [foundation review](p1-u1-review-draft.md).
 
@@ -119,9 +120,10 @@ mixture and preserve exact bytes. Hidden interactive input requires confirmation
 protected automation input supplies the password once. Initial operator creation
 uses explicit active/ready, tenantless platform authority and versions 1/1.
 This is c's scoped D-05/P1-U1 handoff, not approval of broader setup/reset policy.
-The recommendations below, authentication, setup/reset tokens, sessions,
-delivery/recovery and last-administrator policies remain pending for their
-owning units. P1-U1 remains deferred.
+P2-U2a session lifetimes/activity and durable fencing are subsequently approved
+as recorded below. Authentication transports, setup/reset tokens, delivery/recovery
+and last-administrator policies remain pending for their owning units. P1-U1
+remains deferred outside those scoped handoffs.
 
 Recommend lowercase trim normalization for tenant code and username, preserving
 password input exactly. Staff login remains exactly tenant code, username,
@@ -144,10 +146,11 @@ user-designated operator. Define identity verification and the out-of-band hando
 procedure explicitly before P2-U4; this draft does not assume a delivery service.
 
 Block removal/disablement of the last active credential-ready tenant administrator.
-Staff cannot grant platform roles. Propose 30-minute idle/12-hour absolute web
-sessions and 24-hour idle/7-day absolute mobile sessions, with server-side canonical
-checks and cross-replica revocation as already required. These lifetimes need
-review for long command-center shifts. Broader setup/reset password policy and setup/reset UI
+Staff cannot grant platform roles. The user approved web 60-minute idle/12-hour
+absolute and mobile 24-hour idle/7-day absolute sessions under the
+[scoped P2-U2a lifecycle/recovery contract](p2-u2a-session-contract-review.md),
+with canonical checks, durable fencing, qualifying operational activity only and
+fixed absolute lifetime through renewal/rotation. Broader setup/reset password policy and setup/reset UI
 must be approved before their dependent implementation; c's scoped bootstrap policy is approved.
 
 ## 6. D-06 — Tenant lifecycle
@@ -214,3 +217,14 @@ reject impossible coordinates and excessive/replayed observations. Reconnect
 reloads work; do not replay an offline trail or lifecycle commands silently.
 Choose allowed clock skew, precise field disclosure, device test matrix and
 location retention before implementation. No retention period is approved here.
+
+### P2-U2a scoped session handoff approved 2026-10-06
+
+User approved [lifecycle/recovery contract](p2-u2a-session-contract-review.md):
+web 60-minute idle/12-hour absolute; mobile 24-hour idle/7-day absolute.
+Only successful authorized operational activity renews idle expiry; passive
+polling, health, heartbeats and merely open apps do not. Renewal and rotation
+never extend the original verified-sign-in absolute deadline. Durable PostgreSQL
+generation/revocation fencing and fail-closed authority checks are approved.
+P2-U3/U4 own expiry/reauthentication with preservation of unfinished incident work.
+Other D-05 and limiter decisions remain pending.

@@ -199,7 +199,7 @@ try {
     const result = await connection.query(
       'SELECT count(*)::int AS count FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
     );
-    assert.equal(result.rows[0].count, 6);
+    assert.equal(result.rows[0].count, 7);
     const role = await connection.query(
       'SELECT rolsuper, rolcreatedb, rolcreaterole, rolbypassrls FROM pg_roles WHERE rolname = current_user',
     );

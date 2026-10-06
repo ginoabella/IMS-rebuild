@@ -1,3 +1,5 @@
+import { parseSessionConfig, type SessionConfig } from './session';
+export { parseSessionConfig, type SessionConfig } from './session';
 import { parseStorageConfig, type StorageConfig } from './storage';
 export { parseStorageConfig, type StorageConfig } from './storage';
 export type Environment = Record<string, string | undefined>;
@@ -13,6 +15,7 @@ export interface ConnectionConfig {
 }
 export interface BackendConfig {
   storage?: StorageConfig;
+  sessions: SessionConfig;
   http: { host: string; port: number };
   database: ConnectionConfig;
   sessionRedis: ConnectionConfig;
@@ -130,6 +133,7 @@ export function parseBackendConfig(env: Environment): BackendConfig {
     throw new ConfigurationError('HOST must be a valid bind address');
   return {
     storage: parseStorageConfig(env),
+    sessions: parseSessionConfig(env),
     http: { host, port: integer(env, 'PORT', 4000, 0, 65535) },
     database,
     sessionRedis,

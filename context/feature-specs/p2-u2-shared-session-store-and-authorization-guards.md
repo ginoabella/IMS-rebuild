@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; three sequential child specs adopted, all planned.
+- **Status:** planned; three sequential child specs adopted; a complete, b/c planned.
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [Phase 2, P2-U2](../implementation-plan.md#p2-u2--implement-the-shared-session-store-and-authorization-guards).
 - **Goal:** enforce the same session authority on every HTTP replica.
@@ -39,7 +39,7 @@ Existing shells and bootstrap are not sign-in journeys.
 
 P1-U1 remains deferred outside approved scoped handoffs. The
 [credential/session proposals](../../docs/planning/p1-u1-product-contracts.md#5-d-05--credentials-and-administrator-safeguards)
-include unapproved lifetimes. Resolve the relevant gates below before dependent
+now include approved scoped lifetimes/activity and durable recovery fencing for a. Resolve remaining relevant gates below before dependent
 runtime behavior; unrelated setup/recovery and incident decisions stay deferred.
 
 ## Scope and ownership
@@ -226,7 +226,7 @@ consistency, acceptance coverage, relative-link and whitespace review only.
 **Review conclusion: split into three sequential sub-units.** Session lifecycle,
 canonical HTTP authorization and distributed admission/recovery each have a clear
 observable boundary. The user adopted the split on 2026-10-05. The linked child
-specs define the sequential implementation boundaries; a/b/c remain planned.
+specs define the sequential implementation boundaries; a is complete under explicit lifecycle/recovery approval; b/c remain planned.
 Adopting the split does not approve pending product policies or start runtime work.
 
 | Unit | Starting state and scope | Result and acceptance coverage |
@@ -247,7 +247,7 @@ on the combined P2-U2 result. Retain top-level plan IDs and Phase 2 order.
 
 | Gate | Owner and required resolution | Dependent work / resume condition |
 | --- | --- | --- |
-| Session policy, scoped D-05 | User; approve idle/absolute lifetimes by web/mobile consumer and renewal activity. Existing draft proposes web 30 minutes/12 hours and mobile 24 hours/7 days, but these remain unapproved. | a's product defaults and parent completion; record scoped handoff before implementing them. |
+| Session policy, scoped D-05 | User approved 2026-10-06: web 60-minute idle/12-hour absolute; mobile 24-hour idle/7-day absolute; successful authorized operational activity only. Renewal/rotation keep the original absolute deadline. See [approved review](../../docs/planning/p2-u2a-session-contract-review.md). | a's scoped policy handoff is recorded; implement and verify A-01–07. Owning UI/transport units must preserve unfinished incident work across expiry/reauthentication. |
 | Limiter policy | User; approve protected/authentication operation coverage, budgets/windows, source/identity dimensions and counting behavior. | c and later sign-in integration; propose concrete values in a review before dependent implementation. No arbitrary defaults or implicit account lockout. |
 | Recovery design | Implementation owner; document how acknowledged revocation/rotation survives stale Redis restoration, any minimal durable metadata, time basis and fail-closed reset/fencing sequence. | a design and AC-05/AC-10; do not postpone the solution until final testing. User decision is needed only if the design changes product behavior such as revoking other devices. |
 | Cookie/proxy deployment contract | Implementation owner for trusted proxy configuration; user for deployment origins or cross-site behavior not yet defined. | c source extraction and P2-U3/U4 cookie/CSRF transport. Protected fixture HTTP checks do not approve browser policy. |

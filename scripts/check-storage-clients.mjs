@@ -25,6 +25,12 @@ const sentinels = [
   '$scrypt$v=1$',
   'modules/identity/adapters/db',
   'modules/platform/adapters/db',
+  'modules/identity/adapters/redis',
+  'myims:session:v1:',
+  'session_fences',
+  'SESSION_WEB_IDLE_SECONDS',
+  'credential-sentinel',
+  'authentication-sentinel',
 ];
 for (const role of ['runtime', 'fixture', 'denied']) {
   const credentials = JSON.parse(

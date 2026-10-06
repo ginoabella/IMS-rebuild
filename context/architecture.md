@@ -377,6 +377,14 @@ production. Redis outage returns retryable service-unavailable errors for
 session-dependent operations; do not bypass authorization or fall back to local
 sessions. Lost sessions require sign-in again. Test recovery and failover limits.
 
+P2-U2a adds approved [lifecycle and durable generation fencing](../docs/architecture/shared-session-lifecycle.md)
+with Redis expiring records and minimal identity-owned PostgreSQL recovery metadata.
+Web lifetimes are 60-minute idle/12-hour absolute, mobile 24-hour idle/7-day absolute;
+only successful authorized operational activity renews. Rotation retains original
+creation/absolute lifetime. [Session operations](../docs/runbooks/shared-session-lifecycle.md)
+document fail-closed recovery and the expiry/reauthentication draft-preservation
+handoff to P2-U3/U4. HTTP guards and limiter integration remain b/c.
+
 ### Platform Operators and Public Intake
 
 Platform operators use a separate identity store and tenantless sign-in. Platform

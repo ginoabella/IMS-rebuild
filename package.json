@@ -34,7 +34,8 @@
     "check:durability": "pnpm build:backend && node scripts/check-audit-outbox.mjs && node scripts/check-worker-delivery.mjs --recovery",
     "check:storage": "pnpm build:backend && node scripts/check-storage.mjs && node scripts/check-storage-access.mjs",
     "check:storage-clients": "node scripts/check-storage-clients.mjs",
-    "check:identity-foundation": "pnpm build:backend && node scripts/check-identity-foundation.mjs"
+    "check:identity-foundation": "pnpm build:backend && node scripts/check-identity-foundation.mjs",
+    "check:session-foundation": "pnpm build:backend && node scripts/check-session-foundation.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

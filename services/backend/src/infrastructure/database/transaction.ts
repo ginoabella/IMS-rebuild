@@ -16,17 +16,41 @@ export class Transaction {
     logger: SafeLogger,
     action: (transaction: Transaction) => Promise<T>,
   ): Promise<T> {
-    const trusted = executionContext(context);
+    executionContext(context);
     reference(operation);
     const client = await pool.connect();
+    return this.execute(client, context, operation, logger, action, true);
+  }
+  // Reuse an adapter-owned connection while a session advisory lock spans commits.
+  static async runWithClient<T>(
+    client: PoolClient,
+    context: unknown,
+    operation: string,
+    logger: SafeLogger,
+    action: (transaction: Transaction) => Promise<T>,
+  ): Promise<T> {
+    return this.execute(client, context, operation, logger, action, false);
+  }
+  private static async execute<T>(
+    client: PoolClient,
+    context: unknown,
+    operation: string,
+    logger: SafeLogger,
+    action: (transaction: Transaction) => Promise<T>,
+    release: boolean,
+  ): Promise<T> {
+    const trusted = executionContext(context);
+    reference(operation);
     const transaction = new Transaction(trusted);
     let discard = false;
+    let commitAttempted = false;
     try {
       await client.query('BEGIN');
       clients.set(transaction, client);
       const result = await action(transaction);
       if (transaction.failed)
         throw new Error('Required transaction write failed');
+      commitAttempted = true;
       const commit = await client.query('COMMIT');
       if (commit.command !== 'COMMIT')
         throw new Error('Transaction did not commit');
@@ -51,7 +75,7 @@ export class Transaction {
         logger.write({
           operation,
           correlationId: trusted.correlationId,
-          outcome: discard ? 'failed' : 'rolled_back',
+          outcome: discard || commitAttempted ? 'failed' : 'rolled_back',
           error,
         });
       } catch {
@@ -60,7 +84,7 @@ export class Transaction {
       throw error;
     } finally {
       clients.delete(transaction);
-      client.release(discard);
+      if (release) client.release(discard);
     }
   }
   async required<T>(action: () => Promise<T>): Promise<T> {

@@ -98,12 +98,23 @@ Separate P2-U1 implementation specs:
 - [P2-U1c and parent acceptance evidence](status/p2-u1c-evidence.md)
 
 Session foundation: [P2-U2 parent spec and adopted sub-unit review](../context/feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
-P2-U2 and all children remain planned. The user adopted three sequential
-implementation sub-units; session lifetimes and limiter policy remain unapproved.
-No session runtime or Phase 2 authentication gate is claimed.
+P2-U2a is complete and verified under approved lifecycle/recovery policy with
+web 60-minute idle lifetime. P2-U2b/c and the parent remain planned. The user adopted three sequential
+implementation sub-units; a's lifecycle/recovery policy is approved and limiter
+policy remains unapproved.
+Lifecycle completion does not establish protected HTTP access, sign-in or the
+Phase 2 authentication gate.
 
 Separate P2-U2 implementation specs:
 
 - [P2-U2a — Shared session lifecycle and recovery fencing](../context/feature-specs/p2-u2a-shared-session-lifecycle-and-recovery-fencing.md)
 - [P2-U2b — Canonical authority validation and HTTP guards](../context/feature-specs/p2-u2b-canonical-authority-validation-and-http-guards.md)
 - [P2-U2c — Distributed rate limits and integrated recovery handoff](../context/feature-specs/p2-u2c-distributed-rate-limits-and-integrated-recovery-handoff.md)
+
+[P2-U2a lifetime/activity review and durable recovery design](planning/p2-u2a-session-contract-review.md)
+is prepared; the user approved revised section 1 and durable recovery fencing on 2026-10-06.
+
+- [Shared session lifecycle contract and b/c/UI handoffs](architecture/shared-session-lifecycle.md)
+- [Session settings, recovery and verification runbook](runbooks/shared-session-lifecycle.md)
+
+- [P2-U2a lifecycle verification evidence and limits](status/p2-u2a-evidence.md)

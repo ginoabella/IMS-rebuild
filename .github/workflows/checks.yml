@@ -13,6 +13,8 @@ jobs:
       - run: ./dev exec env CI=1 pnpm check
       - name: Foundation, durability, storage and identities (isolated fixtures)
         run: ./dev foundation-check
+      - name: Shared session lifecycle and durable recovery (isolated fixtures)
+        run: ./dev exec pnpm check:session-foundation --lifecycle
       - name: Server credential exclusion from built clients
         run: ./dev exec pnpm check:storage-clients
       - name: Fresh storage provisioning and restart

@@ -195,9 +195,12 @@ authority planes, with shared session enforcement across backend replicas.
 - **Result and acceptance:** Tenantless operator sign-in establishes a protected
   platform session. Web cookies and CSRF protection follow architecture rules.
   Invalid credentials do not reveal account existence; staff sessions cannot enter
-  platform management. Logout revokes access on every replica.
+  platform management. Logout revokes access on every replica. Approved P2-U2a
+  expiry/reauthentication behavior preserves unfinished operational work with
+  identity isolation; renewed or rotated tokens never extend absolute lifetime.
 - **Verification:** Browser sign-in/logout, protected routes, invalid input,
-  CSRF rejection, and cross-plane/cross-replica authorization checks.
+  CSRF rejection, expiry/reauthentication with retained unfinished work,
+  and cross-plane/cross-replica authorization checks.
 
 ### P2-U4 — Deliver tenant staff sign-in and credential lifecycle
 
@@ -210,8 +213,12 @@ authority planes, with shared session enforcement across backend replicas.
   `Invalid credentials`. Credential actions target tenant-qualified user IDs,
   expire as specified, and revoke affected sessions across replicas. Mobile tokens
   never appear in URLs or logs and use protected device storage when consumed.
+  Approved P2-U2a expiry/reauthentication preserves unfinished incident drafts
+  with identity/tenant isolation and blocks expired submissions; passive polling
+  cannot avoid expiry and rotation cannot extend the original absolute lifetime.
 - **Verification:** Same username under two tenant codes, setup/reset/recovery,
-  expired/reused credentials, suspended users/tenants, logout, and replica checks.
+  expired/reused credentials, suspended users/tenants, logout, replica checks,
+  and expiry/reauthentication without unnecessary loss of unfinished incident work.
 
 **Phase gate:** Identity-plane isolation and shared-session acceptance checks
 pass using two HTTP replicas; authentication and recovery guides are available.

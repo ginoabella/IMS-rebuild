@@ -2,7 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** planned.
+- **Status:** complete; 2026-10-06 08:53 +08:00 (Asia/Manila), A-01–07 passed.
+- **Evidence:** [lifecycle acceptance and limits](../../docs/status/p2-u2a-evidence.md).
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [P2-U2 parent scope and acceptance matrix](p2-u2-shared-session-store-and-authorization-guards.md).
 - **Goal:** provide one shared, atomic opaque-session lifecycle for both authority planes.
@@ -22,12 +23,14 @@ versions, authenticated session Redis connection and bounded configuration/healt
 infrastructure. P1-U5 transaction/audit conventions apply to any required canonical
 metadata writes. Do not replace the identity stores or add a session-manager service.
 
-Before product defaults are implemented, record a scoped D-05 approval for web/mobile
-idle and absolute lifetimes and renewal activity. The existing draft's web
-30-minute/12-hour and mobile 24-hour/7-day values remain proposals. Record a recovery
-design before implementing lifecycle persistence; determine whether its product
-impact requires a user decision. Independent design and fixture preparation can
-continue while policies are pending. P1-U1 remains deferred outside approved handoffs.
+The user approved the [scoped D-05 lifecycle/recovery contract](../../docs/planning/p2-u2a-session-contract-review.md)
+on 2026-10-06 (Asia/Manila, +08:00): web 60-minute idle/12-hour absolute,
+mobile 24-hour idle/7-day absolute. Only successful authorized operational activity
+renews; passive polling, health, heartbeats and merely open apps do not. Renewal
+and rotation preserve the original verified-sign-in absolute deadline. Durable
+PostgreSQL generation/revocation fencing is approved. Owning UI/transport units
+must support reauthentication without unnecessary loss of unfinished incident
+work. Unrelated policies and P1-U1 remain deferred outside approved handoffs.
 
 ## Scope and ownership
 

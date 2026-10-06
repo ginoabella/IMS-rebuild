@@ -175,3 +175,13 @@ backend startup; its port 4100 belongs to the separate backend container.
 
 Garage storage uses internal HTTP and private persistent volumes; no HTTPS setup is
 required for local adapter checks. See [storage operations](shared-storage.md).
+
+## Session lifecycle verification
+
+Use `./dev exec pnpm check:session-foundation --lifecycle` from the host.
+The launcher creates and cleans its own authenticated Redis container/data volume
+and the suite owns its disposable PostgreSQL database. The workspace has no
+Docker socket; the host fixture helper uses the existing trusted Docker boundary.
+`./dev check` and the explicit CI lifecycle step run this suite. See the
+[session recovery runbook](shared-session-lifecycle.md) for bounded settings and
+restoration limits.
