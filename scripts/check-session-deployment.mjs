@@ -66,7 +66,7 @@ try {
   child.stdin.end(
     JSON.stringify({ redisUrl: `redis://:${password}@${name}:6379` }),
   );
-  const timer = setTimeout(() => child.kill('SIGKILL'), 360000);
+  const timer = setTimeout(() => child.kill('SIGKILL'), 900000);
   const [code] = await once(child, 'exit');
   clearTimeout(timer);
   if (code !== 0) throw new Error('Session lifecycle checks failed');

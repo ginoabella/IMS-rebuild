@@ -133,3 +133,41 @@ test('approved limiter budgets, shortened settings and bounded trusted proxies',
       ConfigurationError,
     );
 });
+test('platform browser settings are optional together and enforce exact trusted HTTPS topology', () => {
+  assert.equal(parseBackendConfig(valid).platformAuth, undefined);
+  const settings = {
+    PLATFORM_AUTH_ORIGIN: 'https://console.example.test',
+    PLATFORM_AUTH_PROXY_PEERS: '127.0.0.1',
+    PLATFORM_AUTH_PROXY_SECRET: 'a'.repeat(64),
+    PLATFORM_AUTH_CSRF_SECRET: 'b'.repeat(64),
+    LIMITER_TRUSTED_PROXIES: '127.0.0.1',
+  };
+  assert.equal(
+    parseBackendConfig({ ...valid, ...settings }).platformAuth.origin,
+    settings.PLATFORM_AUTH_ORIGIN,
+  );
+  const empty = Object.fromEntries(
+    Object.keys(settings).map((name) => [name, '']),
+  );
+  assert.equal(
+    parseBackendConfig({ ...valid, ...empty }).platformAuth,
+    undefined,
+  );
+  for (const change of [
+    { PLATFORM_AUTH_ORIGIN: 'http://console.example.test' },
+    { PLATFORM_AUTH_ORIGIN: 'https://console.example.test/path' },
+    { PLATFORM_AUTH_ORIGIN: 'https://console.example.test/' },
+    { PLATFORM_AUTH_PROXY_PEERS: '127.0.0.1/8' },
+    { PLATFORM_AUTH_PROXY_PEERS: '127.0.0.1,127.0.0.1' },
+    { LIMITER_TRUSTED_PROXIES: '' },
+    { PLATFORM_AUTH_CSRF_SECRET: settings.PLATFORM_AUTH_PROXY_SECRET },
+    { PLATFORM_AUTH_PROXY_SECRET: 'CONFIG_SECRET_SENTINEL' },
+    { PLATFORM_AUTH_CSRF_SECRET: '' },
+  ])
+    assert.throws(
+      () => parseBackendConfig({ ...valid, ...settings, ...change }),
+      (error) =>
+        error instanceof ConfigurationError &&
+        !error.message.includes('CONFIG_SECRET_SENTINEL'),
+    );
+});

@@ -68,14 +68,49 @@ process.on('message', async (message) => {
           limiterConfig,
         );
         await limiter.connect();
-        http = await openHttp({
-          lifecycle,
-          staff,
-          platform,
-          runtimeUrl,
-          admission: new Admission(limiter),
-          source: new TrustedSource(limiterConfig.trustedProxies),
-        });
+        if (message.productionHttp) {
+          backend('reflect-metadata');
+          const { NestFactory } = backend('@nestjs/core');
+          const { HttpModule } = backend(
+            './dist/entrypoints/http/http.module.js',
+          );
+          const { configureHttpBoundary } = backend(
+            './dist/modules/platform/adapters/http/http-boundary.js',
+          );
+          const base = backend(
+            './dist/infrastructure/configuration.js',
+          ).loadBackendConfig();
+          const app = await NestFactory.create(
+            HttpModule.register({
+              ...base,
+              database: { url: runtimeUrl },
+              sessionRedis: { url: redisUrl },
+              sessions: config,
+              limiter: limiterConfig,
+              platformAuth: message.browserConfig,
+            }),
+            { logger: false, bodyParser: false, abortOnError: false },
+          );
+          configureHttpBoundary(app);
+          await app.listen(0, '127.0.0.1');
+          http = {
+            url: await app.getUrl(),
+            close: () => app.close(),
+            control: () => ({}),
+          };
+        } else
+          http = await openHttp({
+            browserConfig: message.browserConfig,
+            credentials: new (backend(
+              './dist/modules/platform/adapters/db/credential-read.js',
+            ).PlatformCredentialRepository)(database),
+            lifecycle,
+            staff,
+            platform,
+            runtimeUrl,
+            admission: new Admission(limiter),
+            source: new TrustedSource(limiterConfig.trustedProxies),
+          });
       }
       process.send({
         id: message.id,
@@ -84,9 +119,14 @@ process.on('message', async (message) => {
       return;
     }
     if (
-      ['prepare', 'release', 'barrier', 'stats', 'metrics'].includes(
-        message.operation,
-      )
+      [
+        'prepare',
+        'release',
+        'barrier',
+        'stats',
+        'metrics',
+        'hash-failure',
+      ].includes(message.operation)
     ) {
       process.send({
         id: message.id,

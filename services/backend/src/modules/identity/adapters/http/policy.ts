@@ -5,12 +5,14 @@ export type HttpPolicy =
   | { access: 'public' }
   | {
       access: 'protected';
+      channel: 'bearer' | 'platform-cookie';
       plane: 'platform';
       permissions: readonly ['platform_operator'];
       activity: 'passive' | 'operational';
     }
   | {
       access: 'protected';
+      channel: 'bearer';
       plane: 'tenant';
       permissions: readonly [StaffPermission, ...StaffPermission[]];
       activity: 'passive' | 'operational';

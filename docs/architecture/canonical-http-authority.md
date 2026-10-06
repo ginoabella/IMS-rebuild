@@ -8,7 +8,8 @@ using the approved [role/admission grants](canonical-authority-admission.md) and
 
 `IdentityHttpModule.register` installs a global `AuthorityGuard` and
 `ActivityInterceptor`. Every handler must declare `HttpAccess`: explicit public,
-or protected with plane, nonempty permissions and passive/operational activity.
+or protected with explicit credential channel, plane, nonempty permissions and
+passive/operational activity.
 An unclassified route receives generic 403 before its handler runs. Foundation
 and health routes are explicitly public. Method policy overrides class policy;
 review such overrides as part of the route's owning module.
@@ -90,16 +91,16 @@ are defined only in `scripts/`, absent from production HTTP module imports.
 
 ## Transport and consumer handoff
 
-b's protected fixtures accept exactly one well-formed Authorization bearer header.
-Duplicate Authorization headers, cookies (including conflicting cookie/bearer
-inputs) and malformed bearer credentials are rejected generically. No token is
-accepted from URL or body. This provisional bearer selection is not a browser or
-mobile acceptance claim. U3 owns Secure/HttpOnly/SameSite cookies, CSRF, explicit
-credential-channel selection and browser sign-in. U4 owns authenticated mobile
-transport and protected device token storage. Neither may silently choose between
-conflicting credentials. Expiry/invalid authentication must preserve unfinished
-incident work with identity/tenant isolation and block expired submissions during
-reauthentication, per a's approved handoff.
+Bearer consumers explicitly declare `channel: 'bearer'` and accept exactly one
+well-formed Authorization header. They reject cookies and malformed/duplicate
+bearers. Cookie consumers explicitly declare `channel: 'platform-cookie'`, and
+must use a platform policy. The [platform auth contract](platform-authentication-http.md)
+defines origin/proxy/source checks, Secure cookies and context-bound CSRF.
+No credential is accepted from body/URL or silently selected from conflicting
+channels. Missing route or channel classification denies. Cookie support proves
+the backend transport only; actual platform UI/proxy and reauthentication remain
+P2-U3b. U4 owns mobile transport/protected device storage. Preserve unfinished
+incident work with identity/tenant isolation during reauthentication.
 
 c receives reusable guards, principals, safe HTTP errors, activity integration,
 transaction ports and two-replica protected fixtures. c integrates approved shared 429

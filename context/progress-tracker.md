@@ -18,7 +18,9 @@ P2-U1a/b/c and parent P2-U1 are complete and verified: canonical storage,
 role/admission/version contracts and secure initial operator bootstrap.
 P2-U2a/b/c and parent P2-U2 are complete and verified: shared lifecycle/fencing,
 canonical HTTP guards, distributed admission and integrated controlled recovery.
-Real sign-in, evidence authorization and production decisions remain pending.
+P2-U3a platform authentication HTTP is complete and verified. Console browser
+access/reauthentication, staff sign-in, evidence authorization and production
+decisions remain pending.
 Protected traffic/capacity validation remains mandatory before production.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
@@ -28,6 +30,14 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 
 ## Completed
+
+- P2-U3a platform authentication HTTP boundary: real tenantless credentials,
+  bounded typed verifier, shared pre-verification limits, canonical version-bound
+  web issuance, declared Secure cookie consumers, trusted proxy/Origin and
+  context-bound CSRF, passive current-session/logout and cross-replica durable
+  single-session revocation. A-01–09, focused HTTP/HTTPS Chromium, identity/
+  bootstrap/session regressions and full Docker checks passed. See
+  [a evidence](../docs/status/p2-u3a-evidence.md). b and parent remain incomplete.
 
 - P2-U2c distributed admission/integrated recovery and parent P2-U2: approved
   independent source/identity limits, bounded expiring atomic Redis registries,
@@ -108,35 +118,36 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None. P2-U2c and parent P2-U2 completed 2026-10-06 11:12 +08:00 (Asia/Manila).
+None. P2-U3a completed 2026-10-06 14:02 +08:00 (Asia/Manila). P2-U3b remains planned.
 
 ## Unit Checkpoints
 
 ### P2-U3 — Platform operator sign-in
 
-- **Status:** planned; specification/review prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Status:** in progress through a; started 2026-10-06 (Asia/Manila, +08:00).
 - **Requirement/scope:** [feature spec](feature-specs/p2-u3-platform-operator-sign-in.md); tenantless credential verification, cookie/CSRF HTTP boundary, protected console, logout and identity-isolated expiry/reauthentication.
-- **Acceptance/checks:** AC-01–11; proposed `./dev exec pnpm check:platform-auth`, existing session regressions and `./dev check` during implementation. The proposed command is not implemented.
-- **Split:** adopted 2026-10-06; sequential [P2-U3a HTTP boundary](feature-specs/p2-u3a-platform-authentication-http-boundary.md) and [P2-U3b browser access/reauthentication](feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md). Child specs exist; runtime work remains planned.
+- **Acceptance/checks:** AC-01–11; `./dev exec pnpm check:platform-auth --http` now checks a; b browser selection remains planned. Existing identity/session regressions and `./dev check` are required.
+- **Split:** adopted 2026-10-06; sequential [P2-U3a HTTP boundary](feature-specs/p2-u3a-platform-authentication-http-boundary.md) and [P2-U3b browser access/reauthentication](feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md). a is complete and verified; b remains planned. Parent completion requires b and combined AC-01–11.
 - **Dependencies:** P2-U1/U2 and P1-U4 complete. Recheck delivered evidence before implementation; resolve actual secure browser origins/proxy configuration when wiring transport.
-- **Remaining:** all runtime acceptance; verifier failure/capacity distinction, explicit cookie guard channel, login CSRF, secure-origin browser checks and unfinished-work handoff. Existing bootstrap/fixtures are not sign-in evidence.
-- **Verification:** documentation consistency, acceptance ownership, relative links and whitespace review only; no application check or Phase 2 completion claimed.
+- **Remaining:** b console/proxy/Server Actions and isolated unfinished-work reauthentication, followed by full parent AC-01–11. a backend acceptance is verified in [HTTP evidence](../docs/status/p2-u3a-evidence.md).
+- **Verification:** a A-01–09, focused auth/HTTPS Chromium and full Docker checks passed, exit 0. Complete parent browser acceptance and the Phase 2 gate remain pending b.
 
 
 ### P2-U3a — Platform authentication HTTP boundary
 
-- **Status:** planned; child specification prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Status:** complete; 2026-10-06 14:02 +08:00 (Asia/Manila).
 - **Requirement/scope:** [a spec](feature-specs/p2-u3a-platform-authentication-http-boundary.md); credential verification, shared sign-in/session/logout, explicit cookie channel, CSRF and origin/source contract.
 - **Dependencies:** verified P2-U1/U2 and P1-U4; recheck evidence before implementation.
-- **Acceptance/checks:** A-01–09; proposed `./dev exec pnpm check:platform-auth --http`, secure browser transport probe, identity/session regressions and `./dev check`. Proposed selection is not implemented.
-- **Remaining:** all implementation/acceptance; configure actual secure origins/proxy topology. a completion proves the HTTP boundary, not the console journey.
-- **Verification:** documentation consistency, acceptance coverage, relative links and whitespace only.
+- **Acceptance/checks:** A-01–09; `./dev exec pnpm check:platform-auth --http` includes A/B production adapters and HTTPS Chromium probe; identity/session regressions and `./dev check` are required.
+- **Implemented:** named backend sign-in/current-session/logout, bounded typed verifier, explicit cookie consumers and shared-secret/context-bound CSRF transport. Contract: [HTTP boundary](../docs/architecture/platform-authentication-http.md).
+- **Handoff:** tested endpoints, safe session/error DTOs, exact proxy/origin/source/CSRF requirements, logout retry procedure and real-service fixtures documented in [contract](../docs/architecture/platform-authentication-http.md), [runbook](../docs/runbooks/platform-authentication.md) and [evidence](../docs/status/p2-u3a-evidence.md). Actual console/proxy/reauthentication remains b; deployment origin/proxy/TLS and production traffic/capacity are prerequisites.
+- **Verification:** A-01–09 passed; final focused `./dev exec pnpm check:platform-auth --http` and complete `./dev check` passed, exit 0, including identity/bootstrap, all session/admission/recovery, production module wiring, HTTPS Chromium and all five client scans. Links/format/launcher/whitespace and precise fixture teardown verified.
 
 ### P2-U3b — Platform browser access and isolated reauthentication
 
 - **Status:** planned; child specification prepared 2026-10-06 (Asia/Manila, +08:00).
 - **Requirement/scope:** [b spec](feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md); actual protected console/sign-in/logout, app transport, same-operator unfinished-work resume and complete parent acceptance.
-- **Dependencies:** verified P2-U3a A-01–09 and existing P1-U4 primitives; a remains planned.
+- **Dependencies:** verified P2-U3a A-01–09 and existing P1-U4 primitives; a is complete and verified.
 - **Acceptance/checks:** B-01–08 and full parent AC-01–11; proposed `./dev exec pnpm check:platform-auth --browser` and combined default, existing session regressions and `./dev check`. Proposed commands are not implemented.
 - **Remaining:** all implementation/browser acceptance; no durable incident-draft or production readiness claim.
 - **Verification:** documentation consistency, acceptance coverage, relative links and whitespace only.
@@ -661,7 +672,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
 | 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
-| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2 complete; U3/U4 planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
+| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/U3a complete; U3b/U4 planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1, P5-U2, P5-U3, P5-U4, P5-U5, P5-U6, P5-U7 | planned | [Staff intake and dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
@@ -753,6 +764,29 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-06 14:02 +08:00 (Asia/Manila) — Completed P2-U3a A-01–09. Final focused
+  auth HTTP/secure Chromium and full Docker checks passed, exit 0; actual
+  production module wiring, real canonical credential/version races, independent
+  A/B limits, single-session logout/retries, transactional authority, internal
+  crypto failure, actual lost writes/stale restoration/recovery and all five
+  client scans verified. Preserved bootstrap/bearer/lifecycle policies and
+  generic failures; bounded credential pipeline prevents plaintext DB queues.
+  Fixed conservative cookie expiry for HTTP-Date rounding and gave real COMMIT
+  loss fixtures approved finite timeout headroom without relaxing assertions.
+  Recorded contract/runbook/evidence/b handoff and cleared active work. b,
+  parent browser journey, deployment prerequisites and production gates remain.
+
+- 2026-10-06 (Asia/Manila, +08:00) — Started P2-U3a at the user's request.
+  Read AGENT.md/mandatory context/a and parent specs; rechecked delivered operator
+  and combined session evidence. Implemented named auth HTTP contracts, canonical
+  credential/version issuance, typed finite scrypt verification, explicit bearer/
+  cookie policies, trusted proxy/Origin and stateless context-bound CSRF, passive
+  session/logout and durable single-session revocation. Initial focused A/B and
+  secure Chromium probe passed. Expanded checks found browser HTTP-Date cookie
+  rounding could exceed absolute expiry; corrected the conservative Expires value
+  and retained the strict assertion. Final acceptance/regressions/full Docker
+  verification remain in progress; no a/parent completion claimed.
 
 - 2026-10-06 (Asia/Manila, +08:00) — User adopted P2-U3a/b split and requested
   child specs. Created sequential HTTP-authentication and browser/reauthentication

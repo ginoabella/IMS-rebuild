@@ -1,3 +1,4 @@
+import { checkPlatformAuth } from './check-platform-auth.mjs';
 import { checkDistributedLimits } from './check-session-limits.mjs';
 import { checkHttpAuthority } from './check-session-authority.mjs';
 import assert from 'node:assert/strict';
@@ -12,7 +13,9 @@ const selection = process.argv.slice(2);
 assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
-      ['--lifecycle', '--authority', '--limits'].includes(selection[0])),
+      ['--lifecycle', '--authority', '--limits', '--platform-auth'].includes(
+        selection[0],
+      )),
   'Supported selections: --lifecycle, --authority, --limits (default: all)',
 );
 const backend = createRequire(
@@ -350,6 +353,20 @@ try {
       ref,
       secrets,
       appUrl: app.href,
+    });
+  if (selection.length === 0 || selection[0] === '--platform-auth')
+    await checkPlatformAuth({
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      ref,
+      secrets,
+      appUrl: app.href,
+      proxy,
+      commitProxy,
     });
   if (selection.length === 0 || selection[0] === '--limits')
     await checkDistributedLimits({
@@ -780,7 +797,13 @@ try {
 
   for (const operation of ['issue', 'rotate', 'revoke']) {
     const p = await commitProxy();
-    const c = await worker({ runtimeUrl: p.url });
+    // Give the real COMMIT time to occur before deliberately dropping its response.
+    // Keep the strict dropped-frame/durable-write assertions; this uses the approved
+    // production command timeout rather than the 200ms fast expiry fixture.
+    const c = await worker({
+      runtimeUrl: p.url,
+      config: { ...settings, timeoutMs: 2000 },
+    });
     const session = operation === 'issue' ? null : await issue(a);
     const beforeFences = Number(
       (

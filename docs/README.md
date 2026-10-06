@@ -137,3 +137,8 @@ Separate P2-U3 implementation specs, in the adopted sequence:
 
 - [P2-U3a — Platform authentication HTTP boundary](../context/feature-specs/p2-u3a-platform-authentication-http-boundary.md)
 - [P2-U3b — Platform browser access and isolated reauthentication](../context/feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md)
+
+- [Platform authentication HTTP boundary](architecture/platform-authentication-http.md)
+- [Platform authentication operations and browser handoff](runbooks/platform-authentication.md)
+
+- [Platform authentication HTTP acceptance evidence](status/p2-u3a-evidence.md)

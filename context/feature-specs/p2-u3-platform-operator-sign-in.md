@@ -3,7 +3,7 @@
 ## Identity, status and requirement
 
 - **Unit:** P2-U3, Phase 2 — Establish identities, shared sessions, and access boundaries.
-- **Status:** planned; specification and split review only, 2026-10-06 (Asia/Manila, +08:00).
+- **Status:** in progress; a complete and verified, browser child b remains planned, 2026-10-06 (Asia/Manila, +08:00).
 - **Requirement:** [P2-U3 in the implementation plan](../implementation-plan.md#p2-u3--deliver-platform-operator-sign-in), separate tenantless platform console access, and overview success criteria 2, 7 and 8 within this unit's boundary.
 - **Dependencies:** complete P2-U2 (including a/b/c) and P1-U4; reuse complete P2-U1 operator credentials/bootstrap and P1-U5 audit conventions.
 - **Result:** A provisioned operator signs in through the platform browser application, enters its protected console, signs out across replicas, and reauthenticates after expiry without losing or transferring unfinished work.
@@ -11,7 +11,7 @@
 This specification defines intended behavior. Existing session/browser-foundation
 checks do not prove this feature. The user adopted the two-unit split on
 2026-10-06. The linked child specifications define the implementation sequence;
-both children and the parent remain planned, with no runtime work started.
+a is complete and verified; b remains planned. Parent completion requires both children.
 
 ## Sources and verified starting state
 
@@ -243,8 +243,8 @@ from CSRF or postpone backend failure/race checks to a later testing-only unit.
 | [P2-U3a — Platform authentication HTTP boundary](p2-u3a-platform-authentication-http-boundary.md) | Verified P2-U1/U2/P1-U4; credential verifier outcomes/bounds, sign-in/session/logout use cases, explicit cookie channel, CSRF, source/origin configuration and necessary guard/module integration. | Real-service A/B HTTP sign-in/session/revocation with browser cookie/CSRF transport probe. Owns AC-02–07 and backend portions of AC-01/08/09/11. Foundation completion does not claim the console journey. |
 | [P2-U3b — Platform browser access and isolated reauthentication](p2-u3b-platform-browser-access-and-isolated-reauthentication.md) | Verified a; actual app/proxy/server access composition, sign-in/logout UI, safe returns, expiry/unavailable handling, identity-bound unfinished-work handoff and full integrated guide/checks. | Actual browser journey on a's secure transport, identity switching and retained form values. Owns AC-10, browser portions of AC-01/04–06/08/09, and combined AC-11; reruns every AC-01–11. |
 
-All parent criteria have an owner. Both adopted sub-units remain planned; creating
-the child specs does not start implementation or approve new product policies. Keep the
+All parent criteria have an owner. a is complete and verified;
+b remains planned. Child completion does not approve new product policies. Keep the
 P2-U3 top-level delivery order; P2-U4 and Phase 3 require their listed dependencies.
 
 The review identified these required integration fixes and limits:

@@ -6,21 +6,21 @@ on:
 jobs:
   check:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - run: ./dev up
       - run: ./dev exec env CI=1 pnpm check
       - name: Foundation, durability, storage and identities (isolated fixtures)
         run: ./dev foundation-check
+      - run: ./dev exec pnpm exec playwright install chromium
+      - run: docker compose -p myims-rebuild-dev -f infra/docker/compose.yaml exec -T --user root workspace pnpm exec playwright install-deps chromium
       - name: Complete session authority, distributed admission and recovery (isolated fixtures)
         run: ./dev exec pnpm check:session-foundation
       - name: Server credential exclusion from built clients
         run: ./dev exec pnpm check:storage-clients
       - name: Fresh storage provisioning and restart
         run: ./dev storage-deployment-check
-      - run: ./dev exec pnpm exec playwright install chromium
-      - run: docker compose -p myims-rebuild-dev -f infra/docker/compose.yaml exec -T --user root workspace pnpm exec playwright install-deps chromium
       - run: ./dev exec pnpm check:ui
       - if: always()
         run: ./dev down

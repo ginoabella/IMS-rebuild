@@ -1,9 +1,11 @@
-import { Admission, type AdmissionResult } from '../../application/admission';
+import { httpFailure, enforceAdmission } from './http-errors';
+export { httpFailure, enforceAdmission } from './http-errors';
+import { PlatformBrowser } from './platform-browser';
+import { Admission } from '../../application/admission';
 import { TrustedSource, type SourceRequest } from './trusted-source';
 import {
   Inject,
   Injectable,
-  HttpException,
   type CanActivate,
   type ExecutionContext,
   type NestInterceptor,
@@ -20,6 +22,7 @@ import { HTTP_POLICY, type HttpPolicy } from './policy';
 interface HttpRequest extends SourceRequest {
   headers: Record<string, string | string[] | undefined>;
   rawHeaders: string[];
+  method: string;
 }
 interface HttpResponse {
   statusCode: number;
@@ -33,43 +36,18 @@ interface AuthorizedRequest {
 }
 // WeakMap prevents body, headers or arbitrary request properties from becoming authority.
 const authorized = new WeakMap<object, AuthorizedRequest>();
+export function requestSession(request: object): AuthorizedRequest {
+  const state = authorized.get(request);
+  if (!state) throw httpFailure(401);
+  return state;
+}
 export function requestPrincipal(request: object): Principal {
   const state = authorized.get(request);
   if (!state) throw httpFailure(401);
   return state.principal;
 }
-export function httpFailure(status: 400 | 401 | 403 | 429 | 503) {
-  return new HttpException(
-    {
-      statusCode: status,
-      message:
-        status === 400
-          ? 'Invalid request'
-          : status === 429
-            ? 'Too many requests'
-            : status === 401
-              ? 'Authentication required'
-              : status === 403
-                ? 'Access denied'
-                : 'Service unavailable',
-    },
-    status,
-  );
-}
-export function enforceAdmission(
-  result: AdmissionResult,
-  response: HttpResponse,
-): void {
-  if (result.kind === 'admitted') return;
-  if (result.kind === 'limited')
-    response.setHeader('Retry-After', String(result.retrySeconds));
-  if (result.kind === 'unavailable') response.setHeader('Retry-After', '1');
-  throw httpFailure(
-    result.kind === 'limited' ? 429 : result.kind === 'invalid' ? 400 : 503,
-  );
-}
 function bearer(request: HttpRequest): string | null {
-  // b supports bearer fixtures only. Cookies require the owning U3 transport/CSRF contract.
+  // Bearer consumers explicitly reject cookies and ambiguous credentials.
   if (request.headers.cookie !== undefined) return null;
   const count = request.rawHeaders.filter(
     (_, i) =>
@@ -91,6 +69,7 @@ export class AuthorityGuard implements CanActivate {
     @Inject(RequestAuthority) private readonly authority: RequestAuthority,
     @Inject(Admission) private readonly admission: Admission,
     @Inject(TrustedSource) private readonly source: TrustedSource,
+    @Inject(PlatformBrowser) private readonly browser: PlatformBrowser,
   ) {}
   async canActivate(context: ExecutionContext) {
     const policy = this.reflector.getAllAndOverride<HttpPolicy>(HTTP_POLICY, [
@@ -110,8 +89,21 @@ export class AuthorityGuard implements CanActivate {
     )
       throw httpFailure(403);
     const request = context.switchToHttp().getRequest<HttpRequest>();
-    const token = bearer(request);
+    if (!['bearer', 'platform-cookie'].includes(policy.channel))
+      throw httpFailure(403);
+    if (policy.channel === 'platform-cookie' && policy.plane !== 'platform')
+      throw httpFailure(403);
+    if (policy.channel === 'platform-cookie') this.browser.boundary(request);
+    const token =
+      policy.channel === 'platform-cookie'
+        ? this.browser.cookies(request).token
+        : bearer(request);
     if (!token) throw httpFailure(401);
+    if (
+      policy.channel === 'platform-cookie' &&
+      !['GET', 'HEAD', 'OPTIONS'].includes(request.method)
+    )
+      this.browser.check(request, 'session', token);
     const result = await this.authority.validate(token);
     if (result.kind !== 'authorized') {
       if (result.kind === 'unavailable') response.setHeader('Retry-After', '1');
@@ -124,6 +116,11 @@ export class AuthorityGuard implements CanActivate {
       )
     )
       throw httpFailure(403);
+    if (
+      policy.channel === 'platform-cookie' &&
+      result.record.consumer !== 'web'
+    )
+      throw httpFailure(401);
     enforceAdmission(
       await this.admission.protected(
         this.source.extract(request),

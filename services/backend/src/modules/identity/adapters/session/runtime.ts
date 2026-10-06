@@ -1,3 +1,4 @@
+import { PlatformCredentialRepository } from '../../../platform/adapters/db/credential-read';
 import { Admission } from '../../application/admission';
 import { RedisDistributedLimiter } from '../redis/limiter';
 import { TrustedSource } from '../http/trusted-source';
@@ -57,6 +58,8 @@ export async function sessionRuntime(
     config.sessions,
   );
   return {
+    platform,
+    platformCredentials: new PlatformCredentialRepository(database),
     lifecycle,
     admission: new Admission(limiter),
     source: new TrustedSource(config.limiter.trustedProxies),

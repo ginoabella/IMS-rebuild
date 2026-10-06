@@ -26,11 +26,16 @@ function derive(password: Buffer, salt: Buffer): Promise<Buffer> {
   if (busy) return Promise.reject(new PasswordInputError());
   busy = true;
   return new Promise((resolve, reject) => {
-    scrypt(password, salt, 32, options, (error, key) => {
+    try {
+      scrypt(password, salt, 32, options, (error, key) => {
+        busy = false;
+        if (error) reject(new PasswordInputError());
+        else resolve(key);
+      });
+    } catch {
       busy = false;
-      if (error) reject(new PasswordInputError());
-      else resolve(key);
-    });
+      reject(new PasswordInputError());
+    }
   });
 }
 export function supportedHash(encoded: unknown): encoded is string {
@@ -67,5 +72,39 @@ export async function verifyPassword(
     }
   } catch {
     return false;
+  }
+}
+
+export type PasswordVerification =
+  { kind: 'match' } | { kind: 'mismatch' } | { kind: 'unavailable' };
+// Valid supported work even for unknown/ineligible/malformed candidates.
+const dummyHash = `${prefix}${'00'.repeat(16)}$${'00'.repeat(32)}`;
+export async function verifyPasswordOutcome(
+  password: Buffer,
+  encoded: unknown,
+): Promise<PasswordVerification> {
+  try {
+    validatePassword(password);
+  } catch {
+    return { kind: 'mismatch' };
+  }
+  const supported = supportedHash(encoded);
+  const value = supported ? encoded : dummyHash;
+  const [salt, expected] = value.slice(prefix.length).split('$');
+  if (!salt || !expected) return { kind: 'unavailable' };
+  try {
+    const key = await derive(password, Buffer.from(salt, 'hex'));
+    const expectedKey = Buffer.from(expected, 'hex');
+    try {
+      return {
+        kind:
+          timingSafeEqual(key, expectedKey) && supported ? 'match' : 'mismatch',
+      };
+    } finally {
+      key.fill(0);
+      expectedKey.fill(0);
+    }
+  } catch {
+    return { kind: 'unavailable' };
   }
 }

@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Status:** complete; 2026-10-06 14:02 +08:00 (Asia/Manila). A-01–09 passed; see [evidence](../../docs/status/p2-u3a-evidence.md).
 - **Requirement:** [P2-U3 parent scope and acceptance matrix](p2-u3-platform-operator-sign-in.md).
 - **Goal:** authenticate tenantless operators through a secure browser-compatible HTTP boundary and revoke their selected session across replicas.
 - **Completion boundary:** real operator credentials create a shared platform web session; declared cookie/CSRF consumers enforce canonical authority and shared limits; confirmed logout invalidates that session on both HTTP replicas.
@@ -181,3 +181,14 @@ Resolve routine route/proof/configuration choices within the parent contract.
 Unknown required origins/cross-site behavior blocks only dependent deployment
 wiring until established. Existing policy approval is not reopened; production
 HA/TLS/traffic capacity and account recovery remain outside this unit.
+
+## Delivered result
+
+Final `./dev exec pnpm check:platform-auth --http` and `./dev check` passed,
+exit 0. The complete default session suite includes a's real-service A/B HTTP,
+production auth module and HTTPS Chromium probe; identity/bootstrap and all
+session/admission/recovery regressions are retained. See [safe evidence](../../docs/status/p2-u3a-evidence.md),
+[named transport contract](../../docs/architecture/platform-authentication-http.md)
+and [runbook/b handoff](../../docs/runbooks/platform-authentication.md).
+Actual console/proxy/Server Actions and isolated reauthentication remain b;
+no parent or production completion is claimed.

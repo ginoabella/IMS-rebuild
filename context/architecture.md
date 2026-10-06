@@ -397,6 +397,14 @@ ambiguous writes are never replayed. The 120/minute protected identity default a
 8,192-counter ceiling require realistic traffic/combined-memory review before
 production. U3/U4 own sign-in transports and the Phase 2 gate remains incomplete.
 
+P2-U3a adds the [platform authentication HTTP boundary](../docs/architecture/platform-authentication-http.md):
+exact credential verification with typed hash capacity outcomes, shared pre-verification
+admission, explicit platform cookie consumers and stateless context-bound CSRF.
+Cookie routes require exact HTTPS Origin, configured trusted proxy peer and shared
+server-only proxy proof. The auth cookie is host-only Secure/HttpOnly/SameSite=Lax.
+Passive current-session/logout do not renew. Next.js proxy/UI integration and
+isolated unfinished-work reauthentication remain P2-U3b; no preview HTTP exception.
+
 ### Platform Operators and Public Intake
 
 Platform operators use a separate identity store and tenantless sign-in. Platform

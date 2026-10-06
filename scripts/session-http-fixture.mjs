@@ -24,6 +24,20 @@ const { SafeLogger } = load('infrastructure/execution/logging');
 const { AuditRepository } = load('modules/audit/adapters/db/audit-repository');
 const { Admission } = load('modules/identity/application/admission');
 const { TrustedSource } = load('modules/identity/adapters/http/trusted-source');
+const { PlatformBrowser } = load(
+  'modules/identity/adapters/http/platform-browser',
+);
+const { PlatformLogout } = load('modules/platform/application/logout');
+const { PlatformCurrentSession } = load(
+  'modules/platform/application/current-session',
+);
+const { PlatformSignIn } = load('modules/platform/application/sign-in');
+const { PlatformAuthController } = load(
+  'modules/platform/adapters/http/auth.controller',
+);
+const { configureHttpBoundary } = load(
+  'modules/platform/adapters/http/http-boundary',
+);
 const { enforceAdmission } = load('modules/identity/adapters/http/guards');
 export async function openHttp({
   lifecycle,
@@ -32,6 +46,8 @@ export async function openHttp({
   runtimeUrl,
   admission,
   source,
+  browserConfig,
+  credentials,
 }) {
   const pool = new Pool({
     connectionString: runtimeUrl,
@@ -43,7 +59,32 @@ export async function openHttp({
   const authority = new RequestAuthority(lifecycle, staff, platform);
   const transactionAuthority = new TransactionAuthority(staff, platform);
   let barrier = null;
-  const stats = { protected: 0, verification: 0 };
+  const originalRead = credentials?.read.bind(credentials);
+  if (credentials)
+    credentials.read = async (...args) => {
+      const result = await originalRead(...args);
+      await wait('credential-read');
+      return result;
+    };
+  const originalIssue = lifecycle.issue.bind(lifecycle);
+  lifecycle.issue = async (...args) => {
+    await wait('verified-issuance');
+    return originalIssue(...args);
+  };
+  const stats = { protected: 0, verification: 0, hashes: 0, candidates: 0 };
+  const passwordModule = load('infrastructure/password/scrypt');
+  const originalVerify = passwordModule.verifyPasswordOutcome;
+  passwordModule.verifyPasswordOutcome = (...args) => {
+    stats.hashes++;
+    return originalVerify(...args);
+  };
+  const candidate = platform.candidate.bind(platform);
+  platform.candidate = (...args) => {
+    stats.candidates++;
+    return candidate(...args);
+  };
+  const crypto = backend('node:crypto');
+  const originalScrypt = crypto.scrypt;
   const consumeProtected = admission.protected.bind(admission);
   admission.protected = async (...args) => {
     await wait('admission');
@@ -97,6 +138,43 @@ export async function openHttp({
     health() {
       return { status: 'alive' };
     }
+    async cookieWrite(req) {
+      const p = requestPrincipal(req);
+      await wait('before-lock');
+      return Transaction.run(
+        pool,
+        {
+          actor: principalActor(p),
+          target: {
+            type: 'guard-fixture',
+            reference: randomUUID(),
+            tenantId: null,
+          },
+          correlationId: randomUUID(),
+        },
+        'guard-fixture.write',
+        new SafeLogger('http'),
+        async (tx) => {
+          if (!(await transactionAuthority.validate(tx, p)))
+            throw httpFailure(401);
+          await wait('after-lock');
+          await tx.query(
+            'INSERT INTO guard_fixture.platform_writes(actor_id) VALUES($1)',
+            [p.operatorId],
+          );
+          await new AuditRepository().append(
+            tx,
+            {
+              type: 'guard-fixture.write',
+              version: 1,
+              fields: { revision: { kind: 'integer', min: 1, max: 1 } },
+            },
+            { revision: 1 },
+          );
+          return { written: true };
+        },
+      );
+    }
     platformActivity(req) {
       return this.platform(req);
     }
@@ -114,6 +192,9 @@ export async function openHttp({
       // Test-only verification sentinel: never issues a token or checks a password.
       stats.verification++;
       return { verifiedFixture: true };
+    }
+    noChannel() {
+      throw new Error('Unclassified channel executed');
     }
     unclassified() {
       throw new Error('Unclassified handler executed');
@@ -147,15 +228,39 @@ export async function openHttp({
   }
   Controller()(FixtureController);
   const routes = [
+    [
+      'cookieWrite',
+      Post,
+      'fixture/platform-write',
+      {
+        access: 'protected',
+        channel: 'platform-cookie',
+        plane: 'platform',
+        permissions: ['platform_operator'],
+        activity: 'operational',
+      },
+    ],
     ['health', Get, 'health/live', { access: 'public' }],
     ['signIn', Post, 'fixture/sign-in/:plane', { access: 'public' }],
     ['unclassified', Get, 'unclassified', null],
+    [
+      'noChannel',
+      Get,
+      'fixture/no-channel',
+      {
+        access: 'protected',
+        plane: 'platform',
+        permissions: ['platform_operator'],
+        activity: 'passive',
+      },
+    ],
     [
       'platform',
       Get,
       'platform',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'platform',
         permissions: ['platform_operator'],
         activity: 'passive',
@@ -167,6 +272,7 @@ export async function openHttp({
       'platform/activity',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'platform',
         permissions: ['platform_operator'],
         activity: 'operational',
@@ -178,6 +284,7 @@ export async function openHttp({
       'staff/:tenantId',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'tenant',
         permissions: ['incident.read'],
         activity: 'passive',
@@ -189,6 +296,7 @@ export async function openHttp({
       'manage/:tenantId',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'tenant',
         permissions: ['tenant.manage'],
         activity: 'passive',
@@ -200,6 +308,7 @@ export async function openHttp({
       'staff/:tenantId/write',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'tenant',
         permissions: ['incident.create'],
         activity: 'operational',
@@ -211,6 +320,7 @@ export async function openHttp({
       'fail',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'tenant',
         permissions: ['incident.create'],
         activity: 'operational',
@@ -222,6 +332,7 @@ export async function openHttp({
       'activity',
       {
         access: 'protected',
+        channel: 'bearer',
         plane: 'tenant',
         permissions: ['incident.create'],
         activity: 'operational',
@@ -240,8 +351,32 @@ export async function openHttp({
   }
   class FixtureModule {}
   Module({
-    controllers: [FixtureController],
+    controllers: [
+      FixtureController,
+      ...(browserConfig ? [PlatformAuthController] : []),
+    ],
     providers: [
+      {
+        provide: PlatformLogout,
+        useValue: new PlatformLogout(authority, admission),
+      },
+      {
+        provide: PlatformCurrentSession,
+        useValue: new PlatformCurrentSession(),
+      },
+      {
+        provide: PlatformBrowser,
+        useValue: new PlatformBrowser(browserConfig),
+      },
+      {
+        provide: PlatformSignIn,
+        useValue: new PlatformSignIn(
+          admission,
+          platform,
+          credentials,
+          lifecycle,
+        ),
+      },
       { provide: RequestAuthority, useValue: authority },
       { provide: Admission, useValue: admission },
       { provide: TrustedSource, useValue: source },
@@ -249,11 +384,23 @@ export async function openHttp({
       { provide: APP_INTERCEPTOR, useClass: ActivityInterceptor },
     ],
   })(FixtureModule);
-  const app = await NestFactory.create(FixtureModule, { logger: false });
+  const app = await NestFactory.create(FixtureModule, {
+    logger: false,
+    bodyParser: false,
+  });
+  configureHttpBoundary(app);
   await app.listen(0, '127.0.0.1');
   return {
     url: await app.getUrl(),
     control(operation, stage) {
+      if (operation === 'hash-failure') {
+        crypto.scrypt = stage
+          ? () => {
+              throw new Error('HASH_INTERNAL_FAILURE_SENTINEL');
+            }
+          : originalScrypt;
+        return { configured: true };
+      }
       if (operation === 'metrics') return admission.metrics();
       if (operation === 'stats') return { ...stats };
       if (operation === 'prepare') {

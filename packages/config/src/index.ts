@@ -1,3 +1,11 @@
+import {
+  parsePlatformAuthConfig,
+  type PlatformAuthConfig,
+} from './platform-auth';
+export {
+  parsePlatformAuthConfig,
+  type PlatformAuthConfig,
+} from './platform-auth';
 import { parseLimiterConfig, type LimiterConfig } from './limiter';
 export {
   parseLimiterConfig,
@@ -22,6 +30,7 @@ export interface ConnectionConfig {
   secretFile?: string;
 }
 export interface BackendConfig {
+  platformAuth?: PlatformAuthConfig;
   storage?: StorageConfig;
   sessions: SessionConfig;
   limiter: LimiterConfig;
@@ -141,6 +150,7 @@ export function parseBackendConfig(env: Environment): BackendConfig {
   if (!host || !/^[a-zA-Z0-9:.%-]+$/.test(host))
     throw new ConfigurationError('HOST must be a valid bind address');
   return {
+    platformAuth: parsePlatformAuthConfig(env),
     storage: parseStorageConfig(env),
     sessions: parseSessionConfig(env),
     limiter: parseLimiterConfig(env),

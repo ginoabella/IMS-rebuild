@@ -1,3 +1,5 @@
+import type { NestExpressApplication } from '@nestjs/platform-express';
+import { configureHttpBoundary } from '../../modules/platform/adapters/http/http-boundary';
 import { ConfigurationError } from '@myims/config';
 import { loadBackendConfig } from '../../infrastructure/configuration';
 import 'reflect-metadata';
@@ -6,10 +8,15 @@ import { HttpModule } from './http.module';
 
 async function main() {
   const config = loadBackendConfig();
-  const app = await NestFactory.create(HttpModule.register(config), {
-    logger: false,
-    abortOnError: false,
-  });
+  const app = await NestFactory.create<NestExpressApplication>(
+    HttpModule.register(config),
+    {
+      logger: false,
+      bodyParser: false,
+      abortOnError: false,
+    },
+  );
+  configureHttpBoundary(app);
   app.enableShutdownHooks();
   await app.listen(config.http.port, config.http.host);
   console.log(

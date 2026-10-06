@@ -1,3 +1,5 @@
+import { PlatformBrowser } from './platform-browser';
+import { PLATFORM_AUTHENTICATION_PORTS } from '../../../platform/application/authentication-ports';
 import { Admission } from '../../application/admission';
 import { TrustedSource } from './trusted-source';
 import {
@@ -24,6 +26,18 @@ export class IdentityHttpModule {
     return {
       module: IdentityHttpModule,
       providers: [
+        {
+          provide: PlatformBrowser,
+          useFactory: () => new PlatformBrowser(config.platformAuth),
+        },
+        {
+          provide: PLATFORM_AUTHENTICATION_PORTS,
+          inject: [runtime],
+          useFactory: (r: Awaited<ReturnType<typeof sessionRuntime>>) => ({
+            candidates: r.platform,
+            credentials: r.platformCredentials,
+          }),
+        },
         {
           provide: Admission,
           inject: [runtime],
@@ -59,6 +73,8 @@ export class IdentityHttpModule {
         { provide: APP_INTERCEPTOR, useClass: ActivityInterceptor },
       ],
       exports: [
+        PlatformBrowser,
+        PLATFORM_AUTHENTICATION_PORTS,
         RequestAuthority,
         TransactionAuthority,
         Admission,

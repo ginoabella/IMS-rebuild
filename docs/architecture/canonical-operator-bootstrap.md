@@ -43,6 +43,11 @@ This does not establish capacity for a later public authentication service.
 Verification accepts only this exact version/parameter set and field lengths.
 Unknown/malformed hashes return false before hashing; stored input cannot select
 arbitrary expensive parameters. Compare derived bytes with timingSafeEqual.
+P2-U3a adds `verifyPasswordOutcome` for HTTP consumers, distinguishing match,
+mismatch and unavailable capacity/internal crypto errors. Unsupported/absent hashes
+perform supported dummy work before mismatch; one shared per-process hash slot
+rejects overlap without queueing plaintext. Bootstrap's boolean verifier remains
+compatible. Synchronous crypto failure also releases capacity for a later operation.
 Correct/wrong-password and case/space/Unicode-normalization differences are checked
 using synthetic credentials. Clear derived-key buffers and consumed input buffers
 where practical. JavaScript strings/native internals cannot be guaranteed erased.
