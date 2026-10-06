@@ -1,3 +1,4 @@
+import type { Transaction } from '../../../../infrastructure/database/transaction';
 import { SnapshotDatabase } from '../../../../infrastructure/database/read-snapshot';
 import type { PlatformAuthorityRead } from '../../application/authority-read';
 import {
@@ -35,6 +36,17 @@ export class PlatformAuthorityRepository implements PlatformAuthorityRead {
     )
       return { kind: 'denied' };
     return this.read('id', input.operatorId);
+  }
+  async lockedById(
+    transaction: Transaction,
+    operatorId: string,
+  ): Promise<AuthorityResult<PlatformAuthority>> {
+    if (!uuid(operatorId)) return { kind: 'denied' };
+    const result = await transaction.query(
+      `SELECT id,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent,'platform_operator' AS authority FROM public.platform_operators WHERE id=$1 FOR SHARE`,
+      [operatorId],
+    );
+    return platformAuthority(result.rows[0]);
   }
   private async read(
     column: 'id' | 'normalized_username',

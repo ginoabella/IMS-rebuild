@@ -178,7 +178,9 @@ required for local adapter checks. See [storage operations](shared-storage.md).
 
 ## Session lifecycle verification
 
-Use `./dev exec pnpm check:session-foundation --lifecycle` from the host.
+Use `./dev exec pnpm check:session-foundation --lifecycle` for lifecycle-only
+checks or `--authority` for two HTTP replicas plus lifecycle regressions. Omitting
+the selection runs both. See the [HTTP authority runbook](canonical-http-authority.md).
 The launcher creates and cleans its own authenticated Redis container/data volume
 and the suite owns its disposable PostgreSQL database. The workspace has no
 Docker socket; the host fixture helper uses the existing trusted Docker boundary.

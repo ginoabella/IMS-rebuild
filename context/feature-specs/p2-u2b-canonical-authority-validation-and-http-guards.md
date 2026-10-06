@@ -2,7 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** planned.
+- **Status:** complete; 2026-10-06 09:48 +08:00 (Asia/Manila).
+- **Evidence:** [B-01–07 verification and consumer limits](../../docs/status/p2-u2b-evidence.md).
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [P2-U2 parent scope and acceptance matrix](p2-u2-shared-session-store-and-authorization-guards.md).
 - **Goal:** enforce current canonical session authority on every protected HTTP request.

@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; three sequential child specs adopted; a complete, b/c planned.
+- **Status:** planned; three sequential child specs adopted; a/b complete, c planned.
 - **Prepared:** 2026-10-05, Asia/Manila (+08:00).
 - **Requirement:** [Phase 2, P2-U2](../implementation-plan.md#p2-u2--implement-the-shared-session-store-and-authorization-guards).
 - **Goal:** enforce the same session authority on every HTTP replica.
@@ -226,7 +226,8 @@ consistency, acceptance coverage, relative-link and whitespace review only.
 **Review conclusion: split into three sequential sub-units.** Session lifecycle,
 canonical HTTP authorization and distributed admission/recovery each have a clear
 observable boundary. The user adopted the split on 2026-10-05. The linked child
-specs define the sequential implementation boundaries; a is complete under explicit lifecycle/recovery approval; b/c remain planned.
+specs define the sequential implementation boundaries; a is complete under explicit lifecycle/recovery approval; b is complete with
+[HTTP authority evidence](../../docs/status/p2-u2b-evidence.md); c remains planned.
 Adopting the split does not approve pending product policies or start runtime work.
 
 | Unit | Starting state and scope | Result and acceptance coverage |

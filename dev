@@ -24,6 +24,7 @@ prepare() {
   compose config --quiet
 }
 provision_storage() {
+  [ "$#" -gt 0 ] || set -- scripts/provision-storage.mjs
   storage_docker_binary=$(command -v docker)
   docker run --rm --user "$(id -u):$(id -g)" --group-add "$(stat -c %g /var/run/docker.sock)" \
     -e "STORAGE_HOST_PROJECT_ROOT=$(pwd)" \
@@ -31,7 +32,7 @@ provision_storage() {
     --mount "type=bind,src=$storage_docker_binary,dst=/usr/bin/docker,readonly" \
     --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock -w /workspace \
     node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c \
-    node "${1:-scripts/provision-storage.mjs}"
+    node "$@"
 }
 action=${1:-help}
 [ "$#" -eq 0 ] || shift
@@ -62,10 +63,10 @@ case "$action" in
   exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
       if [ "$1" = pnpm ] && [ "${2:-}" = check:session-foundation ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ]; }; then
-          echo 'Supported session selection: --lifecycle' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ] && [ "$1" != --authority ]; }; then
+          echo 'Supported session selections: --lifecycle, --authority' >&2; exit 1
         fi
-        provision_storage scripts/check-session-deployment.mjs
+        provision_storage scripts/check-session-deployment.mjs "$@"
       else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;

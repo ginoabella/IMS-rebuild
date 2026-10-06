@@ -1,3 +1,4 @@
+import { checkHttpAuthority } from './check-session-authority.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -9,8 +10,9 @@ import { setTimeout as delay } from 'node:timers/promises';
 const selection = process.argv.slice(2);
 assert.ok(
   selection.length === 0 ||
-    (selection.length === 1 && selection[0] === '--lifecycle'),
-  'Supported selection: --lifecycle (default: lifecycle)',
+    (selection.length === 1 &&
+      ['--lifecycle', '--authority'].includes(selection[0])),
+  'Supported selections: --lifecycle, --authority (default: both)',
 );
 const backend = createRequire(
   new URL('../services/backend/package.json', import.meta.url),
@@ -153,7 +155,9 @@ async function worker(override = {}) {
           : { id, operation, args },
       );
     });
-  assert.equal((await call('init')).ready, true);
+  const initialized = await call('init');
+  assert.equal(initialized.ready, true);
+  call.url = initialized.url;
   call.child = child;
   return call;
 }
@@ -334,6 +338,18 @@ try {
     "INSERT INTO public.staff_users(id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES($1,$2,'session.staff','active','ready','credential-sentinel',clock_timestamp(),ARRAY['call_taker'])",
     [staffId, tenantId],
   );
+  if (selection[0] !== '--lifecycle')
+    await checkHttpAuthority({
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      ref,
+      secrets,
+      appUrl: app.href,
+    });
   const a = await worker(),
     b = await worker();
   const s = await issue(a),

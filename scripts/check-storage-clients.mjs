@@ -31,6 +31,10 @@ const sentinels = [
   'SESSION_WEB_IDLE_SECONDS',
   'credential-sentinel',
   'authentication-sentinel',
+  'HTTP_GUARD_CREDENTIAL_SENTINEL',
+  'modules/identity/adapters/http',
+  'modules/identity/application/request-authority',
+  'modules/identity/application/transaction-authority',
 ];
 for (const role of ['runtime', 'fixture', 'denied']) {
   const credentials = JSON.parse(

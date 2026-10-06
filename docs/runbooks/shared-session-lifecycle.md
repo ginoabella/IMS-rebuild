@@ -1,8 +1,9 @@
 # Session lifecycle operations and recovery
 
 Contract and scope: [shared lifecycle](../architecture/shared-session-lifecycle.md).
-This runbook covers backend primitives; sign-in/logout UI and HTTP guards remain
-P2-U2b/P2-U3/P2-U4.
+This runbook covers backend primitives. P2-U2b supplies
+[canonical HTTP guards](canonical-http-authority.md); sign-in/logout UI and
+transport acceptance remain P2-U3/P2-U4.
 
 ## Settings and startup
 

@@ -25,8 +25,8 @@ proof of credential verification. Staff facts include canonical tenant ID and
 tenant authority version; platform facts are tenantless. No roles are stored.
 
 `lookup(token)` returns a validated session record after checking durable generation,
-revocation and deadlines. b must still reload canonical account/tenant authority
-for every protected operation. `renew(token, reference, activity)` checks canonical
+revocation and deadlines. [b's HTTP guards](canonical-http-authority.md) reload
+canonical account/tenant authority for every protected operation. `renew(token, reference, activity)` checks canonical
 versions again and conditionally advances idle expiry. `rotate(token, reference)`
 requires eligible unchanged authority, advances the durable generation and
 conditionally replaces the Redis record. Rotation preserves idle deadline,

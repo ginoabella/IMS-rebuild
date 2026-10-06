@@ -7,8 +7,12 @@ import { TenantAdmissionRepository } from '../../../tenancy/adapters/db/admissio
 import { CanonicalSessionAuthority } from '../db/session-authority';
 import { PostgresSessionFences } from '../db/session-fences';
 import { RedisSessionRecords } from '../redis/session-records';
-// Trusted backend consumers only; b owns HTTP dependency registration.
-export async function sessionRuntime(config: BackendConfig) {
+import { TransactionAuthority } from '../../application/transaction-authority';
+import { RequestAuthority } from '../../application/request-authority';
+export async function sessionRuntime(
+  config: BackendConfig,
+  requireReady = true,
+) {
   const database = new SnapshotDatabase(config.database.url);
   const fences = new PostgresSessionFences(
     config.database.url,
@@ -22,22 +26,30 @@ export async function sessionRuntime(config: BackendConfig) {
     records.close();
     await Promise.all([fences.close(), database.close()]);
   };
+  const tenants = new TenantAdmissionRepository();
+  const staff = new StaffAuthorityRepository(database, tenants, tenants);
+  const platform = new PlatformAuthorityRepository(database);
+  // Await bounded connection/capacity validation before exposing the lifecycle.
+  // HTTP still starts on failure so public health remains available.
   try {
     await records.connect();
   } catch {
-    await close();
-    throw new Error('Session dependencies unavailable');
+    records.close();
+    if (requireReady) {
+      await close();
+      throw new Error('Session dependencies unavailable');
+    }
   }
+  const lifecycle = new SharedSessionLifecycle(
+    records,
+    fences,
+    new CanonicalSessionAuthority(staff, platform),
+    config.sessions,
+  );
   return {
-    lifecycle: new SharedSessionLifecycle(
-      records,
-      fences,
-      new CanonicalSessionAuthority(
-        new StaffAuthorityRepository(database, new TenantAdmissionRepository()),
-        new PlatformAuthorityRepository(database),
-      ),
-      config.sessions,
-    ),
+    lifecycle,
+    authority: new RequestAuthority(lifecycle, staff, platform),
+    transactionAuthority: new TransactionAuthority(staff, platform),
     fences,
     close,
   };

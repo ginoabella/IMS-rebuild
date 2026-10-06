@@ -1,3 +1,5 @@
+import type { Transaction } from '../../../../infrastructure/database/transaction';
+import type { TenantAuthorityLock } from '../../application/transaction-authority';
 import {
   SnapshotDatabase,
   type ReadSnapshot,
@@ -23,6 +25,7 @@ export class StaffAuthorityRepository implements StaffAuthorityRead {
   constructor(
     private readonly database: SnapshotDatabase,
     private readonly tenants: TenantAdmissionRead,
+    private readonly tenantLocks?: TenantAuthorityLock,
   ) {}
   async candidate(input: {
     plane: 'tenant';
@@ -81,6 +84,20 @@ export class StaffAuthorityRepository implements StaffAuthorityRead {
     } catch {
       return { kind: 'unavailable' };
     }
+  }
+  async lockedById(
+    transaction: Transaction,
+    tenantId: string,
+    staffId: string,
+  ): Promise<AuthorityResult<StaffAuthority>> {
+    if (!uuid(tenantId) || !uuid(staffId) || !this.tenantLocks)
+      return { kind: 'denied' };
+    const tenant = await this.tenantLocks.lockedById(transaction, tenantId);
+    const result = await transaction.query(
+      `SELECT id,tenant_id,roles,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent FROM public.staff_users WHERE tenant_id=$1 AND id=$2 FOR SHARE`,
+      [tenantId, staffId],
+    );
+    return staffAuthority(result.rows[0], tenant);
   }
   private async staff(
     snapshot: ReadSnapshot,

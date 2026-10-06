@@ -383,7 +383,10 @@ Web lifetimes are 60-minute idle/12-hour absolute, mobile 24-hour idle/7-day abs
 only successful authorized operational activity renews. Rotation retains original
 creation/absolute lifetime. [Session operations](../docs/runbooks/shared-session-lifecycle.md)
 document fail-closed recovery and the expiry/reauthentication draft-preservation
-handoff to P2-U3/U4. HTTP guards and limiter integration remain b/c.
+handoff to P2-U3/U4. P2-U2b adds [canonical HTTP principals and explicit global guards](../docs/architecture/canonical-http-authority.md),
+post-success conditional activity renewal and typed owner transaction locks for
+sensitive-write revalidation. Bearer fixtures are separate from production wiring;
+c owns distributed limits and integrated recovery, U3/U4 own sign-in transports.
 
 ### Platform Operators and Public Intake
 

@@ -1,3 +1,4 @@
+import { HttpAccess } from '../../modules/identity/adapters/http/policy';
 import type { LivenessResponse } from '@myims/contracts';
 import {
   Controller,
@@ -10,6 +11,7 @@ import {
 } from '@nestjs/common';
 import type { BackendConfig } from '@myims/config';
 import { BACKEND_CONFIG, SharedServices } from './shared-services';
+@HttpAccess({ access: 'public' })
 @Controller('health')
 class HealthController {
   constructor(

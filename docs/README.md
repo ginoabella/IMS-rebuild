@@ -99,7 +99,7 @@ Separate P2-U1 implementation specs:
 
 Session foundation: [P2-U2 parent spec and adopted sub-unit review](../context/feature-specs/p2-u2-shared-session-store-and-authorization-guards.md).
 P2-U2a is complete and verified under approved lifecycle/recovery policy with
-web 60-minute idle lifetime. P2-U2b/c and the parent remain planned. The user adopted three sequential
+web 60-minute idle lifetime. P2-U2b is complete and verified; c and the parent remain planned. The user adopted three sequential
 implementation sub-units; a's lifecycle/recovery policy is approved and limiter
 policy remains unapproved.
 Lifecycle completion does not establish protected HTTP access, sign-in or the
@@ -118,3 +118,8 @@ is prepared; the user approved revised section 1 and durable recovery fencing on
 - [Session settings, recovery and verification runbook](runbooks/shared-session-lifecycle.md)
 
 - [P2-U2a lifecycle verification evidence and limits](status/p2-u2a-evidence.md)
+
+- [Canonical HTTP authority and transactional boundary](architecture/canonical-http-authority.md)
+- [Two-replica HTTP authority verification](runbooks/canonical-http-authority.md)
+
+- [P2-U2b HTTP authority verification evidence and limits](status/p2-u2b-evidence.md)
