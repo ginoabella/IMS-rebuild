@@ -130,3 +130,10 @@ is prepared; the user approved revised section 1 and durable recovery fencing on
 - [Integrated session recovery and capacity/traffic gates](runbooks/session-foundation.md)
 
 - [P2-U2c and parent AC-01–11 integrated evidence](status/p2-u2c-evidence.md)
+
+Platform operator access: [P2-U3 feature spec and adopted split](../context/feature-specs/p2-u3-platform-operator-sign-in.md).
+P2-U3 and both children remain planned; no runtime implementation has started.
+Separate P2-U3 implementation specs, in the adopted sequence:
+
+- [P2-U3a — Platform authentication HTTP boundary](../context/feature-specs/p2-u3a-platform-authentication-http-boundary.md)
+- [P2-U3b — Platform browser access and isolated reauthentication](../context/feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md)

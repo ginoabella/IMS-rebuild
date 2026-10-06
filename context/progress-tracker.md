@@ -112,6 +112,35 @@ None. P2-U2c and parent P2-U2 completed 2026-10-06 11:12 +08:00 (Asia/Manila).
 
 ## Unit Checkpoints
 
+### P2-U3 — Platform operator sign-in
+
+- **Status:** planned; specification/review prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Requirement/scope:** [feature spec](feature-specs/p2-u3-platform-operator-sign-in.md); tenantless credential verification, cookie/CSRF HTTP boundary, protected console, logout and identity-isolated expiry/reauthentication.
+- **Acceptance/checks:** AC-01–11; proposed `./dev exec pnpm check:platform-auth`, existing session regressions and `./dev check` during implementation. The proposed command is not implemented.
+- **Split:** adopted 2026-10-06; sequential [P2-U3a HTTP boundary](feature-specs/p2-u3a-platform-authentication-http-boundary.md) and [P2-U3b browser access/reauthentication](feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md). Child specs exist; runtime work remains planned.
+- **Dependencies:** P2-U1/U2 and P1-U4 complete. Recheck delivered evidence before implementation; resolve actual secure browser origins/proxy configuration when wiring transport.
+- **Remaining:** all runtime acceptance; verifier failure/capacity distinction, explicit cookie guard channel, login CSRF, secure-origin browser checks and unfinished-work handoff. Existing bootstrap/fixtures are not sign-in evidence.
+- **Verification:** documentation consistency, acceptance ownership, relative links and whitespace review only; no application check or Phase 2 completion claimed.
+
+
+### P2-U3a — Platform authentication HTTP boundary
+
+- **Status:** planned; child specification prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Requirement/scope:** [a spec](feature-specs/p2-u3a-platform-authentication-http-boundary.md); credential verification, shared sign-in/session/logout, explicit cookie channel, CSRF and origin/source contract.
+- **Dependencies:** verified P2-U1/U2 and P1-U4; recheck evidence before implementation.
+- **Acceptance/checks:** A-01–09; proposed `./dev exec pnpm check:platform-auth --http`, secure browser transport probe, identity/session regressions and `./dev check`. Proposed selection is not implemented.
+- **Remaining:** all implementation/acceptance; configure actual secure origins/proxy topology. a completion proves the HTTP boundary, not the console journey.
+- **Verification:** documentation consistency, acceptance coverage, relative links and whitespace only.
+
+### P2-U3b — Platform browser access and isolated reauthentication
+
+- **Status:** planned; child specification prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Requirement/scope:** [b spec](feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md); actual protected console/sign-in/logout, app transport, same-operator unfinished-work resume and complete parent acceptance.
+- **Dependencies:** verified P2-U3a A-01–09 and existing P1-U4 primitives; a remains planned.
+- **Acceptance/checks:** B-01–08 and full parent AC-01–11; proposed `./dev exec pnpm check:platform-auth --browser` and combined default, existing session regressions and `./dev check`. Proposed commands are not implemented.
+- **Remaining:** all implementation/browser acceptance; no durable incident-draft or production readiness claim.
+- **Verification:** documentation consistency, acceptance coverage, relative links and whitespace only.
+
 ### P2-U2 — Shared session store and authorization guards
 
 - **Status:** complete; 2026-10-06 11:12 +08:00 (Asia/Manila).
@@ -618,7 +647,7 @@ top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
 ## Next Up
 
 [P2-U3 — Deliver platform operator sign-in](implementation-plan.md#p2-u3--deliver-platform-operator-sign-in),
-after completed P2-U2 infrastructure. No later unit has started automatically.
+after completed P2-U2 infrastructure. The [feature spec and adopted two-unit split](feature-specs/p2-u3-platform-operator-sign-in.md) are prepared; runtime work remains planned. No later unit has started automatically.
 P1-U1 remains deferred outside approved scoped handoffs; U3/U4 preserve explicit
 transport/credential decisions and unfinished-work reauthentication requirements.
 
@@ -724,6 +753,22 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-06 (Asia/Manila, +08:00) — User adopted P2-U3a/b split and requested
+  child specs. Created sequential HTTP-authentication and browser/reauthentication
+  specs with A-01–09, B-01–08 and complete parent AC-01–11 ownership. Updated parent,
+  tracker and docs index. Consistency, relative links, coverage and whitespace
+  checked; children/parent remain planned with no runtime implementation claimed.
+
+
+- 2026-10-06 (Asia/Manila, +08:00) — Read AGENT.md, required context and Phase 2;
+  prepared/reviewed P2-U3 spec AC-01–11 against delivered operator/session/guard
+  boundaries. Recommended two sequential sub-units with complete acceptance
+  ownership. Identified bearer-only guard integration, verifier overload/error
+  distinction, secure-origin/login CSRF and isolated unfinished-work handoff.
+  Linked spec/tracker/index; documentation consistency, links and whitespace
+  checked. Split remains proposed and P2-U3 planned; no runtime work claimed.
+
 
 - 2026-10-06 11:12 +08:00 (Asia/Manila) — Completed P2-U2c and parent P2-U2 under approved
   limiter policy/production review conditions. Final full Docker and standalone
