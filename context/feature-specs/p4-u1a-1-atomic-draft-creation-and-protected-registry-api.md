@@ -3,7 +3,7 @@
 ## Identity, state and requirement
 
 - **Unit:** P4-U1a-1, first sequential child of P4-U1a.
-- **Status:** planned; split adopted at the user's request on 2026-10-07 (Asia/Manila, +08:00). Implementation has not started.
+- **Status:** complete; A-01–08 and required regressions passed 2026-10-07 13:50 +08:00 (Asia/Manila). See [evidence](../../docs/status/p4-u1a-1-evidence.md).
 - **Requirement:** [parent spec](p4-u1a-draft-tenant-creation-and-initial-administrator.md) and [P4-U1a delivery plan](../implementation-plan.md#p4-u1a--create-a-draft-tenant-and-its-first-administrator).
 - **Goal:** Expose a protected backend workflow that atomically creates a draft tenant and its first unset administrator, supports durable retries and returns canonical list/detail data.
 - **Dependencies:** completed P2-U1/U2/U3 and P1-U4/U5. Recheck source and evidence before coding. No staff sign-in or PBX prerequisite.
@@ -149,7 +149,7 @@ stack or secret details. Read failures never become empty/missing success.
 | A-07 | Canonical list/detail reads, pagination limits/order, missing/malformed IDs, unavailable provenance and safe read outage pass. Hash/token sentinels remain absent in DTOs/logs. | AC-08, AC-11 backend |
 | A-08 | Saved draft administrator remains denied by canonical staff admission; no usable credentials, staff session, activation or PBX work exists. Document tenant-qualified handoff IDs. | AC-10, AC-11 handoff |
 
-Proposed command: `./dev exec pnpm check:draft-tenant --api`; not implemented yet.
+Implemented command: `./dev exec pnpm check:draft-tenant --api`; final focused and full required verification passed, exit 0.
 Use isolated real PostgreSQL/runtime grants, real session Redis, controlled
 operator/staff fixtures and two independent HTTP processes. Use barriers and
 fault injection to prove rollback/races/commit uncertainty, with exact teardown.
@@ -168,3 +168,5 @@ integration, migration/grants, canonical linked IDs, activity classification and
 check command. Child 2 consumes these contracts; it must not recreate backend
 validation or persistence. All browser criteria and parent completion remain
 pending at this child's completion.
+
+Verified implementation and handoff: [API/DTO/receipt contract](../../docs/architecture/draft-tenant-registry-api.md) and [acceptance evidence](../../docs/status/p4-u1a-1-evidence.md). Child 2 and parent completion remain pending.

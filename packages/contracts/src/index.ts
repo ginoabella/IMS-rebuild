@@ -11,3 +11,12 @@ export type {
   PlatformLogoutDto,
   PlatformAuthErrorDto,
 } from './platform-auth';
+
+export type {
+  CreateDraftTenantDto,
+  TenantSummaryDto,
+  TenantDetailDto,
+  TenantListDto,
+  TenantInputField,
+  TenantApiErrorDto,
+} from './platform-tenants';

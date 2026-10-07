@@ -140,7 +140,7 @@ try {
   const history = await observer.query(
     'SELECT count(*)::int AS count FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
   );
-  assert.equal(history.rows[0].count, 7);
+  assert.equal(history.rows[0].count, 8);
   await owner.query(`CREATE SCHEMA audit_fixture;
     CREATE TABLE audit_fixture.sample (id text PRIMARY KEY);
     CREATE TABLE audit_fixture.delivery_sink (id text PRIMARY KEY);
@@ -148,7 +148,7 @@ try {
     GRANT SELECT, INSERT ON audit_fixture.sample TO myims_runtime;
     GRANT SELECT ON audit_fixture.delivery_sink TO myims_runtime;`);
   console.log(
-    'PASS: fresh deployment and rerun apply seven versioned migrations; fixtures exist only in disposable database',
+    'PASS: fresh deployment and rerun apply eight versioned migrations; fixtures exist only in disposable database',
   );
   let retained;
   const ctx = context('commit');

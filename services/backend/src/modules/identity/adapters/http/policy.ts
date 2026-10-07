@@ -7,6 +7,7 @@ export type HttpPolicy =
       access: 'protected';
       channel: 'bearer' | 'platform-cookie';
       plane: 'platform';
+      sourceFailureStatus?: 403;
       permissions: readonly ['platform_operator'];
       activity: 'passive' | 'operational';
     }

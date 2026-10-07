@@ -364,6 +364,14 @@ records the scoped P1-U1 handoff, creator-closure grant, required explicit role
 persistence and downstream authentication boundary. Password policy, usable
 hashing and operator bootstrap remain c; sessions remain P2-U2.
 
+P4-U1a-1 adds a [protected draft registry API](../docs/architecture/draft-tenant-registry-api.md)
+with tenancy-owned registry ports, identity-owned first-administrator ports and
+platform-owned immutable creation receipts. Tenant/staff creation and their audit
+facts share one authority-locked primary transaction through an expiring scoped
+staff target handle with common failure poison. Receipt operator/request locking
+and qualified database linkage coordinate replica retries. List/detail remain
+passive, uncached primary reads. Browser delivery remains P4-U1a-2.
+
 ### Shared Session Management
 
 The identity module creates, validates, renews, and revokes sessions through a

@@ -121,11 +121,15 @@ export class AuthorityGuard implements CanActivate {
       result.record.consumer !== 'web'
     )
       throw httpFailure(401);
+    const source = this.source.extract(request);
+    if (
+      !source &&
+      policy.plane === 'platform' &&
+      policy.sourceFailureStatus === 403
+    )
+      throw httpFailure(403);
     enforceAdmission(
-      await this.admission.protected(
-        this.source.extract(request),
-        result.principal,
-      ),
+      await this.admission.protected(source, result.principal),
       response,
     );
     authorized.set(request, {

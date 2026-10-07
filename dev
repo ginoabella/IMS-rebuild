@@ -100,6 +100,12 @@ case "$action" in
           *) platform_selection=--platform-auth ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:draft-tenant ]; then
+        shift 2
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --api ]; }; then
+          echo 'Supported draft tenant selection: --api' >&2; exit 1
+        fi
+        provision_storage scripts/check-session-deployment.mjs --draft-tenant
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:session-foundation ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ] && [ "$1" != --authority ] && [ "$1" != --limits ]; }; then

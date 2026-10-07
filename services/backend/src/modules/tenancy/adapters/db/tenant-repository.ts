@@ -1,3 +1,4 @@
+import type { TenantRegistry } from '../../../platform/application/tenant-registry';
 import { storageFailure } from '../../../identity/adapters/db/storage-failure';
 import type { Transaction } from '../../../../infrastructure/database/transaction';
 import { AuditRepository } from '../../../audit/adapters/db/audit-repository';
@@ -8,7 +9,8 @@ import {
   type StorageResult,
 } from '../../../identity/domain/storage';
 import type { TenantRecord, TenantStatus } from '../../domain/tenant-record';
-import type { TenantRegistry } from '../../../platform/application/tenant-registry';
+import type { DraftTenantRegistry } from '../../../platform/application/draft-tenant-ports';
+import type { ReadSnapshot } from '../../../../infrastructure/database/read-snapshot';
 const columns =
   'id,normalized_code,display_name,status,version,authority_version,created_at,updated_at';
 const event = {
@@ -26,7 +28,39 @@ const event = {
     },
   },
 };
-export class TenantRepository implements TenantRegistry {
+export class TenantRepository implements DraftTenantRegistry {
+  async byId(snapshot: ReadSnapshot, id: string): Promise<TenantRecord | null> {
+    if (!uuid(id)) throw new Error('Invalid tenant reference');
+    const result = await snapshot.query<TenantRecord>(
+      `SELECT ${columns} FROM public.tenants WHERE id=$1`,
+      [id],
+    );
+    return result.rows[0] ?? null;
+  }
+  async list(
+    snapshot: ReadSnapshot,
+    limit: number,
+    after: string | null,
+  ): Promise<TenantRecord[]> {
+    if (
+      !Number.isInteger(limit) ||
+      limit < 1 ||
+      limit > 101 ||
+      (after !== null && !uuid(after))
+    )
+      throw new Error('Invalid registry page');
+    const result =
+      after === null
+        ? await snapshot.query<TenantRecord>(
+            `SELECT ${columns} FROM public.tenants ORDER BY id ASC LIMIT $1`,
+            [limit],
+          )
+        : await snapshot.query<TenantRecord>(
+            `SELECT ${columns} FROM public.tenants WHERE id > $2::uuid ORDER BY id ASC LIMIT $1`,
+            [limit, after],
+          );
+    return result.rows;
+  }
   async find(
     transaction: Transaction,
     code: unknown,
@@ -53,6 +87,19 @@ export class TenantRepository implements TenantRegistry {
       displayName: string;
       status: TenantStatus;
     },
+  ): Promise<StorageResult<TenantRecord>> {
+    return this.insert(transaction, input, false);
+  }
+  createDraft(
+    transaction: Transaction,
+    input: { id: string; code: string; displayName: string },
+  ) {
+    return this.insert(transaction, { ...input, status: 'draft' }, true);
+  }
+  private async insert(
+    transaction: Transaction,
+    input: Parameters<TenantRegistry['create']>[1],
+    codeConflictOnly: boolean,
   ): Promise<StorageResult<TenantRecord>> {
     const code = normalizeTenantCode(input.code);
     if (
@@ -85,7 +132,23 @@ export class TenantRepository implements TenantRegistry {
         return { kind: 'found' as const, value };
       });
     } catch (error) {
-      return storageFailure(error);
+      const failure = storageFailure(error);
+      // This narrow creation capability reports only the canonical code
+      // constraint as a user conflict. Audit/UUID uniqueness failures are outages.
+      if (
+        codeConflictOnly &&
+        failure.kind === 'duplicate' &&
+        !(
+          error &&
+          typeof error === 'object' &&
+          'table' in error &&
+          error.table === 'tenants' &&
+          'constraint' in error &&
+          error.constraint === 'tenants_normalized_code_key'
+        )
+      )
+        return { kind: 'unavailable' };
+      return failure;
     }
   }
   async rename(

@@ -112,3 +112,13 @@ rollback, independent database audit/outbox failure, attribution validation,
 append-only/bypass denial and synthetic sentinel exclusion from persisted data and
 captured logs. A test-only delivery sink stays empty; no dispatch exists in this
 unit. See [P1-U5a evidence](../status/p1-u5a-evidence.md) for commands/results/limits.
+
+## Atomic tenant and first-administrator targets
+
+P4-U1a-1 adds `withStaffCreationTarget(staffId, callback)` for a platform actor's
+UUID tenant root. It validates the staff UUID and existing canonical root tenant,
+then supplies an expiring staff-target handle in that tenant. Root and child retain
+one connection, immutable actor/correlation and shared required-failure poison.
+Root context is never changed, and scoped handles cannot query after callback
+return or outer completion. An unfinished target callback prevents outer commit. Existing consumers retain their original target checks and runner API.
+See the [draft registry contract](draft-tenant-registry-api.md).

@@ -1,3 +1,7 @@
+import { PlatformTenantsController } from './tenants.controller';
+import { DraftTenants } from '../../application/draft-tenants';
+import { DraftTenantRuntime } from '../db/draft-tenant-runtime';
+import { TransactionAuthority } from '../../../identity/application/transaction-authority';
 import { PlatformLogout } from '../../application/logout';
 import { PlatformCurrentSession } from '../../application/current-session';
 import { Module, type DynamicModule } from '@nestjs/common';
@@ -17,9 +21,20 @@ export class PlatformAuthHttpModule {
     return {
       module: PlatformAuthHttpModule,
       imports: [IdentityHttpModule.register(config)],
-      controllers: [PlatformAuthController],
+      controllers: [PlatformAuthController, PlatformTenantsController],
       providers: [
         PlatformCurrentSession,
+        {
+          provide: DraftTenantRuntime,
+          inject: [TransactionAuthority],
+          useFactory: (authority: TransactionAuthority) =>
+            new DraftTenantRuntime(config.database.url, authority),
+        },
+        {
+          provide: DraftTenants,
+          inject: [DraftTenantRuntime],
+          useFactory: (runtime: DraftTenantRuntime) => runtime.service,
+        },
         {
           provide: PlatformLogout,
           inject: [RequestAuthority, Admission],
