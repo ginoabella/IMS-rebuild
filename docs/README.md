@@ -148,3 +148,13 @@ Separate P2-U3 implementation specs, in the adopted sequence:
 - [Platform authentication operations and browser handoff](runbooks/platform-authentication.md)
 
 - [Platform authentication HTTP acceptance evidence](status/p2-u3a-evidence.md)
+
+## Draft tenant creation
+
+[P4-U1a feature spec and adopted implementation split](../context/feature-specs/p4-u1a-draft-tenant-creation-and-initial-administrator.md)
+defines early protected draft creation and its first unset administrator. The
+feature and backend/browser sub-units remain planned; credential setup,
+activation and PBX readiness remain with their owning units.
+
+- [P4-U1a-1 — Atomic draft creation and protected registry API](../context/feature-specs/p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md)
+- [P4-U1a-2 — Operator browser creation and integrated handoff](../context/feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md)

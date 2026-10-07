@@ -139,6 +139,32 @@ None.
 
 ## Unit Checkpoints
 
+### P4-U1a — Draft tenant creation and initial administrator
+
+- **Status:** planned; specification prepared and reviewed 2026-10-07 (Asia/Manila, +08:00). Implementation has not started.
+- **Requirement/scope:** [feature spec](feature-specs/p4-u1a-draft-tenant-creation-and-initial-administrator.md); protected list/create/detail, atomic draft tenant and unset first administrator, platform audit and durable retry recovery.
+- **Dependencies:** completed P2-U1/U2/U3 and P1-U4/U5; no P2-U4 or Phase 3 prerequisite under the approved delivery-order exception.
+- **Acceptance/checks:** AC-01–11; proposed `./dev exec pnpm check:draft-tenant` is not implemented. Real database/runtime grants, Redis, two HTTP replicas, HTTPS browser journey and retained foundation/auth regressions plus `./dev check` are required during implementation.
+- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); sequential [P4-U1a-1 atomic creation/protected API](feature-specs/p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md) and [P4-U1a-2 browser journey/integrated handoff](feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md), both planned. Existing transaction target checks require a narrow compatible integration for tenant and staff writes on one connection.
+- **Remaining:** all runtime implementation and acceptance evidence. Credential setup remains P2-U4/P4-U1b; activation remains P4-U3. Draft staff admission remains denied.
+- **Documentation verification:** source/context consistency, local links and whitespace reviewed; no runtime tests were run for this documentation change.
+
+### P4-U1a-1 — Atomic draft creation and protected registry API
+
+- **Status:** planned; split adopted and specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Requirement/scope:** [child spec](feature-specs/p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md); owned create/read ports, protected API, same-connection target integration, durable receipt, transactional audit and admission denial.
+- **Dependencies:** completed P2-U1/U2/U3 and P1-U4/U5; recheck their evidence before starting.
+- **Acceptance/checks:** A-01–08 cover parent AC-01–08/10/11 at the backend boundary and session regressions. Proposed `./dev exec pnpm check:draft-tenant --api`, relevant identity/audit/auth/session regressions and `./dev check`; new command not implemented.
+- **Remaining/handoff:** all implementation and checks; verified safe routes/DTOs, retry/error semantics and canonical linkage are required before child 2. API completion alone does not complete P4-U1a.
+
+### P4-U1a-2 — Operator browser creation and integrated handoff
+
+- **Status:** planned; split adopted and specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Requirement/scope:** [child spec](feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md); protected tenant list/form/detail, explicit forwarding, owner-bound attempt recovery and complete parent acceptance.
+- **Dependencies:** verified P4-U1a-1 and delivered P2-U3b/P1-U4 browser/UI foundation.
+- **Acceptance/checks:** B-01–08, child 1 A-01–08 and parent AC-01–11. Proposed browser/combined `check:draft-tenant` selectors, existing regressions and final `./dev check`; new commands not implemented.
+- **Remaining/handoff:** all browser implementation and integrated checks. P4-U1a completes only with both children verified; credential setup, later onboarding and activation stay with P2-U4/P4-U1b/P4-U3.
+
 ### DEV-PLATFORM-HTTPS — Private development console access
 
 - **Status:** implementation and automated verification complete;
@@ -712,8 +738,9 @@ change does not start implementation or claim a working tenant creation facility
 P4-U1a delivers protected platform list/create/detail with an atomic draft tenant
 and first `tenant_admin` identity, unset credentials, and operator-attributed audit.
 It depends on completed identity/session/platform/UI/audit foundations, not P2-U4
-or PBX readiness. Required acceptance and verification are defined in the linked
-plan; record a detailed unit checkpoint before implementation starts.
+or PBX readiness. Required acceptance and verification are defined in the
+[feature spec](feature-specs/p4-u1a-draft-tenant-creation-and-initial-administrator.md).
+Its checkpoint records the adopted two-step split; both child specs exist and all implementation remains planned.
 
 P1-U1 remains deferred outside approved scoped handoffs. P2-U4 must resolve
 credential delivery/expiry/recovery and the draft administrator setup contract.
@@ -832,6 +859,21 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-07 +08:00 (Asia/Manila) — User requested creating the P4-U1a split
+  feature specs. Adopted sequential P4-U1a-1 API/database and P4-U1a-2 browser/
+  integrated handoff; created detailed child contracts, acceptance criteria and
+  parent coverage, linked parent/tracker/index and kept every unit planned.
+  Clarified explicit recovery before editing an uncertain creation attempt.
+  Documentation links, acceptance coverage and whitespace checked; no runtime
+  implementation or tests claimed.
+
+- 2026-10-07 +08:00 (Asia/Manila) — Prepared and reviewed the requested P4-U1a
+  feature spec after AGENT.md, mandatory context and source inspection. Defined
+  atomic draft/admin creation, per-target audit integration, durable retry receipt,
+  protected list/detail/browser contracts and AC-01–11. Recommended two sequential
+  sub-units without adopting or starting them. Reviewed documentation consistency,
+  local links and whitespace; no runtime checks or feature completion claimed.
 
 - 2026-10-07 11:12 +08:00 (Asia/Manila) — User approved updating the delivery plan
   to create a tenant and its first administrator before staff authentication.
