@@ -13,9 +13,14 @@ const selection = process.argv.slice(2);
 assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
-      ['--lifecycle', '--authority', '--limits', '--platform-auth'].includes(
-        selection[0],
-      )),
+      [
+        '--lifecycle',
+        '--authority',
+        '--limits',
+        '--platform-auth',
+        '--platform-http',
+        '--platform-browser',
+      ].includes(selection[0])),
   'Supported selections: --lifecycle, --authority, --limits (default: all)',
 );
 const backend = createRequire(
@@ -342,7 +347,7 @@ try {
     "INSERT INTO public.staff_users(id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES($1,$2,'session.staff','active','ready','credential-sentinel',clock_timestamp(),ARRAY['call_taker'])",
     [staffId, tenantId],
   );
-  if (selection[0] !== '--lifecycle')
+  if (!['--lifecycle', '--platform-browser'].includes(selection[0]))
     await checkHttpAuthority({
       owner,
       runtime,
@@ -354,7 +359,12 @@ try {
       secrets,
       appUrl: app.href,
     });
-  if (selection.length === 0 || selection[0] === '--platform-auth')
+  if (
+    selection.length === 0 ||
+    ['--platform-auth', '--platform-http', '--platform-browser'].includes(
+      selection[0],
+    )
+  )
     await checkPlatformAuth({
       owner,
       runtime,
@@ -367,6 +377,8 @@ try {
       appUrl: app.href,
       proxy,
       commitProxy,
+      browserChecks: selection[0] !== '--platform-http',
+      browserOnly: selection[0] === '--platform-browser',
     });
   if (selection.length === 0 || selection[0] === '--limits')
     await checkDistributedLimits({

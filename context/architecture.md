@@ -100,6 +100,23 @@ See [storage contract](../docs/architecture/shared-storage.md).
 
 ## System Boundaries
 
+### Private development platform HTTPS access
+
+The user approved SSH-only development access at `https://localhost:3443` on
+2026-10-07. A development supervisor in the existing Docker workspace owns an
+HTTPS ingress on container port 3001 (host loopback 3101), a production Next
+console on workspace loopback 3003 and a normal Nest HTTP replica on workspace
+loopback 4001. That replica uses the existing runtime database role and shared
+Redis configuration; no separate authentication store, identity or migration is
+created. The existing backend container is retained. This avoids recreating the
+workspace or changing shared-service settings to enable browser authentication.
+The launcher must reject non-loopback publication of the ingress. Private
+listeners are not published; only the ingress receives browser traffic through
+SSH. Persistent development CA/TLS keys and distinct authentication secrets live
+under ignored owner-only `.local/platform-https`. The Next listener's exact
+backend peer is `127.0.0.1`; ingress client attribution is socket-derived, with
+Docker/tunnel source aggregation documented. Production deployment remains pending.
+
 ### Applications
 
 - `apps/command-center-web/` owns tenant staff operations and tenant-scoped
@@ -420,6 +437,16 @@ tenant and role boundaries across HTTP, WebSockets, exports, and file/recording
 access. Clients never receive database credentials, PBX administration credentials,
 raw Asterisk configuration, or another tenant's data. Browser calling must not
 expose long-lived client PBX credentials.
+
+P2-U3b composes [protected platform browser access](../docs/architecture/platform-browser-access.md)
+through a narrow same-origin Next proxy and explicitly trusted private ingress.
+NestJS validates every protected server read/API call. Mounted in-memory unfinished
+work is bound to canonical operator ID, hidden on lost/unknown authority and reset
+on confirmed logout/identity switch. Normal builds exclude the verification form.
+No Server Actions, session issuer, database access or durable drafts are added to
+Next. The [operator guide](../docs/guides/platform-operator-access.md) describes
+sign-in/logout/expiry/outages; production origin/TLS/HA/capacity and staff remain
+separate prerequisites.
 
 ## Telephony Architecture
 

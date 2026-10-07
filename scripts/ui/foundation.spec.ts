@@ -5,9 +5,14 @@ for (const [app, port] of [
   ['Platform console', 3201],
 ] as const) {
   test(`${app}: shared theme and local typography`, async ({ page }) => {
-    await page.goto(`http://localhost:${port}`);
+    await page.goto(
+      `http://localhost:${port}${port === 3201 ? '/sign-in' : ''}`,
+    );
     await expect(
-      page.getByRole('heading', { name: app, exact: true }),
+      page.getByRole('heading', {
+        name: port === 3201 ? 'Platform console sign-in' : app,
+        exact: true,
+      }),
     ).toBeVisible();
     const styles = await page.evaluate(async () => {
       await document.fonts.ready;
@@ -31,7 +36,7 @@ for (const [app, port] of [
       expect.arrayContaining([
         'Inter',
         'Barlow Semi Condensed',
-        'JetBrains Mono',
+        ...(port === 3200 ? ['JetBrains Mono'] : []),
       ]),
     );
     const panel = page.locator('section').first();

@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; prepared 2026-10-06 (Asia/Manila, +08:00).
+- **Status:** complete; 2026-10-07 09:11 +08:00 (Asia/Manila). B-01–08 and parent AC-01–11 passed; see [combined evidence](../../docs/status/p2-u3b-evidence.md).
 - **Requirement:** [P2-U3 parent scope and acceptance matrix](p2-u3-platform-operator-sign-in.md).
 - **Goal:** deliver the actual operator browser sign-in/logout journey and preserve unfinished work across expiry with canonical identity isolation.
 - **Completion boundary:** a provisioned operator enters a protected platform console through the real app, signs out across replicas, and reauthenticates to recover only their own retained form values; the complete parent AC-01–11 matrix passes.

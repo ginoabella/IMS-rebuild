@@ -1,7 +1,8 @@
 # P2-U3a platform authentication HTTP boundary evidence
 
 Completed 2026-10-06 14:02 +08:00 (Asia/Manila). A-01–09 passed.
-Final focused and full Docker checks passed, exit 0. b and parent remain incomplete.
+Final focused and full Docker checks passed, exit 0. b and parent were incomplete
+at this checkpoint; they are subsequently verified in [combined b evidence](p2-u3b-evidence.md).
 
 Requirement: [a specification](../../context/feature-specs/p2-u3a-platform-authentication-http-boundary.md).
 Parent/browser ownership: [parent](../../context/feature-specs/p2-u3-platform-operator-sign-in.md)

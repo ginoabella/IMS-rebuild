@@ -7,3 +7,5 @@ next-env.d.ts
 context/
 AGENT.md
 docs/planning/
+
+.local

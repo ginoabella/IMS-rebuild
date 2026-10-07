@@ -12,6 +12,27 @@ workspace_exec() {
   if [ -t 0 ] && [ -t 1 ]; then compose exec --user node workspace "$@";
   else compose exec -T --user node workspace "$@"; fi
 }
+platform_private_binding() {
+  platform_binding=$(compose port workspace 3001)
+  case "$platform_binding" in
+    127.0.0.1:3101|'[::1]:3101') ;;
+    *) echo 'Platform HTTPS requires the running workspace port 3001 published only at 127.0.0.1:3101. Correct MYIMS_WEB_BIND/MYIMS_PLATFORM_PORT before startup.' >&2; exit 1 ;;
+  esac
+  backend_binding=$(compose port backend 4000)
+  case "$backend_binding" in
+    *'
+'*) echo 'Platform HTTPS requires a single loopback publication for the existing backend.' >&2; exit 1 ;;
+  esac
+  case "$backend_binding" in
+    127.0.0.1:*|'[::1]:'*) ;;
+    *) echo 'Platform HTTPS requires the existing backend host publication to remain loopback only.' >&2; exit 1 ;;
+  esac
+  for platform_internal_port in 3003 4001; do
+    if compose port workspace "$platform_internal_port" >/dev/null 2>&1; then
+      echo 'Platform HTTPS internal Next/Nest ports must not be published.' >&2; exit 1
+    fi
+  done
+}
 prepare() {
   docker info --format '{{.ServerVersion}}' >/dev/null
   existing_storage=
@@ -50,6 +71,13 @@ case "$action" in
   shell) workspace_exec bash ;;
   migrate) workspace_exec pnpm build:backend; workspace_exec pnpm db:migrate ;;
   bootstrap-operator) workspace_exec pnpm build:backend; workspace_exec pnpm --filter @myims/backend exec node dist/entrypoints/deployment/main.js bootstrap-operator "$@" ;;
+  platform-https) platform_private_binding; workspace_exec node scripts/platform-https.mjs start ;;
+  platform-https-prepare) workspace_exec node scripts/platform-https.mjs prepare ;;
+  platform-https-stop) workspace_exec node scripts/platform-https.mjs stop ;;
+  platform-https-status) workspace_exec node scripts/platform-https.mjs status ;;
+  platform-https-check) platform_private_binding
+      compose exec -T backend node --input-type=module < scripts/check-platform-https-network.mjs
+      workspace_exec node scripts/check-platform-https.mjs ;;
   health) workspace_exec node scripts/health-status.mjs ;;
   foundation-check) workspace_exec pnpm check:foundation ;;
   backend) compose logs -f backend ;;
@@ -63,10 +91,15 @@ case "$action" in
   exec) [ "$#" -gt 0 ] || { echo 'Usage: ./dev exec COMMAND [ARGS...]' >&2; exit 1; }
       if [ "$1" = pnpm ] && [ "${2:-}" = check:platform-auth ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --http ]; }; then
-          echo 'Supported platform auth selection: --http' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --http ] && [ "$1" != --browser ]; }; then
+          echo 'Supported platform auth selections: --http, --browser' >&2; exit 1
         fi
-        provision_storage scripts/check-session-deployment.mjs --platform-auth
+        case "${1:-}" in
+          --http) platform_selection=--platform-http ;;
+          --browser) platform_selection=--platform-browser ;;
+          *) platform_selection=--platform-auth ;;
+        esac
+        provision_storage scripts/check-session-deployment.mjs "$platform_selection"
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:session-foundation ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ] && [ "$1" != --authority ] && [ "$1" != --limits ]; }; then
@@ -76,6 +109,6 @@ case "$action" in
       else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'
      [ "$action" = help ] || exit 1 ;;
 esac

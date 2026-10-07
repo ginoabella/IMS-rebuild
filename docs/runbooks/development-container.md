@@ -81,6 +81,13 @@ Redis services. Run `./dev health` for actual liveness/readiness; see the
 
 ## Port conflicts and remote access
 
+Platform operator sign-in requires HTTPS and the private authentication proxy;
+the HTTP preview command alone does not provide that setup. Review the
+[private platform HTTPS runbook](platform-development-https.md)
+for `./dev platform-https`, Windows/macOS certificate trust and the approved private SSH
+tunnel to `https://localhost:3443`. The launcher uses the existing shared services
+and bootstrap account without migration or container recreation.
+
 `./dev` explicitly loads the repository-root `.env` when it exists.
 Defaults bind to `127.0.0.1`. Copy `.env.example` to `.env` and change only ports
 that conflict, then rerun `./dev up`. Keep `.env` private and uncommitted.

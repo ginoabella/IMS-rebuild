@@ -3,7 +3,6 @@ import AxeBuilder from '@axe-core/playwright';
 
 for (const [app, port, pending] of [
   ['Command center', 3200, ['Incidents', 'Dispatch', 'Tenant administration']],
-  ['Platform console', 3201, ['Asterisk', 'Tenants']],
 ] as const) {
   test(`${app}: home, skip link, navigation and direct refresh`, async ({
     page,
@@ -127,3 +126,29 @@ for (const [app, port, pending] of [
     });
   });
 }
+
+// The unconfigured private listener must never expose protected foundation content.
+test('Platform console: unconfigured transport fails closed', async ({
+  page,
+}) => {
+  for (const path of ['/', '/ui-preview']) {
+    await page.goto(`http://localhost:3201${path}`);
+    await expect(page.locator('main[role="alert"]')).toContainText(
+      'Service unavailable',
+    );
+    await expect(
+      page.getByRole('link', { name: 'UI preview', exact: true }),
+    ).toHaveCount(0);
+    await expect(page.getByLabel('Sample notes')).toHaveCount(0);
+  }
+  await page.goto('http://localhost:3201/sign-in');
+  await expect(page.getByLabel(/^Username/)).toHaveAttribute(
+    'autocomplete',
+    'username',
+  );
+  await expect(page.getByLabel(/^Password/)).toHaveAttribute(
+    'autocomplete',
+    'current-password',
+  );
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});

@@ -4,9 +4,32 @@ import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as MenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { X } from 'lucide-react';
-import type { ReactNode } from 'react';
+import { createContext, useContext, useRef, useState } from 'react';
+import type { ReactNode, RefObject } from 'react';
 import { Button } from './primitives.js';
 import { cn } from './cn.js';
+
+const OverlayContext = createContext<{
+  active: boolean;
+  container?: RefObject<HTMLElement | null>;
+}>({ active: true });
+
+// Presentation only: callers retain form values outside the portalled content.
+export function OverlayScope({
+  active,
+  container,
+  children,
+}: {
+  active: boolean;
+  container: RefObject<HTMLElement | null>;
+  children: ReactNode;
+}) {
+  return (
+    <OverlayContext.Provider value={{ active, container }}>
+      {children}
+    </OverlayContext.Provider>
+  );
+}
 
 export function Overlay({
   trigger,
@@ -25,12 +48,25 @@ export function Overlay({
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 }) {
+  const scope = useContext(OverlayContext);
+  const active = useRef(scope.active);
+  active.current = scope.active;
+  const [localOpen, setLocalOpen] = useState(false);
   return (
-    <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
+    <DialogPrimitive.Root
+      open={scope.active && (open ?? localOpen)}
+      onOpenChange={(next) => {
+        setLocalOpen(next);
+        onOpenChange?.(next);
+      }}
+    >
       <DialogPrimitive.Trigger asChild>{trigger}</DialogPrimitive.Trigger>
-      <DialogPrimitive.Portal>
+      <DialogPrimitive.Portal container={scope.container?.current ?? undefined}>
         <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-background/80" />
         <DialogPrimitive.Content
+          onCloseAutoFocus={(event) => {
+            if (!active.current) event.preventDefault();
+          }}
           className={cn(
             'fixed z-50 max-h-dvh overflow-y-auto border bg-card p-6 shadow-xl',
             kind === 'sheet'
@@ -69,11 +105,18 @@ export function OverflowMenu({
   trigger: ReactNode;
   items: { label: string; onSelect: () => void }[];
 }) {
+  const scope = useContext(OverlayContext);
+  const active = useRef(scope.active);
+  active.current = scope.active;
+  const [open, setOpen] = useState(false);
   return (
-    <MenuPrimitive.Root>
+    <MenuPrimitive.Root open={scope.active && open} onOpenChange={setOpen}>
       <MenuPrimitive.Trigger asChild>{trigger}</MenuPrimitive.Trigger>
-      <MenuPrimitive.Portal>
+      <MenuPrimitive.Portal container={scope.container?.current ?? undefined}>
         <MenuPrimitive.Content
+          onCloseAutoFocus={(event) => {
+            if (!active.current) event.preventDefault();
+          }}
           sideOffset={6}
           className="z-50 min-w-40 rounded-md border bg-card p-1 shadow-xl"
         >

@@ -52,14 +52,14 @@ for (const role of ['runtime', 'fixture', 'denied']) {
   );
   sentinels.push(credentials.accessKeyId, credentials.secretAccessKey);
 }
-async function scan(directory) {
+async function scan(directory, extraSentinels = []) {
   let count = 0;
   for (const entry of await readdir(directory, { withFileTypes: true })) {
     const path = join(directory, entry.name);
-    if (entry.isDirectory()) count += await scan(path);
+    if (entry.isDirectory()) count += await scan(path, extraSentinels);
     else {
       const content = await readFile(path);
-      for (const sentinel of sentinels)
+      for (const sentinel of [...sentinels, ...extraSentinels])
         assert.ok(
           !content.includes(sentinel),
           'Client storage sentinel exclusion failed',
@@ -77,7 +77,16 @@ for (const app of [
   'responder-mobile',
 ]) {
   const directory = app.endsWith('-web') ? '.next/static' : 'dist';
-  const count = await scan(`/workspace/apps/${app}/${directory}`);
+  const count = await scan(
+    `/workspace/apps/${app}/${directory}`,
+    app === 'platform-console-web'
+      ? [
+          'Unfinished-work verification form',
+          'Unfinished notes',
+          'Submit retained work',
+        ]
+      : [],
+  );
   assert.ok(count > 0, 'Build client artifacts before running this check');
   console.log(
     `PASS: ${app} built client artifacts exclude storage and identity credential/content/configuration/import sentinels (${count} files)`,

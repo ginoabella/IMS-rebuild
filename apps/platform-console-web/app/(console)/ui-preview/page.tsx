@@ -1,3 +1,4 @@
+import { WorkFixture } from '@platform/work-fixture';
 import { UiPreview } from '@myims/ui-web';
 
 export default function PreviewPage() {
@@ -10,6 +11,7 @@ export default function PreviewPage() {
         <h1 className="mt-1 font-display text-3xl font-semibold">UI preview</h1>
       </div>
       <UiPreview />
+      <WorkFixture />
     </div>
   );
 }

@@ -1,7 +1,7 @@
 # Platform authentication HTTP boundary
 
-P2-U3a implements the backend boundary; the actual Next.js proxy and UI belong to
-P2-U3b. All routes live under `/platform/auth`. Responses use `no-store`.
+P2-U3a implements the backend boundary; P2-U3b composes the actual Next.js proxy
+and UI through the [browser contract](platform-browser-access.md). All routes live under `/platform/auth`. Responses use `no-store`.
 
 | Route           | Channel and result                                                                                                                                                                                   |
 | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

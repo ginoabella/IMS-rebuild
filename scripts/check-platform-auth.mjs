@@ -1,4 +1,5 @@
 // Isolated real PostgreSQL/runtime grants and Redis, independent HTTP processes.
+import { checkPlatformBrowser } from './check-platform-browser.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -46,6 +47,8 @@ export async function checkPlatformAuth({
   appUrl,
   proxy,
   commitProxy,
+  browserChecks = true,
+  browserOnly = false,
 }) {
   const password = ' Exact Password Åe\u0301 fixture 2026 ';
   const passwordBytes = Buffer.from(password);
@@ -124,7 +127,8 @@ export async function checkPlatformAuth({
     records = [],
     pool = new Pool({ connectionString: appUrl, max: 2 });
   pool.on('error', () => {});
-  let secureServer, browser, selected;
+  let secureServer, browser, selected, nextTarget, ingressSecret, droppedPath;
+  const ingressEvents = [];
   const directory = mkdtempSync(join(tmpdir(), 'myims-platform-browser-'));
   async function insert(
     operatorId,
@@ -306,6 +310,62 @@ export async function checkPlatformAuth({
     }
     throw new Error('Auth barrier deadline');
   }
+  async function runAppBrowser(a, b) {
+    const tenantId = randomUUID(),
+      staffId = randomUUID();
+    await owner.query(
+      "INSERT INTO public.tenants(id,normalized_code,display_name,status) VALUES($1,$2,'Browser fixture','active')",
+      [tenantId, `${username}.browser-tenant`],
+    );
+    await owner.query(
+      "INSERT INTO public.staff_users(id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES($1,$2,'browser.staff','active','ready',$3,clock_timestamp(),ARRAY['call_taker'])",
+      [staffId, tenantId, hash],
+    );
+    const browserId = randomUUID(),
+      browserSecond = randomUUID();
+    const browserName = `${username}.browser`;
+    await insert(browserId, browserName);
+    await insert(browserSecond, `${browserName}.second`);
+    await checkPlatformBrowser({
+      config,
+      a,
+      b,
+      select: (value) => {
+        selected = value;
+      },
+      ingress: {
+        events: () => ingressEvents.slice(-8),
+        selected: () => selected,
+        drop: (path) => {
+          droppedPath = path;
+        },
+        next: (value, secret) => {
+          nextTarget = value;
+          ingressSecret = secret;
+        },
+      },
+      username: browserName,
+      password,
+      owner,
+      redis,
+      key,
+      secrets,
+      records,
+      issue,
+      staffFacts: {
+        plane: 'tenant',
+        identityId: staffId,
+        tenantId,
+        authenticationVersion: 1,
+        tenantAuthorityVersion: 1,
+      },
+      change: (value) =>
+        change(browserId, {
+          kind: 'status',
+          status: value === 'disable' ? 'disabled' : 'active',
+        }),
+    });
+  }
   try {
     await insert(id, username);
     await insert(secondId, `${username}.second`);
@@ -361,6 +421,79 @@ export async function checkPlatformAuth({
           res.writeHead(403).end();
           return;
         }
+        if (nextTarget) {
+          const forwarded = { ...req.headers };
+          for (const name of [
+            'x-myims-ingress',
+            'x-myims-client-ip',
+            'x-myims-path',
+            'x-platform-proxy',
+            'x-forwarded-for',
+            'forwarded',
+            'x-forwarded-host',
+            'x-forwarded-proto',
+            'x-forwarded-port',
+            'connection',
+            'proxy-connection',
+            'keep-alive',
+            'te',
+            'trailer',
+            'transfer-encoding',
+            'upgrade',
+            'content-length',
+            'expect',
+          ])
+            delete forwarded[name];
+          Object.assign(forwarded, {
+            'x-myims-ingress': ingressSecret,
+            'x-myims-client-ip': req.socket.remoteAddress,
+            'x-myims-path': req.url.split('?')[0],
+            'x-forwarded-proto': 'https',
+            'x-forwarded-host': new URL(config.origin).host,
+          });
+          const consumer = ['csrf', 'sign-in', 'session', 'logout'].find(
+            (value) => req.url === `/platform/auth/${value}`,
+          );
+          if (consumer) {
+            ingressEvents.push(`next-${consumer}:sent`);
+            let bytes = 0;
+            req.on('data', (chunk) => {
+              bytes += chunk.length;
+            });
+            req.on('end', () =>
+              ingressEvents.push(
+                `next-${consumer}:body-${bytes === Number(req.headers['content-length'] ?? 0) ? 'complete' : 'framed'}`,
+              ),
+            );
+          }
+          const outgoing = httpRequest(
+            `${nextTarget}${req.url}`,
+            { method: req.method, headers: forwarded },
+            (incoming) => {
+              if (consumer)
+                ingressEvents.push(`next-${consumer}:${incoming.statusCode}`);
+              if (droppedPath === req.url && incoming.statusCode === 201) {
+                droppedPath = null;
+                incoming.resume();
+                // Truncate a started response without delivering cookies. Closing before
+                // any response bytes allows Chromium to transparently retransmit a POST.
+                res.writeHead(201, {
+                  'Content-Type': 'application/json',
+                  'Content-Length': '2',
+                  'Cache-Control': 'no-store',
+                });
+                res.write('{');
+                setTimeout(() => res.destroy(), 30);
+                return;
+              }
+              res.writeHead(incoming.statusCode, incoming.headers);
+              incoming.pipe(res);
+            },
+          );
+          outgoing.on('error', () => res.writeHead(503).end());
+          req.pipe(outgoing);
+          return;
+        }
         if (req.url === '/') {
           res.setHeader('Content-Type', 'text/html');
           res.end('<!doctype html><title>Secure transport fixture</title>');
@@ -411,12 +544,17 @@ export async function checkPlatformAuth({
         req.pipe(upstream);
       },
     );
-    secureServer.listen(0, '127.0.0.1');
+    // Separate the real browser source (::1) from the trusted backend proxy peer (127.0.0.1).
+    secureServer.listen(0, '::1');
     await once(secureServer, 'listening');
     config.origin = `https://localhost:${secureServer.address().port}`;
     const a = await replica(),
       b = await replica();
     selected = a;
+    if (browserOnly) {
+      await runAppBrowser(a, b);
+      return;
+    }
     // Origin/proxy/channel and malformed body fail before admission/verification.
     for (const headers of [
       { origin: '' },
@@ -1259,6 +1397,7 @@ export async function checkPlatformAuth({
       !(await browserContext.cookies()).some((c) => c.name === cookieName),
     );
     await browserContext.close();
+    if (browserChecks) await runAppBrowser(a, b);
     console.log(
       'PASS platform A-08–09: hash capacity, real failure/response-loss boundaries and HTTPS Chromium Secure/HttpOnly cookie acceptance',
     );

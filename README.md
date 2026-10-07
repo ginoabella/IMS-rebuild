@@ -16,14 +16,15 @@ needed for this workflow. Run these commands from the repository root:
 
 Open http://localhost:3100. Use separate terminals to run other applications:
 
-| Command               | Application                                                        |
-| --------------------- | ------------------------------------------------------------------ |
-| `./dev command`       | Command center, http://localhost:3100                              |
-| `./dev platform`      | Platform console, http://localhost:3101                            |
-| `./dev public`        | Public intake, http://localhost:3102                               |
-| `./dev backend`       | Follow backend logs; API starts with `up` on http://localhost:4100 |
-| `./dev responder`     | Responder Expo app                                                 |
-| `./dev public-mobile` | Public Expo app                                                    |
+| Command                | Application                                                        |
+| ---------------------- | ------------------------------------------------------------------ |
+| `./dev command`        | Command center, http://localhost:3100                              |
+| `./dev platform`       | Platform console, http://localhost:3101                            |
+| `./dev platform-https` | Private HTTPS platform sign-in, https://localhost:3443 through SSH |
+| `./dev public`         | Public intake, http://localhost:3102                               |
+| `./dev backend`        | Follow backend logs; API starts with `up` on http://localhost:4100 |
+| `./dev responder`      | Responder Expo app                                                 |
+| `./dev public-mobile`  | Public Expo app                                                    |
 
 ```sh
 ./dev check       # Lint, formatting, types, builds and backend process checks
@@ -36,6 +37,11 @@ VS Code users can also choose **Dev Containers: Reopen in Container**.
 See the [development runbook](docs/runbooks/development-container.md) for remote
 server access, port overrides, mobile testing, troubleshooting and switching machines.
 The default port 3100 avoids the existing host development process on port 3000.
+
+For Platform Console sign-in with your existing bootstrap operator, follow the
+[private HTTPS server, Windows and macOS runbook](docs/runbooks/platform-development-https.md).
+It explains certificate trust and the SSH tunnel; `./dev platform` alone is an
+HTTP preview. HTTPS startup preserves the current database and shared services.
 
 ## Current capability
 
@@ -50,8 +56,9 @@ builds/migrates and starts the backend automatically:
 
 See the [backend foundation runbook](docs/runbooks/backend-foundation.md).
 The applications remain foundation placeholders. Backend `/` returns
-`operational: false`; authentication, incident workflows and operations UI are later
-units. Asterisk has a bootstrap SIP transport; extensions, trunks and live calling
+`operational: false`; platform operator authentication is delivered, while staff
+sign-in, incident workflows and administration screens remain later units.
+Asterisk has a bootstrap SIP transport; extensions, trunks and live calling
 are later work. See [shared-service details](docs/runbooks/shared-services.md).
 
 Shared artifact storage uses private Garage in Docker with internal HTTP.

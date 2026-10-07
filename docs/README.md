@@ -132,12 +132,18 @@ is prepared; the user approved revised section 1 and durable recovery fencing on
 - [P2-U2c and parent AC-01–11 integrated evidence](status/p2-u2c-evidence.md)
 
 Platform operator access: [P2-U3 feature spec and adopted split](../context/feature-specs/p2-u3-platform-operator-sign-in.md).
-P2-U3 and both children remain planned; no runtime implementation has started.
+P2-U3a/b and parent P2-U3 are complete and verified. Staff/Phase 2 and production gates remain pending.
 Separate P2-U3 implementation specs, in the adopted sequence:
 
 - [P2-U3a — Platform authentication HTTP boundary](../context/feature-specs/p2-u3a-platform-authentication-http-boundary.md)
 - [P2-U3b — Platform browser access and isolated reauthentication](../context/feature-specs/p2-u3b-platform-browser-access-and-isolated-reauthentication.md)
 
+- [P2-U3b browser implementation and verification evidence](status/p2-u3b-evidence.md)
+- [Platform browser access and unfinished-work integration](architecture/platform-browser-access.md)
+- [Platform operator sign-in and recovery guide](guides/platform-operator-access.md)
+- [Approved private development platform HTTPS access](planning/platform-development-https-access.md)
+- [Private development platform HTTPS: server, Windows and macOS commands](runbooks/platform-development-https.md)
+- [Private development HTTPS verification and manual test limits](status/platform-development-https-evidence.md)
 - [Platform authentication HTTP boundary](architecture/platform-authentication-http.md)
 - [Platform authentication operations and browser handoff](runbooks/platform-authentication.md)
 

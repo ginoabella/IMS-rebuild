@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 
-for (const port of [3200, 3201]) {
+// Shared primitives remain exercised in the public foundation app.
+// Protected platform composition is exercised by check:platform-auth over real HTTPS.
+for (const port of [3200]) {
   test(`App ${port}: forms preserve values, pending actions and retry`, async ({
     page,
   }) => {

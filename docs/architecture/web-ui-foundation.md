@@ -59,3 +59,9 @@ Next.js links and marks the current path with `aria-current="page"`. Planned
 areas are text, not links. Selecting a compact navigation link closes the sheet.
 Shell navigation is presentation; later identity units establish protected routes
 and backend authorization. No tenant selector or pretend session is provided.
+
+The platform console now composes this shell inside a backend-validated layout
+and mounted access boundary. Its public sign-in page uses the same fields/buttons.
+See [platform browser access](platform-browser-access.md). Shared primitive
+regressions remain in the command-center foundation; real protected platform
+shell/reflow/accessibility checks run through `check:platform-auth` over HTTPS.
