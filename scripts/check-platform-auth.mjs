@@ -310,7 +310,11 @@ export async function checkPlatformAuth({
     }
     throw new Error('Auth barrier deadline');
   }
-  async function runAppBrowser(a, b) {
+  async function runAppBrowser() {
+    // The integrated journey uses the actual shipping HTTP module, including tenants.
+    const a = await replica({ productionHttp: true }),
+      b = await replica({ productionHttp: true });
+    selected = a;
     const tenantId = randomUUID(),
       staffId = randomUUID();
     await owner.query(
@@ -548,13 +552,13 @@ export async function checkPlatformAuth({
     secureServer.listen(0, '::1');
     await once(secureServer, 'listening');
     config.origin = `https://localhost:${secureServer.address().port}`;
+    if (browserOnly) {
+      await runAppBrowser();
+      return;
+    }
     const a = await replica(),
       b = await replica();
     selected = a;
-    if (browserOnly) {
-      await runAppBrowser(a, b);
-      return;
-    }
     // Origin/proxy/channel and malformed body fail before admission/verification.
     for (const headers of [
       { origin: '' },
@@ -1397,7 +1401,7 @@ export async function checkPlatformAuth({
       !(await browserContext.cookies()).some((c) => c.name === cookieName),
     );
     await browserContext.close();
-    if (browserChecks) await runAppBrowser(a, b);
+    if (browserChecks) await runAppBrowser();
     console.log(
       'PASS platform A-08–09: hash capacity, real failure/response-loss boundaries and HTTPS Chromium Secure/HttpOnly cookie acceptance',
     );

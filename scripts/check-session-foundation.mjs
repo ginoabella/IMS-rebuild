@@ -16,6 +16,8 @@ assert.ok(
     (selection.length === 1 &&
       [
         '--draft-tenant',
+        '--draft-integrated',
+        '--draft-browser',
         '--lifecycle',
         '--authority',
         '--limits',
@@ -351,9 +353,13 @@ try {
     [staffId, tenantId],
   );
   if (
-    !['--lifecycle', '--platform-browser', '--draft-tenant'].includes(
-      selection[0],
-    )
+    ![
+      '--lifecycle',
+      '--platform-browser',
+      '--draft-tenant',
+      '--draft-integrated',
+      '--draft-browser',
+    ].includes(selection[0])
   )
     await checkHttpAuthority({
       owner,
@@ -368,9 +374,13 @@ try {
     });
   if (
     selection.length === 0 ||
-    ['--platform-auth', '--platform-http', '--platform-browser'].includes(
-      selection[0],
-    )
+    [
+      '--platform-auth',
+      '--platform-http',
+      '--platform-browser',
+      '--draft-integrated',
+      '--draft-browser',
+    ].includes(selection[0])
   )
     await checkPlatformAuth({
       owner,
@@ -385,7 +395,11 @@ try {
       proxy,
       commitProxy,
       browserChecks: selection[0] !== '--platform-http',
-      browserOnly: selection[0] === '--platform-browser',
+      browserOnly: [
+        '--platform-browser',
+        '--draft-integrated',
+        '--draft-browser',
+      ].includes(selection[0]),
     });
   if (selection.length === 0 || selection[0] === '--limits')
     await checkDistributedLimits({
@@ -399,7 +413,10 @@ try {
       appUrl: app.href,
       proxy,
     });
-  if (selection.length === 0 || selection[0] === '--draft-tenant')
+  if (
+    selection.length === 0 ||
+    ['--draft-tenant', '--draft-integrated'].includes(selection[0])
+  )
     await checkDraftTenants({
       owner,
       runtime,
@@ -412,7 +429,11 @@ try {
       proxy,
       commitProxy,
     });
-  if (selection[0] !== '--draft-tenant') {
+  if (
+    !['--draft-tenant', '--draft-integrated', '--draft-browser'].includes(
+      selection[0],
+    )
+  ) {
     const a = await worker(),
       b = await worker();
     const s = await issue(a),
@@ -1068,7 +1089,11 @@ try {
   }
   // The focused API selection also validates independent-process diagnostics;
   // it does not run the lifecycle tail that historically owned this scan.
-  if (selection[0] === '--draft-tenant') {
+  if (
+    ['--draft-tenant', '--draft-integrated', '--draft-browser'].includes(
+      selection[0],
+    )
+  ) {
     const draftAudit = (
       await owner.query(
         "SELECT metadata FROM public.audit_events WHERE event_type='identity.storage.changed'",

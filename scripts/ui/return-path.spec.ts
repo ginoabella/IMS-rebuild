@@ -20,8 +20,23 @@ test('Platform return destinations allow only delivered local console paths', ()
     '/ui-preview/../sign-in',
     '/%75i-preview',
     ' /ui-preview',
+    '/tenants?after=bad',
+    '/tenants/create/../sign-in',
+    '/tenants/%63reate',
+    '/tenants/not-a-uuid',
+    '/tenants//foreign.invalid',
+    '/tenants/create#private',
   ])
     expect(consoleReturnPath(path)).toBe('/');
   expect(consoleReturnPath('/')).toBe('/');
   expect(consoleReturnPath('/ui-preview')).toBe('/ui-preview');
+});
+
+test('Tenant returns accept only delivered literal list/create/UUID detail paths', () => {
+  for (const path of [
+    '/tenants',
+    '/tenants/create',
+    '/tenants/12345678-1234-1234-1234-123456789abc',
+  ])
+    expect(consoleReturnPath(path)).toBe(path);
 });

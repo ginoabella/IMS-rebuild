@@ -9,7 +9,10 @@ import {
   useState,
 } from 'react';
 import type { ReactNode } from 'react';
-import type { PlatformSessionDto } from '@myims/contracts';
+import type {
+  CreateDraftTenantDto,
+  PlatformSessionDto,
+} from '@myims/contracts';
 import { AppShell, Button, OverlayScope } from '@myims/ui-web';
 import { AppNavigation } from '../navigation';
 import { usePathname } from 'next/navigation';
@@ -25,7 +28,20 @@ import {
 } from './client';
 
 type FormValues = Record<string, string>;
+export type TenantDraftWork = {
+  values: Omit<CreateDraftTenantDto, 'requestId'>;
+  attempt: CreateDraftTenantDto | null;
+};
+const emptyDraft = (): TenantDraftWork => ({
+  values: { tenantCode: '', displayName: '', administratorUsername: '' },
+  attempt: null,
+});
 type WorkContract = {
+  ready: boolean;
+  draft: TenantDraftWork;
+  recordDraft: (draft: TenantDraftWork) => void;
+  capture: () => { current: () => boolean; proof: string };
+
   operatorId: string;
   rejectAccess: (error: unknown) => void;
   values: FormValues;
@@ -53,6 +69,8 @@ export function ConsoleAccess({
   const [message, setMessage] = useState(''),
     [pending, setPending] = useState(false),
     [values, setValues] = useState<FormValues>({});
+  const [draft, setDraft] = useState<TenantDraftWork>(emptyDraft);
+  const retainedDraft = useRef(new RetainedWork<TenantDraftWork>(emptyDraft));
   const retained = useRef(new RetainedWork<FormValues>(() => ({})));
   const authority = useRef(initial),
     epoch = useRef(0),
@@ -69,6 +87,7 @@ export function ConsoleAccess({
     accessible.current = true;
     clearOnAbsent.current = false;
     setValues(retained.current.validateOwner(next.operatorId));
+    setDraft(retainedDraft.current.validateOwner(next.operatorId));
     authority.current = next;
     setSession(next);
     setMode('ready');
@@ -135,6 +154,8 @@ export function ConsoleAccess({
               error.status === 401
             ) {
               retained.current.clear();
+              retainedDraft.current.clear();
+              setDraft(emptyDraft());
               setValues({});
               setSession(null);
               clearOnAbsent.current = false;
@@ -240,6 +261,8 @@ export function ConsoleAccess({
       )
         throw new AccessError(503);
       retained.current.clear();
+      retainedDraft.current.clear();
+      setDraft(emptyDraft());
       setValues({});
       setSession(null);
       signalAccessChange('logout');
@@ -268,6 +291,30 @@ export function ConsoleAccess({
         <WorkContext.Provider
           value={{
             operatorId: renderedOwner,
+            ready: mode === 'ready',
+            draft,
+            recordDraft: (next) => {
+              if (
+                accessible.current &&
+                authority.current.operatorId === renderedOwner &&
+                !logoutRequested.current
+              ) {
+                retainedDraft.current.record(renderedOwner, next);
+                setDraft(next);
+              }
+            },
+            capture: () => {
+              const generation = epoch.current;
+              return {
+                proof: authority.current.proof,
+                current: () =>
+                  mounted.current &&
+                  accessible.current &&
+                  !logoutRequested.current &&
+                  epoch.current === generation &&
+                  authority.current.operatorId === renderedOwner,
+              };
+            },
             rejectAccess,
             values,
             record: (next) => {

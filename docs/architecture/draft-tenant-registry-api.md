@@ -62,7 +62,7 @@ Tenancy supplies a narrow fixed-draft creation capability plus canonical list/de
 first-administrator create/read port that explicitly selects username and safe
 state, never private verifier material. Platform SQL owns receipts only.
 Tenant-qualified `{tenantId, administrator.id}` is the P2-U4 handoff. Credentials,
-staff sign-in, activation, browser forwarding/screens and PBX remain subsequent
+staff sign-in, activation and PBX remain subsequent
 units. Backend acceptance and required regressions are complete; linked evidence records the exact commands and limits.
 
 Apply the deployment-owned schema with `./dev migrate` before starting updated
@@ -71,3 +71,7 @@ for the focused backend matrix. The required `./dev check` graph also runs that
 matrix through its complete session check, including existing authentication,
 authority, audit, identity and recovery regressions. See
 [acceptance evidence](../status/p4-u1a-1-evidence.md) for exact results and limits.
+
+The [browser contract](draft-tenant-browser.md) defines the delivered protected
+forwarding/screens and mounted owner-bound recovery. Final integrated verification
+is recorded in [child 2 evidence](../status/p4-u1a-2-evidence.md).

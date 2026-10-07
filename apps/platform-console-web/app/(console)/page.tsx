@@ -29,7 +29,7 @@ export default function HomePage() {
           <Badge tone="info">Interface preview</Badge>
         </div>
         <p className="mt-2 text-muted-foreground">
-          Administration features are pending. Platform management has its own
+          Draft tenant creation is available. Platform management has its own
           home, separate from the tenant command center.
         </p>
       </Panel>
@@ -65,10 +65,12 @@ export default function HomePage() {
             their configured services.
           </p>
           <div className="mt-5">
-            <ContentState kind="empty" title="Tenant management is pending">
-              Organization onboarding and lifecycle management will follow
-              platform configuration.
-            </ContentState>
+            <Link
+              href="/tenants"
+              className="inline-flex min-h-11 items-center text-primary underline"
+            >
+              Open tenants
+            </Link>
           </div>
         </Panel>
       </div>

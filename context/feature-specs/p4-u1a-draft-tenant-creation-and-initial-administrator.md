@@ -3,7 +3,7 @@
 ## Identity, status and requirement
 
 - **Unit:** P4-U1a, Phase 4 — Onboard tenants and enable tenant administration.
-- **Status:** in progress at parent level; backend child 1 is verified complete on 2026-10-07 (Asia/Manila, +08:00). Browser child 2 and combined parent acceptance remain pending.
+- **Status:** complete; both children and AC-01–11 verified 2026-10-07 16:00 +08:00 (Asia/Manila). See [integrated evidence](../../docs/status/p4-u1a-2-evidence.md).
 - **Requirement:** [P4-U1a in the implementation plan](../implementation-plan.md#p4-u1a--create-a-draft-tenant-and-its-first-administrator), the approved early-draft delivery exception, and the overview's platform tenant creation requirement.
 - **Dependencies:** completed P2-U1, P2-U2, P2-U3, P1-U4 and P1-U5. Recheck their handoffs before implementing. Neither P2-U4 nor Phase 3 is a prerequisite.
 - **Result:** A signed-in platform operator creates one retained draft tenant and its first tenant administrator, then sees the saved organization in protected list/detail screens. The administrator has no usable credentials or ordinary staff access.
@@ -11,7 +11,7 @@
 This spec defines intended behavior. The user adopted the two-child split on
 2026-10-07 (Asia/Manila, +08:00); linked child specs define sequential delivery.
 P4-U1 remains incomplete until both P4-U1a and P4-U1b are verified. Backend implementation/evidence is delivered by child 1; browser and combined
-parent acceptance remain with child 2.
+parent acceptance are verified by child 2.
 
 ## Sources and starting state
 
@@ -191,7 +191,7 @@ protected admission and existing deadline/rotation behavior.
 
 Implement a focused real-service command following current workspace conventions;
 implemented backend selector: `./dev exec pnpm check:draft-tenant --api`. This
-selector is verified; child 2 adds browser/combined coverage to the command. It must cover the matrix with isolated PostgreSQL/runtime grants,
+selector is verified; child 2 delivered verified browser/combined coverage. It must cover the matrix with isolated PostgreSQL/runtime grants,
 real session Redis, independent HTTP processes and production Next HTTPS browser
 composition. Wire the owning required check into the project check graph.
 
@@ -216,7 +216,7 @@ recommended. The IDs below extend P4-U1a rather than colliding with P4-U1b.
 | [P4-U1a-1 — Atomic draft creation and protected registry API](p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md) | Owned ports/DTOs, minimal target-context integration, creation receipt, transaction/audit, protected create/list/detail and canonical admission denial. | Completed P2-U1/U2/U3 and P1-U4/U5; verified existing transaction constraints. | Backend create-to-read workflow with durable retries across replicas. AC-01–08 and AC-10 at API/database boundary; targeted transaction/identity/session/auth regressions. Provides safe DTOs, linked IDs, exact transport/error/retry contract and reproducible evidence. |
 | [P4-U1a-2 — Operator browser creation and integrated handoff](p4-u1a-2-operator-browser-creation-and-integrated-handoff.md) | Tenant navigation/list/form/detail, explicit proxy consumers, owner-bound inputs/attempts, feedback/recovery, guides and complete parent verification. | Verified P4-U1a-1 plus delivered P2-U3b protected browser integration. | Real browser create/list/detail and refresh/retry/reauthentication journey; AC-01–11 across browser/API/database and full required checks. |
 
-Child 1 is **complete** with [API evidence](../../docs/status/p4-u1a-1-evidence.md); child 2 is **planned** and consumes the [verified contract](../../docs/architecture/draft-tenant-registry-api.md). Execute sequentially,
+Child 1 is **complete** with [API evidence](../../docs/status/p4-u1a-1-evidence.md); child 2 is **complete** with [browser/integrated evidence](../../docs/status/p4-u1a-2-evidence.md) and consumes the [verified contract](../../docs/architecture/draft-tenant-registry-api.md). Execute sequentially,
 recording the current dependency evidence and active checkpoint before each
 implementation. P4-U1a completes only after both and the complete acceptance
 matrix pass; P2-U4 must not start merely because the backend child passes.

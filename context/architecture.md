@@ -370,7 +370,9 @@ platform-owned immutable creation receipts. Tenant/staff creation and their audi
 facts share one authority-locked primary transaction through an expiring scoped
 staff target handle with common failure poison. Receipt operator/request locking
 and qualified database linkage coordinate replica retries. List/detail remain
-passive, uncached primary reads. Browser delivery remains P4-U1a-2.
+passive, uncached primary reads. P4-U1a-2 adds the [protected browser journey](../docs/architecture/draft-tenant-browser.md)
+with named bounded Next forwarding, mounted canonical-owner draft/attempt memory,
+explicit uncertain retry and owner/epoch-fenced callbacks. Complete API/browser/parent acceptance and the full graph passed; see [integrated evidence](../docs/status/p4-u1a-2-evidence.md).
 
 ### Shared Session Management
 

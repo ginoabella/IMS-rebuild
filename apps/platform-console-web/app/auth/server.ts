@@ -56,7 +56,13 @@ export function sessionDto(value: unknown): value is PlatformSessionDto {
 }
 
 export async function backendRequest(
-  path: 'csrf' | 'sign-in' | 'session' | 'logout',
+  path:
+    | 'csrf'
+    | 'sign-in'
+    | 'session'
+    | 'logout'
+    | { consumer: 'tenants'; query: string }
+    | { consumer: 'tenant'; id: string },
   headers: Headers,
   method: 'GET' | 'POST',
   body?: string,
@@ -76,21 +82,24 @@ export async function backendRequest(
   if ((cookie !== null && cookie.length > 8192) || proof.length > 1024)
     return safeError(403);
   try {
-    return await fetch(`${config.backend}/platform/auth/${path}`, {
-      method,
-      cache: 'no-store',
-      redirect: 'error',
-      signal: AbortSignal.timeout(5000),
-      headers: {
-        origin: method === 'GET' ? config.origin : origin!,
-        'x-platform-proxy': config.proxySecret,
-        'x-forwarded-for': source,
-        ...(cookie === null ? {} : { cookie }),
-        ...(proof ? { 'x-platform-csrf': proof } : {}),
-        'content-type': 'application/json',
+    return await fetch(
+      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : `/platform/tenants/${path.id}`}`,
+      {
+        method,
+        cache: 'no-store',
+        redirect: 'error',
+        signal: AbortSignal.timeout(5000),
+        headers: {
+          origin: method === 'GET' ? config.origin : origin!,
+          'x-platform-proxy': config.proxySecret,
+          'x-forwarded-for': source,
+          ...(cookie === null ? {} : { cookie }),
+          ...(proof ? { 'x-platform-csrf': proof } : {}),
+          'content-type': 'application/json',
+        },
+        ...(body === undefined ? {} : { body }),
       },
-      ...(body === undefined ? {} : { body }),
-    });
+    );
   } catch {
     return safeError(503);
   }

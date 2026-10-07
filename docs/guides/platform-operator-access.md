@@ -18,7 +18,8 @@ is `https://localhost:3443/sign-in`; use `./dev platform-https` on the server.
 Open the console or its UI preview link. Enter Username and Password, then choose
 Sign in (keyboard Enter works). Username ignores outer whitespace and casing;
 password preserves exact spaces, case and Unicode bytes. A successful sign-in
-opens the protected console. Administration screens remain planned.
+opens the protected console. Choose Tenants to create and revisit draft organizations;
+see the [draft tenant guide](draft-tenant-creation.md).
 
 Invalid credentials preserves username and clears password. Access denied means
 platform operator access is required. Too many requests displays a retry interval;
@@ -46,7 +47,7 @@ Returning to a hidden tab or using browser history also requires validation befo
 protected content is shown. Cross-tab signals accelerate hiding but do not replace
 backend checks.
 
-This foundation proves the contract with an isolated verification form. It does
-not deliver PBX/tenant forms or durable incident drafts. Refreshing, closing the tab
+The tenant creation form retains values and unresolved attempts in mounted memory.
+PBX administration and durable incident drafts remain later work. Refreshing, closing the tab
 or losing the browser process loses in-memory values; real incident recovery and
 conflicts belong to P5-U4. Account recovery/reset and staff access are separate units.

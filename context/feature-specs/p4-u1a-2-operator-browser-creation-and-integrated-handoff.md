@@ -3,7 +3,7 @@
 ## Identity, state and requirement
 
 - **Unit:** P4-U1a-2, second sequential child of P4-U1a.
-- **Status:** planned; split adopted at the user's request on 2026-10-07 (Asia/Manila, +08:00). Implementation has not started.
+- **Status:** complete; B-01–08, child 1 A-01–08, parent AC-01–11 and required checks verified 2026-10-07 16:00 +08:00 (Asia/Manila). See [completion evidence](../../docs/status/p4-u1a-2-evidence.md).
 - **Requirement:** [parent spec](p4-u1a-draft-tenant-creation-and-initial-administrator.md) and [P4-U1a delivery plan](../implementation-plan.md#p4-u1a--create-a-draft-tenant-and-its-first-administrator).
 - **Goal:** Give the operator the protected browser create/list/detail journey with explicit retry recovery and complete parent verification.
 - **Dependencies:** verified [P4-U1a-1 API/database workflow](p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md), delivered P2-U3b browser access/work isolation and P1-U4 UI. Recheck child 1 evidence/contract before starting.
@@ -121,10 +121,9 @@ logout uncertainty and reauthentication behavior.
 | B-07 | Keyboard/focus/zoom/reflow and status feedback pass. Browser/client/log scans reveal no credential material, protected proxy secrets or verification fixtures. Draft screen grants no setup/session/activation/PBX capability. | AC-10, AC-11 |
 | B-08 | Rerun child 1 A-01–08, relevant platform/identity/session/audit regressions and final full check. Evidence maps every parent AC and guides specify later handoff/limitations. | AC-01–11, including AC-04 backend rollback |
 
-Proposed commands: `./dev exec pnpm check:draft-tenant --browser` for this
+Implemented and verified commands: `./dev exec pnpm check:draft-tenant --browser` for this
 boundary and `./dev exec pnpm check:draft-tenant` for combined child/parent checks.
-These names/flags are planned, not available or executed. Document actual
-implemented selectors before claiming verification; include the combined check
+Both selectors passed, exit 0. The [browser contract](../../docs/architecture/draft-tenant-browser.md) documents actual selectors; include the combined check
 in the owning required check graph and run final `./dev check`.
 
 Use production Next output in a controlled HTTPS browser harness that accepts
@@ -134,8 +133,7 @@ processes. Exercise real forwarding and fault controls; do not substitute mock
 API success for the integrated create journey. Fixtures and TLS controls prove
 their declared local boundary, not production hosting/HA or real staff sign-in.
 Retain existing auth/browser/safe-return regressions and record exact fixture
-cleanup, commands, results and limits. Runtime checks remain unexecuted until
-implementation.
+cleanup, commands, results and limits. Runtime results and limitations are recorded in [completion evidence](../../docs/status/p4-u1a-2-evidence.md).
 
 ## Completion and downstream handoff
 

@@ -153,7 +153,8 @@ Separate P2-U3 implementation specs, in the adopted sequence:
 
 [P4-U1a feature spec and adopted implementation split](../context/feature-specs/p4-u1a-draft-tenant-creation-and-initial-administrator.md)
 defines early protected draft creation and its first unset administrator. The
-backend API is verified complete; the browser sub-unit remains planned. Credential setup,
+backend API, protected browser and integrated P4-U1a acceptance are verified
+complete. Credential setup,
 activation and PBX readiness remain with their owning units.
 
 - [P4-U1a-1 — Atomic draft creation and protected registry API](../context/feature-specs/p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md)
@@ -163,3 +164,8 @@ activation and PBX readiness remain with their owning units.
   atomic creation, durable attempts, canonical reads and browser handoff.
 
 - [P4-U1a-1 acceptance evidence](status/p4-u1a-1-evidence.md)
+
+- [Protected tenant browser and recovery contract](architecture/draft-tenant-browser.md)
+- [Draft tenant operator guide](guides/draft-tenant-creation.md)
+
+- [P4-U1a-2 browser/parent acceptance evidence](status/p4-u1a-2-evidence.md) — verified complete.

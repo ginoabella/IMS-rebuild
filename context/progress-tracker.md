@@ -22,7 +22,8 @@ P2-U3a/b and parent P2-U3 are complete and verified: platform HTTP/browser
 access, logout and canonical-owner isolated reauthentication. Staff sign-in,
 evidence authorization and production decisions remain pending.
 P4-U1a-1 is complete: the protected atomic draft registry API and durable receipt
-workflow are verified; P4-U1a-2 browser delivery and parent acceptance remain next.
+workflow are verified; P4-U1a-2 browser delivery and parent P4-U1a acceptance
+are complete. P2-U4 is next under the approved delivery order.
 Protected traffic/capacity validation remains mandatory before production.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
@@ -33,6 +34,15 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## Completed
 
+- P4-U1a-2 operator browser and parent P4-U1a: protected tenant list/create/detail,
+  named bounded forwarding, canonical-owner mounted draft/attempt recovery,
+  explicit original retry and stale callback fencing. API A-01–08, browser
+  B-01–08/parent AC-01–11, combined/standalone selectors, all 10 UI tests and
+  final `./dev check` passed, exit 0. Completed 2026-10-07 16:00 +08:00
+  (Asia/Manila); see [browser/parent evidence](../docs/status/p4-u1a-2-evidence.md)
+  and [operator guide](../docs/guides/draft-tenant-creation.md).
+  P4-U1b, credential setup and activation remain with their later units.
+
 - P4-U1a-1 atomic draft creation/protected registry API: canonical owner ports,
   immutable operator-scoped receipt and qualified administrator linkage,
   authority-locked same-connection creation/audit, durable replica retries and
@@ -40,7 +50,8 @@ authorizes routine foundation choices, not approval of proposed product rules.
   Docker graph including audit/session/platform HTTP/browser regressions and
   all five client scans passed, exit 0. Local migration and health passed.
   Completed 2026-10-07 13:50 +08:00 (Asia/Manila); see [API evidence](../docs/status/p4-u1a-1-evidence.md).
-  Browser child 2, parent acceptance, credentials, activation and PBX remain pending.
+  Browser child 2 and parent acceptance are now complete; credentials, activation
+  and PBX remain with their owning units.
 
 - DEV-PLATFORM-HTTPS implementation and automated verification: approved private
   SSH/HTTPS console, retained private CA/TLS/authentication material, exact
@@ -146,19 +157,19 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-None.
+- None.
 
 ## Unit Checkpoints
 
 ### P4-U1a — Draft tenant creation and initial administrator
 
-- **Status:** in progress at parent level; backend child 1 is complete, browser child 2 remains planned (2026-10-07, Asia/Manila, +08:00).
+- **Status:** complete; both children and parent acceptance verified 2026-10-07 16:00 +08:00 (Asia/Manila).
 - **Requirement/scope:** [feature spec](feature-specs/p4-u1a-draft-tenant-creation-and-initial-administrator.md); protected list/create/detail, atomic draft tenant and unset first administrator, platform audit and durable retry recovery.
 - **Dependencies:** completed P2-U1/U2/U3 and P1-U4/U5; no P2-U4 or Phase 3 prerequisite under the approved delivery-order exception.
-- **Acceptance/checks:** AC-01–11; `./dev exec pnpm check:draft-tenant --api` is implemented and verified. Browser/combined selectors remain with child 2. Real database/runtime grants, Redis, two HTTP replicas, HTTPS browser journey and retained foundation/auth regressions plus `./dev check` are required during implementation.
-- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); sequential [P4-U1a-1 atomic creation/protected API](feature-specs/p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md) and [P4-U1a-2 browser journey/integrated handoff](feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md). Child 1 is verified complete; child 2 is planned. Scoped staff target integration preserves one connection, actor/correlation and poison while retaining existing consumers.
-- **Remaining:** child 2 browser implementation and combined parent acceptance/evidence. Credential setup remains P2-U4/P4-U1b; activation remains P4-U3. Draft staff admission remains denied.
-- **Verification:** backend A-01–08 and required regressions pass; see child 1 evidence. Browser and complete parent verification remain pending.
+- **Acceptance/checks:** AC-01–11, child 1 A-01–08 and child 2 B-01–08 passed. API/browser/combined `check:draft-tenant` selectors, all 10 production UI/safe-return tests and final `./dev check` passed, exit 0. Real PostgreSQL/runtime grants, Redis, two HTTP replicas and production Next HTTPS establish the declared local boundary.
+- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); [API/database child](feature-specs/p4-u1a-1-atomic-draft-creation-and-protected-registry-api.md) and [browser/integrated child](feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md) are complete. Scoped staff integration preserves one connection, actor/correlation and poison while retaining existing consumers.
+- **Remaining:** none within P4-U1a. Credential setup remains P2-U4/P4-U1b; activation remains P4-U3. Draft staff admission remains denied; P4-U1 and Phase 2 remain incomplete.
+- **Verification:** [child 1 evidence](../docs/status/p4-u1a-1-evidence.md) and [browser/complete parent evidence](../docs/status/p4-u1a-2-evidence.md) map every criterion, actual fault boundaries, commands/results, cleanup and limitations.
 
 ### P4-U1a-1 — Atomic draft creation and protected registry API
 
@@ -168,15 +179,16 @@ None.
 - **Acceptance/checks:** A-01–08 cover parent AC-01–08/10/11 at the backend boundary and session regressions. Final `./dev exec pnpm check:draft-tenant --api`, complete `check:identity-foundation` and `./dev check` passed, exit 0. The full graph includes existing audit/outbox, platform HTTP/HTTPS browser, session/admission/recovery and all five client scans.
 - **Delivered:** protected POST/GET `/platform/tenants` and GET `/platform/tenants/:tenantId`; canonical owner creation/reads, strict bounded normalization, operator/request fingerprint receipts, qualified immutable linkage, one authority-locked creation commit and both owner audit facts. Expiring staff target handles share connection/poison and unfinished scopes prevent commit; only the canonical code constraint yields code conflict. Read pagination defaults to 25/max 100 with UUID keysets. Reads are passive; create is operational.
 - **Evidence:** [acceptance/commands/limits](../docs/status/p4-u1a-1-evidence.md) and [API/DTO/receipt/migration/handoff contract](../docs/architecture/draft-tenant-registry-api.md). Local additive deployment and live/ready 200 passed. The initial full check found one stale identity migration count; corrected to eight, focused reruns and final full graph passed.
-- **Remaining/handoff:** no child 1 work remains. Child 2 must implement declared Next forwarding, owner-bound browser form/list/detail and combined parent verification. P4-U1a/P4-U1 and the staff gate remain incomplete.
+- **Remaining/handoff:** no child 1 work remains. Child 2 delivered declared Next forwarding, owner-bound browser form/list/detail and combined parent verification. P4-U1a is complete; P4-U1 and the staff gate remain incomplete.
 
 ### P4-U1a-2 — Operator browser creation and integrated handoff
 
-- **Status:** planned; split adopted and specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Status:** complete; verified 2026-10-07 16:00 +08:00 (Asia/Manila).
 - **Requirement/scope:** [child spec](feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md); protected tenant list/form/detail, explicit forwarding, owner-bound attempt recovery and complete parent acceptance.
 - **Dependencies:** verified P4-U1a-1 and delivered P2-U3b/P1-U4 browser/UI foundation.
-- **Acceptance/checks:** B-01–08, child 1 A-01–08 and parent AC-01–11. Proposed browser/combined `check:draft-tenant` selectors, existing regressions and final `./dev check`; new commands not implemented.
-- **Remaining/handoff:** all browser implementation and integrated checks. P4-U1a completes only with both children verified; credential setup, later onboarding and activation stay with P2-U4/P4-U1b/P4-U3.
+- **Acceptance/checks:** B-01–08, child 1 A-01–08 and parent AC-01–11 passed. Final API, standalone browser and combined selectors, all 10 production UI/safe-return tests and full `./dev check` passed, exit 0. Full graph includes audit/outbox/worker recovery, storage, identity/bootstrap, HTTP/browser/session/limiter regressions and all five client scans.
+- **Delivered:** tenant list/create/detail, bounded protected forwarding, literal safe returns and typed canonical-owner draft/attempt memory with explicit retry and stale callback fencing. [Operator guide](../docs/guides/draft-tenant-creation.md), [browser contract](../docs/architecture/draft-tenant-browser.md) and [acceptance/commands/limits evidence](../docs/status/p4-u1a-2-evidence.md) are complete.
+- **Remaining/handoff:** none within this child or P4-U1a. Mounted unfinished work survives same-owner recovery and client navigation; refresh/process loss may discard it. Saved canonical tenants/admin IDs are durable. Credential setup, later onboarding and activation stay with P2-U4/P4-U1b/P4-U3; P4-U1 and Phase 2 remain incomplete.
 
 ### DEV-PLATFORM-HTTPS — Private development console access
 
@@ -742,10 +754,10 @@ top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
 
 ## Next Up
 
-[P4-U1a — Create a draft tenant and its first administrator](implementation-plan.md#p4-u1a--create-a-draft-tenant-and-its-first-administrator),
-then P2-U4 staff credential setup/sign-in, Phase 3, and P4-U1b/remaining Phase 4.
+[P2-U4 — Deliver tenant staff sign-in and credential lifecycle](implementation-plan.md#p2-u4--deliver-tenant-staff-sign-in-and-credential-lifecycle),
+then Phase 3 and P4-U1b/remaining Phase 4. The early P4-U1a draft exception is complete.
 The user approved this delivery-order change on 2026-10-07 (Asia/Manila, +08:00).
-P4-U1a backend child 1 is complete; [child 2 browser delivery](feature-specs/p4-u1a-2-operator-browser-creation-and-integrated-handoff.md) is next. P4-U1a/P4-U1 remain incomplete; P4-U1b and P2-U4 remain planned.
+P4-U1a and both children are complete. P2-U4 is next, then Phase 3 and P4-U1b/remaining Phase 4. P4-U1 remains incomplete; P4-U1b and P2-U4 remain planned.
 
 P4-U1a delivers protected platform list/create/detail with an atomic draft tenant
 and first `tenant_admin` identity, unset credentials, and operator-attributed audit.
@@ -762,7 +774,7 @@ The remaining Phase 2 staff gate stays incomplete.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); P2-U3 is `complete` (a/b complete); other units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); P2-U3 is `complete` (a/b complete); P4-U1a and both children are `complete`; other units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
@@ -772,7 +784,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 | 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/P2-U3 complete; U4 planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
-| 4 | P4-U1 (a/b), P4-U2, P4-U3, P4-U4, P4-U5 | planned; U1a next before P2-U4 | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
+| 4 | P4-U1 (a/b), P4-U2, P4-U3, P4-U4, P4-U5 | U1a complete; U1b and remaining units planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1, P5-U2, P5-U3, P5-U4, P5-U5, P5-U6, P5-U7 | planned | [Staff intake and dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1, P6-U2, P6-U3, P6-U4 | planned | [Responder mobile and monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
 | 7 | P7-U1, P7-U2, P7-U3 | planned | [First-release verification](implementation-plan.md#phase-7--verify-the-complete-first-release-journey) |
@@ -828,6 +840,14 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 ## Verification and Limitations
 
+- P4-U1a-2 and parent P4-U1a: B-01–08/A-01–08/AC-01–11, API/browser/combined
+  selectors, all 10 normal UI tests and final full Docker graph passed, exit 0.
+  [Integrated evidence](../docs/status/p4-u1a-2-evidence.md) records real HTTPS,
+  PostgreSQL/Redis, two HTTP processes, response loss and owner fencing, fixture
+  cleanup and command outcomes. Mounted unfinished inputs can be lost on refresh;
+  saved tenants/admin linkage remain durable. Production HA/traffic and credential
+  delivery/activation/PBX remain with their later units.
+
 - P2-U3a/b and parent: A-01–09, B-01–08, parent AC-01–11, focused/combined
   platform, complete session and final full Docker checks passed, exit 0.
   Nine normal UI regressions and shipping fixture/credential exclusion passed.
@@ -871,6 +891,20 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-07 16:00 +08:00 (Asia/Manila) — Completed requested P4-U1a-2 and
+  integrated P4-U1a acceptance. Read AGENT.md/context/spec/API handoff, marked
+  active work, built protected tenant screens/forwarding and mounted owner-bound
+  explicit recovery. Real production HTTPS/Nest/PostgreSQL/Redis checks cover
+  committed response loss, late owner callbacks, validation, pagination, outages,
+  keyboard/reflow and accessibility. Corrected production fixture composition,
+  backend error focus and passive expiry test synchronization. API/browser/
+  combined selectors, 10 UI tests and final full `./dev check` passed, exit 0.
+  Earlier long tool sessions ended with signal 143; the final supervised serial
+  run recorded actual command exit statuses and completed cleanly. Owned fixture
+  cleanup verified; local live/ready 200 and shared data retained. Updated contracts,
+  guide/index/specs/evidence and cleared active work. P2-U4 is next; P4-U1/Phase 2
+  remain incomplete and credential setup/activation/PBX stay downstream.
 
 - 2026-10-07 13:50 +08:00 (Asia/Manila) — Completed requested P4-U1a-1. Read instructions/context/spec
   and dependency source/evidence; implemented documented protected create/list/detail,

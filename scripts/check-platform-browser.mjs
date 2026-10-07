@@ -1,5 +1,6 @@
 // Actual production Next app, HTTPS ingress, and independent real-service replicas.
 import assert from 'node:assert/strict';
+import { checkDraftTenantBrowser } from './check-draft-tenant-browser.mjs';
 import { spawn } from 'node:child_process';
 import { createServer, request } from 'node:http';
 import { once } from 'node:events';
@@ -40,7 +41,37 @@ export async function checkPlatformBrowser({
   secrets.push(ingressSecret);
   let next, browser;
   const sockets = new Set();
+  let responseGate = null;
+  const pendingGates = new Set();
+  function holdResponse(method, path) {
+    assert.equal(responseGate, null);
+    let arrived, release;
+    const reached = new Promise((r) => {
+      arrived = r;
+    });
+    const released = new Promise((r) => {
+      release = r;
+    });
+    const gate = {
+      method,
+      path,
+      arrived,
+      released,
+      release: () => {
+        release();
+        pendingGates.delete(gate);
+      },
+    };
+    responseGate = gate;
+    pendingGates.add(gate);
+    return { reached, release: gate.release };
+  }
   const balancer = createServer((req, res) => {
+    const delayed =
+      responseGate?.method === req.method && responseGate.path === req.url
+        ? responseGate
+        : null;
+    if (delayed) responseGate = null;
     if (req.url?.startsWith('/platform/auth/'))
       transportEvents.push(`backend-${req.url.split('/').at(-1)}:sent`);
     const forwarded = {};
@@ -63,8 +94,17 @@ export async function checkPlatformBrowser({
           transportEvents.push(
             `backend-${req.url.split('/').at(-1)}:${incoming.statusCode}`,
           );
-        res.writeHead(incoming.statusCode, incoming.headers);
-        incoming.pipe(res);
+        if (delayed) {
+          incoming.pause();
+          delayed.arrived(incoming.statusCode);
+          void delayed.released.then(() => {
+            res.writeHead(incoming.statusCode, incoming.headers);
+            incoming.pipe(res);
+          });
+        } else {
+          res.writeHead(incoming.statusCode, incoming.headers);
+          incoming.pipe(res);
+        }
       },
     );
     upstream.on('error', () => res.writeHead(503).end());
@@ -118,7 +158,6 @@ export async function checkPlatformBrowser({
       }
     }
     for (const file of [
-      'scripts/check-platform-browser.mjs',
       'apps/platform-console-web/next.config.ts',
       'apps/platform-console-web/tsconfig.json',
       'apps/platform-console-web/package.json',
@@ -138,7 +177,7 @@ export async function checkPlatformBrowser({
       const sharedBuild = spawn(
         'pnpm',
         ['--filter', '@myims/ui-web', 'build'],
-        { stdio: ['ignore', 'pipe', 'pipe'] },
+        { stdio: ['ignore', 'pipe', 'pipe'], detached: true },
       );
       sharedBuild.stdout.on('data', (d) => {
         output += d;
@@ -147,7 +186,7 @@ export async function checkPlatformBrowser({
         output += d;
       });
       const sharedDeadline = setTimeout(
-        () => sharedBuild.kill('SIGKILL'),
+        () => process.kill(-sharedBuild.pid, 'SIGKILL'),
         60000,
       );
       const [sharedCode] = await once(sharedBuild, 'exit');
@@ -158,6 +197,7 @@ export async function checkPlatformBrowser({
         ['--filter', '@myims/platform-console-web', 'build'],
         {
           env: { ...process.env, PLATFORM_AUTH_BROWSER_BUILD: '1' },
+          detached: true,
           stdio: ['ignore', 'pipe', 'pipe'],
         },
       );
@@ -167,9 +207,13 @@ export async function checkPlatformBrowser({
       build.stderr.on('data', (d) => {
         output += d;
       });
-      const deadline = setTimeout(() => build.kill('SIGKILL'), 240000);
-      const [buildCode] = await once(build, 'exit');
+      const deadline = setTimeout(
+        () => process.kill(-build.pid, 'SIGKILL'),
+        480000,
+      );
+      const [buildCode, buildSignal] = await once(build, 'exit');
       clearTimeout(deadline);
+      console.log('CHECK platform browser: build exit', buildCode, buildSignal);
       assert.equal(buildCode, 0, 'Isolated browser application build failed');
       console.log('CHECK platform browser: actual secure-origin journey');
       writeFileSync(marker, revision);
@@ -451,6 +495,22 @@ export async function checkPlatformBrowser({
       await fetch('/platform/auth/session');
     });
     assert.equal(await redis.get(key(passiveToken)), before);
+    phase = 'draft tenant browser';
+    await checkDraftTenantBrowser({
+      page,
+      context,
+      config,
+      owner,
+      login,
+      expire,
+      ingress,
+      select,
+      a,
+      b,
+      username,
+      redis,
+      holdResponse,
+    });
     phase = 'expiry and canonical-owner recovery';
     for (const boundary of ['idle', 'absolute']) {
       await page
@@ -665,7 +725,19 @@ export async function checkPlatformBrowser({
       ),
       403,
     );
+    assert.equal(
+      await page.evaluate(
+        async () => (await fetch('/platform/tenants')).status,
+      ),
+      403,
+    );
     await context.clearCookies();
+    assert.equal(
+      await page.evaluate(
+        async () => (await fetch('/platform/tenants')).status,
+      ),
+      401,
+    );
     // Narrow consumer, mutations with missing/foreign Origin/CSRF and browser-held proxy headers fail.
     await page.goto(`${config.origin}/sign-in`);
     for (const path of [
@@ -722,6 +794,22 @@ export async function checkPlatformBrowser({
       (await fetch(`http://127.0.0.1:${port}/platform/auth/session`)).status,
       503,
     );
+    for (const headers of [
+      {},
+      {
+        'x-myims-ingress': '0'.repeat(64),
+        'x-myims-client-ip': '127.0.0.1',
+        'x-platform-proxy': config.proxySecret,
+        'x-forwarded-for': '192.0.2.99',
+        'x-actor-id': username,
+        'x-role': 'platform_operator',
+      },
+    ])
+      assert.equal(
+        (await fetch(`http://127.0.0.1:${port}/platform/tenants`, { headers }))
+          .status,
+        503,
+      );
     await expect(
       page.getByRole('heading', { name: 'Platform console sign-in' }),
     ).toBeVisible();
@@ -869,13 +957,19 @@ export async function checkPlatformBrowser({
     );
     await context.close();
   } catch (error) {
+    await currentPage
+      ?.screenshot({
+        path: '.local/ui-review/draft-failure.png',
+        fullPage: true,
+      })
+      .catch(() => {});
     // Playwright errors can include fill values or request details. Never emit those.
     const location =
       error instanceof Error
         ? error.stack
             ?.split('\n')
             .find((line) =>
-              /at checkPlatformBrowser .*check-platform-browser\.mjs:\d+/.test(
+              /^\s*at .*check-(?:platform-browser|draft-tenant-browser)\.mjs:\d+/.test(
                 line,
               ),
             )
@@ -908,6 +1002,7 @@ export async function checkPlatformBrowser({
       `Platform browser acceptance failed during ${phase}${location ? ` (${location})` : ''}; category ${category}; statuses ${statuses.join(',')}; feedback ${safeState}; transport ${transportEvents.slice(-8).join(',')}; ingress ${ingress.events().join(',')}}`,
     );
   } finally {
+    for (const gate of pendingGates) gate.release();
     ingress.next(null);
     if (browser) await browser.close();
     if (next && next.exitCode === null) {
