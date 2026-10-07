@@ -161,6 +161,40 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## Unit Checkpoints
 
+### P2-U4 — Tenant staff sign-in and credential lifecycle
+
+- **Status:** planned; spec prepared and reviewed 2026-10-07 (Asia/Manila, +08:00). Implementation has not started.
+- **Requirement/scope:** [feature spec](feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md); qualified setup/reset/recovery, initial-admin handoff, staff authentication, secure browser/mobile consumers and isolated expiry recovery.
+- **Dependencies:** completed P2-U1/U2, P1-U4/U5 and P4-U1a; reuse verified P2-U3 transport/verifier patterns. D-05/D-06 setup/reset/recovery approvals remain required before dependent work.
+- **Acceptance/checks:** AC-01–12; proposed focused staff lifecycle/HTTP/browser/mobile checks with real PostgreSQL/Redis, two replicas, production Next HTTPS and declared native secure-storage evidence, plus relevant existing regressions and final `./dev check`. Commands for the new checks are provisional.
+- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); three sequential child specs created below. Adoption does not approve G-01–06 product policies. Children and parent remain planned.
+- **Remaining:** resolve G-01–06 issuer/state/draft setup, password, capability lifetime/revocation, verified-person handoff/recovery and abuse/retention policies; implement and verify all parent criteria. General activation/PBX/staff management remain later units.
+- **Verification:** documentation consistency, local links, acceptance ownership and whitespace reviewed; no runtime checks or implementation/Phase 2 completion claimed.
+
+### P2-U4a — Qualified credential lifecycle and administrator handoff
+
+- **Status:** planned; child specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Requirement/scope:** [child spec](feature-specs/p2-u4a-qualified-credential-lifecycle-and-administrator-handoff.md); Capability schema/authorization/exchange, atomic credential/version/audit, real operator/recipient UI and qualified draft handoff; A-01–08.
+- **Dependencies:** Verified foundations/P4-U1a and G-01–06 approval before dependent implementation.
+- **Required verification:** Proposed `check:staff-auth --lifecycle`, real-service two-replica/browser checks and relevant regressions plus `./dev check`. New commands are provisional; documentation checks only at spec creation.
+- **Remaining:** all implementation and runtime acceptance; scoped completion does not complete parent P2-U4.
+
+### P2-U4b — Staff authentication HTTP and transport boundaries
+
+- **Status:** planned; child specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Requirement/scope:** [child spec](feature-specs/p2-u4b-staff-authentication-http-and-transport-boundaries.md); Canonical staff verification/issuance, shared limits, cookie/CSRF and mobile bearer HTTP, current-session/logout and safe failures; B-01–09.
+- **Dependencies:** Verified P2-U4a and parent foundations.
+- **Required verification:** Proposed `check:staff-auth --http`, real A/B HTTP and HTTPS browser transport probe plus relevant regressions and `./dev check`. New commands are provisional; documentation checks only at spec creation.
+- **Remaining:** all implementation and runtime acceptance; scoped completion does not complete parent P2-U4.
+
+### P2-U4c — Command-center and mobile access with isolated recovery
+
+- **Status:** planned; child specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Requirement/scope:** [child spec](feature-specs/p2-u4c-command-center-and-mobile-access-with-isolated-recovery.md); Actual protected command center, real staff issuer integration, minimal native secure-storage consumer, owner-isolated expiry recovery and full parent matrix; C-01–09.
+- **Dependencies:** Verified P2-U4a/b; declared HTTPS/native storage configuration and device access.
+- **Required verification:** Proposed browser/mobile/combined `check:staff-auth` selectors, actual native evidence, a/b and parent AC-01–12 regressions and `./dev check`. New commands are provisional; documentation checks only at spec creation.
+- **Remaining:** all implementation and runtime acceptance; scoped completion does not complete parent P2-U4.
+
 ### P4-U1a — Draft tenant creation and initial administrator
 
 - **Status:** complete; both children and parent acceptance verified 2026-10-07 16:00 +08:00 (Asia/Manila).
@@ -891,6 +925,10 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-07 (Asia/Manila, +08:00) — User adopted the P2-U4 three-child split. Created a/b/c specs with sequential dependencies, explicit scope/decision gates, A-01–08/B-01–09/C-01–09 checks and parent acceptance ownership. Linked children from parent/docs index/tracker; documentation links, coverage and whitespace reviewed. No policy approval, runtime implementation or completion claimed.
+
+- 2026-10-07 (Asia/Manila, +08:00) — Read AGENT.md, mandatory context and Phase 2; created and reviewed the P2-U4 feature spec with AC-01–12, initial-admin provenance, secure browser/mobile boundaries, credential race/revocation behavior and six explicit product gates. Recommended three sequential implementation children without adopting the split or approving pending policies. Registered the spec in the docs index/tracker; documentation checks only. P2-U4 remains planned.
 
 - 2026-10-07 16:00 +08:00 (Asia/Manila) — Completed requested P4-U1a-2 and
   integrated P4-U1a acceptance. Read AGENT.md/context/spec/API handoff, marked

@@ -169,3 +169,13 @@ activation and PBX readiness remain with their owning units.
 - [Draft tenant operator guide](guides/draft-tenant-creation.md)
 
 - [P4-U1a-2 browser/parent acceptance evidence](status/p4-u1a-2-evidence.md) — verified complete.
+
+Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
+P2-U4 and all children remain planned. The three-child split is adopted;
+setup/reset/recovery and draft-administrator setup policies remain decision gates.
+
+Separate P2-U4 implementation specs, in sequence:
+
+- [P2-U4a — Qualified credential lifecycle and administrator handoff](../context/feature-specs/p2-u4a-qualified-credential-lifecycle-and-administrator-handoff.md)
+- [P2-U4b — Staff authentication HTTP and transport boundaries](../context/feature-specs/p2-u4b-staff-authentication-http-and-transport-boundaries.md)
+- [P2-U4c — Command-center and mobile access with isolated recovery](../context/feature-specs/p2-u4c-command-center-and-mobile-access-with-isolated-recovery.md)
