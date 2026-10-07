@@ -20,13 +20,14 @@ Actual delivery state belongs in [progress-tracker.md](context/progress-tracker.
 - Each phase delivers an observable outcome. Each numbered unit delivers one
   focused capability, including its required contracts, persistence, backend,
   interface, checks, and documentation.
-- Every unit starts as **planned**. No application capability has been verified
-  in the current repository. Creating this plan does not complete a unit.
+- Every unit starts as **planned**. Verified delivery state is recorded in the
+  progress tracker; creating or revising this plan does not complete a unit.
 - A unit's starting state is the verified result of its listed dependencies.
   P1-U1 starts with the existing project context and no application code.
 - Follow phase order and unit order within each phase. Listed dependencies name
-  capabilities that must be verified before starting that unit. A blocked unit
-  may be bypassed only for independent work under the workflow rules.
+  capabilities that must be verified before starting that unit. The approved
+  delivery-order exception below brings draft tenant creation forward. A blocked
+  unit may otherwise be bypassed only for independent work under the workflow rules.
 - Before starting, record the unit ID, requirement, scope, acceptance criteria,
   status, and required check procedure in the progress tracker. Resolve any
   decision gate affecting that unit first.
@@ -36,6 +37,27 @@ Actual delivery state belongs in [progress-tracker.md](context/progress-tracker.
 - After each meaningful change, update the tracker with reproducible evidence,
   limitations, blockers, and the remaining work. Update authoritative context
   whenever an approved decision changes documented behavior.
+
+## Approved delivery-order exception — draft tenant creation first
+
+Approved 2026-10-07 (Asia/Manila, +08:00): after completed P2-U3, deliver
+P4-U1a before P2-U4 so the platform operator can create a real draft tenant and
+its first administrator through the console. The next sequence is:
+
+1. P4-U1a — Draft tenant creation and initial administrator.
+2. P2-U4 — Tenant staff credential setup, sign-in, and credential lifecycle.
+3. Phase 3 — Asterisk administration and verification.
+4. P4-U1b and the remaining Phase 4 units — Complete onboarding, allocation,
+   activation, and tenant administration.
+
+P4-U1 remains the parent onboarding unit and is complete only when both a and b
+are verified. Draft creation does not require PBX infrastructure, credential
+setup, or activation. Draft tenants remain denied ordinary staff sign-in and
+operational access. P2-U4 must resolve the draft credential-setup contract;
+setting credentials does not activate a tenant. P4-U3 owns activation, including
+voice readiness gates and the explicitly voice-disabled path. Authentication
+checks may use controlled active-tenant fixtures, which do not establish an
+operator-facing activation workflow or operational readiness.
 
 ## Requirements applied throughout delivery
 
@@ -206,19 +228,24 @@ authority planes, with shared session enforcement across backend replicas.
 
 - **Goal:** Let tenant-qualified staff set credentials, sign in, and sign out.
 - **Scope:** Staff authentication, setup/reset/recovery contracts, command-center
-  sign-in UI, and protected mobile token delivery/storage boundary.
-- **Dependencies:** P2-U2, P1-U4; approved credential recovery flow from P1-U1.
+  sign-in UI, initial administrator setup handoff from P4-U1a, and protected
+  mobile token delivery/storage boundary.
+- **Dependencies:** P2-U2, P1-U4, P4-U1a; approved credential setup/reset/recovery
+  flow from P1-U1, including whether and how a draft administrator can set credentials.
 - **Result and acceptance:** Staff sign-in uses exactly tenant code, username,
   and password as identity fields. All invalid identity/status combinations return
-  `Invalid credentials`. Credential actions target tenant-qualified user IDs,
-  expire as specified, and revoke affected sessions across replicas. Mobile tokens
+  `Invalid credentials`. Draft credential setup, if approved, grants no ordinary
+  staff session or activation; draft sign-in remains denied. Credential actions
+  target tenant-qualified user IDs, expire as specified, and revoke affected
+  sessions across replicas. Mobile tokens
   never appear in URLs or logs and use protected device storage when consumed.
   Approved P2-U2a expiry/reauthentication preserves unfinished incident drafts
   with identity/tenant isolation and blocks expired submissions; passive polling
   cannot avoid expiry and rotation cannot extend the original absolute lifetime.
 - **Verification:** Same username under two tenant codes, setup/reset/recovery,
-  expired/reused credentials, suspended users/tenants, logout, replica checks,
-  and expiry/reauthentication without unnecessary loss of unfinished incident work.
+  initial-administrator handoff, draft sign-in denial, expired/reused credentials,
+  suspended users/tenants, logout, replica checks, and expiry/reauthentication
+  without unnecessary loss of unfinished incident work.
 
 **Phase gate:** Identity-plane isolation and shared-session acceptance checks
 pass using two HTTP replicas; authentication and recovery guides are available.
@@ -226,7 +253,9 @@ pass using two HTTP replicas; authentication and recovery guides are available.
 ## Phase 3 — Deliver Asterisk administration before tenant onboarding
 
 **Outcome:** A platform operator configures and verifies PBX infrastructure and
-unallocated extension inventory through the browser, with safe recovery.
+unallocated extension inventory through the browser, with safe recovery. Early
+draft registry creation in P4-U1a is the approved exception; voice allocation and
+readiness remain dependent on this phase.
 
 ### P3-U1 — Register PBX nodes and observe health
 
@@ -302,16 +331,56 @@ manage their people and assign only verified extensions owned by their organizat
 
 ### P4-U1 — Deliver tenant registry and onboarding
 
-- **Goal:** Create organizations and their initial administrator through the console.
-- **Scope:** Tenant list/search/filter, creation wizard, detail/edit, contacts,
-  service area/default intake coordinates, voice setting, and administrator setup.
-- **Dependencies:** P2-U1, P2-U3, P2-U4, Phase 3 gate; approved coordinate policy.
-- **Result and acceptance:** A wizard creates a draft tenant and initial
-  administrator without exposing credentials. Codes cannot be changed; names
-  can. Incomplete drafts are retained. Voice-disabled tenants are explicitly
-  identified. Configured coordinates are validated and available to intake.
-- **Verification:** Browser draft/create/edit/setup journey, duplicate tenant code,
-  partial failure/retry, invalid coordinates, and unauthorized registry access.
+- **Goal:** Create organizations and their initial administrator through the console,
+  then complete their onboarding configuration.
+- **Scope:** Delivered in P4-U1a and P4-U1b below; parent completion requires both.
+- **Dependencies:** Each child follows its own dependencies. P4-U1a is delivered
+  before P2-U4 under the approved delivery-order exception.
+- **Result and acceptance:** Operators create retained draft tenants and their
+  initial administrators, then configure contacts, geography, voice settings,
+  and administrator credential setup without exposing credentials.
+- **Verification:** Combined browser create/detail/edit/setup journey and both
+  children's required checks. Activation remains P4-U3.
+
+### P4-U1a — Create a draft tenant and its first administrator
+
+- **Goal:** Give the signed-in platform operator a real tenant creation workflow
+  before implementing tenant staff access.
+- **Scope:** Protected platform tenant list, creation form, and saved detail view;
+  tenant code/display name and first administrator identity; canonical persistence,
+  shared contracts, validation, and operator-attributed transactional audit.
+- **Dependencies:** P2-U1, P2-U2, P2-U3, P1-U4, P1-U5. No P2-U4 or Phase 3 gate.
+- **Result and acceptance:** One transaction creates a draft tenant and its
+  tenant-qualified first administrator with the `tenant_admin` role and unset
+  credentials. Tenant codes are normalized, globally unique, and immutable;
+  usernames follow the existing within-tenant uniqueness rules. A failure leaves
+  neither an orphan tenant nor an orphan administrator; retry after an uncertain
+  result cannot create duplicates. Validation preserves entered form values.
+  Saved drafts appear in the protected list/detail view. Creation records the
+  canonical platform operator in audit and creates no password, setup token,
+  staff session, activation, PBX allocation, or operational access.
+- **Verification:** Real database and browser create/list/detail journey, normalized
+  duplicate code and concurrent/retry cases, transactional rollback including
+  audit failure, validation recovery, unauthenticated/cross-plane denial, CSRF
+  rejection, and retained platform authentication regressions. Confirm the saved
+  administrator's role, tenant ownership, and unset credentials and that ordinary
+  draft staff admission remains denied.
+
+### P4-U1b — Complete tenant onboarding configuration
+
+- **Goal:** Extend saved drafts with the remaining onboarding configuration.
+- **Scope:** Tenant search/filter, detail/edit, contacts, service area/default intake
+  coordinates, explicit voice setting, and P2-U4 administrator setup integration.
+- **Dependencies:** P4-U1a, P2-U4, Phase 3 gate; approved coordinate policy and
+  initial-administrator credential setup contract.
+- **Result and acceptance:** Retained drafts can be resumed and edited. Codes
+  cannot be changed; names can. Voice-disabled tenants are explicitly identified.
+  Configured coordinates are validated and available to intake. Administrator
+  setup uses P2-U4's credential lifecycle without exposing credentials or granting
+  ordinary draft access. Configuration does not itself activate a tenant.
+- **Verification:** Browser resume/edit/setup journey, immutable code, partial
+  failure/retry, invalid coordinates, explicit voice settings, and unauthorized
+  registry access. Regress P4-U1a's tenant/administrator creation journey.
 
 ### P4-U2 — Allocate inventory and verify tenant routing
 
@@ -820,8 +889,8 @@ foundation work. They prevent completing the units that require their answers.
 | Decision | What must be established | Affected units |
 | --- | --- | --- |
 | Operational rules | Exact role matrix; incident/assignment transitions; closure with outstanding work; responder eligibility and concurrency; category/priority behavior. | P1-U1, P4-U4, P5-U1–P5-U2, P5-U6–P5-U7, P6-U2 |
-| Credentials and lifecycle | Setup/reset/recovery delivery and expiry; administrator safeguards; tenant lifecycle effects on access, routes, and active work. | P2-U4, P4-U1, P4-U3–P4-U4 |
-| Geographic behavior | Who configures default coordinates; valid service-area/bounds behavior; approved tiles/search provider and availability expectations. | P4-U1, P5-U4–P5-U5 |
+| Credentials and lifecycle | Setup/reset/recovery delivery and expiry, including draft administrator setup; administrator safeguards; tenant lifecycle effects on access, routes, and active work. | P2-U4, P4-U1, P4-U3–P4-U4 |
+| Geographic behavior | Who configures default coordinates; valid service-area/bounds behavior; approved tiles/search provider and availability expectations. | P4-U1b, P5-U4–P5-U5 |
 | Draft and location policies | Draft ownership/recovery/conflicts; foreground sharing consent, frequency, stale thresholds, retention, and mobile support targets. | P5-U4, P6-U1–P6-U3 |
 | Telephony environment and policy | Controlled PBX access; secret store; permitted validation/reload commands; route semantics; active-call change policy; test destinations. | P3-U1–P3-U5, P4-U2–P4-U3, P5-U3 |
 | Shared files and evidence | Storage provider, allowed files/limits, recording access, reference lifetime, retention, and recovery objectives. | P1-U6, P8-U1–P8-U2, P8-U11, P9-U1 |

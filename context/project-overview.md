@@ -19,9 +19,9 @@ runtime and database, followed by initial provisioning and operational launch.
 1. Complete the emergency-response journey from staff intake through responder
    assignment, acceptance, progress, location sharing, and incident closure,
    with a retained timeline and actor-attributed audit.
-2. Enable platform operators to configure Asterisk before onboarding tenants,
-   and enable tenant administrators to manage staff and assign only verified
-   extensions owned by their organization.
+2. Enable platform operators to configure Asterisk before completing voice-enabled
+   tenant onboarding, and enable tenant administrators to manage staff and assign
+   only verified extensions owned by their organization.
 3. Enforce tenant ownership and role permissions throughout every supported
    workflow, with separate platform and tenant identities and no cross-tenant
    access in acceptance and concurrency checks.
@@ -32,6 +32,12 @@ runtime and database, followed by initial provisioning and operational launch.
    automated acceptance checks and updated documentation.
 
 ## Core User Flow
+
+Operators can create a draft tenant and its first administrator before PBX
+configuration. This early registry step creates no usable credentials or ordinary
+staff access. Credential setup follows the approved credential lifecycle;
+activation remains a separate readiness-checked action. The flow below describes
+completed onboarding and operational use.
 
 1. A platform operator signs in to the separate platform console, configures an
    Asterisk node, provisions extensions and routes, and validates, applies, and

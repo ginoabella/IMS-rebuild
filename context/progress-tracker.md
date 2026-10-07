@@ -703,11 +703,23 @@ top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
 
 ## Next Up
 
-[P2-U4 — Deliver tenant staff sign-in and credential lifecycle](implementation-plan.md#p2-u4--deliver-tenant-staff-sign-in-and-credential-lifecycle),
-after completed P2-U3. U4 remains planned; no later unit has started automatically.
-P1-U1 remains deferred outside approved scoped handoffs. Staff credential/transport
-policy and unfinished-work reauthentication must follow U4's own requirements;
-the remaining Phase 2 staff gate stays incomplete.
+[P4-U1a — Create a draft tenant and its first administrator](implementation-plan.md#p4-u1a--create-a-draft-tenant-and-its-first-administrator),
+then P2-U4 staff credential setup/sign-in, Phase 3, and P4-U1b/remaining Phase 4.
+The user approved this delivery-order change on 2026-10-07 (Asia/Manila, +08:00).
+P4-U1a, P4-U1b, their parent P4-U1, and P2-U4 remain planned; this documentation
+change does not start implementation or claim a working tenant creation facility.
+
+P4-U1a delivers protected platform list/create/detail with an atomic draft tenant
+and first `tenant_admin` identity, unset credentials, and operator-attributed audit.
+It depends on completed identity/session/platform/UI/audit foundations, not P2-U4
+or PBX readiness. Required acceptance and verification are defined in the linked
+plan; record a detailed unit checkpoint before implementation starts.
+
+P1-U1 remains deferred outside approved scoped handoffs. P2-U4 must resolve
+credential delivery/expiry/recovery and the draft administrator setup contract.
+Draft tenants remain denied ordinary staff sign-in; credential setup does not
+activate them. Activation and voice readiness remain P4-U3/later onboarding work.
+The remaining Phase 2 staff gate stays incomplete.
 
 ### Planned units
 
@@ -721,7 +733,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 | 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/P2-U3 complete; U4 planned | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
-| 4 | P4-U1, P4-U2, P4-U3, P4-U4, P4-U5 | planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
+| 4 | P4-U1 (a/b), P4-U2, P4-U3, P4-U4, P4-U5 | planned; U1a next before P2-U4 | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1, P5-U2, P5-U3, P5-U4, P5-U5, P5-U6, P5-U7 | planned | [Staff intake and dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1, P6-U2, P6-U3, P6-U4 | planned | [Responder mobile and monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
 | 7 | P7-U1, P7-U2, P7-U3 | planned | [First-release verification](implementation-plan.md#phase-7--verify-the-complete-first-release-journey) |
@@ -740,7 +752,8 @@ identifies the required answers and affected units. Current unresolved areas are
   realistic protected traffic and combined session/limiter capacity need production validation;
   production/joint-store recovery remains pending;
   scoped session lifetimes/activity and selective durable fencing are approved.
-- Credential setup/reset/recovery, administrator safeguards, and tenant lifecycle
+- Credential setup/reset/recovery (including draft administrator setup),
+  administrator safeguards, and tenant lifecycle
   effects on access, routes, and active work.
 - Default coordinate configuration, service-area behavior, map tiles/search,
   draft ownership/conflicts, mobile targets, and foreground-location policies.
@@ -819,6 +832,14 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-07 11:12 +08:00 (Asia/Manila) — User approved updating the delivery plan
+  to create a tenant and its first administrator before staff authentication.
+  Split P4-U1 into early draft creation (a) and later onboarding configuration (b),
+  added P4-U1a to P2-U4 dependencies, and synchronized Next Up and overview wording.
+  Draft admission remains denied; credential setup policy and activation remain
+  with their owning units. Reviewed dependency order and documentation consistency;
+  no application changes, runtime checks, or new completion claims.
 
 - 2026-10-07 — User confirmed Windows private HTTPS access/sign-in is working.
   Updated the development runbook with sequential PowerShell commands, download
