@@ -1,9 +1,11 @@
 import {
   parsePlatformAuthConfig,
+  parseCredentialBrowserConfig,
   type PlatformAuthConfig,
 } from './platform-auth';
 export {
   parsePlatformAuthConfig,
+  parseCredentialBrowserConfig,
   type PlatformAuthConfig,
 } from './platform-auth';
 import { parseLimiterConfig, type LimiterConfig } from './limiter';
@@ -31,6 +33,8 @@ export interface ConnectionConfig {
 }
 export interface BackendConfig {
   platformAuth?: PlatformAuthConfig;
+  credentialExchange?: PlatformAuthConfig;
+  staffIssuer?: PlatformAuthConfig;
   storage?: StorageConfig;
   sessions: SessionConfig;
   limiter: LimiterConfig;
@@ -151,6 +155,11 @@ export function parseBackendConfig(env: Environment): BackendConfig {
     throw new ConfigurationError('HOST must be a valid bind address');
   return {
     platformAuth: parsePlatformAuthConfig(env),
+    credentialExchange: parseCredentialBrowserConfig(
+      env,
+      'CREDENTIAL_EXCHANGE',
+    ),
+    staffIssuer: parseCredentialBrowserConfig(env, 'STAFF_ISSUER'),
     storage: parseStorageConfig(env),
     sessions: parseSessionConfig(env),
     limiter: parseLimiterConfig(env),

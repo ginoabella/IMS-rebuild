@@ -71,7 +71,9 @@ P2-U1a/b/c and parent P2-U1 are complete and verified.
 [Integrated evidence](status/p2-u1c-evidence.md) maps every parent acceptance criterion.
 The user adopted three sequential implementation sub-units;
 D-05 storage representation is approved for a; b's scoped role/admission contract
-is approved with creator closure. Other credential/lifecycle decisions remain pending.
+is approved with creator closure. Later bootstrap/session policies and scoped
+P2-U4a credential setup/reset/recovery policies have their separately recorded
+approvals; those approvals do not complete ordinary staff access.
 
 [P2-U1b role and admission contract — review for approval](planning/p2-u1b-contract-review.md)
 records the approved scoped D-01/D-05/D-06 decision and creator-closure revision.
@@ -171,8 +173,15 @@ activation and PBX readiness remain with their owning units.
 - [P4-U1a-2 browser/parent acceptance evidence](status/p4-u1a-2-evidence.md) — verified complete.
 
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
-P2-U4 and all children remain planned. The three-child split is adopted;
-setup/reset/recovery and draft-administrator setup policies remain decision gates.
+P2-U4 remains incomplete; a is verified complete under approved policy, and b/c
+remain planned. The three-child split is adopted.
+[Credential lifecycle contract — review for approval](planning/p2-u4a-credential-contract-review.md)
+records the approved G-01–06 decisions.
+[Qualified credential lifecycle](architecture/qualified-credential-lifecycle.md)
+describes current implementation contracts and verification boundaries.
+See the [handoff guide](guides/staff-credential-handoff.md),
+[operations runbook](runbooks/staff-credential-lifecycle.md) and
+[acceptance evidence](status/p2-u4a-evidence.md).
 
 Separate P2-U4 implementation specs, in sequence:
 

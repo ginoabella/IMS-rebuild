@@ -1,3 +1,4 @@
+import { PlatformCredentialActionsController } from './credential-actions.controller';
 import { PlatformTenantsController } from './tenants.controller';
 import { DraftTenants } from '../../application/draft-tenants';
 import { DraftTenantRuntime } from '../db/draft-tenant-runtime';
@@ -21,7 +22,11 @@ export class PlatformAuthHttpModule {
     return {
       module: PlatformAuthHttpModule,
       imports: [IdentityHttpModule.register(config)],
-      controllers: [PlatformAuthController, PlatformTenantsController],
+      controllers: [
+        PlatformAuthController,
+        PlatformTenantsController,
+        PlatformCredentialActionsController,
+      ],
       providers: [
         PlatformCurrentSession,
         {

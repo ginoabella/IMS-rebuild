@@ -1,3 +1,4 @@
+import { checkCredentialActions } from './check-credential-actions.mjs';
 import { checkDraftTenants } from './check-draft-tenants.mjs';
 import { checkPlatformAuth } from './check-platform-auth.mjs';
 import { checkDistributedLimits } from './check-session-limits.mjs';
@@ -15,6 +16,8 @@ assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
       [
+        '--credential-lifecycle',
+        '--credential-api',
         '--draft-tenant',
         '--draft-integrated',
         '--draft-browser',
@@ -134,12 +137,20 @@ async function worker(override = {}) {
     pending.get(m.id)?.resolve(m);
     pending.delete(m.id);
   });
+  child.on('error', () => {
+    for (const entry of pending.values()) entry.reject();
+    pending.clear();
+  });
   child.on('exit', () => {
     for (const entry of pending.values()) entry.reject();
     pending.clear();
   });
   const call = (operation, ...args) =>
     new Promise((resolve, reject) => {
+      if (!child.connected) {
+        reject(new Error('Session fixture interrupted'));
+        return;
+      }
       const id = ++sequence;
       const timer = setTimeout(() => {
         pending.delete(id);
@@ -355,6 +366,8 @@ try {
   if (
     ![
       '--lifecycle',
+      '--credential-lifecycle',
+      '--credential-api',
       '--platform-browser',
       '--draft-tenant',
       '--draft-integrated',
@@ -430,9 +443,30 @@ try {
       commitProxy,
     });
   if (
-    !['--draft-tenant', '--draft-integrated', '--draft-browser'].includes(
-      selection[0],
-    )
+    selection.length === 0 ||
+    ['--credential-lifecycle', '--credential-api'].includes(selection[0])
+  )
+    await checkCredentialActions({
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      secrets,
+      appUrl: app.href,
+      commitProxy,
+      proxy,
+      browserChecks: selection[0] !== '--credential-api',
+    });
+  if (
+    ![
+      '--credential-lifecycle',
+      '--credential-api',
+      '--draft-tenant',
+      '--draft-integrated',
+      '--draft-browser',
+    ].includes(selection[0])
   ) {
     const a = await worker(),
       b = await worker();
@@ -1090,9 +1124,13 @@ try {
   // The focused API selection also validates independent-process diagnostics;
   // it does not run the lifecycle tail that historically owned this scan.
   if (
-    ['--draft-tenant', '--draft-integrated', '--draft-browser'].includes(
-      selection[0],
-    )
+    [
+      '--credential-lifecycle',
+      '--credential-api',
+      '--draft-tenant',
+      '--draft-integrated',
+      '--draft-browser',
+    ].includes(selection[0])
   ) {
     const draftAudit = (
       await owner.query(

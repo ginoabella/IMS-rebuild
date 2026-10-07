@@ -37,7 +37,8 @@
     "check:identity-foundation": "pnpm build:backend && node scripts/check-identity-foundation.mjs",
     "check:session-foundation": "pnpm build:backend && node scripts/check-session-foundation.mjs",
     "check:platform-auth": "pnpm build:backend && node scripts/check-platform-auth-selection.mjs",
-    "check:draft-tenant": "pnpm build:backend && node scripts/check-draft-tenant-selection.mjs"
+    "check:draft-tenant": "pnpm build:backend && node scripts/check-draft-tenant-selection.mjs",
+    "check:staff-auth": "pnpm build:backend && node scripts/check-staff-auth-selection.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

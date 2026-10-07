@@ -1,3 +1,9 @@
+import { CredentialRuntime } from '../db/credential-runtime';
+import { CredentialActions } from '../../application/credential-actions';
+import { CredentialExchangeController } from './credential-exchange.controller';
+import { StaffCredentialActionsController } from './staff-credential-actions.controller';
+import { CredentialExchangeBrowser } from './credential-browser';
+import { StaffIssuerBrowser } from './credential-browser';
 import { PlatformBrowser } from './platform-browser';
 import { PLATFORM_AUTHENTICATION_PORTS } from '../../../platform/application/authentication-ports';
 import { Admission } from '../../application/admission';
@@ -25,7 +31,29 @@ export class IdentityHttpModule {
     const runtime = Symbol('HTTP_SESSION_RUNTIME');
     return {
       module: IdentityHttpModule,
+      controllers: [
+        CredentialExchangeController,
+        StaffCredentialActionsController,
+      ],
       providers: [
+        {
+          provide: CredentialRuntime,
+          useFactory: () => new CredentialRuntime(config),
+        },
+        {
+          provide: CredentialActions,
+          inject: [CredentialRuntime],
+          useFactory: (r: CredentialRuntime) => r.service,
+        },
+        {
+          provide: CredentialExchangeBrowser,
+          useFactory: () =>
+            new CredentialExchangeBrowser(config.credentialExchange),
+        },
+        {
+          provide: StaffIssuerBrowser,
+          useFactory: () => new StaffIssuerBrowser(config.staffIssuer),
+        },
         {
           provide: PlatformBrowser,
           useFactory: () => new PlatformBrowser(config.platformAuth),
@@ -73,6 +101,8 @@ export class IdentityHttpModule {
         { provide: APP_INTERCEPTOR, useClass: ActivityInterceptor },
       ],
       exports: [
+        CredentialActions,
+        StaffIssuerBrowser,
         PlatformBrowser,
         PLATFORM_AUTHENTICATION_PORTS,
         RequestAuthority,

@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; specification prepared and reviewed 2026-10-07 (Asia/Manila, +08:00). No implementation or product-policy approval is claimed.
+- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00), a complete, b/c planned. Parent acceptance remains incomplete.
 - **Requirement:** [Phase 2, P2-U4](../implementation-plan.md#p2-u4--deliver-tenant-staff-sign-in-and-credential-lifecycle); tenant-qualified access and credential recovery from the project overview.
 - **Goal:** let the intended staff member set credentials, sign in through the command center or protected mobile boundary, and sign out; make credential replacement invalidate previous authority across replicas.
 - **Completion boundary:** approved initial-administrator setup from a real P4-U1a draft, setup/reset/recovery journeys, active-tenant authentication, protected browser/mobile transport, and isolated expiry recovery pass the acceptance matrix. Setting credentials never activates a tenant.
@@ -10,6 +10,12 @@
 Read [AGENT.md](../../AGENT.md) and its required context before implementation.
 This spec follows the approved delivery-order exception: completed P4-U1a precedes
 P2-U4; Phase 3 follows. P4-U1b/P4-U3 retain completed onboarding and activation.
+
+**Policy approval, 2026-10-07 (Asia/Manila, +08:00):** the user approved
+[credential review sections 1–6](../../docs/planning/p2-u4a-credential-contract-review.md).
+G-01–06 are resolved; its precise matrix, draft-ready reset exception, policies
+and limits supersede the earlier unapproved recommendations. Runtime acceptance
+remains incomplete.
 
 ## Starting state and dependencies
 
@@ -33,11 +39,11 @@ operator-facing activation workflow.
 ## Decision gates before dependent implementation
 
 [Product contracts, D-05/D-06](../../docs/planning/p1-u1-product-contracts.md#5-d-05--credentials-and-administrator-safeguards)
-explicitly leave setup/reset/recovery and draft setup unapproved. Bootstrap
+now record the scoped setup/reset/recovery and draft-setup approval in the credential review. Bootstrap
 password approval applies only to bootstrap; existing session/limiter approvals
 must not be reopened or silently extended to recovery traffic.
 
-| Gate | Required decision | Recommendation for review; not approved |
+| Gate | Required decision | Original recommendation; approved review now governs |
 | --- | --- | --- |
 | G-01 — Setup/reset authority | Who issues setup/reset, for which target roles and tenant/account states; scope of platform-assisted recovery and last-admin safeguards. | Platform operator initiates first-admin setup and verified last-admin recovery through narrow qualified workflows; tenant admin initiates same-tenant staff setup/reset. No general platform staff-management or impersonation grant. |
 | G-02 — Draft setup | Whether the first administrator may set credentials while draft, and eligibility at issue and exchange. | Permit initial-admin setup only for the canonically linked draft administrator; issue no ordinary session. Active tenants use the normal approved setup/reset path; suspended/retired targets deny. |
@@ -235,8 +241,8 @@ split atomic token consumption from credential/version/audit changes, cookies fr
 CSRF, or UI delivery from its integrated acceptance.
 
 The user adopted the split and requested child specs on 2026-10-07 (Asia/Manila,
-+08:00). All children and parent remain planned. This approves the delivery split,
-not pending G-01–06 product policies. Parent completion requires every criterion.
++08:00). The split originally approved delivery structure only. The user subsequently
+approved G-01–06 through the credential review; a is complete and b/c remain planned. Parent completion requires every criterion.
 
 | Unit | Scope and starting state | Result, verification and parent ownership |
 | --- | --- | --- |

@@ -24,6 +24,9 @@ const { SafeLogger } = load('infrastructure/execution/logging');
 const { AuditRepository } = load('modules/audit/adapters/db/audit-repository');
 const { Admission } = load('modules/identity/application/admission');
 const { TrustedSource } = load('modules/identity/adapters/http/trusted-source');
+const { StaffIssuerBrowser } = load(
+  'modules/identity/adapters/http/credential-browser',
+);
 const { PlatformBrowser } = load(
   'modules/identity/adapters/http/platform-browser',
 );
@@ -356,6 +359,7 @@ export async function openHttp({
       ...(browserConfig ? [PlatformAuthController] : []),
     ],
     providers: [
+      { provide: StaffIssuerBrowser, useValue: new StaffIssuerBrowser() },
       {
         provide: PlatformLogout,
         useValue: new PlatformLogout(authority, admission),

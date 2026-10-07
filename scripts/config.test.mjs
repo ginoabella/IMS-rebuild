@@ -171,3 +171,50 @@ test('platform browser settings are optional together and enforce exact trusted 
         !error.message.includes('CONFIG_SECRET_SENTINEL'),
     );
 });
+test('credential consumers require their own complete HTTPS configuration', () => {
+  const platform = {
+    PLATFORM_AUTH_ORIGIN: 'https://console.example.test',
+    PLATFORM_AUTH_PROXY_PEERS: '127.0.0.1',
+    PLATFORM_AUTH_PROXY_SECRET: 'a'.repeat(64),
+    PLATFORM_AUTH_CSRF_SECRET: 'b'.repeat(64),
+    LIMITER_TRUSTED_PROXIES: '127.0.0.1',
+  };
+  const absent = parseBackendConfig({ ...valid, ...platform });
+  assert.equal(absent.credentialExchange, undefined);
+  assert.equal(absent.staffIssuer, undefined);
+  for (const [prefix, field] of [
+    ['CREDENTIAL_EXCHANGE', 'credentialExchange'],
+    ['STAFF_ISSUER', 'staffIssuer'],
+  ]) {
+    const settings = {
+      [`${prefix}_ORIGIN`]: 'https://staff.example.test',
+      [`${prefix}_PROXY_PEERS`]: '127.0.0.1',
+      [`${prefix}_PROXY_SECRET`]: 'c'.repeat(64),
+      [`${prefix}_CSRF_SECRET`]: 'd'.repeat(64),
+    };
+    const configured = parseBackendConfig({
+      ...valid,
+      ...platform,
+      ...settings,
+    });
+    assert.equal(configured[field].origin, settings[`${prefix}_ORIGIN`]);
+    assert.equal(
+      configured[
+        field === 'staffIssuer' ? 'credentialExchange' : 'staffIssuer'
+      ],
+      undefined,
+    );
+    for (const change of [
+      { [`${prefix}_ORIGIN`]: 'http://staff.example.test' },
+      { [`${prefix}_ORIGIN`]: 'https://staff.example.test/path' },
+      { [`${prefix}_CSRF_SECRET`]: '' },
+      { [`${prefix}_CSRF_SECRET`]: settings[`${prefix}_PROXY_SECRET`] },
+      { [`${prefix}_PROXY_PEERS`]: '192.0.2.1' },
+    ])
+      assert.throws(
+        () =>
+          parseBackendConfig({ ...valid, ...platform, ...settings, ...change }),
+        ConfigurationError,
+      );
+  }
+});

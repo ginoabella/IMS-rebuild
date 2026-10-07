@@ -1,3 +1,4 @@
+import { credentialControls } from './credential-action-fixture.mjs';
 import { openHttp } from './session-http-fixture.mjs';
 import { createRequire } from 'node:module';
 const backend = createRequire(
@@ -80,6 +81,9 @@ process.on('message', async (message) => {
           const base = backend(
             './dist/infrastructure/configuration.js',
           ).loadBackendConfig();
+          const controls = credentialControls((path) =>
+            backend(`./dist/${path}.js`),
+          );
           const app = await NestFactory.create(
             HttpModule.register({
               ...base,
@@ -88,6 +92,8 @@ process.on('message', async (message) => {
               sessions: config,
               limiter: limiterConfig,
               platformAuth: message.browserConfig,
+              credentialExchange: message.exchangeConfig,
+              staffIssuer: message.staffIssuerConfig,
             }),
             { logger: false, bodyParser: false, abortOnError: false },
           );
@@ -96,7 +102,7 @@ process.on('message', async (message) => {
           http = {
             url: await app.getUrl(),
             close: () => app.close(),
-            control: () => ({}),
+            control: controls,
           };
         } else
           http = await openHttp({

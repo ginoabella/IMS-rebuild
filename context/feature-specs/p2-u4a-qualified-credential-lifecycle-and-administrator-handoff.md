@@ -2,13 +2,20 @@
 
 ## Status and purpose
 
-- **Status:** planned; split adopted 2026-10-07 (Asia/Manila, +08:00).
+- **Status:** complete; A-01–08 verified 2026-10-08 00:18 +08:00 (Asia/Manila). G-01–06 approved and implementation resumed 2026-10-07.
 - **Requirement:** [P2-U4 parent scope, gates and AC-01–12](p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 - **Goal:** deliver approved issuer-to-recipient setup/reset/recovery with durable single-use exchange and qualified administrator provenance.
 - **Completion boundary:** an authorized issuer initiates an approved action, safely hands off its capability, and the recipient sets credentials through the real UI; canonical credential replacement invalidates previous authority across replicas. Draft setup grants neither ordinary staff sessions nor activation.
 
-The user authorized child-spec creation, not G-01–06 policy approval or runtime
-implementation. The parent remains authoritative for common scope and policies.
+The initial split authorized child-spec creation. The user subsequently approved
+all recommended credential-review decisions and runtime continuation. The parent
+and approved review remain authoritative for common scope and policies.
+
+**Policy approval, 2026-10-07 (Asia/Manila, +08:00):** the user approved
+[credential review sections 1–6](../../docs/planning/p2-u4a-credential-contract-review.md).
+G-01–06 are resolved; its precise matrix, draft-ready reset exception, policies
+and limits supersede the earlier unapproved recommendations. Scoped A-01–08 runtime acceptance now passes; see
+[verified evidence](../../docs/status/p2-u4a-evidence.md).
 
 ## Starting state and decision gates
 
@@ -19,7 +26,7 @@ interfaces. Reuse [identity authority](../../docs/architecture/canonical-authori
 [HTTP authority](../../docs/architecture/canonical-http-authority.md) and
 [draft provenance](../../docs/architecture/draft-tenant-registry-api.md).
 
-Resolve all parent G-01–06 before dependent implementation: issuer/target/state
+Parent G-01–06 are resolved by the approved review, covering: issuer/target/state
 matrix, draft exception, staff password policy, capability lifetime/reissue/cancel
 and invalidation timing, verified-person handoff/recovery, abuse budgets and
 retention. Record scoped approvals in product contracts and tracker; do not treat
@@ -126,12 +133,19 @@ fixtures for reset and authorized tenant-admin issuer checks. Use barriers and c
 fixtures for races/expiry; test actual stale session restoration and lost responses.
 Do not claim ordinary staff authentication from fixtures.
 
-Provisionally select `./dev exec pnpm check:staff-auth --lifecycle`; command/selector
-is not yet established. Record actual commands at implementation, run relevant
+Established selectors: `./dev exec pnpm check:staff-auth --api` and `--lifecycle`.
+Record observed results in [acceptance evidence](../../docs/status/p2-u4a-evidence.md); run relevant
 existing foundation/auth/draft regressions and final `./dev check`. Documentation
 preparation requires consistency/link/coverage/whitespace checks only.
 
 ## Completion and handoff
+
+**Completed 2026-10-08 00:18 +08:00 (Asia/Manila).** Focused API/HTTPS lifecycle, all 10 existing UI
+regressions and final `./dev check` passed, exit 0. The
+[evidence](../../docs/status/p2-u4a-evidence.md),
+[guide](../../docs/guides/staff-credential-handoff.md) and
+[runbook](../../docs/runbooks/staff-credential-lifecycle.md) document observed scope,
+controlled staff-session fixtures and persistent HTTPS configuration handoff.
 
 Complete only when A-01–08 pass. Hand b/c approved policy, migration/grants, safe
 qualified DTOs, exchange/error/forgery contracts, actual credential format,

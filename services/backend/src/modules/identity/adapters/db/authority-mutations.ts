@@ -1,3 +1,5 @@
+import type { CredentialTenancy } from '../../application/credential-action-ports';
+import { CredentialTenancyRepository } from '../../../tenancy/adapters/db/credential-tenancy';
 import type { Transaction } from '../../../../infrastructure/database/transaction';
 import { AuditRepository } from '../../../audit/adapters/db/audit-repository';
 import { uuid, type StorageResult } from '../../domain/storage';
@@ -14,6 +16,9 @@ import type { StaffRecord } from './staff-repository';
 // Internal persistence capability. Authenticated owning use cases must authorize
 // their actor before supplying the existing trusted transaction handle.
 export class StaffAuthorityMutations {
+  constructor(
+    private readonly tenancy: CredentialTenancy = new CredentialTenancyRepository(),
+  ) {}
   async change(
     transaction: Transaction,
     input: { plane: 'tenant'; tenantId: string; staffId: string },
@@ -41,6 +46,8 @@ export class StaffAuthorityMutations {
       return { kind: 'invalid' };
     try {
       return await transaction.required(async () => {
+        // Serialize tenant-wide administrator eligibility before locking staff.
+        await this.tenancy.lock(transaction, input.tenantId);
         const { rows } = await transaction.query<LockedAccount>(
           `SELECT id,status,credential_state,password_hash,credential_changed_at,version,authentication_version,roles FROM public.staff_users WHERE id=$1 AND tenant_id=$2 FOR UPDATE`,
           [input.staffId, input.tenantId],

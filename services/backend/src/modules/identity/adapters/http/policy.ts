@@ -13,7 +13,7 @@ export type HttpPolicy =
     }
   | {
       access: 'protected';
-      channel: 'bearer';
+      channel: 'bearer' | 'staff-cookie';
       plane: 'tenant';
       permissions: readonly [StaffPermission, ...StaffPermission[]];
       activity: 'passive' | 'operational';

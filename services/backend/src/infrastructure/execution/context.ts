@@ -117,6 +117,7 @@ export function correlationId(incoming?: unknown): string {
   }
 }
 export type FieldRule =
+  | { kind: 'uuid' }
   | { kind: 'enum'; values: readonly string[] }
   | { kind: 'integer'; min: number; max: number }
   | { kind: 'boolean' };
@@ -154,6 +155,14 @@ export function safeData(
       Number.isSafeInteger(field) &&
       field >= rule.min &&
       field <= rule.max
+    )
+      result[key] = field;
+    else if (
+      rule.kind === 'uuid' &&
+      typeof field === 'string' &&
+      /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/.test(
+        field,
+      )
     )
       result[key] = field;
     else if (rule.kind === 'boolean' && typeof field === 'boolean')

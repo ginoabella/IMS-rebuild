@@ -1,3 +1,5 @@
+import type { CredentialTenancy } from '../../application/credential-action-ports';
+import { CredentialTenancyRepository } from '../../../tenancy/adapters/db/credential-tenancy';
 import { canonicalRoles, type StaffRole } from '../../domain/roles';
 import { storageFailure } from './storage-failure';
 import type { Transaction } from '../../../../infrastructure/database/transaction';
@@ -42,6 +44,9 @@ function qualified(input: StaffReference) {
   );
 }
 export class StaffRepository {
+  constructor(
+    private readonly tenancy: CredentialTenancy = new CredentialTenancyRepository(),
+  ) {}
   async find(
     transaction: Transaction,
     reference: StaffReference,
@@ -120,6 +125,7 @@ export class StaffRepository {
       return { kind: 'invalid' };
     try {
       return await transaction.required(async () => {
+        await this.tenancy.lock(transaction, input.tenantId);
         const result = await transaction.query<StaffRecord>(
           `INSERT INTO public.staff_users (id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING ${columns}`,
           [
@@ -162,6 +168,7 @@ export class StaffRepository {
       return { kind: 'invalid' };
     try {
       return await transaction.required(async () => {
+        await this.tenancy.lock(transaction, reference.tenantId);
         const locked = await transaction.query<{
           id: string;
           version: number;

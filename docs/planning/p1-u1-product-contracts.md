@@ -105,6 +105,15 @@ any different vocabulary before P5-U4/P5-U6.
 
 ## 5. D-05 — Credentials and administrator safeguards
 
+**Scoped P2-U4a approval, 2026-10-07 (Asia/Manila, +08:00):** the user approved
+[credential contract sections 1–6](p2-u4a-credential-contract-review.md). This contract
+owns the qualified issuer/state matrix, linked sole-admin recovery, denial of
+self-issuance, staff password policy, single-use capability lifetime/reissue/cancel,
+revocation at exchange commit, verified-person handoff, shared abuse budgets and
+30-day capability retention. Earlier recommendations below are superseded within
+that scoped boundary; general administrator removal/disablement and platform-account
+recovery remain with their later owners.
+
 **Partial approval, 2026-10-05 (Asia/Manila, +08:00):** the user approved
 P2-U1a account vocabulary `active`/`disabled`, credential vocabulary
 `unset`/`ready` and the associated
@@ -121,8 +130,9 @@ protected automation input supplies the password once. Initial operator creation
 uses explicit active/ready, tenantless platform authority and versions 1/1.
 This is c's scoped D-05/P1-U1 handoff, not approval of broader setup/reset policy.
 P2-U2a session lifetimes/activity and durable fencing are subsequently approved
-as recorded below. Authentication transports, setup/reset tokens, delivery/recovery
-and last-administrator policies remain pending for their owning units. P1-U1
+as recorded below. Staff sign-in transports and broader last-administrator removal/disablement
+policies remain with their owning units; setup/reset and handoff/recovery are now
+approved within the P2-U4a review scope. P1-U1
 remains deferred outside those scoped handoffs.
 
 Recommend lowercase trim normalization for tenant code and username, preserving
@@ -142,18 +152,25 @@ atomically revokes sessions and advances authentication version.
 Recommend no email/SMS self-service recovery in the first release. Recovery uses
 verified tenant-admin assistance; recovery of the last tenant admin uses a trusted
 platform workflow; platform-operator recovery uses a deployment command and a
-user-designated operator. Define identity verification and the out-of-band handoff
-procedure explicitly before P2-U4; this draft does not assume a delivery service.
+user-designated operator. The approved P2-U4a review defines identity verification and the out-of-band
+handoff procedure; this scope adds no delivery service.
 
 Block removal/disablement of the last active credential-ready tenant administrator.
 Staff cannot grant platform roles. The user approved web 60-minute idle/12-hour
 absolute and mobile 24-hour idle/7-day absolute sessions under the
 [scoped P2-U2a lifecycle/recovery contract](p2-u2a-session-contract-review.md),
 with canonical checks, durable fencing, qualifying operational activity only and
-fixed absolute lifetime through renewal/rotation. Broader setup/reset password policy and setup/reset UI
-must be approved before their dependent implementation; c's scoped bootstrap policy is approved.
+fixed absolute lifetime through renewal/rotation. Staff setup/reset password and UI policy are now approved by the P2-U4a review;
+c's scoped bootstrap policy remains approved.
 
 ## 6. D-06 — Tenant lifecycle
+
+**Scoped P2-U4a approval, 2026-10-07 (Asia/Manila, +08:00):**
+[approved credential contract sections 1–2](p2-u4a-credential-contract-review.md)
+permit receipt-linked initial-admin setup and ready-admin verified reset while
+draft. No ordinary session, activation, PBX or tenant transition is authorized.
+Suspended/retired and disabled targets deny; canonical versions invalidate
+outstanding actions after authority/state changes. Ordinary admission is unchanged.
 
 **Scoped approval for P2-U1b, 2026-10-05 (Asia/Manila, +08:00):** ordinary
 staff eligibility requires canonical active tenant, active account, ready

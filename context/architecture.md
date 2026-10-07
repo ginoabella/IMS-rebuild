@@ -374,6 +374,16 @@ passive, uncached primary reads. P4-U1a-2 adds the [protected browser journey](.
 with named bounded Next forwarding, mounted canonical-owner draft/attempt memory,
 explicit uncertain retry and owner/epoch-fenced callbacks. Complete API/browser/parent acceptance and the full graph passed; see [integrated evidence](../docs/status/p4-u1a-2-evidence.md).
 
+P2-U4a implements the user-approved [qualified credential lifecycle](../docs/architecture/qualified-credential-lifecycle.md).
+Identity owns durable single-use actions and atomic credential/version/audit exchange;
+platform uses creation provenance and tenancy owns status/eligibility serialization.
+Staff creation/rename/authority mutations now lock tenancy before staff to preserve
+sole-admin recovery qualification. Draft setup/reset never changes ordinary admission.
+Independent recipient and existing-session staff issuer HTTPS/CSRF boundaries are
+required and verified with real temporary origins. A-01–08 and full Docker checks
+passed; [evidence](../docs/status/p2-u4a-evidence.md) records the controlled
+staff-session and persistent deployment limits. Ordinary staff access remains b/c.
+
 ### Shared Session Management
 
 The identity module creates, validates, renews, and revokes sessions through a

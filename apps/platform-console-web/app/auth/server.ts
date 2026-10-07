@@ -62,7 +62,8 @@ export async function backendRequest(
     | 'session'
     | 'logout'
     | { consumer: 'tenants'; query: string }
-    | { consumer: 'tenant'; id: string },
+    | { consumer: 'tenant'; id: string }
+    | { consumer: 'credential-actions'; id: string; actionId?: string },
   headers: Headers,
   method: 'GET' | 'POST',
   body?: string,
@@ -83,7 +84,7 @@ export async function backendRequest(
     return safeError(403);
   try {
     return await fetch(
-      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : `/platform/tenants/${path.id}`}`,
+      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
       {
         method,
         cache: 'no-store',

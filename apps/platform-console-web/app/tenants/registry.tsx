@@ -1,4 +1,5 @@
 'use client';
+import { AdministratorCredentials } from './credential-issuer';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import {
@@ -229,7 +230,7 @@ export function TenantDetail({ id }: { id: string }) {
           {detail.tenant.status === 'draft' && (
             <p className="text-muted-foreground">
               This draft is unavailable for ordinary staff sign-in. Credential
-              setup and activation are separate later steps.
+              setup does not activate it; activation remains a separate step.
             </p>
           )}
           <Button variant="secondary" onClick={state.retry}>
@@ -237,6 +238,15 @@ export function TenantDetail({ id }: { id: string }) {
           </Button>
         </>
       )}
+      <AdministratorCredentials
+        key={id}
+        tenantId={id}
+        credentialState={
+          detail?.administrator.kind === 'available'
+            ? detail.administrator.credentialState
+            : undefined
+        }
+      />
     </div>
   );
 }

@@ -20,3 +20,13 @@ export type {
   TenantInputField,
   TenantApiErrorDto,
 } from './platform-tenants';
+
+export { credentialActionDto } from './credential-actions';
+export type {
+  CredentialPurpose,
+  VerificationMethod,
+  IssueCredentialActionDto,
+  CredentialActionDto,
+  IssuedCredentialActionDto,
+  CredentialActionStatusDto,
+} from './credential-actions';

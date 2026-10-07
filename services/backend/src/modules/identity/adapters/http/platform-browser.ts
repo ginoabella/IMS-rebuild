@@ -26,17 +26,29 @@ export function singleHeader(
   return typeof value === 'string' ? value : undefined;
 }
 export class PlatformBrowser {
-  constructor(private readonly config?: PlatformAuthConfig) {}
+  constructor(
+    private readonly config?: PlatformAuthConfig,
+    private readonly names = {
+      cookie: platformCookie,
+      context: contextCookie,
+      proxy: 'x-platform-proxy',
+      csrf: 'x-platform-csrf',
+    },
+  ) {}
   private mac(value: string) {
     if (!this.config) throw httpFailure(403);
     return createHmac('sha256', Buffer.from(this.config.csrfSecret, 'hex'))
-      .update(value)
+      .update(
+        this.names.cookie === platformCookie
+          ? value
+          : `${this.names.cookie}:${value}`,
+      )
       .digest('base64url');
   }
   boundary(request: SourceRequest) {
     const peer = canonicalAddress(request.socket.remoteAddress);
     const origin = singleHeader(request, 'origin');
-    const proxy = singleHeader(request, 'x-platform-proxy');
+    const proxy = singleHeader(request, this.names.proxy);
     if (
       !this.config ||
       !peer ||
@@ -71,11 +83,16 @@ export class PlatformBrowser {
       if (separator < 1) throw httpFailure(401);
       const name = item.slice(0, separator);
       const value = item.slice(separator + 1);
-      if (name === platformCookie) {
+      if (
+        ['__Host-myims-platform', '__Host-myims-staff'].includes(name) &&
+        name !== this.names.cookie
+      )
+        throw httpFailure(401);
+      if (name === this.names.cookie) {
         if (token !== null || !tokenPattern.test(value)) throw httpFailure(401);
         token = value;
       }
-      if (name === contextCookie) {
+      if (name === this.names.context) {
         if (
           context !== null ||
           !/^[A-Za-z0-9_-]{43}\.[0-9]{13}\.[A-Za-z0-9_-]{43}$/.test(value)
@@ -99,14 +116,14 @@ export class PlatformBrowser {
     const context = `${value}.${this.mac(`context:${value}`)}`;
     response.setHeader(
       'Set-Cookie',
-      `${contextCookie}=${context}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=600`,
+      `${this.names.context}=${context}; Path=/; Secure; HttpOnly; SameSite=Lax; Max-Age=600`,
     );
     return { proof: this.preProof(context, token) };
   }
   check(request: SourceRequest, mode: 'pre' | 'session', token: string | null) {
     this.boundary(request);
     const { context } = this.cookies(request);
-    const proof = singleHeader(request, 'x-platform-csrf');
+    const proof = singleHeader(request, this.names.csrf);
     if (!proof || !/^[A-Za-z0-9_-]{43}$/.test(proof)) throw httpFailure(403);
     if (mode === 'session') {
       if (!token || !equal(proof, this.sessionProof(token)))
@@ -127,14 +144,14 @@ export class PlatformBrowser {
   }
   issued(response: CookieResponse, token: string, absoluteExpiresAt: number) {
     response.setHeader('Set-Cookie', [
-      `${platformCookie}=${token}; Path=/; Secure; HttpOnly; SameSite=Lax; Expires=${new Date(absoluteExpiresAt - 1000).toUTCString()}`,
-      this.clear(contextCookie),
+      `${this.names.cookie}=${token}; Path=/; Secure; HttpOnly; SameSite=Lax; Expires=${new Date(absoluteExpiresAt - 1000).toUTCString()}`,
+      this.clear(this.names.context),
     ]);
   }
   cleared(response: CookieResponse) {
     response.setHeader('Set-Cookie', [
-      this.clear(platformCookie),
-      this.clear(contextCookie),
+      this.clear(this.names.cookie),
+      this.clear(this.names.context),
     ]);
   }
   private clear(name: string) {

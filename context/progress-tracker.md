@@ -23,7 +23,9 @@ access, logout and canonical-owner isolated reauthentication. Staff sign-in,
 evidence authorization and production decisions remain pending.
 P4-U1a-1 is complete: the protected atomic draft registry API and durable receipt
 workflow are verified; P4-U1a-2 browser delivery and parent P4-U1a acceptance
-are complete. P2-U4 is next under the approved delivery order.
+are complete. P2-U4a is complete under the approved delivery order: qualified
+credential setup/reset/recovery and real issuer/recipient handoff are verified.
+P2-U4b/c remain planned; parent P2-U4 and Phase 2 remain incomplete.
 Protected traffic/capacity validation remains mandatory before production.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
@@ -33,6 +35,17 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 
 ## Completed
+
+- P2-U4a qualified credential lifecycle and administrator handoff: approved
+  G-01–06, durable single-use actions, qualified issuer/target state checks, atomic
+  credential/version/audit replacement, shared budgets and actual HTTPS UI.
+  A-01–08, focused lifecycle, all 10 existing UI tests and final `./dev check`
+  passed, exit 0. Completed 2026-10-08 00:18 +08:00 (Asia/Manila); see
+  [acceptance evidence](../docs/status/p2-u4a-evidence.md) and
+  [handoff guide](../docs/guides/staff-credential-handoff.md). Staff issuer access
+  uses controlled existing-session fixtures; ordinary staff sign-in/mobile and
+  parent completion remain b/c. Persistent recipient HTTPS configuration is an
+  explicit deployment step in the runbook.
 
 - P4-U1a-2 operator browser and parent P4-U1a: protected tenant list/create/detail,
   named bounded forwarding, canonical-owner mounted draft/attempt recovery,
@@ -157,27 +170,31 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-- None.
+No active implementation unit. Parent P2-U4 remains incomplete pending b/c.
 
 ## Unit Checkpoints
 
 ### P2-U4 — Tenant staff sign-in and credential lifecycle
 
-- **Status:** planned; spec prepared and reviewed 2026-10-07 (Asia/Manila, +08:00). Implementation has not started.
+- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00); child a complete, b/c planned and parent acceptance incomplete.
 - **Requirement/scope:** [feature spec](feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md); qualified setup/reset/recovery, initial-admin handoff, staff authentication, secure browser/mobile consumers and isolated expiry recovery.
-- **Dependencies:** completed P2-U1/U2, P1-U4/U5 and P4-U1a; reuse verified P2-U3 transport/verifier patterns. D-05/D-06 setup/reset/recovery approvals remain required before dependent work.
-- **Acceptance/checks:** AC-01–12; proposed focused staff lifecycle/HTTP/browser/mobile checks with real PostgreSQL/Redis, two replicas, production Next HTTPS and declared native secure-storage evidence, plus relevant existing regressions and final `./dev check`. Commands for the new checks are provisional.
-- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); three sequential child specs created below. Adoption does not approve G-01–06 product policies. Children and parent remain planned.
-- **Remaining:** resolve G-01–06 issuer/state/draft setup, password, capability lifetime/revocation, verified-person handoff/recovery and abuse/retention policies; implement and verify all parent criteria. General activation/PBX/staff management remain later units.
-- **Verification:** documentation consistency, local links, acceptance ownership and whitespace reviewed; no runtime checks or implementation/Phase 2 completion claimed.
+- **Dependencies:** completed P2-U1/U2, P1-U4/U5 and P4-U1a; reuse verified P2-U3 transport/verifier patterns. Scoped D-05/D-06 setup/reset/recovery policies are now approved through the credential review.
+- **Acceptance/checks:** AC-01–12; proposed focused staff lifecycle/HTTP/browser/mobile checks with real PostgreSQL/Redis, two replicas, production Next HTTPS and declared native secure-storage evidence, plus relevant existing regressions and final `./dev check`. Lifecycle selectors are established; b/c transport/device selectors remain planned.
+- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); three sequential child specs created below. Adoption initially covered the split only; G-01–06 were subsequently approved through the credential review. a is complete; b/c remain planned.
+- **Remaining:** b/c ordinary staff authentication, protected command-center/native transport and integrated parent acceptance under the approved policies. General activation/PBX/staff management remain later units.
+- **Verification:** child a A-01–08 and complete relevant foundation/audit/identity/session/platform/draft regressions pass; parent staff sign-in/native acceptance and Phase 2 completion are not claimed.
 
 ### P2-U4a — Qualified credential lifecycle and administrator handoff
 
-- **Status:** planned; child specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Status:** complete; A-01–08 verified 2026-10-08 00:18 +08:00 (Asia/Manila). Resumed after user approval on 2026-10-07.
 - **Requirement/scope:** [child spec](feature-specs/p2-u4a-qualified-credential-lifecycle-and-administrator-handoff.md); Capability schema/authorization/exchange, atomic credential/version/audit, real operator/recipient UI and qualified draft handoff; A-01–08.
 - **Dependencies:** Verified foundations/P4-U1a and G-01–06 approval before dependent implementation.
-- **Required verification:** Proposed `check:staff-auth --lifecycle`, real-service two-replica/browser checks and relevant regressions plus `./dev check`. New commands are provisional; documentation checks only at spec creation.
-- **Remaining:** all implementation and runtime acceptance; scoped completion does not complete parent P2-U4.
+- **Required verification:** Established `./dev exec pnpm check:staff-auth --api` and `--lifecycle`, actual two-replica/runtime-service/browser acceptance and final `./dev check`.
+- **Preparation:** read required context, parent/child specs and existing canonical authority, transaction, provenance, credential mutation and session/limiter interfaces. Created the requested [credential contract review](../docs/planning/p2-u4a-credential-contract-review.md) with concrete sections 1–6, issuer/state matrix, handoff procedure, budgets/retention and proposed implementation contracts. Sections 1–6 are now user-approved.
+- **Approval:** user approved review sections 1–6; recorded scoped D-05/D-06 and synchronized parent/child before runtime changes.
+- **Implementation checkpoint:** feature-owned action migration/runtime grants, immutable metadata and retention, narrow tenancy/provenance/management-binding ports, tenant-first staff mutation locks, atomic credential/version/audit replacement and shared source/issuer/target budgets are implemented. Separate exchange/staff browser boundaries and bounded named forwarding serve real operator/recipient UI and existing-session staff issuer UI. Mounted owner recovery, uncertainty, page-hide/target-change secret clearing and late callback fencing are verified.
+- **Verification:** A-01–08; `./dev exec pnpm check:staff-auth --lifecycle`, all 10 `check:ui` regressions and final `./dev check` passed, exit 0, including real-service A/B races, rollback/interruption/COMMIT loss, stale Redis restoration, HTTPS/Axe/reflow, six configuration tests and all five client scans. [Acceptance evidence](../docs/status/p2-u4a-evidence.md) records results and limits. Documentation links/whitespace pass.
+- **Remaining:** none within a. b/c deliver real ordinary staff sign-in/logout, command-center/native access and parent acceptance. Persistent recipient HTTPS configuration is documented in the runbook; automated checks own temporary real origins.
 
 ### P2-U4b — Staff authentication HTTP and transport boundaries
 
@@ -925,6 +942,21 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- 2026-10-08 00:18 +08:00 (Asia/Manila) — Completed approved P2-U4a and cleared its in-progress entry. Implemented qualified setup/reset/recovery, atomic audited version replacement, shared budgets and separate HTTPS/CSRF UI boundaries. Real A/B API/HTTPS acceptance, all 10 UI regressions and full Docker graph passed, exit 0. Published evidence/guide/runbook and recorded fixture/deployment limits; b/c and parent remain incomplete.
+
+- 2026-10-07 (Asia/Manila, +08:00) — User approved all recommended P2-U4a
+  review decisions and instructed continuation. Recorded G-01–06 approval in
+  product contracts/review/specs and resumed a in progress. Runtime implementation
+  and A-01–08 verification remain required; parent and b/c remain incomplete.
+
+- 2026-10-07 (Asia/Manila, +08:00) — Started P2-U4a as requested and marked
+  in progress. Required G-01–06 are still unapproved; inspected existing owner
+  interfaces and prepared the user-requested [approval document](../docs/planning/p2-u4a-credential-contract-review.md).
+  Sections 1–6 propose qualified issuer/state rules, draft setup/recovery, staff
+  password policy, capability lifetimes/revocation, verified-person handoff and
+  independent abuse/retention policy. Documentation checks passed. Cleared active
+  work and recorded blocked/resume conditions; no runtime changes or completion.
 
 - 2026-10-07 (Asia/Manila, +08:00) — User adopted the P2-U4 three-child split. Created a/b/c specs with sequential dependencies, explicit scope/decision gates, A-01–08/B-01–09/C-01–09 checks and parent acceptance ownership. Linked children from parent/docs index/tracker; documentation links, coverage and whitespace reviewed. No policy approval, runtime implementation or completion claimed.
 

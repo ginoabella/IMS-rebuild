@@ -60,3 +60,16 @@ export function parsePlatformAuthConfig(
     return fail();
   return { origin, proxyPeers, proxySecret, csrfSecret };
 }
+
+export function parseCredentialBrowserConfig(
+  env: Environment,
+  prefix: 'CREDENTIAL_EXCHANGE' | 'STAFF_ISSUER',
+): PlatformAuthConfig | undefined {
+  return parsePlatformAuthConfig({
+    ...env,
+    PLATFORM_AUTH_ORIGIN: env[`${prefix}_ORIGIN`],
+    PLATFORM_AUTH_PROXY_PEERS: env[`${prefix}_PROXY_PEERS`],
+    PLATFORM_AUTH_PROXY_SECRET: env[`${prefix}_PROXY_SECRET`],
+    PLATFORM_AUTH_CSRF_SECRET: env[`${prefix}_CSRF_SECRET`],
+  });
+}

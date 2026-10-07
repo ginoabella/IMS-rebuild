@@ -111,6 +111,15 @@ case "$action" in
           *) draft_selection=--draft-integrated ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$draft_selection"
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:staff-auth ]; then
+        shift 2
+        case "${1:-}" in
+          ""|--lifecycle) credential_selection=--credential-lifecycle ;;
+          --api) credential_selection=--credential-api ;;
+          *) echo 'Supported staff auth selections: --lifecycle, --api' >&2; exit 1 ;;
+        esac
+        [ "$#" -le 1 ] || { echo 'One staff auth selection is supported' >&2; exit 1; }
+        provision_storage scripts/check-session-deployment.mjs "$credential_selection"
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:session-foundation ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --lifecycle ] && [ "$1" != --authority ] && [ "$1" != --limits ]; }; then

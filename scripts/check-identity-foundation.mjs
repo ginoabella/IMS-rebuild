@@ -240,7 +240,7 @@ try {
         'SELECT count(*)::int AS n FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
       )
     ).rows[0].n,
-    8,
+    9,
   );
   for (const table of [
     'tenants',
@@ -265,7 +265,7 @@ try {
   assert.equal(collations.length, 3);
   assert.ok(collations.every((row) => row.collation_name === 'C'));
   console.log(
-    'PASS: fresh/rerun eight migrations; no production identity seeds; canonical ASCII normalization and bounds',
+    'PASS: fresh/rerun nine migrations; no production identity seeds; canonical ASCII normalization and bounds',
   );
   phase = 'tenant constraints';
   const t1 = randomUUID(),
