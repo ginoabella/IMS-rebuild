@@ -591,7 +591,9 @@ export async function checkDistributedLimits({
     if (redis.isOpen) redis.destroy();
     for (let i = 0; i < 100; i++) {
       try {
-        await redis.connect();
+        if (!redis.isOpen) await redis.connect();
+        // TCP/authentication may be available before the persisted dataset is loaded.
+        await redis.ping();
         break;
       } catch {
         assert.ok(i < 99, 'Integrated Redis restart deadline');

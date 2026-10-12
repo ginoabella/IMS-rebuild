@@ -1,3 +1,4 @@
+import { StaffCredentialRepository } from '../db/credential-read';
 import { PlatformCredentialRepository } from '../../../platform/adapters/db/credential-read';
 import { Admission } from '../../application/admission';
 import { RedisDistributedLimiter } from '../redis/limiter';
@@ -58,6 +59,8 @@ export async function sessionRuntime(
     config.sessions,
   );
   return {
+    staff,
+    staffCredentials: new StaffCredentialRepository(database),
     platform,
     platformCredentials: new PlatformCredentialRepository(database),
     lifecycle,

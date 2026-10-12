@@ -173,8 +173,8 @@ activation and PBX readiness remain with their owning units.
 - [P4-U1a-2 browser/parent acceptance evidence](status/p4-u1a-2-evidence.md) — verified complete.
 
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
-P2-U4 remains incomplete; a is verified complete under approved policy, and b/c
-remain planned. The three-child split is adopted.
+P2-U4 remains incomplete; a/b are verified complete under approved policy and
+c remains planned. The three-child split is adopted.
 [Credential lifecycle contract — review for approval](planning/p2-u4a-credential-contract-review.md)
 records the approved G-01–06 decisions.
 [Qualified credential lifecycle](architecture/qualified-credential-lifecycle.md)
@@ -188,3 +188,8 @@ Separate P2-U4 implementation specs, in sequence:
 - [P2-U4a — Qualified credential lifecycle and administrator handoff](../context/feature-specs/p2-u4a-qualified-credential-lifecycle-and-administrator-handoff.md)
 - [P2-U4b — Staff authentication HTTP and transport boundaries](../context/feature-specs/p2-u4b-staff-authentication-http-and-transport-boundaries.md)
 - [P2-U4c — Command-center and mobile access with isolated recovery](../context/feature-specs/p2-u4c-command-center-and-mobile-access-with-isolated-recovery.md)
+
+Staff authentication HTTP: [named transport and c handoff](architecture/staff-authentication-http.md)
+and [operations/verification](runbooks/staff-authentication.md). P2-U4b acceptance
+is complete; [B-01–09 evidence](status/p2-u4b-evidence.md) records passing focused/full
+checks and transport limits. Parent and c remain incomplete.

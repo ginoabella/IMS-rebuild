@@ -1,3 +1,4 @@
+import { StaffMobile } from './staff-mobile';
 import { StaffIssuerBrowser } from './credential-browser';
 import { httpFailure, enforceAdmission } from './http-errors';
 export { httpFailure, enforceAdmission } from './http-errors';
@@ -73,6 +74,7 @@ export class AuthorityGuard implements CanActivate {
     @Inject(PlatformBrowser) private readonly browser: PlatformBrowser,
     @Inject(StaffIssuerBrowser)
     private readonly staffBrowser: StaffIssuerBrowser,
+    @Inject(StaffMobile) private readonly mobile: StaffMobile,
   ) {}
   async canActivate(context: ExecutionContext) {
     const policy = this.reflector.getAllAndOverride<HttpPolicy>(HTTP_POLICY, [
@@ -92,24 +94,32 @@ export class AuthorityGuard implements CanActivate {
     )
       throw httpFailure(403);
     const request = context.switchToHttp().getRequest<HttpRequest>();
-    if (!['bearer', 'platform-cookie', 'staff-cookie'].includes(policy.channel))
+    if (
+      !['bearer', 'platform-cookie', 'staff-cookie', 'staff-mobile'].includes(
+        policy.channel,
+      )
+    )
       throw httpFailure(403);
     if (policy.channel === 'platform-cookie' && policy.plane !== 'platform')
       throw httpFailure(403);
-    if (policy.channel === 'staff-cookie' && policy.plane !== 'tenant')
+    if (
+      ['staff-cookie', 'staff-mobile'].includes(policy.channel) &&
+      policy.plane !== 'tenant'
+    )
       throw httpFailure(403);
     const cookieBrowser =
       policy.channel === 'staff-cookie' ? this.staffBrowser : this.browser;
-    if (policy.channel !== 'bearer') cookieBrowser.boundary(request);
-    const token =
-      policy.channel !== 'bearer'
-        ? cookieBrowser.cookies(request).token
+    const cookieChannel = ['platform-cookie', 'staff-cookie'].includes(
+      policy.channel,
+    );
+    if (cookieChannel) cookieBrowser.boundary(request);
+    const token = cookieChannel
+      ? cookieBrowser.cookies(request).token
+      : policy.channel === 'staff-mobile'
+        ? this.mobile.token(request)
         : bearer(request);
     if (!token) throw httpFailure(401);
-    if (
-      policy.channel !== 'bearer' &&
-      !['GET', 'HEAD', 'OPTIONS'].includes(request.method)
-    )
+    if (cookieChannel && !['GET', 'HEAD', 'OPTIONS'].includes(request.method))
       cookieBrowser.check(request, 'session', token);
     const result = await this.authority.validate(token);
     if (result.kind !== 'authorized') {
@@ -123,8 +133,13 @@ export class AuthorityGuard implements CanActivate {
       )
     )
       throw httpFailure(403);
-    if (policy.channel !== 'bearer' && result.record.consumer !== 'web')
-      throw httpFailure(401);
+    if (
+      policy.channel === 'staff-mobile' &&
+      result.record.consumer !== 'mobile'
+    )
+      throw httpFailure(403);
+    if (cookieChannel && result.record.consumer !== 'web')
+      throw httpFailure(policy.channel === 'staff-cookie' ? 403 : 401);
     const source = this.source.extract(request);
     if (
       !source &&

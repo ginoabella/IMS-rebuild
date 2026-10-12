@@ -116,7 +116,8 @@ case "$action" in
         case "${1:-}" in
           ""|--lifecycle) credential_selection=--credential-lifecycle ;;
           --api) credential_selection=--credential-api ;;
-          *) echo 'Supported staff auth selections: --lifecycle, --api' >&2; exit 1 ;;
+          --http) credential_selection=--staff-http ;;
+          *) echo 'Supported staff auth selections: --lifecycle, --api, --http' >&2; exit 1 ;;
         esac
         [ "$#" -le 1 ] || { echo 'One staff auth selection is supported' >&2; exit 1; }
         provision_storage scripts/check-session-deployment.mjs "$credential_selection"

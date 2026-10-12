@@ -1,3 +1,4 @@
+import { checkStaffHttp } from './check-staff-http.mjs';
 import { checkCredentialActions } from './check-credential-actions.mjs';
 import { checkDraftTenants } from './check-draft-tenants.mjs';
 import { checkPlatformAuth } from './check-platform-auth.mjs';
@@ -16,6 +17,7 @@ assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
       [
+        '--staff-http',
         '--credential-lifecycle',
         '--credential-api',
         '--draft-tenant',
@@ -344,7 +346,8 @@ try {
   connected = true;
   for (let i = 0; i < 60; i++) {
     try {
-      await redis.connect();
+      if (!redis.isOpen) await redis.connect();
+      await redis.ping();
       break;
     } catch {
       if (i === 59) throw new Error('Fixture Redis unavailable');
@@ -366,6 +369,7 @@ try {
   if (
     ![
       '--lifecycle',
+      '--staff-http',
       '--credential-lifecycle',
       '--credential-api',
       '--platform-browser',
@@ -414,6 +418,20 @@ try {
         '--draft-browser',
       ].includes(selection[0]),
     });
+  if (selection.length === 0 || selection[0] === '--staff-http')
+    await checkStaffHttp({
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      ref,
+      secrets,
+      appUrl: app.href,
+      proxy,
+      commitProxy,
+    });
   if (selection.length === 0 || selection[0] === '--limits')
     await checkDistributedLimits({
       owner,
@@ -461,6 +479,7 @@ try {
     });
   if (
     ![
+      '--staff-http',
       '--credential-lifecycle',
       '--credential-api',
       '--draft-tenant',
@@ -1069,7 +1088,10 @@ try {
     recovered.on('error', () => {});
     for (let i = 0; i < 80; i++) {
       try {
-        await recovered.connect();
+        if (!recovered.isOpen) await recovered.connect();
+        // A restarted Redis may accept TCP/authentication while its saved dataset
+        // is still loading. Wait for command readiness before checking retained keys.
+        await recovered.ping();
         break;
       } catch {
         if (i === 79) throw new Error('Session Redis restart deadline');
@@ -1125,6 +1147,7 @@ try {
   // it does not run the lifecycle tail that historically owned this scan.
   if (
     [
+      '--staff-http',
       '--credential-lifecycle',
       '--credential-api',
       '--draft-tenant',

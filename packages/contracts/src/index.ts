@@ -1,4 +1,12 @@
 export type {
+  StaffSignInDto,
+  StaffSessionDto,
+  StaffBrowserSessionDto,
+  StaffMobileSignInDto,
+  StaffSecureStorage,
+} from './staff-auth';
+
+export type {
   DependencyState,
   LivenessResponse,
   ReadinessResponse,

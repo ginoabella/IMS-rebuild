@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; split adopted 2026-10-07 (Asia/Manila, +08:00).
+- **Status:** complete; B-01–09 verified 2026-10-12 12:42 +08:00 (Asia/Manila); split adopted 2026-10-07.
 - **Requirement:** [P2-U4 parent and acceptance matrix](p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 - **Goal:** verify tenant-qualified credentials and deliver explicitly separated browser-cookie and mobile-bearer staff sessions with shared logout/expiry enforcement.
 - **Completion boundary:** real active staff signs in on replica A, accesses a protected staff consumer on B, and signs out with confirmed revocation on A/B. Actual HTTPS browser transport is proven; full command-center/native consumer journeys remain c.
@@ -127,8 +127,8 @@ Use barrier/clock fixtures, actual stale restoration and controlled dependency/
 response-loss faults. HTTPS Chromium cookie transport is required; mocked cookie
 headers are insufficient. Mobile HTTP fixture proves only transport.
 
-Provisionally use `./dev exec pnpm check:staff-auth --http` including secure browser
-transport probe; selector is not yet established. Record actual commands and run
+Use the established `./dev exec pnpm check:staff-auth --http` including secure browser
+transport probe. Record actual commands and run
 relevant existing foundation/auth/draft checks plus final `./dev check`. No native
 storage or full command-center completion claim. Documentation-only checks are
 consistency, links, coverage and whitespace.
@@ -140,3 +140,9 @@ tested routes/DTOs, proxy/Origin/CSRF/source configuration, safe errors, explici
 logout retry/uncertain-state behavior, canonical owner metadata, mobile secure-storage
 port outcomes and reproducible a/b fixtures. c owns actual browser/native consumers,
 owner-isolated unfinished work and full parent regression. Parent remains incomplete.
+
+Implementation contracts: [named HTTP/topology/native storage handoff](../../docs/architecture/staff-authentication-http.md)
+and [operations](../../docs/runbooks/staff-authentication.md). `./dev exec pnpm check:staff-auth --http`
+is established and passed, exit 0. B-01–09, relevant regressions and final `./dev check`
+passed; [acceptance evidence](../../docs/status/p2-u4b-evidence.md) records commands and limits.
+Parent P2-U4 and Phase 2 remain incomplete pending c.

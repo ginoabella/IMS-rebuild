@@ -106,6 +106,10 @@ process.on('message', async (message) => {
           };
         } else
           http = await openHttp({
+            staffIssuerConfig: message.staffIssuerConfig,
+            staffCredentials: new (backend(
+              './dist/modules/identity/adapters/db/credential-read.js',
+            ).StaffCredentialRepository)(database),
             browserConfig: message.browserConfig,
             credentials: new (backend(
               './dist/modules/platform/adapters/db/credential-read.js',

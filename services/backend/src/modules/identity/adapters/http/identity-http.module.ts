@@ -1,3 +1,12 @@
+import { StaffSignIn } from '../../application/sign-in';
+import { StaffLogout } from '../../application/logout';
+import { StaffCurrentSession } from '../../application/current-session';
+import {
+  STAFF_AUTHENTICATION_PORTS,
+  type StaffAuthenticationPorts,
+} from '../../application/authentication-ports';
+import { StaffAuthController } from './staff-auth.controller';
+import { StaffMobile } from './staff-mobile';
 import { CredentialRuntime } from '../db/credential-runtime';
 import { CredentialActions } from '../../application/credential-actions';
 import { CredentialExchangeController } from './credential-exchange.controller';
@@ -32,10 +41,45 @@ export class IdentityHttpModule {
     return {
       module: IdentityHttpModule,
       controllers: [
+        StaffAuthController,
         CredentialExchangeController,
         StaffCredentialActionsController,
       ],
       providers: [
+        StaffCurrentSession,
+        {
+          provide: StaffMobile,
+          useFactory: () => new StaffMobile(config.staffIssuer),
+        },
+        {
+          provide: STAFF_AUTHENTICATION_PORTS,
+          inject: [runtime],
+          useFactory: (r: Awaited<ReturnType<typeof sessionRuntime>>) => ({
+            candidates: r.staff,
+            credentials: r.staffCredentials,
+          }),
+        },
+        {
+          provide: StaffSignIn,
+          inject: [Admission, RequestAuthority, STAFF_AUTHENTICATION_PORTS],
+          useFactory: (
+            admission: Admission,
+            authority: RequestAuthority,
+            ports: StaffAuthenticationPorts,
+          ) =>
+            new StaffSignIn(
+              admission,
+              ports.candidates,
+              ports.credentials,
+              authority.lifecycle,
+            ),
+        },
+        {
+          provide: StaffLogout,
+          inject: [RequestAuthority, Admission],
+          useFactory: (authority: RequestAuthority, admission: Admission) =>
+            new StaffLogout(authority, admission),
+        },
         {
           provide: CredentialRuntime,
           useFactory: () => new CredentialRuntime(config),

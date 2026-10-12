@@ -51,6 +51,8 @@ export async function openHttp({
   source,
   browserConfig,
   credentials,
+  staffCredentials,
+  staffIssuerConfig,
 }) {
   const pool = new Pool({
     connectionString: runtimeUrl,
@@ -69,6 +71,14 @@ export async function openHttp({
       await wait('credential-read');
       return result;
     };
+  if (staffCredentials) {
+    const read = staffCredentials.read.bind(staffCredentials);
+    staffCredentials.read = async (...args) => {
+      const result = await read(...args);
+      await wait('credential-read');
+      return result;
+    };
+  }
   const originalIssue = lifecycle.issue.bind(lifecycle);
   lifecycle.issue = async (...args) => {
     await wait('verified-issuance');
@@ -80,6 +90,11 @@ export async function openHttp({
   passwordModule.verifyPasswordOutcome = (...args) => {
     stats.hashes++;
     return originalVerify(...args);
+  };
+  const staffCandidate = staff.candidate.bind(staff);
+  staff.candidate = (...args) => {
+    stats.candidates++;
+    return staffCandidate(...args);
   };
   const candidate = platform.candidate.bind(platform);
   platform.candidate = (...args) => {
@@ -218,6 +233,13 @@ export async function openHttp({
     manage(req) {
       return this.staff(req);
     }
+    async staffCookieWrite(req) {
+      const p = requestPrincipal(req);
+      return sensitiveWrite(p, p.tenantId);
+    }
+    async staffMobileWrite(req) {
+      return this.staffCookieWrite(req);
+    }
     async write(req) {
       return sensitiveWrite(requestPrincipal(req), req.params.tenantId);
     }
@@ -231,6 +253,30 @@ export async function openHttp({
   }
   Controller()(FixtureController);
   const routes = [
+    [
+      'staffCookieWrite',
+      Post,
+      'fixture/staff-write',
+      {
+        access: 'protected',
+        channel: 'staff-cookie',
+        plane: 'tenant',
+        permissions: ['incident.create'],
+        activity: 'operational',
+      },
+    ],
+    [
+      'staffMobileWrite',
+      Post,
+      'fixture/staff-mobile-write',
+      {
+        access: 'protected',
+        channel: 'staff-mobile',
+        plane: 'tenant',
+        permissions: ['incident.create'],
+        activity: 'operational',
+      },
+    ],
     [
       'cookieWrite',
       Post,
@@ -356,10 +402,46 @@ export async function openHttp({
   Module({
     controllers: [
       FixtureController,
+      ...(staffIssuerConfig
+        ? [
+            load('modules/identity/adapters/http/staff-auth.controller')
+              .StaffAuthController,
+          ]
+        : []),
       ...(browserConfig ? [PlatformAuthController] : []),
     ],
     providers: [
-      { provide: StaffIssuerBrowser, useValue: new StaffIssuerBrowser() },
+      {
+        provide: load('modules/identity/application/sign-in').StaffSignIn,
+        useValue: new (load(
+          'modules/identity/application/sign-in',
+        ).StaffSignIn)(admission, staff, staffCredentials, lifecycle),
+      },
+      {
+        provide: load('modules/identity/application/logout').StaffLogout,
+        useValue: new (load('modules/identity/application/logout').StaffLogout)(
+          authority,
+          admission,
+        ),
+      },
+      {
+        provide: load('modules/identity/application/current-session')
+          .StaffCurrentSession,
+        useValue: new (load(
+          'modules/identity/application/current-session',
+        ).StaffCurrentSession)(),
+      },
+      {
+        provide: load('modules/identity/adapters/http/staff-mobile')
+          .StaffMobile,
+        useValue: new (load(
+          'modules/identity/adapters/http/staff-mobile',
+        ).StaffMobile)(staffIssuerConfig),
+      },
+      {
+        provide: StaffIssuerBrowser,
+        useValue: new StaffIssuerBrowser(staffIssuerConfig),
+      },
       {
         provide: PlatformLogout,
         useValue: new PlatformLogout(authority, admission),

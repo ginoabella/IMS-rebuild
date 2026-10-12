@@ -382,7 +382,16 @@ sole-admin recovery qualification. Draft setup/reset never changes ordinary admi
 Independent recipient and existing-session staff issuer HTTPS/CSRF boundaries are
 required and verified with real temporary origins. A-01–08 and full Docker checks
 passed; [evidence](../docs/status/p2-u4a-evidence.md) records the controlled
-staff-session and persistent deployment limits. Ordinary staff access remains b/c.
+staff-session and persistent deployment limits. Ordinary staff HTTP access is verified in b; actual command-center/native consumers remain c.
+
+P2-U4b adds [staff authentication HTTP](../docs/architecture/staff-authentication-http.md)
+through strict qualified credentials and the existing canonical/version-bound issuer.
+Browser routes reuse the independently configured staff issuer HTTPS/CSRF boundary;
+explicit native ingress attestation and `staff-mobile` guards separate mobile bearer
+delivery from browser cookies. Current-session/logout are passive and use shared
+durable enforcement. Actual command-center/native protected storage remains c;
+B-01–09 and final Docker verification passed; [evidence](../docs/status/p2-u4b-evidence.md)
+records the actual HTTPS and device-storage limits.
 
 ### Shared Session Management
 

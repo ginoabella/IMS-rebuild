@@ -391,6 +391,8 @@ export async function checkCredentialBrowser({
     ).toBeVisible();
     phase = 'draft creation';
     await page.goto(`${platform.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await page
       .getByLabel(/^Tenant code/)
       .fill(`credential-browser-${randomUUID().slice(0, 8)}`);
@@ -398,9 +400,19 @@ export async function checkCredentialBrowser({
       .getByLabel(/^Organization name/)
       .fill('Credential browser organization');
     await page.getByLabel(/^Administrator username/).fill('browser.admin');
+    const creationResponse = page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === '/platform/tenants' &&
+        response.request().method() === 'POST',
+    );
     await page
       .getByRole('button', { name: 'Create draft tenant', exact: true })
       .click();
+    const creation = await creationResponse;
+    if (creation.status() !== 201)
+      throw new Error(
+        `Credential browser draft creation status ${creation.status()}`,
+      );
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();

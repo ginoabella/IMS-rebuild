@@ -2,6 +2,10 @@ import assert from 'node:assert/strict';
 import { readFile, readdir } from 'node:fs/promises';
 import { join } from 'node:path';
 const sentinels = [
+  'STAFF_ISSUER_PROXY_SECRET',
+  'STAFF_ISSUER_CSRF_SECRET',
+  'modules/identity/application/sign-in',
+  'Exact Staff Åe',
   'PLATFORM_AUTH_PROXY_SECRET',
   'PLATFORM_AUTH_CSRF_SECRET',
   'modules/platform/application/sign-in',

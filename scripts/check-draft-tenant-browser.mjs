@@ -43,6 +43,8 @@ export async function checkDraftTenantBrowser({
   }
   async function create(tenantCode) {
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await fill(tenantCode);
     await createButton().click();
     await expect(
@@ -203,6 +205,8 @@ export async function checkDraftTenantBrowser({
     assert.notEqual(admins[0].id, admins[1].id);
     // Valid maximum identifiers/name must also reflow without clipping.
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await fill(`${code}-maximum`.padEnd(64, 'x'), 'N'.repeat(200));
     await page.getByLabel(/^Administrator username/).fill('A'.repeat(128));
     await createButton().click();
@@ -215,6 +219,8 @@ export async function checkDraftTenantBrowser({
     await review('maximum-detail');
 
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await fill(code);
     await createButton().click();
     await expect(
@@ -409,6 +415,8 @@ export async function checkDraftTenantBrowser({
     );
     // Interrupt the actual connected session Redis long enough to cross its timeout.
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await fill(`${code}-redis`);
     await redis.sendCommand(['CLIENT', 'PAUSE', '2500', 'ALL']);
     await createButton().click();
@@ -423,6 +431,8 @@ export async function checkDraftTenantBrowser({
     await expect(page.getByLabel(/^Tenant code/)).toHaveValue(`${code}-redis`);
     // Owner-bound unfinished values, actual dependency outage, and explicit continuation.
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await fill(`${code}-retained`);
     select({ url: 'http://127.0.0.1:1' });
     await createButton().click();
@@ -602,6 +612,8 @@ export async function checkDraftTenantBrowser({
     ).toBeVisible();
 
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await review('form');
     await fill(`${code}-logout`);
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
@@ -609,6 +621,8 @@ export async function checkDraftTenantBrowser({
       page.getByRole('heading', { name: 'Platform console sign-in' }),
     ).toBeVisible();
     await page.goto(`${config.origin}/tenants/create`);
+    // Settle the mounted access checks before submitting or injecting an outage.
+    await page.waitForLoadState('networkidle');
     await expect(
       page.getByRole('heading', { name: 'Platform console sign-in' }),
     ).toBeVisible();

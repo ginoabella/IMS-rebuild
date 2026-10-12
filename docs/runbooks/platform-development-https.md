@@ -342,6 +342,12 @@ Redis instance is created.
 - Windows decode reports file not found: run `Test-Path $caPem`, rerun `scp`,
   and resolve its error before decoding. If the remote public CA is missing,
   run `./dev platform-https-prepare` on the server, then retry the download.
+- `Issue setup code` returns `Service unavailable or response uncertain`: verify
+  the credential lifecycle migration has been deployed. The HTTPS launcher builds
+  updated code but does not apply schema migrations. Run `./dev migrate` on the
+  server after pulling schema changes. Restore access with **Retry access**, then
+  use **Check credential status** before issuing or explicitly reissuing a code.
+  See [credential lifecycle operations](staff-credential-lifecycle.md).
 - Browser `Service unavailable`: run `./dev platform-https-check` and report the
   fixed failing phase. Never paste private configuration or browser cookie data.
 - Invalid credentials: use the original bootstrap username/password; successful
