@@ -291,6 +291,10 @@ export async function checkStaffBrowser({
   await form
     .getByRole('button', { name: 'Retry sign out', exact: true })
     .click();
+  // Confirm the completed sign-out navigation before filling the new document.
+  await form.waitForURL(`${staff.origin}/sign-in`, {
+    waitUntil: 'domcontentloaded',
+  });
   await expect(
     form.getByRole('button', { name: 'Sign in', exact: true }),
   ).toBeVisible();

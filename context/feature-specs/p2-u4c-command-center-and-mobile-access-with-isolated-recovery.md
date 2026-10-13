@@ -2,10 +2,18 @@
 
 ## Status and purpose
 
-- **Status:** blocked on actual native-device acceptance after verified resumption 2026-10-13 (Asia/Manila, +08:00). Started 2026-10-12; split adopted 2026-10-07. Configured ingress readiness, separate native acceptance typecheck/prebuild/export, independent browser acceptance and final full Docker checks pass. OS/device evidence is pending.
+- **Status:** complete; C-01–09 and parent AC-01–12 verified 2026-10-13 17:20 +08:00 (Asia/Manila). Reported declared Android acceptance and final full Docker regressions pass; evidence limits remain documented.
 - **Requirement:** [P2-U4 parent and AC-01–12](p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 - **Goal:** deliver actual tenant-staff browser/native access and preserve unfinished command-center work safely through expiry and same-owner reauthentication.
 - **Completion boundary:** issuer/recipient setup/reset, browser staff sign-in/protected shell/logout, native protected token use/storage and isolated expiry recovery work through the real a/b adapters; all parent acceptance passes.
+
+2026-10-13 fixture checkpoint: the user authorized separate active native acceptance
+accounts. The development-only preparer and [private handoff procedure](../../docs/runbooks/staff-native-acceptance.md#prepared-active-acceptance-fixture)
+are delivered; real HTTPS sign-in/session/logout and revoked-token denial pass.
+Responder credentials use the existing action issue/exchange service; a seeded
+control administrator remains explicitly test data. This does not supply general
+activation or native storage evidence. The real draft tenant remains denied;
+ordinary access requires P4-U3 activation first. C-05–09 and parent closure are verified in the [final evidence](../../docs/status/p2-u4c-evidence.md).
 
 ## Starting state and scope
 

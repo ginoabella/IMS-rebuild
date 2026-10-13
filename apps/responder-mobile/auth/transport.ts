@@ -42,6 +42,8 @@ export function mobileTransport(origin: string | undefined): MobileTransport {
     token?: string,
     body?: StaffSignInDto,
   ): Promise<unknown> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 7000);
     try {
       if (
         !origin ||
@@ -52,10 +54,12 @@ export function mobileTransport(origin: string | undefined): MobileTransport {
       const response = await fetch(`${origin}/staff/auth/mobile/${path}`, {
         method: path === 'session' ? 'GET' : 'POST',
         credentials: 'omit',
-        cache: 'no-store',
         redirect: 'error',
-        signal: AbortSignal.timeout(7000),
+        signal: controller.signal,
         headers: {
+          // Native fetch's cache option appends a query parameter to GET URLs.
+          // Keep the exact native route; the ingress also responds with no-store.
+          'Cache-Control': 'no-store',
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
           ...(body ? { 'Content-Type': 'application/json' } : {}),
         },
@@ -78,6 +82,8 @@ export function mobileTransport(origin: string | undefined): MobileTransport {
       throw error instanceof MobileAccessError
         ? error
         : new MobileAccessError(503);
+    } finally {
+      clearTimeout(timeout);
     }
   }
   return {

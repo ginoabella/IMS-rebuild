@@ -169,7 +169,12 @@ export async function checkDistributedLimits({
       signal: AbortSignal.timeout(15000),
     });
     const data = await r.json();
-    if (status !== null)
+    if (Array.isArray(status))
+      assert.ok(
+        status.includes(r.status),
+        `Integrated HTTP ${path}: unexpected ${r.status}`,
+      );
+    else if (status !== null)
       assert.equal(
         r.status,
         status,
@@ -181,7 +186,7 @@ export async function checkDistributedLimits({
         `Concurrent ${path} returned ${r.status}`,
       );
     assert.equal(r.headers.get('cache-control'), 'no-store');
-    if (status === 503) assert.equal(r.headers.get('retry-after'), '1');
+    if (r.status === 503) assert.equal(r.headers.get('retry-after'), '1');
     if (status === 429)
       assert.ok(
         Number(r.headers.get('retry-after')) >= 1 &&
@@ -606,7 +611,21 @@ export async function checkDistributedLimits({
     pg.set(true);
     for (const c of [normal, ga, gb]) await c('release');
     for (const c of [ga, gb]) {
-      await http(c, `staff/${tenantId}`, tenantSession.token);
+      // Restoring the relay does not make every previously failed connection
+      // ready immediately. Only explicit read retries may await bounded recovery.
+      const beforeRecovery = (await c('stats')).protected;
+      for (let attempt = 0; attempt < 6; attempt++) {
+        const result = await http(
+          c,
+          `staff/${tenantId}`,
+          tenantSession.token,
+          [200, 503],
+        );
+        if (result.status === 200) break;
+        assert.equal((await c('stats')).protected, beforeRecovery);
+        assert.ok(attempt < 5, 'Integrated primary recovery deadline');
+        await delay(result.retry * 1000);
+      }
       for (const old of [retained, absent, revoked, rotated, stale])
         await http(
           c,

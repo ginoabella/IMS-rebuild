@@ -41,6 +41,8 @@ const { TrustedSource } = backend(
 const { parseLimiterConfig } = backend('@myims/config');
 let lifecycle, records, fences, database, http, limiter;
 process.on('message', async (message) => {
+  // The separate native acceptance worker owns its scoped clock IPC operation.
+  if (message.operation === 'native-clock') return;
   try {
     if (message.operation === 'init') {
       const { runtimeUrl, redisUrl, config } = message;

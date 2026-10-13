@@ -1,5 +1,6 @@
 // JavaScript port/failure evidence only. Real Android/iOS acceptance is separate.
 import assert from 'node:assert/strict';
+import { createRequire } from 'node:module';
 import { mkdtempSync, readFileSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -248,6 +249,87 @@ try {
       MobileAccessError,
     );
   }
+  // Use the installed native abort polyfill, not Node's richer AbortSignal API.
+  const projectRequire = createRequire(import.meta.url);
+  const nativeRequire = createRequire(
+    projectRequire.resolve('react-native/package.json', {
+      paths: ['apps/responder-mobile'],
+    }),
+  );
+  const nativeAbort = nativeRequire('abort-controller/dist/abort-controller');
+  const { Request: NativeRequest } = nativeRequire('whatwg-fetch');
+  // Actual native fetch cache handling rewrites GET URLs, which the ingress denies.
+  const sessionUrl = 'https://localhost:3444/staff/auth/mobile/session';
+  assert.notEqual(
+    new NativeRequest(sessionUrl, { cache: 'no-store' }).url,
+    sessionUrl,
+  );
+  const savedGlobals = {
+    AbortController: globalThis.AbortController,
+    AbortSignal: globalThis.AbortSignal,
+    fetch: globalThis.fetch,
+    setTimeout: globalThis.setTimeout,
+    clearTimeout: globalThis.clearTimeout,
+  };
+  try {
+    globalThis.AbortController = nativeAbort.AbortController;
+    globalThis.AbortSignal = nativeAbort.AbortSignal;
+    assert.equal(typeof AbortSignal.timeout, 'undefined');
+    let timeoutCallback,
+      cleared = 0,
+      requests = 0;
+    globalThis.setTimeout = (callback, milliseconds) => {
+      assert.equal(milliseconds, 7000);
+      timeoutCallback = callback;
+      return 1;
+    };
+    globalThis.clearTimeout = () => cleared++;
+    globalThis.fetch = async (url, options) => {
+      requests++;
+      assert.ok(options.signal instanceof nativeAbort.AbortSignal);
+      assert.equal(options.credentials, 'omit');
+      const nativeRequest = new NativeRequest(url, options);
+      assert.equal(nativeRequest.url, url);
+      assert.equal(nativeRequest.headers.get('cache-control'), 'no-store');
+      const body = url.endsWith('/logout')
+        ? { signedOut: true }
+        : url.endsWith('/sign-in')
+          ? { ...owner, token }
+          : owner;
+      return { ok: true, text: async () => JSON.stringify(body) };
+    };
+    const nativeTransport = mobileTransport('https://localhost:3444');
+    assert.equal((await nativeTransport.signIn(input())).token, token);
+    assert.deepEqual(await nativeTransport.session(token), owner);
+    await nativeTransport.logout(token);
+    assert.equal(requests, 3);
+    assert.equal(cleared, 3);
+    globalThis.fetch = (_url, options) =>
+      new Promise((_resolve, reject) => {
+        options.signal.addEventListener('abort', () =>
+          reject(new Error('Aborted')),
+        );
+      });
+    const timedOut = nativeTransport.session(token);
+    timeoutCallback();
+    await assert.rejects(
+      timedOut,
+      (error) => error instanceof MobileAccessError && error.status === 503,
+    );
+    assert.equal(cleared, 4);
+    globalThis.fetch = async () => ({
+      ok: false,
+      status: 401,
+      headers: { get: () => null },
+    });
+    await assert.rejects(
+      nativeTransport.session(token),
+      (error) => error instanceof MobileAccessError && error.status === 401,
+    );
+    assert.equal(cleared, 5);
+  } finally {
+    Object.assign(globalThis, savedGlobals);
+  }
   // Execute adapter itself with an injected OS port. This proves marker/failure sequencing only.
   const values = new Map();
   let failSet = false,
@@ -323,6 +405,8 @@ try {
   );
   const marker = 'myims.responder.staff.v1.pending';
   const tokenKey = 'myims.responder.staff.v1.token';
+  const traces = [];
+  const stopObserving = harness.observeFault((message) => traces.push(message));
   harness.armFault('write');
   assert.equal(await harnessStorage.save(token), 'uncertain');
   assert.equal(values.get(marker), 'pending');
@@ -349,6 +433,16 @@ try {
   assert.equal(values.has(tokenKey), false);
   assert.deepEqual(await harnessStorage.read(), { kind: 'unavailable' });
   assert.equal(await harnessStorage.clear(), 'cleared');
+  assert.ok(
+    traces.some((message) => message.includes('read token: completed')),
+  );
+  assert.ok(
+    traces.some((message) =>
+      message.includes('write pending marker: completed'),
+    ),
+  );
+  assert.ok(traces.every((message) => !message.includes(token)));
+  stopObserving();
   console.log(
     'PASS isolated native fault harness write/delete/pause placement (port evidence only).',
   );

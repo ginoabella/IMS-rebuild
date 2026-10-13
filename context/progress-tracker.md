@@ -1,5 +1,309 @@
 # Progress Tracker
 
+Completed P2-U4c and parent P2-U4 (2026-10-13 17:20 +08:00 (Asia/Manila)): C-01–09 and parent
+AC-01–12 are reconciled. Final full `./dev check` exited 0 after the corrected
+bounded primary-recovery read check; production browser/credential/HTTP, shared
+limits/recovery, all application builds, foundation/storage/identity and client
+scans passed. Focused browser and limits checks also exited 0. Reported Android
+release acceptance passes protected sign-in/restart, canonical B ownership,
+injected write/delete/interruption quarantine and recovery, fingerprint cancellation,
+authenticated lock/unlock resume, reset/fresh replacement, normal/lost-response
+logout and approved idle/original absolute expiry. Runtime/fixture retired, control
+socket removed and existing t001 unchanged; backend live/ready HTTP 200.
+
+Declared evidence limits remain: Android 16/API 36 with 2025-04-05 patch; desktop
+Node 24.13.1 is outside the supported engine, while Docker uses Node 22.23.3.
+Storage faults are injected around real OS calls; physically locked reads and
+exact interruption timing are not claimed. Trusted fixture clock renewals are
+not shipping responder operations. General activation, persistent incident drafts,
+full responder operations and production readiness remain later units.
+
+2026-10-13 (Asia/Manila +08:00) focused recovery regression passed:
+`./dev exec pnpm check:session-foundation --limits` exited 0 after the bounded
+post-restoration read retry correction. Shared authority, limits/capacity, outage,
+retained-record recovery, revoked/rotated/stale denial, Redis restart, migrations,
+diagnostics and fixture cleanup pass. Changed checker lint/format pass. The final
+full `./dev check` restarted automatically and remains running; no final full pass
+or unit/parent completion is claimed yet.
+
+2026-10-13 (Asia/Manila +08:00) required full regression failed:
+latest detached full check exited 1 after distributed-limit checks: post-primary-
+restoration tenant HTTP expected 200 but received 503. No full pass is claimed.
+The recovery fixture now permits six explicit read attempts honoring the real
+503 Retry-After, asserting no protected handler work during every failed attempt,
+then requiring 200 and all revoked/rotated/stale records to remain denied. This
+corrects an immediate-readiness assumption without changing production retries,
+connection deadlines, admission or write behavior. Focused limits/recovery rerun
+is started, followed automatically by the full Docker check only if it passes.
+Fixture retirement and reported native evidence remain valid; c/parent incomplete.
+
+2026-10-13 (Asia/Manila +08:00) acceptance fixture cleanup passed:
+private A/B runtime stopped and its owner-only control socket is absent. Exact
+fixture tenant was retired through the audited authority mutation; retained
+fixture sessions cannot regain canonical admission. Utility verified existing
+t001 tenant/staff status and authority versions unchanged. Original staff/browser
+composition remains available; the temporary 3445 SSH target is no longer live.
+Native device evidence is reconciled with C-05–08 and parent AC-08–11, preserving
+reported-device/test-injection/clock limits. Final full regression result remains
+required before C-09/AC-12 and unit/parent completion.
+
+2026-10-13 (Asia/Manila +08:00) final declared desktop environment:
+Windows C:\ims, Pixel_8_API_36 / emulator-5554, Android 16/API 36, security patch
+2025-04-05, Node v24.13.1 and pnpm 10.12.1. Release package
+com.myims.responder.acceptance built/installed and reported native tests passed.
+Desktop Node 24 lies outside the repository's supported >=22.23.3 <23 engine;
+no supported-Node Windows build or broader desktop-toolchain compatibility is
+claimed. Docker verification uses pinned Node 22.23.3. Scoped mkcert trust and
+SSH/ADB reverse preserved the https://localhost:3444 origin. Test fingerprints
+were approved/cancelled explicitly and passwords were cleared from screens.
+
+2026-10-13 (Asia/Manila +08:00) Android absolute-expiry denial passed:
+user supplied Invalid credentials or session ended. Sign in again after explicit
+Check access on the session advanced past its original seven-day absolute cap.
+B independently records session 401 at offset 648,000 seconds. Activity renewals
+preserved the original deadline; earlier HTTP 200 history did not grant access.
+Reported device matrix now covers native sign-in/restart/owner on B, reset and
+fresh replacement, idle/absolute expiry, normal and lost-response logout,
+injected write/delete/interruption quarantine and recovery, cancelled biometric
+read and authenticated lock/unlock resume. Direct read while physically locked
+and Android-generated storage failures are not claimed. Android 16/API 36 and
+pnpm 10.12.1 are confirmed; separate security-patch/Node values requested.
+Final full Docker regression result and evidence reconciliation remain pending.
+
+2026-10-13 (Asia/Manila +08:00) Android absolute-expiry test prepared:
+fresh post-idle sign-in shows protected token write/readback, marker cleanup,
+HTTPS 200 and verified access; B confirms native.responder canonical owner.
+Private control advances only the new owned session through half-idle activity
+renewals, checking the original absolute deadline remains unchanged, then past
+seven days (final offset 648,000 seconds). Canonical backend lookup denies it.
+Android explicit Check access denial remains to be observed. Simulated trusted
+operational renewals do not imply shipped responder operations or change policy.
+Prior idle denial independently confirmed B session 401 at offset 86,401 seconds.
+
+2026-10-13 (Asia/Manila +08:00) Android idle-expiry denial observed:
+after advancing the runtime-owned responder session past the approved 24-hour
+idle deadline, user tapped Check access and supplied Invalid credentials or
+session ended. Sign in again, with protected UI hidden. Earlier HTTP 200 trace
+history did not preserve authority. Fresh sign-in will prepare the independent
+seven-day absolute-limit test. Final full Docker check remains running.
+
+2026-10-13 (Asia/Manila +08:00) Android fresh credentials after reset passed:
+user supplied protected token write/readback, completed pending-marker cleanup,
+HTTPS session HTTP 200 and verified staff access after downloading the updated
+handoff and signing in. B status confirms native.responder canonical owner.
+This completes the reported retained-token reset denial and fresh replacement.
+Advanced only this runtime-owned session by 86,401 seconds through the private
+clock control; backend lookup now denies it at the approved 24-hour idle bound.
+Android explicit revalidation of idle expiry is next; absolute expiry and full
+final checks remain pending. No production or device clock/policy changed.
+
+2026-10-13 (Asia/Manila +08:00) Android retained-token reset denial passed:
+after the actual responder credential reset, user tapped Check access and supplied
+Invalid credentials or session ended. Sign in again, with protected UI hidden.
+Private runtime independently confirms session HTTP 401 on B. The previous HTTP
+200 is earlier trace history and did not preserve authority. Fresh-password
+sign-in/replacement and device idle/absolute checks remain; c/parent incomplete.
+
+2026-10-13 (Asia/Manila +08:00) retained Android session prepared for reset:
+user supplied successful protected token write/readback and HTTPS session 200;
+private B status confirmed native.responder canonical owner. Ran the fixed-fixture
+responder reset once through actual protected administrator issuer and recipient
+browser exchange. Script passed, exit 0: old preparatory token denied on A/B,
+fresh credentials verified, authentication version incremented and t001 unchanged.
+Private handoff updated for native.responder. Android still retains its pre-reset
+token; explicit device Check access denial and fresh-password replacement remain
+to be observed. No device reset acceptance completion is claimed yet.
+
+2026-10-13 (Asia/Manila +08:00) full-check execution interruption:
+the latest foreground full Docker check ended with exit 143 during integrated
+browser work; it is not a pass. The workspace remains running and reports no
+OOM kill. Restarted the full required check in a detached process with owner-only
+log and retained exit-status file, so desktop response turns do not interrupt
+its supervision. Cause of the termination is not established. Focused browser
+acceptance remains passed; c/parent completion still requires the full result.
+
+2026-10-13 (Asia/Manila +08:00) Android lost-logout-response recovery passed:
+private runtime records completed B logout HTTP 201 with response dropped, then
+an explicit B retry HTTP 201. User confirms the app first showed unavailable or
+uncertain access and they tapped Retry sign out and storage cleanup. Supplied
+screen confirms sign-out and protected storage cleared, with marker write,
+token deletion/readback and marker deletion. No false success was reported for
+the missing response. Credential reset and device lifetime checks remain.
+
+Focused production HTTPS browser regression passes, exit 0, after adding an
+explicit completed-sign-out navigation wait before subsequent test input.
+C-01–04/08, credential A-02/07, qualified issuer/recipient, mounted owner recovery,
+uncertain logout retry and secret diagnostics pass. Final full Docker check has
+passed lint/format/typecheck/build, foundation/storage/identity checks and is
+running integrated session regressions. Full completion is not yet claimed.
+
+2026-10-13 (Asia/Manila +08:00) Android independent replica B passed:
+supplied screenshot shows protected token read completed, HTTPS session HTTP 200
+and Staff access verified. Private runtime status independently identifies B,
+native.responder and matching canonical ownership. Lost completed-logout response
+is armed for the next device check. Reset, expiry and response-loss device checks
+remain pending; c/parent remain incomplete.
+
+Final integrated regression passed lifecycle, platform/draft, staff HTTP, limits,
+recovery and credential API gates, then failed the staff browser login after
+uncertain-logout retry with no recognized error. Full quality check is running
+separately. Browser acceptance now explicitly waits for the completed sign-out
+navigation before filling the new document; focused browser rerun is running.
+This navigation-race hypothesis is not yet recorded as a confirmed fix.
+
+Remaining native acceptance prepared (2026-10-13, Asia/Manila +08:00): private
+A/B production HTTP runtime and owner-only replica/lost-logout/session-clock
+controls implemented. Trusted TLS self-check passes all three accounts across
+A/B, unchanged passive deadlines, forbidden browser/query headers, suppressed
+completed logout response, revoked-token denial and explicit retry. Scoped
+clock tests pass approved 24-hour idle/7-day absolute expiry, synthetic operational
+renewal and real rotation without extending the cap. Actual browser issuer and
+recipient reset passes for native.other; A/B old-token denial, fresh password,
+version increment and unchanged t001 verified. Private handoff updated only for
+native.other; native.responder unchanged. Desktop B/response-loss/reset/expiry
+evidence and final combined regressions remain pending. c/parent incomplete.
+
+Native device-lock/resume revalidation passed (2026-10-13, Asia/Manila +08:00):
+following emulator lock/unlock instructions, user screenshot shows background
+then active, completed protected token read, HTTPS session HTTP 200 and verified
+access. User confirms MyIMS requested a fingerprint after Android unlock and it
+was approved. Resume automatically revalidated; no explicit retry was needed.
+This proves reported authenticated resume, not a direct read while Android was
+locked. Independent B, reset, lifetime/response-loss and final acceptance checks
+remain pending; P2-U4C and parent remain incomplete.
+
+Native interrupted-write cleanup passed (2026-10-13, Asia/Manila +08:00): after
+reported retained-marker restart denial, user supplied Local access cleared. No
+stored session was available to revoke, with marker write, token deletion/readback
+and marker deletion in the trace. This verifies local marker recovery without
+claiming orphan server revocation after process loss. Device-lock/resume,
+independent B, reset, lifetime/response-loss and final regressions remain open.
+P2-U4C and parent remain incomplete.
+
+Native interrupted-write restart quarantine observed (2026-10-13, Asia/Manila
++08:00): following pause-write and force-stop/relaunch instructions, user screen
+shows completed protected pending-marker read, unavailable/uncertain access and
+cleanup retry. No token read/session request or verified UI appears. Records
+reported restart denial with the retained recovery marker; explicit cleanup is
+next. Pause timing was not captured, and no orphan revocation after process loss
+is claimed. Device lock, independent B, reset, lifetime/response-loss and final
+checks remain pending; P2-U4C and parent remain incomplete.
+
+Native biometric cancellation recovery passed (2026-10-13, Asia/Manila +08:00):
+after failed protected token read kept access hidden, user approved explicit
+cleanup and supplied Sign-out confirmed and protected storage cleared. Trace
+shows marker write, token deletion/readback and marker deletion. The reported
+cancelled-read/cleanup sequence is verified. Interrupted token write is next;
+device lock, independent B, reset, lifetime/response-loss and final regressions
+remain pending. P2-U4C and parent remain incomplete.
+
+Native biometric cancellation blocked access (2026-10-13, Asia/Manila +08:00):
+after the instructed Check access/cancel prompt sequence, user screenshot shows
+read token: failed and access unavailable/uncertain with protected UI hidden.
+Retry sign out and storage cleanup is offered. Records cancelled protected read
+denying authority; explicit cleanup recovery is next. Interrupted write/device
+lock, independent B, reset, lifetime/response-loss and final checks remain open.
+
+Native rejected-deletion recovery restart passed (2026-10-13, Asia/Manila +08:00):
+following confirmed cleanup retry, user supplied the relaunched app showing
+Sign in to continue after storage reads. No verified session returned. The
+reported injected delete failure, blocked UI, explicit cleanup and subsequent
+restart denial sequence is verified. Cancelled biometric storage access is next;
+interrupted write/locked storage, independent B, reset, lifetime/response-loss
+and final regressions remain pending. P2-U4C and parent remain incomplete.
+
+Native rejected-deletion cleanup retry passed (2026-10-13, Asia/Manila +08:00):
+after the documented HTTP 201 logout/injected delete rejection, user supplied
+Sign-out confirmed and protected storage cleared following explicit retry.
+Trace shows pending-marker write, token deletion/readback and marker deletion.
+Restart denial after this recovery is next; interruption/locked storage,
+independent B, reset, lifetime/response-loss and final regressions remain pending.
+P2-U4C and parent P2-U4 remain incomplete.
+
+Native rejected-deletion quarantine observed (2026-10-13, Asia/Manila +08:00):
+user screenshot shows Armed: delete, HTTPS logout HTTP 201, completed protected
+pending-marker write and injected token-delete rejection. Verified UI is hidden;
+Retry sign out and storage cleanup is offered. This proves the reported injected
+delete failure stays blocked after confirmed server logout. Cleanup retry and
+subsequent restart denial remain pending; no complete deletion recovery claim.
+
+Native rejected-write recovery passed (2026-10-13, Asia/Manila +08:00): user
+confirmed Armed: write before sign-in; resulting protected UI remained blocked
+with cleanup operations in the trace. Subsequent Retry stored access now shows
+Sign in to continue after marker/token reads, confirming no usable stored token
+remains. This is an injected failure around actual Android protected storage,
+not a spontaneous OS write failure or independently replayed orphan token.
+Rejected deletion/retry is next; interruption/locked storage, independent B,
+reset, lifetime/response-loss and final checks remain pending. c/parent incomplete.
+
+Native fault attempt observation (2026-10-13, Asia/Manila +08:00): following
+fault-selection instructions, user screenshot shows access unavailable/uncertain,
+protected pending-marker write, token deletion/readback and marker deletion.
+Protected UI remains hidden. The rolling trace no longer includes the injection
+event; the user subsequently confirms Armed: write before sign-in. The observed
+rejected-write attempt stayed blocked and cleaned up; explicit retry is next to
+verify cleared state. P2-U4C and parent remain incomplete.
+
+Native post-logout restart denial passed (2026-10-13, Asia/Manila +08:00): after
+confirmed normal logout/cleanup, user supplied the restarted screen showing
+completed storage reads and Sign in to continue, without restored verified
+access. Combined with prior sign-in, retained-session restart and normal logout,
+the reported Android normal path is verified. Rejected token-write recovery is
+next; deletion/interruption/locked-storage, independent B, reset, lifetime/response
+loss and final regressions remain pending. P2-U4C/parent remain incomplete.
+
+Native normal logout passed (2026-10-13, Asia/Manila +08:00): following the
+verified retained-session restart, user tapped Sign out and supplied the screen
+Sign-out confirmed and protected storage cleared. Trace shows protected marker
+write, token deletion/readback and marker deletion. This verifies the reported
+normal revoke-then-clear UI path on Android. Post-logout restart denial is next;
+fault/locked storage, independent B, reset, lifetime/response-loss and final
+regressions remain pending. P2-U4C and parent P2-U4 remain incomplete.
+
+Native retained-session restart passed (2026-10-13, Asia/Manila +08:00): user
+provided verified sign-in immediately before the instructed force-stop/relaunch,
+then a screenshot showing completed pending-marker/token reads, session HTTPS
+HTTP 200 and Staff access verified. Records successful stored-token retrieval and
+canonical revalidation after process restart on the declared Android emulator,
+with explicit retry allowed. Normal logout/deletion and restart denial are next;
+fault/locked storage, independent B, reset, lifetime/response-loss and final
+regressions remain pending. P2-U4C and parent P2-U4 remain incomplete.
+
+Restart test clarification (2026-10-13, Asia/Manila +08:00): after relaunch the
+user supplied Sign in to continue with storage reads completed and no session
+request. User confirms sign-out or a fault control was used between verified
+access and this screenshot. This is not a clean retained-session restart test
+and does not establish either restart failure or complete logout/fault acceptance.
+Repeat from verified access without intervening sign-out/fault/reinstall.
+
+Native device success checkpoint (2026-10-13, Asia/Manila +08:00): user screenshot
+from the Windows Pixel_8_API_36 acceptance app shows token write/readback and
+pending-marker deletion/readback completed, session HTTPS HTTP 200, and Staff
+access verified. This verifies the corrected sign-in/storage/session UI path on
+the declared Android emulator. Process restart, locked/cancelled storage,
+logout/deletion/fault recovery, independent replica B, reset and lifetime/response
+loss acceptance remain pending; P2-U4C and parent P2-U4 remain incomplete.
+
+Native session URL correction (2026-10-13, Asia/Manila +08:00): desktop trace
+shows completed secure-storage writes/verification and HTTP 403 on session GET.
+All three fixture accounts pass server HTTPS checks, including native.admin.
+The installed React Native whatwg-fetch Request appends a cache-busting query
+for cache: no-store GET, while the native ingress intentionally rejects queries.
+Transport now sends Cache-Control: no-store without the rewriting cache option;
+the ingress still sends no-store responses and retains its exact-route boundary.
+Actual installed-polyfill regression, lint and mobile typecheck pass. Desktop
+rebuild/retest subsequently passed as recorded above; remaining native acceptance
+is pending.
+
+Native diagnostic checkpoint (2026-10-13 UTC): the desktop user reports four
+approved fingerprint prompts followed by uncertain access. The adapter protects
+both the token and pending marker per operation; its 15-second total deadline and
+app-state transitions remain possible causes, not confirmed diagnoses. Added a
+test-only bounded operation trace (storage labels, HTTP statuses and app state,
+without values, headers or errors). Focused lint, staged native typecheck and
+mobile port checks pass; the updated desktop trace and native acceptance remain
+pending. No biometric policy or production storage behavior changed.
+
 
 
 ## Current Goal
@@ -19,15 +323,16 @@ role/admission/version contracts and secure initial operator bootstrap.
 P2-U2a/b/c and parent P2-U2 are complete and verified: shared lifecycle/fencing,
 canonical HTTP guards, distributed admission and integrated controlled recovery.
 P2-U3a/b and parent P2-U3 are complete and verified: platform HTTP/browser
-access, logout and canonical-owner isolated reauthentication. Actual staff browser/native
-journeys, evidence authorization and production decisions remain pending.
+access, logout and canonical-owner isolated reauthentication. Staff browser/native journeys are verified through completed P2-U4; later
+operational evidence authorization and production decisions remain pending.
 P4-U1a-1 is complete: the protected atomic draft registry API and durable receipt
 workflow are verified; P4-U1a-2 browser delivery and parent P4-U1a acceptance
 are complete. P2-U4a is complete under the approved delivery order: qualified
 credential setup/reset/recovery and real issuer/recipient handoff are verified.
 P2-U4b is complete: qualified staff HTTP authentication and separate HTTPS browser/mobile
-transport are verified. c is blocked on actual native-device acceptance; parent
-P2-U4 and Phase 2 remain incomplete.
+transport are verified. P2-U4c and parent P2-U4 are complete: reported Android
+acceptance, production browser/recovery and final full Docker regressions pass.
+Phase 2 implementation units are complete; broader operational gates remain.
 Protected traffic/capacity validation remains mandatory before production.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
@@ -181,82 +486,23 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-P2-U4c independent resumption work is verified 2026-10-13 (Asia/Manila, +08:00).
-The unit is blocked on actual Windows Android build/install and device acceptance;
-no implementation unit is active. Configured native ingress readiness, browser
-probe coexistence and isolated native acceptance preparation are complete at their
-stated boundaries. Actual desktop Android OS acceptance remains pending.
-Resumption checkpoint 2026-10-13: browser readiness probe now uses an ephemeral
-tunnel and passes alongside the configured ingress on 3444. Trusted mkcert
-private-interface ingress probes pass sign-in 200, browser CSRF 200, native
-unauthenticated 401 and browser/native confusion 403. The earlier loopback-only
-CSRF 400 was trusted-source-chain rejection, not an ordinary client failure.
-Separate native acceptance staging adds a hostname-scoped public CA, real
-SecureStore adapter with explicit test-only write/delete/pause fault controls,
-and Windows build/tunnel instructions. Typecheck and Expo Android prebuild pass;
-Hermes export and focused harness marker/quarantine checks pass. Generated
-manifest/scoped CA/cleartext and bundle secrecy checks pass. The initial export
-needed explicit Metro dependency/watch paths for the isolated dependency junction;
-the corrected export passes. Focused production HTTPS browser/issuer acceptance
-passes, exit 0 (C-01–04/08 and A-02/07), including races, owner isolation and
-secret diagnostics. Final `./dev check` passes, exit 0, including staff HTTP/browser,
-credential lifecycle, source/identity limits, stale-session restoration, durable
-recovery and all ordinary application builds/client scans. Normal Android/iOS
-bundles exclude acceptance fault controls and the acceptance CA resource name.
-User declared Windows/emulator-5554; private ADB host/port is not configured.
-See [desktop acceptance execution](../docs/runbooks/staff-native-acceptance.md).
-Earlier independent implementation, production HTTPS browser acceptance and the
-prior `./dev check` passed. P2-U4a/b are complete; parent P2-U4 and Phase 2 remain incomplete.
-
-Authorized follow-up (2026-10-12): real local recipient/staff HTTPS composition
-is running while Android preparation continues. Companion supervisor implemented
-for `https://localhost:3444`, existing loopback-only host port 3102, private
-Next/Nest ports 3004/4002 and retained development CA. `./dev staff-https-check`
-passes real trusted TLS/hostname, CSRF, forged/direct channel denial, normal
-artifact secrecy, Chromium recipient form and unchanged canonical snapshots;
-private listeners deny from another container. Existing platform port 3443 and
-canonical records are retained. Desktop tunnel and URL are documented in the
-[recipient runbook](../docs/runbooks/staff-development-https.md). Native trust,
-independent A/B device testing and real OS storage acceptance remain pending.
-
-Recipient troubleshooting follow-up: clean live CSRF returns 200; ordinary
-platform/staff cookies reproduce 401 before exchange. The client now distinguishes
-that blocked browser session and a 403 request boundary from actual service
-unavailability, retaining generic non-disclosing messages and clearing secrets.
-The user confirmed desktop bootstrap HTTP 401. Updated ordinary build and
-deployment, targeted command-center lint and `./dev staff-https-check` pass.
-Actual Chromium reproduces workspace-cookie denial, verifies actionable recovery,
-cleared secrets and zero exchange requests; canonical snapshots remain unchanged.
-Recovery uses a separate unsigned-in browser context without changing the approved
-channel policy or consuming a code. The previous full Docker pass predates this
-message-only follow-up; native acceptance remains blocked.
-
-Recipient hostname isolation follow-up completed: public recipient setup now uses
-`https://127.0.0.1:3444/credentials`; staff remains on `localhost:3444`.
-The old recipient URL redirects without carrying a code/query. Dedicated-host
-routing permits only public exchange/assets and denies staff/native routes.
-A private companion leaf covering localhost and 127.0.0.1 uses the existing CA;
-platform leaf, channel/cookie/CSRF policy and canonical records remain unchanged.
-`./dev staff-https-check` passes actual Chromium cookie isolation (localhost
-workspace cookie plus successful recipient bootstrap), deliberate recipient-host
-workspace-cookie denial with zero exchanges, trusted TLS, private listeners and
-unchanged canonical snapshots. `./dev exec pnpm check:staff-auth --browser` passes
-staff C-01–04/08 and credential A-02/07 regressions. Host-loopback checks prove
-recipient/staff CSRF 200, old URL 307 and platform page 200 with trusted TLS.
-Script lint/format and documentation links/whitespace pass. The earlier full
-Docker pass predates this ingress follow-up; native OS acceptance remains pending.
+None. P2-U4c and parent P2-U4 are complete. See the
+[final acceptance evidence](../docs/status/p2-u4c-evidence.md) for commands,
+reported Android results, cleanup and declared limitations. Phase 3 follows the
+approved delivery order; no Phase 3 unit has been started.
 
 ## Unit Checkpoints
 
 ### P2-U4 — Tenant staff sign-in and credential lifecycle
 
-- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00); children a/b complete, c blocked on native acceptance and parent acceptance incomplete.
+- **Status:** complete; all children and AC-01–12 verified 2026-10-13 17:20 +08:00 (Asia/Manila). G-01–06 remain approved.
 - **Requirement/scope:** [feature spec](feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md); qualified setup/reset/recovery, initial-admin handoff, staff authentication, secure browser/mobile consumers and isolated expiry recovery.
 - **Dependencies:** completed P2-U1/U2, P1-U4/U5 and P4-U1a; reuse verified P2-U3 transport/verifier patterns. Scoped D-05/D-06 setup/reset/recovery policies are now approved through the credential review.
-- **Acceptance/checks:** AC-01–12; proposed focused staff lifecycle/HTTP/browser/mobile checks with real PostgreSQL/Redis, two replicas, production Next HTTPS and declared native secure-storage evidence, plus relevant existing regressions and final `./dev check`. Lifecycle/HTTP/browser/mobile-port selectors are established; native OS evidence remains pending.
-- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); three sequential child specs created below. Adoption initially covered the split only; G-01–06 were subsequently approved through the credential review. a/b are complete; c is blocked on native acceptance.
-- **Remaining:** c protected command-center/native consumers, device secure storage, isolated recovery and integrated parent acceptance under the approved policies. General activation/PBX/staff management remain later units.
+- **Acceptance/checks:** AC-01–12 pass real PostgreSQL/Redis, independent production HTTP replicas, production Next HTTPS and reported Android SecureStore/transport checks. Final `./dev check` and focused browser/recovery regressions pass, exit 0; see [reconciliation](../docs/status/p2-u4c-evidence.md).
+- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); a/b/c are complete under approved G-01–06.
+- **Remaining:** none within P2-U4. General activation/PBX/staff management remain later units; ordinary draft admission stays denied.
 - **Verification:** child a A-01–08 and b B-01–09, focused HTTP/lifecycle and complete relevant foundation/audit/identity/session/platform/draft regressions pass; actual parent command-center/native acceptance and Phase 2 completion are not claimed.
+
 
 ### P2-U4a — Qualified credential lifecycle and administrator handoff
 
@@ -278,16 +524,19 @@ Docker pass predates this ingress follow-up; native OS acceptance remains pendin
 - **Required verification:** Established `./dev exec pnpm check:staff-auth --http`, real independent A/B HTTP and HTTPS Chromium/native probes, a lifecycle and relevant regressions, plus final `./dev check`.
 - **Implementation checkpoint:** strict tenant-qualified sign-in/private verifier integration, separate browser-cookie/mobile-bearer adapters, passive canonical metadata/logout, trusted native ingress classification and shared durable enforcement are implemented. Named routes, CSRF/proxy/source/error/lifecycle and secure-storage outcomes are documented in [transport/c handoff](../docs/architecture/staff-authentication-http.md).
 - **Verification:** B-01–09; focused `check:staff-auth --http` and `--lifecycle`, `check:draft-tenant --browser`, `check:session-foundation --lifecycle` and `--limits`, and final `./dev check` passed, exit 0. Real qualified a credentials, shared budgets, proof/authority races, reset/stale restoration, dependency/write/response loss, web/mobile expiry/renewal/rotation, production A/B HTTPS Chromium cookies and native bearer transport pass. Full foundation/audit/worker/storage/identity/bootstrap/session/platform/draft/credential regressions, six configuration tests and all five client scans pass. Existing browser probes now settle navigation before fault injection; Redis startup/restart fixtures wait for command readiness. [Evidence](../docs/status/p2-u4b-evidence.md) records results, browser prerequisites and limits.
-- **Remaining:** none within b. c owns actual command-center/issuer integration, native secure storage, owner-isolated recovery and full parent acceptance. Parent P2-U4 and Phase 2 remain incomplete.
+- **Remaining:** none within b. completed c provides actual command-center/issuer integration, reported native secure storage, owner-isolated recovery and full parent acceptance. Parent P2-U4 is complete.
 
 ### P2-U4c — Command-center and mobile access with isolated recovery
 
-- **Status:** blocked on actual native-device acceptance after verified resumption 2026-10-13 (Asia/Manila, +08:00). Ingress/browser readiness and separate native acceptance preparation pass; actual OS evidence remains pending.
+- **Status:** complete; C-01–09 and parent AC-01–12 verified 2026-10-13 17:20 +08:00 (Asia/Manila).
 - **Requirement/scope:** [child spec](feature-specs/p2-u4c-command-center-and-mobile-access-with-isolated-recovery.md); Actual protected command center, real staff issuer integration, minimal native secure-storage consumer, owner-isolated expiry recovery and full parent matrix; C-01–09.
 - **Dependencies:** Verified P2-U4a/b; declared HTTPS/native storage configuration and device access.
-- **Required verification:** Established browser/mobile-port/combined `check:staff-auth` selectors, actual native evidence, a/b and parent AC-01–12 regressions and `./dev check`. Native port checks, Android/iOS bundle export, all 11 shared UI tests, production HTTPS staff/issuer browser acceptance and final full Docker graph pass, exit 0. Native OS evidence remains pending. See the [evidence checkpoint and parent reconciliation](../docs/status/p2-u4c-evidence.md).
-- **Implementation checkpoint:** three-field staff sign-in, named bounded forwarding, canonical protected shell/admin issuer and qualified mounted owner/epoch recovery implemented and focused browser acceptance passes; native HTTPS consumer and Expo protected-storage adapter with pending-operation quarantine and explicit revocation/cleanup implemented. Guides, contracts, runbook and Android preparation document delivered. Native OS acceptance remains pending.
-- **Remaining/resume:** User declared Windows, `Pixel_8_API_36`, serial `emulator-5554`, Android API 36 / 36-ext17; private ADB forwarding is not configured. Follow the [Windows desktop execution](../docs/runbooks/staff-native-acceptance.md) and [full native matrix](../docs/planning/p2-u4c-android-emulator-preparation.md). Server mkcert ingress readiness passes; native APK installation/trust, screen lock/biometrics and actual storage/restart/locked/write/delete/revoke/reset/expiry/UI evidence remain. Declare isolated active fixtures, independent backend B and clock/response-loss controls for integrated native acceptance. Reconcile C-05–09 and parent AC-08–12 and rerun affected checks after any resulting code changes. No native acceptance or parent completion is claimed.
+- **Required verification:** focused browser/mobile-port/limits and final full Docker graph pass, exit 0. All 11 shared UI checks and reported Android release-app acceptance pass within the declared boundaries; see [final evidence and parent reconciliation](../docs/status/p2-u4c-evidence.md).
+- **Implementation checkpoint:** production browser/native consumers, owner/epoch recovery, bounded HTTPS transport and authenticated SecureStore marker quarantine/revocation/cleanup delivered. Native compatibility fixes, finite secret-free acceptance traces, private A/B/response-loss/clock controls and issuer/recipient fixture reset tooling verified. Guides/runbooks/index synchronized; exact fixture retired and t001 unchanged.
+- **Active fixture checkpoint:** `scripts/prepare-staff-native-fixture.mjs` prepares only the known Docker development database/ingress, audited fixture creation/status, real responder credential-action issue/exchange, owner-only handoff, HTTPS sign-in/session/logout and canonical retirement. Prepare/check pass; duplicate preparation safely denies; secret file Git exclusion and 0700/0600 permissions pass. Existing t001 and staff authority versions remain unchanged. The control administrator is seeded test data; the fixture utility alone does not establish general P4-U3 activation or native evidence. Reported native acceptance is separately verified above.
+- **Remaining/resume:** none within c. Reported device acceptance is complete on Windows/Android 16/API 36; fixture is retired. The runbook retains reproducible checks and the evidence records unsupported desktop Node 24, injected-fault, clock, interruption-timing and physically-locked-read limits. Later activation, persistent incident drafts, responder operations and production verification remain.
+
+
 
 ### P4-U1a — Draft tenant creation and initial administrator
 
@@ -882,28 +1131,19 @@ top-level plan IDs and Phase 2 order; each child includes its own checks/docs.
 
 ## Next Up
 
-[P2-U4c — Command-center and mobile access with isolated recovery](feature-specs/p2-u4c-command-center-and-mobile-access-with-isolated-recovery.md),
-then Phase 3 and P4-U1b/remaining Phase 4. The early P4-U1a draft exception is complete.
-The user approved this delivery-order change on 2026-10-07 (Asia/Manila, +08:00).
-P4-U1a and both children are complete. P2-U4a/b are complete; c is next, then Phase 3 and P4-U1b/remaining Phase 4. P4-U1 remains incomplete; P4-U1b remains planned and P2-U4 remains in progress.
+Phase 3, beginning with [P3-U1 — Register PBX nodes and observe health](implementation-plan.md#p3-u1--register-pbx-nodes-and-observe-health),
+then P4-U1b/remaining Phase 4 under the approved 2026-10-07 delivery order.
+P2-U4 and a/b/c are complete; early P4-U1a and its two children are complete.
+P4-U1b and general tenant activation remain planned. Draft credential setup
+continues to preserve draft status and deny ordinary staff access.
 
-P4-U1a delivers protected platform list/create/detail with an atomic draft tenant
-and first `tenant_admin` identity, unset credentials, and operator-attributed audit.
-It depends on completed identity/session/platform/UI/audit foundations, not P2-U4
-or PBX readiness. Required acceptance and verification are defined in the
-[feature spec](feature-specs/p4-u1a-draft-tenant-creation-and-initial-administrator.md).
-Its checkpoint records the adopted two-step split; child 1 provides the verified API/DTO/retry contract and child 2 completes the operator browser journey.
-
-P1-U1 remains deferred outside approved scoped handoffs. P2-U4a/b verify
-credential delivery, backend expiry/recovery and the draft administrator setup contract;
-c must deliver actual browser/native consumers and isolated recovery.
-Draft tenants remain denied ordinary staff sign-in; credential setup does not
-activate them. Activation and voice readiness remain P4-U3/later onboarding work.
-The remaining Phase 2 staff gate stays incomplete.
+P1-U1 remains deferred outside approved scoped handoffs. Phase 2 units are complete;
+this checkpoint does not claim telephony, onboarding completion, operational
+response journeys or production rollout.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); P2-U3 is `complete` (a/b complete); P4-U1a and both children are `complete`; P2-U4 is `in progress` (a/b complete, c blocked on native acceptance); other units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); P2-U3 is `complete` (a/b complete); P4-U1a and both children are `complete`; P2-U4 is `complete` (a/b/c complete); other units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
@@ -911,7 +1151,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
 | 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
-| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/P2-U3 complete; U4 in progress (a/b complete, c blocked on native acceptance) | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
+| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/P2-U3/P2-U4 complete | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1 (a/b), P4-U2, P4-U3, P4-U4, P4-U5 | U1a complete; U1b and remaining units planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1, P5-U2, P5-U3, P5-U4, P5-U5, P5-U6, P5-U7 | planned | [Staff intake and dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
@@ -1020,6 +1260,66 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 
 
 ## Session Notes
+
+- Completed P2-U4c and parent P2-U4 (2026-10-13 17:20 +08:00 (Asia/Manila)): C-01–09 and parent
+  AC-01–12 are reconciled. Final full `./dev check` exited 0 after the corrected
+  bounded primary-recovery read check; production browser/credential/HTTP, shared
+  limits/recovery, all application builds, foundation/storage/identity and client
+  scans passed. Focused browser and limits checks also exited 0. Reported Android
+  release acceptance passes protected sign-in/restart, canonical B ownership,
+  injected write/delete/interruption quarantine and recovery, fingerprint cancellation,
+  authenticated lock/unlock resume, reset/fresh replacement, normal/lost-response
+  logout and approved idle/original absolute expiry. Runtime/fixture retired, control
+  socket removed and existing t001 unchanged; backend live/ready HTTP 200.
+
+    Declared evidence limits remain: Android 16/API 36 with 2025-04-05 patch; desktop
+  Node 24.13.1 is outside the supported engine, while Docker uses Node 22.23.3.
+  Storage faults are injected around real OS calls; physically locked reads and
+  exact interruption timing are not claimed. Trusted fixture clock renewals are
+  not shipping responder operations. General activation, persistent incident drafts,
+  full responder operations and production readiness remain later units.
+
+
+- 2026-10-13 (Asia/Manila, +08:00) — Prepared the user-authorized isolated active
+  native fixture with an owner-only handoff. Audited draft creation, fixture-only
+  active transition and staff creation use existing repositories; two responders
+  receive real single-use service-issued/exchanged credentials. A seeded control
+  admin is explicitly test-only. Actual verified HTTPS sign-in/session/logout and
+  revoked-token denial pass for all three accounts; t001/staff statuses and
+  authority versions remain unchanged. Initial preparer checks incorrectly expected
+  POST 200 and read TLS socket state after release; incomplete fixtures were safely
+  retired and the corrected fresh fixture passes. Product draft-to-active delivery
+  remains P4-U3 before ordinary login. Native storage/matrix and c/parent closure
+  remain pending; handoff contains no completion claim. Independent --check passes,
+  duplicate preparation refuses overwrites, owner-only Git-ignored files are verified,
+  and focused lint/mobile typecheck/port regressions pass. Final full graph and
+  native matrix remain closure gates after device evidence.
+
+- 2026-10-13 (Asia/Manila, +08:00) — User authorized preparing an isolated active
+  tenant/account to continue P2-U4c. Development-only fixture utility is being
+  prepared with audited creation/status changes, a fixture control administrator,
+  responder credentials through the real action service, private handoff and
+  canonical retirement. This does not implement general activation or change
+  t001. Actual OS checks must pass before closing c/parent. Production activation
+  remains P4-U3 and must precede ordinary tenant login.
+
+- 2026-10-13 (Asia/Manila, +08:00) — After copying the native timeout fix,
+  user reports an explicit Invalid credentials or session ended response.
+  Status-only read-only inspection of t001/tenant001 confirms tenant draft,
+  staff active and credential ready. Draft tenant admission correctly denies
+  ordinary sign-in; credential setup does not activate the tenant. No lifecycle
+  or credential mutations were performed. An isolated active acceptance fixture
+  is still needed for successful native sign-in/storage evidence.
+
+- 2026-10-13 (Asia/Manila, +08:00) — User reported successful Windows release
+  APK build/install/launch on Pixel_8_API_36 after resolving stale pnpm junctions.
+  Desktop CA-verified HTTPS returned the expected anonymous 401; native stored
+  access retry reports absent storage. Sign-in still failed. Inspection of the
+  installed React Native 0.83.10 abort polyfill confirmed no AbortSignal.timeout;
+  mobile transport called it before fetch. Replaced it with AbortController and
+  a cleared seven-second timer. Focused mobile port checks using the actual native
+  abort polyfill, lint, typecheck and formatting pass. Patched desktop APK and real
+  sign-in/storage acceptance remain pending; P2-U4c and parent remain incomplete.
 
 - 2026-10-12 12:42 +08:00 (Asia/Manila) — Completed requested P2-U4b and cleared its in-progress entry. Implemented strict qualified staff sign-in, separate cookie/CSRF and attested mobile-bearer boundaries, canonical current-session/logout and c storage/topology handoff. B-01–09 and focused HTTP/lifecycle/browser/recovery checks passed. Corrected existing browser fixture synchronization and Redis startup/restart readiness; final complete `./dev check` passed, exit 0. Evidence, contract, runbook, index and tracker updated. c, parent P2-U4 and Phase 2 remain incomplete.
 

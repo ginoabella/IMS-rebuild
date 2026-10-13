@@ -408,6 +408,27 @@ defines the private mkcert ingress tunnel, embedded-JavaScript native build,
 real-storage and precisely simulated fault boundaries. Device evidence remains
 required; prebuild/typecheck/export do not establish OS behavior.
 
+The user-authorized development-only native fixture preparer uses existing audited
+tenant/staff repositories and an explicitly test-only draft-to-active transition
+for a separately named acceptance tenant. A seeded control admin issues responder
+credentials through the existing single-use credential-action service. Private
+owner-only fixture manifests/handoffs are not app assets. The utility verifies real
+HTTPS session/logout and supports audited retirement; it cannot target arbitrary
+tenant IDs. It neither activates t001 nor implements the P4-U3 operator workflow.
+Ordinary tenant access still requires completed activation before login.
+
+Remaining native acceptance uses a separate private TLS listener on container
+port 3445 while retaining public origin https://localhost:3444 and the declared
+mkcert trust. `scripts/staff-native-runtime.mjs` owns two independent production
+Nest HTTP graphs using existing PostgreSQL/Redis and loopback-only upstreams.
+Owner-only Unix socket controls select A/B, suppress a completed logout response
+and advance time only for tracked fixed-fixture sessions through test-worker IPC.
+No HTTP control routes or production clock changes exist. Default mobile 24-hour
+idle/7-day absolute policy is preserved; synthetic successful activity for the
+absolute check is trusted test IPC, not a shipped responder operation. Runtime
+shutdown explicitly revokes its tracked sessions before releasing the clock
+override. Finite outcome/owner-match evidence contains no tokens or credentials.
+
 The user-authorized [local staff/recipient companion](../docs/runbooks/staff-development-https.md)
 serves staff at `https://localhost:3444` and public recipients at
 `https://127.0.0.1:3444` using existing workspace port 3002/host-loopback
