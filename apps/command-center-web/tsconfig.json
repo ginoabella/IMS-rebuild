@@ -12,7 +12,11 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@staff/work-fixture": ["./app/auth/work-fixture-disabled.tsx"],
+      "@staff/work-submit": ["./app/auth/work-submit-disabled.ts"]
+    }
   },
   "include": [
     "**/*.ts",

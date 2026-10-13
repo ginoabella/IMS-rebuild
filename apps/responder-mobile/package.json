@@ -5,15 +5,16 @@
   "main": "index.ts",
   "scripts": {
     "dev": "expo start",
-    "lint": "eslint App.tsx index.ts",
+    "lint": "eslint App.tsx index.ts theme.ts auth",
     "typecheck": "tsc --noEmit",
     "build": "expo export --platform android --platform ios --max-workers 2 --output-dir dist"
   },
   "dependencies": {
+    "@myims/contracts": "workspace:*",
     "expo": "55.0.31",
+    "expo-secure-store": "~55.0.18",
     "react": "19.2.0",
-    "react-native": "0.83.10",
-    "@myims/contracts": "workspace:*"
+    "react-native": "0.83.10"
   },
   "devDependencies": {
     "@types/react": "19.2.18",

@@ -393,6 +393,33 @@ durable enforcement. Actual command-center/native protected storage remains c;
 B-01–09 and final Docker verification passed; [evidence](../docs/status/p2-u4b-evidence.md)
 records the actual HTTPS and device-storage limits.
 
+P2-U4c now implements canonical staff browser composition and minimal Expo native
+protected-storage consumers; independent browser acceptance and full Docker checks
+pass, and native OS evidence is pending. The [consumer contract](../docs/architecture/staff-access-consumers.md)
+defines owner/epoch mounted recovery, protected-storage quarantine and named HTTPS
+ingress. This adds no identity/session store, activation or incident persistence.
+
+P2-U4c native acceptance preparation stages a separate ignored application from
+the current responder source using `scripts/prepare-staff-native-acceptance.mjs`.
+Only that app imports test storage-failure controls and a hostname-scoped public
+CA plugin; normal responder builds contain neither. Expo owns native generation.
+The [Windows acceptance runbook](../docs/runbooks/staff-native-acceptance.md)
+defines the private mkcert ingress tunnel, embedded-JavaScript native build,
+real-storage and precisely simulated fault boundaries. Device evidence remains
+required; prebuild/typecheck/export do not establish OS behavior.
+
+The user-authorized [local staff/recipient companion](../docs/runbooks/staff-development-https.md)
+serves staff at `https://localhost:3444` and public recipients at
+`https://127.0.0.1:3444` using existing workspace port 3002/host-loopback
+3102, private ordinary Next/Nest listeners 3004/4002, existing canonical stores
+and the retained platform development CA. Separate staff/exchange transport
+secrets remain private. It runs alongside the platform console and does not
+establish Android native trust or device acceptance. The dedicated recipient
+host serves only public exchange routes/assets; the old recipient URL redirects
+to it. A private companion leaf covering localhost and 127.0.0.1 is signed by
+the retained development CA, isolating recipient cookies without weakening
+workspace-cookie, channel, CSRF or hostname checks.
+
 ### Shared Session Management
 
 The identity module creates, validates, renews, and revokes sessions through a

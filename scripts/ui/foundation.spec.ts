@@ -6,11 +6,11 @@ for (const [app, port] of [
 ] as const) {
   test(`${app}: shared theme and local typography`, async ({ page }) => {
     await page.goto(
-      `http://localhost:${port}${port === 3201 ? '/sign-in' : ''}`,
+      `http://localhost:${port}${port === 3201 ? '/sign-in' : '/ui-preview'}`,
     );
     await expect(
       page.getByRole('heading', {
-        name: port === 3201 ? 'Platform console sign-in' : app,
+        name: port === 3201 ? 'Platform console sign-in' : 'UI preview',
         exact: true,
       }),
     ).toBeVisible();

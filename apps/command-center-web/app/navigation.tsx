@@ -3,13 +3,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-export function AppNavigation() {
+export function AppNavigation({ roles = [] }: { roles?: readonly string[] }) {
   const pathname = usePathname();
   return (
     <nav aria-label="Command center navigation" className="space-y-1">
       {[
         { href: '/', label: 'Home' },
         { href: '/ui-preview', label: 'UI preview' },
+        ...(roles.includes('tenant_admin')
+          ? [
+              {
+                href: '/credential-issuer',
+                label: 'Credential setup and reset',
+              },
+            ]
+          : []),
       ].map((item) => (
         <Link
           key={item.href}

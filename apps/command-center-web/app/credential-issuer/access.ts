@@ -153,6 +153,8 @@ export function useIssuerAccess(
     window.addEventListener('pageshow', restore);
     document.addEventListener('visibilitychange', visibility);
     window.addEventListener('myims-staff-logout', logout);
+    window.addEventListener('myims-staff-hidden', hide);
+    window.addEventListener('myims-staff-restored', restore);
     return () => {
       mounted.current = false;
       epoch.current++;
@@ -162,6 +164,8 @@ export function useIssuerAccess(
       window.removeEventListener('pageshow', restore);
       document.removeEventListener('visibilitychange', visibility);
       window.removeEventListener('myims-staff-logout', logout);
+      window.removeEventListener('myims-staff-hidden', hide);
+      window.removeEventListener('myims-staff-restored', restore);
     };
   }, []);
   return {

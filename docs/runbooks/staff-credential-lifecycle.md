@@ -33,15 +33,17 @@ Recipient and issuer cookies should use separate browser contexts when sharing a
 host. An ordinary staff/platform cookie is deliberately rejected by capability
 exchange; the recipient context contains only the signed exchange forgery cookie.
 Staff issuer session metadata is passive and carries a proof, never the opaque
-session token. This unit supplies an existing-session issuer consumer, not staff
-sign-in or a production native storage implementation.
+session token. P2-U4c supplies real staff sign-in and the protected issuer consumer;
+native OS acceptance remains pending.
 
 The focused checks below supply actual separate temporary HTTPS operator/recipient
 origins, isolated production Next outputs, exact proxy/ingress configuration,
 independent production Nest replicas, PostgreSQL runtime grants and authenticated
 Redis. They remove owned temporary processes/certificates/database/Redis fixtures.
-They do not change the user's existing private platform HTTPS supervisor or imply
-that a persistent recipient ingress has been configured on this installation.
+They do not change the user's existing private platform HTTPS supervisor.
+The separately authorized [local recipient companion](staff-development-https.md)
+now serves `https://127.0.0.1:3444/credentials` through private desktop SSH
+forwarding; its real-stack checks consume no setup code.
 Use approved deployment configuration when hosting that recipient app; no public
 plaintext secret-submission endpoint is provided as a fallback.
 

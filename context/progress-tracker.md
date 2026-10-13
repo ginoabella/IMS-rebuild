@@ -26,7 +26,8 @@ workflow are verified; P4-U1a-2 browser delivery and parent P4-U1a acceptance
 are complete. P2-U4a is complete under the approved delivery order: qualified
 credential setup/reset/recovery and real issuer/recipient handoff are verified.
 P2-U4b is complete: qualified staff HTTP authentication and separate HTTPS browser/mobile
-transport are verified. c remains planned; parent P2-U4 and Phase 2 remain incomplete.
+transport are verified. c is blocked on actual native-device acceptance; parent
+P2-U4 and Phase 2 remain incomplete.
 Protected traffic/capacity validation remains mandatory before production.
 Follow the agreed [build, review, improve process](ai-workflow-rules.md#build-review-improve):
 small working steps, routine choices handled by the agent, user feedback on results,
@@ -180,18 +181,80 @@ authorizes routine foundation choices, not approval of proposed product rules.
 
 ## In Progress
 
-No implementation unit is active. P2-U4a/b are complete; c is planned.
-Parent P2-U4 and Phase 2 remain incomplete pending c and integrated acceptance.
+P2-U4c independent resumption work is verified 2026-10-13 (Asia/Manila, +08:00).
+The unit is blocked on actual Windows Android build/install and device acceptance;
+no implementation unit is active. Configured native ingress readiness, browser
+probe coexistence and isolated native acceptance preparation are complete at their
+stated boundaries. Actual desktop Android OS acceptance remains pending.
+Resumption checkpoint 2026-10-13: browser readiness probe now uses an ephemeral
+tunnel and passes alongside the configured ingress on 3444. Trusted mkcert
+private-interface ingress probes pass sign-in 200, browser CSRF 200, native
+unauthenticated 401 and browser/native confusion 403. The earlier loopback-only
+CSRF 400 was trusted-source-chain rejection, not an ordinary client failure.
+Separate native acceptance staging adds a hostname-scoped public CA, real
+SecureStore adapter with explicit test-only write/delete/pause fault controls,
+and Windows build/tunnel instructions. Typecheck and Expo Android prebuild pass;
+Hermes export and focused harness marker/quarantine checks pass. Generated
+manifest/scoped CA/cleartext and bundle secrecy checks pass. The initial export
+needed explicit Metro dependency/watch paths for the isolated dependency junction;
+the corrected export passes. Focused production HTTPS browser/issuer acceptance
+passes, exit 0 (C-01–04/08 and A-02/07), including races, owner isolation and
+secret diagnostics. Final `./dev check` passes, exit 0, including staff HTTP/browser,
+credential lifecycle, source/identity limits, stale-session restoration, durable
+recovery and all ordinary application builds/client scans. Normal Android/iOS
+bundles exclude acceptance fault controls and the acceptance CA resource name.
+User declared Windows/emulator-5554; private ADB host/port is not configured.
+See [desktop acceptance execution](../docs/runbooks/staff-native-acceptance.md).
+Earlier independent implementation, production HTTPS browser acceptance and the
+prior `./dev check` passed. P2-U4a/b are complete; parent P2-U4 and Phase 2 remain incomplete.
+
+Authorized follow-up (2026-10-12): real local recipient/staff HTTPS composition
+is running while Android preparation continues. Companion supervisor implemented
+for `https://localhost:3444`, existing loopback-only host port 3102, private
+Next/Nest ports 3004/4002 and retained development CA. `./dev staff-https-check`
+passes real trusted TLS/hostname, CSRF, forged/direct channel denial, normal
+artifact secrecy, Chromium recipient form and unchanged canonical snapshots;
+private listeners deny from another container. Existing platform port 3443 and
+canonical records are retained. Desktop tunnel and URL are documented in the
+[recipient runbook](../docs/runbooks/staff-development-https.md). Native trust,
+independent A/B device testing and real OS storage acceptance remain pending.
+
+Recipient troubleshooting follow-up: clean live CSRF returns 200; ordinary
+platform/staff cookies reproduce 401 before exchange. The client now distinguishes
+that blocked browser session and a 403 request boundary from actual service
+unavailability, retaining generic non-disclosing messages and clearing secrets.
+The user confirmed desktop bootstrap HTTP 401. Updated ordinary build and
+deployment, targeted command-center lint and `./dev staff-https-check` pass.
+Actual Chromium reproduces workspace-cookie denial, verifies actionable recovery,
+cleared secrets and zero exchange requests; canonical snapshots remain unchanged.
+Recovery uses a separate unsigned-in browser context without changing the approved
+channel policy or consuming a code. The previous full Docker pass predates this
+message-only follow-up; native acceptance remains blocked.
+
+Recipient hostname isolation follow-up completed: public recipient setup now uses
+`https://127.0.0.1:3444/credentials`; staff remains on `localhost:3444`.
+The old recipient URL redirects without carrying a code/query. Dedicated-host
+routing permits only public exchange/assets and denies staff/native routes.
+A private companion leaf covering localhost and 127.0.0.1 uses the existing CA;
+platform leaf, channel/cookie/CSRF policy and canonical records remain unchanged.
+`./dev staff-https-check` passes actual Chromium cookie isolation (localhost
+workspace cookie plus successful recipient bootstrap), deliberate recipient-host
+workspace-cookie denial with zero exchanges, trusted TLS, private listeners and
+unchanged canonical snapshots. `./dev exec pnpm check:staff-auth --browser` passes
+staff C-01–04/08 and credential A-02/07 regressions. Host-loopback checks prove
+recipient/staff CSRF 200, old URL 307 and platform page 200 with trusted TLS.
+Script lint/format and documentation links/whitespace pass. The earlier full
+Docker pass predates this ingress follow-up; native OS acceptance remains pending.
 
 ## Unit Checkpoints
 
 ### P2-U4 — Tenant staff sign-in and credential lifecycle
 
-- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00); children a/b complete, c planned and parent acceptance incomplete.
+- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00); children a/b complete, c blocked on native acceptance and parent acceptance incomplete.
 - **Requirement/scope:** [feature spec](feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md); qualified setup/reset/recovery, initial-admin handoff, staff authentication, secure browser/mobile consumers and isolated expiry recovery.
 - **Dependencies:** completed P2-U1/U2, P1-U4/U5 and P4-U1a; reuse verified P2-U3 transport/verifier patterns. Scoped D-05/D-06 setup/reset/recovery policies are now approved through the credential review.
-- **Acceptance/checks:** AC-01–12; proposed focused staff lifecycle/HTTP/browser/mobile checks with real PostgreSQL/Redis, two replicas, production Next HTTPS and declared native secure-storage evidence, plus relevant existing regressions and final `./dev check`. Lifecycle and HTTP selectors are established; c browser/device selectors remain planned.
-- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); three sequential child specs created below. Adoption initially covered the split only; G-01–06 were subsequently approved through the credential review. a/b are complete; c remains planned.
+- **Acceptance/checks:** AC-01–12; proposed focused staff lifecycle/HTTP/browser/mobile checks with real PostgreSQL/Redis, two replicas, production Next HTTPS and declared native secure-storage evidence, plus relevant existing regressions and final `./dev check`. Lifecycle/HTTP/browser/mobile-port selectors are established; native OS evidence remains pending.
+- **Review/split:** adopted 2026-10-07 (Asia/Manila, +08:00); three sequential child specs created below. Adoption initially covered the split only; G-01–06 were subsequently approved through the credential review. a/b are complete; c is blocked on native acceptance.
 - **Remaining:** c protected command-center/native consumers, device secure storage, isolated recovery and integrated parent acceptance under the approved policies. General activation/PBX/staff management remain later units.
 - **Verification:** child a A-01–08 and b B-01–09, focused HTTP/lifecycle and complete relevant foundation/audit/identity/session/platform/draft regressions pass; actual parent command-center/native acceptance and Phase 2 completion are not claimed.
 
@@ -219,11 +282,12 @@ Parent P2-U4 and Phase 2 remain incomplete pending c and integrated acceptance.
 
 ### P2-U4c — Command-center and mobile access with isolated recovery
 
-- **Status:** planned; child specification created 2026-10-07 (Asia/Manila, +08:00).
+- **Status:** blocked on actual native-device acceptance after verified resumption 2026-10-13 (Asia/Manila, +08:00). Ingress/browser readiness and separate native acceptance preparation pass; actual OS evidence remains pending.
 - **Requirement/scope:** [child spec](feature-specs/p2-u4c-command-center-and-mobile-access-with-isolated-recovery.md); Actual protected command center, real staff issuer integration, minimal native secure-storage consumer, owner-isolated expiry recovery and full parent matrix; C-01–09.
 - **Dependencies:** Verified P2-U4a/b; declared HTTPS/native storage configuration and device access.
-- **Required verification:** Proposed browser/mobile/combined `check:staff-auth` selectors, actual native evidence, a/b and parent AC-01–12 regressions and `./dev check`. New commands are provisional; documentation checks only at spec creation.
-- **Remaining:** all implementation and runtime acceptance; scoped completion does not complete parent P2-U4.
+- **Required verification:** Established browser/mobile-port/combined `check:staff-auth` selectors, actual native evidence, a/b and parent AC-01–12 regressions and `./dev check`. Native port checks, Android/iOS bundle export, all 11 shared UI tests, production HTTPS staff/issuer browser acceptance and final full Docker graph pass, exit 0. Native OS evidence remains pending. See the [evidence checkpoint and parent reconciliation](../docs/status/p2-u4c-evidence.md).
+- **Implementation checkpoint:** three-field staff sign-in, named bounded forwarding, canonical protected shell/admin issuer and qualified mounted owner/epoch recovery implemented and focused browser acceptance passes; native HTTPS consumer and Expo protected-storage adapter with pending-operation quarantine and explicit revocation/cleanup implemented. Guides, contracts, runbook and Android preparation document delivered. Native OS acceptance remains pending.
+- **Remaining/resume:** User declared Windows, `Pixel_8_API_36`, serial `emulator-5554`, Android API 36 / 36-ext17; private ADB forwarding is not configured. Follow the [Windows desktop execution](../docs/runbooks/staff-native-acceptance.md) and [full native matrix](../docs/planning/p2-u4c-android-emulator-preparation.md). Server mkcert ingress readiness passes; native APK installation/trust, screen lock/biometrics and actual storage/restart/locked/write/delete/revoke/reset/expiry/UI evidence remain. Declare isolated active fixtures, independent backend B and clock/response-loss controls for integrated native acceptance. Reconcile C-05–09 and parent AC-08–12 and rerun affected checks after any resulting code changes. No native acceptance or parent completion is claimed.
 
 ### P4-U1a — Draft tenant creation and initial administrator
 
@@ -839,7 +903,7 @@ The remaining Phase 2 staff gate stays incomplete.
 
 ### Planned units
 
-P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); P2-U3 is `complete` (a/b complete); P4-U1a and both children are `complete`; P2-U4 is `in progress` (a/b complete, c planned); other units remain `planned`. Their requirement references,
+P1-U1 is `deferred`; P1-U2, P1-U3 and P1-U4 are `complete`; P1-U5 and P1-U6 are `complete` (including P1-U6a/b); P2-U1 and P2-U2 are `complete` (all children complete); P2-U3 is `complete` (a/b complete); P4-U1a and both children are `complete`; P2-U4 is `in progress` (a/b complete, c blocked on native acceptance); other units remain `planned`. Their requirement references,
 scope, acceptance criteria, dependencies, and verification are defined in the
 linked plan. P1-U2 scaffolding, full P1-U3 foundation and P1-U4 web foundation have been verified.
 Create a detailed per-unit checkpoint when that unit starts.
@@ -847,7 +911,7 @@ Create a detailed per-unit checkpoint when that unit starts.
 | Phase | Unit IDs | Status | Scope and acceptance reference |
 | --- | --- | --- | --- |
 | 1 | P1-U1, P1-U2, P1-U3, P1-U4, P1-U5, P1-U6 | P1-U1 deferred; P1-U2/P1-U3/P1-U4 complete; P1-U5/P1-U6 complete | [Runnable foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
-| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/P2-U3 complete; U4 in progress (a/b complete, c planned) | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
+| 2 | P2-U1, P2-U2, P2-U3, P2-U4 | P2-U1/P2-U2/P2-U3 complete; U4 in progress (a/b complete, c blocked on native acceptance) | [Identities and sessions](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1, P3-U2, P3-U3, P3-U4, P3-U5 | planned | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1 (a/b), P4-U2, P4-U3, P4-U4, P4-U5 | U1a complete; U1b and remaining units planned | [Tenant onboarding and administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1, P5-U2, P5-U3, P5-U4, P5-U5, P5-U6, P5-U7 | planned | [Staff intake and dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |

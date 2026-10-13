@@ -1,9 +1,11 @@
+import { WorkFixture } from '@staff/work-fixture';
 import Link from 'next/link';
 import { Badge, ContentState, Panel, PanelHeading } from '@myims/ui-web';
 
 export default function HomePage() {
   return (
     <div className="space-y-6">
+      <WorkFixture />
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-widest text-subtle">

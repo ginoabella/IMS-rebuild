@@ -34,6 +34,7 @@ export async function checkCredentialActions({
   commitProxy,
   proxy,
   browserChecks = true,
+  browserOnly = false,
 }) {
   const cfg = () => ({
     origin: 'https://localhost:9443',
@@ -231,6 +232,20 @@ export async function checkCredentialActions({
   const password = ' Exact staff password Åe\u0301 2026 ';
   secrets.push(password);
   try {
+    if (browserOnly) {
+      await checkCredentialBrowser({
+        owner,
+        worker,
+        redis,
+        key,
+        secrets,
+        settings,
+        limiter,
+        password,
+        hashPassword,
+      });
+      return;
+    }
     a = await replica();
     b = await replica();
     const operatorId = randomUUID();

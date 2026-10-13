@@ -4,12 +4,12 @@ import AxeBuilder from '@axe-core/playwright';
 for (const [app, port, pending] of [
   ['Command center', 3200, ['Incidents', 'Dispatch', 'Tenant administration']],
 ] as const) {
-  test(`${app}: home, skip link, navigation and direct refresh`, async ({
+  test(`${app}: preview, skip link, navigation and direct refresh`, async ({
     page,
   }) => {
     const errors: string[] = [];
     page.on('pageerror', (error) => errors.push(error.message));
-    await page.goto(`http://localhost:${port}`);
+    await page.goto(`http://localhost:${port}/ui-preview`);
     await page.keyboard.press('Tab');
     await expect(
       page.getByRole('link', { name: 'Skip to content' }),
@@ -22,7 +22,7 @@ for (const [app, port, pending] of [
     await expect(page.getByRole('main')).toBeFocused();
     const nav = page.getByRole('navigation', { name: `${app} navigation` });
     await expect(
-      nav.getByRole('link', { name: 'Home', exact: true }),
+      nav.getByRole('link', { name: 'UI preview', exact: true }),
     ).toHaveAttribute('aria-current', 'page');
     for (const label of pending) {
       await expect(nav.getByText(label, { exact: true })).toBeVisible();
@@ -41,14 +41,6 @@ for (const [app, port, pending] of [
     await expect(
       page.getByRole('heading', { name: 'UI preview', exact: true }),
     ).toBeVisible();
-    await nav.getByRole('link', { name: 'Home', exact: true }).click();
-    await expect(
-      page.getByRole('heading', { name: app, exact: true }),
-    ).toBeVisible();
-    await page.reload();
-    await expect(
-      page.getByRole('heading', { name: app, exact: true }),
-    ).toBeVisible();
     expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
     expect(errors).toEqual([]);
   });
@@ -56,7 +48,7 @@ for (const [app, port, pending] of [
   test(`${app}: compact navigation, viewport review and zoom`, async ({
     page,
   }) => {
-    await page.goto(`http://localhost:${port}`);
+    await page.goto(`http://localhost:${port}/ui-preview`);
     for (const [width, height, label] of [
       [1440, 900, 'desktop'],
       [768, 1024, 'tablet'],
@@ -70,7 +62,7 @@ for (const [app, port, pending] of [
         ),
       ).toBe(true);
       await expect(
-        page.getByRole('heading', { name: app, exact: true }),
+        page.getByRole('heading', { name: 'UI preview', exact: true }),
       ).toBeVisible();
       await page.screenshot({
         path: `.local/ui-review/${port}-home-${label}.png`,
@@ -150,5 +142,36 @@ test('Platform console: unconfigured transport fails closed', async ({
     'autocomplete',
     'current-password',
   );
+  expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
+});
+
+test('Command center: unconfigured staff transport fails closed', async ({
+  page,
+}) => {
+  for (const path of ['/', '/credential-issuer']) {
+    await page.goto(`http://localhost:3200${path}`);
+    await expect(page.locator('main[role="alert"]')).toContainText(
+      'Service unavailable',
+    );
+    await expect(page.getByLabel('Unfinished notes')).toHaveCount(0);
+    await expect(
+      page.getByLabel('Target staff ID', { exact: true }),
+    ).toHaveCount(0);
+  }
+  const fixture = await page.request.post(
+    'http://localhost:3200/staff/auth/work-fixture',
+  );
+  expect(fixture.status()).toBe(403);
+  await page.goto('http://localhost:3200/sign-in');
+  await expect(page.getByLabel(/^Tenant code/)).toBeVisible();
+  await expect(page.getByLabel(/^Username/)).toHaveAttribute(
+    'autocomplete',
+    'username',
+  );
+  await expect(page.getByLabel(/^Password/)).toHaveAttribute(
+    'autocomplete',
+    'current-password',
+  );
+  expect(await page.locator('input').count()).toBe(3);
   expect((await new AxeBuilder({ page }).analyze()).violations).toEqual([]);
 });

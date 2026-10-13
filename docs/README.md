@@ -174,7 +174,8 @@ activation and PBX readiness remain with their owning units.
 
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 P2-U4 remains incomplete; a/b are verified complete under approved policy and
-c remains planned. The three-child split is adopted.
+c is blocked on actual native-device acceptance with preparation documented.
+Independent browser acceptance and full Docker checks pass. The three-child split is adopted.
 [Credential lifecycle contract — review for approval](planning/p2-u4a-credential-contract-review.md)
 records the approved G-01–06 decisions.
 [Qualified credential lifecycle](architecture/qualified-credential-lifecycle.md)
@@ -193,3 +194,14 @@ Staff authentication HTTP: [named transport and c handoff](architecture/staff-au
 and [operations/verification](runbooks/staff-authentication.md). P2-U4b acceptance
 is complete; [B-01–09 evidence](status/p2-u4b-evidence.md) records passing focused/full
 checks and transport limits. Parent and c remain incomplete.
+
+P2-U4c native preparation: [Pixel_8_API_36 setup and evidence checklist](planning/p2-u4c-android-emulator-preparation.md). Desktop emulator API 36 / 36-ext17 is declared; HTTPS trust, native build, connection and OS storage evidence remain pending.
+
+[Windows native acceptance execution](runbooks/staff-native-acceptance.md) supplies
+the declared mkcert ingress tunnel, separate CA/fault test build and device checks.
+
+Local browser recipient setup: [staff/recipient development HTTPS and desktop tunnel](runbooks/staff-development-https.md) — `https://127.0.0.1:3444/credentials` through private SSH port forwarding, alongside the existing platform console.
+
+Staff consumers: [browser/mobile access guide](guides/staff-access.md), [consumer/storage contract](architecture/staff-access-consumers.md) and [recovery runbook](runbooks/staff-access-recovery.md).
+
+P2-U4c [implementation/evidence checkpoint](status/p2-u4c-evidence.md) records verified boundaries and pending native acceptance; c/parent completion is not claimed.

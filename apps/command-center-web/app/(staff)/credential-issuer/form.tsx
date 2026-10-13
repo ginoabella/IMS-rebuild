@@ -1,6 +1,6 @@
 'use client';
 import { useRef, useState } from 'react';
-import { useIssuerAccess } from './access';
+import { useIssuerAccess } from '../../credential-issuer/access';
 import { Button, Panel } from '@myims/ui-web';
 import {
   credentialActionDto,

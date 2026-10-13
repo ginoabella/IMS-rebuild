@@ -18,6 +18,7 @@ assert.ok(
     (selection.length === 1 &&
       [
         '--staff-http',
+        '--credential-browser',
         '--credential-lifecycle',
         '--credential-api',
         '--draft-tenant',
@@ -32,6 +33,7 @@ assert.ok(
       ].includes(selection[0])),
   'Supported selections: --lifecycle, --authority, --limits (default: all)',
 );
+if (selection.length === 0) await import('./check-staff-mobile.mjs');
 const backend = createRequire(
   new URL('../services/backend/package.json', import.meta.url),
 );
@@ -370,6 +372,7 @@ try {
     ![
       '--lifecycle',
       '--staff-http',
+      '--credential-browser',
       '--credential-lifecycle',
       '--credential-api',
       '--platform-browser',
@@ -462,7 +465,11 @@ try {
     });
   if (
     selection.length === 0 ||
-    ['--credential-lifecycle', '--credential-api'].includes(selection[0])
+    [
+      '--credential-lifecycle',
+      '--credential-api',
+      '--credential-browser',
+    ].includes(selection[0])
   )
     await checkCredentialActions({
       owner,
@@ -476,10 +483,12 @@ try {
       commitProxy,
       proxy,
       browserChecks: selection[0] !== '--credential-api',
+      browserOnly: selection[0] === '--credential-browser',
     });
   if (
     ![
       '--staff-http',
+      '--credential-browser',
       '--credential-lifecycle',
       '--credential-api',
       '--draft-tenant',
@@ -1148,6 +1157,7 @@ try {
   if (
     [
       '--staff-http',
+      '--credential-browser',
       '--credential-lifecycle',
       '--credential-api',
       '--draft-tenant',

@@ -40,10 +40,10 @@ fallback access. No recovery action activates a tenant.
 
 The tenant-admin surface is `/credential-issuer` in the command-center app. It
 requires an existing active tenant-admin staff session and a same-tenant qualified
-staff ID from its owning record, with no self-reset. P2-U4a verifies this UI using
-controlled existing sessions. Ordinary staff sign-in/logout and integrated
-command-center access belong to b/c; this surface does not mint fixture sessions
-or provide a staff directory. Staff status controls apply to a known action ID.
+staff ID from its owning record, with no self-reset. Sign in with Tenant code,
+Username and Password; the protected command-center navigation exposes this
+surface to tenant administrators. It does not provide a staff directory.
+Staff status controls apply to a known action ID.
 If a lost issuance response supplies no action ID, restore administrator access
 and explicitly reissue for the verified qualified target; the old code cannot be
 redisclosed.
@@ -56,6 +56,10 @@ a private browser window if already signed into a MyIMS workspace. Enter
 credentials**. Use 15–128 Unicode characters and at most 512 UTF-8 bytes. Spaces
 and Unicode are allowed; case, spaces and Unicode form are preserved exactly.
 NUL and line breaks are invalid. Both password fields must match exactly.
+
+On the current local installation, use **https://127.0.0.1:3444/credentials** after
+starting the [desktop SSH tunnel](../runbooks/staff-development-https.md). Port
+3443 remains the platform console; it does not host the recipient page.
 
 Only a confirmed response says credentials were set. Success clears the inputs
 and issues no session. Earlier sessions are invalid; fresh sign-in with the new

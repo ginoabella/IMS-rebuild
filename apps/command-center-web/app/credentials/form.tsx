@@ -76,7 +76,11 @@ export function CredentialForm() {
       });
       if (!bootstrap.ok)
         throw new Error(
-          'Credential service unavailable. Retry when it is available.',
+          bootstrap.status === 401
+            ? 'This browser session cannot exchange a code. Open the recipient page in a separate browser or a fresh private window where you have not signed into a MyIMS workspace. Your code has not been submitted.'
+            : bootstrap.status === 403
+              ? 'Credential request blocked. Open the exact recipient HTTPS address supplied by the issuer. Your code has not been submitted.'
+              : 'Credential service unavailable. Retry when it is available.',
         );
       const context: unknown = await bootstrap.json();
       if (!current()) return;

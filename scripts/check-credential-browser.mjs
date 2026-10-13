@@ -1,7 +1,12 @@
+import { createStaffIngress } from './staff-access-ingress.mjs';
+import { checkStaffBrowser } from './check-staff-browser.mjs';
 import assert from 'node:assert/strict';
 import { spawn, spawnSync } from 'node:child_process';
 import { createServer as httpServer, request } from 'node:http';
-import { createServer as httpsServer } from 'node:https';
+import {
+  createServer as httpsServer,
+  request as httpsRequest,
+} from 'node:https';
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { once } from 'node:events';
 import {
@@ -24,7 +29,6 @@ export async function checkCredentialBrowser({
   owner,
   worker,
   redis,
-  issue,
   key,
   secrets,
   settings,
@@ -40,6 +44,7 @@ export async function checkCredentialBrowser({
     sessions = [],
     urls = [],
     output = [];
+  let fixtureBackend;
   let browser,
     selected,
     dropPath = null,
@@ -59,6 +64,13 @@ export async function checkCredentialBrowser({
     staff = cfg();
   for (const c of [platform, exchange, staff])
     secrets.push(c.proxySecret, c.csrfSecret);
+  const staffIngressConfig = {
+    origin: '',
+    nextUrl: '',
+    backendUrl: '',
+    proxySecret: staff.proxySecret,
+    ingressSecret,
+  };
   function track(server) {
     servers.push(server);
     server.on('connection', (socket) => {
@@ -68,8 +80,8 @@ export async function checkCredentialBrowser({
     });
     return server;
   }
-  async function listen(server) {
-    server.listen(0, '127.0.0.1');
+  async function listen(server, host = '127.0.0.1') {
+    server.listen(0, host);
     await once(server, 'listening');
     return server.address().port;
   }
@@ -103,6 +115,28 @@ export async function checkCredentialBrowser({
     )
       return;
     mkdirSync(`apps/${app}/.local`, { recursive: true });
+    if (app === 'command-center-web')
+      writeFileSync(
+        `apps/${app}/.local/staff-access-tsconfig.json`,
+        JSON.stringify({
+          extends: '../tsconfig.json',
+          compilerOptions: {
+            incremental: false,
+            paths: {
+              '@staff/work-fixture': ['../app/auth/work-fixture.tsx'],
+              '@staff/work-submit': ['../app/auth/work-submit.ts'],
+            },
+          },
+          include: [
+            '../app/**/*.ts',
+            '../app/**/*.tsx',
+            '../next-env.d.ts',
+            '../next.config.ts',
+            './credential-next/types/**/*.ts',
+          ],
+          exclude: ['../node_modules'],
+        }),
+      );
     if (app === 'platform-console-web')
       writeFileSync(
         `apps/${app}/.local/platform-auth-tsconfig.json`,
@@ -232,6 +266,7 @@ export async function checkCredentialBrowser({
         httpsServer(tls, (req, res) => {
           if (
             req.headers.host !== new URL(config.origin).host ||
+            req.headers.authorization !== undefined ||
             (req.method === 'POST' && req.headers.origin !== config.origin) ||
             (req.method === 'GET' &&
               !['same-origin', 'none'].includes(req.headers['sec-fetch-site']))
@@ -250,7 +285,7 @@ export async function checkCredentialBrowser({
             )
               delete headers[name];
           headers['x-myims-ingress'] = ingressSecret;
-          headers['x-myims-client-ip'] = '192.0.2.180';
+          headers['x-myims-client-ip'] = req.socket.remoteAddress;
           headers['x-myims-path'] = req.url.split('?')[0];
           const upstream = request(
             `${target()}${req.url}`,
@@ -269,10 +304,13 @@ export async function checkCredentialBrowser({
       );
     }
     const operatorIngress = ingress(() => nextOperator, platform),
-      recipientIngress = ingress(() => nextRecipient, exchange);
-    platform.origin = `https://localhost:${await listen(operatorIngress)}`;
-    exchange.origin = `https://localhost:${await listen(recipientIngress)}`;
+      recipientIngress = track(
+        createStaffIngress({ tls, config: staffIngressConfig }),
+      );
+    platform.origin = `https://localhost:${await listen(operatorIngress, '::1')}`;
+    exchange.origin = `https://localhost:${await listen(recipientIngress, '::1')}`;
     staff.origin = exchange.origin;
+    staffIngressConfig.origin = staff.origin;
     const balancer = track(
       httpServer((req, res) => {
         const delayed =
@@ -289,12 +327,14 @@ export async function checkCredentialBrowser({
           'x-credential-csrf',
           'x-staff-proxy',
           'x-staff-csrf',
+          'x-staff-mobile-proxy',
+          'authorization',
           'x-forwarded-for',
         ])
           if (typeof req.headers[name] === 'string')
             headers[name] = req.headers[name];
         const upstream = request(
-          `${selected.url}${req.url}`,
+          `${req.url === '/fixture/staff-write' ? fixtureBackend.url : selected.url}${req.url}`,
           { method: req.method, headers },
           (incoming) => {
             if (dropPath === req.url && req.method === 'POST') {
@@ -324,6 +364,7 @@ export async function checkCredentialBrowser({
       }),
     );
     const backendUrl = `http://127.0.0.1:${await listen(balancer)}`;
+    staffIngressConfig.backendUrl = backendUrl;
     for (let i = 0; i < 2; i++)
       calls.push(
         await worker({
@@ -336,6 +377,13 @@ export async function checkCredentialBrowser({
           config: settings,
         }),
       );
+    fixtureBackend = await worker({
+      http: true,
+      staffIssuerConfig: staff,
+      limiterConfig: limiter,
+      config: settings,
+    });
+    calls.push(fixtureBackend);
     selected = calls[0];
     await ensureBuild('platform-console-web', 'PLATFORM_AUTH_BROWSER_BUILD');
     await ensureBuild('command-center-web', 'CREDENTIAL_BROWSER_BUILD');
@@ -363,6 +411,7 @@ export async function checkCredentialBrowser({
         STAFF_ISSUER_INGRESS_SECRET: ingressSecret,
       },
     );
+    staffIngressConfig.nextUrl = nextRecipient;
     const operatorId = randomUUID(),
       username = `credential.browser.${operatorId.slice(0, 8)}`,
       hash = await hashPassword(Buffer.from(password));
@@ -480,11 +529,15 @@ export async function checkCredentialBrowser({
     await expect(
       page.getByRole('button', { name: 'Issue recovery code', exact: true }),
     ).toBeVisible();
-    assert.deepEqual(
-      (await new AxeBuilder({ page: form }).analyze()).violations,
-      [],
-    );
+    phase = 'recipient accessibility';
+    const recipientViolations = (await new AxeBuilder({ page: form }).analyze())
+      .violations;
+    if (recipientViolations.length)
+      throw new Error(
+        `Safe accessibility: ${recipientViolations.map((v) => v.id.replace(/[^a-z-]/g, '')).join(',')}`,
+      );
     assert.deepEqual((await new AxeBuilder({ page }).analyze()).violations, []);
+    phase = 'recipient/operator reflow';
     for (const p of [page, form])
       for (const width of [1440, 768, 390, 320]) {
         await p.setViewportSize({ width, height: 900 });
@@ -497,6 +550,7 @@ export async function checkCredentialBrowser({
           true,
         );
       }
+    phase = 'recipient secret clearing';
     await form.reload();
     await expect(form.getByLabel('Handoff code', { exact: true })).toHaveValue(
       '',
@@ -609,130 +663,92 @@ export async function checkCredentialBrowser({
     await expect(
       page.getByLabel('Verification method', { exact: true }),
     ).toHaveValue('known_contact_call');
-    phase = 'staff issuer browser';
-    const activeId = randomUUID(),
-      adminId = randomUUID(),
-      targetId = randomUUID();
-    await owner.query(
-      "INSERT INTO public.tenants(id,normalized_code,display_name,status) VALUES($1,$2,'Issuer browser fixture','active')",
-      [activeId, `issuer-browser-${randomUUID().slice(0, 8)}`],
-    );
-    await owner.query(
-      "INSERT INTO public.staff_users(id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES($1,$3,'issuer','active','ready',$4,clock_timestamp(),ARRAY['tenant_admin']),($2,$3,'recipient','active','unset',NULL,NULL,ARRAY['call_taker'])",
-      [adminId, targetId, activeId, hash],
-    );
-    const controlled = await issue(calls[0], {
-      plane: 'tenant',
-      tenantId: activeId,
-      identityId: adminId,
-      authenticationVersion: 1,
-      tenantAuthorityVersion: 1,
-    });
-    sessions.push(controlled);
-    await recipient.addCookies([
-      {
-        name: '__Host-myims-staff',
-        value: controlled.token,
-        url: staff.origin,
-        secure: true,
-        httpOnly: true,
-        sameSite: 'Lax',
-      },
-    ]);
-    await form.goto(`${staff.origin}/credential-issuer`);
+    phase = 'actual draft sign-in denial';
+    const draftCode = (
+      await owner.query(
+        'SELECT normalized_code FROM public.tenants WHERE id=$1',
+        [tenantId],
+      )
+    ).rows[0].normalized_code;
+    await form.goto(`${staff.origin}/sign-in`);
+    await form.getByLabel(/^Tenant code/).fill(draftCode);
+    await form.getByLabel(/^Username/).fill('browser.admin');
+    await form.getByLabel(/^Password/).fill(password);
+    await form.getByRole('button', { name: 'Sign in', exact: true }).click();
     await expect(
-      form.getByLabel('Target staff ID', { exact: true }),
+      form.getByRole('alert').filter({ hasText: 'Invalid credentials' }),
     ).toBeVisible();
-    await form.getByLabel('Target staff ID', { exact: true }).fill(targetId);
-    await form.getByRole('checkbox').check();
-    await form
-      .getByRole('button', { name: 'Issue staff code', exact: true })
-      .click();
-    await expect(form.getByLabel('One-time handoff code')).toBeVisible();
-    const staffCode = await form
-      .getByLabel('One-time handoff code')
-      .textContent();
-    secrets.push(staffCode);
-    await form.getByRole('button', { name: 'Hide code', exact: true }).click();
-    const staffViolations = (await new AxeBuilder({ page: form }).analyze())
-      .violations;
-    if (staffViolations.length)
-      throw new Error(
-        `Credential browser accessibility failed: ${staffViolations.map((v) => (/^[a-z-]+$/.test(v.id) ? v.id : 'unknown')).join(',')}`,
-      );
-    await redis.del(key(controlled.token));
-    await form
-      .getByRole('button', { name: 'Check administrator access', exact: true })
-      .click();
-    await expect(
-      form.getByLabel('Target staff ID', { exact: true }),
-    ).toBeHidden();
-    const renewed = await issue(calls[1], {
-      plane: 'tenant',
-      tenantId: activeId,
-      identityId: adminId,
-      authenticationVersion: 1,
-      tenantAuthorityVersion: 1,
-    });
-    sessions.push(renewed);
-    await recipient.addCookies([
-      {
-        name: '__Host-myims-staff',
-        value: renewed.token,
-        url: staff.origin,
-        secure: true,
-        httpOnly: true,
-        sameSite: 'Lax',
-      },
-    ]);
-    await form
-      .getByRole('button', { name: 'Check administrator access', exact: true })
-      .click();
-    await expect(
-      form.getByLabel('Target staff ID', { exact: true }),
-    ).toHaveValue(targetId);
-    const foreignId = randomUUID();
-    await owner.query(
-      "INSERT INTO public.staff_users(id,tenant_id,normalized_username,status,credential_state,password_hash,credential_changed_at,roles) VALUES($1,$2,'foreign.issuer','active','ready',$3,clock_timestamp(),ARRAY['tenant_admin'])",
-      [foreignId, activeId, hash],
+    assert.ok(
+      !(await recipient.cookies()).some((c) => c.name === '__Host-myims-staff'),
     );
-    const foreign = await issue(calls[0], {
-      plane: 'tenant',
-      tenantId: activeId,
-      identityId: foreignId,
-      authenticationVersion: 1,
-      tenantAuthorityVersion: 1,
-    });
-    sessions.push(foreign);
-    await recipient.addCookies([
-      {
-        name: '__Host-myims-staff',
-        value: foreign.token,
-        url: staff.origin,
-        secure: true,
-        httpOnly: true,
-        sameSite: 'Lax',
+    phase = 'staff browser integrated acceptance';
+    const nativeRequest = (path, body, token, extra = {}) =>
+      new Promise((resolve, reject) => {
+        const payload = body === undefined ? undefined : JSON.stringify(body);
+        const r = httpsRequest(
+          `${staff.origin}/staff/auth/mobile/${path}`,
+          {
+            ca: tls.cert,
+            family: 6,
+            method: path === 'session' ? 'GET' : 'POST',
+            headers: {
+              ...(payload ? { 'Content-Type': 'application/json' } : {}),
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+              ...extra,
+            },
+          },
+          (response) => {
+            let text = '';
+            response.on('data', (chunk) => {
+              text += chunk;
+            });
+            response.on('end', () => {
+              let data;
+              try {
+                data = JSON.parse(text);
+              } catch {
+                data = null;
+              }
+              resolve({
+                status: response.statusCode,
+                headers: response.headers,
+                data,
+              });
+            });
+          },
+        );
+        r.on('error', reject);
+        r.setTimeout(10000, () =>
+          r.destroy(new Error('Native TLS probe unavailable')),
+        );
+        r.end(payload);
+      });
+    await checkStaffBrowser({
+      exchange,
+      nativeRequest,
+      progress: (stage) => {
+        phase = `staff browser ${stage}`;
       },
-    ]);
-    await form
-      .getByRole('button', { name: 'Check administrator access', exact: true })
-      .click();
-    await expect(
-      form.getByLabel('Target staff ID', { exact: true }),
-    ).toHaveValue('');
-    await form.getByLabel('Target staff ID', { exact: true }).fill(targetId);
-    await form.evaluate(() =>
-      globalThis.dispatchEvent(new globalThis.Event('myims-staff-logout')),
-    );
-    await expect(
-      form.getByLabel('Target staff ID', { exact: true }),
-    ).toBeHidden();
-    await form
-      .getByRole('button', { name: 'Check administrator access', exact: true })
-      .click();
-    await expect(
-      form.getByLabel('Target staff ID', { exact: true }),
-    ).toHaveValue('');
+      owner,
+      redis,
+      key,
+      secrets,
+      password,
+      hash,
+      form,
+      recipient,
+      staff,
+      calls,
+      select: (call) => {
+        selected = call;
+      },
+      drop: (path) => {
+        dropPath = path;
+      },
+      gate: (value) => {
+        gate = value;
+      },
+    });
     const forged = await form.evaluate(async () => {
       const r = await fetch('/credential-actions/exchange', {
         method: 'POST',
@@ -771,19 +787,19 @@ export async function checkCredentialBrowser({
       'PASS credential A-02/07: actual HTTPS operator create/detail/issue and recipient keyboard exchange; no session/activation, uncertainty without replay, labels/axe/narrow reflow and secret exclusion',
     );
     console.log(
-      'PASS credential A-07: late disclosure fencing and same/foreign-owner staff issuer isolation; staff session is a controlled fixture pending b/c sign-in',
+      'PASS credential A-07: late disclosure fencing and same/foreign-owner staff issuer isolation; real qualified staff login and protected command-center recovery',
     );
   } catch (error) {
     const location =
       error instanceof Error
         ? error.stack
             ?.split('\n')
-            .find((l) => /check-credential-browser\.mjs:\d+/.test(l))
+            .find((l) => /check-(?:credential|staff)-browser\.mjs:\d+/.test(l))
             ?.trim()
         : '';
     // eslint-disable-next-line preserve-caught-error -- Browser errors may contain passwords or one-time capabilities.
     throw new Error(
-      `Credential HTTPS browser acceptance failed during ${phase}${location ? ` (${location})` : ''}${error?.message?.startsWith('Credential browser') ? `: ${error.message}` : ''}`,
+      `Credential HTTPS browser acceptance failed during ${phase}${location ? ` (${location})` : ''}${error && typeof error.code === 'string' && /^[A-Z0-9_]+$/.test(error.code) ? ` [${error.code}]` : ''}${error?.message?.startsWith('Credential browser') ? `: ${error.message}` : ''}`,
     );
   } finally {
     gate?.release?.();

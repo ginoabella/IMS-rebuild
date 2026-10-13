@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; split adopted 2026-10-07 (Asia/Manila, +08:00).
+- **Status:** blocked on actual native-device acceptance after verified resumption 2026-10-13 (Asia/Manila, +08:00). Started 2026-10-12; split adopted 2026-10-07. Configured ingress readiness, separate native acceptance typecheck/prebuild/export, independent browser acceptance and final full Docker checks pass. OS/device evidence is pending.
 - **Requirement:** [P2-U4 parent and AC-01–12](p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 - **Goal:** deliver actual tenant-staff browser/native access and preserve unfinished command-center work safely through expiry and same-owner reauthentication.
 - **Completion boundary:** issuer/recipient setup/reset, browser staff sign-in/protected shell/logout, native protected token use/storage and isolated expiry recovery work through the real a/b adapters; all parent acceptance passes.
@@ -146,8 +146,9 @@ issuer workflows; a fixture issuer cannot substitute for completed browser acces
 Isolated active fixtures do not establish activation. Use deterministic barriers/
 clock controls for races/deadlines and safe controlled outages/response loss.
 
-Provisionally use `./dev exec pnpm check:staff-auth --browser`, `--mobile`, and
-combined `./dev exec pnpm check:staff-auth`; commands/selectors are not yet established.
+Use `./dev exec pnpm check:staff-auth --browser`, `--mobile`, and
+combined `./dev exec pnpm check:staff-auth`; these selectors are established.
+The mobile selector verifies the JavaScript port, not actual OS protected storage.
 Native device procedures may be separate required evidence rather than a Docker
 command. Record actual procedures/results, rerun a/b and relevant identity/session/
 platform/draft checks, and final `./dev check`. Link/consistency/coverage/whitespace

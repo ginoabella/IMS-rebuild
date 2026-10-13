@@ -12,3 +12,6 @@ next-env.d.ts
 .pnpm-store/
 playwright-report/
 test-results/
+
+# Local MyIMS secrets
+/private/

@@ -3,6 +3,15 @@
     "name": "MyIMS Responder",
     "slug": "myims-responder-mobile",
     "version": "0.0.0",
-    "platforms": ["android", "ios"]
+    "platforms": ["android", "ios"],
+    "plugins": [
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": "Allow MyIMS to unlock your protected staff session."
+        }
+      ]
+    ]
   }
 }

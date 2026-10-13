@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00), a/b complete, c planned. Parent acceptance remains incomplete.
+- **Status:** in progress; G-01–06 approved 2026-10-07 (Asia/Manila, +08:00), a/b complete, c blocked on actual native-device acceptance. Parent acceptance remains incomplete.
 - **Requirement:** [Phase 2, P2-U4](../implementation-plan.md#p2-u4--deliver-tenant-staff-sign-in-and-credential-lifecycle); tenant-qualified access and credential recovery from the project overview.
 - **Goal:** let the intended staff member set credentials, sign in through the command center or protected mobile boundary, and sign out; make credential replacement invalidate previous authority across replicas.
 - **Completion boundary:** approved initial-administrator setup from a real P4-U1a draft, setup/reset/recovery journeys, active-tenant authentication, protected browser/mobile transport, and isolated expiry recovery pass the acceptance matrix. Setting credentials never activates a tenant.
@@ -242,7 +242,10 @@ CSRF, or UI delivery from its integrated acceptance.
 
 The user adopted the split and requested child specs on 2026-10-07 (Asia/Manila,
 +08:00). The split originally approved delivery structure only. The user subsequently
-approved G-01–06 through the credential review; a/b are complete and c remains planned. Parent completion requires every criterion.
+approved G-01–06 through the credential review; a/b are complete and c is blocked
+on actual native-device acceptance. Independent browser acceptance and full Docker
+checks pass. Native preparation and OS evidence remain pending; parent completion
+requires every criterion.
 
 | Unit | Scope and starting state | Result, verification and parent ownership |
 | --- | --- | --- |
