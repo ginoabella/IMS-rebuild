@@ -1887,3 +1887,48 @@ approved; c's scoped bootstrap handoff is approved as well. Other P1-U1 product 
 - 2026-10-04 11:19 +08:00 — Completed documentation cleanup: removed the obsolete delivery-plan dependency from `AGENT.md` and the unused phase heading from this tracker. Reviewed all repository documents; the delivery-plan file is absent and no numbered delivery stages remain. Documentation consistency checks passed; runtime tests are not applicable.
 
 <!-- END ORIGINAL TRACKER SNAPSHOT 2026-10-14 -->
+
+
+## 2026-10-14 — P3-U1a pre-completion checkpoint (Asia/Manila, +08:00)
+
+## Current Unit Checkpoint — P3-U1
+
+- **Status:** P3-U1a in progress under approved scoped connectivity contract; b/c planned and parent incomplete. Updated 2026-10-14 (Asia/Manila, +08:00).
+- **Requirement:** [P3-U1 feature spec](feature-specs/p3-u1-register-pbx-nodes-and-observe-health.md), parent AC-01–11.
+- **Scope:** protected PBX registry, safe secret references, independent database-fenced observation, health/registration freshness and platform browser inspection.
+- **Dependencies:** verified P2-U3/P1-U5, existing foundation/guards/UI, and scoped D-09 environment/secret access. Recheck owner interfaces and evidence before coding.
+- **Adopted sequence:** a → b → c, requested by the user on 2026-10-14. P3-U1a resumed under scoped G-01/G-02 approval; b/c and parent completion remain pending. Spec creation does not approve pending policy.
+- **Prepared:** [connectivity review](../docs/planning/p3-u1a-connectivity-contract-review.md) covers the proposed local target, canonical identity, TLS destination boundary, opaque aliases/process access, named API/DTO/error contracts, retry receipts and b's atomic invalidation handoff. Preparation does not satisfy A-01–07.
+- **Approval/resume:** user approved review section 1 for the existing local Compose target, with multiple-installation, shared-tenant, credential-rotation and future-profile clarifications. Approved non-secret local catalog is provisioned; isolated resolver fixtures exercise protected local files; actual live authentication/G-03 remain with b. Tracked AMI and HTTP/ARI are disabled; no credentials were read or management access changed.
+- **Implementation checkpoint:** telephony-owned desired registry/receipt migration and runtime grants, protected create/list/detail/versioned-edit API, canonical catalog, server-only resolver/destination ports and atomic b handoff are implemented. Local non-secret catalog provisioned with persistent installation identity. Focused A-01–07 acceptance passed, exit 0; the actual controlled DNS/address probe passed without connection/authentication. The full Docker graph and final regression confirmation are still running.
+- **Remaining:** finish focused A-01–07 acceptance, affected regressions, full Docker checks and evidence/runbook handoff. Saving desired settings must remain distinct from observed health, live apply and tenant voice readiness.
+- **Required verification:** focused registry, controlled observation/ownership and actual secure-browser matrix, affected regressions and full Docker checks. Proposed `check:pbx-nodes` selections do not exist yet; establish actual commands during implementation.
+- **Documentation verification:** acceptance coverage, local links, consistency and whitespace checked. No runtime completion inferred.
+
+| Unit | Status | Boundary and acceptance |
+| --- | --- | --- |
+| [P3-U1a — Protected PBX registry and connectivity contracts](feature-specs/p3-u1a-protected-pbx-registry-and-connectivity-contracts.md) | in progress | Scoped G-01/G-02 approved; desired registry/API, target/alias validation, transactional audit/idempotency and atomic edit handoff; A-01–07. |
+| [P3-U1b — Fenced Asterisk observation and recovery](feature-specs/p3-u1b-fenced-asterisk-observation-and-recovery.md) | planned | Verified a and resolved observation gates; real read-only adapter, database epochs/leases, freshness/reconciliation and stale-owner rejection; B-01–09. |
+| [P3-U1c — Operator PBX browser journey and integrated handoff](feature-specs/p3-u1c-operator-pbx-browser-journey-and-integrated-handoff.md) | planned | Verified a/b; real register/inspect/edit UI, isolated recovery and combined AC-01–11 evidence; C-01–07. |
+
+### Prerequisites for dependent P3-U1 work
+
+| Gate | Required condition and resume evidence |
+| --- | --- |
+| G-01 — Controlled observation environment | Establish canonical controlled target, authorized interface/transport/network, read-only permissions and supported registration fixtures; document real authenticated access before live acceptance. |
+| G-02 — Secret resolution | Establish approved provider/protected runtime configuration, opaque aliases, least-privilege process access and rotation/reconnect behavior; provision access without exposing material. |
+| G-03 — Observation policy | Establish freshness, bounded I/O/concurrency/reconciliation/retry and lease settings with coverage/stale semantics; validate settings before dependent implementation. |
+
+Resolve only the gate portions needed by the current child. Routine SQL/routes/
+adapter choices follow existing conventions. Routing/reload/active-call policy
+remains with later units; P3-U5 must prove external stale-owner fencing before
+live apply is enabled. Missing live access cannot be replaced by simulator evidence.
+
+
+## 2026-10-14 — Session notes archived at P3-U1a completion
+
+- 2026-10-14 (Asia/Manila, +08:00) — Started P3-U1a, read required context and delivered owner contracts/evidence, and verified disabled management bootstrap plus absent PBX resolver/registry/check command in tracked source. Prepared the scoped connectivity decision review and independent API/transaction/invalidation contracts; then marked a blocked pending user approval. Documentation links/coverage/whitespace checked; no runtime changes, provisioning, credentials read or acceptance checks run.
+
+- 2026-10-14 (Asia/Manila, +08:00) — Archived the full pre-compaction tracker verbatim with a checksum, condensed current state and reconciled superseded pending entries against final results/approved policies. Preserved completed evidence, open gates, deferred resume conditions and limitations. Archive preservation, current links/anchors, status consistency and whitespace checked; no runtime changes/checks.
+- 2026-10-14 (Asia/Manila, +08:00) — Prepared/reviewed P3-U1 and adopted the user-requested a/b/c specs with sequential dependencies and full AC-01–11 coverage. Documentation checks passed; parent/children remain planned and PBX gates unresolved.
+- 2026-10-13 17:20 +08:00 (Asia/Manila) — Completed P2-U4c/parent after final full Docker exit 0 and focused passes. Reported native evidence reconciled; isolated fixture/runtime retired and limits retained in the linked evidence.

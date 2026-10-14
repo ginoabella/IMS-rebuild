@@ -214,7 +214,7 @@ actual issuer/recipient reset and exact desktop tunnel switch. Preparatory backe
 and browser checks do not replace the remaining Android results.
 
 PBX node administration: [P3-U1 feature spec and split review](../context/feature-specs/p3-u1-register-pbx-nodes-and-observe-health.md).
-P3-U1 and its children remain planned. The user adopted the three-unit split on
+P3-U1a is complete within A-01–07 under [approved scoped connectivity policy](planning/p3-u1a-connectivity-contract-review.md); b/c remain planned and the parent is incomplete. The user adopted the three-unit split on
 2026-10-14 (Asia/Manila, +08:00). Controlled observation access, secret resolution
 and settings remain scoped prerequisites; no live PBX acceptance is claimed.
 
@@ -223,3 +223,7 @@ Separate P3-U1 implementation specs, in sequence:
 - [P3-U1a — Protected PBX registry and connectivity contracts](../context/feature-specs/p3-u1a-protected-pbx-registry-and-connectivity-contracts.md)
 - [P3-U1b — Fenced Asterisk observation and recovery](../context/feature-specs/p3-u1b-fenced-asterisk-observation-and-recovery.md)
 - [P3-U1c — Operator PBX browser journey and integrated handoff](../context/feature-specs/p3-u1c-operator-pbx-browser-journey-and-integrated-handoff.md)
+
+- [Protected PBX registry contract](architecture/pbx-registry.md)
+- [PBX registry operations and checks](runbooks/pbx-registry.md)
+- [P3-U1a acceptance evidence](status/p3-u1a-evidence.md)

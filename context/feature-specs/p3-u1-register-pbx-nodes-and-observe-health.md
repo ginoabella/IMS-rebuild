@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; specification prepared and three-child split adopted 2026-10-14 (Asia/Manila, +08:00). No implementation or live PBX verification is claimed.
+- **Status:** in progress; registry a is complete within A-01–07, verified 2026-10-14 11:22 +08:00 (Asia/Manila). b/c and live PBX verification remain pending.
 - **Requirement:** [Phase 3, P3-U1](../implementation-plan.md#p3-u1--register-pbx-nodes-and-observe-health), platform Asterisk administration in the [overview](../project-overview.md), and [telephony architecture](../architecture.md#telephony-architecture).
 - **Goal:** let a platform operator register and inspect PBX connectivity while exactly one current database-fenced process owns observation and configuration publication for each node.
 - **Completion boundary:** the real platform browser registers a controlled node and displays trustworthy, freshness-qualified health/registration observations; duplicate observers, ownership loss, restart and failover satisfy the matrix below. Saving a node never applies Asterisk configuration or establishes tenant voice readiness.
@@ -222,7 +222,7 @@ transaction/security contract can be verified independently; observer ownership
 and recovery form a second cohesive runtime outcome; the browser is the final
 operator journey. Keep race/failure checks with their owning implementation,
 rather than deferring them to a testing-only unit. The user adopted this split on 2026-10-14 (Asia/Manila, +08:00).
-The linked child specs define sequential delivery; all children remain planned.
+The linked child specs define sequential delivery; a is complete within its registry boundary, and b/c remain planned.
 
 | Unit | Starting state and scope | Expected result and parent coverage |
 | --- | --- | --- |

@@ -1,3 +1,4 @@
+import { checkPbxNodes } from './check-pbx-nodes.mjs';
 import { checkStaffHttp } from './check-staff-http.mjs';
 import { checkCredentialActions } from './check-credential-actions.mjs';
 import { checkDraftTenants } from './check-draft-tenants.mjs';
@@ -21,6 +22,7 @@ assert.ok(
         '--credential-browser',
         '--credential-lifecycle',
         '--credential-api',
+        '--pbx-registry',
         '--draft-tenant',
         '--draft-integrated',
         '--draft-browser',
@@ -376,6 +378,7 @@ try {
       '--credential-lifecycle',
       '--credential-api',
       '--platform-browser',
+      '--pbx-registry',
       '--draft-tenant',
       '--draft-integrated',
       '--draft-browser',
@@ -491,6 +494,7 @@ try {
       '--credential-browser',
       '--credential-lifecycle',
       '--credential-api',
+      '--pbx-registry',
       '--draft-tenant',
       '--draft-integrated',
       '--draft-browser',
@@ -1178,6 +1182,36 @@ try {
       );
     console.log(
       'PASS draft diagnostics: input/fingerprint/verifier/session/CSRF sentinels absent from independent process logs and audit',
+    );
+  }
+  // PBX retains immutable contract-fixture intent until database teardown;
+  // run it after legacy suites that assert their own empty outbox.
+  if (selection.length === 0 || selection[0] === '--pbx-registry') {
+    if (!redis.isOpen) await redis.connect();
+    await redis.ping();
+    await checkPbxNodes({
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      secrets,
+      appUrl: app.href,
+      proxy,
+      commitProxy,
+    });
+
+    const pbxAudit = (
+      await owner.query(
+        "SELECT metadata FROM public.audit_events WHERE event_type='telephony.pbx.desired-changed'",
+      )
+    ).rows;
+    const diagnostics = captured.join('') + JSON.stringify(pbxAudit);
+    for (const secret of secrets)
+      assert.ok(!diagnostics.includes(secret), 'Sensitive PBX sentinel leaked');
+    console.log(
+      'PASS PBX diagnostics: sentinels absent from independent HTTP process logs and audit',
     );
   }
 } finally {

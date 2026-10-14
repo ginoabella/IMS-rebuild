@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; split adopted 2026-10-14 (Asia/Manila, +08:00).
+- **Status:** complete; A-01–07 verified 2026-10-14 11:22 +08:00 (Asia/Manila). See [evidence](../../docs/status/p3-u1a-evidence.md).
 - **Requirement:** [P3-U1 parent scope and acceptance matrix](p3-u1-register-pbx-nodes-and-observe-health.md).
 - **Goal:** register and inspect canonical PBX desired connectivity through a protected, transactional platform API without exposing secrets or connecting before commit.
 - **Completion boundary:** real PostgreSQL and two HTTP replicas prove registry creation, reads, versioned edits, safe retry and platform-only authority. Live observation belongs to b; operator screens belong to c.

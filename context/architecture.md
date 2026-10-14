@@ -527,6 +527,22 @@ separate prerequisites.
 
 ## Telephony Architecture
 
+P3-U1a adds the [protected desired registry](../docs/architecture/pbx-registry.md)
+under [approved local connectivity policy](../docs/planning/p3-u1a-connectivity-contract-review.md).
+Telephony owns desired nodes and immutable bounded-retry creation receipts;
+existing owners retain authority, transactions, audit and outbox. Deployment-owned
+catalogs establish immutable installation identity independently of endpoint and
+credential rotation, support many installations/profiles, and resolve equivalent
+aliases to one database-unique target. Registration has no tenant/LGU ownership or
+association; future explicit contracts may share one PBX across multiple tenants.
+HTTP reads only the non-secret catalog; protected credential files belong solely
+to the future telephony observer. Desired saves never connect. A transaction-bound
+creation/edit port lets b invalidate ownership/observations and insert required
+reconciliation intent atomically. a adds no observer/lease schema or browser screen.
+The local profile is Asterisk 22.10.1, private AMI-TLS 5039 and protected local
+files; other approved deployment profiles extend the catalog/adapter boundary
+without changing registry identity or tenant semantics.
+
 Support shared Asterisk nodes while preserving tenant ownership:
 
 ```text

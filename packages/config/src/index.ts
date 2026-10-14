@@ -32,6 +32,7 @@ export interface ConnectionConfig {
   secretFile?: string;
 }
 export interface BackendConfig {
+  pbxCatalogFile?: string;
   platformAuth?: PlatformAuthConfig;
   credentialExchange?: PlatformAuthConfig;
   staffIssuer?: PlatformAuthConfig;
@@ -128,6 +129,16 @@ export function parseDatabaseConfig(env: Environment, migration = false) {
   );
 }
 export function parseBackendConfig(env: Environment): BackendConfig {
+  const pbxCatalogFile = env.PBX_CATALOG_FILE || undefined;
+  if (
+    pbxCatalogFile &&
+    (!pbxCatalogFile.startsWith('/') ||
+      pbxCatalogFile.length > 512 ||
+      pbxCatalogFile.includes('\0'))
+  )
+    throw new ConfigurationError(
+      'PBX_CATALOG_FILE must be a bounded absolute file path',
+    );
   const database = parseDatabaseConfig(env);
   const sessionRedis = connection(
     env,
@@ -154,6 +165,7 @@ export function parseBackendConfig(env: Environment): BackendConfig {
   if (!host || !/^[a-zA-Z0-9:.%-]+$/.test(host))
     throw new ConfigurationError('HOST must be a valid bind address');
   return {
+    pbxCatalogFile,
     platformAuth: parsePlatformAuthConfig(env),
     credentialExchange: parseCredentialBrowserConfig(
       env,

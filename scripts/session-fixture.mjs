@@ -93,6 +93,7 @@ process.on('message', async (message) => {
               sessionRedis: { url: redisUrl },
               sessions: config,
               limiter: limiterConfig,
+              pbxCatalogFile: message.pbxCatalogFile,
               platformAuth: message.browserConfig,
               credentialExchange: message.exchangeConfig,
               staffIssuer: message.staffIssuerConfig,

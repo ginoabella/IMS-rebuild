@@ -118,6 +118,7 @@ services:
       context: ../..
       dockerfile: infra/docker/Dockerfile.dev
     environment: &backend-environment
+      PBX_CATALOG_FILE: '${PBX_CATALOG_FILE-/workspace/.local/pbx-catalog/catalog.json}'
       STORAGE_ENABLED: 'false'
       STORAGE_ENDPOINT: http://garage:3900
       STORAGE_REFERENCE_ENDPOINT: http://garage:3900
@@ -271,6 +272,7 @@ services:
       - session_redis_auth
       - realtime_redis_auth
     volumes: &runtime-volumes
+      - ../../.local/pbx-catalog:/workspace/.local/pbx-catalog:ro
       - ../../services/backend:/workspace/services/backend:ro
       - ../../packages/config:/workspace/packages/config:ro
       - ../../packages/contracts:/workspace/packages/contracts:ro

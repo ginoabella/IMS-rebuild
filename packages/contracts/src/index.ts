@@ -38,3 +38,15 @@ export type {
   IssuedCredentialActionDto,
   CredentialActionStatusDto,
 } from './credential-actions';
+
+export type {
+  PbxManagementDto,
+  CreatePbxNodeRequest,
+  EditPbxNodeRequest,
+  PbxNodeDto,
+  PbxNodeDetailDto,
+  PbxNodeListDto,
+  PbxConflict,
+  PbxInputField,
+  PbxApiErrorDto,
+} from './pbx-nodes';

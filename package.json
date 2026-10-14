@@ -38,7 +38,8 @@
     "check:session-foundation": "pnpm build:backend && node scripts/check-session-foundation.mjs",
     "check:platform-auth": "pnpm build:backend && node scripts/check-platform-auth-selection.mjs",
     "check:draft-tenant": "pnpm build:backend && node scripts/check-draft-tenant-selection.mjs",
-    "check:staff-auth": "pnpm build:backend && node scripts/check-staff-auth-selection.mjs"
+    "check:staff-auth": "pnpm build:backend && node scripts/check-staff-auth-selection.mjs",
+    "check:pbx-nodes": "pnpm build:backend && node scripts/check-pbx-selection.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

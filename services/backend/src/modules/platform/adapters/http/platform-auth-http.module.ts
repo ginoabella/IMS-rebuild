@@ -1,3 +1,6 @@
+import { PbxController } from '../../../telephony/adapters/http/pbx.controller';
+import { PbxRuntime } from '../../../telephony/adapters/db/pbx-runtime';
+import { PbxNodes } from '../../../telephony/application/pbx-nodes';
 import { PlatformCredentialActionsController } from './credential-actions.controller';
 import { PlatformTenantsController } from './tenants.controller';
 import { DraftTenants } from '../../application/draft-tenants';
@@ -23,12 +26,28 @@ export class PlatformAuthHttpModule {
       module: PlatformAuthHttpModule,
       imports: [IdentityHttpModule.register(config)],
       controllers: [
+        PbxController,
         PlatformAuthController,
         PlatformTenantsController,
         PlatformCredentialActionsController,
       ],
       providers: [
         PlatformCurrentSession,
+        {
+          provide: PbxRuntime,
+          inject: [TransactionAuthority],
+          useFactory: (authority: TransactionAuthority) =>
+            new PbxRuntime(
+              config.database.url,
+              authority,
+              config.pbxCatalogFile,
+            ),
+        },
+        {
+          provide: PbxNodes,
+          inject: [PbxRuntime],
+          useFactory: (runtime: PbxRuntime) => runtime.service,
+        },
         {
           provide: DraftTenantRuntime,
           inject: [TransactionAuthority],

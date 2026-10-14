@@ -71,10 +71,12 @@ action=${1:-help}
 [ "$#" -eq 0 ] || shift
 case "$action" in
   prepare) prepare ;;
+  pbx-catalog-prepare) provision_storage scripts/prepare-pbx-catalog.mjs ;;
   storage-provision) provision_storage ;;
   storage-deployment-check) workspace_exec pnpm build:backend; provision_storage scripts/check-storage-deployment.mjs ;;
   up) prepare; compose up -d --build --wait --wait-timeout 120 workspace
       provision_storage
+      provision_storage scripts/prepare-pbx-catalog.mjs
       workspace_exec pnpm install --frozen-lockfile
       workspace_exec pnpm build:backend
       workspace_exec pnpm db:migrate
@@ -120,6 +122,12 @@ case "$action" in
           *) platform_selection=--platform-auth ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-nodes ]; then
+        shift 2
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ]; }; then
+          echo 'Supported PBX selection: --registry' >&2; exit 1
+        fi
+        provision_storage scripts/check-session-deployment.mjs --pbx-registry
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:draft-tenant ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --api ] && [ "$1" != --browser ]; }; then
@@ -153,6 +161,6 @@ case "$action" in
       else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check|pbx-catalog-prepare}'
      [ "$action" = help ] || exit 1 ;;
 esac
