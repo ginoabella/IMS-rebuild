@@ -5,7 +5,8 @@ Authoritative context: [overview](../context/project-overview.md),
 [standards](../context/code-standards.md), and
 [workflow](../context/ai-workflow-rules.md).
 Delivery order: [implementation plan](../context/implementation-plan.md).
-Observed state: [progress tracker](../context/progress-tracker.md).
+Observed state: [current progress tracker](../context/progress-tracker.md).
+Historical checkpoints: [progress tracker history](../context/progress-tracker-history.md).
 
 P1-U1 review documents (draft, awaiting approval):
 
@@ -211,3 +212,14 @@ Its [remaining acceptance procedure](runbooks/staff-native-acceptance.md#remaini
 defines the private A/B runtime, response-loss and per-session clock controls,
 actual issuer/recipient reset and exact desktop tunnel switch. Preparatory backend
 and browser checks do not replace the remaining Android results.
+
+PBX node administration: [P3-U1 feature spec and split review](../context/feature-specs/p3-u1-register-pbx-nodes-and-observe-health.md).
+P3-U1 and its children remain planned. The user adopted the three-unit split on
+2026-10-14 (Asia/Manila, +08:00). Controlled observation access, secret resolution
+and settings remain scoped prerequisites; no live PBX acceptance is claimed.
+
+Separate P3-U1 implementation specs, in sequence:
+
+- [P3-U1a — Protected PBX registry and connectivity contracts](../context/feature-specs/p3-u1a-protected-pbx-registry-and-connectivity-contracts.md)
+- [P3-U1b — Fenced Asterisk observation and recovery](../context/feature-specs/p3-u1b-fenced-asterisk-observation-and-recovery.md)
+- [P3-U1c — Operator PBX browser journey and integrated handoff](../context/feature-specs/p3-u1c-operator-pbx-browser-journey-and-integrated-handoff.md)
