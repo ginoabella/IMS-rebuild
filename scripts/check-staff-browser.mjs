@@ -42,6 +42,14 @@ export async function checkStaffBrowser({
     [adminId, tenantId, hash, otherId, secondTenant, targetId, callerId],
   );
   const login = async (tenant = code, username = 'issuer') => {
+    // A real user foregrounds the document before entering protected values.
+    // Visibility changes intentionally clear passwords; DOM-ready navigation
+    // alone can race that protection after uncertain logout.
+    await form.bringToFront();
+    await form.waitForLoadState('networkidle');
+    await expect(
+      form.getByRole('button', { name: 'Sign in', exact: true }),
+    ).toBeEnabled();
     await form.getByLabel(/^Tenant code/).fill(tenant);
     await form.getByLabel(/^Username/).fill(username);
     await form.getByLabel(/^Password/).fill(password);

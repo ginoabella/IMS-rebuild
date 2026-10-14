@@ -50,7 +50,7 @@ session CSRF boundary. The backend endpoints are `/platform/pbx-nodes`; browser
 forwarding/screens will be delivered in c. Submit a UUID requestId, displayName,
 management `{targetAlias:'local-asterisk',transport:'ami-tls',port:5039}`, and
 credentialAlias local-asterisk-observer. Never include a password or provider path.
-GET list/detail are passive and return observation not_available. Saving settings
+GET list/detail are passive and return b’s freshness-qualified observations when available, otherwise observation not_available. Saving settings
 establishes desired state only. No tenant/LGU association is created; the future
 explicit contract can associate several tenants with one shared PBX.
 
@@ -102,3 +102,5 @@ cleanup is installed. No node deletion, restore-by-replay, live apply or rollbac
 workflow is included. Back up installation identity/catalog with deployment
 configuration and PostgreSQL desired state/receipts under future production
 recovery policy.
+
+For the conditionally approved local observer, protected provisioning, runtime start, freshness and recovery checks, see [PBX observation operations](pbx-observation.md). Registry saves remain separate from observation health; browser delivery is P3-U1c.

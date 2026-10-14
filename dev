@@ -2,6 +2,9 @@
 set -eu
 cd "$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
 compose() {
+  if [ -f .local/pbx-observation/enabled ]; then
+    set -- -f infra/docker/compose.observation.yaml "$@"
+  fi
   if [ -f .env ]; then
     docker compose --env-file .env -p myims-rebuild-dev -f infra/docker/compose.yaml "$@"
   else
@@ -71,6 +74,15 @@ action=${1:-help}
 [ "$#" -eq 0 ] || shift
 case "$action" in
   prepare) prepare ;;
+  pbx-observation-prepare) provision_storage scripts/provision-pbx-observation.mjs "$@"
+      if compose exec -T --user node workspace test -r /workspace/.local/pbx-observation/runtime/observer.json; then
+        compose up -d --force-recreate --no-deps workspace
+      fi
+      compose up -d --force-recreate --wait --wait-timeout 120 asterisk
+      provision_storage scripts/prepare-pbx-catalog.mjs ;;
+  telephony-up) workspace_exec pnpm build:backend; workspace_exec pnpm db:migrate
+      MYIMS_PBX_UID=$(id -u) MYIMS_PBX_GID=$(id -g) compose --profile telephony up -d --scale "telephony=${1:-1}" telephony ;;
+  telephony-down) compose --profile telephony stop telephony ;;
   pbx-catalog-prepare) provision_storage scripts/prepare-pbx-catalog.mjs ;;
   storage-provision) provision_storage ;;
   storage-deployment-check) workspace_exec pnpm build:backend; provision_storage scripts/check-storage-deployment.mjs ;;
@@ -124,10 +136,13 @@ case "$action" in
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-nodes ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ]; }; then
-          echo 'Supported PBX selection: --registry' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ] && [ "$1" != --observation ]; }; then
+          echo 'Supported PBX selections: --registry, --observation' >&2; exit 1
         fi
-        provision_storage scripts/check-session-deployment.mjs --pbx-registry
+        case "${1:-}" in
+          --observation) provision_storage scripts/check-session-deployment.mjs --pbx-observation ;;
+          *) provision_storage scripts/check-session-deployment.mjs --pbx-registry ;;
+        esac
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:draft-tenant ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --api ] && [ "$1" != --browser ]; }; then
@@ -161,6 +176,6 @@ case "$action" in
       else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|storage-provision|storage-deployment-check|pbx-catalog-prepare}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|pbx-observation-prepare|telephony-up|telephony-down|storage-provision|storage-deployment-check|pbx-catalog-prepare}'
      [ "$action" = help ] || exit 1 ;;
 esac

@@ -40,6 +40,9 @@ export type {
 } from './credential-actions';
 
 export type {
+  PbxRegistrationFact,
+  PbxObservationFailure,
+  PbxObservationDto,
   PbxManagementDto,
   CreatePbxNodeRequest,
   EditPbxNodeRequest,

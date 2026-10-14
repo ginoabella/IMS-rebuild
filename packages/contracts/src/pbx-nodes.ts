@@ -27,7 +27,7 @@ export interface PbxNodeDto {
   updatedAt: string;
   createdBy: string;
   updatedBy: string;
-  observation: { kind: 'not_available' };
+  observation: PbxObservationDto;
 }
 export interface PbxNodeDetailDto {
   node: PbxNodeDto;
@@ -54,3 +54,42 @@ export interface PbxApiErrorDto {
   reason?: PbxConflict;
   fieldErrors?: Partial<Record<PbxInputField, string>>;
 }
+
+/** Minimal PJSIP facts only. Never inventory, tenant attribution or voice readiness. */
+export interface PbxRegistrationFact {
+  endpoint: string;
+  registered: boolean;
+  contacts: number;
+  reachableContacts: number;
+}
+export type PbxObservationFailure =
+  | 'secret_missing'
+  | 'secret_unavailable'
+  | 'destination_denied'
+  | 'resolution_unavailable'
+  | 'connect_failed'
+  | 'auth_failed'
+  | 'timeout'
+  | 'protocol_failed'
+  | 'snapshot_incomplete'
+  | 'resource_limit'
+  | 'disconnected'
+  | 'ownership_lost';
+export type PbxObservationDto =
+  | { kind: 'not_available' }
+  | {
+      kind: 'observed';
+      desiredVersion: number;
+      epoch: string;
+      sequence: number;
+      lastSuccessAt: string | null;
+      ageMs: number | null;
+      freshness: 'current' | 'stale' | 'unknown' | 'historical';
+      connection: 'reachable' | 'disconnected' | 'unknown';
+      reconciliation: 'complete' | 'reconciling';
+      ownership: 'current' | 'absent';
+      failure: PbxObservationFailure | null;
+      coverage: 'pjsip-dynamic-contacts' | 'unknown';
+      registrations: PbxRegistrationFact[];
+      registeredEndpoints: number | null;
+    };

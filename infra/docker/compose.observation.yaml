@@ -1,0 +1,38 @@
+# Explicitly approved local development profile only. No published management ports.
+services:
+  asterisk:
+    volumes:
+      - ../../.local/pbx-observation/server:/run/pbx-server:ro
+      - ../../.local/pbx-observation/server/manager.conf:/etc/asterisk/manager.conf:ro
+      - ../asterisk/observation/logger.conf:/etc/asterisk/logger.conf:ro
+  telephony:
+    profiles: [telephony]
+    image: myims-rebuild-dev-workspace
+    entrypoint:
+      ['node', '/workspace/services/backend/dist/entrypoints/telephony/main.js']
+    user: '${MYIMS_PBX_UID:-1002}:${MYIMS_PBX_GID:-1002}'
+    init: true
+    stop_grace_period: 6s
+    environment:
+      DATABASE_URL: postgresql://myims_runtime@postgres:5432/myims
+      DATABASE_PASSWORD_FILE: /run/secrets/runtime_postgres_password
+      PBX_CATALOG_FILE: /workspace/.local/pbx-catalog/catalog.json
+      PBX_OBSERVATION_PROFILE: approved-local-development
+      PBX_OBSERVATION_CONFIG_FILE: /run/pbx-observer/configuration.json
+    secrets: [runtime_postgres_password]
+    volumes:
+      - ../../.local/pbx-catalog:/workspace/.local/pbx-catalog:ro
+      - ../../.local/pbx-observation/runtime:/run/pbx-observer:ro
+      - ../../services/backend:/workspace/services/backend:ro
+      - ../../packages/config:/workspace/packages/config:ro
+      - ../../packages/contracts:/workspace/packages/contracts:ro
+      - ../../package.json:/workspace/package.json:ro
+      - ../../pnpm-workspace.yaml:/workspace/pnpm-workspace.yaml:ro
+      - ../../tsconfig.base.json:/workspace/tsconfig.base.json:ro
+      - workspace-deps-0:/workspace/node_modules:ro
+      - workspace-deps-10:/workspace/services/backend/node_modules:ro
+      - workspace-deps-6:/workspace/packages/config/node_modules:ro
+      - workspace-deps-7:/workspace/packages/contracts/node_modules:ro
+    depends_on:
+      postgres: { condition: service_healthy }
+      asterisk: { condition: service_healthy }

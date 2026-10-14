@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; split adopted 2026-10-14 (Asia/Manila, +08:00).
+- **Status:** complete; B-01–09 verified 2026-10-14 17:44 +08:00 (Asia/Manila) under conditional development approval. [Evidence](../../docs/status/p3-u1b-evidence.md).
 - **Requirement:** [P3-U1 parent scope and acceptance matrix](p3-u1-register-pbx-nodes-and-observe-health.md).
 - **Goal:** produce freshness-qualified Asterisk health/registration observations under one current database-fenced owner per canonical PBX node.
 - **Completion boundary:** controlled real Asterisk and independent telephony processes prove authenticated observation, single-owner coordination, stale-owner denial and reconciled restart/failover. Browser delivery remains c; live apply remains P3-U5.

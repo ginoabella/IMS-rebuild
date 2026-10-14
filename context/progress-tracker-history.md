@@ -1932,3 +1932,40 @@ live apply is enabled. Missing live access cannot be replaced by simulator evide
 - 2026-10-14 (Asia/Manila, +08:00) — Archived the full pre-compaction tracker verbatim with a checksum, condensed current state and reconciled superseded pending entries against final results/approved policies. Preserved completed evidence, open gates, deferred resume conditions and limitations. Archive preservation, current links/anchors, status consistency and whitespace checked; no runtime changes/checks.
 - 2026-10-14 (Asia/Manila, +08:00) — Prepared/reviewed P3-U1 and adopted the user-requested a/b/c specs with sequential dependencies and full AC-01–11 coverage. Documentation checks passed; parent/children remain planned and PBX gates unresolved.
 - 2026-10-13 17:20 +08:00 (Asia/Manila) — Completed P2-U4c/parent after final full Docker exit 0 and focused passes. Reported native evidence reconciled; isolated fixture/runtime retired and limits retained in the linked evidence.
+
+
+## 2026-10-14 — P3-U1b pre-completion checkpoint (Asia/Manila, +08:00)
+
+- Started the requested b unit after required context/registry inspection. Prepared
+  [local policy review](../docs/planning/p3-u1b-observation-contract-review.md); the
+  user conditionally approved G-01–03 for the isolated development target, with
+  broader AMI `system` permission disclosure, a replaceable adapter boundary,
+  protected material isolation and no production/live-control approval.
+- Implemented durable epochs/leases/latest projection and column-scoped grants,
+  atomic registry edit invalidation, passive freshness DTOs, independent engine
+  and fixed-action certificate-verified AMI adapter. Preserved applied migration
+  history through a follow-up grants version; twelve migrations now exist.
+- Final focused controlled observation passed, including real registration,
+  credential rotation, disconnect/reconnect and independent shipping processes.
+  Database races/expiry/cancelled callbacks/intents and actual TCP/COMMIT-loss
+  recovery passed; synthetic adapter/ordering/concurrency faults remain labeled.
+  Exact fixture names, cleanup and c/P3-U5 boundaries are in
+  [b evidence](../docs/status/p3-u1b-evidence.md).
+- Full-graph intermediate findings: legacy migration counts, empty workspace-mask
+  traversal permissions, a bootstrap race while supervisor builders ran, and
+  missing Playwright browser/cache dependencies after workspace recreation.
+  Counts/mask were corrected, focused identity/bootstrap passed unchanged,
+  supervisors were restored ready, and existing CI browser prerequisites restored.
+  At this historical checkpoint the final full graph remained pending.
+- Registry, durability/process and focused b checks passed; b remained in progress
+  until B-09/full graph/documentation reconciliation. c, parent P3-U1, live apply,
+  tenant voice readiness and production deployment remained incomplete/unapproved.
+
+## 2026-10-14 — P3-U1b final reconciliation (Asia/Manila, +08:00)
+
+Full `./dev check` passed, exit 0, at 17:44 +08:00 after the documented browser
+fixture readiness correction. B-01–09 completed, tracker cleared, c/P3-U5 handoff
+reconciled, exact fixture cleanup independently verified and normal HTTPS/observer
+services retained. This supersedes the pending pre-completion checkpoint above
+within b's conditional development scope only; parent/browser/live apply and
+production remain pending. See [final evidence](../docs/status/p3-u1b-evidence.md).

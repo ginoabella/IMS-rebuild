@@ -34,7 +34,7 @@ async function check(entrypoint) {
   try {
     const message = await new Promise((resolve, reject) => {
       child.on('error', reject);
-      child.stdout.on('data', (data) => {
+      const report = (data) => {
         output += data;
         const line = output
           .split('\n')
@@ -48,7 +48,9 @@ async function check(entrypoint) {
             reject(error);
           }
         }
-      });
+      };
+      child.stdout.on('data', report);
+      child.stderr.on('data', report);
       child.on('exit', () =>
         reject(
           new Error(`${entrypoint} exited before reporting ready: ${errors}`),
@@ -56,12 +58,12 @@ async function check(entrypoint) {
       );
     });
     assert.equal(message.entrypoint, entrypoint);
-    if (entrypoint === 'worker') {
+    if (entrypoint === 'worker' || entrypoint === 'telephony') {
       assert.equal(message.state, 'failed');
       const [code] = await exit;
       assert.equal(code, 1);
       console.log(
-        'PASS: worker fails clearly without a provisioned database and opens no listener',
+        `PASS: ${entrypoint} fails clearly without provisioned runtime settings and opens no listener`,
       );
       return;
     }

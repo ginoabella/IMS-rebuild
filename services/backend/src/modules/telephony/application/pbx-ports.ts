@@ -52,7 +52,7 @@ export interface PbxDesiredChangePort {
     },
   ): Promise<void>;
 }
-/** Explicitly no observation implementation installed yet; never connects. */
+/** Legacy isolated registry fixture hook; shipping runtime installs atomic observation changes. */
 export class ObservationNotInstalled implements PbxDesiredChangePort {
   async onCreate() {}
   async onChange() {}

@@ -5,11 +5,9 @@ import { SafeLogger } from '../../../../infrastructure/execution/logging';
 import type { TransactionAuthority } from '../../../identity/application/transaction-authority';
 import { AuditRepository } from '../../../audit/adapters/db/audit-repository';
 import { PbxNodes } from '../../application/pbx-nodes';
-import {
-  ObservationNotInstalled,
-  type PbxDesiredChangePort,
-} from '../../application/pbx-ports';
+import { type PbxDesiredChangePort } from '../../application/pbx-ports';
 import { FilePbxCatalog } from '../connectivity/catalog';
+import { ObservationDesiredChanges } from './observation-repository';
 import { PbxRepository } from './pbx-repository';
 import { PbxReceiptRepository } from './pbx-receipts';
 export class PbxRuntime {
@@ -20,7 +18,7 @@ export class PbxRuntime {
     url: string,
     authority: TransactionAuthority,
     catalogFile?: string,
-    changes: PbxDesiredChangePort = new ObservationNotInstalled(),
+    changes: PbxDesiredChangePort = new ObservationDesiredChanges(),
     logger: SafeLogger = new SafeLogger('http'),
   ) {
     const catalog = new FilePbxCatalog(catalogFile);

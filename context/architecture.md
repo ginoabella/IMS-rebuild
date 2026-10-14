@@ -702,3 +702,15 @@ bootstrap or public endpoint is added. See the
 [bootstrap contract](../docs/architecture/canonical-operator-bootstrap.md) and
 [runbook](../docs/runbooks/operator-bootstrap.md). This foundation adds no
 sign-in, sessions, reset/recovery or production provisioning acceptance.
+
+## PBX observation adapter boundary — P3-U1b
+
+The conditionally approved development observer uses an application-owned narrow
+snapshot/session port, separate from the database lease/epoch repository, engine
+and passive platform DTO projection. AMI-TLS framing, action allowlist, credentials,
+TLS trust and event ordering stay in the observation adapter; no arbitrary command
+method is exposed. Production replacement or a stronger PBX-side read-only
+mechanism belongs primarily to that adapter and provisioning, under separate
+approval. Upstream AMI `system` grants are broader than the application's read-only
+actions; this is not a strictly read-only PBX account or production approval.
+See the [conditional local policy](../docs/planning/p3-u1b-observation-contract-review.md).

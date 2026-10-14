@@ -178,6 +178,8 @@ services:
       - runtime_postgres_password
       - session_redis_auth
       - realtime_redis_auth
+    tmpfs:
+      - /workspace/.local/pbx-observation:mode=0755
     volumes: &workspace-volumes
       - ../..:/workspace
       - type: volume

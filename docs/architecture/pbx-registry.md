@@ -62,7 +62,7 @@ Detail/edit reject query fields; reads use a primary repeatable-read snapshot.
 
 Safe node DTO: id, installationId, displayName, management (canonical targetAlias,
 host, transport, port, tlsServerName), credentialAlias, version, ISO timestamps,
-createdBy/updatedBy operator references, and `observation:{kind:'not_available'}`.
+createdBy/updatedBy operator references, and b's passive `PbxObservationDto` (or `observation:{kind:'not_available'}` before observation exists). Immutable create receipts preserve the original save result.
 Detail/create/edit wrap `{node}`; list wraps `{items,nextCursor}`. Desired save
 never resolves credentials or connects; no connection/health success is inferred.
 
@@ -167,3 +167,5 @@ The connector must use the returned address directly and verify the returned TLS
 service name against approved trust, without another DNS resolution. HTTP never
 imports this connector/resolver graph. Safe resolver fixtures establish this port
 boundary; live AMI authentication/registration remains b.
+
+P3-U1b installs the atomic change hook and passive freshness-qualified list/detail projection described in the [observation contract](pbx-observation.md). Immutable create receipts retain their original save result; explicit detail reads obtain current observations.

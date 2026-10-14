@@ -194,3 +194,25 @@ Docker socket; the host fixture helper uses the existing trusted Docker boundary
 `./dev check` and the explicit CI lifecycle step run this suite. See the
 [session recovery runbook](shared-session-lifecycle.md) for bounded settings and
 restoration limits.
+
+## Observation profile workspace recreation
+
+The approved local PBX observation preparer masks
+`/workspace/.local/pbx-observation` with an empty root-owned tmpfs so general
+workspace HTTP/web processes cannot read host observer/server material. On first
+activation it recreates the workspace if that material was previously readable.
+Persistent source, dependency/cache volumes and private development files remain;
+processes and packages/browser binaries installed only in the old container do not.
+
+Restore the existing Playwright verification environment using the same commands
+as CI before browser regressions after such a recreation:
+
+```sh
+./dev exec pnpm exec playwright install chromium
+docker compose -p myims-rebuild-dev -f infra/docker/compose.yaml exec -T --user root workspace pnpm exec playwright install-deps chromium
+```
+
+Restart previously running private platform/staff HTTPS supervisors using their
+runbooks and verify both report ready. PBX observer material remains unavailable
+to them. See [local PBX observation operations](pbx-observation.md) for the scoped
+approval, separate telephony process mounts, lifecycle and verification commands.

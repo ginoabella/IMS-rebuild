@@ -1,3 +1,4 @@
+import { checkPbxObservation } from './check-pbx-observation.mjs';
 import { checkPbxNodes } from './check-pbx-nodes.mjs';
 import { checkStaffHttp } from './check-staff-http.mjs';
 import { checkCredentialActions } from './check-credential-actions.mjs';
@@ -23,6 +24,7 @@ assert.ok(
         '--credential-lifecycle',
         '--credential-api',
         '--pbx-registry',
+        '--pbx-observation',
         '--draft-tenant',
         '--draft-integrated',
         '--draft-browser',
@@ -52,7 +54,7 @@ const { PostgresSessionFences } = backend(
   './dist/modules/identity/adapters/db/session-fences.js',
 );
 const { SafeLogger } = backend('./dist/infrastructure/execution/logging.js');
-const { redisUrl } = JSON.parse(readFileSync(0, 'utf8'));
+const { redisUrl, pbxAccess } = JSON.parse(readFileSync(0, 'utf8'));
 const settings = parseSessionConfig({
   SESSION_TIMEOUT_MS: '200',
   SESSION_WEB_IDLE_SECONDS: '60',
@@ -343,6 +345,10 @@ try {
   await admin.connect();
   await admin.query(`CREATE DATABASE ${name}`);
   created = true;
+  if (selection[0] === '--pbx-observation')
+    console.log(
+      JSON.stringify({ check: 'pbx-observation', databaseFixture: name }),
+    );
   await deploy();
   await deploy();
   await owner.connect();
@@ -379,6 +385,7 @@ try {
       '--credential-api',
       '--platform-browser',
       '--pbx-registry',
+      '--pbx-observation',
       '--draft-tenant',
       '--draft-integrated',
       '--draft-browser',
@@ -495,6 +502,7 @@ try {
       '--credential-lifecycle',
       '--credential-api',
       '--pbx-registry',
+      '--pbx-observation',
       '--draft-tenant',
       '--draft-integrated',
       '--draft-browser',
@@ -1184,6 +1192,19 @@ try {
       'PASS draft diagnostics: input/fingerprint/verifier/session/CSRF sentinels absent from independent process logs and audit',
     );
   }
+  if (selection[0] === '--pbx-observation')
+    await checkPbxObservation({
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      secrets,
+      appUrl: app.href,
+      commitProxy,
+      pbxAccess,
+    });
   // PBX retains immutable contract-fixture intent until database teardown;
   // run it after legacy suites that assert their own empty outbox.
   if (selection.length === 0 || selection[0] === '--pbx-registry') {

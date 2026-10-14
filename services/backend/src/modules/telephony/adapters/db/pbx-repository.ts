@@ -1,3 +1,4 @@
+import { passiveObservation } from './observation-projection';
 import type { PbxNodeDto } from '@myims/contracts';
 import type { Transaction } from '../../../../infrastructure/database/transaction';
 import type { ReadSnapshot } from '../../../../infrastructure/database/read-snapshot';
@@ -90,13 +91,24 @@ export class PbxRepository implements PbxRegistry {
       'SELECT * FROM public.pbx_nodes WHERE id=$1',
       [id],
     );
-    return result.rows[0] ? dto(result.rows[0]) : null;
+    const row = result.rows[0];
+    return row
+      ? {
+          ...dto(row),
+          observation: await passiveObservation(snapshot, row.id, row.version),
+        }
+      : null;
   }
   async list(snapshot: ReadSnapshot, limit: number, after: string | null) {
     const result = await snapshot.query<Row>(
       'SELECT * FROM public.pbx_nodes WHERE ($1::uuid IS NULL OR id>$1::uuid) ORDER BY id LIMIT $2',
       [after, limit],
     );
-    return result.rows.map(dto);
+    return Promise.all(
+      result.rows.map(async (row) => ({
+        ...dto(row),
+        observation: await passiveObservation(snapshot, row.id, row.version),
+      })),
+    );
   }
 }
