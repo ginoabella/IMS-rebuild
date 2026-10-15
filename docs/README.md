@@ -239,3 +239,12 @@ Separate P3-U1 implementation specs, in sequence:
 - [PBX console browser contract](architecture/pbx-browser.md)
 - [Operator PBX guide](runbooks/pbx-operator-guide.md)
 - [P3-U1c integrated evidence](status/p3-u1c-evidence.md)
+
+P3-U2 planning: [Extension inventory and endpoint profiles — feature spec and adopted split](../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md). Implementation remains planned; the user-supplied working Asterisk reference informs compatibility examples, while profile, credential and runtime-mapping decisions remain explicit gates.
+
+The user adopted P3-U2's sequential a → b → c split on 2026-10-15
+(Asia/Manila, +08:00). Separate child specs are prepared; all remain planned:
+
+- [P3-U2a — Protected inventory, profiles and atomic bulk creation](../context/feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md)
+- [P3-U2b — Protected endpoint credential lifecycle and recovery](../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md)
+- [P3-U2c — Operator inventory browser and integrated handoff](../context/feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md)

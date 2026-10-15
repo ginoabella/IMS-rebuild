@@ -14,7 +14,7 @@ Deliver MyIMS incrementally under the agreed
 [build, review, improve process](ai-workflow-rules.md#build-review-improve).
 The next implementation is P3-U2 extension inventory under Phase 3 Asterisk
 administration, following completed P3-U1 registry, observation and operator
-browser delivery. The adopted a → b → c sequence is complete.
+browser delivery. The P3-U1 a → b → c sequence is complete. P3-U2 now has an adopted a → b → c implementation sequence and separate planned child specs.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
 their verified boundaries. Early draft tenant creation P4-U1a is complete under
@@ -90,7 +90,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U2: extension inventory using the completed P3-U1 identity/observation handoff.
+1. P3-U2: extension inventory using the completed P3-U1 identity/observation handoff. The [feature spec and adopted split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md) and three child specs are prepared; implement a → b → c. Implementation remains planned; number/profile, endpoint-credential and runtime-mapping gates must be resolved for dependent work.
 2. P3-U3–U5: trunks/gateways/DIDs, routing, then verified apply/recovery and external fencing.
 3. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
@@ -159,6 +159,10 @@ for their scope; creating a spec does not approve a proposal.
 - Previously recorded unrelated follow-up: the implementation plan has six source links using an incorrect relative `context/...` prefix. This cleanup preserves the plan; follow-up remains outstanding.
 
 ## Recent Session Notes
+
+- 2026-10-15 (Asia/Manila, +08:00) — User adopted the P3-U2 a → b → c split and requested separate child specs. Created [a — inventory/profiles/atomic bulk](feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md), [b — protected credential lifecycle](feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md) and [c — browser/integrated handoff](feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md), with child acceptance matrices and parent coverage. All remain planned; implementation has not started and policy gates are not approved by spec creation. Documentation consistency, coverage, links and whitespace reviewed.
+
+- 2026-10-15 (Asia/Manila, +08:00) — Prepared and reviewed the P3-U2 feature spec using Phase 3, delivered P3-U1 contracts and the user-supplied working Asterisk reference. Recommended three sequential children: inventory/profiles/atomic bulk API, protected credential lifecycle, then browser/observation/integrated handoff. No child implementation or split adoption claimed. Applicable number/profile, credential provider/handoff and runtime identity/coexistence decisions remain required; live apply/allocation/assignment stay with later owners. Documentation consistency/link/whitespace review only.
 
 - 2026-10-15 09:32 +08:00 (Asia/Manila) — Completed P3-U1c and parent P3-U1 after combined real-service/browser/ownership acceptance, durable/process regressions, full Docker graph, shared UI and final maximum-name browser checks. Exact owned fixtures removed; older unrelated database preserved. Normal platform/staff HTTPS ready, their network checks passed and backend live/ready returned 200. P3-U2/U5 handoff documented; configuration apply, tenant voice readiness and production remain incomplete.
 
