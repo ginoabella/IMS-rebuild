@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-10-15 (Asia/Manila, +08:00).
+Last reconciled: 2026-10-16 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -72,7 +72,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U2b: resolve G-02 endpoint credential/provider/handoff/recovery policy, then implement its separately approved scope using verified a’s transaction/version port. P3-U2c follows with the actual browser and controlled live mapping/coexistence checks. [Parent scope and split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md); parent P3-U2 remains incomplete.
+1. P3-U2b: review and approve the proposed [G-02 credential contract](../docs/planning/p3-u2b-credential-contract-review.md), then provision protected access and implement its separately approved scope using verified a’s transaction/version port. The review proposes generated material, OpenBao and a dedicated credential worker, no recipient delivery, durable recovery and conservative retirement. All remain unapproved; b is planned and no provider/runtime change is claimed. P3-U2c follows with the actual browser and controlled live mapping/coexistence checks. [Parent scope and split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md); parent P3-U2 remains incomplete.
 2. P3-U3–U5: trunks/gateways/DIDs, routing, then verified apply/recovery and external fencing.
 3. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
@@ -143,6 +143,7 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Recent Session Notes
 
+- 2026-10-16 (Asia/Manila, +08:00) — Prepared the [P3-U2b G-02 credential contract review](../docs/planning/p3-u2b-credential-contract-review.md) with recommended decisions, explicit new-provider/process approval, operation ordering, retention, cleanup, API and acceptance handoffs. Documentation only; user approval and real protected provider access remain required before implementation. No credential material or runtime configuration changed.
 - 2026-10-15 15:01 +08:00 (Asia/Manila) — Completed P3-U2a A-01–07 under the user’s conditional approval. Delivered protected inventory/profile/atomic bulk APIs, immutable identity/version contracts, audit/receipts and exact b transaction handoff. Real-service focused checks, affected regressions and full Docker graph passed; fixtures removed, normal HTTPS restored ready, health 200. [Evidence](../docs/status/p3-u2a-evidence.md) records commands, fixes and limits. Credentials, c browser/live mapping, live apply and production acceptance remain separate.
 
 ## Tracker Maintenance

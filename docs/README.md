@@ -255,6 +255,11 @@ The user adopted P3-U2's sequential a → b → c split on 2026-10-15
 - [P3-U2b — Protected endpoint credential lifecycle and recovery](../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md)
 - [P3-U2c — Operator inventory browser and integrated handoff](../context/feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md)
 
+[P3-U2b endpoint credential contract — review for approval](planning/p3-u2b-credential-contract-review.md)
+proposes G-02 generation, OpenBao/process access, no recipient delivery,
+version/retry retention and recovery/cleanup values. Awaiting approval; no provider
+provisioning or credential implementation is claimed.
+
 P3-U2a controlled-development inventory foundation:
 
 - [Inventory/profile API and transaction contract](architecture/extension-inventory.md)

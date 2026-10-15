@@ -34,6 +34,11 @@ hashing/setup tokens and delivery approvals do not define SIP credential behavio
 Do not select a new provider or copy reference passwords to bypass this gate.
 Routine API/adapter composition follows existing conventions.
 
+The [G-02 credential contract review](../../docs/planning/p3-u2b-credential-contract-review.md)
+contains proposed values and approval wording prepared 2026-10-16 (Asia/Manila,
++08:00). It remains unapproved; provider provisioning and implementation have not
+started.
+
 ## Scope and ownership
 
 Own narrow endpoint-secret provider ports and approved adapter integration,
