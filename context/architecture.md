@@ -714,3 +714,14 @@ mechanism belongs primarily to that adapter and provisioning, under separate
 approval. Upstream AMI `system` grants are broader than the application's read-only
 actions; this is not a strictly read-only PBX account or production approval.
 See the [conditional local policy](../docs/planning/p3-u1b-observation-contract-review.md).
+
+P3-U1c composes the [PBX browser contract](../docs/architecture/pbx-browser.md)
+through named no-store Next forwarding and the existing current backend authority.
+The console has list/register/detail/versioned connectivity edit with passive
+safe observation reads. Owner-bound mounted create intents carry immutable payload,
+fingerprint and operation epoch; uncertain edits require explicit canonical
+reload/review. Identity replacement/confirmed logout clears retained work, and
+browser storage/session/observer ownership remains outside the web application.
+The [tracker](progress-tracker.md) and [c evidence](../docs/status/p3-u1c-evidence.md)
+record actual acceptance state; browser implementation alone does not complete
+P3-U1 or the Phase 3 gate.

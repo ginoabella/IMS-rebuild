@@ -1,5 +1,6 @@
 // Actual production Next app, HTTPS ingress, and independent real-service replicas.
 import assert from 'node:assert/strict';
+import { checkPbxBrowser } from './check-pbx-browser.mjs';
 import { checkDraftTenantBrowser } from './check-draft-tenant-browser.mjs';
 import { spawn } from 'node:child_process';
 import { createServer, request } from 'node:http';
@@ -36,6 +37,8 @@ export async function checkPlatformBrowser({
   issue,
   staffFacts,
   change,
+  pbxFixture,
+  pbxUsername,
 }) {
   const ingressSecret = randomBytes(32).toString('hex');
   secrets.push(ingressSecret);
@@ -511,6 +514,39 @@ export async function checkPlatformBrowser({
       redis,
       holdResponse,
     });
+    if (pbxFixture) {
+      phase = 'PBX integrated browser';
+      await page.goto(`${config.origin}/sign-in`);
+      await login(page, pbxUsername);
+      await expect(
+        page.getByRole('heading', { name: 'Platform console', exact: true }),
+      ).toBeVisible();
+      await checkPbxBrowser({
+        page,
+        context,
+        config,
+        owner,
+        login: (target = page, name = pbxUsername, secret = password) =>
+          login(target, name, secret),
+        expire,
+        ingress,
+        select,
+        a,
+        b,
+        username: pbxUsername,
+        redis,
+        key,
+        holdResponse,
+        fixture: pbxFixture,
+      });
+      await page.goto(`${config.origin}/sign-in`);
+      await login();
+      await expect(
+        page.getByRole('heading', { name: 'Platform console', exact: true }),
+      ).toBeVisible();
+      await page.goto(`${config.origin}/ui-preview`);
+      await expect(page.getByLabel('Unfinished notes')).toBeVisible();
+    }
     phase = 'expiry and canonical-owner recovery';
     for (const boundary of ['idle', 'absolute']) {
       await page
@@ -731,6 +767,18 @@ export async function checkPlatformBrowser({
       ),
       403,
     );
+    if (pbxFixture) {
+      assert.equal(
+        await page.evaluate(
+          async () => (await fetch('/platform/pbx-nodes')).status,
+        ),
+        403,
+      );
+      await page.goto(`${config.origin}/pbx-nodes`);
+      await expect(
+        page.locator('main [role="alert"], main[role="alert"]'),
+      ).toContainText('Access denied');
+    }
     await context.clearCookies();
     assert.equal(
       await page.evaluate(
@@ -789,6 +837,27 @@ export async function checkPlatformBrowser({
       ).status(),
       400,
     );
+    if (pbxFixture) {
+      assert.equal(
+        (
+          await context.request.patch(
+            `${config.origin}/platform/pbx-nodes/12345678-1234-1234-1234-123456789abc`,
+            {
+              headers: {
+                Origin: 'https://foreign.invalid',
+                'Content-Type': 'application/json',
+              },
+              data: '{}',
+            },
+          )
+        ).status(),
+        403,
+      );
+      assert.equal(
+        (await fetch(`http://127.0.0.1:${port}/platform/pbx-nodes`)).status,
+        503,
+      );
+    }
     // Direct private Next access without trusted ingress metadata cannot establish a session.
     assert.equal(
       (await fetch(`http://127.0.0.1:${port}/platform/auth/session`)).status,
@@ -968,11 +1037,13 @@ export async function checkPlatformBrowser({
       error instanceof Error
         ? error.stack
             ?.split('\n')
-            .find((line) =>
-              /^\s*at .*check-(?:platform-browser|draft-tenant-browser)\.mjs:\d+/.test(
+            .filter((line) =>
+              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser)\.mjs:\d+/.test(
                 line,
               ),
             )
+            .slice(0, 2)
+            .join('; ')
             ?.trim()
         : '';
     const category = [
@@ -999,7 +1070,7 @@ export async function checkPlatformBrowser({
       ].find((value) => alert?.includes(value)) ?? 'no known feedback';
     // eslint-disable-next-line preserve-caught-error -- The caught Playwright error may contain passwords or headers.
     throw new Error(
-      `Platform browser acceptance failed during ${phase}${location ? ` (${location})` : ''}; category ${category}; statuses ${statuses.join(',')}; feedback ${safeState}; transport ${transportEvents.slice(-8).join(',')}; ingress ${ingress.events().join(',')}}`,
+      `Platform browser acceptance failed during ${phase}${location ? ` (${location})` : ''}; category ${category}; statuses ${statuses.slice(-8).join(',')}; feedback ${safeState}; transport ${transportEvents.slice(-8).join(',')}; ingress ${ingress.events().join(',')}}`,
     );
   } finally {
     for (const gate of pendingGates) gate.release();

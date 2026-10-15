@@ -66,6 +66,8 @@ address permissions or management exposure as a recovery shortcut.
 ```sh
 ./dev exec pnpm check:pbx-nodes --observation
 ./dev exec pnpm check:pbx-nodes --registry
+./dev exec pnpm check:pbx-nodes --browser
+./dev exec pnpm check:pbx-nodes
 ./dev exec pnpm check:durability
 ./dev exec pnpm check:entrypoints
 ./dev check
@@ -108,3 +110,7 @@ do not restore old process memory or reuse epochs. Complete empty snapshots remo
 obsolete facts; partial/errors remain historical. No external apply/reload/control
 recovery command exists in the application. c owns browser presentation; P3-U5
 owns live apply/revision ordering and PBX-side stale-owner enforcement.
+
+The c browser selection reuses this trusted launcher with real secure platform
+sign-in, independent HTTP/telephony processes and precise no-call fixtures. See
+the [operator guide](pbx-operator-guide.md) and [browser evidence](../status/p3-u1c-evidence.md).

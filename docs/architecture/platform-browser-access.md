@@ -112,3 +112,7 @@ real provisioned synthetic credentials, PostgreSQL/runtime grants, session Redis
 and two independent backend HTTP processes. TLS ingress/balancer/fault controls
 and accounts are isolated test infrastructure. Production TLS/HA/capacity and
 staff/reset/mobile journeys remain separate acceptance boundaries.
+
+P3-U1c adds the delivered PBX list/register/detail return paths, named GET/POST/PATCH
+forwarding and owner-bound PBX intent/edit retention described in the
+[PBX browser contract](pbx-browser.md).

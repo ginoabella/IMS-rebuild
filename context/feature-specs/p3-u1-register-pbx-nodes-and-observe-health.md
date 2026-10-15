@@ -2,7 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** in progress; registry a is complete within A-01–07, verified 2026-10-14 11:22 +08:00 (Asia/Manila). b/c and live PBX verification remain pending.
+- **Status:** complete, a/b/c and AC-01–11 reconciled 2026-10-15 09:32 +08:00 (Asia/Manila), within conditional development registry/observation scope. Configuration apply and the Phase 3 gate remain incomplete.
+- **Evidence:** [combined a/b/c acceptance](../../docs/status/p3-u1c-evidence.md).
 - **Requirement:** [Phase 3, P3-U1](../implementation-plan.md#p3-u1--register-pbx-nodes-and-observe-health), platform Asterisk administration in the [overview](../project-overview.md), and [telephony architecture](../architecture.md#telephony-architecture).
 - **Goal:** let a platform operator register and inspect PBX connectivity while exactly one current database-fenced process owns observation and configuration publication for each node.
 - **Completion boundary:** the real platform browser registers a controlled node and displays trustworthy, freshness-qualified health/registration observations; duplicate observers, ownership loss, restart and failover satisfy the matrix below. Saving a node never applies Asterisk configuration or establishes tenant voice readiness.
@@ -13,6 +14,9 @@ is the delivered early draft-creation exception. This spec defines intended
 behavior; the tracker and evidence record actual delivery.
 
 ## Starting state and dependencies
+
+This section records the pre-P3-U1 baseline. Current delivered state and scoped
+limits are in the linked evidence and progress tracker.
 
 Require verified P2-U3 and P1-U5; reuse the P1-U3 database/runtime/configuration
 foundation, P1-U4 primitives, and P2-U2 canonical platform guards. Recheck their

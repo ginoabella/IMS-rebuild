@@ -1,6 +1,8 @@
 // Only literal delivered paths; never decode untrusted destinations.
 export function consoleReturnPath(value: string | null | undefined): string {
   if (
+    value === '/pbx-nodes' ||
+    value === '/pbx-nodes/register' ||
     value === '/ui-preview' ||
     value === '/tenants' ||
     value === '/tenants/create'
@@ -8,7 +10,7 @@ export function consoleReturnPath(value: string | null | undefined): string {
     return value;
   if (
     value &&
-    /^\/tenants\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    /^\/(?:tenants|pbx-nodes)\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
       value,
     )
   )

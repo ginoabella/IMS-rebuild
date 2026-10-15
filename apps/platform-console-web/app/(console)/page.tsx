@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Badge, ContentState, Panel, PanelHeading } from '@myims/ui-web';
+import { Badge, Panel, PanelHeading } from '@myims/ui-web';
 
 export default function HomePage() {
   return (
@@ -29,8 +29,9 @@ export default function HomePage() {
           <Badge tone="info">Interface preview</Badge>
         </div>
         <p className="mt-2 text-muted-foreground">
-          Draft tenant creation is available. Platform management has its own
-          home, separate from the tenant command center.
+          PBX registry/observation and draft tenant creation are available.
+          Platform management has its own home, separate from the tenant command
+          center.
         </p>
       </Panel>
       <div className="grid gap-5 lg:grid-cols-2">
@@ -46,13 +47,17 @@ export default function HomePage() {
             onboarding voice-enabled organizations.
           </p>
           <div className="mt-5">
-            <ContentState
-              kind="empty"
-              title="Infrastructure management is pending"
+            <Link
+              href="/pbx-nodes"
+              className="inline-flex min-h-11 items-center text-primary underline"
             >
-              PBX nodes, extensions, routing and configuration review will be
-              delivered here.
-            </ContentState>
+              Open PBX nodes
+            </Link>
+            <p className="mt-2 text-muted-foreground">
+              Register, inspect and edit desired connectivity. Saving does not
+              apply configuration or establish tenant voice readiness. Extension
+              inventory, routing and configuration apply follow separately.
+            </p>
           </div>
         </Panel>
         <Panel aria-labelledby="tenants-heading">

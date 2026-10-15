@@ -61,18 +61,20 @@ export async function backendRequest(
     | 'sign-in'
     | 'session'
     | 'logout'
+    | { consumer: 'pbx-nodes'; query: string }
+    | { consumer: 'pbx-node'; id: string }
     | { consumer: 'tenants'; query: string }
     | { consumer: 'tenant'; id: string }
     | { consumer: 'credential-actions'; id: string; actionId?: string },
   headers: Headers,
-  method: 'GET' | 'POST',
+  method: 'GET' | 'POST' | 'PATCH',
   body?: string,
 ): Promise<Response> {
   const config = transportConfig(),
     source = ingressSource(headers);
   if (!config || !source) return safeError(503);
   const origin = headers.get('origin');
-  if (method === 'POST' && origin !== config.origin) return safeError(403);
+  if (method !== 'GET' && origin !== config.origin) return safeError(403);
   const site = headers.get('sec-fetch-site');
   if (method === 'GET' && site !== 'same-origin' && site !== 'none')
     return safeError(403);
@@ -84,7 +86,7 @@ export async function backendRequest(
     return safeError(403);
   try {
     return await fetch(
-      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
+      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'pbx-nodes' ? `/platform/pbx-nodes${path.query}` : path.consumer === 'pbx-node' ? `/platform/pbx-nodes/${path.id}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
       {
         method,
         cache: 'no-store',

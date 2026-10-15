@@ -44,8 +44,8 @@ All use existing `platform-cookie`, current platform plane/operator permission,
 trusted peer/proxy source, exact HTTPS Origin and shared admission. Writes require
 session CSRF plus locked canonical authority revalidation on their mutation
 transaction. Reads are passive and never renew sessions. Successful operational
-writes use existing conditional renewal. All responses use no-store. c will own
-named Next forwarding and browser composition; no generic proxy or UI is added.
+writes use existing conditional renewal. All responses use no-store. c delivers named Next forwarding and browser composition through the
+[PBX browser contract](pbx-browser.md); no generic proxy is exposed.
 
 Create accepts only `requestId`, `displayName`, `management` and `credentialAlias`.
 Management accepts only `targetAlias`, `transport`, `port`. Edit replaces requestId

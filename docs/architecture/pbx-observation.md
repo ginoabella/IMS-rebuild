@@ -124,7 +124,7 @@ web applications. Evidence separates fixture privileges from runtime grants.
 
 c consumes `PbxObservationDto` through protected existing list/detail endpoints,
 with explicit current/stale/historical/unknown semantics and separate coverage.
-Saving desired state never establishes health. Browser delivery remains c.
+Saving desired state never establishes health. Browser delivery is described in the [PBX browser contract](pbx-browser.md).
 
 P3-U5 must reuse the ownership port and same-transaction fence for persisted
 work, but **a pre-call database check cannot revoke an already issued external

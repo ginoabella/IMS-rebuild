@@ -25,6 +25,7 @@ assert.ok(
         '--credential-api',
         '--pbx-registry',
         '--pbx-observation',
+        '--pbx-browser',
         '--draft-tenant',
         '--draft-integrated',
         '--draft-browser',
@@ -345,7 +346,7 @@ try {
   await admin.connect();
   await admin.query(`CREATE DATABASE ${name}`);
   created = true;
-  if (selection[0] === '--pbx-observation')
+  if (['--pbx-observation', '--pbx-browser'].includes(selection[0]))
     console.log(
       JSON.stringify({ check: 'pbx-observation', databaseFixture: name }),
     );
@@ -386,6 +387,7 @@ try {
       '--platform-browser',
       '--pbx-registry',
       '--pbx-observation',
+      '--pbx-browser',
       '--draft-tenant',
       '--draft-integrated',
       '--draft-browser',
@@ -405,6 +407,7 @@ try {
   if (
     selection.length === 0 ||
     [
+      '--pbx-browser',
       '--platform-auth',
       '--platform-http',
       '--platform-browser',
@@ -424,9 +427,11 @@ try {
       appUrl: app.href,
       proxy,
       commitProxy,
+      pbxAccess: selection[0] === '--pbx-browser' ? pbxAccess : undefined,
       browserChecks: selection[0] !== '--platform-http',
       browserOnly: [
         '--platform-browser',
+        '--pbx-browser',
         '--draft-integrated',
         '--draft-browser',
       ].includes(selection[0]),
@@ -503,6 +508,7 @@ try {
       '--credential-api',
       '--pbx-registry',
       '--pbx-observation',
+      '--pbx-browser',
       '--draft-tenant',
       '--draft-integrated',
       '--draft-browser',

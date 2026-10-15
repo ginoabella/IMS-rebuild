@@ -15,9 +15,12 @@ function docker(args) {
   return r.stdout;
 }
 let pbxAccess;
-const observing = process.argv[2] === '--pbx-observation';
+const observing = ['--pbx-observation', '--pbx-browser'].includes(
+  process.argv[2],
+);
 const fixtureName = `myims-observation-${randomBytes(4).toString('hex')}`;
 let fixtureInstalled = false;
+let controlledStopped = false;
 if (observing) {
   pbxAccess = {
     credentials: JSON.parse(
@@ -154,6 +157,12 @@ try {
       } else if (observing && line === 'PBX_FIXTURE_REMOVE') {
         fixture('');
         fixtureInstalled = false;
+      } else if (observing && line === 'PBX_FIXTURE_STOP') {
+        docker(['stop', 'myims-rebuild-dev-asterisk-1']);
+        controlledStopped = true;
+      } else if (observing && line === 'PBX_FIXTURE_START') {
+        docker(['start', 'myims-rebuild-dev-asterisk-1']);
+        controlledStopped = false;
       } else if (observing && line === 'PBX_FIXTURE_RESTART') {
         docker(['restart', 'myims-rebuild-dev-asterisk-1']);
       } else process.stdout.write(`${line}\n`);
@@ -171,6 +180,7 @@ try {
   if (code !== 0) throw new Error('Session lifecycle checks failed');
 } finally {
   if (observing) {
+    if (controlledStopped) docker(['start', 'myims-rebuild-dev-asterisk-1']);
     rotate(pbxAccess.credentials);
     fixture('');
     docker([

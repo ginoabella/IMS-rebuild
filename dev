@@ -136,12 +136,16 @@ case "$action" in
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-nodes ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ] && [ "$1" != --observation ]; }; then
-          echo 'Supported PBX selections: --registry, --observation' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ] && [ "$1" != --observation ] && [ "$1" != --browser ]; }; then
+          echo 'Supported PBX selections: --registry, --observation, --browser' >&2; exit 1
         fi
         case "${1:-}" in
           --observation) provision_storage scripts/check-session-deployment.mjs --pbx-observation ;;
-          *) provision_storage scripts/check-session-deployment.mjs --pbx-registry ;;
+          --registry) provision_storage scripts/check-session-deployment.mjs --pbx-registry ;;
+          --browser) provision_storage scripts/check-session-deployment.mjs --pbx-browser ;;
+          *) provision_storage scripts/check-session-deployment.mjs --pbx-registry
+             provision_storage scripts/check-session-deployment.mjs --pbx-observation
+             provision_storage scripts/check-session-deployment.mjs --pbx-browser ;;
         esac
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:draft-tenant ]; then
         shift 2

@@ -235,3 +235,7 @@ Separate P3-U1 implementation specs, in sequence:
 - [Local observation provisioning, recovery and checks](runbooks/pbx-observation.md)
 
 - [P3-U1b controlled observation and recovery evidence](status/p3-u1b-evidence.md) — B-01–09 and final full Docker graph passed; real and injected evidence distinguished.
+
+- [PBX console browser contract](architecture/pbx-browser.md)
+- [Operator PBX guide](runbooks/pbx-operator-guide.md)
+- [P3-U1c integrated evidence](status/p3-u1c-evidence.md)

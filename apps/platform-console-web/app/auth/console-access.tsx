@@ -27,6 +27,8 @@ import {
   signalAccessChange,
 } from './client';
 
+import { emptyPbx, type PbxWork } from '../pbx/work';
+
 type FormValues = Record<string, string>;
 export type TenantDraftWork = {
   values: Omit<CreateDraftTenantDto, 'requestId'>;
@@ -38,6 +40,8 @@ const emptyDraft = (): TenantDraftWork => ({
 });
 type WorkContract = {
   ready: boolean;
+  pbx: PbxWork;
+  recordPbx: (next: PbxWork) => void;
   draft: TenantDraftWork;
   recordDraft: (draft: TenantDraftWork) => void;
   capture: () => { current: () => boolean; proof: string };
@@ -70,6 +74,8 @@ export function ConsoleAccess({
     [pending, setPending] = useState(false),
     [values, setValues] = useState<FormValues>({});
   const [draft, setDraft] = useState<TenantDraftWork>(emptyDraft);
+  const [pbx, setPbx] = useState<PbxWork>(emptyPbx);
+  const retainedPbx = useRef(new RetainedWork<PbxWork>(emptyPbx));
   const retainedDraft = useRef(new RetainedWork<TenantDraftWork>(emptyDraft));
   const retained = useRef(new RetainedWork<FormValues>(() => ({})));
   const authority = useRef(initial),
@@ -88,6 +94,7 @@ export function ConsoleAccess({
     clearOnAbsent.current = false;
     setValues(retained.current.validateOwner(next.operatorId));
     setDraft(retainedDraft.current.validateOwner(next.operatorId));
+    setPbx(retainedPbx.current.validateOwner(next.operatorId));
     authority.current = next;
     setSession(next);
     setMode('ready');
@@ -155,6 +162,8 @@ export function ConsoleAccess({
             ) {
               retained.current.clear();
               retainedDraft.current.clear();
+              retainedPbx.current.clear();
+              setPbx(emptyPbx());
               setDraft(emptyDraft());
               setValues({});
               setSession(null);
@@ -262,6 +271,8 @@ export function ConsoleAccess({
         throw new AccessError(503);
       retained.current.clear();
       retainedDraft.current.clear();
+      retainedPbx.current.clear();
+      setPbx(emptyPbx());
       setDraft(emptyDraft());
       setValues({});
       setSession(null);
@@ -292,6 +303,17 @@ export function ConsoleAccess({
           value={{
             operatorId: renderedOwner,
             ready: mode === 'ready',
+            pbx,
+            recordPbx: (next) => {
+              if (
+                accessible.current &&
+                authority.current.operatorId === renderedOwner &&
+                !logoutRequested.current
+              ) {
+                retainedPbx.current.record(renderedOwner, next);
+                setPbx(next);
+              }
+            },
             draft,
             recordDraft: (next) => {
               if (

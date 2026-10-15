@@ -2,7 +2,8 @@
 
 ## Status and purpose
 
-- **Status:** planned; split adopted 2026-10-14 (Asia/Manila, +08:00).
+- **Status:** complete, C-01–07 and integrated parent AC-01–11 verified 2026-10-15 09:32 +08:00 (Asia/Manila); approved development scope only.
+- **Evidence:** [combined acceptance and handoff](../../docs/status/p3-u1c-evidence.md).
 - **Requirement:** [P3-U1 parent scope and acceptance matrix](p3-u1-register-pbx-nodes-and-observe-health.md).
 - **Goal:** let an authenticated platform operator register, inspect and edit PBX connectivity through the actual console with clear desired/runtime states and safe recovery.
 - **Completion boundary:** real secure-browser registry/observation journey and all parent AC-01–11 pass with a/b's real-service ownership/failover evidence. This completes P3-U1 only, not configuration apply or the Phase 3 gate.

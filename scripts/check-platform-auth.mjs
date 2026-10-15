@@ -1,4 +1,5 @@
 // Isolated real PostgreSQL/runtime grants and Redis, independent HTTP processes.
+import { pbxBrowserFixture } from './pbx-browser-fixture.mjs';
 import { checkPlatformBrowser } from './check-platform-browser.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
@@ -6,7 +7,7 @@ import { createRequire } from 'node:module';
 import { request as httpRequest } from 'node:http';
 import { createServer } from 'node:https';
 import { once } from 'node:events';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -47,6 +48,7 @@ export async function checkPlatformAuth({
   appUrl,
   proxy,
   commitProxy,
+  pbxAccess,
   browserChecks = true,
   browserOnly = false,
 }) {
@@ -184,9 +186,20 @@ export async function checkPlatformAuth({
   const limiterConfig = parseLimiterConfig({
     LIMITER_TRUSTED_PROXIES: '127.0.0.1',
   });
+  let pbxFixture;
+  const pbxCatalogFile = pbxAccess
+    ? join(directory, 'catalog.json')
+    : undefined;
+  if (pbxAccess) {
+    pbxFixture = await pbxBrowserFixture(appUrl, pbxAccess, secrets);
+    writeFileSync(pbxCatalogFile, JSON.stringify(pbxFixture.catalog), {
+      mode: 0o600,
+    });
+  }
   async function replica(override = {}) {
     const call = await worker({
       http: true,
+      ...(pbxCatalogFile ? { pbxCatalogFile } : {}),
       browserConfig: config,
       limiterConfig,
       config: backend('@myims/config').parseSessionConfig({
@@ -330,6 +343,12 @@ export async function checkPlatformAuth({
     const browserName = `${username}.browser`;
     await insert(browserId, browserName);
     await insert(browserSecond, `${browserName}.second`);
+    const pbxUsername = pbxFixture ? `${browserName}.pbx` : undefined;
+    if (pbxUsername) {
+      await insert(randomUUID(), pbxUsername);
+      await insert(randomUUID(), `${pbxUsername}.second`);
+      secrets.push(pbxUsername);
+    }
     await checkPlatformBrowser({
       config,
       a,
@@ -340,14 +359,16 @@ export async function checkPlatformAuth({
       ingress: {
         events: () => ingressEvents.slice(-8),
         selected: () => selected,
-        drop: (path) => {
-          droppedPath = path;
+        drop: (path, method = 'POST') => {
+          droppedPath = { path, method };
         },
         next: (value, secret) => {
           nextTarget = value;
           ingressSecret = secret;
         },
       },
+      pbxFixture,
+      pbxUsername,
       username: browserName,
       password,
       owner,
@@ -476,7 +497,11 @@ export async function checkPlatformAuth({
             (incoming) => {
               if (consumer)
                 ingressEvents.push(`next-${consumer}:${incoming.statusCode}`);
-              if (droppedPath === req.url && incoming.statusCode === 201) {
+              if (
+                droppedPath?.path === req.url &&
+                droppedPath.method === req.method &&
+                [200, 201].includes(incoming.statusCode)
+              ) {
                 droppedPath = null;
                 incoming.resume();
                 // Truncate a started response without delivering cookies. Closing before
@@ -1406,6 +1431,7 @@ export async function checkPlatformAuth({
       'PASS platform A-08–09: hash capacity, real failure/response-loss boundaries and HTTPS Chromium Secure/HttpOnly cookie acceptance',
     );
   } finally {
+    await pbxFixture?.close();
     if (browser) await browser.close();
     if (secureServer) {
       secureServer.closeAllConnections();

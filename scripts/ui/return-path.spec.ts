@@ -40,3 +40,19 @@ test('Tenant returns accept only delivered literal list/create/UUID detail paths
   ])
     expect(consoleReturnPath(path)).toBe(path);
 });
+
+test('PBX returns allow only delivered literal paths', () => {
+  for (const path of [
+    '/pbx-nodes',
+    '/pbx-nodes/register',
+    '/pbx-nodes/12345678-1234-1234-1234-123456789abc',
+  ])
+    expect(consoleReturnPath(path)).toBe(path);
+  for (const path of [
+    '/pbx-nodes?secret=x',
+    '/pbx-nodes/register/../sign-in',
+    '/pbx-nodes/%72egister',
+    '/pbx-nodes/bad',
+  ])
+    expect(consoleReturnPath(path)).toBe('/');
+});

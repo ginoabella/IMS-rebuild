@@ -10,6 +10,7 @@ export function AppNavigation() {
       {[
         { href: '/', label: 'Home' },
         { href: '/tenants', label: 'Tenants' },
+        { href: '/pbx-nodes', label: 'PBX nodes' },
         { href: '/ui-preview', label: 'UI preview' },
       ].map((item) => (
         <Link
@@ -17,26 +18,15 @@ export function AppNavigation() {
           href={item.href}
           aria-current={
             pathname === item.href ||
-            (item.href === '/tenants' && pathname.startsWith('/tenants/'))
+            (['/tenants', '/pbx-nodes'].includes(item.href) &&
+              pathname.startsWith(`${item.href}/`))
               ? 'page'
               : undefined
           }
-          className={`flex min-h-11 items-center rounded-md px-3 py-2 font-medium transition-colors ${pathname === item.href || (item.href === '/tenants' && pathname.startsWith('/tenants/')) ? 'bg-muted text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}
+          className={`flex min-h-11 items-center rounded-md px-3 py-2 font-medium transition-colors ${pathname === item.href || (['/tenants', '/pbx-nodes'].includes(item.href) && pathname.startsWith(`${item.href}/`)) ? 'bg-muted text-primary' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}
         >
           {item.label}
         </Link>
-      ))}
-      <p className="px-3 pb-2 pt-6 text-xs uppercase tracking-widest text-subtle">
-        Planned areas
-      </p>
-      {['Asterisk'].map((label) => (
-        <div
-          key={label}
-          className="flex flex-wrap items-center justify-between gap-2 px-3 py-3 text-muted-foreground"
-        >
-          <span>{label}</span>
-          <span className="text-xs text-subtle">Pending</span>
-        </div>
       ))}
     </nav>
   );

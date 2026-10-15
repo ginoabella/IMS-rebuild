@@ -47,7 +47,7 @@ Missing files are a safe resolver outcome, not grounds for deleting desired stat
 
 Use the existing secure platform cookie, trusted private proxy, exact Origin and
 session CSRF boundary. The backend endpoints are `/platform/pbx-nodes`; browser
-forwarding/screens will be delivered in c. Submit a UUID requestId, displayName,
+forwarding/screens are described in the [operator guide](pbx-operator-guide.md). Submit a UUID requestId, displayName,
 management `{targetAlias:'local-asterisk',transport:'ami-tls',port:5039}`, and
 credentialAlias local-asterisk-observer. Never include a password or provider path.
 GET list/detail are passive and return b’s freshness-qualified observations when available, otherwise observation not_available. Saving settings
@@ -103,4 +103,4 @@ workflow is included. Back up installation identity/catalog with deployment
 configuration and PostgreSQL desired state/receipts under future production
 recovery policy.
 
-For the conditionally approved local observer, protected provisioning, runtime start, freshness and recovery checks, see [PBX observation operations](pbx-observation.md). Registry saves remain separate from observation health; browser delivery is P3-U1c.
+For the conditionally approved local observer, protected provisioning, runtime start, freshness and recovery checks, see [PBX observation operations](pbx-observation.md). Registry saves remain separate from observation health; browser delivery and acceptance are P3-U1c; see the [operator guide](pbx-operator-guide.md).
