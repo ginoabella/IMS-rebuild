@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; child spec prepared 2026-10-15 (Asia/Manila, +08:00). The user adopted the a → b → c split; implementation has not started.
+- **Status:** complete 2026-10-15 15:01 +08:00 (Asia/Manila), A-01–07 verified under conditional controlled-development approval; [final evidence](../../docs/status/p3-u2a-evidence.md). No production or live PBX acceptance is implied.
 - **Requirement:** [P3-U2 parent scope, gates and acceptance](p3-u2-extension-inventory-and-endpoint-profiles.md).
 - **Goal:** establish canonical unallocated SIP/WebRTC inventory and reproducible endpoint profiles through protected individual/bulk APIs.
 - **Completion boundary:** real PostgreSQL and two HTTP replicas prove valid inventory creation, profile versioning, atomic bulk operations, safe retries, versioned edits/disable and platform-only access. Credentials may remain unset. No browser, live configuration or tenant-allocation completion is claimed.

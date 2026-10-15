@@ -375,12 +375,30 @@ export async function checkStaffBrowser({
   const adminPage = await adminContext.newPage();
   try {
     await adminPage.goto(`${staff.origin}/credential-issuer`);
+    // Match the main login's foreground/navigation barrier: visibility recovery
+    // intentionally clears passwords, including in newly opened contexts.
+    await adminPage.bringToFront();
+    await adminPage.waitForLoadState('networkidle');
+    await expect(
+      adminPage.getByRole('button', { name: 'Sign in', exact: true }),
+    ).toBeEnabled();
     await adminPage.getByLabel(/^Tenant code/).fill(code);
     await adminPage.getByLabel(/^Username/).fill('issuer');
     await adminPage.getByLabel(/^Password/).fill(password);
+    const adminSignIn = adminPage.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === '/staff/auth/browser/sign-in' &&
+        response.request().method() === 'POST',
+    );
     await adminPage
       .getByRole('button', { name: 'Sign in', exact: true })
       .click();
+    const adminSignInStatus = (await adminSignIn).status();
+    assert.equal(
+      adminSignInStatus,
+      201,
+      `Credential browser administrator sign-in status: ${adminSignInStatus}`,
+    );
     await expect(
       adminPage.getByLabel('Target staff ID', { exact: true }),
     ).toBeVisible();

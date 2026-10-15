@@ -90,6 +90,10 @@ function fixture(content) {
   // Exact file is mounted separately through a fixture include, not product inventory.
   pbxCommand('module reload res_pjsip.so');
 }
+if (process.argv[2] === '--extension-inventory')
+  console.log(
+    JSON.stringify({ check: 'extension-inventory', redisFixture: name }),
+  );
 if (observing)
   console.log(
     JSON.stringify({
@@ -195,6 +199,14 @@ try {
   }
   if (created) docker(['rm', '-f', '-v', name]);
   rmSync(directory, { recursive: true, force: true });
+  if (process.argv[2] === '--extension-inventory')
+    console.log(
+      JSON.stringify({
+        check: 'extension-inventory',
+        redisFixture: name,
+        cleanup: 'removed',
+      }),
+    );
   if (observing)
     console.log(
       'PASS observation cleanup: controlled credential restored, exact SIP fixture cleared, exact Redis container/volume and launcher directory removed',

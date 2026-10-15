@@ -1,3 +1,4 @@
+import { expectedMigrationNames } from './migration-history.mjs';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { once } from 'node:events';
@@ -138,9 +139,12 @@ try {
   await owner.connect();
   await observer.connect();
   const history = await observer.query(
-    'SELECT count(*)::int AS count FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
+    'SELECT migration_name FROM public._prisma_migrations WHERE finished_at IS NOT NULL ORDER BY migration_name',
   );
-  assert.equal(history.rows[0].count, 12);
+  assert.deepEqual(
+    history.rows.map((row) => row.migration_name),
+    expectedMigrationNames(),
+  );
   await owner.query(`CREATE SCHEMA audit_fixture;
     CREATE TABLE audit_fixture.sample (id text PRIMARY KEY);
     CREATE TABLE audit_fixture.delivery_sink (id text PRIMARY KEY);
@@ -148,7 +152,7 @@ try {
     GRANT SELECT, INSERT ON audit_fixture.sample TO myims_runtime;
     GRANT SELECT ON audit_fixture.delivery_sink TO myims_runtime;`);
   console.log(
-    'PASS: fresh deployment and rerun apply twelve versioned migrations; fixtures exist only in disposable database',
+    'PASS: fresh deployment and rerun apply the complete repository migration set; fixtures exist only in disposable database',
   );
   let retained;
   const ctx = context('commit');

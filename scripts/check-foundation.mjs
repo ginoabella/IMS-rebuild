@@ -1,3 +1,4 @@
+import { expectedMigrationNames } from './migration-history.mjs';
 import assert from 'node:assert/strict';
 import { spawn } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -197,9 +198,12 @@ try {
   await connection.connect();
   try {
     const result = await connection.query(
-      'SELECT count(*)::int AS count FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
+      'SELECT migration_name FROM public._prisma_migrations WHERE finished_at IS NOT NULL ORDER BY migration_name',
     );
-    assert.equal(result.rows[0].count, 12);
+    assert.deepEqual(
+      result.rows.map((row) => row.migration_name),
+      expectedMigrationNames(),
+    );
     const role = await connection.query(
       'SELECT rolsuper, rolcreatedb, rolcreaterole, rolbypassrls FROM pg_roles WHERE rolname = current_user',
     );

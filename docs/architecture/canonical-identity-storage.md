@@ -90,9 +90,9 @@ Cover A-01–07: canonical/invalid identifiers, all tenant statuses, retired-cod
 collision, immutable codes and ownership, two-tenant username equality, duplicate
 and foreign-key rejection, concurrent inserts, wrong-plane/foreign-qualified
 repository access, runtime bootstrap denial, retained audit, synthetic sentinel
-absence and existing `./dev check` regression verification. Update any existing
-checks that assert the exact migration count when adding a migration; preserve
-their fresh/rerun assertions.
+absence and existing `./dev check` regression verification. Fresh/rerun foundation, audit and identity checks compare exact applied migration
+names to deployment-owned repository migrations through `scripts/migration-history.mjs`;
+new migrations must preserve these complete-history assertions.
 
 Foundation source inspection confirms `Transaction.query()` uses the active pooled
 connection and marks failed required writes for rollback. `AuditRepository.append()`

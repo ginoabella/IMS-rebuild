@@ -12,9 +12,10 @@ do not override the final results summarized here.
 
 Deliver MyIMS incrementally under the agreed
 [build, review, improve process](ai-workflow-rules.md#build-review-improve).
-The next implementation is P3-U2 extension inventory under Phase 3 Asterisk
-administration, following completed P3-U1 registry, observation and operator
-browser delivery. The P3-U1 a → b → c sequence is complete. P3-U2 now has an adopted a → b → c implementation sequence and separate planned child specs.
+P3-U2a inventory/profile foundation is complete under conditional development
+approval, following completed P3-U1 registry, observation and operator browser.
+P3-U2 continues in the adopted a → b → c sequence: b needs its G-02 credential
+contract/approval; c owns the browser/live-mapping journey. Parent P3-U2 remains incomplete.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
 their verified boundaries. Early draft tenant creation P4-U1a is complete under
@@ -24,39 +25,19 @@ production readiness remain to be delivered.
 
 ## In Progress
 
-None. P3-U1c and parent P3-U1 completed 2026-10-15 09:32 +08:00 (Asia/Manila).
+None. P3-U2a completed 2026-10-15 15:01 +08:00 (Asia/Manila).
 
-## Current Unit Checkpoint — P3-U1
+## Current Unit Checkpoint — P3-U2a
 
-- **Status:** parent P3-U1 and a/b/c complete within approved development registry/observation scope; reconciled 2026-10-15 09:32 +08:00 (Asia/Manila). Phase 3 remains incomplete.
-- **Requirement:** [P3-U1 AC-01–11](feature-specs/p3-u1-register-pbx-nodes-and-observe-health.md) and [c C-01–07](feature-specs/p3-u1c-operator-pbx-browser-journey-and-integrated-handoff.md).
-- **Delivered a:** protected desired registry, canonical installation identity, safe aliases/destinations, transactional audit/receipts, versioned edits and atomic observation handoff; [A-01–07 evidence](../docs/status/p3-u1a-evidence.md).
-- **Delivered b:** independent AMI-TLS observation, durable leases/epochs/fencing, complete reconciliation, freshness and sanitized failures; [B-01–09 evidence](../docs/status/p3-u1b-evidence.md). The upstream account has broader `system` permissions than the fixed application allowlist and is not strictly read-only at the PBX.
-- **Delivered c:** actual secure list/register/detail/connectivity edit, bounded named forwarding, current backend authority, owner-bound immutable create intent/fingerprint/epoch, uncertain-edit canonical reload/review, passive desired/runtime states and accessible responsive presentation; [browser contract](../docs/architecture/pbx-browser.md), [operator guide](../docs/runbooks/pbx-operator-guide.md), [C-01–07/parent evidence](../docs/status/p3-u1c-evidence.md).
-- **Verification:** combined `./dev exec pnpm check:pbx-nodes`, durable/process regressions, full `./dev check`, all 12 shared UI tests and final `--browser` selection passed, exit 0. Real AMI/SIP, disconnect/reconnect, ownership/freshness and reference/target recovery are separated from injected faults and synthetic second-target evidence. Final maximum-name/keyboard/axe/reflow and secret-exclusion checks passed.
-- **Cleanup/runtime:** exact task database/Redis/PBX fixtures removed; existing installation/catalog/material/tenant routes retained. Both normal HTTPS supervisors restored ready and network checks passed; backend live/ready HTTP 200. An older October 7 disposable database without PBX schema was identified read-only and preserved.
-- **Approval/boundary:** existing scoped G-01/G-02 and conditional G-01–03 local-development approvals unchanged. One real controlled installation was tested; production deployment/secrets/HA/capacity and strict PBX-side read-only enforcement remain unapproved. Registry save establishes neither live apply nor tenant voice readiness.
-- **Handoff:** P3-U2 consumes canonical node/installation identity, safe registry/observation ports and freshness/coverage semantics. P3-U5 must deliver external stale-epoch fencing and ordered configuration revisions; a pre-call database check cannot revoke an issued PBX command. Tenant allocation/activation and the remaining Phase 3 gate stay incomplete.
-- **Documentation:** guide/contracts/runbooks/index, every parent criterion, local links, consistency and whitespace reconciled. Historical intermediate checkpoints are archived; final results are authoritative.
-
-| Unit | Status | Boundary and acceptance |
-| --- | --- | --- |
-| [P3-U1a — Protected PBX registry and connectivity contracts](feature-specs/p3-u1a-protected-pbx-registry-and-connectivity-contracts.md) | complete | A-01–07; [registry evidence](../docs/status/p3-u1a-evidence.md). |
-| [P3-U1b — Fenced Asterisk observation and recovery](feature-specs/p3-u1b-fenced-asterisk-observation-and-recovery.md) | complete | B-01–09; conditional development approval; [observation evidence](../docs/status/p3-u1b-evidence.md). |
-| [P3-U1c — Operator PBX browser journey and integrated handoff](feature-specs/p3-u1c-operator-pbx-browser-journey-and-integrated-handoff.md) | complete | C-01–07 and parent AC-01–11; [combined evidence](../docs/status/p3-u1c-evidence.md). |
-
-### Prerequisites for dependent P3-U1 work
-
-| Gate | Required condition and resume evidence |
-| --- | --- |
-| G-01 — Controlled observation environment | Resolved for isolated development: existing Asterisk 22.10.1, verified private AMI-TLS and cleaned-up no-call registration fixtures. AMI `system` is broader than read-only; the application enforces its fixed allowlist. Production PBX-side enforcement remains unapproved. |
-| G-02 — Secret resolution | Resolved for isolated development: protected exact-file provider/opaque aliases, dedicated telephony mounts and fresh lookup on reconnect/rotation verified. Production secrets management requires separate review. |
-| G-03 — Observation policy | Resolved for isolated development: approved validated limits, complete reconciliation and passive stale/historical/unknown semantics verified. Exact values are in the b contract/evidence; production capacity/HA/recovery requires separate review. |
-
-Resolve only the gate portions needed by the current child. Routine SQL/routes/
-adapter choices follow existing conventions. Routing/reload/active-call policy
-remains with later units; P3-U5 must prove external stale-owner fencing before
-live apply is enabled. Missing live access cannot be replaced by simulator evidence.
+- **Status:** complete within conditionally approved controlled-development inventory/profile scope; 2026-10-15 15:01 +08:00 (Asia/Manila). Parent P3-U2 and Phase 3 remain incomplete.
+- **Requirement:** [P3-U2a A-01–07](feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md); [final evidence](../docs/status/p3-u2a-evidence.md).
+- **Delivered:** protected individual/bulk preview/create, bounded list/detail/profile APIs; node-wide canonical number reservation, immutable generated endpoint/auth/AOR identities, node-scoped immutable profile versions and explicit adoption, versioned disable/re-enable, transactional actor audit, owner/operation-scoped durable intent receipts and unallocated calling/assignment denial.
+- **Compatibility/deployment:** reviewed revisioned capability declarations are deployment-owned. Additive migration and the existing controlled installation’s non-secret declaration applied successfully. No editable profiles/inventory were seeded on startup.
+- **Verification:** final real PostgreSQL/runtime-grant, shared Redis and independent HTTP A/B inventory suite passed, including overlapping/non-overlapping races, audit/receipt rollback, immutable profile history, exact actor/set audit, same/conflicting intents and actual HTTP/COMMIT acknowledgment loss. Registry, isolated authority/lifecycle, staff browser, complete foundation/durability/storage/identity and final full `./dev check` passed, exit 0.
+- **Regression maintenance:** foundation/audit/identity now verify exact repository migration history instead of hard-coded counts. A second-context staff-browser fixture uses its existing foreground/navigation barrier before password entry; authentication, expiry and password-clearing behavior remain unchanged. Focused and integrated checks passed.
+- **Cleanup/runtime:** exact inventory PostgreSQL/Redis/session/catalog fixtures removed. Normal platform and staff HTTPS supervisors restored ready; both network checks passed. Backend live/ready HTTP 200, PostgreSQL and both Redis dependencies up. Existing identities/material/unmanaged PBX/reference configuration retained.
+- **Handoff:** [API/transaction contract](../docs/architecture/extension-inventory.md), [runbook](../docs/runbooks/extension-inventory.md). b must authorize and call `InventoryVersionPort.lockUnallocated` on the same transaction before approved credential/version/audit changes; c receives safe DTOs, dependency tokens and explicit uncertainty recovery. G-02/b, c’s live mapping/browser, P3-U5 apply and P4 calling eligibility remain separate.
+- **Approval limits:** initial 1000–899999 convention, node-scoped profiles, removeExisting=false and generated namespace are approved only within the recorded conditional development scope. Shorter municipal plans need explicit policy revision; production transport/media/contact recovery needs separate review. Saving/enabling grants no credentials, live installation, readiness or calling eligibility.
 
 ## Completed
 
@@ -79,6 +60,7 @@ the history preserves their full earlier checkpoints.
 | P3-U1a | Protected desired PBX registry/API, canonical identity, safe aliases/destinations, atomic audit/retry/versioned edits and b handoff; A-01–07 complete. | [Registry evidence](../docs/status/p3-u1a-evidence.md) |
 | P3-U1b | Controlled development observation, replaceable AMI-TLS adapter, durable ownership/fencing and reconciled freshness; B-01–09 complete. | [Observation evidence](../docs/status/p3-u1b-evidence.md) |
 | P3-U1c / parent P3-U1 | Secure operator register/inspect/edit, identity-bound uncertainty recovery and real integrated registry/observation/browser acceptance; C-01–07 and AC-01–11 complete. | [Combined evidence](../docs/status/p3-u1c-evidence.md) |
+| P3-U2a | Protected inventory/profile APIs, immutable selections/identities, atomic bounded bulk creation, versioned status/adoption, audit/idempotency and unallocated denial; A-01–07 complete. | [Inventory evidence](../docs/status/p3-u2a-evidence.md) |
 | DEV-PLATFORM-HTTPS | Approved private SSH/HTTPS console access, real-stack verification and Windows user-confirmed sign-in. | [Development evidence](../docs/status/platform-development-https-evidence.md) |
 
 Latest completed P2-U4 checkpoint: C-01–09 and parent AC-01–12 reconciled;
@@ -90,7 +72,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U2: extension inventory using the completed P3-U1 identity/observation handoff. The [feature spec and adopted split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md) and three child specs are prepared; implement a → b → c. Implementation remains planned; number/profile, endpoint-credential and runtime-mapping gates must be resolved for dependent work.
+1. P3-U2b: resolve G-02 endpoint credential/provider/handoff/recovery policy, then implement its separately approved scope using verified a’s transaction/version port. P3-U2c follows with the actual browser and controlled live mapping/coexistence checks. [Parent scope and split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md); parent P3-U2 remains incomplete.
 2. P3-U3–U5: trunks/gateways/DIDs, routing, then verified apply/recovery and external fencing.
 3. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
@@ -102,7 +84,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | --- | --- | --- |
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
-| 3 | P3-U1 and a/b/c complete within development scope; P3-U2–U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
+| 3 | P3-U1 and a/b/c plus P3-U2a complete within development scope; parent P3-U2, b/c, U3–U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1a/children complete; P4-U1b and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
@@ -133,13 +115,14 @@ for their scope; creating a spec does not approve a proposal.
 - Scoped staff setup/reset/recovery, linked draft-administrator setup/reset exception, password/capability/revocation/handoff/budget/retention rules: [approved credential review sections 1–6](../docs/planning/p2-u4a-credential-contract-review.md). These are resolved within P2-U4; general administrator removal and tenant transitions are not thereby approved.
 - Local Garage/shared reference access: [storage contract](../docs/architecture/shared-storage.md), GET-only references with 120-second default/300-second ceiling; existing references may survive authority changes until expiry.
 - P3-U1b G-01–03: [conditional local observation approval](../docs/planning/p3-u1b-observation-contract-review.md), including replaceable adapter/material isolation, broader AMI permission disclosure and development-only limits. Production and expanded permissions/control require separate approval.
+- P3-U2a G-01 and the G-03 namespace portion: [conditional inventory/profile approval](../docs/planning/p3-u2a-inventory-contract-review.md), Sections 2–4; initial number convention, immutable node-scoped profiles, generated identities and disabled/unset stock. Production security/contact recovery and b/G-02, c and P3-U5 remain separate.
 - Existing architecture/runtime and early draft delivery order remain adopted; implementation decisions are documented in [architecture](architecture.md) and [docs/architecture](../docs/architecture/), not duplicated here.
 
 ### Unresolved for dependent work
 
 | Area | Affected work and resume condition |
 | --- | --- |
-| PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above; production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
+| PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 endpoint credentials and c's live mapping remain separate. Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
 | Administrator/tenant lifecycle | General last-admin removal/disablement, platform-account recovery and tenant activation/suspension/retirement effects on routes/active work remain with owning P4/later units. Ordinary admission and scoped P2-U4 credential recovery are already approved. |
 | Geography/drafts/location | Default-coordinate/service-area policy, tiles/search, persistent draft recovery/conflicts, foreground sharing/retention and supported operational mobile targets must be established before owning units. |
@@ -149,7 +132,7 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Verification and Limitations
 
-- Latest required full Docker graph passed, exit 0, confirmed 2026-10-15 09:24 +08:00; shared UI and final PBX browser checks also passed. Hosted CI, production traffic/capacity/TLS/HA and joint backing-store rollback/recovery remain separately unverified.
+- Latest required full Docker graph passed, exit 0, confirmed 2026-10-15 15:01 +08:00; focused inventory, registry, authority, staff browser and restored HTTPS network checks passed. Prior shared UI/PBX browser evidence remains in its owning unit. Hosted CI, production traffic/capacity/TLS/HA and joint backing-store rollback/recovery remain separately unverified.
 - Native evidence is reported Windows Android acceptance on Android 16/API 36, patch 2025-04-05. Desktop Node 24.13.1 is outside the supported engine; Docker verification used Node 22.23.3. Secure-storage faults are injected around real OS calls; physically locked reads and exact interruption timing are not claimed. Trusted session-clock activity fixtures do not establish responder operations.
 - Mounted web work recovery does not persist through refresh; durable incident drafts belong to P5-U4. Staff authentication is complete; full responder/incident workflows remain future work.
 - P3-U1 establishes authenticated registry/observation/browser recovery against one controlled development Asterisk. Live configuration apply/recovery, tenant voice readiness, operational call attribution, production deployment and real multi-PBX HA remain unverified/unapproved.
@@ -160,11 +143,7 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Recent Session Notes
 
-- 2026-10-15 (Asia/Manila, +08:00) — User adopted the P3-U2 a → b → c split and requested separate child specs. Created [a — inventory/profiles/atomic bulk](feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md), [b — protected credential lifecycle](feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md) and [c — browser/integrated handoff](feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md), with child acceptance matrices and parent coverage. All remain planned; implementation has not started and policy gates are not approved by spec creation. Documentation consistency, coverage, links and whitespace reviewed.
-
-- 2026-10-15 (Asia/Manila, +08:00) — Prepared and reviewed the P3-U2 feature spec using Phase 3, delivered P3-U1 contracts and the user-supplied working Asterisk reference. Recommended three sequential children: inventory/profiles/atomic bulk API, protected credential lifecycle, then browser/observation/integrated handoff. No child implementation or split adoption claimed. Applicable number/profile, credential provider/handoff and runtime identity/coexistence decisions remain required; live apply/allocation/assignment stay with later owners. Documentation consistency/link/whitespace review only.
-
-- 2026-10-15 09:32 +08:00 (Asia/Manila) — Completed P3-U1c and parent P3-U1 after combined real-service/browser/ownership acceptance, durable/process regressions, full Docker graph, shared UI and final maximum-name browser checks. Exact owned fixtures removed; older unrelated database preserved. Normal platform/staff HTTPS ready, their network checks passed and backend live/ready returned 200. P3-U2/U5 handoff documented; configuration apply, tenant voice readiness and production remain incomplete.
+- 2026-10-15 15:01 +08:00 (Asia/Manila) — Completed P3-U2a A-01–07 under the user’s conditional approval. Delivered protected inventory/profile/atomic bulk APIs, immutable identity/version contracts, audit/receipts and exact b transaction handoff. Real-service focused checks, affected regressions and full Docker graph passed; fixtures removed, normal HTTPS restored ready, health 200. [Evidence](../docs/status/p3-u2a-evidence.md) records commands, fixes and limits. Credentials, c browser/live mapping, live apply and production acceptance remain separate.
 
 ## Tracker Maintenance
 

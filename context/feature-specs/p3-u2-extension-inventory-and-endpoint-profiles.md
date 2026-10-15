@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; specification reviewed and a → b → c split adopted by the user 2026-10-15 (Asia/Manila, +08:00); separate child specs prepared. No P3-U2 implementation or runtime verification is claimed.
+- **Status:** in progress; a → b → c split adopted 2026-10-15 (Asia/Manila, +08:00). P3-U2a is complete under the user’s conditional inventory/profile approval with [A-01–07 evidence](../../docs/status/p3-u2a-evidence.md); b/c remain planned. Parent completion and live PBX/production acceptance are not claimed.
 - **Requirement:** [Phase 3, P3-U2](../implementation-plan.md#p3-u2--manage-extension-inventory-and-endpoint-profiles), [platform requirements](../project-overview.md#platform-and-asterisk-administration), and [telephony architecture](../architecture.md#telephony-architecture).
 - **Goal:** let a platform operator create and maintain individual and bulk SIP/WebRTC extension inventory, endpoint profiles and protected credential references before tenant reservation.
 - **Completion boundary:** the protected browser journey persists valid inventory and profile choices, performs the approved credential setup/reset flow, and displays desired state separately from trustworthy registration observations. Unallocated or disabled inventory confers no tenant calling or staff assignment authority. Saving never installs or reloads Asterisk configuration.
@@ -26,7 +26,7 @@ Reuse:
 - Same-transaction actor audit, explicit transaction handles, and existing durable execution for any required postcommit work. Do not create a second queue, secret store or assignment source of truth.
 - Existing database deployment/migration ownership, runtime grants and shared UI primitives.
 
-Current telephony code owns registry/connectivity and observation only; shared
+At specification preparation, telephony code owned registry/connectivity and observation only; shared
 PBX DTOs expose bounded endpoint identifiers and contact counts. Neither existing
 observations nor reference files establish canonical inventory, ownership,
 credential lifecycle or verified endpoint profiles. P4-U1a draft tenants already
@@ -85,6 +85,16 @@ pagination and adapter composition follow existing conventions.
 | G-01 — Number and profile policy | Allowed number syntax/length and leading-zero equivalence, permitted ranges/exclusions, approved SIP/WebRTC profile fields/defaults, supported transports/codecs/contact behavior and node compatibility. Decide whether profiles are reusable across nodes or node-scoped. Reference settings above are candidates, not approved defaults. | Before dependent validation/schema/profile behavior: record the scoped policy and examples, including equivalent-number collisions and invalid profile combinations. Bulk request bounds must be documented and validated; no capacity target is inferred. |
 | G-02 — Endpoint credential lifecycle | Approved generation or supplied-reference flow, secret provider and write/read identities, handoff to phones, rotation/versioning, old-secret retirement, retry retention and abandoned-material cleanup. Decide explicitly whether any one-time secret delivery is required and through what protected channel. | Before credential implementation: record a reviewed contract and provision protected access. Existing P3-U1 exact-file observation lookup is not a writable endpoint-secret service. Staff account password/setup policy is not a SIP credential policy. No credential reveal or browser password-entry flow is implicitly approved. |
 | G-03 — Runtime identity and coexistence | Trusted generated endpoint/auth/AOR naming, mapping to observations, treatment of unmanaged existing PBX identifiers, and compatibility with the approved controlled installation. Existing runtime entries must not be overwritten or adopted merely because a number matches. | Before runtime mapping/acceptance: document mapping and collision/coexistence checks against the reference and controlled target. Resolve an ambiguous namespace before claiming usable inventory. Missing live visibility blocks the dependent check, not independent registry work. |
+
+The user conditionally approved [inventory review Sections 2–4](../../docs/planning/p3-u2a-inventory-contract-review.md)
+on 2026-10-15 for controlled private development: G-01 number/profile policy and
+the G-03 generated namespace portion are resolved for a. This includes the initial
+1000–899999 convention (future shorter municipal plans require explicit revision),
+node-scoped immutable profiles, removeExisting=false, generated identities and
+disabled/unallocated/unset stock. Production transport/media and contact recovery
+need separate review. G-02/b, c’s live mapping/coexistence and P3-U5 apply remain
+separate. A desired save grants no credentials, readiness or calling eligibility.
+See the [implemented API/transaction contract](../../docs/architecture/extension-inventory.md).
 
 No answer is needed to prepare this spec. Resolve the applicable gate before
 implementing its dependent behavior; record the decision and affected child in
@@ -293,7 +303,7 @@ external secret lifecycle and recovery boundary. The final child delivers the
 operator journey and trustworthy observation presentation across those contracts.
 Keep each child's failure/security tests with that child; do not defer correctness
 to a testing-only unit. The user adopted this split on 2026-10-15 (Asia/Manila,
-+08:00). The linked child specs define sequential implementation; all remain planned.
++08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b/c remain planned.
 
 | Unit | Starting state, scope and expected result | Parent criteria owned |
 | --- | --- | --- |

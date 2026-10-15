@@ -134,6 +134,12 @@ case "$action" in
           *) platform_selection=--platform-auth ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:extension-inventory ]; then
+        shift 2
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --inventory ]; }; then
+          echo 'Supported inventory selection: --inventory' >&2; exit 1
+        fi
+        provision_storage scripts/check-session-deployment.mjs --extension-inventory
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-nodes ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ] && [ "$1" != --observation ] && [ "$1" != --browser ]; }; then

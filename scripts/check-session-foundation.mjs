@@ -1,3 +1,4 @@
+import { checkExtensionInventory } from './check-extension-inventory.mjs';
 import { checkPbxObservation } from './check-pbx-observation.mjs';
 import { checkPbxNodes } from './check-pbx-nodes.mjs';
 import { checkStaffHttp } from './check-staff-http.mjs';
@@ -24,6 +25,7 @@ assert.ok(
         '--credential-lifecycle',
         '--credential-api',
         '--pbx-registry',
+        '--extension-inventory',
         '--pbx-observation',
         '--pbx-browser',
         '--draft-tenant',
@@ -346,9 +348,19 @@ try {
   await admin.connect();
   await admin.query(`CREATE DATABASE ${name}`);
   created = true;
-  if (['--pbx-observation', '--pbx-browser'].includes(selection[0]))
+  if (
+    ['--pbx-observation', '--pbx-browser', '--extension-inventory'].includes(
+      selection[0],
+    )
+  )
     console.log(
-      JSON.stringify({ check: 'pbx-observation', databaseFixture: name }),
+      JSON.stringify({
+        check:
+          selection[0] === '--extension-inventory'
+            ? 'extension-inventory'
+            : 'pbx-observation',
+        databaseFixture: name,
+      }),
     );
   await deploy();
   await deploy();
@@ -386,6 +398,7 @@ try {
       '--credential-api',
       '--platform-browser',
       '--pbx-registry',
+      '--extension-inventory',
       '--pbx-observation',
       '--pbx-browser',
       '--draft-tenant',
@@ -507,6 +520,7 @@ try {
       '--credential-lifecycle',
       '--credential-api',
       '--pbx-registry',
+      '--extension-inventory',
       '--pbx-observation',
       '--pbx-browser',
       '--draft-tenant',
@@ -1211,6 +1225,27 @@ try {
       commitProxy,
       pbxAccess,
     });
+  if (selection[0] === '--extension-inventory') {
+    await checkExtensionInventory({
+      ownerUrl: trusted.href,
+      owner,
+      runtime,
+      worker,
+      redis,
+      issue,
+      key,
+      secrets,
+      appUrl: app.href,
+      proxy,
+      commitProxy,
+    });
+    for (const secret of secrets)
+      assert.ok(
+        !captured.join('').includes(secret),
+        'Inventory process diagnostics leaked private material',
+      );
+    console.log('PASS inventory process diagnostics: private sentinels absent');
+  }
   // PBX retains immutable contract-fixture intent until database teardown;
   // run it after legacy suites that assert their own empty outbox.
   if (selection.length === 0 || selection[0] === '--pbx-registry') {
@@ -1241,6 +1276,15 @@ try {
       'PASS PBX diagnostics: sentinels absent from independent HTTP process logs and audit',
     );
   }
+} catch (error) {
+  if (selection[0] === '--extension-inventory')
+    for (const line of captured
+      .join('')
+      .split('\n')
+      .filter((line) => line.includes('"operation":"telephony.inventory"'))
+      .slice(-8))
+      console.error(line);
+  throw error;
 } finally {
   for (const child of children)
     if (child.exitCode === null) child.kill('SIGKILL');
@@ -1256,6 +1300,24 @@ try {
       [name],
     );
     await admin.query(`DROP DATABASE ${name}`);
+    if (selection[0] === '--extension-inventory') {
+      assert.equal(
+        (
+          await admin.query(
+            'SELECT datname FROM pg_database WHERE datname=$1',
+            [name],
+          )
+        ).rows.length,
+        0,
+      );
+      console.log(
+        JSON.stringify({
+          check: 'extension-inventory',
+          databaseFixture: name,
+          cleanup: 'removed',
+        }),
+      );
+    }
   }
   await admin.end();
 }

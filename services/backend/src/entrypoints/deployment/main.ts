@@ -1,3 +1,4 @@
+import { declareEndpointCapabilities } from './endpoint-capabilities';
 import { bootstrap } from './bootstrap';
 import { ConfigurationError } from '@myims/config';
 import {
@@ -10,6 +11,10 @@ import { DeploymentModule } from './deployment.module';
 
 async function main() {
   const command = process.argv[2];
+  if (command === 'declare-endpoint-capabilities') {
+    await declareEndpointCapabilities(process.argv.slice(3));
+    return;
+  }
   if (command === 'bootstrap-operator') {
     await bootstrap(process.argv.slice(3));
     return;

@@ -240,11 +240,23 @@ Separate P3-U1 implementation specs, in sequence:
 - [Operator PBX guide](runbooks/pbx-operator-guide.md)
 - [P3-U1c integrated evidence](status/p3-u1c-evidence.md)
 
-P3-U2 planning: [Extension inventory and endpoint profiles — feature spec and adopted split](../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md). Implementation remains planned; the user-supplied working Asterisk reference informs compatibility examples, while profile, credential and runtime-mapping decisions remain explicit gates.
+P3-U2 planning: [Extension inventory and endpoint profiles — feature spec and adopted split](../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md). P3-U2a is complete within conditional controlled-development number/profile/namespace scope; A-01–07 and required checks passed. Credential policy and live runtime mapping remain separate gates; the working Asterisk reference stays unchanged.
+
+[P3-U2a inventory and endpoint profile contract — conditional approval](planning/p3-u2a-inventory-contract-review.md)
+records the user’s controlled-development approval of number/range rules,
+node-scoped immutable profiles and generated runtime keys, with atomic bulk/retry
+contracts. G-02/credential policy remains with b; production policy and c’s live
+mapping/coexistence remain separately gated.
 
 The user adopted P3-U2's sequential a → b → c split on 2026-10-15
-(Asia/Manila, +08:00). Separate child specs are prepared; all remain planned:
+(Asia/Manila, +08:00). Separate child specs are prepared; a is complete and b/c remain planned:
 
 - [P3-U2a — Protected inventory, profiles and atomic bulk creation](../context/feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md)
 - [P3-U2b — Protected endpoint credential lifecycle and recovery](../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md)
 - [P3-U2c — Operator inventory browser and integrated handoff](../context/feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md)
+
+P3-U2a controlled-development inventory foundation:
+
+- [Inventory/profile API and transaction contract](architecture/extension-inventory.md)
+- [Inventory deployment, recovery and checks](runbooks/extension-inventory.md)
+- [P3-U2a acceptance evidence](status/p3-u2a-evidence.md)

@@ -1,3 +1,6 @@
+import { InventoryController } from '../../../telephony/adapters/http/inventory.controller';
+import { InventoryRuntime } from '../../../telephony/adapters/db/inventory-runtime';
+import { ExtensionInventory } from '../../../telephony/application/extension-inventory';
 import { PbxController } from '../../../telephony/adapters/http/pbx.controller';
 import { PbxRuntime } from '../../../telephony/adapters/db/pbx-runtime';
 import { PbxNodes } from '../../../telephony/application/pbx-nodes';
@@ -27,12 +30,24 @@ export class PlatformAuthHttpModule {
       imports: [IdentityHttpModule.register(config)],
       controllers: [
         PbxController,
+        InventoryController,
         PlatformAuthController,
         PlatformTenantsController,
         PlatformCredentialActionsController,
       ],
       providers: [
         PlatformCurrentSession,
+        {
+          provide: InventoryRuntime,
+          inject: [TransactionAuthority],
+          useFactory: (authority: TransactionAuthority) =>
+            new InventoryRuntime(config.database.url, authority),
+        },
+        {
+          provide: ExtensionInventory,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.service,
+        },
         {
           provide: PbxRuntime,
           inject: [TransactionAuthority],

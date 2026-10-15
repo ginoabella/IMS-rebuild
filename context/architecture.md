@@ -725,3 +725,12 @@ browser storage/session/observer ownership remains outside the web application.
 The [tracker](progress-tracker.md) and [c evidence](../docs/status/p3-u1c-evidence.md)
 record actual acceptance state; browser implementation alone does not complete
 P3-U1 or the Phase 3 gate.
+
+P3-U2a adds [protected inventory/profile transactions](../docs/architecture/extension-inventory.md):
+node-wide reserved canonical numbers, immutable generated runtime identities,
+node-scoped immutable profile versions and explicit adoption, bounded atomic bulk
+creation and operator/operation-scoped 30-day intent receipts. Deployment owns
+reviewed revisioned capability declarations; runtime only reads/locks them. New
+stock is disabled/unallocated, credentials unset and readiness unestablished;
+no save installs PBX resources or grants calling eligibility. b owns credentials,
+c owns browser/live mapping and P3-U5 owns application.

@@ -1,3 +1,4 @@
+import { expectedMigrationNames } from './migration-history.mjs';
 import { checkBootstrap } from './check-operator-bootstrap.mjs';
 import { checkAuthority } from './check-identity-authority.mjs';
 import assert from 'node:assert/strict';
@@ -234,13 +235,12 @@ try {
   await deploy();
   await owner.connect();
   await runtime.connect();
-  assert.equal(
-    (
-      await runtime.query(
-        'SELECT count(*)::int AS n FROM public._prisma_migrations WHERE finished_at IS NOT NULL',
-      )
-    ).rows[0].n,
-    12,
+  const migrationHistory = await runtime.query(
+    'SELECT migration_name FROM public._prisma_migrations WHERE finished_at IS NOT NULL ORDER BY migration_name',
+  );
+  assert.deepEqual(
+    migrationHistory.rows.map((row) => row.migration_name),
+    expectedMigrationNames(),
   );
   for (const table of [
     'tenants',
@@ -265,7 +265,7 @@ try {
   assert.equal(collations.length, 3);
   assert.ok(collations.every((row) => row.collation_name === 'C'));
   console.log(
-    'PASS: fresh/rerun twelve migrations; no production identity seeds; canonical ASCII normalization and bounds',
+    'PASS: fresh/rerun exact migration history; no production identity seeds; canonical ASCII normalization and bounds',
   );
   phase = 'tenant constraints';
   const t1 = randomUUID(),
