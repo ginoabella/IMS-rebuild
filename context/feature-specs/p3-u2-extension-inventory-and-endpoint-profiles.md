@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** in progress; a → b → c split adopted 2026-10-15 (Asia/Manila, +08:00). P3-U2a is complete under the user’s conditional inventory/profile approval with [A-01–07 evidence](../../docs/status/p3-u2a-evidence.md); b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c is in progress with its remaining G-03 review awaiting approval. Parent completion and live PBX/production acceptance are not claimed.
+- **Status:** completed 2026-10-16 within conditional private-development approval; a A-01–07, b B-01–07, c C-01–07 and parent AC-01–11 reconcile in [final integrated evidence](../../docs/status/p3-u2c-evidence.md). Live application, production and tenant calling readiness remain separate.
 - **Requirement:** [Phase 3, P3-U2](../implementation-plan.md#p3-u2--manage-extension-inventory-and-endpoint-profiles), [platform requirements](../project-overview.md#platform-and-asterisk-administration), and [telephony architecture](../architecture.md#telephony-architecture).
 - **Goal:** let a platform operator create and maintain individual and bulk SIP/WebRTC extension inventory, endpoint profiles and protected credential references before tenant reservation.
 - **Completion boundary:** the protected browser journey persists valid inventory and profile choices, performs the approved credential setup/reset flow, and displays desired state separately from trustworthy registration observations. Unallocated or disabled inventory confers no tenant calling or staff assignment authority. Saving never installs or reloads Asterisk configuration.
@@ -96,7 +96,7 @@ need separate review. G-02/b, c’s live mapping/coexistence and P3-U5 apply rem
 separate. A desired save grants no credentials, readiness or calling eligibility.
 See the [implemented API/transaction contract](../../docs/architecture/extension-inventory.md).
 
-The proposed [c runtime mapping and controlled acceptance review](../../docs/planning/p3-u2c-observation-mapping-contract-review.md) is awaiting user approval; its preparation does not resolve G-03.
+The [c runtime mapping and controlled acceptance review](../../docs/planning/p3-u2c-observation-mapping-contract-review.md) sections 2–6 and G03-01–06 were conditionally approved by the user on 2026-10-16 for the existing private development installation. Its explicit preservation, exclusive-access, baseline, recovery and cleanup conditions apply. Approval does not complete acceptance.
 
 No answer is needed to prepare this spec. Resolve the applicable gate before
 implementing its dependent behavior; record the decision and affected child in
@@ -279,8 +279,8 @@ automatically replay a mutation after reauthentication.
 | AC-10 | Actual browser individual/bulk/profile/edit/credential/disable paths pass validation/conflict/uncertainty recovery, same/foreign-operator expiry, logout, keyboard/focus/status and narrow-width reflow checks. No automatic replay or passive session renewal. |
 | AC-11 | Integrated AC-01–10, affected registry/observation/auth/durable regressions and full Docker graph pass. Guides, owner contracts, docs index, safe evidence and tracker record commands, environment, limits and explicit P3-U4/U5/P4/P8 handoffs. |
 
-During implementation establish a focused `./dev exec pnpm check:extension-inventory`
-procedure (proposed; not an existing command or recorded pass). Run real database
+The implemented combined `./dev exec pnpm check:extension-inventory` procedure
+passed, including inventory, real-provider credentials and actual browser checks. Run real database
 constraints/transactions under runtime grants, shared Redis, two HTTP replicas,
 the actual secure platform browser and controlled Asterisk passive observation.
 Use deterministic barriers/fault fixtures for race and response-loss contracts;
@@ -294,8 +294,8 @@ fixture ownership/cleanup and limitations. No production changes or reloads are
 authorized by verification preparation. Missing required controlled observation
 or credential-provider access keeps the dependent child/parent incomplete.
 
-For this documentation task, review requirement coverage, source consistency,
-relative links and whitespace only; application runtime tests are unnecessary.
+Final runtime results, requirement reconciliation, documentation checks and exact
+cleanup/restoration are recorded in the [integrated evidence](../../docs/status/p3-u2c-evidence.md).
 
 ## Review and adopted implementation sub-units
 
@@ -305,7 +305,7 @@ external secret lifecycle and recovery boundary. The final child delivers the
 operator journey and trustworthy observation presentation across those contracts.
 Keep each child's failure/security tests with that child; do not defer correctness
 to a testing-only unit. The user adopted this split on 2026-10-15 (Asia/Manila,
-+08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c is in progress with its remaining G-03 review awaiting approval.
++08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c is complete under the user’s conditional G-03 approval dated 2026-10-16, with [integrated evidence](../../docs/status/p3-u2c-evidence.md).
 
 | Unit | Starting state, scope and expected result | Parent criteria owned |
 | --- | --- | --- |

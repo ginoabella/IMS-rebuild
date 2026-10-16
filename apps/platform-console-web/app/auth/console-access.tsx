@@ -27,6 +27,7 @@ import {
   signalAccessChange,
 } from './client';
 
+import { emptyInventory, type InventoryWork } from '../inventory/work';
 import { emptyPbx, type PbxWork } from '../pbx/work';
 
 type FormValues = Record<string, string>;
@@ -40,6 +41,8 @@ const emptyDraft = (): TenantDraftWork => ({
 });
 type WorkContract = {
   ready: boolean;
+  inventory: InventoryWork;
+  recordInventory: (next: InventoryWork) => void;
   pbx: PbxWork;
   recordPbx: (next: PbxWork) => void;
   draft: TenantDraftWork;
@@ -75,6 +78,10 @@ export function ConsoleAccess({
     [values, setValues] = useState<FormValues>({});
   const [draft, setDraft] = useState<TenantDraftWork>(emptyDraft);
   const [pbx, setPbx] = useState<PbxWork>(emptyPbx);
+  const [inventory, setInventory] = useState<InventoryWork>(emptyInventory);
+  const retainedInventory = useRef(
+    new RetainedWork<InventoryWork>(emptyInventory),
+  );
   const retainedPbx = useRef(new RetainedWork<PbxWork>(emptyPbx));
   const retainedDraft = useRef(new RetainedWork<TenantDraftWork>(emptyDraft));
   const retained = useRef(new RetainedWork<FormValues>(() => ({})));
@@ -95,6 +102,7 @@ export function ConsoleAccess({
     setValues(retained.current.validateOwner(next.operatorId));
     setDraft(retainedDraft.current.validateOwner(next.operatorId));
     setPbx(retainedPbx.current.validateOwner(next.operatorId));
+    setInventory(retainedInventory.current.validateOwner(next.operatorId));
     authority.current = next;
     setSession(next);
     setMode('ready');
@@ -163,6 +171,8 @@ export function ConsoleAccess({
               retained.current.clear();
               retainedDraft.current.clear();
               retainedPbx.current.clear();
+              retainedInventory.current.clear();
+              setInventory(emptyInventory());
               setPbx(emptyPbx());
               setDraft(emptyDraft());
               setValues({});
@@ -272,6 +282,8 @@ export function ConsoleAccess({
       retained.current.clear();
       retainedDraft.current.clear();
       retainedPbx.current.clear();
+      retainedInventory.current.clear();
+      setInventory(emptyInventory());
       setPbx(emptyPbx());
       setDraft(emptyDraft());
       setValues({});
@@ -303,6 +315,17 @@ export function ConsoleAccess({
           value={{
             operatorId: renderedOwner,
             ready: mode === 'ready',
+            inventory,
+            recordInventory: (next) => {
+              if (
+                accessible.current &&
+                authority.current.operatorId === renderedOwner &&
+                !logoutRequested.current
+              ) {
+                retainedInventory.current.record(renderedOwner, next);
+                setInventory(next);
+              }
+            },
             pbx,
             recordPbx: (next) => {
               if (

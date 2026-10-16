@@ -131,3 +131,16 @@ work, but **a pre-call database check cannot revoke an already issued external
 PBX command**. External stale-epoch enforcement, ordered revisions and active-call
 policy are required before live apply. No mutating PBX adapter is wired in b;
 its observation/outbox tests do not establish live apply safety.
+
+## Inventory consumer — P3-U2c
+
+The [inventory browser](extension-inventory-browser.md) composes this same passive
+projection inside its primary inventory read snapshot. It matches only exact
+persisted endpoint/auth/AOR consistency bindings qualified by canonical node and
+installation, reading one node projection per bounded page. Covered current
+presence, zero contacts and endpoint absence remain distinct; other coverage,
+age, desired-version, epoch or ownership conditions remain unknown. The consumer
+never connects to AMI, starts an observer, discovers inventory ownership or
+verifies a selected profile/credential generation. Browser elapsed time uses a
+monotonic clock only to demote old facts. No projection or observation policy is
+replaced by this composition.

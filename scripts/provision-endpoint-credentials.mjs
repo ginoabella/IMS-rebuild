@@ -4,13 +4,14 @@ import { request } from 'node:https';
 import {
   readFileSync,
   writeFileSync,
-  existsSync,
   unlinkSync,
+  existsSync,
   renameSync,
+  statSync,
 } from 'node:fs';
 process.umask(0o077);
 const directory = '/custody';
-const [command, installation] = process.argv.slice(2);
+const [command, installation, fixtureRun] = process.argv.slice(2);
 let stage = 0;
 let lastStatus = 0;
 const ca = readFileSync(`${directory}/ca.crt`);
@@ -194,14 +195,50 @@ path "sys/audit/endpoint" { capabilities = ["create", "read", "update", "sudo"] 
       { mode: 0o600 },
     );
   }
-  if (command === 'provision') {
+  if (command === 'revoke-fixture') {
+    if (!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(installation ?? ''))
+      throw new Error('Exact fixture installation required');
+    for (const role of ['worker', 'cleanup', 'worker-expiring']) {
+      const file = `${directory}/${role}-${installation}.token`;
+      if (existsSync(file)) {
+        try {
+          await call('auth/token/revoke-self', {}, readFileSync(file, 'utf8'));
+        } catch (error) {
+          // Only this test role has a fixed one-second explicit maximum lifetime.
+          if (
+            role !== 'worker-expiring' ||
+            lastStatus !== 403 ||
+            Date.now() - statSync(file).mtimeMs < 2000
+          )
+            throw error;
+        }
+        unlinkSync(file);
+      }
+    }
+  }
+  if (command === 'provision' || command === 'provision-fixture') {
     if (!/^[a-f0-9]{8}(-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(installation ?? ''))
       throw new Error('Exact installation required');
     const admin = readFileSync(`${directory}/admin.token`, 'utf8');
+    if (command === 'provision-fixture') {
+      if (!/^[a-f0-9-]{36}$/.test(fixtureRun ?? ''))
+        throw new Error('Exact fixture run required');
+      for (const role of ['worker', 'cleanup']) {
+        if (existsSync(`${directory}/${role}-${installation}.token`))
+          throw new Error('Provider fixture ownership collision');
+        await call(
+          `sys/policies/acl/endpoint-${role}-${installation}-${fixtureRun}`,
+          undefined,
+          admin,
+        );
+        if (lastStatus !== 404)
+          throw new Error('Pre-existing provider fixture policy');
+      }
+    }
     const prefix = `myims-endpoint/data/installations/${installation}/extensions/+/operations/+`;
     const common = `path "auth/token/lookup-self" { capabilities = ["read"] }\npath "auth/token/renew-self" { capabilities = ["update"] }\npath "auth/token/revoke-self" { capabilities = ["update"] }`;
     for (const role of ['worker', 'cleanup']) {
-      const policy = `endpoint-${role}-${installation}`;
+      const policy = `endpoint-${role}-${installation}${command === 'provision-fixture' ? `-${fixtureRun}` : ''}`;
       const permissions =
         role === 'worker'
           ? `path "${prefix}" { capabilities = ["create", "read"] }`
@@ -236,6 +273,8 @@ path "sys/audit/endpoint" { capabilities = ["create", "read", "update", "sudo"] 
       'bootstrap',
       'unseal',
       'provision',
+      'provision-fixture',
+      'revoke-fixture',
       'rotate-admin',
       'recover-bootstrap',
       'provision-expiring',

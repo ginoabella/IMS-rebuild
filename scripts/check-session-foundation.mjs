@@ -15,6 +15,8 @@ import { once } from 'node:events';
 import { createServer, connect } from 'node:net';
 import { readFileSync } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
+const inventoryBrowser = process.argv[2] === '--inventory-browser';
+if (inventoryBrowser) await import('./check-inventory-composition.mjs');
 const endpointCredentials = [
   '--endpoint-credentials',
   '--endpoint-credentials-api',
@@ -25,7 +27,9 @@ const selection = process.argv
   .map((x) =>
     ['--endpoint-credentials', '--endpoint-credentials-api'].includes(x)
       ? '--extension-inventory'
-      : x,
+      : x === '--inventory-browser'
+        ? '--platform-browser'
+        : x,
   );
 assert.ok(
   selection.length === 0 ||
@@ -453,7 +457,11 @@ try {
       appUrl: app.href,
       proxy,
       commitProxy,
-      pbxAccess: selection[0] === '--pbx-browser' ? pbxAccess : undefined,
+      pbxAccess:
+        selection[0] === '--pbx-browser' || inventoryBrowser
+          ? pbxAccess
+          : undefined,
+      inventoryBrowser,
       browserChecks: selection[0] !== '--platform-http',
       browserOnly: [
         '--platform-browser',

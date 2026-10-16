@@ -49,6 +49,7 @@ export async function checkPlatformAuth({
   proxy,
   commitProxy,
   pbxAccess,
+  inventoryBrowser = false,
   browserChecks = true,
   browserOnly = false,
 }) {
@@ -185,6 +186,9 @@ export async function checkPlatformAuth({
   }
   const limiterConfig = parseLimiterConfig({
     LIMITER_TRUSTED_PROXIES: '127.0.0.1',
+    ...(inventoryBrowser
+      ? { LIMITER_PLATFORM_PROTECTED_WINDOW_SECONDS: '1' }
+      : {}),
   });
   let pbxFixture;
   const pbxCatalogFile = pbxAccess
@@ -369,6 +373,7 @@ export async function checkPlatformAuth({
       },
       pbxFixture,
       pbxUsername,
+      inventoryBrowser,
       username: browserName,
       password,
       owner,

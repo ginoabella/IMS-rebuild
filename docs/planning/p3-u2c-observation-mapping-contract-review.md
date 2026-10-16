@@ -1,7 +1,7 @@
 # P3-U2c runtime mapping and controlled acceptance — review for approval
 
-Prepared 2026-10-16 (Asia/Manila, +08:00). **Status: proposed; awaiting user approval.**
-This document records no approval, provisioning, implementation or acceptance pass.
+Prepared 2026-10-16 (Asia/Manila, +08:00). **Status: conditionally approved by the user, 2026-10-16 (Asia/Manila, +08:00).**
+Approval authorizes implementation and controlled private-development verification, not an acceptance pass.
 
 Decision owner: user, under D-09 and [parent G-03](../../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md#decisions-required-before-dependent-implementation).
 Requirement: [P3-U2c C-01–07](../../context/feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md),
@@ -263,3 +263,24 @@ external fencing, verification, rollback and revocation proof. P4-U2/P4-U5 own
 allocation/readiness/tenant isolation/staff assignment. P8-U8 owns browser calling
 and any approved short-lived endpoint access. This review changes none of those
 ownership boundaries or the Phase 3 gate.
+
+## Recorded conditional approval — 2026-10-16
+
+The user approved sections 2–6 and G03-01–06, and authorized sections 7–8,
+exclusively on the existing approved private development Asterisk. Preserve all
+existing endpoints, trunks, dialplans, routing, installation identities,
+configuration references and unmanaged resources; never overwrite, adopt or
+remove them for acceptance. Before fixture reloads or controlled stop/start,
+verify exclusive target access, absence of operational calls/conflicting tests,
+a verified baseline and a documented recovery procedure. Associate every fixture,
+credential, registration and process with a unique run; restore and verify the
+original service state. Collisions, uncertain ownership, incomplete cleanup or
+failed restoration stop dependent acceptance and require preserved recovery
+information and reporting. Distinguish actual registration, real-service checks
+and injected faults. Inventory, PBX observation and future live deployment remain
+separate; fixtures do not prove provisioning, WebRTC, credential activation or
+tenant calling readiness. P3-U2c/parent remain incomplete until every applicable
+criterion passes with evidence. Production deployment, live endpoint application,
+general credential delivery, tenant routing activation and expanded PBX management
+permissions remain unauthorized. These conditions override proposed procedures
+where stricter.

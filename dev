@@ -137,10 +137,16 @@ case "$action" in
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:extension-inventory ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --inventory ] && [ "$1" != --credentials ] && [ "$1" != --credentials-api ]; }; then
-          echo 'Supported inventory selections: --inventory, --credentials' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --inventory ] && [ "$1" != --credentials ] && [ "$1" != --credentials-api ] && [ "$1" != --browser ]; }; then
+          echo 'Supported inventory selections: --inventory, --credentials, --browser' >&2; exit 1
         fi
-        if [ "${1:-}" = --credentials-api ]; then
+        if [ "$#" -eq 0 ]; then
+          provision_storage scripts/check-session-deployment.mjs --extension-inventory
+          provision_storage scripts/check-session-deployment.mjs --endpoint-credentials
+          provision_storage scripts/check-session-deployment.mjs --inventory-browser
+        elif [ "${1:-}" = --browser ]; then
+          provision_storage scripts/check-session-deployment.mjs --inventory-browser
+        elif [ "${1:-}" = --credentials-api ]; then
           provision_storage scripts/check-session-deployment.mjs --endpoint-credentials-api
         elif [ "${1:-}" = --credentials ]; then
           provision_storage scripts/check-session-deployment.mjs --endpoint-credentials

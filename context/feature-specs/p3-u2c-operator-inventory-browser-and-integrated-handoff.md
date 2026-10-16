@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** in progress as of 2026-10-16 (Asia/Manila, +08:00); G-03 review prepared at the user’s request, approval pending. Child spec prepared 2026-10-15 under the adopted a → b → c sequence.
+- **Status:** completed 2026-10-16 within the user’s conditionally approved private development scope; C-01–07 and parent AC-01–11 passed. See [final evidence](../../docs/status/p3-u2c-evidence.md).
 - **Requirement:** [P3-U2 parent journey and AC-01–11](p3-u2-extension-inventory-and-endpoint-profiles.md).
 - **Goal:** deliver the real platform inventory/profile/credential workflow with trustworthy passive registration presentation and safe operator recovery.
 - **Completion boundary:** the secure browser completes individual/bulk/profile/edit/credential/disable journeys through canonical backend authority, and all parent criteria reconcile against integrated evidence. Saving still establishes no live apply or tenant voice readiness.
@@ -20,9 +20,9 @@ versions and approved lifecycle decisions. Reuse the P3-U1
 [browser](../../docs/architecture/pbx-browser.md) and
 [observation](../../docs/architecture/pbx-observation.md) contracts and shared UI.
 
-Resolve remaining parent G-03 before dependent mapping and controlled acceptance.
-The proposed [runtime mapping and controlled acceptance review](../../docs/planning/p3-u2c-observation-mapping-contract-review.md)
-is awaiting user approval; preparation does not approve it. Required decisions:
+Parent G-03 was conditionally resolved by the user on 2026-10-16 before dependent mapping and controlled acceptance; its recorded conditions remain mandatory.
+The conditionally approved [runtime mapping and controlled acceptance review](../../docs/planning/p3-u2c-observation-mapping-contract-review.md)
+is conditionally approved by the user on 2026-10-16; its recorded preservation, exclusive-access, baseline, recovery and cleanup conditions apply. Required decisions:
 exact node/installation/runtime endpoint identities, unmanaged namespace collision
 handling, supported registration coverage and access to isolated controlled
 observations. Recheck the approved G-01 profiles and G-02 credential action/delivery
@@ -135,9 +135,9 @@ hiding warnings or forcing avoidable page-wide horizontal scrolling.
 | C-06 | Keyboard/focus/labels, bulk error/status announcements, loading/empty/error/retry and desktop/tablet/narrow/zoom layouts pass on actual screens using shared tokens. Availability/disablement/credentials/readiness/registration are distinct and understandable. | AC-10 accessibility/status |
 | C-07 | Integrated parent AC-01–11 and child A/B/C matrices reconcile, affected PBX/auth/durable regressions and full Docker graph pass. Safe evidence, operator guide, owner contracts, index and tracker record exact commands/results, real versus injected checks, gates/limits and cleanup. | AC-01/07/09/11 integrated |
 
-Establish the proposed `./dev exec pnpm check:extension-inventory --browser`
-selection and combined `./dev exec pnpm check:extension-inventory` procedure during
-implementation; these are not existing commands or recorded passes. Use real
+The implemented `./dev exec pnpm check:extension-inventory --browser` selection
+and combined `./dev exec pnpm check:extension-inventory` procedure passed; exact
+commands and outcomes are recorded in the [final evidence](../../docs/status/p3-u2c-evidence.md). Use real
 PostgreSQL/runtime grants, shared Redis, independent HTTP A/B, the existing secure
 platform browser environment and controlled Asterisk passive observation. Exercise
 race/response-loss paths through their real owner APIs with deterministic faults.
@@ -170,4 +170,4 @@ authorizes safe asynchronous setup/reset/status and exact immutable intent recov
 it authorizes no phone delivery, reveal or password-entry browser contract. b uses
 opaque generation/operation IDs, separate material health and retained history;
 configured desired state is not live activation/revocation. b has passed real B-01–07 acceptance within private development; c may consume
-that verified API/intent handoff. c is in progress under its own C-01–07 contract, with G-03 approval pending.
+that verified API/intent handoff. c passed C-01–07 and parent AC-01–11 under conditionally approved G-03 within private development.

@@ -77,3 +77,11 @@ and last-success age, never credential material. Follow
 [observation operations](pbx-observation.md) for approved access, settings,
 rotation, ownership recovery and shutdown. Never reset epoch rows or widen
 permissions to recover. Configuration apply/reload/rollback is a later workflow.
+
+## Extension inventory
+
+From node detail choose **Manage extension inventory** for the protected
+[inventory/profile/credential journey](extension-inventory-browser.md).
+Availability, desired disablement, credential material status and observed
+registration are separate. Saving never applies live PBX configuration or grants
+tenant calling readiness.

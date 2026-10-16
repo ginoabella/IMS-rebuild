@@ -1,3 +1,4 @@
+import { inventoryPbxAcceptance } from './inventory-pbx-acceptance.mjs';
 import {
   endpointAccess,
   provisionEndpointFixture,
@@ -20,16 +21,19 @@ function docker(args) {
     throw new Error('Session fixture Docker operation failed');
   return r.stdout;
 }
-const credentials = process.argv[2] === '--endpoint-credentials';
-if (credentials) provisionEndpointFixture();
+const credentials = ['--endpoint-credentials', '--inventory-browser'].includes(
+  process.argv[2],
+);
+
+const inventoryBrowser = process.argv[2] === '--inventory-browser';
+let inventoryAcceptance;
 let pbxAccess;
 const observing = ['--pbx-observation', '--pbx-browser'].includes(
   process.argv[2],
 );
 const fixtureName = `myims-observation-${randomBytes(4).toString('hex')}`;
 let fixtureInstalled = false;
-let controlledStopped = false;
-if (observing) {
+if (observing || inventoryBrowser) {
   pbxAccess = {
     credentials: JSON.parse(
       readFileSync(
@@ -52,52 +56,17 @@ if (observing) {
       password: randomBytes(32).toString('hex'),
     },
     fixtureName,
+    preserveConfiguration: true,
     fixturePassword: randomBytes(32).toString('hex'),
   };
 }
-function rotate(credentials) {
-  const r = spawnSync(
-    'docker',
-    [
-      'run',
-      '--rm',
-      '--entrypoint',
-      'node',
-      '-i',
-      '--mount',
-      `type=bind,src=${process.env.STORAGE_HOST_PROJECT_ROOT}/.local/pbx-observation/server,dst=/server`,
-      'myims-rebuild-dev-workspace',
-      '-e',
-      "const fs=require('fs');const c=JSON.parse(fs.readFileSync(0,'utf8'));const p='/server/manager.conf';let s=fs.readFileSync(p,'utf8');s=s.replace(/^secret=.*$/m,'secret='+c.password);fs.writeFileSync(p,s);",
-    ],
-    { input: JSON.stringify(credentials), encoding: 'utf8', timeout: 15000 },
-  );
-  if (r.status !== 0) throw new Error('Controlled account rotation failed');
-  pbxCommand('manager reload');
-}
-function pbxCommand(command) {
-  docker(['exec', 'myims-rebuild-dev-asterisk-1', 'asterisk', '-rx', command]);
-}
 function fixture(content) {
-  // Deployment-only pipe: never print generated SIP authentication material.
-  const r = spawnSync(
-    'docker',
-    [
-      'exec',
-      '-i',
-      '--user',
-      'asterisk',
-      'myims-rebuild-dev-asterisk-1',
-      'sh',
-      '-c',
-      'cat > /tmp/myims-pbx-fixture.conf && chmod 600 /tmp/myims-pbx-fixture.conf',
-    ],
-    { input: content, encoding: 'utf8', timeout: 10000 },
-  );
-  if (r.status !== 0) throw new Error('PBX fixture preparation failed');
-  // Exact file is mounted separately through a fixture include, not product inventory.
-  pbxCommand('module reload res_pjsip.so');
+  if (!inventoryAcceptance)
+    throw new Error('Exclusive PBX acceptance guard required');
+  return inventoryAcceptance.writeLegacy(content, fixtureName);
 }
+if (inventoryBrowser || observing)
+  inventoryAcceptance = inventoryPbxAcceptance(pbxAccess);
 if (process.argv[2] === '--extension-inventory')
   console.log(
     JSON.stringify({ check: 'extension-inventory', redisFixture: name }),
@@ -113,6 +82,7 @@ if (observing)
 let created = false;
 let endpointCleanupError;
 try {
+  if (credentials) provisionEndpointFixture();
   docker([
     'create',
     '--name',
@@ -156,34 +126,57 @@ try {
     while ((newline = output.indexOf('\n')) >= 0) {
       const line = output.slice(0, newline);
       output = output.slice(newline + 1);
-      if (credentials && line.startsWith('ENDPOINT_FIXTURE_REQUEST '))
-        endpointFixtureRequest(line).catch(() => {
-          console.error('Endpoint fixture control failed');
-          child.kill('SIGKILL');
-        });
-      else if (line === 'SESSION_FIXTURE_RESTART') docker(['restart', name]);
-      else if (observing && line === 'PBX_FIXTURE_INSTALL') {
-        if (fixtureInstalled) throw new Error('PBX fixture already installed');
-        fixture(
-          `[${fixtureName}]\ntype=endpoint\ncontext=myims-observation-no-calls\nauth=${fixtureName}\naors=${fixtureName}\ndisallow=all\nallow=ulaw\n[${fixtureName}]\ntype=auth\nauth_type=userpass\nusername=${fixtureName}\npassword=${pbxAccess.fixturePassword}\n[${fixtureName}]\ntype=aor\nmax_contacts=1\nremove_existing=yes\n`,
+      try {
+        if (credentials && line.startsWith('ENDPOINT_FIXTURE_REQUEST '))
+          endpointFixtureRequest(line).catch(() => {
+            console.error('Endpoint fixture control failed');
+            child.kill('SIGKILL');
+          });
+        else if (inventoryBrowser && line.startsWith('INVENTORY_PBX_INSTALL '))
+          inventoryAcceptance.install(
+            JSON.parse(line.slice('INVENTORY_PBX_INSTALL '.length)),
+          );
+        else if (inventoryBrowser && line === 'INVENTORY_PBX_STOP')
+          inventoryAcceptance.stop();
+        else if (inventoryBrowser && line === 'INVENTORY_PBX_START')
+          inventoryAcceptance.start();
+        else if (inventoryBrowser && line === 'INVENTORY_SESSION_STOP')
+          docker(['stop', '--time', '5', name]);
+        else if (inventoryBrowser && line === 'INVENTORY_SESSION_START')
+          docker(['start', name]);
+        else if (line === 'SESSION_FIXTURE_RESTART') docker(['restart', name]);
+        else if (observing && line === 'PBX_FIXTURE_INSTALL') {
+          if (fixtureInstalled)
+            throw new Error('PBX fixture already installed');
+          fixture(
+            `[${fixtureName}]\ntype=endpoint\ncontext=myims-observation-no-calls\nauth=${fixtureName}\naors=${fixtureName}\ndisallow=all\nallow=ulaw\n[${fixtureName}]\ntype=auth\nauth_type=userpass\nusername=${fixtureName}\npassword=${pbxAccess.fixturePassword}\n[${fixtureName}]\ntype=aor\nmax_contacts=1\nremove_existing=yes\n`,
+          );
+          fixtureInstalled = true;
+        } else if (observing && line === 'PBX_FIXTURE_ROTATE') {
+          throw new Error('Existing observer configuration must be preserved');
+        } else if (observing && line === 'PBX_FIXTURE_RESTORE') {
+          if (!pbxAccess.preserveConfiguration)
+            throw new Error(
+              'Existing observer configuration must be preserved',
+            );
+        } else if (observing && line === 'PBX_FIXTURE_REMOVE') {
+          fixture('');
+          fixtureInstalled = false;
+        } else if (observing && line === 'PBX_FIXTURE_STOP') {
+          inventoryAcceptance.stop();
+        } else if (observing && line === 'PBX_FIXTURE_START') {
+          inventoryAcceptance.start();
+        } else if (observing && line === 'PBX_FIXTURE_RESTART') {
+          inventoryAcceptance.stop();
+          inventoryAcceptance.start();
+        } else process.stdout.write(`${line}\n`);
+      } catch {
+        inventoryAcceptance?.recordFailure(line.split(' ')[0]);
+        console.error(
+          'Controlled acceptance operation failed; recovery manifest retained',
         );
-        fixtureInstalled = true;
-      } else if (observing && line === 'PBX_FIXTURE_ROTATE') {
-        rotate(pbxAccess.rotatedCredentials);
-      } else if (observing && line === 'PBX_FIXTURE_RESTORE') {
-        rotate(pbxAccess.credentials);
-      } else if (observing && line === 'PBX_FIXTURE_REMOVE') {
-        fixture('');
-        fixtureInstalled = false;
-      } else if (observing && line === 'PBX_FIXTURE_STOP') {
-        docker(['stop', 'myims-rebuild-dev-asterisk-1']);
-        controlledStopped = true;
-      } else if (observing && line === 'PBX_FIXTURE_START') {
-        docker(['start', 'myims-rebuild-dev-asterisk-1']);
-        controlledStopped = false;
-      } else if (observing && line === 'PBX_FIXTURE_RESTART') {
-        docker(['restart', 'myims-rebuild-dev-asterisk-1']);
-      } else process.stdout.write(`${line}\n`);
+        child.kill('SIGKILL');
+      }
     }
   });
   child.stdin.end(
@@ -205,20 +198,7 @@ try {
       endpointCleanupError = error;
     }
   }
-  if (observing) {
-    if (controlledStopped) docker(['start', 'myims-rebuild-dev-asterisk-1']);
-    rotate(pbxAccess.credentials);
-    fixture('');
-    docker([
-      'exec',
-      '--user',
-      '0',
-      'myims-rebuild-dev-asterisk-1',
-      'rm',
-      '-f',
-      '/tmp/myims-pbx-fixture.conf',
-    ]);
-  }
+  if (inventoryAcceptance) inventoryAcceptance.close();
   if (created) docker(['rm', '-f', '-v', name]);
   rmSync(directory, { recursive: true, force: true });
   if (process.argv[2] === '--extension-inventory')
@@ -231,7 +211,7 @@ try {
     );
   if (observing)
     console.log(
-      'PASS observation cleanup: controlled credential restored, exact SIP fixture cleared, exact Redis container/volume and launcher directory removed',
+      'PASS observation cleanup: existing observer credentials preserved, exact SIP fixture cleared, exact Redis container/volume and launcher directory removed',
     );
 }
 

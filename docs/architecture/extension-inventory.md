@@ -197,3 +197,16 @@ now defines G-02. Its implementation reuses this exact version port and adds saf
 configured generation IDs to inventory DTOs. [Credential lifecycle](endpoint-credentials.md)
 records the separate provider/worker boundary. b remains incomplete until its real
 acceptance evidence passes; this addendum does not authorize c or P3-U5 progression.
+
+## P3-U2c passive composition and browser compatibility
+
+Under the user's conditional G-03 approval dated 2026-10-16, list/detail reads
+compose the existing passive node projection once per bounded page in the same
+primary snapshot. `ExtensionDto.observation` adds an observed union preserving
+node version, epoch, sequence, ownership, coverage, reconciliation and database
+age. Only exact persisted endpoint/auth/AOR keys qualified by canonical node and
+installation may map. Current complete covered snapshots distinguish registered,
+unregistered and endpoint absent; other states report unknown. Generated keys
+remain internal. Mutations/receipts preserve a/b desired semantics. No read
+connects to Asterisk. This compatible response extension requires rerunning a/b
+checks and does not establish profile/credential application or readiness.

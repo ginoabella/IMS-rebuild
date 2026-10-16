@@ -1,15 +1,24 @@
 // Trusted Docker acceptance owner. Never imported by HTTP or a runtime worker.
 import { spawnSync, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
-import { mkdirSync, writeFileSync } from 'node:fs';
-const installationId = randomUUID();
+import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
+const browserFixture = process.argv[2] === '--inventory-browser';
+const installationId = browserFixture
+  ? JSON.parse(readFileSync('.local/pbx-catalog/catalog.json', 'utf8'))[0]
+      .installationId
+  : randomUUID();
+const fixtureRun = randomUUID();
 const project = process.env.STORAGE_HOST_PROJECT_ROOT;
 const custody = `${project}/.local/endpoint-credentials`;
 const network = 'myims-rebuild-dev_endpoint-credentials';
 const bindings = new Map(),
   captured = [];
 const pending = new Set();
+let scopeStarted = false,
+  provisioningUncertain = false;
 let database,
+  fixtureResults,
+  browserAccessRevoked = false,
   providerNeedsUnseal = false;
 export const endpointAccess = { installationId };
 function docker(args, input) {
@@ -38,10 +47,30 @@ function provision(command) {
     '/provision.mjs',
     command,
     ...(command === 'unseal' ? [] : [installationId]),
+    ...(command === 'provision-fixture' ? [fixtureRun] : []),
   ]);
 }
 export function provisionEndpointFixture() {
-  provision('provision');
+  {
+    for (const role of ['worker', 'cleanup'])
+      if (
+        existsSync(
+          `.local/endpoint-credentials/${role}-${installationId}.token`,
+        )
+      )
+        throw new Error(
+          'Existing provider access must not be adopted or revoked',
+        );
+    scopeStarted = true;
+    persist();
+  }
+  try {
+    provision(browserFixture ? 'provision-fixture' : 'provision');
+  } catch (error) {
+    provisioningUncertain = true;
+    persist();
+    throw error;
+  }
 }
 function args(name, script, role = 'worker', scan = false) {
   const mounts = [];
@@ -99,14 +128,29 @@ function args(name, script, role = 'worker', scan = false) {
   ];
 }
 function persist(results) {
+  if (results) fixtureResults = results;
   mkdirSync('.local/endpoint-fixtures', { recursive: true, mode: 0o700 });
   writeFileSync(
-    `.local/endpoint-fixtures/${installationId}.json`,
+    `.local/endpoint-fixtures/${installationId}${browserFixture ? `-${fixtureRun}` : ''}.json`,
     JSON.stringify({
       database,
       installationId,
+      scopeStarted,
+      provisioningUncertain,
+      accessRevoked: browserAccessRevoked,
+      ...(browserFixture
+        ? {
+            fixtureRun,
+            accessRevoked: browserAccessRevoked,
+            scopeStarted,
+            provisioningUncertain,
+            policies: ['worker', 'cleanup'].map(
+              (role) => `endpoint-${role}-${installationId}-${fixtureRun}`,
+            ),
+          }
+        : {}),
       bindings: [...bindings.values()],
-      ...(results ? { results } : {}),
+      ...(fixtureResults ? { results: fixtureResults } : {}),
     }),
     { mode: 0o600 },
   );
@@ -238,13 +282,35 @@ async function runRequest(line) {
   );
 }
 export async function cleanupEndpointFixture() {
+  if (!scopeStarted) return;
+  if (provisioningUncertain)
+    throw new Error(
+      'Provider fixture provisioning uncertain; preserve protected recovery manifest and stop dependent acceptance',
+    );
   await Promise.allSettled([...pending]);
   if (providerNeedsUnseal) {
     docker(['start', 'myims-rebuild-dev-endpoint-secrets-1']);
     provision('unseal');
     providerNeedsUnseal = false;
   }
-  if (!bindings.size) return;
+  if (!bindings.size) {
+    {
+      provision('revoke-fixture');
+      browserAccessRevoked = true;
+      persist();
+      console.log(
+        JSON.stringify({
+          check: 'inventory-provider-access-cleanup',
+          installationId,
+          fixtureRun,
+          tokensRevoked: true,
+          tokenFilesRemoved: true,
+          policyMetadata: 'retained_without_tokens',
+        }),
+      );
+    }
+    return;
+  }
   const name = `myims-endpoint-teardown-${randomUUID()}`;
   try {
     docker(args(name, 'endpoint-credential-fixture-teardown.mjs', 'cleanup'));
@@ -269,5 +335,20 @@ export async function cleanupEndpointFixture() {
     );
   } finally {
     docker(['rm', '-f', name]);
+    {
+      provision('revoke-fixture');
+      browserAccessRevoked = true;
+      persist();
+      console.log(
+        JSON.stringify({
+          check: 'inventory-provider-access-cleanup',
+          installationId,
+          fixtureRun,
+          tokensRevoked: true,
+          tokenFilesRemoved: true,
+          policyMetadata: 'retained_without_tokens',
+        }),
+      );
+    }
   }
 }

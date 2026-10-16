@@ -214,7 +214,7 @@ actual issuer/recipient reset and exact desktop tunnel switch. Preparatory backe
 and browser checks do not replace the remaining Android results.
 
 PBX node administration: [P3-U1 feature spec and split review](../context/feature-specs/p3-u1-register-pbx-nodes-and-observe-health.md).
-P3-U1a is complete within A-01–07 under [approved scoped connectivity policy](planning/p3-u1a-connectivity-contract-review.md); b is complete within B-01–09 under [conditional development observation approval](planning/p3-u1b-observation-contract-review.md), c remains planned and the parent is incomplete. The user adopted the three-unit split on
+P3-U1a is complete within A-01–07 under [approved scoped connectivity policy](planning/p3-u1a-connectivity-contract-review.md); b is complete within B-01–09 under [conditional development observation approval](planning/p3-u1b-observation-contract-review.md), c and parent P3-U1 are complete within their integrated private-development scope. The user adopted the three-unit split on
 2026-10-14 (Asia/Manila, +08:00). Controlled observation, protected secret resolution and development settings are
 verified against one isolated Asterisk 22.10.1. Broader AMI `system` permissions
 are acknowledged; production and live control remain unapproved.
@@ -240,16 +240,16 @@ Separate P3-U1 implementation specs, in sequence:
 - [Operator PBX guide](runbooks/pbx-operator-guide.md)
 - [P3-U1c integrated evidence](status/p3-u1c-evidence.md)
 
-P3-U2 planning: [Extension inventory and endpoint profiles — feature spec and adopted split](../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md). P3-U2a is complete within conditional controlled-development number/profile/namespace scope; A-01–07 and required checks passed. Credential policy and live runtime mapping remain separate gates; the working Asterisk reference stays unchanged.
+P3-U2: [Extension inventory and endpoint profiles — feature spec and adopted split](../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md). P3-U2a is complete within conditional controlled-development number/profile/namespace scope; A-01–07 and required checks passed. All a/b/c and parent acceptance criteria passed under their conditional private-development approvals; the working Asterisk reference is unchanged.
 
 [P3-U2a inventory and endpoint profile contract — conditional approval](planning/p3-u2a-inventory-contract-review.md)
 records the user’s controlled-development approval of number/range rules,
 node-scoped immutable profiles and generated runtime keys, with atomic bulk/retry
-contracts. G-02/credential policy remains with b; production policy and c’s live
-mapping/coexistence remain separately gated.
+contracts. G-02/credential policy and G-03 mapping/coexistence are conditionally approved
+for private development; production and live application remain separately gated.
 
 The user adopted P3-U2's sequential a → b → c split on 2026-10-15
-(Asia/Manila, +08:00). Separate child specs are prepared; a/b are complete within conditional development scope, and c is in progress with G-03 approval pending:
+(Asia/Manila, +08:00). All three children and parent P3-U2 are complete within conditional private-development scope:
 
 - [P3-U2a — Protected inventory, profiles and atomic bulk creation](../context/feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md)
 - [P3-U2b — Protected endpoint credential lifecycle and recovery](../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md)
@@ -273,6 +273,16 @@ for process isolation, manual unseal, token custody and deferred production revi
 [P3-U2b final implementation and acceptance evidence](status/p3-u2b-evidence.md).
 
 [P3-U2c runtime mapping and controlled acceptance — review for approval](planning/p3-u2c-observation-mapping-contract-review.md)
-records proposed G-03 identity/coexistence, no-call fixture, freshness, trusted
-test operations and cleanup boundaries. User approval remains pending; no new
-implementation or acceptance result is claimed.
+records conditionally approved G-03 identity/coexistence, no-call fixture, freshness,
+trusted test operations and cleanup boundaries for the existing private development
+installation only. C-01–07 and parent AC-01–11 passed; implementation and
+integrated acceptance are complete within that scope. See [inventory browser contract](architecture/extension-inventory-browser.md)
+and [controlled acceptance recovery](runbooks/extension-inventory-browser.md).
+[P3-U2c evidence](status/p3-u2c-evidence.md) records actual checks, failures and cleanup;
+it reconciles all criteria, required regressions and verified restoration.
+
+P3-U3: [Trunks, gateways and DIDs — parent spec and adopted split](../context/feature-specs/p3-u3-trunks-gateways-and-dids.md). The user adopted the sequential a → b → c split on 2026-10-16 (Asia/Manila, +08:00). All remain planned; resource/connection, DID identity, protected-reference and lifecycle policies require scoped decisions before dependent implementation.
+
+- [P3-U3a — Protected trunk and gateway definitions](../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md)
+- [P3-U3b — DID inventory and dependency-safe resource removal](../context/feature-specs/p3-u3b-did-inventory-and-dependency-safe-resource-removal.md)
+- [P3-U3c — Operator resource browser and integrated handoff](../context/feature-specs/p3-u3c-operator-resource-browser-and-integrated-handoff.md)

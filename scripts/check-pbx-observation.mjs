@@ -57,7 +57,7 @@ export function sipRegistration(access, expires) {
     function send() {
       const port = socket.address().port,
         uri = `sip:${host}`;
-      const text = `REGISTER ${uri} SIP/2.0\r\nVia: SIP/2.0/UDP ${socket.address().address}:${port};branch=z9hG4bK${randomBytes(8).toString('hex')}\r\nMax-Forwards: 70\r\nFrom: <sip:${name}@${host}>;tag=${tag}\r\nTo: <sip:${name}@${host}>\r\nCall-ID: ${callId}\r\nCSeq: ${serial++} REGISTER\r\nContact: ${expires === 0 ? '*' : `<sip:${name}@${socket.address().address}:${port}>`}\r\nExpires: ${expires}\r\n${auth}Content-Length: 0\r\n\r\n`;
+      const text = `REGISTER ${uri} SIP/2.0\r\nVia: SIP/2.0/UDP ${socket.address().address}:${port};branch=z9hG4bK${randomBytes(8).toString('hex')}\r\nMax-Forwards: 70\r\nFrom: <sip:${name}@${host}>;tag=${tag}\r\nTo: <sip:${access.fixtureAor ?? name}@${host}>\r\nCall-ID: ${callId}\r\nCSeq: ${serial++} REGISTER\r\nContact: ${expires === 0 ? '*' : `<sip:${name}@${socket.address().address}:${port}>`}\r\nExpires: ${expires}\r\n${auth}Content-Length: 0\r\n\r\n`;
       socket.send(text, 5060, host);
     }
     socket.on('error', () => finish(new Error('SIP fixture failed')));
@@ -495,16 +495,21 @@ export async function checkPbxObservation({
       (await a.call('snapshot', profile.targetAlias)).failure,
       'secret_missing',
     );
-    console.log('PBX_FIXTURE_ROTATE');
-    await a.call('credentials', pbxAccess.rotatedCredentials);
+    if (!pbxAccess.preserveConfiguration) console.log('PBX_FIXTURE_ROTATE');
+    const recoveryCredentials = pbxAccess.preserveConfiguration
+      ? pbxAccess.credentials
+      : pbxAccess.rotatedCredentials;
+    await a.call('credentials', recoveryCredentials);
     await until(
       async () =>
         (await a.call('snapshot', profile.targetAlias)).kind === 'complete',
       'real credential rotation',
     );
-    await b.call('credentials', pbxAccess.rotatedCredentials);
+    await b.call('credentials', recoveryCredentials);
     console.log(
-      'PASS B-07 real controlled account rotation and fresh protected provider lookup reconnect; installation identity unchanged.',
+      pbxAccess.preserveConfiguration
+        ? 'PASS B-07 preserving configuration regression: real invalid-auth/missing-secret and fresh protected lookup recovery; existing observer credentials unchanged. Account rotation is retained prior evidence, not repeated.'
+        : 'PASS B-07 real controlled account rotation and fresh protected provider lookup reconnect; installation identity unchanged.',
     );
     await a.call('start');
     await b.call('start');

@@ -1,3 +1,4 @@
+import type { PbxObservationDto } from './pbx-nodes';
 /** Controlled-development desired inventory; no credentials or live readiness. */
 export type EndpointKind = 'sip' | 'webrtc';
 export type AudioCodec = 'opus' | 'ulaw' | 'alaw';
@@ -121,7 +122,7 @@ export interface ExtensionDto {
   administrativeStatus: 'enabled' | 'disabled';
   credentials: { kind: 'unset' } | { kind: 'configured'; generationId: string };
   readiness: { kind: 'not_established' };
-  observation: { kind: 'not_available' };
+  observation: ExtensionObservationDto;
   eligibility: { eligible: false; reasons: ('unallocated' | 'disabled')[] };
   version: number;
   createdAt: string;
@@ -177,3 +178,18 @@ export interface InventoryApiErrorDto {
   >;
   conflicts?: { numbers: string[]; total: number; truncated: boolean };
 }
+
+/** Exact internal mapping only; generated keys never cross the transport boundary. */
+export type ExtensionObservationDto =
+  | { kind: 'not_available' }
+  | (Omit<
+      Extract<PbxObservationDto, { kind: 'observed' }>,
+      'registrations' | 'registeredEndpoints'
+    > & {
+      nodeVersion: number;
+      registration:
+        'registered' | 'unregistered' | 'endpoint_absent' | 'unknown';
+      endpointPresent: boolean | null;
+      contacts: number | null;
+      reachableContacts: number | null;
+    });

@@ -72,6 +72,7 @@ export type {
   ExtensionBulkPreviewDto,
   ExtensionBulkResultDto,
   ExtensionDto,
+  ExtensionObservationDto,
   ExtensionDetailDto,
   ExtensionListDto,
   EditExtensionRequest,

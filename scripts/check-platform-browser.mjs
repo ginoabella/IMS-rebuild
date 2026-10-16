@@ -1,3 +1,4 @@
+import { checkInventoryBrowser } from './check-inventory-browser.mjs';
 // Actual production Next app, HTTPS ingress, and independent real-service replicas.
 import assert from 'node:assert/strict';
 import { checkPbxBrowser } from './check-pbx-browser.mjs';
@@ -39,6 +40,7 @@ export async function checkPlatformBrowser({
   change,
   pbxFixture,
   pbxUsername,
+  inventoryBrowser = false,
 }) {
   const ingressSecret = randomBytes(32).toString('hex');
   secrets.push(ingressSecret);
@@ -499,29 +501,32 @@ export async function checkPlatformBrowser({
     });
     assert.equal(await redis.get(key(passiveToken)), before);
     phase = 'draft tenant browser';
-    await checkDraftTenantBrowser({
-      page,
-      context,
-      config,
-      owner,
-      login,
-      expire,
-      ingress,
-      select,
-      a,
-      b,
-      username,
-      redis,
-      holdResponse,
-    });
+    if (!inventoryBrowser)
+      await checkDraftTenantBrowser({
+        page,
+        context,
+        config,
+        owner,
+        login,
+        expire,
+        ingress,
+        select,
+        a,
+        b,
+        username,
+        redis,
+        holdResponse,
+      });
     if (pbxFixture) {
-      phase = 'PBX integrated browser';
+      phase = inventoryBrowser
+        ? 'inventory integrated browser'
+        : 'PBX integrated browser';
       await page.goto(`${config.origin}/sign-in`);
       await login(page, pbxUsername);
       await expect(
         page.getByRole('heading', { name: 'Platform console', exact: true }),
       ).toBeVisible();
-      await checkPbxBrowser({
+      await (inventoryBrowser ? checkInventoryBrowser : checkPbxBrowser)({
         page,
         context,
         config,
@@ -538,6 +543,8 @@ export async function checkPlatformBrowser({
         key,
         holdResponse,
         fixture: pbxFixture,
+        issue,
+        staffFacts,
       });
       await page.goto(`${config.origin}/sign-in`);
       await login();
@@ -1038,7 +1045,7 @@ export async function checkPlatformBrowser({
         ? error.stack
             ?.split('\n')
             .filter((line) =>
-              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser)\.mjs:\d+/.test(
+              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser|inventory-browser)\.mjs:\d+/.test(
                 line,
               ),
             )
@@ -1057,6 +1064,14 @@ export async function checkPlatformBrowser({
     ]
       .filter((value) => error?.message?.includes(value))
       .join(',');
+    const diagnostic =
+      error?.code === 'ERR_ASSERTION' &&
+      ['number', 'boolean'].includes(typeof error.actual) &&
+      ['number', 'boolean'].includes(typeof error.expected)
+        ? ` assertion actual=${String(error.actual)} expected=${String(error.expected)}`
+        : ['23514', '42703', '42501'].includes(error?.code)
+          ? ` databaseCode=${error.code}`
+          : '';
     const alert = await currentPage
       ?.locator('main [role="alert"], main[role="alert"]')
       .textContent({ timeout: 1000 })
@@ -1070,7 +1085,7 @@ export async function checkPlatformBrowser({
       ].find((value) => alert?.includes(value)) ?? 'no known feedback';
     // eslint-disable-next-line preserve-caught-error -- The caught Playwright error may contain passwords or headers.
     throw new Error(
-      `Platform browser acceptance failed during ${phase}${location ? ` (${location})` : ''}; category ${category}; statuses ${statuses.slice(-8).join(',')}; feedback ${safeState}; transport ${transportEvents.slice(-8).join(',')}; ingress ${ingress.events().join(',')}}`,
+      `Platform browser acceptance failed during ${phase}${location ? ` (${location})` : ''}; category ${category}${diagnostic}; statuses ${statuses.slice(-8).join(',')}; feedback ${safeState}; transport ${transportEvents.slice(-8).join(',')}; ingress ${ingress.events().join(',')}}`,
     );
   } finally {
     for (const gate of pendingGates) gate.release();

@@ -741,3 +741,9 @@ reviewed revisioned capability declarations; runtime only reads/locks them. New
 stock is disabled/unallocated, credentials unset and readiness unestablished;
 no save installs PBX resources or grants calling eligibility. b owns credentials,
 c owns browser/live mapping and P3-U5 owns application.
+
+P3-U2c adds the [operator inventory browser](../docs/architecture/extension-inventory-browser.md)
+and exact passive inventory observation composition under conditional private
+G-03 approval. It reuses canonical APIs, current platform authority, shared session
+recovery and one node projection per primary inventory snapshot. No observer,
+credential delivery, live application or tenant calling capability is added.

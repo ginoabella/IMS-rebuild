@@ -4,6 +4,8 @@ import type {
   EndpointProfileDto,
   ExtensionDto,
 } from '@myims/contracts';
+import { passiveObservation } from './observation-projection';
+import { composeExtensionObservation } from '../../domain/inventory-observation';
 import type { Transaction } from '../../../../infrastructure/database/transaction';
 import type { ReadSnapshot } from '../../../../infrastructure/database/read-snapshot';
 import type { EndpointCapability } from '../../domain/inventory';
@@ -27,6 +29,10 @@ interface ProfileRow {
   created_by: string;
 }
 interface ExtensionRow {
+  installation_id: string;
+  endpoint_key: string;
+  auth_key: string;
+  aor_key: string;
   credential_generation_id: string | null;
   id: string;
   node_id: string;
@@ -209,7 +215,9 @@ export class InventoryRepository implements InventoryStore {
       `SELECT * FROM public.extensions WHERE node_id=$1 AND id=$2${lock ? ' FOR UPDATE' : ''}`,
       [nodeId, id],
     );
-    return r.rows[0] ? extensionDto(r.rows[0]) : null;
+    if (!r.rows[0]) return null;
+    if (lock) return extensionDto(r.rows[0]);
+    return (await this.observed(s, nodeId, [r.rows[0]]))[0] ?? null;
   }
   async extensions(
     s: ReadSnapshot,
@@ -217,12 +225,26 @@ export class InventoryRepository implements InventoryStore {
     limit: number,
     after: string | null,
   ) {
-    return (
+    const rows = (
       await s.query<ExtensionRow>(
         'SELECT * FROM public.extensions WHERE node_id=$1 AND ($2::uuid IS NULL OR id>$2) ORDER BY id LIMIT $3',
         [nodeId, after, limit],
       )
-    ).rows.map(extensionDto);
+    ).rows;
+    return this.observed(s, nodeId, rows);
+  }
+  private async observed(
+    s: ReadSnapshot,
+    nodeId: string,
+    rows: ExtensionRow[],
+  ) {
+    const node = await this.node(s, nodeId);
+    if (!node) return rows.map(extensionDto);
+    const observation = await passiveObservation(s, nodeId, node.version);
+    return rows.map((row) => ({
+      ...extensionDto(row),
+      observation: composeExtensionObservation(node, row, observation),
+    }));
   }
   async collisions(
     s: ReadSnapshot,
