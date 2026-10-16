@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** in progress; a → b → c split adopted 2026-10-15 (Asia/Manila, +08:00). P3-U2a is complete under the user’s conditional inventory/profile approval with [A-01–07 evidence](../../docs/status/p3-u2a-evidence.md); b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c remains planned. Parent completion and live PBX/production acceptance are not claimed.
+- **Status:** in progress; a → b → c split adopted 2026-10-15 (Asia/Manila, +08:00). P3-U2a is complete under the user’s conditional inventory/profile approval with [A-01–07 evidence](../../docs/status/p3-u2a-evidence.md); b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c is in progress with its remaining G-03 review awaiting approval. Parent completion and live PBX/production acceptance are not claimed.
 - **Requirement:** [Phase 3, P3-U2](../implementation-plan.md#p3-u2--manage-extension-inventory-and-endpoint-profiles), [platform requirements](../project-overview.md#platform-and-asterisk-administration), and [telephony architecture](../architecture.md#telephony-architecture).
 - **Goal:** let a platform operator create and maintain individual and bulk SIP/WebRTC extension inventory, endpoint profiles and protected credential references before tenant reservation.
 - **Completion boundary:** the protected browser journey persists valid inventory and profile choices, performs the approved credential setup/reset flow, and displays desired state separately from trustworthy registration observations. Unallocated or disabled inventory confers no tenant calling or staff assignment authority. Saving never installs or reloads Asterisk configuration.
@@ -95,6 +95,8 @@ disabled/unallocated/unset stock. Production transport/media and contact recover
 need separate review. G-02/b, c’s live mapping/coexistence and P3-U5 apply remain
 separate. A desired save grants no credentials, readiness or calling eligibility.
 See the [implemented API/transaction contract](../../docs/architecture/extension-inventory.md).
+
+The proposed [c runtime mapping and controlled acceptance review](../../docs/planning/p3-u2c-observation-mapping-contract-review.md) is awaiting user approval; its preparation does not resolve G-03.
 
 No answer is needed to prepare this spec. Resolve the applicable gate before
 implementing its dependent behavior; record the decision and affected child in
@@ -303,7 +305,7 @@ external secret lifecycle and recovery boundary. The final child delivers the
 operator journey and trustworthy observation presentation across those contracts.
 Keep each child's failure/security tests with that child; do not defer correctness
 to a testing-only unit. The user adopted this split on 2026-10-15 (Asia/Manila,
-+08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c remains planned.
++08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c is in progress with its remaining G-03 review awaiting approval.
 
 | Unit | Starting state, scope and expected result | Parent criteria owned |
 | --- | --- | --- |

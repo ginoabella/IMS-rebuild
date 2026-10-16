@@ -249,7 +249,7 @@ contracts. G-02/credential policy remains with b; production policy and c’s li
 mapping/coexistence remain separately gated.
 
 The user adopted P3-U2's sequential a → b → c split on 2026-10-15
-(Asia/Manila, +08:00). Separate child specs are prepared; a/b are complete within conditional development scope, and c remains planned:
+(Asia/Manila, +08:00). Separate child specs are prepared; a/b are complete within conditional development scope, and c is in progress with G-03 approval pending:
 
 - [P3-U2a — Protected inventory, profiles and atomic bulk creation](../context/feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md)
 - [P3-U2b — Protected endpoint credential lifecycle and recovery](../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md)
@@ -271,3 +271,8 @@ service for controlled development only. See the [endpoint credential runbook](r
 for process isolation, manual unseal, token custody and deferred production review.
 
 [P3-U2b final implementation and acceptance evidence](status/p3-u2b-evidence.md).
+
+[P3-U2c runtime mapping and controlled acceptance — review for approval](planning/p3-u2c-observation-mapping-contract-review.md)
+records proposed G-03 identity/coexistence, no-call fixture, freshness, trusted
+test operations and cleanup boundaries. User approval remains pending; no new
+implementation or acceptance result is claimed.
