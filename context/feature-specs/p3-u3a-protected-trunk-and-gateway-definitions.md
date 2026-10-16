@@ -11,6 +11,10 @@ Read [AGENT.md](../../AGENT.md) and its required context before implementation.
 The parent remains authoritative for shared requirements and unresolved gates.
 This child does not approve PBX control, provider access or pending product policy.
 
+Proposed decisions and approval scope are prepared in the
+[draft contract review](../../docs/planning/p3-u3a-definition-contract-review.md).
+The review is unapproved; authenticated binding and full a completion remain gated.
+
 ## Starting state and decision gates
 
 Require verified P3-U1 and recheck its [integrated evidence](../../docs/status/p3-u1c-evidence.md).
