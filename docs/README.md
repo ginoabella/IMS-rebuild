@@ -288,3 +288,5 @@ P3-U3: [Trunks, gateways and DIDs — parent spec and adopted split](../context/
 - [P3-U3c — Operator resource browser and integrated handoff](../context/feature-specs/p3-u3c-operator-resource-browser-and-integrated-handoff.md)
 
 - [P3-U3a trunk/gateway contract — draft for approval](planning/p3-u3a-definition-contract-review.md) — proposed resource/connection and initial lifecycle policies; staged IP-peer scope, authenticated binding decision and full a completion remain pending.
+
+- [U3A-04 OpenBao trunk credential reuse — proposed decision](planning/p3-u3a-openbao-trunk-credential-review.md) — source findings, isolated import/binding lifecycle, administration remediation, transactional qualification and exact approval scope; no implementation.

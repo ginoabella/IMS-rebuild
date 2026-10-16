@@ -144,6 +144,11 @@ shared-IP discrimination requires a later explicit policy revision.
 
 ## 5. Authenticated references — G-03 remains a specific approval gate
 
+The [U3A-04 OpenBao reuse evaluation](p3-u3a-openbao-trunk-credential-review.md)
+now proposes a concrete isolated owner/import/binding design, administrative
+remediation and exact approval wording. It remains unapproved and supersedes
+this section's open-ended investigation checklist only if explicitly adopted.
+
 IP-peer mode means no material is required. It must report
 `credentialBinding={kind:'not_required'}` rather than configured, available or
 registered. Reject any credential field in that mode.
