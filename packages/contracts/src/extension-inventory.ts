@@ -119,7 +119,7 @@ export interface ExtensionDto {
   profile: { id: string; version: number };
   availability: 'available';
   administrativeStatus: 'enabled' | 'disabled';
-  credentials: { kind: 'unset' };
+  credentials: { kind: 'unset' } | { kind: 'configured'; generationId: string };
   readiness: { kind: 'not_established' };
   observation: { kind: 'not_available' };
   eligibility: { eligible: false; reasons: ('unallocated' | 'disabled')[] };

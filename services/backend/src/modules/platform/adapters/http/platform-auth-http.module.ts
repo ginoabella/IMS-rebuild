@@ -1,3 +1,6 @@
+import { EndpointCredentialsController } from '../../../telephony/adapters/http/endpoint-credentials.controller';
+import { EndpointCredentialRuntime } from '../../../telephony/adapters/db/endpoint-credential-runtime';
+import { EndpointCredentials } from '../../../telephony/application/endpoint-credentials';
 import { InventoryController } from '../../../telephony/adapters/http/inventory.controller';
 import { InventoryRuntime } from '../../../telephony/adapters/db/inventory-runtime';
 import { ExtensionInventory } from '../../../telephony/application/extension-inventory';
@@ -31,12 +34,31 @@ export class PlatformAuthHttpModule {
       controllers: [
         PbxController,
         InventoryController,
+        EndpointCredentialsController,
         PlatformAuthController,
         PlatformTenantsController,
         PlatformCredentialActionsController,
       ],
       providers: [
         PlatformCurrentSession,
+        {
+          provide: EndpointCredentialRuntime,
+          inject: [TransactionAuthority, ExtensionInventory],
+          useFactory: (
+            authority: TransactionAuthority,
+            inventory: ExtensionInventory,
+          ) =>
+            new EndpointCredentialRuntime(
+              config.database.url,
+              authority,
+              inventory,
+            ),
+        },
+        {
+          provide: EndpointCredentials,
+          inject: [EndpointCredentialRuntime],
+          useFactory: (runtime: EndpointCredentialRuntime) => runtime.service,
+        },
         {
           provide: InventoryRuntime,
           inject: [TransactionAuthority],

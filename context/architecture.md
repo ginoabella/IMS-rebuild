@@ -238,8 +238,15 @@ and keep the workflow traceable.
 - **Deployment configuration:** Bootstrap PBX connectivity, secret-store access,
   and allowed validation/reload commands. Editable PBX infrastructure and routes
   are authoritative PostgreSQL desired state, managed through the platform UI.
-- **Secret store:** Credential material referenced by desired configuration;
-  revisions and audit records contain references, never raw secrets.
+- **Secret store:** P3-U2b conditionally adopts private verified-TLS OpenBao KV v2
+  with persistent single-node Raft for development endpoint material. PostgreSQL
+  owns safe operations/generations; only the dedicated credential worker resolves
+  material, with separate trusted cleanup access. HTTP, ordinary workers, observer,
+  Asterisk and clients receive no provider token. No delivery or live application
+  is authorized. See [endpoint credential contract](../docs/architecture/endpoint-credentials.md)
+  and [runbook](../docs/runbooks/endpoint-credentials.md). Associated generations
+  are retained pending P3-U5 dependencies. Production HA, key custody, joint backup,
+  token/security controls, worker scope and retirement require separate review.
 
 
 Every tenant-owned table has a restrictive foreign key to `tenants`. Shared PBX

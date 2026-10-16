@@ -1,3 +1,4 @@
+import { checkEndpointCredentials } from './check-endpoint-credentials.mjs';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import assert from 'node:assert/strict';
@@ -28,6 +29,8 @@ const { Transaction } = load('infrastructure/database/transaction');
 const { SafeLogger } = load('infrastructure/execution/logging');
 const { Pool } = backend('pg');
 export async function checkExtensionInventory({
+  processDiagnostics,
+  endpointAccess,
   ownerUrl,
   owner,
   runtime,
@@ -43,7 +46,10 @@ export async function checkExtensionInventory({
   const directory = await mkdtemp(join(tmpdir(), 'myims-inventory-'));
   const catalogFile = join(directory, 'catalog.json');
   const targets = Array.from({ length: 3 }, (_, i) => ({
-    installationId: randomUUID(),
+    installationId:
+      i === 0 && endpointAccess?.installationId
+        ? endpointAccess.installationId
+        : randomUUID(),
     targetAlias: `inventory-${i}`,
     aliases: [`inventory-alias-${i}`],
     host: `pbx-${i}.fixture.invalid`,
@@ -483,6 +489,36 @@ export async function checkExtensionInventory({
     console.log(
       'PASS inventory A-01/02: runtime-granted SIP/WebRTC, exact namespace, canonical alias/kind/profile/disabled conflicts, distinct-node reuse, safe states and attributed atomic audit',
     );
+    if (endpointAccess) {
+      await checkEndpointCredentials({
+        replica,
+        proxy,
+        commitProxy,
+        key,
+        sessions,
+        patch,
+        processDiagnostics,
+        apiOnly: endpointAccess.apiOnly,
+        otherNode: nodes[1],
+        issue,
+        redis,
+        owner,
+        runtime,
+        appUrl,
+        node,
+        a,
+        b,
+        s,
+        other,
+        post,
+        get,
+        request,
+        operator,
+        output,
+        secrets,
+      });
+      return;
+    }
 
     const invalidBefore = await counts();
     const invalidNumbers = [

@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; child spec prepared 2026-10-15 (Asia/Manila, +08:00) under the adopted a → b → c sequence.
+- **Status:** completed 2026-10-16 with B-01–07 passing evidence under conditional private-development approval; child spec prepared 2026-10-15 (Asia/Manila, +08:00) under the adopted a → b → c sequence.
 - **Requirement:** [P3-U2 parent credential contract and acceptance](p3-u2-extension-inventory-and-endpoint-profiles.md).
 - **Goal:** associate and reset protected endpoint credentials with exact canonical extension generations, with recoverable retries and sanitized status.
 - **Completion boundary:** the approved provider/reference flow and protected API prove setup/reset, version fencing, audit, retry and interrupted-operation recovery. Desired credential configuration grants no live activation or revocation. Browser integration belongs to c.
@@ -36,8 +36,9 @@ Routine API/adapter composition follows existing conventions.
 
 The [G-02 credential contract review](../../docs/planning/p3-u2b-credential-contract-review.md)
 contains proposed values and approval wording prepared 2026-10-16 (Asia/Manila,
-+08:00). It remains unapproved; provider provisioning and implementation have not
-started.
++08:00). Sections 2–6 and G02-01–10 were conditionally approved by the user on
+2026-10-16 for controlled private development. Provider/lifecycle implementation and B-01–07 are complete within that scope.
+See [final evidence](../../docs/status/p3-u2b-evidence.md).
 
 ## Scope and ownership
 
@@ -143,8 +144,9 @@ calling credentials are included.
 | B-06 | Sentinel scans prove no material in DTOs, receipts, desired/revision metadata, audit/outbox/jobs, logs/errors, URLs or client contracts. Real provider access is restricted to approved processes; protected recipient handoff, if required, passes its approved contract without secret evidence capture. | AC-09 credentials |
 | B-07 | Focused provider/database/HTTP checks, affected a/auth/durable regressions and full Docker graph pass. Safe evidence/runbook/index/tracker document real versus injected checks, cleanup and outstanding live-apply/browser boundaries. | AC-11 scoped |
 
-Establish the proposed `./dev exec pnpm check:extension-inventory --credentials`
-selection during implementation; it is not an existing command or recorded pass.
+Use `./dev exec pnpm check:extension-inventory --credentials` for the required
+real-provider suite. The separate `--credentials-api` selection deliberately
+excludes provider execution and cannot establish full unit acceptance.
 Use real PostgreSQL/runtime grants, shared Redis, two HTTP replicas and the approved
 protected endpoint provider. Fault injection proves ordering/failure cases, not
 provider integration by itself. Use deterministic barriers and isolated material;

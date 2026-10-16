@@ -216,3 +216,7 @@ Restart previously running private platform/staff HTTPS supervisors using their
 runbooks and verify both report ready. PBX observer material remains unavailable
 to them. See [local PBX observation operations](pbx-observation.md) for the scoped
 approval, separate telephony process mounts, lifecycle and verification commands.
+
+P3-U2b conditionally approves a dedicated private persistent verified-TLS OpenBao
+service for controlled development only. See the [endpoint credential runbook](endpoint-credentials.md)
+for process isolation, manual unseal, token custody and deferred production review.

@@ -79,3 +79,4 @@ export type {
   InventoryConflict,
   InventoryApiErrorDto,
 } from './extension-inventory';
+export * from './endpoint-credentials';

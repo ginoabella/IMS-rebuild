@@ -99,3 +99,7 @@ identity or tenant schema is created by this increment.
 
 Garage settings, credentials, access limits and recovery are documented in the
 [shared-storage runbook](shared-storage.md).
+
+P3-U2b conditionally approves a dedicated private persistent verified-TLS OpenBao
+service for controlled development only. See the [endpoint credential runbook](endpoint-credentials.md)
+for process isolation, manual unseal, token custody and deferred production review.

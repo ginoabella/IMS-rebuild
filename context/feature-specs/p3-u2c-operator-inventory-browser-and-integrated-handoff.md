@@ -160,3 +160,12 @@ with a/b evidence still valid. Record remaining Phase 3/P4 work explicitly:
 
 No P3-U2 completion establishes live apply/recovery, tenant voice readiness,
 operational calling, production capacity or the Phase 3 gate.
+
+## Approved b handoff boundary — 2026-10-16
+
+The [conditionally approved G-02 review](../../docs/planning/p3-u2b-credential-contract-review.md)
+authorizes safe asynchronous setup/reset/status and exact immutable intent recovery;
+it authorizes no phone delivery, reveal or password-entry browser contract. b uses
+opaque generation/operation IDs, separate material health and retained history;
+configured desired state is not live activation/revocation. b has passed real B-01–07 acceptance within private development; c may consume
+that verified API/intent handoff. c remains planned under its own C-01–07 contract.

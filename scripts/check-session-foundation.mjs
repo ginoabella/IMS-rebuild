@@ -15,7 +15,18 @@ import { once } from 'node:events';
 import { createServer, connect } from 'node:net';
 import { readFileSync } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
-const selection = process.argv.slice(2);
+const endpointCredentials = [
+  '--endpoint-credentials',
+  '--endpoint-credentials-api',
+].includes(process.argv[2]);
+const endpointApiOnly = process.argv[2] === '--endpoint-credentials-api';
+const selection = process.argv
+  .slice(2)
+  .map((x) =>
+    ['--endpoint-credentials', '--endpoint-credentials-api'].includes(x)
+      ? '--extension-inventory'
+      : x,
+  );
 assert.ok(
   selection.length === 0 ||
     (selection.length === 1 &&
@@ -57,7 +68,9 @@ const { PostgresSessionFences } = backend(
   './dist/modules/identity/adapters/db/session-fences.js',
 );
 const { SafeLogger } = backend('./dist/infrastructure/execution/logging.js');
-const { redisUrl, pbxAccess } = JSON.parse(readFileSync(0, 'utf8'));
+const { redisUrl, pbxAccess, endpointAccess } = JSON.parse(
+  readFileSync(0, 'utf8'),
+);
 const settings = parseSessionConfig({
   SESSION_TIMEOUT_MS: '200',
   SESSION_WEB_IDLE_SECONDS: '60',
@@ -1227,6 +1240,12 @@ try {
     });
   if (selection[0] === '--extension-inventory') {
     await checkExtensionInventory({
+      processDiagnostics: () => captured.join(''),
+      endpointAccess: endpointCredentials
+        ? endpointApiOnly
+          ? { apiOnly: true }
+          : endpointAccess
+        : undefined,
       ownerUrl: trusted.href,
       owner,
       runtime,

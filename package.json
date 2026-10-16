@@ -8,8 +8,8 @@
   },
   "scripts": {
     "lint": "eslint scripts eslint.config.mjs && pnpm -r --workspace-concurrency=1 lint",
-    "format:check": "prettier --check .",
-    "format": "prettier --write .",
+    "format:check": "node scripts/format.mjs --check",
+    "format": "node scripts/format.mjs --write",
     "typecheck": "pnpm -r --workspace-concurrency=1 typecheck && tsc --project scripts/ui/tsconfig.json",
     "build": "pnpm -r --workspace-concurrency=1 build",
     "check:entrypoints": "pnpm --filter @myims/backend build && node scripts/check-entrypoints.mjs",

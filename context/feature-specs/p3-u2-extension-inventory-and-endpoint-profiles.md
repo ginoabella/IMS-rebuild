@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** in progress; a → b → c split adopted 2026-10-15 (Asia/Manila, +08:00). P3-U2a is complete under the user’s conditional inventory/profile approval with [A-01–07 evidence](../../docs/status/p3-u2a-evidence.md); b/c remain planned. Parent completion and live PBX/production acceptance are not claimed.
+- **Status:** in progress; a → b → c split adopted 2026-10-15 (Asia/Manila, +08:00). P3-U2a is complete under the user’s conditional inventory/profile approval with [A-01–07 evidence](../../docs/status/p3-u2a-evidence.md); b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c remains planned. Parent completion and live PBX/production acceptance are not claimed.
 - **Requirement:** [Phase 3, P3-U2](../implementation-plan.md#p3-u2--manage-extension-inventory-and-endpoint-profiles), [platform requirements](../project-overview.md#platform-and-asterisk-administration), and [telephony architecture](../architecture.md#telephony-architecture).
 - **Goal:** let a platform operator create and maintain individual and bulk SIP/WebRTC extension inventory, endpoint profiles and protected credential references before tenant reservation.
 - **Completion boundary:** the protected browser journey persists valid inventory and profile choices, performs the approved credential setup/reset flow, and displays desired state separately from trustworthy registration observations. Unallocated or disabled inventory confers no tenant calling or staff assignment authority. Saving never installs or reloads Asterisk configuration.
@@ -303,7 +303,7 @@ external secret lifecycle and recovery boundary. The final child delivers the
 operator journey and trustworthy observation presentation across those contracts.
 Keep each child's failure/security tests with that child; do not defer correctness
 to a testing-only unit. The user adopted this split on 2026-10-15 (Asia/Manila,
-+08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b/c remain planned.
++08:00). The linked child specs define sequential implementation; a is complete under conditional approval; b is complete under conditional private-development approval with [B-01–07 evidence](../../docs/status/p3-u2b-evidence.md); c remains planned.
 
 | Unit | Starting state, scope and expected result | Parent criteria owned |
 | --- | --- | --- |
@@ -324,3 +324,11 @@ Review corrections incorporated:
 - Retain profile/credential versions so desired edits cannot silently change dependencies or reuse old readiness evidence.
 - Resolve endpoint-secret storage and handoff explicitly; existing read-only management-secret lookup does not authorize provisioning.
 - Keep unallocated access denial testable now while assigning future live routing, revocation and staff-assignment proof to their actual owners. This avoids a circular dependency on P3-U5/P4 and an unsupported claim of live PBX isolation.
+
+## P3-U2b conditional development approval — 2026-10-16
+
+The user approved [G02-01–10 and sections 2–6](../../docs/planning/p3-u2b-credential-contract-review.md)
+for controlled private development: private persistent verified-TLS OpenBao,
+generated material, a dedicated worker, no recipient delivery, retained associated
+generations and bounded recovery/cleanup. Production, phone delivery/revelation
+and live PBX application remain separately gated. b passed B-01–07 and is complete within the approved development scope. See [current evidence](../../docs/status/p3-u2b-evidence.md).

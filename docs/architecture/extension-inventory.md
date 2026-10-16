@@ -191,3 +191,9 @@ Generated keys remain internal. P3-U5 owns default-deny rendering, live collisio
 checks/apply, media/listener/trust verification and external fencing. P4 owns
 allocation/assignment and real tenant calling eligibility. a completion establishes
 none of those outcomes. [Verification evidence](../status/p3-u2a-evidence.md).
+
+P3-U2b's [conditional development approval](../planning/p3-u2b-credential-contract-review.md)
+now defines G-02. Its implementation reuses this exact version port and adds safe
+configured generation IDs to inventory DTOs. [Credential lifecycle](endpoint-credentials.md)
+records the separate provider/worker boundary. b remains incomplete until its real
+acceptance evidence passes; this addendum does not authorize c or P3-U5 progression.

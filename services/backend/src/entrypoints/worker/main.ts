@@ -11,14 +11,43 @@ async function main() {
   const app = await NestFactory.createApplicationContext(WorkerModule, {
     logger: false,
   });
-  const worker = new DeliveryWorker(url, settings);
+  let credential:
+    | ReturnType<
+        typeof import('../../modules/telephony/adapters/credentials/worker-runtime').credentialWorkerRuntime
+      >
+    | undefined;
+  const mode = process.env.WORKER_CONSUMER ?? 'ordinary';
+  if (!['ordinary', 'endpoint-credentials'].includes(mode))
+    throw new Error('Invalid worker consumer');
+  const consumer =
+    mode === 'endpoint-credentials'
+      ? {
+          get installationId() {
+            return credential!.installationId;
+          },
+          execute: (operation: string, work: string, attempt: number) =>
+            credential!.execute(operation, work, attempt),
+          reconcileExhausted: () => credential!.reconcileExhausted(),
+        }
+      : undefined;
+  const worker = new DeliveryWorker(url, settings, {}, consumer);
+  if (consumer) {
+    const { credentialWorkerRuntime } =
+      await import('../../modules/telephony/adapters/credentials/worker-runtime');
+    credential = credentialWorkerRuntime(url, worker.pool);
+  }
   try {
+    if (credential) await credential.provider.renew();
     await worker.start();
   } catch (error) {
+    await credential?.close();
     await app.close();
     throw error;
   }
-  installWorkerShutdown(worker, () => app.close());
+  installWorkerShutdown(worker, async () => {
+    await credential?.close();
+    await app.close();
+  });
 }
 void main().catch(() => {
   console.error(

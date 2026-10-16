@@ -1,3 +1,9 @@
+import {
+  endpointAccess,
+  provisionEndpointFixture,
+  endpointFixtureRequest,
+  cleanupEndpointFixture,
+} from './endpoint-credential-launcher.mjs';
 // Trusted Docker fixture launcher. No socket or deployment secret is added to HTTP.
 import { spawn, spawnSync } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
@@ -14,6 +20,8 @@ function docker(args) {
     throw new Error('Session fixture Docker operation failed');
   return r.stdout;
 }
+const credentials = process.argv[2] === '--endpoint-credentials';
+if (credentials) provisionEndpointFixture();
 let pbxAccess;
 const observing = ['--pbx-observation', '--pbx-browser'].includes(
   process.argv[2],
@@ -103,6 +111,7 @@ if (observing)
     }),
   );
 let created = false;
+let endpointCleanupError;
 try {
   docker([
     'create',
@@ -147,7 +156,12 @@ try {
     while ((newline = output.indexOf('\n')) >= 0) {
       const line = output.slice(0, newline);
       output = output.slice(newline + 1);
-      if (line === 'SESSION_FIXTURE_RESTART') docker(['restart', name]);
+      if (credentials && line.startsWith('ENDPOINT_FIXTURE_REQUEST '))
+        endpointFixtureRequest(line).catch(() => {
+          console.error('Endpoint fixture control failed');
+          child.kill('SIGKILL');
+        });
+      else if (line === 'SESSION_FIXTURE_RESTART') docker(['restart', name]);
       else if (observing && line === 'PBX_FIXTURE_INSTALL') {
         if (fixtureInstalled) throw new Error('PBX fixture already installed');
         fixture(
@@ -176,6 +190,7 @@ try {
     JSON.stringify({
       redisUrl: `redis://:${password}@${name}:6379`,
       ...(pbxAccess ? { pbxAccess } : {}),
+      ...(credentials ? { endpointAccess } : {}),
     }),
   );
   const timer = setTimeout(() => child.kill('SIGKILL'), 1500000);
@@ -183,6 +198,13 @@ try {
   clearTimeout(timer);
   if (code !== 0) throw new Error('Session lifecycle checks failed');
 } finally {
+  if (credentials) {
+    try {
+      await cleanupEndpointFixture();
+    } catch (error) {
+      endpointCleanupError = error;
+    }
+  }
   if (observing) {
     if (controlledStopped) docker(['start', 'myims-rebuild-dev-asterisk-1']);
     rotate(pbxAccess.credentials);
@@ -212,3 +234,5 @@ try {
       'PASS observation cleanup: controlled credential restored, exact SIP fixture cleared, exact Redis container/volume and launcher directory removed',
     );
 }
+
+if (endpointCleanupError) throw endpointCleanupError;

@@ -321,6 +321,12 @@ readiness remain dependent on this phase.
   rollback, concurrent applies, worker interruption, owner failover, and active-call
   handling. A simulator alone cannot complete this unit.
 
+P3-U2b supplies exact desired credential generations and retained history. Before
+P3-U5 consumes them, separately approve protected generation access, phone delivery
+where needed, actual applied/in-flight/rollback dependency facts and credential
+retirement. A desired reset is not live credential application or revocation.
+See the [endpoint credential handoff](../docs/architecture/endpoint-credentials.md).
+
 **Phase gate:** Browser configuration and live verification/recovery pass on a
 controlled PBX. Operator guides explain desired state, runtime state, and rollback.
 
@@ -850,6 +856,13 @@ supported by measured targets and successful recovery/rollback rehearsals.
   launch are resolved. Unmet targets keep readiness incomplete.
 - **Verification:** Run the approved matrix and retain measurements, environment,
   workloads, failure-injection steps, results, and material limitations.
+
+The development OpenBao arrangement requires separate production review of high
+availability, secure seal/key custody, joint provider/PostgreSQL backup and
+recovery, token lifecycle/operational security and credential-worker provider
+scope. Credential retention, retirement and secure destruction must include live
+PBX and rollback dependencies. P3-U2b's private development approval grants no
+production deployment or phone-delivery/apply authority.
 
 ### P9-U4 — Verify initial provisioning, backup/restore, and rollback
 

@@ -249,19 +249,25 @@ contracts. G-02/credential policy remains with b; production policy and c’s li
 mapping/coexistence remain separately gated.
 
 The user adopted P3-U2's sequential a → b → c split on 2026-10-15
-(Asia/Manila, +08:00). Separate child specs are prepared; a is complete and b/c remain planned:
+(Asia/Manila, +08:00). Separate child specs are prepared; a/b are complete within conditional development scope, and c remains planned:
 
 - [P3-U2a — Protected inventory, profiles and atomic bulk creation](../context/feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md)
 - [P3-U2b — Protected endpoint credential lifecycle and recovery](../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md)
 - [P3-U2c — Operator inventory browser and integrated handoff](../context/feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md)
 
-[P3-U2b endpoint credential contract — review for approval](planning/p3-u2b-credential-contract-review.md)
-proposes G-02 generation, OpenBao/process access, no recipient delivery,
-version/retry retention and recovery/cleanup values. Awaiting approval; no provider
-provisioning or credential implementation is claimed.
+[P3-U2b endpoint credential contract — conditional development approval](planning/p3-u2b-credential-contract-review.md)
+records approved G-02 generation, OpenBao/process access, no recipient delivery,
+retention and recovery/cleanup values. Implementation and B-01–07 real-service acceptance
+are complete under controlled private development approval.
 
 P3-U2a controlled-development inventory foundation:
 
 - [Inventory/profile API and transaction contract](architecture/extension-inventory.md)
 - [Inventory deployment, recovery and checks](runbooks/extension-inventory.md)
 - [P3-U2a acceptance evidence](status/p3-u2a-evidence.md)
+
+P3-U2b conditionally approves a dedicated private persistent verified-TLS OpenBao
+service for controlled development only. See the [endpoint credential runbook](runbooks/endpoint-credentials.md)
+for process isolation, manual unseal, token custody and deferred production review.
+
+[P3-U2b final implementation and acceptance evidence](status/p3-u2b-evidence.md).

@@ -2089,3 +2089,59 @@ live apply is enabled. Missing live access cannot be replaced by simulator evide
 - 2026-10-15 (Asia/Manila, +08:00) — Prepared and reviewed the P3-U2 feature spec using Phase 3, delivered P3-U1 contracts and the user-supplied working Asterisk reference. Recommended three sequential children: inventory/profiles/atomic bulk API, protected credential lifecycle, then browser/observation/integrated handoff. No child implementation or split adoption claimed. Applicable number/profile, credential provider/handoff and runtime identity/coexistence decisions remain required; live apply/allocation/assignment stay with later owners. Documentation consistency/link/whitespace review only.
 
 - 2026-10-15 09:32 +08:00 (Asia/Manila) — Completed P3-U1c and parent P3-U1 after combined real-service/browser/ownership acceptance, durable/process regressions, full Docker graph, shared UI and final maximum-name browser checks. Exact owned fixtures removed; older unrelated database preserved. Normal platform/staff HTTPS ready, their network checks passed and backend live/ready returned 200. P3-U2/U5 handoff documented; configuration apply, tenant voice readiness and production remain incomplete.
+
+
+## P3-U2b preceding implementation checkpoints — archived 2026-10-16 10:49 +08:00
+
+Historical intermediate states before final acceptance; superseded by the current [tracker](progress-tracker.md) and [final evidence](../docs/status/p3-u2b-evidence.md).
+
+### In Progress
+
+P3-U2b — protected endpoint credential lifecycle and recovery. Started
+2026-10-16 (Asia/Manila, +08:00), under the user's conditional approval of
+[sections 2–6 and G02-01–10](../docs/planning/p3-u2b-credential-contract-review.md).
+Scope: private persistent TLS OpenBao, protected asynchronous setup/reset/status,
+exact-generation recovery and conservative cleanup; no delivery or live PBX apply.
+Required completion: B-01–07, real provider/PostgreSQL/Redis/HTTP A/B denial,
+concurrency/recovery checks, regressions, full Docker graph and updated handoffs.
+Current checkpoint: approval/architecture/runbooks synchronized; private OpenBao
+2.7.1 pinned by digest, persistent Raft and verified TLS provisioned, manually
+unsealed, declarative HMAC audit enabled, initialization root revoked. Added
+operation/generation migration, strict safe API/controller, provider CAS adapter,
+worker preflight/final authority/version fences, filtered shared-queue claims and
+trusted maintenance. Real inventory and partial credential API checks passed on
+PostgreSQL/Redis/HTTP A/B; custody/file and anonymous provider denial passed after
+separating UID 1003. The full Docker graph is being rerun after fixing safe-error
+lint and private-custody formatting traversal. [Incomplete evidence](../docs/status/p3-u2b-evidence.md).
+The user explicitly approved isolated development administration recovery after
+initial automatic-review rejection. Recovery completed: orphan scoped administrator
+created, recovered root revoked, protected listener settings restored and provider
+manually unsealed. Real provider acceptance is running; no completion claimed.
+
+### Current Unit Checkpoint — P3-U2b
+
+- **Status:** in progress; 2026-10-16 (Asia/Manila, +08:00).
+- **Requirement:** [B-01–07](feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md); [implementation evidence](../docs/status/p3-u2b-evidence.md).
+- **Delivered source:** retained operation/generation metadata, safe platform API, OpenBao CAS adapter, filtered dedicated worker, transaction/authority/version fences and trusted recovery/cleanup.
+- **Verified:** final real-provider credential suite passed, exit 0: PostgreSQL/Redis/HTTP A/B, two production workers, setup/reset, authority/version/replay fences, real provider/COMMIT/HTTP loss, seal/token/restart/audit/database/cleanup recovery and actual-material scans. Exact 26-generation teardown passed (25 destroyed, one absent); disposable database removed. Private administration recovery/rotation and process isolation passed.
+- **Remaining:** sequential full Docker graph, evidence reconciliation and handoff. Final real queue-selection and complete inventory regressions passed, exit 0, with exact fixture cleanup. Production/delivery/live apply remain excluded.
+
+### Previous Completed Checkpoint — P3-U2a
+
+- **Status:** complete within conditionally approved controlled-development inventory/profile scope; 2026-10-15 15:01 +08:00 (Asia/Manila). Parent P3-U2 and Phase 3 remain incomplete.
+- **Requirement:** [P3-U2a A-01–07](feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md); [final evidence](../docs/status/p3-u2a-evidence.md).
+- **Delivered:** protected individual/bulk preview/create, bounded list/detail/profile APIs; node-wide canonical number reservation, immutable generated endpoint/auth/AOR identities, node-scoped immutable profile versions and explicit adoption, versioned disable/re-enable, transactional actor audit, owner/operation-scoped durable intent receipts and unallocated calling/assignment denial.
+- **Compatibility/deployment:** reviewed revisioned capability declarations are deployment-owned. Additive migration and the existing controlled installation’s non-secret declaration applied successfully. No editable profiles/inventory were seeded on startup.
+- **Verification:** final real PostgreSQL/runtime-grant, shared Redis and independent HTTP A/B inventory suite passed, including overlapping/non-overlapping races, audit/receipt rollback, immutable profile history, exact actor/set audit, same/conflicting intents and actual HTTP/COMMIT acknowledgment loss. Registry, isolated authority/lifecycle, staff browser, complete foundation/durability/storage/identity and final full `./dev check` passed, exit 0.
+- **Regression maintenance:** foundation/audit/identity now verify exact repository migration history instead of hard-coded counts. A second-context staff-browser fixture uses its existing foreground/navigation barrier before password entry; authentication, expiry and password-clearing behavior remain unchanged. Focused and integrated checks passed.
+- **Cleanup/runtime:** exact inventory PostgreSQL/Redis/session/catalog fixtures removed. Normal platform and staff HTTPS supervisors restored ready; both network checks passed. Backend live/ready HTTP 200, PostgreSQL and both Redis dependencies up. Existing identities/material/unmanaged PBX/reference configuration retained.
+- **Handoff:** [API/transaction contract](../docs/architecture/extension-inventory.md), [runbook](../docs/runbooks/extension-inventory.md). b must authorize and call `InventoryVersionPort.lockUnallocated` on the same transaction before approved credential/version/audit changes; c receives safe DTOs, dependency tokens and explicit uncertainty recovery. G-02/b, c’s live mapping/browser, P3-U5 apply and P4 calling eligibility remain separate.
+- **Approval limits:** initial 1000–899999 convention, node-scoped profiles, removeExisting=false and generated namespace are approved only within the recorded conditional development scope. Shorter municipal plans need explicit policy revision; production transport/media/contact recovery needs separate review. Saving/enabling grants no credentials, live installation, readiness or calling eligibility.
+
+
+### Recent Session Notes
+
+- 2026-10-16 (Asia/Manila, +08:00) — Started P3-U2b under the user's conditional sections 2–6/G02-01–10 approval. Added provider/lifecycle source and synchronized documentation. Real partial API/inventory/isolation checks passed; provider administration recovery was rejected by automatic approval review and requires an explicit decision. Full real-provider acceptance remains incomplete; see linked evidence.
+
+- 2026-10-16 (Asia/Manila, +08:00) — Prepared the [P3-U2b G-02 credential contract review](../docs/planning/p3-u2b-credential-contract-review.md) with recommended decisions, explicit new-provider/process approval, operation ordering, retention, cleanup, API and acceptance handoffs. Documentation only; user approval and real protected provider access remain required before implementation. No credential material or runtime configuration changed.
+- 2026-10-15 15:01 +08:00 (Asia/Manila) — Completed P3-U2a A-01–07 under the user’s conditional approval. Delivered protected inventory/profile/atomic bulk APIs, immutable identity/version contracts, audit/receipts and exact b transaction handoff. Real-service focused checks, affected regressions and full Docker graph passed; fixtures removed, normal HTTPS restored ready, health 200. [Evidence](../docs/status/p3-u2a-evidence.md) records commands, fixes and limits. Credentials, c browser/live mapping, live apply and production acceptance remain separate.

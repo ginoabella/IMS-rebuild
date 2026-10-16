@@ -5,6 +5,22 @@ import { parseWorkerConfig } from '@myims/config';
 import { executionContext, safeData, reference } from '../execution/context';
 import { SafeLogger } from '../execution/logging';
 import { QUEUE } from './queue';
+import { credentialWorkContract } from '../../modules/telephony/application/endpoint-credentials';
+export interface CredentialConsumer {
+  readonly installationId: string;
+  execute(
+    operationId: string,
+    workId: string,
+    queueAttempt: number,
+  ): Promise<void>;
+  reconcileExhausted(): Promise<void>;
+  renew?(): Promise<void>;
+}
+type DeliveryJob = Pick<
+  PgBoss.JobWithMetadata<{ workId: string }>,
+  'id' | 'data' | 'retryCount' | 'retryLimit'
+>;
+
 export const sampleContract = {
   type: 'sample.deliver',
   version: 1,
@@ -52,6 +68,7 @@ export class DeliveryWorker {
     url: string,
     readonly settings: ReturnType<typeof parseWorkerConfig>,
     private readonly hooks: DeliveryHooks = {},
+    private readonly credentialConsumer?: CredentialConsumer,
   ) {
     this.pool = new Pool({
       connectionString: url,
@@ -111,7 +128,9 @@ export class DeliveryWorker {
   async start() {
     try {
       await this.boss.start();
-      if (!(await this.boss.getQueue(QUEUE))) throw new Error('queue_missing');
+      const queue = await this.boss.getQueue(QUEUE);
+      if (!queue || queue.policy !== 'standard')
+        throw new Error('queue_missing_or_unsupported');
       const capability = await this.pool.query<{ capable: boolean }>(
         `SELECT bool_and(has_table_privilege(current_user,'pgboss.job',privilege)) AS capable
          FROM unnest(ARRAY['SELECT','INSERT','UPDATE','DELETE']) AS permissions(privilege)`,
@@ -120,8 +139,9 @@ export class DeliveryWorker {
         throw new Error('queue_permission_missing');
       this.state('ready');
       this.loop = this.dispatchLoop();
-      this.consumers = Array.from({ length: this.settings.concurrency }, () =>
-        this.consumeLoop(),
+      this.consumers = Array.from(
+        { length: this.credentialConsumer ? 2 : this.settings.concurrency },
+        () => this.consumeLoop(),
       );
     } catch {
       this.state('failed');
@@ -136,6 +156,7 @@ export class DeliveryWorker {
       try {
         await this.boss.expire(); // pg-boss owns retry eligibility and expiration.
         await this.reconcile();
+        await this.credentialConsumer?.reconcileExhausted();
         await this.dispatch();
         if (failures) this.state('ready', 'dispatch');
         failures = 0;
@@ -164,14 +185,30 @@ export class DeliveryWorker {
       try {
         // In pg-boss 10.4.2 work() does not await complete()/fail(). Use its
         // public pull API so dependency failures and shutdown are fully awaited.
-        const [job] = await this.boss.fetch<{ workId: string }>(QUEUE, {
-          includeMetadata: true,
-          batchSize: 1,
-        });
+        const job = await this.claim();
         if (this.stopping) break; // Any fetched claim remains recoverable by expiry.
         if (job) {
           try {
-            await this.execute(job);
+            if (this.credentialConsumer) {
+              const work = (
+                await this.pool.query<Work>(
+                  'SELECT * FROM public.outbox_work WHERE id=$1',
+                  [job.data.workId],
+                )
+              ).rows[0];
+              if (
+                !work ||
+                work.work_type !== credentialWorkContract.type ||
+                work.schema_version !== 1
+              )
+                throw new Error('invalid_work');
+              safeData(credentialWorkContract, work.payload);
+              await this.credentialConsumer.execute(
+                work.target_reference,
+                work.id,
+                job.retryCount + 1,
+              );
+            } else await this.execute(job);
           } catch {
             await this.boss.fail(QUEUE, job.id, {
               failureCode: 'delivery_unavailable',
@@ -191,6 +228,33 @@ export class DeliveryWorker {
           Math.min(30000, Math.max(500, this.settings.pollMs) * 2 ** failures),
         );
     }
+  }
+  private async claim(): Promise<DeliveryJob | undefined> {
+    // pg-boss 10.4.2 has no work-type selector. Preserve its standard queue claim
+    // semantics while filtering canonical immutable intent BEFORE SKIP LOCKED claim.
+    // pg-boss still owns expiry, retry scheduling and complete/fail transitions.
+    const result = await this.pool.query<DeliveryJob>(
+      `
+      WITH next AS (
+        SELECT j.id FROM pgboss.job j
+        WHERE j.name=$1 AND j.state<'active' AND j.start_after<now()
+        AND (COALESCE((SELECT w.work_type FROM public.outbox_work w WHERE w.id::text=j.data->>'workId'),'')=$2)=$3
+        AND (NOT $3 OR EXISTS (
+          SELECT 1 FROM public.endpoint_credential_operations o
+          WHERE o.work_id::text=j.data->>'workId' AND o.installation_id=$4::uuid
+        ))
+        ORDER BY j.priority DESC,j.created_on,j.id LIMIT 1 FOR UPDATE OF j SKIP LOCKED
+      ) UPDATE pgboss.job j SET state='active',started_on=now(),retry_count=CASE WHEN j.started_on IS NOT NULL THEN j.retry_count+1 ELSE j.retry_count END
+      FROM next WHERE j.name=$1 AND j.id=next.id
+      RETURNING j.id,j.data,j.retry_count AS "retryCount",j.retry_limit AS "retryLimit"`,
+      [
+        QUEUE,
+        credentialWorkContract.type,
+        !!this.credentialConsumer,
+        this.credentialConsumer?.installationId ?? null,
+      ],
+    );
+    return result.rows[0];
   }
   async dispatch() {
     const client = await this.pool.connect();
@@ -217,8 +281,14 @@ export class DeliveryWorker {
           },
           {
             id: item.id,
-            retryLimit: this.settings.attempts - 1,
-            retryDelay: this.settings.retrySeconds,
+            retryLimit:
+              item.work_type === credentialWorkContract.type
+                ? 5
+                : this.settings.attempts - 1,
+            retryDelay:
+              item.work_type === credentialWorkContract.type
+                ? 5
+                : this.settings.retrySeconds,
             retryBackoff: true,
             expireInSeconds: this.settings.timeoutSeconds,
             db: { executeSql: (sql, values) => client.query(sql, values) },
@@ -259,7 +329,7 @@ export class DeliveryWorker {
       `INSERT INTO public.work_results(work_id,handler,attempts,outcome,failure_code,first_attempt_at,last_attempt_at,finished_at)
       SELECT DISTINCT ON (w.id) w.id,'sample.deliver',j.retry_count+1,'failed','queue_exhausted',j.started_on,j.started_on,clock_timestamp()
       FROM pgboss.job j JOIN public.outbox_work w ON w.id::text=j.data->>'workId'
-      WHERE j.name=$1 AND j.state='failed'
+      WHERE j.name=$1 AND j.state='failed' AND w.work_type<>'endpoint.credential.prepare'
       AND NOT EXISTS (SELECT 1 FROM pgboss.job live WHERE live.name=$1 AND live.data->>'workId'=w.id::text AND live.state<'completed')
       AND NOT EXISTS (SELECT 1 FROM public.work_results r WHERE r.work_id=w.id AND r.outcome<>'pending')
       ORDER BY w.id,j.retry_count DESC,j.started_on DESC LIMIT $2
@@ -270,7 +340,7 @@ export class DeliveryWorker {
   }
   private log(
     work: Work,
-    job: PgBoss.JobWithMetadata<{ workId: string }>,
+    job: DeliveryJob,
     attempt: number,
     outcome: 'committed' | 'failed',
     failureCode?:
@@ -294,7 +364,7 @@ export class DeliveryWorker {
       outcome,
     });
   }
-  private async execute(job: PgBoss.JobWithMetadata<{ workId: string }>) {
+  private async execute(job: DeliveryJob) {
     // Queue input contains only a stable ID; canonical immutable intent supplies trusted context.
     let id: string;
     try {

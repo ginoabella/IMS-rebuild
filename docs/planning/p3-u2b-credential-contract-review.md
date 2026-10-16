@@ -1,16 +1,29 @@
-# P3-U2b endpoint credential lifecycle contract — review for approval
+# P3-U2b endpoint credential lifecycle contract — conditional development approval
 
-Prepared 2026-10-16 (Asia/Manila, +08:00). **Status: proposed; awaiting user review and approval. No implementation or provisioning authorized by this document alone.**
+Prepared 2026-10-16 (Asia/Manila, +08:00). **Status: sections 2–6 and G02-01–10 conditionally approved by the user on 2026-10-16 (Asia/Manila, +08:00) for controlled private development. Implementation completed with B-01–07 evidence; see the linked final acceptance record.**
 
 Requirement: [P3-U2b](../../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md).
 Decision owner: user, under D-09 and [parent G-02](../../context/feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md#decisions-required-before-dependent-implementation).
 Starting evidence: [completed P3-U2a](../status/p3-u2a-evidence.md), its [approved policy](p3-u2a-inventory-contract-review.md) and [transaction/version port](../architecture/extension-inventory.md#bc-handoffs).
 
-## 1. Decisions requested
+## Conditional approval record
 
-Recommend approving sections 2–6 for controlled private development, with sections 7–9 defining implementation and verification. Every value below is a proposal, including operational limits. Approval would resolve b's scoped G-02 policy; completion still requires real provider access and B-01–07 evidence.
+The user explicitly approved sections 2–6 and decisions G02-01–10 for controlled
+private development, including dedicated private persistent verified-TLS OpenBao.
+The approval requires security/authority/concurrency/transaction contracts,
+material exclusion, installation/tenant isolation and all B-01–07 real-service
+checks. It excludes production deployment, phone delivery/revelation and live PBX
+application. Single-node/manual-unseal/development tokens are development only.
+Before production, separately review HA, key custody, backup/recovery, token and
+operational security, credential retirement/retention/destruction (including live
+and rollback dependencies), and worker provider access scope. Update architecture,
+runbooks and deferred requirements before dependent implementation proceeds.
 
-| Decision | Recommended value | Practical effect |
+## 1. Decisions approved
+
+The user conditionally approved sections 2–6 and G02-01–10 for controlled private development. Sections 7–9 define the implementation and verification handoff. This resolves b's scoped G-02 policy; completion still requires passing B-01–07 evidence.
+
+| Decision | Approved development value | Practical effect |
 | --- | --- | --- |
 | G02-01 generation | Server-generated, independent 32 random bytes encoded as 64 lowercase hexadecimal characters; 256 bits of entropy | No supplied passwords, shared defaults, number-derived secrets or arbitrary reference input |
 | G02-02 provider | One dedicated OpenBao service, KV v2, persistent single-node Raft storage, private verified TLS | Explicitly approves the first writable endpoint-secret provider and a new development service; existing management-secret files remain separate |
@@ -23,21 +36,21 @@ Recommend approving sections 2–6 for controlled private development, with sect
 | G02-09 abandoned material | Eligible after 24 hours and terminal non-association, with exact ownership and dependency checks; retain cleanup tombstones | Failed preparations are recoverable and eventually cleaned without deleting successors |
 | G02-10 bounds | 5-second provider request deadline; 6 attempts total, exponential delay from 5 seconds capped at 5 minutes; concurrency 2 per credential-worker process | Bounded retries through existing pg-boss; exhausted work needs explicit trusted reconciliation |
 
-Main tradeoffs: OpenBao adds a service, storage, TLS and seal/access administration. Asynchronous setup/reset returns an operation to inspect rather than an immediate configured result. No phone can be configured through this unit's UI/API. Retaining associated generations consumes storage until P3-U5 supplies trustworthy retirement dependencies. These are deliberate scope choices for approval.
+Main tradeoffs: OpenBao adds a service, storage, TLS and seal/access administration. Asynchronous setup/reset returns an operation to inspect rather than an immediate configured result. No phone can be configured through this unit's UI/API. Retaining associated generations consumes storage until P3-U5 supplies trustworthy retirement dependencies. These are the conditionally approved development scope choices.
 
 Suggested approval wording:
 
 > Approve sections 2–6 of the P3-U2b credential contract review for controlled private development, including OpenBao provisioning, dedicated credential-worker access, generated credentials, no recipient delivery, authority continuation, retention and recovery limits. Proceed with P3-U2b using sections 7–9. Production and live PBX application remain separately gated.
 
-The [feature gate](../../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md#starting-state-and-decision-gate) requires: “Resolve parent G-02 before dependent provider/schema/lifecycle implementation”. This review supplies the concrete proposal for that approval; no dependent implementation starts during document preparation.
+The [feature gate](../../context/feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md#starting-state-and-decision-gate) requires: “Resolve parent G-02 before dependent provider/schema/lifecycle implementation”. The approval record above resolves that decision gate. Initial document preparation preceded dependent implementation; current delivery is recorded in the linked evidence.
 
 ## 2. Material, identity and provider — G02-01/02
 
 Use the generated-material flow only. Generate with the runtime cryptographic random generator inside the credential worker. Recoverable SIP material belongs encrypted in OpenBao; staff password hashes/tokens, AMI credentials and Garage references are unrelated and cannot be reused.
 
-Use the existing immutable generated auth-object key (`ims-a-<installation>-<extension>`) as the proposed SIP authentication username. Keep it stable across resets; generation changes the password only. Keep it internal to protected consumers in b. Validate the 71-character username and 64-character hexadecimal password against the controlled node's reviewed capability declaration; fail unsupported combinations. This is a desired-format contract, with actual phone/client and Asterisk authentication verification owned by later delivery/apply units.
+Use the existing immutable generated auth-object key (`ims-a-<installation>-<extension>`) as the approved SIP authentication username. Keep it stable across resets; generation changes the password only. Keep it internal to protected consumers in b. Validate the 71-character username and 64-character hexadecimal password against the controlled node's reviewed capability declaration; fail unsupported combinations. This is a desired-format contract, with actual phone/client and Asterisk authentication verification owned by later delivery/apply units.
 
-| Provider item | Proposed development contract |
+| Provider item | Approved development contract |
 | --- | --- |
 | Deployment | Separate opt-in Compose service `endpoint-secrets`; normal persistent server mode, no ephemeral dev mode; pin an exact reviewed release/image digest during implementation |
 | Storage | Dedicated persistent Raft volume; OpenBao owns encrypted material and storage keys; PostgreSQL owns operations, generations and references only |
@@ -51,7 +64,7 @@ Use the existing immutable generated auth-object key (`ims-a-<installation>-<ext
 | Desired reference | Opaque application generation UUID with internal provider location/version mapping; APIs expose safe generation identity, never location or provider capabilities |
 | Diagnostics | Provider request/response body tracing disabled; provider audit uses protected storage and default sensitive-value HMAC/redaction, never raw logging; sentinel verification includes it |
 
-OpenBao documents [KV-v2 CAS and deletion semantics](https://openbao.org/docs/secrets/kv/kv-v2/) and [persistent Raft storage](https://openbao.org/docs/configuration/storage/raft/). These support the proposed adapter; our path convention, TTLs and lifecycle are project policy. CAS=0 allows creation only for a previously absent key. Soft deletion is reversible; cleanup must explicitly destroy the owned version. Preserve metadata/tombstones rather than deleting metadata and permitting key reuse.
+OpenBao documents [KV-v2 CAS and deletion semantics](https://openbao.org/docs/secrets/kv/kv-v2/) and [persistent Raft storage](https://openbao.org/docs/configuration/storage/raft/). These support the adopted adapter; our path convention, TTLs and lifecycle are project policy. CAS=0 allows creation only for a previously absent key. Soft deletion is reversible; cleanup must explicitly destroy the owned version. Preserve metadata/tombstones rather than deleting metadata and permitting key reuse.
 
 The provider implements the architecture's endpoint-secret-store slot; it does not replace canonical PostgreSQL state or expand the existing read-only management-file adapter. Approval explicitly permits this new service/storage integration. Before code depends on it, synchronize [architecture](../../context/architecture.md) and the shared-service/deployment runbooks with the approved scope.
 
@@ -89,7 +102,7 @@ An already accepted intent may complete after session expiry or confirmed logout
 
 The association transaction commits the usable reference, generation history, extension version increment, one actor-attributed setup/reset business audit, original safe result and required durable intent together. Operational progress is separate from the successful-change audit. Preserve originating operator attribution and executing system context through the existing audit/outbox contracts; no invented operator session. Failed/queued preparations never masquerade as completed resets.
 
-| Evidence | Proposed retention |
+| Evidence | Approved development retention |
 | --- | --- |
 | Full original safe operation result/receipt | 30 days from terminal completion, measured by database time; unresolved operations never expire into new work |
 | Minimal key tombstone | Retain operator/action/key, canonical fingerprint, target, operation/generation IDs, outcome and timestamps without automatic pruning |
@@ -100,7 +113,7 @@ This intentionally strengthens a's receipt-pruning boundary for external credent
 
 ## 5. Provider ordering and recovery
 
-Persist the durable operation and outbox before contacting OpenBao. External calls remain outside application database transactions. Prepared material is not yet desired configuration. State names below are proposed safe enums; they describe durable facts rather than inferring success from an HTTP timeout.
+Persist the durable operation and outbox before contacting OpenBao. External calls remain outside application database transactions. Prepared material is not yet desired configuration. State names below are the safe enums; they describe durable facts rather than inferring success from an HTTP timeout.
 
 | Stage / interruption | Canonical result and required recovery |
 | --- | --- |
@@ -136,11 +149,11 @@ Run cleanup explicitly through trusted deployment, in batches of at most 50 exac
 
 Provider destruction does not prove erasure from retained backups, storage media or a previous live Asterisk configuration. Backup retention and live revocation are separately owned policies. No production destruction guarantee is inferred.
 
-## 7. Proposed protected API and consumer handoffs
+## 7. Protected API and consumer handoffs
 
 Routine route names and schemas may follow repository conventions while preserving these policy contracts. Route root: `/platform/pbx-nodes/:nodeId/extensions/:extensionId`.
 
-| Route | Proposed behavior |
+| Route | Behavior |
 | --- | --- |
 | POST `/credentials/setup` | Strict `{operationId, expectedVersion, expectedGenerationId:null}`; 202 new accepted operation, 200 terminal original result, 202 still-pending replay |
 | POST `/credentials/reset` | Strict `{operationId, expectedVersion, expectedGenerationId}` with exact current UUID; same replay behavior |
@@ -173,6 +186,6 @@ Verify with real provider policy denials that HTTP, web, ordinary worker and obs
 | B-06 | Sentinels absent from DTOs, receipts, audit/outbox/jobs, revisions, logs/errors/provider audit, URLs and client contracts; real process/provider ACL denials; no recipient output |
 | B-07 | Focused real-service checks, affected inventory/auth/audit/durable regressions and full Docker graph; safe evidence/runbook/index/tracker and exact fixture cleanup |
 
-Establish `./dev exec pnpm check:extension-inventory --credentials` during implementation; it is proposed, not an existing recorded pass. Use real PostgreSQL/runtime grants, shared Redis, independent HTTP A/B and OpenBao with isolated fixture material. Existing `--inventory`, affected documented authority/durable commands and `./dev check` remain required. Record exact commands/results and distinguish real integration from injected provider faults and future-owner dependency fixtures.
+Use `./dev exec pnpm check:extension-inventory --credentials` for required real-provider acceptance. Use real PostgreSQL/runtime grants, shared Redis, independent HTTP A/B and OpenBao with isolated fixture material. Existing `--inventory`, affected documented authority/durable commands and `./dev check` remain required. Record exact commands/results and distinguish real integration from injected provider faults and future-owner dependency fixtures.
 
-For this review draft, checks are source consistency, G-02/B-01–07 coverage, relative links and whitespace only. No runtime test, service provisioning, credential generation, approval or feature completion is claimed.
+At initial document preparation, verification covered source consistency, G-02/B-01–07 coverage, relative links and whitespace only. Current implementation, real-service results and completion status are recorded in [P3-U2b evidence](../status/p3-u2b-evidence.md).

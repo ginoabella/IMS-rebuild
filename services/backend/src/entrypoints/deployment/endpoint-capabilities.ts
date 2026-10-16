@@ -23,6 +23,8 @@ export async function declareEndpointCapabilities(args: string[]) {
       'signaling',
       'codecs',
       'media',
+      'credentialAuthMax',
+      'credentialHexMax',
     ]);
     const installationId = id(data.installationId, 'nodeId'),
       revision = version(data.revision);
@@ -48,6 +50,14 @@ export async function declareEndpointCapabilities(args: string[]) {
       signaling: choices('signaling', ['udp', 'wss']),
       codecs: choices('codecs', ['opus', 'ulaw', 'alaw']),
       media: choices('media', ['none', 'dtls-srtp']),
+      credentialAuthMax:
+        data.credentialAuthMax === undefined
+          ? null
+          : version(data.credentialAuthMax),
+      credentialHexMax:
+        data.credentialHexMax === undefined
+          ? null
+          : version(data.credentialHexMax),
     };
   });
   const client = new Client({
@@ -71,13 +81,36 @@ export async function declareEndpointCapabilities(args: string[]) {
       if (
         old &&
         old.revision === d.revision &&
-        JSON.stringify([old.kinds, old.signaling, old.codecs, old.media]) ===
-          JSON.stringify([d.kinds, d.signaling, d.codecs, d.media])
+        JSON.stringify([
+          old.kinds,
+          old.signaling,
+          old.codecs,
+          old.media,
+          old.credential_auth_max,
+          old.credential_hex_max,
+        ]) ===
+          JSON.stringify([
+            d.kinds,
+            d.signaling,
+            d.codecs,
+            d.media,
+            d.credentialAuthMax,
+            d.credentialHexMax,
+          ])
       )
         continue;
       await client.query(
-        'INSERT INTO public.endpoint_capabilities(installation_id,revision,kinds,signaling,codecs,media) VALUES($1,$2,$3,$4,$5,$6) ON CONFLICT(installation_id) DO UPDATE SET revision=EXCLUDED.revision,kinds=EXCLUDED.kinds,signaling=EXCLUDED.signaling,codecs=EXCLUDED.codecs,media=EXCLUDED.media',
-        [d.installationId, d.revision, d.kinds, d.signaling, d.codecs, d.media],
+        'INSERT INTO public.endpoint_capabilities(installation_id,revision,kinds,signaling,codecs,media,credential_auth_max,credential_hex_max) VALUES($1,$2,$3,$4,$5,$6,$7,$8) ON CONFLICT(installation_id) DO UPDATE SET revision=EXCLUDED.revision,kinds=EXCLUDED.kinds,signaling=EXCLUDED.signaling,codecs=EXCLUDED.codecs,media=EXCLUDED.media,credential_auth_max=EXCLUDED.credential_auth_max,credential_hex_max=EXCLUDED.credential_hex_max',
+        [
+          d.installationId,
+          d.revision,
+          d.kinds,
+          d.signaling,
+          d.codecs,
+          d.media,
+          d.credentialAuthMax,
+          d.credentialHexMax,
+        ],
       );
     }
     await client.query('COMMIT');

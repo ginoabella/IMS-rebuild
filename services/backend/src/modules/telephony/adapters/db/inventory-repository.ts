@@ -27,6 +27,7 @@ interface ProfileRow {
   created_by: string;
 }
 interface ExtensionRow {
+  credential_generation_id: string | null;
   id: string;
   node_id: string;
   number: string;
@@ -68,7 +69,9 @@ function extensionDto(r: ExtensionRow): ExtensionDto {
     createdBy: r.created_by,
     updatedBy: r.updated_by,
     availability: 'available',
-    credentials: { kind: 'unset' },
+    credentials: r.credential_generation_id
+      ? { kind: 'configured', generationId: r.credential_generation_id }
+      : { kind: 'unset' },
     readiness: { kind: 'not_established' },
     observation: { kind: 'not_available' },
     eligibility: inventoryEligibility(r.administrative_status),

@@ -14,8 +14,9 @@ Deliver MyIMS incrementally under the agreed
 [build, review, improve process](ai-workflow-rules.md#build-review-improve).
 P3-U2a inventory/profile foundation is complete under conditional development
 approval, following completed P3-U1 registry, observation and operator browser.
-P3-U2 continues in the adopted a → b → c sequence: b needs its G-02 credential
-contract/approval; c owns the browser/live-mapping journey. Parent P3-U2 remains incomplete.
+P3-U2 continues in the adopted a → b → c sequence: a and b are complete within
+conditional development scope; c owns the browser/live-mapping journey and remains
+planned. Parent P3-U2 remains incomplete.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
 their verified boundaries. Early draft tenant creation P4-U1a is complete under
@@ -25,19 +26,17 @@ production readiness remain to be delivered.
 
 ## In Progress
 
-None. P3-U2a completed 2026-10-15 15:01 +08:00 (Asia/Manila).
+None.
 
-## Current Unit Checkpoint — P3-U2a
+## Latest Completed Checkpoint — P3-U2b
 
-- **Status:** complete within conditionally approved controlled-development inventory/profile scope; 2026-10-15 15:01 +08:00 (Asia/Manila). Parent P3-U2 and Phase 3 remain incomplete.
-- **Requirement:** [P3-U2a A-01–07](feature-specs/p3-u2a-protected-inventory-profiles-and-atomic-bulk-creation.md); [final evidence](../docs/status/p3-u2a-evidence.md).
-- **Delivered:** protected individual/bulk preview/create, bounded list/detail/profile APIs; node-wide canonical number reservation, immutable generated endpoint/auth/AOR identities, node-scoped immutable profile versions and explicit adoption, versioned disable/re-enable, transactional actor audit, owner/operation-scoped durable intent receipts and unallocated calling/assignment denial.
-- **Compatibility/deployment:** reviewed revisioned capability declarations are deployment-owned. Additive migration and the existing controlled installation’s non-secret declaration applied successfully. No editable profiles/inventory were seeded on startup.
-- **Verification:** final real PostgreSQL/runtime-grant, shared Redis and independent HTTP A/B inventory suite passed, including overlapping/non-overlapping races, audit/receipt rollback, immutable profile history, exact actor/set audit, same/conflicting intents and actual HTTP/COMMIT acknowledgment loss. Registry, isolated authority/lifecycle, staff browser, complete foundation/durability/storage/identity and final full `./dev check` passed, exit 0.
-- **Regression maintenance:** foundation/audit/identity now verify exact repository migration history instead of hard-coded counts. A second-context staff-browser fixture uses its existing foreground/navigation barrier before password entry; authentication, expiry and password-clearing behavior remain unchanged. Focused and integrated checks passed.
-- **Cleanup/runtime:** exact inventory PostgreSQL/Redis/session/catalog fixtures removed. Normal platform and staff HTTPS supervisors restored ready; both network checks passed. Backend live/ready HTTP 200, PostgreSQL and both Redis dependencies up. Existing identities/material/unmanaged PBX/reference configuration retained.
-- **Handoff:** [API/transaction contract](../docs/architecture/extension-inventory.md), [runbook](../docs/runbooks/extension-inventory.md). b must authorize and call `InventoryVersionPort.lockUnallocated` on the same transaction before approved credential/version/audit changes; c receives safe DTOs, dependency tokens and explicit uncertainty recovery. G-02/b, c’s live mapping/browser, P3-U5 apply and P4 calling eligibility remain separate.
-- **Approval limits:** initial 1000–899999 convention, node-scoped profiles, removeExisting=false and generated namespace are approved only within the recorded conditional development scope. Shorter municipal plans need explicit policy revision; production transport/media/contact recovery needs separate review. Saving/enabling grants no credentials, live installation, readiness or calling eligibility.
+- **Status:** completed within conditionally approved controlled private development; 2026-10-16 10:49 +08:00 (Asia/Manila). Parent P3-U2, c and Phase 3 remain incomplete.
+- **Requirement:** [B-01–07](feature-specs/p3-u2b-protected-endpoint-credential-lifecycle-and-recovery.md); [final evidence](../docs/status/p3-u2b-evidence.md).
+- **Delivered:** private persistent verified-TLS OpenBao, retained generation/operation metadata, protected asynchronous setup/reset/status, exact intent recovery, dedicated installation-scoped worker, atomic authority/version/association/audit fences and trusted bounded requeue/cleanup.
+- **Verification:** real OpenBao/PostgreSQL/runtime grants/Redis/HTTP A/B and two production worker processes passed setup/reset, replay/races, lost provider/HTTP/COMMIT replies, revocation/session continuation, restart/seal/token expiry, database/audit rollback, late preparation and interrupted cleanup. Actual-password scans and worker/cleanup/process security denials passed. Final full credential, queue-selection and inventory regressions plus `./dev check` passed, exit 0.
+- **Cleanup/runtime:** exact 26-generation final fixture teardown accounted for 25 destroyed/one absent; metadata retained, disposable database/Redis/worker fixtures removed. Root recovery was explicitly user-approved, recovered root revoked and protected listener restored; scoped administrator rotation passed. Backend live/ready 200; normal platform/staff HTTPS checks passed. Both endpoint networks remain internal.
+- **Handoff:** [safe API/transaction contract](../docs/architecture/endpoint-credentials.md), [deployment/recovery runbook](../docs/runbooks/endpoint-credentials.md). c receives safe asynchronous status and immutable intent recovery; P3-U5 receives exact generations and retained dependency history.
+- **Deferred approval:** production HA, key custody, joint backup/recovery, token/operational security, worker provider scope and credential retirement/retention/secure destruction. Phone delivery/revelation, live PBX application/revocation and tenant calling readiness remain outside b.
 
 ## Completed
 
@@ -61,6 +60,7 @@ the history preserves their full earlier checkpoints.
 | P3-U1b | Controlled development observation, replaceable AMI-TLS adapter, durable ownership/fencing and reconciled freshness; B-01–09 complete. | [Observation evidence](../docs/status/p3-u1b-evidence.md) |
 | P3-U1c / parent P3-U1 | Secure operator register/inspect/edit, identity-bound uncertainty recovery and real integrated registry/observation/browser acceptance; C-01–07 and AC-01–11 complete. | [Combined evidence](../docs/status/p3-u1c-evidence.md) |
 | P3-U2a | Protected inventory/profile APIs, immutable selections/identities, atomic bounded bulk creation, versioned status/adoption, audit/idempotency and unallocated denial; A-01–07 complete. | [Inventory evidence](../docs/status/p3-u2a-evidence.md) |
+| P3-U2b | Protected desired credential lifecycle, private OpenBao, exact-generation recovery, worker/process isolation and conservative cleanup; B-01–07 complete for private development. | [Credential lifecycle evidence](../docs/status/p3-u2b-evidence.md) |
 | DEV-PLATFORM-HTTPS | Approved private SSH/HTTPS console access, real-stack verification and Windows user-confirmed sign-in. | [Development evidence](../docs/status/platform-development-https-evidence.md) |
 
 Latest completed P2-U4 checkpoint: C-01–09 and parent AC-01–12 reconciled;
@@ -70,9 +70,10 @@ acceptance runtime/control socket were removed, fixture tenant retired and exist
 t001 unchanged; backend live/ready returned HTTP 200 at that checkpoint.
 These are retained results, not a claim that fresh checks ran during this cleanup.
 
+
 ## Next Up
 
-1. P3-U2b: review and approve the proposed [G-02 credential contract](../docs/planning/p3-u2b-credential-contract-review.md), then provision protected access and implement its separately approved scope using verified a’s transaction/version port. The review proposes generated material, OpenBao and a dedicated credential worker, no recipient delivery, durable recovery and conservative retirement. All remain unapproved; b is planned and no provider/runtime change is claimed. P3-U2c follows with the actual browser and controlled live mapping/coexistence checks. [Parent scope and split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md); parent P3-U2 remains incomplete.
+1. P3-U2c: implement the operator inventory browser and controlled live-mapping/coexistence handoff using verified a/b APIs. [Parent scope and split](feature-specs/p3-u2-extension-inventory-and-endpoint-profiles.md). Parent P3-U2 remains incomplete; delivery/live apply/production retain separate approvals.
 2. P3-U3–U5: trunks/gateways/DIDs, routing, then verified apply/recovery and external fencing.
 3. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
@@ -84,7 +85,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | --- | --- | --- |
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
-| 3 | P3-U1 and a/b/c plus P3-U2a complete within development scope; parent P3-U2, b/c, U3–U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
+| 3 | P3-U1 and a/b/c plus P3-U2a/b complete within development scope; parent P3-U2, c, U3–U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1a/children complete; P4-U1b and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
@@ -116,13 +117,14 @@ for their scope; creating a spec does not approve a proposal.
 - Local Garage/shared reference access: [storage contract](../docs/architecture/shared-storage.md), GET-only references with 120-second default/300-second ceiling; existing references may survive authority changes until expiry.
 - P3-U1b G-01–03: [conditional local observation approval](../docs/planning/p3-u1b-observation-contract-review.md), including replaceable adapter/material isolation, broader AMI permission disclosure and development-only limits. Production and expanded permissions/control require separate approval.
 - P3-U2a G-01 and the G-03 namespace portion: [conditional inventory/profile approval](../docs/planning/p3-u2a-inventory-contract-review.md), Sections 2–4; initial number convention, immutable node-scoped profiles, generated identities and disabled/unset stock. Production security/contact recovery and b/G-02, c and P3-U5 remain separate.
+- P3-U2b G02-01–10: sections 2–6 conditionally approved 2026-10-16 for controlled private development only. OpenBao, dedicated worker, no delivery/live apply, retained generations and bounded recovery; production HA/key custody/backup/token/security, retention/destruction and worker access scope require separate review.
 - Existing architecture/runtime and early draft delivery order remain adopted; implementation decisions are documented in [architecture](architecture.md) and [docs/architecture](../docs/architecture/), not duplicated here.
 
 ### Unresolved for dependent work
 
 | Area | Affected work and resume condition |
 | --- | --- |
-| PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 endpoint credentials and c's live mapping remain separate. Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
+| PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping remains incomplete. Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
 | Administrator/tenant lifecycle | General last-admin removal/disablement, platform-account recovery and tenant activation/suspension/retirement effects on routes/active work remain with owning P4/later units. Ordinary admission and scoped P2-U4 credential recovery are already approved. |
 | Geography/drafts/location | Default-coordinate/service-area policy, tiles/search, persistent draft recovery/conflicts, foreground sharing/retention and supported operational mobile targets must be established before owning units. |
@@ -132,7 +134,7 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Verification and Limitations
 
-- Latest required full Docker graph passed, exit 0, confirmed 2026-10-15 15:01 +08:00; focused inventory, registry, authority, staff browser and restored HTTPS network checks passed. Prior shared UI/PBX browser evidence remains in its owning unit. Hosted CI, production traffic/capacity/TLS/HA and joint backing-store rollback/recovery remain separately unverified.
+- Latest required full Docker graph passed, exit 0, confirmed 2026-10-16 10:49 +08:00; real credential/provider, queue-selection, inventory and process-isolation checks passed. Normal platform/staff HTTPS and backend health checks passed. Prior shared UI/PBX browser evidence remains in its owning unit. Hosted CI, production traffic/capacity/TLS/HA and joint backing-store rollback/recovery remain separately unverified.
 - Native evidence is reported Windows Android acceptance on Android 16/API 36, patch 2025-04-05. Desktop Node 24.13.1 is outside the supported engine; Docker verification used Node 22.23.3. Secure-storage faults are injected around real OS calls; physically locked reads and exact interruption timing are not claimed. Trusted session-clock activity fixtures do not establish responder operations.
 - Mounted web work recovery does not persist through refresh; durable incident drafts belong to P5-U4. Staff authentication is complete; full responder/incident workflows remain future work.
 - P3-U1 establishes authenticated registry/observation/browser recovery against one controlled development Asterisk. Live configuration apply/recovery, tenant voice readiness, operational call attribution, production deployment and real multi-PBX HA remain unverified/unapproved.
@@ -143,8 +145,7 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Recent Session Notes
 
-- 2026-10-16 (Asia/Manila, +08:00) — Prepared the [P3-U2b G-02 credential contract review](../docs/planning/p3-u2b-credential-contract-review.md) with recommended decisions, explicit new-provider/process approval, operation ordering, retention, cleanup, API and acceptance handoffs. Documentation only; user approval and real protected provider access remain required before implementation. No credential material or runtime configuration changed.
-- 2026-10-15 15:01 +08:00 (Asia/Manila) — Completed P3-U2a A-01–07 under the user’s conditional approval. Delivered protected inventory/profile/atomic bulk APIs, immutable identity/version contracts, audit/receipts and exact b transaction handoff. Real-service focused checks, affected regressions and full Docker graph passed; fixtures removed, normal HTTPS restored ready, health 200. [Evidence](../docs/status/p3-u2a-evidence.md) records commands, fixes and limits. Credentials, c browser/live mapping, live apply and production acceptance remain separate.
+- 2026-10-16 10:49 +08:00 (Asia/Manila) — Completed P3-U2b B-01–07 under the user's conditional G-02 private-development approval. Real provider/lifecycle/security/recovery evidence, complete inventory/queue regressions and final full Docker graph passed, exit 0. Fixture material accounted for and exact owned resources removed; normal runtime readiness verified. In Progress cleared. Approved recovery and deferred production/delivery/live-apply boundaries are recorded in [final evidence](../docs/status/p3-u2b-evidence.md). Earlier checkpoints moved to tracker history.
 
 ## Tracker Maintenance
 

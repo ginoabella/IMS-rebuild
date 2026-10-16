@@ -84,6 +84,7 @@ case "$action" in
       MYIMS_PBX_UID=$(id -u) MYIMS_PBX_GID=$(id -g) compose --profile telephony up -d --scale "telephony=${1:-1}" telephony ;;
   telephony-down) compose --profile telephony stop telephony ;;
   pbx-catalog-prepare) provision_storage scripts/prepare-pbx-catalog.mjs ;;
+  endpoint-isolation-check) provision_storage scripts/check-endpoint-isolation.mjs ;;
   storage-provision) provision_storage ;;
   storage-deployment-check) workspace_exec pnpm build:backend; provision_storage scripts/check-storage-deployment.mjs ;;
   up) prepare; compose up -d --build --wait --wait-timeout 120 workspace
@@ -136,10 +137,14 @@ case "$action" in
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:extension-inventory ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --inventory ]; }; then
-          echo 'Supported inventory selection: --inventory' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --inventory ] && [ "$1" != --credentials ] && [ "$1" != --credentials-api ]; }; then
+          echo 'Supported inventory selections: --inventory, --credentials' >&2; exit 1
         fi
-        provision_storage scripts/check-session-deployment.mjs --extension-inventory
+        if [ "${1:-}" = --credentials-api ]; then
+          provision_storage scripts/check-session-deployment.mjs --endpoint-credentials-api
+        elif [ "${1:-}" = --credentials ]; then
+          provision_storage scripts/check-session-deployment.mjs --endpoint-credentials
+        else provision_storage scripts/check-session-deployment.mjs --extension-inventory; fi
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-nodes ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --registry ] && [ "$1" != --observation ] && [ "$1" != --browser ]; }; then
@@ -186,6 +191,6 @@ case "$action" in
       else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|pbx-observation-prepare|telephony-up|telephony-down|storage-provision|storage-deployment-check|pbx-catalog-prepare}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|pbx-observation-prepare|telephony-up|telephony-down|storage-provision|storage-deployment-check|endpoint-isolation-check|pbx-catalog-prepare}'
      [ "$action" = help ] || exit 1 ;;
 esac

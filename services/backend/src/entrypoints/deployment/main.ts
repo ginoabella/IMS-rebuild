@@ -11,6 +11,12 @@ import { DeploymentModule } from './deployment.module';
 
 async function main() {
   const command = process.argv[2];
+  if (command === 'endpoint-credentials') {
+    const { maintainEndpointCredentials } =
+      await import('./endpoint-credentials');
+    await maintainEndpointCredentials(process.argv.slice(3));
+    return;
+  }
   if (command === 'declare-endpoint-capabilities') {
     await declareEndpointCapabilities(process.argv.slice(3));
     return;
