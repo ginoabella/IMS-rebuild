@@ -13,7 +13,9 @@ import { createRequire } from 'node:module';
 import { fork, spawn } from 'node:child_process';
 import { once } from 'node:events';
 import { createServer, connect } from 'node:net';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 const inventoryBrowser = process.argv[2] === '--inventory-browser';
 if (inventoryBrowser) await import('./check-inventory-composition.mjs');
@@ -130,27 +132,47 @@ const ref = (s) => ({
   generation: s.record.generation,
 });
 async function deploy() {
-  const child = spawn(
-    process.execPath,
-    ['services/backend/dist/entrypoints/deployment/main.js', 'migrate'],
-    {
-      env: {
-        ...process.env,
-        DATABASE_URL: app.href,
-        DATABASE_PASSWORD_FILE: undefined,
-        MIGRATION_DATABASE_URL: trusted.href,
-        MIGRATION_DATABASE_PASSWORD_FILE: undefined,
+  // Required by the scoped trunk provisioning approval: retained database
+  // credentials stay out of subprocess environment values, even in acceptance.
+  const directory = mkdtempSync(join(tmpdir(), 'myims-migration-input-'));
+  const input = (url, label) => {
+    const safe = new URL(url);
+    const password = decodeURIComponent(safe.password);
+    safe.password = '';
+    const file = password ? join(directory, label) : undefined;
+    if (file) writeFileSync(file, password, { mode: 0o600, flag: 'wx' });
+    return { url: safe.href, file };
+  };
+  try {
+    const runtimeInput = input(app.href, 'runtime.password');
+    const ownerInput = input(trusted.href, 'owner.password');
+    const child = spawn(
+      process.execPath,
+      ['services/backend/dist/entrypoints/deployment/main.js', 'migrate'],
+      {
+        env: {
+          ...process.env,
+          DATABASE_URL: runtimeInput.url,
+          DATABASE_PASSWORD_FILE: runtimeInput.file,
+          MIGRATION_DATABASE_URL: ownerInput.url,
+          MIGRATION_DATABASE_PASSWORD_FILE: ownerInput.file,
+        },
+        stdio: ['ignore', 'pipe', 'pipe'],
       },
-      stdio: ['ignore', 'pipe', 'pipe'],
-    },
-  );
-  let output = '';
-  child.stdout.on('data', (d) => (output += d));
-  child.stderr.on('data', (d) => (output += d));
-  const timer = setTimeout(() => child.kill('SIGKILL'), 90000);
-  const [code] = await once(child, 'exit');
-  clearTimeout(timer);
-  assert.equal(code, 0, output);
+    );
+    let output = '';
+    child.stdout.on('data', (d) => (output += d));
+    child.stderr.on('data', (d) => (output += d));
+    const timer = setTimeout(() => child.kill('SIGKILL'), 90000);
+    try {
+      const [code] = await once(child, 'exit');
+      assert.equal(code, 0, output);
+    } finally {
+      clearTimeout(timer);
+    }
+  } finally {
+    rmSync(directory, { recursive: true, force: true });
+  }
 }
 async function worker(override = {}) {
   const child = fork(new URL('./session-fixture.mjs', import.meta.url), [], {

@@ -1,7 +1,12 @@
 # U3A-04 — Reuse OpenBao for isolated trunk credentials
 
-Prepared 2026-10-16 (Asia/Manila, +08:00). **Proposed decision; awaiting user
-approval. Documentation only. No provisioning, policy, schema or runtime changes.**
+Prepared 2026-10-16 (Asia/Manila, +08:00). **Approved by the user on
+2026-10-19 (Asia/Manila, +08:00) for the stated controlled private-development
+scope. Implementation and verification remain outstanding.**
+
+The proposal wording below is retained as the approved decision record. The
+OpenBao review supersedes the initial staged authenticated-scope hold; its
+concrete profile/provisioning prerequisites and exclusions still apply.
 
 Owners: [P3-U3a](../../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md),
 [parent G-03 and conditional lifecycle refinement](../../context/feature-specs/p3-u3-trunks-gateways-and-dids.md),

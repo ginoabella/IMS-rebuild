@@ -771,8 +771,20 @@ export async function checkDraftTenants({
       }),
     });
     const limitedSession = await operator(low);
-    // Mixed policies fail closed in the shared registry; use the isolated
-    // fixture-owned key to start a fresh consistent-policy saturation check.
+    // Establish both policies inside one real Redis window. Earlier requests
+    // can belong to an expired window and cannot prove a mixed-policy conflict.
+    const redisTime = await redis.sendCommand(['TIME']);
+    const windowMs = limiterConfig.policies['platform.protected'].windowMs;
+    const remaining = windowMs - ((Number(redisTime[0]) * 1000) % windowMs);
+    if (remaining < 10000) await delay(remaining + 1000);
+    await redis.del('myims:limiter:v1:platform.protected');
+    assert.equal(
+      (await request(b, '/platform/tenants', { session: limitedSession }))
+        .status,
+      200,
+    );
+    // Mixed policies fail closed. Only this disposable fixture's registry is
+    // cleared before the separate consistent-policy saturation check below.
     assert.equal(
       (await request(low, '/platform/tenants', { session: limitedSession }))
         .status,

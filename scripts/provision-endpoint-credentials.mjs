@@ -59,6 +59,30 @@ async function call(path, body, token, method = body ? 'POST' : 'GET') {
   });
 }
 try {
+  if (
+    existsSync(`${directory}/issuer.token`) &&
+    ['provision', 'provision-fixture', 'provision-expiring'].includes(command)
+  ) {
+    const { restrictedEndpointProvision } =
+      await import('/openbao/endpoint-restricted.mjs');
+    await restrictedEndpointProvision(command, installation, fixtureRun);
+    console.log(
+      JSON.stringify({
+        entrypoint: 'deployment',
+        state: 'complete',
+        action: command,
+        issuer: 'restricted',
+      }),
+    );
+    process.exit(0);
+  }
+  if (
+    existsSync(`${directory}/issuer.token`) &&
+    ['rotate-admin', 'bootstrap', 'init', 'recover-bootstrap'].includes(command)
+  )
+    throw new Error(
+      'Use explicit platform custody; routine endpoint administration cannot recover or escalate',
+    );
   if (command === 'recover-bootstrap') {
     const status = await call('sys/generate-root/attempt');
     const otp = randomBytes(64).toString('base64').slice(0, status.otp_length);

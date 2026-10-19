@@ -556,15 +556,21 @@ export async function checkPlatformBrowser({
     }
     phase = 'expiry and canonical-owner recovery';
     for (const boundary of ['idle', 'absolute']) {
-      await page
-        .getByLabel('Unfinished notes')
-        .fill(`retained ${boundary} notes`);
+      phase = `${boundary} expiry: capture canonical mounted work`;
+      // Navigation/focus revalidation must settle before injecting expiry. A
+      // fill during that check is intentionally rejected by the guarded form.
+      const notes = page.getByLabel('Unfinished notes');
+      await notes.focus();
+      await page.waitForLoadState('networkidle');
+      await notes.fill(`retained ${boundary} notes`);
+      await expect(notes).toHaveValue(`retained ${boundary} notes`);
       if (boundary === 'idle') {
         await page.getByRole('button', { name: 'Open confirmation' }).click();
         await expect(
           page.getByRole('dialog', { name: 'Confirm sample action' }),
         ).toBeVisible();
       }
+      phase = `${boundary} expiry: same-owner recovery`;
       await expire(boundary);
       if (boundary === 'idle') {
         assert.equal(

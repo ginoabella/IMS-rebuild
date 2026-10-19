@@ -281,12 +281,35 @@ and [controlled acceptance recovery](runbooks/extension-inventory-browser.md).
 [P3-U2c evidence](status/p3-u2c-evidence.md) records actual checks, failures and cleanup;
 it reconciles all criteria, required regressions and verified restoration.
 
-P3-U3: [Trunks, gateways and DIDs — parent spec and adopted split](../context/feature-specs/p3-u3-trunks-gateways-and-dids.md). The user adopted the sequential a → b → c split on 2026-10-16 (Asia/Manila, +08:00). All remain planned; resource/connection, DID identity, protected-reference and lifecycle policies require scoped decisions before dependent implementation.
+P3-U3: [Trunks, gateways and DIDs — parent spec and adopted split](../context/feature-specs/p3-u3-trunks-gateways-and-dids.md). The user adopted the sequential a → b → c split on 2026-10-16 (Asia/Manila, +08:00). a is in progress following the 2026-10-19 definition/OpenBao approvals; b/c remain planned. Concrete provisioning/profile prerequisites, DID identity and remaining removal policy stay with their owning reviews.
 
 - [P3-U3a — Protected trunk and gateway definitions](../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md)
 - [P3-U3b — DID inventory and dependency-safe resource removal](../context/feature-specs/p3-u3b-did-inventory-and-dependency-safe-resource-removal.md)
 - [P3-U3c — Operator resource browser and integrated handoff](../context/feature-specs/p3-u3c-operator-resource-browser-and-integrated-handoff.md)
 
-- [P3-U3a trunk/gateway contract — draft for approval](planning/p3-u3a-definition-contract-review.md) — proposed resource/connection and initial lifecycle policies; staged IP-peer scope, authenticated binding decision and full a completion remain pending.
+- [P3-U3a trunk/gateway contract — approved private development](planning/p3-u3a-definition-contract-review.md) — approved resource/connection and initial lifecycle policies; authenticated integration requires the approved isolated owner and real evidence.
 
-- [U3A-04 OpenBao trunk credential reuse — proposed decision](planning/p3-u3a-openbao-trunk-credential-review.md) — source findings, isolated import/binding lifecycle, administration remediation, transactional qualification and exact approval scope; no implementation.
+- [U3A-04 OpenBao trunk credential reuse — approved private development](planning/p3-u3a-openbao-trunk-credential-review.md) — approved isolated import/binding lifecycle, administration remediation and transactional qualification; implementation and real evidence outstanding.
+
+- [P3-U3a-1 — Focused isolated trunk credential lifecycle](../context/feature-specs/p3-u3a-1-isolated-trunk-credential-lifecycle.md) — required refinement before authenticated integration.
+- [P3-U3a — Recommended provisioning and test provider profile](planning/p3-u3a-provisioning-and-provider-profile-review.md) — plain-language recommendation, exact synthetic profile, protected custody and conditional one-time recovery procedure; profile/provisioning conditionally approved; one recovery operation subsequently authorized with mandatory safeguards.
+
+Trunk preparation: [owner contract](architecture/trunk-credentials.md) and
+[token/provisioning runbook](runbooks/trunk-credentials.md). Conditional private-development
+approval and a single-operation recovery authorization are recorded. No trunk
+lifecycle or definition acceptance is complete yet.
+
+P3-U3a provisioning checkpoint: [recovery pre-execution report](status/p3-u3a-provisioning-preexecution.md)
+records custodian availability, preparation checks, exact maintenance/restoration plan
+and the separately granted user authorization. The single operation has executed.
+The [custodian succession design](planning/p3-u3a-custodian-succession-review.md)
+is approved. The [execution checkpoint](status/p3-u3a-recovery-execution.md) records
+resolved fresh custody, consistent backup, revoked root, independently verified
+succession and normal restoration. Endpoint regressions passed. A subsequent token-lifetime test requires separate
+[hardening review](planning/p3-u3a-token-lifetime-hardening-review.md); full owner/API
+acceptance remains outstanding and no repeat recovery is authorized.
+
+P3-U3a disposable-only follow-up: [validation evidence and unresolved findings](status/p3-u3a-disposable-lifetime-validation.md),
+[complete-array candidate bodies](planning/p3-u3a-token-lifetime-hardening-array-manifest.json),
+and [separate maintenance/backup design](planning/p3-u3a-retained-lifetime-maintenance-proposal.md).
+Retained remediation is unapproved; P3-U3a remains incomplete.

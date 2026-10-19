@@ -3,10 +3,23 @@ import { spawnSync, spawn } from 'node:child_process';
 import { randomUUID } from 'node:crypto';
 import { mkdirSync, writeFileSync, readFileSync, existsSync } from 'node:fs';
 const browserFixture = process.argv[2] === '--inventory-browser';
+const restrictedFixtureFile =
+  '.local/endpoint-fixtures/restricted-installation.json';
+const restrictedFixture = existsSync(restrictedFixtureFile)
+  ? JSON.parse(readFileSync(restrictedFixtureFile, 'utf8'))
+  : null;
+if (
+  restrictedFixture &&
+  (!/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(
+    restrictedFixture.installationId ?? '',
+  ) ||
+    restrictedFixture.version !== 1)
+)
+  throw new Error('Invalid restricted fixture installation');
 const installationId = browserFixture
   ? JSON.parse(readFileSync('.local/pbx-catalog/catalog.json', 'utf8'))[0]
       .installationId
-  : randomUUID();
+  : (restrictedFixture?.installationId ?? randomUUID());
 const fixtureRun = randomUUID();
 const project = process.env.STORAGE_HOST_PROJECT_ROOT;
 const custody = `${project}/.local/endpoint-credentials`;
@@ -42,6 +55,8 @@ function provision(command) {
     `${custody}:/custody`,
     '-v',
     `${project}/scripts/provision-endpoint-credentials.mjs:/provision.mjs:ro`,
+    '-v',
+    `${project}/scripts/openbao:/openbao:ro`,
     'node:22.23.3-bookworm-slim',
     'node',
     '/provision.mjs',
@@ -144,8 +159,10 @@ function persist(results) {
             accessRevoked: browserAccessRevoked,
             scopeStarted,
             provisioningUncertain,
-            policies: ['worker', 'cleanup'].map(
-              (role) => `endpoint-${role}-${installationId}-${fixtureRun}`,
+            policies: ['worker', 'cleanup'].map((role) =>
+              restrictedFixture
+                ? `endpoint-${role}-${installationId}`
+                : `endpoint-${role}-${installationId}-${fixtureRun}`,
             ),
           }
         : {}),

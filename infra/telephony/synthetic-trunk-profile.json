@@ -1,0 +1,19 @@
+{
+  "id": "synthetic-trunk-outbound-v1",
+  "revision": 1,
+  "fixtureOnly": true,
+  "kind": "sip-peer",
+  "direction": "outbound",
+  "authenticationMode": "outbound-digest",
+  "registrationMode": "none",
+  "purpose": "outbound-request",
+  "digestAlgorithm": "SHA-256",
+  "realm": "trunk.fixture.invalid",
+  "destination": { "address": "192.0.2.60", "port": 5060 },
+  "signaling": "udp",
+  "media": "rtp",
+  "codecs": ["ulaw", "alaw"],
+  "directMedia": false,
+  "rtpSymmetric": true,
+  "forceRport": true
+}

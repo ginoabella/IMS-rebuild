@@ -1,0 +1,23 @@
+{
+  "operationId": "56550aa4-2823-4b3c-a610-14a8f8094969",
+  "finding": "runtime_role_explicit_maximum_override",
+  "observed": {
+    "requested": {
+      "ttl": "48h",
+      "explicit_max_ttl": "48h"
+    },
+    "policies": ["trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"],
+    "explicitMaxTtl": 172800,
+    "period": 0,
+    "orphan": true,
+    "ttl": 86400,
+    "identityPolicies": [],
+    "exactTestTokenRevocationVerified": true
+  },
+  "cleanup": {
+    "remainingTokenFiles": 0,
+    "fixtureIdentityPresent": false
+  },
+  "privilegedRemediationApplied": false,
+  "additionalRecoveryPerformed": false
+}

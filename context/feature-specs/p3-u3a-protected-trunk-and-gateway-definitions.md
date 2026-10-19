@@ -2,7 +2,7 @@
 
 ## Status and purpose
 
-- **Status:** planned; child specification prepared 2026-10-16 (Asia/Manila, +08:00). The user adopted the a → b → c split; implementation and product-policy decisions remain pending.
+- **Status:** in progress from 2026-10-19 (Asia/Manila, +08:00). The user approved both definition and OpenBao reviews; implementation and required evidence remain outstanding.
 - **Requirement:** [P3-U3 parent scope, gates and AC-01–11](p3-u3-trunks-gateways-and-dids.md).
 - **Goal:** establish canonical desired trunk and gateway definitions through protected, audited, concurrency-safe platform APIs.
 - **Completion boundary:** valid definitions and approved opaque credential bindings persist against real PostgreSQL/runtime grants; invalid combinations, ambiguous sources, unsafe references and stale writes reject. Two HTTP replicas prove authority, retries and atomicity. Browser delivery, DID management and resource removal follow in b/c.
@@ -13,7 +13,13 @@ This child does not approve PBX control, provider access or pending product poli
 
 Proposed decisions and approval scope are prepared in the
 [draft contract review](../../docs/planning/p3-u3a-definition-contract-review.md).
-The review is unapproved; authenticated binding and full a completion remain gated.
+Both reviews were explicitly approved on 2026-10-19. The [focused lifecycle refinement](p3-u3a-1-isolated-trunk-credential-lifecycle.md) precedes authenticated integration. Concrete compatible deployment profiles and an authorized platform provisioning identity remain prerequisites; full a completion requires real owner/binding evidence.
+
+The single approved recovery/handoff and endpoint regressions have executed, but
+a real token-lifetime override failed the 24-hour maximum contract. Work is blocked
+for the user's mandatory [separate privilege review](../../docs/planning/p3-u3a-token-lifetime-hardening-review.md);
+no further recovery or provider remediation is authorized. This is not completion
+of the focused lifecycle owner or A-01–07.
 
 ## Starting state and decision gates
 
@@ -161,3 +167,22 @@ locks, safe DTO/error/retry contracts and dependency checks. c receives protecte
 APIs and canonical uncertainty recovery. Record implemented interfaces in their
 owner documentation before either consumer starts; do not let consumers query
 telephony tables or infer authority from browser selections.
+
+## Approved contract amendment — 2026-10-19
+
+The user's approval adopts U3A-01–05 and the OpenBao review's exact decision.
+Outbound digest and separate optional outbound registration are desired dimensions,
+subject to a concrete reviewed profile. Registration requires digest, exact registrar,
+realm, algorithm and protected registration identity; fixed timing is 3600/60/10
+seconds/seconds/retries with permanent auth rejection. No automatic downgrade.
+Explicit expected-version credential adoption is allowed; other structural facts
+remain immutable. Exact references include binding/generation UUIDs, ordinal,
+material version 1 and expected owner revision. Owner qualification expires after
+60 seconds by database time. Canonical association, eligibility and qualification
+remain separate, with `not_required`, `missing`, `unavailable`, and `bound` summaries.
+
+A-04 is replaced by section 8 of the approved OpenBao review, including real
+import/qualification, claim/adoption, ACL/process isolation, interruption/retry,
+cleanup races and retained history. A-01/02/03/05/06/07 are extended there too.
+Approval does not satisfy these checks. No authenticated success is exposed until
+the focused lifecycle owner and compatible profile are implemented and verified.

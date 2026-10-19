@@ -534,6 +534,31 @@ separate prerequisites.
 
 ## Telephony Architecture
 
+P3-U3a's approved private-development trunk credential preparation adds isolated
+protected import/exact-verification and restricted deployment policy-plan helpers.
+These are not wired into HTTP or existing workers. The [trunk owner contract](../docs/architecture/trunk-credentials.md)
+and [token runbook](../docs/runbooks/trunk-credentials.md) record delivered versus
+outstanding boundaries. The synthetic digest-only profile and provisioning design
+are conditionally approved; the user subsequently authorized one isolated recovery
+operation subject to mandatory custody, backup, deadline and restoration gates.
+The approved [human custodian succession design](../docs/planning/p3-u3a-custodian-succession-review.md)
+now provides verified 15-minute maintenance access after recovered-root retirement.
+The single operation completed with protected backup/inventory gates and verified
+normal restoration; [execution evidence](../docs/status/p3-u3a-recovery-execution.md).
+Endpoint/trunk issuers are restricted to the two approved installation manifests;
+no further recovery or expanded privileges are authorized. A later real token
+override probe found a 48-hour explicit maximum instead of the required 24 hours;
+[security acceptance is blocked for separate review](../docs/planning/p3-u3a-token-lifetime-hardening-review.md).
+Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
+tested complete-array request constraints without changing retained policies.
+Ordinary issuance/rejection passed, but privileged overlap, expiry-error and
+endpoint concurrency findings remain unresolved. The separate maintenance design
+must resolve snapshot access and self-policy denial before a retained execution
+request; no backup-gate exception or new authority is implicitly approved.
+Provider policies/roles and separate issuer custody are installed; canonical trunk
+owner/schema/runtime composition and completed binding remain outstanding.
+
+
 P3-U1a adds the [protected desired registry](../docs/architecture/pbx-registry.md)
 under [approved local connectivity policy](../docs/planning/p3-u1a-connectivity-contract-review.md).
 Telephony owns desired nodes and immutable bounded-retry creation receipts;

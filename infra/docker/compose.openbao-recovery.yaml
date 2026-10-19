@@ -1,0 +1,18 @@
+# MANUAL ONLY: do not add this overlay to ./dev or ordinary startup.
+# Requires separate user confirmation of the pre-execution report before `up`.
+services:
+  endpoint-secrets:
+    restart: 'no'
+    labels:
+      myims.openbao.recovery.operation: ${MYIMS_OPENBAO_RECOVERY_OPERATION:?Explicit confirmed operation UUID required}
+    ports: !reset []
+    networks: !override [openbao-recovery]
+    volumes: !override
+      - ${MYIMS_OPENBAO_RECOVERY_CONFIG:?Explicit temporary recovery config required}:/bao/config/server.hcl:ro
+      - ../../.local/endpoint-credentials/server.crt:/bao/tls/server.crt:ro
+      - ../../.local/endpoint-credentials/server.key:/bao/tls/server.key:ro
+      - endpoint-secrets-data:/bao/data
+      - endpoint-secrets-audit:/bao/audit
+networks:
+  openbao-recovery:
+    internal: true

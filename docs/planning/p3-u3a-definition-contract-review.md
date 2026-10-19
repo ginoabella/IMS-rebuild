@@ -1,7 +1,12 @@
 # P3-U3a — Trunk and gateway contract review for approval
 
-Prepared 2026-10-16 (Asia/Manila, +08:00). **Draft; no product decision or
-implementation is approved by this document.**
+Prepared 2026-10-16 (Asia/Manila, +08:00). **Approved by the user on
+2026-10-19 (Asia/Manila, +08:00) for the stated controlled private-development
+scope. Implementation and verification remain outstanding.**
+
+The proposal wording below is retained as the approved decision record. The
+OpenBao review supersedes the initial staged authenticated-scope hold; its
+concrete profile/provisioning prerequisites and exclusions still apply.
 
 Requirement: [P3-U3a](../../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md),
 [parent gates G-01/G-03/G-04 and AC-01–11](../../context/feature-specs/p3-u3-trunks-gateways-and-dids.md).

@@ -255,7 +255,7 @@ then composes both into the required operator outcome. These are independently
 verifiable increments under the workflow's foundation-unit exception. Keep
 security, audit, concurrency and failure checks with each owning child, followed
 by parent reconciliation in the last child. The user adopted this split on
-2026-10-16 (Asia/Manila, +08:00); all children remain planned.
+2026-10-16 (Asia/Manila, +08:00). On 2026-10-19 the user approved a’s definition and isolated OpenBao design reviews; a is in progress and b/c remain planned. The [focused lifecycle refinement](p3-u3a-1-isolated-trunk-credential-lifecycle.md) precedes authenticated integration, with concrete profile/provisioning prerequisites still pending.
 
 | Unit | Starting state and implementation boundary | Expected result / verification | Parent criteria owned |
 | --- | --- | --- | --- |
