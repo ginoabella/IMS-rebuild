@@ -72,3 +72,16 @@ owner/API integration was not rerun. Provider near-expiry 500 and measured
 subsecond absolute-expiry overrun remain failed acceptance findings in the
 [follow-up report](../status/p3-u3a-disposable-review-followup.md). No precise,
 immutable server-wide 24-hour ceiling or retained deployment is established.
+
+## Approved P3-U3a lifecycle follow-up — 2026-10-20
+
+The [approved completion direction](../planning/p3-u3a-approved-completion-direction.md)
+authorizes local bounded same-token reconciliation and pre-maximum replacement
+with conservative consumption controls. Preserve the one-hour initial runtime
+lease, 86,400-second configured explicit maximum and failed-response rejection.
+After transient failure, pause and independently validate remaining same-token
+authority before resuming within the original conservative deadline; never infer
+renewal success or extend authority from 500/malformed/lost replies. Invalid,
+revoked or expired authority stops consumption. This is approved development,
+not evidence of runtime integration or retained rollout. Endpoint/trunk isolation,
+prior endpoint acceptance limits and documented provider failures remain intact.

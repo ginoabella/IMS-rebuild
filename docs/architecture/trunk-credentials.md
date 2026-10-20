@@ -4,7 +4,10 @@ Owner: [P3-U3a-1](../../context/feature-specs/p3-u3a-1-isolated-trunk-credential
 and [P3-U3a](../../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md).
 Authority: approved [isolated lifecycle review](../planning/p3-u3a-openbao-trunk-credential-review.md)
 and [conditional provisioning/profile approval](../planning/p3-u3a-provisioning-and-provider-profile-review.md).
-Status: implementation incomplete, 2026-10-19 (UTC). Provider provisioning,
+Status: implementation incomplete, updated 2026-10-20 (Asia/Manila, +08:00).
+The [approved completion direction](../planning/p3-u3a-approved-completion-direction.md)
+authorizes independent local implementation; retained access/remediation remains
+unapproved. Its conditional timing amendment is specified below. Provider provisioning,
 verified root retirement/human succession and normal restoration executed once.
 Endpoint regressions passed. Security acceptance is blocked by the
 [token-lifetime finding](../planning/p3-u3a-token-lifetime-hardening-review.md).
@@ -83,12 +86,54 @@ window and was cancelled after restoration; normal startup does not arm it.
 
 The required 24-hour explicit maximum is not yet an accepted provider-enforced
 guarantee: a caller override produced a 48-hour explicit maximum (24-hour initial
-TTL). The exact test token was revoked. No further provider changes are authorized
-until separate review; proposed request constraints remain untested/unapplied.
+TTL). The exact test token was revoked. Complete-array constraints passed
+disposable validation and are the approved hardening candidate; they remain
+unapplied on the retained server. Retained changes require separate authorization.
 
-Remaining: resolve that review, then safe canonical owner schema/grants/functions, operation/intent history,
+Remaining local work, independently authorized: canonical owner schema/grants/functions, operation/intent history,
 protected reserve/import commands, dedicated verifier, ordinary/endpoint queue
 exclusion of trunk work, claim/adoption ports, explicit retirement/cleanup and all
 real external acceptance. The common lock order, 60-second proof, 30-day results,
 retained tombstones and never-associated cleanup bounds remain exactly as approved.
 No endpoint tables/grants or runtime processes were changed by this preparation.
+
+## Approved lifecycle direction — 2026-10-20
+
+Keep 3,600-second initial runtime leases and the 86,400-second configured explicit
+maximum. Policy generation and exact-body fixed-issuer preflight must agree on the
+complete-array candidate; unknown bodies/authority still reject. Effective token,
+entity/group, auth and issuance authority must be independently checked before
+retained remediation. No trusted-administrator-proof server-wide cap is claimed.
+
+Develop bounded same-token reconciliation and controlled replacement before maximum
+expiry. Pause consumption on failed/uncertain renewal; HTTP 500 is never success
+and never advances the local lease. Resume only with independently validated
+remaining authority for the same token inside its original conservative deadline.
+Reject expired/revoked/invalid authority. Replacement is validated before switching,
+with bounded overlap and exact prior-token accounting. Retained issuance is gated.
+
+Prove conservative pre/post-provider-call controls using immutable original issuance,
+current lease, monotonic elapsed time, defensible clock bounds/margins and restart
+revalidation. Clock uncertainty pauses the consumer. Prototype numerical settings
+remain experimental. Provider 500 and measured expiry overruns remain documented
+failures; conditional timing acceptance needs real consumer evidence and explicit
+disposition. No control may authorize expired-token consumption.
+
+### Conditional attestation timing — not accepted for runtime use
+
+The owner approved in principle a completed, authorized provider verification
+producing an attestation usable within its original 60-second freshness interval
+even if that provider token subsequently expires. Expiry never restarts or extends
+the attestation interval. It authorizes no further provider call. At database
+transaction finalization independently revalidate current business authority, exact
+owner, installation, credential generation, expected versions/epoch, eligibility,
+replay protection and freshness against database time. Preserve the approved lock
+order and atomic association/history/audit. Failed, late or uncertain verification
+cannot establish proof; unknown/expired/invalidated proof fails closed.
+
+This amendment is conditional pending implementation and real transaction/failure
+acceptance, including verification-before-expiry/finalization-after-expiry within
+freshness, stale proof, authority invalidation, wrong identity/generation, replay,
+response loss and rollback. No runtime activation is authorized by this text.
+The [completion plan](../planning/p3-u3a-approved-completion-direction.md) defines
+the matrix and separate local/retained/end-to-end/production boundaries.

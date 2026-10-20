@@ -1,6 +1,6 @@
 # P3-U3a-1 — Isolated trunk credential lifecycle
 
-Status: in progress, 2026-10-19 (Asia/Manila, +08:00); provider/provisioning primitives and the single recovery/handoff are executed; blocked pending separate token-lifetime review, with owner integration and real acceptance outstanding.
+Status: in progress, updated 2026-10-20 (Asia/Manila, +08:00). Independent local implementation is authorized by the [approved completion direction](../../docs/planning/p3-u3a-approved-completion-direction.md); retained access/remediation remains unapproved. Provider/provisioning primitives and the single recovery/handoff executed; canonical owner integration and real acceptance remain outstanding.
 Parent: [P3-U3a](p3-u3a-protected-trunk-and-gateway-definitions.md).
 Authority: user's explicit approval of the [OpenBao review](../../docs/planning/p3-u3a-openbao-trunk-credential-review.md).
 This is the parent's required focused refinement, preceding authenticated resource
@@ -20,7 +20,8 @@ The authorized recovery/root retirement/restoration and endpoint regressions pas
 A real token request yielded a 172,800-second explicit maximum against the required
 86,400-second ceiling; its initial TTL was 86,400 seconds. The exact test token and
 all other known test tokens were revoked/403, and the helper was removed. No trunk
-import began. Stop under the user's required separate privilege review; see the
+import began. Retained work remains stopped pending named access and concrete
+execution approval; independent local work proceeds. See the
 [finding and proposed hardening](../../docs/planning/p3-u3a-token-lifetime-hardening-review.md).
 The single recovery authorization is consumed. Do not weaken the contract below
 or modify roles/policies to make the test pass without separate approval.
@@ -51,6 +52,23 @@ adoption or revocation. Cleanup destroys version 1 only for terminal never-assoc
 generations aged at least 24 hours, at most 50 per run, with affirmative complete
 dependency checks, serialized claims, pending-before-I/O and late-write reconciliation.
 Associated generations remain retained for later apply/rollback owners.
+
+## Approved lifecycle and conditional timing amendment — 2026-10-20
+
+Apply the [authoritative trunk lifecycle direction](../../docs/architecture/trunk-credentials.md#approved-lifecycle-direction--2026-10-20):
+3,600-second initial lease, 86,400-second configured explicit maximum, complete-array
+hardening candidate, bounded same-token reconciliation and controlled replacement.
+No failed/uncertain renewal extends authority. Conservative consumption controls
+must be proven; preserve provider 500/expiry failures and negative tests.
+
+A completed authorized verification may in principle attest within its original
+60-second freshness interval even after provider-token expiry; expiry does not
+restart or extend that interval. This amendment is **not accepted for runtime use**
+until implementation and real transaction/failure tests pass. Database finalization
+independently rechecks current business authority, exact owner, installation,
+generation, replay protection and freshness, plus existing versions/eligibility.
+The [completion plan](../../docs/planning/p3-u3a-approved-completion-direction.md#conditional-transaction-timing-amendment)
+defines the required real test matrix; it supplements L-01–05 without weakening them.
 
 ## Acceptance and verification
 

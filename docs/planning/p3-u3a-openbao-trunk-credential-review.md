@@ -209,6 +209,21 @@ explicit audited reconciliation after exhaustion. Trunk tokens use one-hour TTL,
 maximum; no default policy. Full safe results 30 days, minimal intent/generation/
 association tombstones retained. No automated associated-material destruction.
 
+## October 20 approved direction amendment
+
+The [approved completion direction](p3-u3a-approved-completion-direction.md)
+supplements this review: retain one-hour initial runtime leases and 86,400-second
+configured explicit maxima; adopt complete-array hardening as the candidate and
+develop bounded same-token reconciliation/pre-maximum replacement. Retained
+access and execution remain unapproved. The [trunk security contract](../architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use)
+defines the conditional timing clarification: completed authorized verification
+may attest within its original 60-second verification freshness interval even after
+provider-token expiry (without extending that interval), with independent current
+business authority, exact owner/installation/generation, replay and freshness
+checks at database finalization. This is approved in principle only, **not accepted
+for runtime use** until implemented and real transaction/failure tests pass.
+Historical proposal language below does not override these conditions.
+
 ## 5. Exact revalidation in a's business transaction
 
 `qualifyAndClaim(tx, node, peer, trunk, exactReference, expectedOwnerRevision,

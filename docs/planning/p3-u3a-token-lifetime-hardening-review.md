@@ -4,6 +4,15 @@
 The one recovery authorization is consumed. This document requests no further root
 recovery and does not authorize retained-provider changes.
 
+## Current direction update — 2026-10-20
+
+The owner approved the [completion direction](p3-u3a-approved-completion-direction.md):
+complete-array constraints are the hardening candidate; independent local lifecycle,
+owner and API development may proceed. Retained access/remediation remains
+unapproved and the historical failure below remains unresolved. The earlier
+feature-wide stop is superseded for authorized local work only. The transaction
+timing amendment is conditional and not accepted for runtime use.
+
 ## Observed acceptance failure
 
 After verified root revocation, independent succession, normal restoration and

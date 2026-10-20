@@ -15,6 +15,15 @@ Proposed decisions and approval scope are prepared in the
 [draft contract review](../../docs/planning/p3-u3a-definition-contract-review.md).
 Both reviews were explicitly approved on 2026-10-19. The [focused lifecycle refinement](p3-u3a-1-isolated-trunk-credential-lifecycle.md) precedes authenticated integration. Concrete compatible deployment profiles and an authorized platform provisioning identity remain prerequisites; full a completion requires real owner/binding evidence.
 
+The [approved completion direction and plan](../../docs/planning/p3-u3a-approved-completion-direction.md)
+(2026-10-20) supersedes earlier pending-direction language: independent local
+implementation is authorized; named retained access and concrete retained execution
+are not. The timing amendment remains conditional pending implementation and real
+transaction/failure acceptance, as specified in the [trunk contract](../../docs/architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use).
+A-04 includes that matrix and database finalization revalidation of current business
+authority, exact owner/installation/generation, replay protection and 60-second
+freshness. No runtime acceptance is implied. Earlier checkpoints follow as history.
+
 The single approved recovery/handoff and endpoint regressions have executed, but
 real token-lifetime override failed the maximum contract. The user's follow-up
 accepts the corrected complete-array candidate for disposable testing only and

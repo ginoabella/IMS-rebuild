@@ -8,6 +8,16 @@ The separate [retained failure/authorization proposal](../planning/p3-u3a-retain
 and [exact authorization draft](../planning/p3-u3a-retained-maintenance-authorization-draft.json)
 are not execution approvals.
 
+## Subsequent direction approval — 2026-10-20
+
+The [approved completion direction](../planning/p3-u3a-approved-completion-direction.md)
+now authorizes independent local lifecycle/owner/API implementation, bounded
+same-token reconciliation and controlled pre-maximum replacement. The transaction
+timing clarification is approved in principle only, pending implementation and
+real transaction/failure acceptance. Neither retained access nor retained execution
+is authorized. This planning update changes none of the observations, failed
+assertions or evidence boundaries below. Security acceptance remains incomplete.
+
 ## Acceptance rationale by boundary
 
 | Boundary                        | Supported result                                                                                                                                                   | Remaining condition                                                                                                      |

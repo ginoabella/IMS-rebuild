@@ -548,11 +548,24 @@ normal restoration; [execution evidence](../docs/status/p3-u3a-recovery-executio
 Endpoint/trunk issuers are restricted to the two approved installation manifests;
 no further recovery or expanded privileges are authorized. A later real token
 override probe found a 48-hour explicit maximum instead of the required 24 hours;
-[security acceptance is blocked for separate review](../docs/planning/p3-u3a-token-lifetime-hardening-review.md).
+[security acceptance remains incomplete](../docs/planning/p3-u3a-token-lifetime-hardening-review.md).
+The [2026-10-20 approved direction](../docs/planning/p3-u3a-approved-completion-direction.md)
+authorizes independent local owner/grants/worker/API/binding and lifecycle work.
+Retain one-hour runtime leases and 86,400-second configured explicit maxima; adopt
+complete-array constraints as the hardening candidate. Bounded same-token renewal
+reconciliation and pre-maximum replacement require proven conservative consumption
+controls; 500/uncertain replies never extend authority. The [trunk contract](../docs/architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use)
+records the conditional 60-second attestation timing amendment: approved in principle,
+not accepted for runtime use before implementation and real transaction/failure
+tests. Database finalization must independently check current business authority,
+exact owner/installation/generation, replay protection and freshness. Prefer stable,
+separately controlled existing backup/maintenance authority. New/expanded retained
+privilege, retained access and execution remain separately gated.
 Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
 tested complete-array request constraints without changing retained policies.
-Ordinary issuance/rejection passed, but privileged overlap, expiry-error and
-endpoint concurrency findings remain unresolved. The separate maintenance design
+Ordinary issuance/rejection passed. Later disposable work reconciled exact
+immutable endpoint create races and rejects unexpected effective authority; retained
+inventory/integration, provider expiry errors and precision remain unresolved. The separate maintenance design
 must resolve snapshot access and self-policy denial before a retained execution
 request; no backup-gate exception or new authority is implicitly approved.
 Provider policies/roles and separate issuer custody are installed; canonical trunk
