@@ -6,12 +6,19 @@ Authority: approved [isolated lifecycle review](../planning/p3-u3a-openbao-trunk
 and [conditional provisioning/profile approval](../planning/p3-u3a-provisioning-and-provider-profile-review.md).
 Status: implementation incomplete, updated 2026-10-20 (Asia/Manila, +08:00).
 The [approved completion direction](../planning/p3-u3a-approved-completion-direction.md)
-authorizes independent local implementation; retained access/remediation remains
-unapproved. Its conditional timing amendment is specified below. Provider provisioning,
+authorizes independent local implementation. The named ten-path custodian
+verification is owner-accepted and closed with confirmed cleanup; both session
+authorizations are consumed. No further retained access/remediation is authorized.
+The [sustainable administration design](../planning/p3-u3a-sustainable-openbao-administration-design.md)
+is for separate review; it neither grants administration nor establishes backup
+readiness. The approved completion direction's conditional timing amendment is specified below. Provider provisioning,
 verified root retirement/human succession and normal restoration executed once.
 Endpoint regressions passed. Security acceptance is blocked by the
 [token-lifetime finding](../planning/p3-u3a-token-lifetime-hardening-review.md).
-No owner schema, HTTP binding or worker delivery is established yet.
+The [owner database foundation](../status/p3-u3a-trunk-owner-foundation.md) now has
+source migration/grants and an exact-reference read port verified in disposable
+PostgreSQL; no shared deployment or runtime wiring is claimed. Authority-checked
+owner commands, HTTP binding and worker delivery remain outstanding.
 
 The shared OpenBao server is retained. Separate `myims-trunk` KV-v2, installation
 policies, importer/verifier/cleanup identities and custody must be established by
@@ -90,7 +97,17 @@ TTL). The exact test token was revoked. Complete-array constraints passed
 disposable validation and are the approved hardening candidate; they remain
 unapplied on the retained server. Retained changes require separate authorization.
 
-Remaining local work, independently authorized: canonical owner schema/grants/functions, operation/intent history,
+The source foundation adds immutable binding/generation/reservation/history and
+safe reference metadata under a separate NOLOGIN capability. Runtime cannot write
+base records or assume that role; migration preflight rejects any existing role
+membership in either direction. Savepoint-safe protected transaction markers bind
+reservation history and matching platform-only audit to the same commit. Captured
+operator/node/peer versions are provenance only; this is not authority-checked
+reservation or verification. Peer scopes are deployment declarations awaiting
+canonical definition/capability integration. The port selects exact identities,
+not latest generations, and does not establish eligibility or freshness.
+
+Remaining local work, independently authorized: authority-checked owner transactions/functions, full lifecycle results/tombstones,
 protected reserve/import commands, dedicated verifier, ordinary/endpoint queue
 exclusion of trunk work, claim/adoption ports, explicit retirement/cleanup and all
 real external acceptance. The common lock order, 60-second proof, 30-day results,

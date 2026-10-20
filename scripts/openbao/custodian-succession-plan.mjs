@@ -1,4 +1,5 @@
 // Reviewable non-secret native human-auth plan; importing this never contacts OpenBao.
+import { restrictedIssuanceRule } from './restricted-issuance-rule.mjs';
 export function custodianSuccessionPlan(username) {
   if (
     typeof username !== 'string' ||
@@ -44,7 +45,11 @@ export function custodianSuccessionPlan(username) {
     ...['endpoint', 'trunk'].flatMap((lifecycle) => [
       rule(`sys/policies/acl/${lifecycle}-*`, ['create', 'read', 'update']),
       rule(`auth/token/roles/${lifecycle}-*`, ['create', 'read', 'update']),
-      rule(`auth/token/create/platform-${lifecycle}-issuer`, ['update']),
+      restrictedIssuanceRule(
+        issuerRoles.find(
+          (role) => role.name === `platform-${lifecycle}-issuer`,
+        ),
+      ),
       rule(`auth/token/roles/platform-${lifecycle}-issuer`, ['read']),
     ]),
     rule(`auth/platform-custodian/users/${username}/password`, ['update']),

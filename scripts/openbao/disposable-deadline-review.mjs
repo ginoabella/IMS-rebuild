@@ -42,6 +42,27 @@ export async function reviewDeadline({
   );
   const original = Date.parse(identity.issue_time),
     observations = [];
+  // Discard one real successful renewal acknowledgement to model lost delivery;
+  // only an independent lookup of this exact existing token may resume admission.
+  const discarded = await api(
+    'auth/token/renew-self',
+    { increment: '2s' },
+    token,
+  );
+  remember(discarded);
+  need(discarded.status === 200, 'deadline_reconciliation_setup_failed');
+  try {
+    guard.renewalUnavailable();
+  } catch (error) {
+    need(
+      error.message === 'deadline_renewal_uncertain',
+      'deadline_pause_failed',
+    );
+  }
+  await guard.reconcile(
+    () => api('auth/token/lookup-self', undefined, token),
+    250,
+  );
   let admitted = 0,
     denied = 0,
     firstDenialMs = null,
@@ -104,6 +125,7 @@ export async function reviewDeadline({
     productionMarginIsProposal: true,
     real24HourSoak: false,
     localClockHealthAssumedOnlyInFixture: true,
+    discardedRenewalAcknowledgementReconciled: true,
     admitted,
     denied,
     renewals,

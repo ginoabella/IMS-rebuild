@@ -1,5 +1,11 @@
 # P3-U3a — Retained failure plan and proposed maintenance authorization
 
+Current preferred direction is consolidated in the [sustainable administration
+design](p3-u3a-sustainable-openbao-administration-design.md), for separate review
+only. The named custodian checkpoint is owner-accepted and closed; its permissions
+are functioning as intended. Historical exception/ticket sequences below remain
+unapproved contingencies, not the routine next step.
+
 2026-10-20 (Asia/Manila, +08:00). **Draft for separate review, not an execution request or authorization.**
 The current permission is investigation, disposable testing and non-disruptive
 verification only. No retained login, custody search, privileged inventory capture,

@@ -1,0 +1,18 @@
+{
+  "operationId": "90e5c828-6890-4568-8a25-fdba0dfeb710",
+  "image": "postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6",
+  "sharedDatabaseAccess": false,
+  "providerAccess": false,
+  "checks": [],
+  "status": "failed",
+  "failure": {
+    "stage": "migration_20261007000000_draft_tenant_receipts",
+    "code": "command_failed"
+  },
+  "cleanup": {
+    "exactContainerAbsent": true,
+    "namedVolumesCreated": 0,
+    "hostPortsPublished": 0,
+    "retainedMounts": 0
+  }
+}

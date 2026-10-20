@@ -17,8 +17,10 @@ Both reviews were explicitly approved on 2026-10-19. The [focused lifecycle refi
 
 The [approved completion direction and plan](../../docs/planning/p3-u3a-approved-completion-direction.md)
 (2026-10-20) supersedes earlier pending-direction language: independent local
-implementation is authorized; named retained access and concrete retained execution
-are not. The timing amendment remains conditional pending implementation and real
+implementation is authorized. The separately approved second named retained capability session passed
+all identity and ten-path checks; revocation/403 confirmed, both authorizations consumed
+([findings](../../docs/status/p3-u3a-retained-capability-session-2.md)); concrete
+retained remediation remains unapproved. The timing amendment remains conditional pending implementation and real
 transaction/failure acceptance, as specified in the [trunk contract](../../docs/architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use).
 A-04 includes that matrix and database finalization revalidation of current business
 authority, exact owner/installation/generation, replay protection and 60-second

@@ -313,3 +313,14 @@ P3-U3a disposable-only follow-up: [validation evidence and unresolved findings](
 [complete-array candidate bodies](planning/p3-u3a-token-lifetime-hardening-array-manifest.json),
 and [separate maintenance/backup design](planning/p3-u3a-retained-lifetime-maintenance-proposal.md).
 Retained remediation is unapproved; P3-U3a remains incomplete.
+
+P3-U3a named custodian capability verification is **owner-accepted and closed**
+within its ten-path scope: [final evidence and limits](status/p3-u3a-retained-capability-session-2.md).
+The custodian functions with intended restricted permissions; no further login
+is authorized. The [consolidated sustainable OpenBao backup and maintenance design](planning/p3-u3a-sustainable-openbao-administration-design.md)
+is prepared for separate review; no administrative implementation is authorized.
+
+P3-U3a local owner foundation: [migration/grants/read-port evidence and limits](status/p3-u3a-trunk-owner-foundation.md).
+Real isolated SQL checks and backend build passed; authority-checked commands,
+protected worker/provider composition and binding/claim/adoption remain unfinished.
+No shared database migration or runtime activation was performed.

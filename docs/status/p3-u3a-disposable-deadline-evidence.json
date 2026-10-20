@@ -1,14 +1,14 @@
 {
-  "operationId": "50e2eb4c-965c-4e29-ae7d-6928b650cd66",
+  "operationId": "e31d6ef7-ce65-4095-8c2b-58d926c34040",
   "image": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
   "retainedAccess": false,
   "candidate": "array",
   "containers": [
-    "myims-lifetime-50e2eb4c-provider",
-    "myims-lifetime-50e2eb4c-helper"
+    "myims-lifetime-e31d6ef7-provider",
+    "myims-lifetime-e31d6ef7-helper"
   ],
   "validation": {
-    "startedAt": "2026-10-20T00:15:47.948Z",
+    "startedAt": "2026-10-20T07:26:50.439Z",
     "paths": [
       {
         "path": "auth/token/create/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
@@ -17,7 +17,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "policies": [
+            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -187,7 +189,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "policies": [
+            "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -357,7 +361,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "policies": [
+            "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -527,8 +533,10 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"],
-          "ttl": 3600,
+          "policies": [
+            "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
         },
@@ -697,7 +705,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "policies": [
+            "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -867,7 +877,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "policies": [
+            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1037,7 +1049,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "policies": [
+            "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1207,7 +1221,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "policies": [
+            "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1377,7 +1393,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "policies": [
+            "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1547,7 +1565,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "policies": [
+            "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1717,7 +1737,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "policies": [
+            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
           "ttl": 1,
           "explicitMaximum": 1,
           "renewable": false
@@ -1887,8 +1909,10 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
-          "ttl": 1,
+          "policies": [
+            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "ttl": 0,
           "explicitMaximum": 1,
           "renewable": false
         },
@@ -2057,7 +2081,9 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["endpoint-restricted-issuer"],
+          "policies": [
+            "endpoint-restricted-issuer"
+          ],
           "ttl": 86399,
           "explicitMaximum": 86400,
           "renewable": false
@@ -2227,8 +2253,10 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": ["trunk-restricted-issuer"],
-          "ttl": 86399,
+          "policies": [
+            "trunk-restricted-issuer"
+          ],
+          "ttl": 86400,
           "explicitMaximum": 86400,
           "renewable": false
         },
@@ -2395,42 +2423,42 @@
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 608
+        "overrunMs": 606
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 218
+        "overrunMs": 210
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 446
+        "overrunMs": 426
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 57
+        "overrunMs": 34
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 669
+        "overrunMs": 642
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 298
+        "overrunMs": 249
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 516
+        "overrunMs": 462
       },
       {
         "stage": "accelerated_absolute_lifetime",
         "label": "scaled_expiry_extended",
-        "overrunMs": 516
+        "overrunMs": 462
       },
       {
         "stage": "accelerated_absolute_lifetime",
@@ -2569,6 +2597,10 @@
         "candidateSha256": "df4964543f0f840167ec395e71f841ddf29875d9ad57cb43fb5ba5107f514b5b"
       }
     ],
+    "nativeUserpassDisplayName": {
+      "customMountPrefixMatches": true,
+      "defaultUserpassPrefixMatches": false
+    },
     "humanAuthentication": "native_userpass_900_second_orphan_session",
     "constraintDiagnostics": [
       {
@@ -2681,7 +2713,7 @@
         },
         {
           "test": "snapshot_scope",
-          "path": "sys/policies/acl/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b",
+          "path": "sys/policies/acl/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453",
           "status": 403
         },
         {
@@ -2841,7 +2873,10 @@
         },
         {
           "checkpoint": "role_cleanup_race",
-          "statuses": [204, 204]
+          "statuses": [
+            204,
+            204
+          ]
         },
         {
           "checkpoint": "policy_cleanup",
@@ -2869,14 +2904,14 @@
         "renewable": false,
         "orphan": true,
         "policies": [
-          "endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b"
+          "endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453"
         ],
         "identityPolicies": []
       },
       "snapshotAuditCheckpoint": {
-        "snapshotSha256": "472dda0a09bde9cab577242ae2b173f1615ff27c1a066167f6b605b741225081",
-        "auditBoundaryBytes": 2279399,
-        "auditSha256": "7fc4871fa04a5d5a322f516804fea54e20ccf2424e11fa127ec0629534b55e35",
+        "snapshotSha256": "b6083f5d43ebd3591bd41d73a962ede1735d473c64e842997ecf29eca66a44df",
+        "auditBoundaryBytes": 2279421,
+        "auditSha256": "287cebc90bdc353d252e8b19c0e9e486320f28e7e349dff1353e00f3c876ba15",
         "fsyncCalled": true,
         "tmpfsOnly": true,
         "stablePrefixVerified": true,
@@ -2886,7 +2921,7 @@
         "unavailableStorageRejected": true
       },
       "snapshot": {
-        "snapshotSha256": "472dda0a09bde9cab577242ae2b173f1615ff27c1a066167f6b605b741225081",
+        "snapshotSha256": "b6083f5d43ebd3591bd41d73a962ede1735d473c64e842997ecf29eca66a44df",
         "index": 379,
         "term": 3,
         "sealedChecksumPresent": true,
@@ -2898,18 +2933,21 @@
         "changedBodyAccepted": false,
         "exactBodyStatus": 204
       },
-      "exactMaintenancePolicy": "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/policy/endpoint-restricted-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/endpoint-restricted-issuer\" { capabilities = [\"update\"]\nrequired_parameters = [\"policy\"]\nallowed_parameters = { \"policy\" = [\"cGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvZW5kcG9pbnQtd29ya2VyLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LXdvcmtlci01OGFkYjc4NS01Mzg0LTQxY2UtOWM3Mi1jY2RhNmVhNTU0ZGIiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxaCJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjI0aCJdCiAgICAicmVuZXdhYmxlIiA9IFt0cnVlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZS9lbmRwb2ludC1jbGVhbnVwLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LWNsZWFudXAtNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvZW5kcG9pbnQtd29ya2VyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LXdvcmtlci1mZmYzOGFhZC0yZTNjLTQxNDktYWEzZi04OGY3MTVkMWI0ODgiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxaCJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjI0aCJdCiAgICAicmVuZXdhYmxlIiA9IFt0cnVlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZS9lbmRwb2ludC1jbGVhbnVwLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LWNsZWFudXAtZmZmMzhhYWQtMmUzYy00MTQ5LWFhM2YtODhmNzE1ZDFiNDg4Il1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvZW5kcG9pbnQtd29ya2VyLWV4cGlyaW5nLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LXdvcmtlci01OGFkYjc4NS01Mzg0LTQxY2UtOWM3Mi1jY2RhNmVhNTU0ZGIiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxcyJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjFzIl0KICAgICJyZW5ld2FibGUiID0gW2ZhbHNlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZS9lbmRwb2ludC13b3JrZXItZXhwaXJpbmctZmZmMzhhYWQtMmUzYy00MTQ5LWFhM2YtODhmNzE1ZDFiNDg4IiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1siZW5kcG9pbnQtd29ya2VyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFzIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMXMiXQogICAgInJlbmV3YWJsZSIgPSBbZmFsc2VdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vbG9va3VwLXNlbGYiIHsgY2FwYWJpbGl0aWVzID0gWyJyZWFkIl0gfQpwYXRoICJhdXRoL3Rva2VuL3JlbmV3LXNlbGYiIHsgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vcmV2b2tlLXNlbGYiIHsgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXSB9\"] } }\npath \"sys/policy/trunk-restricted-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/trunk-restricted-issuer\" { capabilities = [\"update\"]\nrequired_parameters = [\"policy\"]\nallowed_parameters = { \"policy\" = [\"cGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvdHJ1bmstaW1wb3J0ZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1sidHJ1bmstaW1wb3J0ZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvdHJ1bmstdmVyaWZpZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1sidHJ1bmstdmVyaWZpZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvdHJ1bmstY2xlYW51cC01OGFkYjc4NS01Mzg0LTQxY2UtOWM3Mi1jY2RhNmVhNTU0ZGIiIHsKICBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdCiAgcmVxdWlyZWRfcGFyYW1ldGVycyA9IFsicG9saWNpZXMiLCJub19kZWZhdWx0X3BvbGljeSIsInR0bCIsImV4cGxpY2l0X21heF90dGwiLCJyZW5ld2FibGUiXQogIGFsbG93ZWRfcGFyYW1ldGVycyA9IHsKICAgICJwb2xpY2llcyIgPSBbWyJ0cnVuay1jbGVhbnVwLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW3RydWVdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3RydW5rLWltcG9ydGVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbInRydW5rLWltcG9ydGVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW3RydWVdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3RydW5rLXZlcmlmaWVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbInRydW5rLXZlcmlmaWVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW3RydWVdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3RydW5rLWNsZWFudXAtZmZmMzhhYWQtMmUzYy00MTQ5LWFhM2YtODhmNzE1ZDFiNDg4IiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1sidHJ1bmstY2xlYW51cC1mZmYzOGFhZC0yZTNjLTQxNDktYWEzZi04OGY3MTVkMWI0ODgiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxaCJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjI0aCJdCiAgICAicmVuZXdhYmxlIiA9IFt0cnVlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2xvb2t1cC1zZWxmIiB7IGNhcGFiaWxpdGllcyA9IFsicmVhZCJdIH0KcGF0aCAiYXV0aC90b2tlbi9yZW5ldy1zZWxmIiB7IGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0gfQpwYXRoICJhdXRoL3Rva2VuL3Jldm9rZS1zZWxmIiB7IGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0gfQ==\"] } }\npath \"sys/policy/platform-deployment-maintainer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/platform-deployment-maintainer\" { capabilities = [\"update\"]\nrequired_parameters = [\"policy\"]\nallowed_parameters = { \"policy\" = [\"cGF0aCAiYXV0aC90b2tlbi9sb29rdXAtc2VsZiIgeyBjYXBhYmlsaXRpZXMgPSBbInJlYWQiXSB9CnBhdGggInN5cy9jYXBhYmlsaXRpZXMtc2VsZiIgeyBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdIH0KcGF0aCAiYXV0aC90b2tlbi9yZXZva2Utc2VsZiIgeyBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdIH0KcGF0aCAic3lzL21vdW50cyIgeyBjYXBhYmlsaXRpZXMgPSBbInJlYWQiXSB9CnBhdGggInN5cy9hdXRoIiB7IGNhcGFiaWxpdGllcyA9IFsicmVhZCJdIH0KcGF0aCAic3lzL3BvbGljaWVzL2FjbCIgeyBjYXBhYmlsaXRpZXMgPSBbImxpc3QiXSB9CnBhdGggImF1dGgvdG9rZW4vcm9sZXMiIHsgY2FwYWJpbGl0aWVzID0gWyJsaXN0Il0gfQpwYXRoICJhdXRoL3Rva2VuL2FjY2Vzc29ycyIgeyBjYXBhYmlsaXRpZXMgPSBbImxpc3QiLCAic3VkbyJdIH0KcGF0aCAiYXV0aC90b2tlbi9sb29rdXAtYWNjZXNzb3IiIHsgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vcmV2b2tlLWFjY2Vzc29yIiB7IGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0gfQpwYXRoICJzeXMvcG9saWNpZXMvYWNsL2VuZHBvaW50LSoiIHsgY2FwYWJpbGl0aWVzID0gWyJjcmVhdGUiLCAicmVhZCIsICJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vcm9sZXMvZW5kcG9pbnQtKiIgeyBjYXBhYmlsaXRpZXMgPSBbImNyZWF0ZSIsICJyZWFkIiwgInVwZGF0ZSJdIH0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvcGxhdGZvcm0tZW5kcG9pbnQtaXNzdWVyIiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1siZW5kcG9pbnQtcmVzdHJpY3RlZC1pc3N1ZXIiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIyNGgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbZmFsc2VdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vcm9sZXMvcGxhdGZvcm0tZW5kcG9pbnQtaXNzdWVyIiB7IGNhcGFiaWxpdGllcyA9IFsicmVhZCJdIH0KcGF0aCAic3lzL3BvbGljaWVzL2FjbC90cnVuay0qIiB7IGNhcGFiaWxpdGllcyA9IFsiY3JlYXRlIiwgInJlYWQiLCAidXBkYXRlIl0gfQpwYXRoICJhdXRoL3Rva2VuL3JvbGVzL3RydW5rLSoiIHsgY2FwYWJpbGl0aWVzID0gWyJjcmVhdGUiLCAicmVhZCIsICJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3BsYXRmb3JtLXRydW5rLWlzc3VlciIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbInRydW5rLXJlc3RyaWN0ZWQtaXNzdWVyIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMjRoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW2ZhbHNlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL3JvbGVzL3BsYXRmb3JtLXRydW5rLWlzc3VlciIgeyBjYXBhYmlsaXRpZXMgPSBbInJlYWQiXSB9CnBhdGggImF1dGgvcGxhdGZvcm0tY3VzdG9kaWFuL3VzZXJzL3BsYXRmb3JtLW93bmVyLWN1c3RvZGlhbi9wYXNzd29yZCIgeyBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdIH0KcGF0aCAic3lzL3BvbGljaWVzL2FjbC9wbGF0Zm9ybS1kZXBsb3ltZW50LW1haW50YWluZXIiIHsgY2FwYWJpbGl0aWVzID0gWyJkZW55Il0gfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZSIgeyBjYXBhYmlsaXRpZXMgPSBbImRlbnkiXSB9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlLW9ycGhhbiIgeyBjYXBhYmlsaXRpZXMgPSBbImRlbnkiXSB9CnBhdGggInN5cy9nZW5lcmF0ZS1yb290LyoiIHsgY2FwYWJpbGl0aWVzID0gWyJkZW55Il0gfQ==\"] } }\npath \"sys/policies/acl/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b\" { capabilities = [\"delete\"] }\npath \"auth/token/roles/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b\" { capabilities = [\"delete\"] }",
+      "exactMaintenancePolicy": "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/policy/endpoint-restricted-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/endpoint-restricted-issuer\" { capabilities = [\"update\"]\nrequired_parameters = [\"policy\"]\nallowed_parameters = { \"policy\" = [\"cGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvZW5kcG9pbnQtd29ya2VyLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LXdvcmtlci01OGFkYjc4NS01Mzg0LTQxY2UtOWM3Mi1jY2RhNmVhNTU0ZGIiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxaCJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjI0aCJdCiAgICAicmVuZXdhYmxlIiA9IFt0cnVlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZS9lbmRwb2ludC1jbGVhbnVwLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LWNsZWFudXAtNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvZW5kcG9pbnQtd29ya2VyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LXdvcmtlci1mZmYzOGFhZC0yZTNjLTQxNDktYWEzZi04OGY3MTVkMWI0ODgiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxaCJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjI0aCJdCiAgICAicmVuZXdhYmxlIiA9IFt0cnVlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZS9lbmRwb2ludC1jbGVhbnVwLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LWNsZWFudXAtZmZmMzhhYWQtMmUzYy00MTQ5LWFhM2YtODhmNzE1ZDFiNDg4Il1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvZW5kcG9pbnQtd29ya2VyLWV4cGlyaW5nLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbImVuZHBvaW50LXdvcmtlci01OGFkYjc4NS01Mzg0LTQxY2UtOWM3Mi1jY2RhNmVhNTU0ZGIiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxcyJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjFzIl0KICAgICJyZW5ld2FibGUiID0gW2ZhbHNlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZS9lbmRwb2ludC13b3JrZXItZXhwaXJpbmctZmZmMzhhYWQtMmUzYy00MTQ5LWFhM2YtODhmNzE1ZDFiNDg4IiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1siZW5kcG9pbnQtd29ya2VyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFzIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMXMiXQogICAgInJlbmV3YWJsZSIgPSBbZmFsc2VdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vbG9va3VwLXNlbGYiIHsgY2FwYWJpbGl0aWVzID0gWyJyZWFkIl0gfQpwYXRoICJhdXRoL3Rva2VuL3JlbmV3LXNlbGYiIHsgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vcmV2b2tlLXNlbGYiIHsgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXSB9\"] } }\npath \"sys/policy/trunk-restricted-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/trunk-restricted-issuer\" { capabilities = [\"update\"]\nrequired_parameters = [\"policy\"]\nallowed_parameters = { \"policy\" = [\"cGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvdHJ1bmstaW1wb3J0ZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1sidHJ1bmstaW1wb3J0ZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvdHJ1bmstdmVyaWZpZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1sidHJ1bmstdmVyaWZpZXItNThhZGI3ODUtNTM4NC00MWNlLTljNzItY2NkYTZlYTU1NGRiIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMWgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbdHJ1ZV0KICB9Cn0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvdHJ1bmstY2xlYW51cC01OGFkYjc4NS01Mzg0LTQxY2UtOWM3Mi1jY2RhNmVhNTU0ZGIiIHsKICBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdCiAgcmVxdWlyZWRfcGFyYW1ldGVycyA9IFsicG9saWNpZXMiLCJub19kZWZhdWx0X3BvbGljeSIsInR0bCIsImV4cGxpY2l0X21heF90dGwiLCJyZW5ld2FibGUiXQogIGFsbG93ZWRfcGFyYW1ldGVycyA9IHsKICAgICJwb2xpY2llcyIgPSBbWyJ0cnVuay1jbGVhbnVwLTU4YWRiNzg1LTUzODQtNDFjZS05YzcyLWNjZGE2ZWE1NTRkYiJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW3RydWVdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3RydW5rLWltcG9ydGVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbInRydW5rLWltcG9ydGVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW3RydWVdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3RydW5rLXZlcmlmaWVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbInRydW5rLXZlcmlmaWVyLWZmZjM4YWFkLTJlM2MtNDE0OS1hYTNmLTg4ZjcxNWQxYjQ4OCJdXQogICAgIm5vX2RlZmF1bHRfcG9saWN5IiA9IFt0cnVlXQogICAgInR0bCIgPSBbIjFoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW3RydWVdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3RydW5rLWNsZWFudXAtZmZmMzhhYWQtMmUzYy00MTQ5LWFhM2YtODhmNzE1ZDFiNDg4IiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1sidHJ1bmstY2xlYW51cC1mZmYzOGFhZC0yZTNjLTQxNDktYWEzZi04OGY3MTVkMWI0ODgiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIxaCJdCiAgICAiZXhwbGljaXRfbWF4X3R0bCIgPSBbIjI0aCJdCiAgICAicmVuZXdhYmxlIiA9IFt0cnVlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL2xvb2t1cC1zZWxmIiB7IGNhcGFiaWxpdGllcyA9IFsicmVhZCJdIH0KcGF0aCAiYXV0aC90b2tlbi9yZW5ldy1zZWxmIiB7IGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0gfQpwYXRoICJhdXRoL3Rva2VuL3Jldm9rZS1zZWxmIiB7IGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0gfQ==\"] } }\npath \"sys/policy/platform-deployment-maintainer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/platform-deployment-maintainer\" { capabilities = [\"update\"]\nrequired_parameters = [\"policy\"]\nallowed_parameters = { \"policy\" = [\"cGF0aCAiYXV0aC90b2tlbi9sb29rdXAtc2VsZiIgeyBjYXBhYmlsaXRpZXMgPSBbInJlYWQiXSB9CnBhdGggInN5cy9jYXBhYmlsaXRpZXMtc2VsZiIgeyBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdIH0KcGF0aCAiYXV0aC90b2tlbi9yZXZva2Utc2VsZiIgeyBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdIH0KcGF0aCAic3lzL21vdW50cyIgeyBjYXBhYmlsaXRpZXMgPSBbInJlYWQiXSB9CnBhdGggInN5cy9hdXRoIiB7IGNhcGFiaWxpdGllcyA9IFsicmVhZCJdIH0KcGF0aCAic3lzL3BvbGljaWVzL2FjbCIgeyBjYXBhYmlsaXRpZXMgPSBbImxpc3QiXSB9CnBhdGggImF1dGgvdG9rZW4vcm9sZXMiIHsgY2FwYWJpbGl0aWVzID0gWyJsaXN0Il0gfQpwYXRoICJhdXRoL3Rva2VuL2FjY2Vzc29ycyIgeyBjYXBhYmlsaXRpZXMgPSBbImxpc3QiLCAic3VkbyJdIH0KcGF0aCAiYXV0aC90b2tlbi9sb29rdXAtYWNjZXNzb3IiIHsgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vcmV2b2tlLWFjY2Vzc29yIiB7IGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0gfQpwYXRoICJzeXMvcG9saWNpZXMvYWNsL2VuZHBvaW50LSoiIHsgY2FwYWJpbGl0aWVzID0gWyJjcmVhdGUiLCAicmVhZCIsICJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vcm9sZXMvZW5kcG9pbnQtKiIgeyBjYXBhYmlsaXRpZXMgPSBbImNyZWF0ZSIsICJyZWFkIiwgInVwZGF0ZSJdIH0KcGF0aCAiYXV0aC90b2tlbi9jcmVhdGUvcGxhdGZvcm0tZW5kcG9pbnQtaXNzdWVyIiB7CiAgY2FwYWJpbGl0aWVzID0gWyJ1cGRhdGUiXQogIHJlcXVpcmVkX3BhcmFtZXRlcnMgPSBbInBvbGljaWVzIiwibm9fZGVmYXVsdF9wb2xpY3kiLCJ0dGwiLCJleHBsaWNpdF9tYXhfdHRsIiwicmVuZXdhYmxlIl0KICBhbGxvd2VkX3BhcmFtZXRlcnMgPSB7CiAgICAicG9saWNpZXMiID0gW1siZW5kcG9pbnQtcmVzdHJpY3RlZC1pc3N1ZXIiXV0KICAgICJub19kZWZhdWx0X3BvbGljeSIgPSBbdHJ1ZV0KICAgICJ0dGwiID0gWyIyNGgiXQogICAgImV4cGxpY2l0X21heF90dGwiID0gWyIyNGgiXQogICAgInJlbmV3YWJsZSIgPSBbZmFsc2VdCiAgfQp9CnBhdGggImF1dGgvdG9rZW4vcm9sZXMvcGxhdGZvcm0tZW5kcG9pbnQtaXNzdWVyIiB7IGNhcGFiaWxpdGllcyA9IFsicmVhZCJdIH0KcGF0aCAic3lzL3BvbGljaWVzL2FjbC90cnVuay0qIiB7IGNhcGFiaWxpdGllcyA9IFsiY3JlYXRlIiwgInJlYWQiLCAidXBkYXRlIl0gfQpwYXRoICJhdXRoL3Rva2VuL3JvbGVzL3RydW5rLSoiIHsgY2FwYWJpbGl0aWVzID0gWyJjcmVhdGUiLCAicmVhZCIsICJ1cGRhdGUiXSB9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlL3BsYXRmb3JtLXRydW5rLWlzc3VlciIgewogIGNhcGFiaWxpdGllcyA9IFsidXBkYXRlIl0KICByZXF1aXJlZF9wYXJhbWV0ZXJzID0gWyJwb2xpY2llcyIsIm5vX2RlZmF1bHRfcG9saWN5IiwidHRsIiwiZXhwbGljaXRfbWF4X3R0bCIsInJlbmV3YWJsZSJdCiAgYWxsb3dlZF9wYXJhbWV0ZXJzID0gewogICAgInBvbGljaWVzIiA9IFtbInRydW5rLXJlc3RyaWN0ZWQtaXNzdWVyIl1dCiAgICAibm9fZGVmYXVsdF9wb2xpY3kiID0gW3RydWVdCiAgICAidHRsIiA9IFsiMjRoIl0KICAgICJleHBsaWNpdF9tYXhfdHRsIiA9IFsiMjRoIl0KICAgICJyZW5ld2FibGUiID0gW2ZhbHNlXQogIH0KfQpwYXRoICJhdXRoL3Rva2VuL3JvbGVzL3BsYXRmb3JtLXRydW5rLWlzc3VlciIgeyBjYXBhYmlsaXRpZXMgPSBbInJlYWQiXSB9CnBhdGggImF1dGgvcGxhdGZvcm0tY3VzdG9kaWFuL3VzZXJzL3BsYXRmb3JtLW93bmVyLWN1c3RvZGlhbi9wYXNzd29yZCIgeyBjYXBhYmlsaXRpZXMgPSBbInVwZGF0ZSJdIH0KcGF0aCAic3lzL3BvbGljaWVzL2FjbC9wbGF0Zm9ybS1kZXBsb3ltZW50LW1haW50YWluZXIiIHsgY2FwYWJpbGl0aWVzID0gWyJkZW55Il0gfQpwYXRoICJhdXRoL3Rva2VuL2NyZWF0ZSIgeyBjYXBhYmlsaXRpZXMgPSBbImRlbnkiXSB9CnBhdGggImF1dGgvdG9rZW4vY3JlYXRlLW9ycGhhbiIgeyBjYXBhYmlsaXRpZXMgPSBbImRlbnkiXSB9CnBhdGggInN5cy9nZW5lcmF0ZS1yb290LyoiIHsgY2FwYWJpbGl0aWVzID0gWyJkZW55Il0gfQ==\"] } }\npath \"sys/policies/acl/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453\" { capabilities = [\"delete\"] }\npath \"auth/token/roles/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453\" { capabilities = [\"delete\"] }",
       "bootstrap": {
-        "name": "endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b",
-        "policyPath": "sys/policies/acl/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b",
-        "rolePath": "auth/token/roles/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b",
-        "createPath": "auth/token/create/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b",
+        "name": "endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453",
+        "policyPath": "sys/policies/acl/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453",
+        "rolePath": "auth/token/roles/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453",
+        "createPath": "auth/token/create/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453",
         "initialPolicy": "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/storage/raft/snapshot\" { capabilities = [\"read\"] }",
         "role": {
           "allowed_policies": [
-            "endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b"
+            "endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453"
           ],
-          "disallowed_policies": ["root", "default"],
+          "disallowed_policies": [
+            "root",
+            "default"
+          ],
           "allowed_policies_glob": [],
           "disallowed_policies_glob": [],
           "orphan": true,
@@ -2918,10 +2956,10 @@
           "token_period": 0,
           "token_type": "service"
         },
-        "issuerAppend": "path \"auth/token/create/endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b\" { capabilities = [\"update\"]\nrequired_parameters = [\"policies\", \"no_default_policy\", \"ttl\", \"explicit_max_ttl\", \"renewable\"]\nallowed_parameters = { \"policies\" = [[\"endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b\"]] \"ttl\" = [\"300s\"] \"explicit_max_ttl\" = [\"300s\"] \"no_default_policy\" = [true] \"renewable\" = [false] } }",
+        "issuerAppend": "path \"auth/token/create/endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453\" { capabilities = [\"update\"]\nrequired_parameters = [\"policies\", \"no_default_policy\", \"ttl\", \"explicit_max_ttl\", \"renewable\"]\nallowed_parameters = { \"policies\" = [[\"endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453\"]] \"ttl\" = [\"300s\"] \"explicit_max_ttl\" = [\"300s\"] \"no_default_policy\" = [true] \"renewable\" = [false] } }",
         "request": {
           "policies": [
-            "endpoint-maintenance-d2674974-c84a-4ce0-9e82-80ff8014991b"
+            "endpoint-maintenance-9c1eed31-e44c-4953-8b74-943ede561453"
           ],
           "no_default_policy": true,
           "ttl": "300s",
@@ -3088,9 +3126,9 @@
         }
       ],
       "auditAppendPreservation": {
-        "firstBoundaryBytes": 2279399,
-        "finalBoundaryBytes": 3021284,
-        "laterAppendedBytes": 741885,
+        "firstBoundaryBytes": 2279421,
+        "finalBoundaryBytes": 3021300,
+        "laterAppendedBytes": 741879,
         "originalPrefixUnchanged": true,
         "laterAuditSeparatelyVerified": true
       }
@@ -3124,18 +3162,18 @@
       }
     ],
     "absoluteTimestamps": {
-      "issueTime": "2026-10-20T00:16:07.24673626Z",
-      "initialExpireTime": "2026-10-20T00:16:09.24672566Z",
-      "creationTime": 1792455367,
+      "issueTime": "2026-10-20T07:27:07.304468293Z",
+      "initialExpireTime": "2026-10-20T07:27:09.304456793Z",
+      "creationTime": 1792481227,
       "explicitMaximum": 6
     },
     "acceleratedRenewalResponses": [
       {
         "status": 200,
         "leaseDuration": 6,
-        "elapsedMs": 620,
-        "expireTime": "2026-10-20T00:16:13.854825349Z",
-        "overrunMs": 608,
+        "elapsedMs": 612,
+        "expireTime": "2026-10-20T07:27:13.91011516Z",
+        "overrunMs": 606,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3144,9 +3182,9 @@
       {
         "status": 200,
         "leaseDuration": 5,
-        "elapsedMs": 1229,
-        "expireTime": "2026-10-20T00:16:13.464676041Z",
-        "overrunMs": 218,
+        "elapsedMs": 1215,
+        "expireTime": "2026-10-20T07:27:13.51430202Z",
+        "overrunMs": 210,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3155,9 +3193,9 @@
       {
         "status": 200,
         "leaseDuration": 4,
-        "elapsedMs": 1846,
-        "expireTime": "2026-10-20T00:16:13.073659131Z",
-        "overrunMs": -173,
+        "elapsedMs": 1825,
+        "expireTime": "2026-10-20T07:27:13.121190891Z",
+        "overrunMs": -183,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3166,9 +3204,9 @@
       {
         "status": 200,
         "leaseDuration": 4,
-        "elapsedMs": 2460,
-        "expireTime": "2026-10-20T00:16:13.692363238Z",
-        "overrunMs": 446,
+        "elapsedMs": 2433,
+        "expireTime": "2026-10-20T07:27:13.730749174Z",
+        "overrunMs": 426,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3177,9 +3215,9 @@
       {
         "status": 200,
         "leaseDuration": 3,
-        "elapsedMs": 3068,
-        "expireTime": "2026-10-20T00:16:13.303798832Z",
-        "overrunMs": 57,
+        "elapsedMs": 3040,
+        "expireTime": "2026-10-20T07:27:13.33848345Z",
+        "overrunMs": 34,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3188,9 +3226,9 @@
       {
         "status": 200,
         "leaseDuration": 3,
-        "elapsedMs": 3697,
-        "expireTime": "2026-10-20T00:16:13.915889228Z",
-        "overrunMs": 669,
+        "elapsedMs": 3648,
+        "expireTime": "2026-10-20T07:27:13.946339125Z",
+        "overrunMs": 642,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3199,9 +3237,9 @@
       {
         "status": 200,
         "leaseDuration": 2,
-        "elapsedMs": 4309,
-        "expireTime": "2026-10-20T00:16:13.544737651Z",
-        "overrunMs": 298,
+        "elapsedMs": 4256,
+        "expireTime": "2026-10-20T07:27:13.553334897Z",
+        "overrunMs": 249,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3210,9 +3248,9 @@
       {
         "status": 200,
         "leaseDuration": 1,
-        "elapsedMs": 4918,
-        "expireTime": "2026-10-20T00:16:13.153903741Z",
-        "overrunMs": -93,
+        "elapsedMs": 4862,
+        "expireTime": "2026-10-20T07:27:13.160716271Z",
+        "overrunMs": -144,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3221,9 +3259,9 @@
       {
         "status": 200,
         "leaseDuration": 1,
-        "elapsedMs": 5529,
-        "expireTime": "2026-10-20T00:16:13.762674232Z",
-        "overrunMs": 516,
+        "elapsedMs": 5468,
+        "expireTime": "2026-10-20T07:27:13.766227037Z",
+        "overrunMs": 462,
         "failedRenewalPreservedExpiry": null,
         "errors": [],
         "lookupStatus": 200,
@@ -3232,44 +3270,52 @@
       {
         "status": 500,
         "leaseDuration": null,
-        "elapsedMs": 6138,
-        "expireTime": "2026-10-20T00:16:13.762674232Z",
-        "overrunMs": 516,
+        "elapsedMs": 6072,
+        "expireTime": "2026-10-20T07:27:13.766227037Z",
+        "overrunMs": 462,
         "failedRenewalPreservedExpiry": true,
-        "errors": ["past_max_ttl"],
+        "errors": [
+          "past_max_ttl"
+        ],
         "lookupStatus": 200,
         "expireWithinOriginalMaximum": false
       },
       {
         "status": 403,
         "leaseDuration": null,
-        "elapsedMs": 6745,
+        "elapsedMs": 6685,
         "expireTime": null,
         "overrunMs": null,
         "failedRenewalPreservedExpiry": null,
-        "errors": ["permission_denied"],
+        "errors": [
+          "permission_denied"
+        ],
         "lookupStatus": 403,
         "expireWithinOriginalMaximum": null
       },
       {
         "status": 403,
         "leaseDuration": null,
-        "elapsedMs": 7350,
+        "elapsedMs": 7292,
         "expireTime": null,
         "overrunMs": null,
         "failedRenewalPreservedExpiry": null,
-        "errors": ["permission_denied"],
+        "errors": [
+          "permission_denied"
+        ],
         "lookupStatus": 403,
         "expireWithinOriginalMaximum": null
       },
       {
         "status": 403,
         "leaseDuration": null,
-        "elapsedMs": 7959,
+        "elapsedMs": 7896,
         "expireTime": null,
         "overrunMs": null,
         "failedRenewalPreservedExpiry": null,
-        "errors": ["permission_denied"],
+        "errors": [
+          "permission_denied"
+        ],
         "lookupStatus": 403,
         "expireWithinOriginalMaximum": null
       }
@@ -3282,175 +3328,182 @@
       "productionMarginIsProposal": true,
       "real24HourSoak": false,
       "localClockHealthAssumedOnlyInFixture": true,
-      "admitted": 20,
+      "discardedRenewalAcknowledgementReconciled": true,
+      "admitted": 21,
       "denied": 8,
-      "renewals": 20,
-      "firstDenialMs": 5605,
+      "renewals": 21,
+      "firstDenialMs": 5735,
       "observations": [
         {
-          "elapsedMs": 285,
+          "elapsedMs": 279,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 275
+          "providerExpiryOverrunMs": 267
         },
         {
-          "elapsedMs": 548,
+          "elapsedMs": 537,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 537
+          "providerExpiryOverrunMs": 531
         },
         {
-          "elapsedMs": 810,
+          "elapsedMs": 793,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": -198
+          "providerExpiryOverrunMs": 788
         },
         {
-          "elapsedMs": 1076,
+          "elapsedMs": 1051,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 63
+          "providerExpiryOverrunMs": 45
         },
         {
-          "elapsedMs": 1346,
+          "elapsedMs": 1319,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 328
+          "providerExpiryOverrunMs": 306
         },
         {
-          "elapsedMs": 1619,
+          "elapsedMs": 1581,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 599
+          "providerExpiryOverrunMs": 570
         },
         {
-          "elapsedMs": 1895,
+          "elapsedMs": 1839,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": -128
+          "providerExpiryOverrunMs": -167
         },
         {
-          "elapsedMs": 2163,
+          "elapsedMs": 2097,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 147
+          "providerExpiryOverrunMs": 91
         },
         {
-          "elapsedMs": 2424,
+          "elapsedMs": 2365,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 416
+          "providerExpiryOverrunMs": 352
         },
         {
-          "elapsedMs": 2696,
+          "elapsedMs": 2623,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 676
+          "providerExpiryOverrunMs": 618
         },
         {
-          "elapsedMs": 2967,
+          "elapsedMs": 2881,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": -52
+          "providerExpiryOverrunMs": -125
         },
         {
-          "elapsedMs": 3227,
+          "elapsedMs": 3140,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 219
+          "providerExpiryOverrunMs": 133
         },
         {
-          "elapsedMs": 3488,
+          "elapsedMs": 3400,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 480
+          "providerExpiryOverrunMs": 391
         },
         {
-          "elapsedMs": 3755,
+          "elapsedMs": 3659,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 742
+          "providerExpiryOverrunMs": 653
         },
         {
-          "elapsedMs": 4028,
+          "elapsedMs": 3918,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 11
+          "providerExpiryOverrunMs": -89
         },
         {
-          "elapsedMs": 4291,
+          "elapsedMs": 4174,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 281
+          "providerExpiryOverrunMs": 169
         },
         {
-          "elapsedMs": 4553,
+          "elapsedMs": 4434,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 543
+          "providerExpiryOverrunMs": 426
         },
         {
-          "elapsedMs": 4813,
+          "elapsedMs": 4691,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": -196
+          "providerExpiryOverrunMs": 686
         },
         {
-          "elapsedMs": 5088,
+          "elapsedMs": 4955,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 67
+          "providerExpiryOverrunMs": -58
         },
         {
-          "elapsedMs": 5355,
+          "elapsedMs": 5217,
           "applicationAdmitted": true,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 340
+          "providerExpiryOverrunMs": 207
         },
         {
-          "elapsedMs": 5607,
+          "elapsedMs": 5484,
+          "applicationAdmitted": true,
+          "providerLookup": 200,
+          "providerExpiryOverrunMs": 472
+        },
+        {
+          "elapsedMs": 5738,
           "applicationAdmitted": false,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 340
+          "providerExpiryOverrunMs": 472
         },
         {
-          "elapsedMs": 5862,
+          "elapsedMs": 5991,
           "applicationAdmitted": false,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 340
+          "providerExpiryOverrunMs": 472
         },
         {
-          "elapsedMs": 6121,
+          "elapsedMs": 6245,
           "applicationAdmitted": false,
           "providerLookup": 200,
-          "providerExpiryOverrunMs": 340
+          "providerExpiryOverrunMs": 472
         },
         {
-          "elapsedMs": 6376,
-          "applicationAdmitted": false,
-          "providerLookup": 403,
-          "providerExpiryOverrunMs": null
-        },
-        {
-          "elapsedMs": 6631,
-          "applicationAdmitted": false,
-          "providerLookup": 403,
-          "providerExpiryOverrunMs": null
-        },
-        {
-          "elapsedMs": 6886,
+          "elapsedMs": 6500,
           "applicationAdmitted": false,
           "providerLookup": 403,
           "providerExpiryOverrunMs": null
         },
         {
-          "elapsedMs": 7139,
+          "elapsedMs": 6758,
           "applicationAdmitted": false,
           "providerLookup": 403,
           "providerExpiryOverrunMs": null
         },
         {
-          "elapsedMs": 7396,
+          "elapsedMs": 7010,
+          "applicationAdmitted": false,
+          "providerLookup": 403,
+          "providerExpiryOverrunMs": null
+        },
+        {
+          "elapsedMs": 7263,
+          "applicationAdmitted": false,
+          "providerLookup": 403,
+          "providerExpiryOverrunMs": null
+        },
+        {
+          "elapsedMs": 7515,
           "applicationAdmitted": false,
           "providerLookup": 403,
           "providerExpiryOverrunMs": null
@@ -3558,8 +3611,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "rejected",
-            "code": "material_invalid"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3586,8 +3639,8 @@
             "code": "material_invalid"
           },
           {
-            "status": "rejected",
-            "code": "provider_access_denied"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3606,8 +3659,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "material_invalid"
           },
           {
             "status": "fulfilled",
@@ -3654,8 +3707,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "rejected",
-            "code": "material_invalid"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3682,8 +3735,8 @@
             "code": null
           },
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "provider_access_denied"
           },
           {
             "status": "fulfilled",
@@ -3702,8 +3755,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "rejected",
-            "code": "material_invalid"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3726,8 +3779,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "rejected",
-            "code": "material_invalid"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3774,8 +3827,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "rejected",
-            "code": "material_invalid"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3826,8 +3879,8 @@
             "code": null
           },
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "provider_access_denied"
           },
           {
             "status": "fulfilled",
@@ -3898,8 +3951,8 @@
             "code": null
           },
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "provider_access_denied"
           },
           {
             "status": "fulfilled",
@@ -3922,8 +3975,8 @@
             "code": null
           },
           {
-            "status": "rejected",
-            "code": "provider_access_denied"
+            "status": "fulfilled",
+            "code": null
           },
           {
             "status": "fulfilled",
@@ -3942,8 +3995,8 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "material_invalid"
           },
           {
             "status": "fulfilled",
@@ -3974,8 +4027,8 @@
             "code": null
           },
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "material_invalid"
           }
         ]
       },
@@ -3990,12 +4043,12 @@
         "resurrectionDenied": true,
         "cleanupRace": [
           {
-            "status": "rejected",
-            "code": "material_invalid"
-          },
-          {
             "status": "fulfilled",
             "code": null
+          },
+          {
+            "status": "rejected",
+            "code": "provider_access_denied"
           },
           {
             "status": "fulfilled",
@@ -4018,8 +4071,8 @@
             "code": null
           },
           {
-            "status": "fulfilled",
-            "code": null
+            "status": "rejected",
+            "code": "provider_access_denied"
           },
           {
             "status": "fulfilled",
@@ -4055,22 +4108,22 @@
     },
     "completed": true,
     "remainingKnownTokens": 0,
-    "finishedAt": "2026-10-20T00:16:34.227Z",
+    "finishedAt": "2026-10-20T07:27:29.662Z",
     "status": "failed"
   },
   "workerExit": 1,
   "cleanup": {
     "containers": [
       {
-        "container": "myims-lifetime-50e2eb4c-helper",
+        "container": "myims-lifetime-e31d6ef7-helper",
         "absent": true
       },
       {
-        "container": "myims-lifetime-50e2eb4c-provider",
+        "container": "myims-lifetime-e31d6ef7-provider",
         "absent": true
       }
     ],
-    "network": "myims-lifetime-50e2eb4c",
+    "network": "myims-lifetime-e31d6ef7",
     "networkAbsent": true,
     "temporaryDirectoryAbsent": true,
     "namedVolumesCreated": 0

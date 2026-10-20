@@ -15,6 +15,7 @@ const identity = (overrides = {}) => ({
   explicit_max_ttl: 86400,
   orphan: true,
   renewable: true,
+  type: 'service',
   policies: ['exact-runtime'],
   identity_policies: [],
   period: 0,
@@ -106,7 +107,7 @@ test('failed, lost or malformed renewal pauses further work without extending au
       g = candidate(identity(), f.clock);
     assert.throws(
       () => g.observeRenewal(response, identity()),
-      /deadline_renewal_uncertain/,
+      /deadline_renewal_uncertain|deadline_authority_revoked/,
     );
     assert.throws(() => g.check(), /deadline_paused/);
   }
@@ -195,7 +196,7 @@ test('late successes cannot authorize completion and insufficient request budget
     g.run(async () => {
       calls++;
     }),
-    /deadline_reprovision_required/,
+    /deadline_paused/,
   );
   assert.equal(calls, 1);
 });

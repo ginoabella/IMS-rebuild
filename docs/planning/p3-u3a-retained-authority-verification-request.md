@@ -1,8 +1,18 @@
 # P3-U3a — Existing retained backup and maintenance authority verification
 
-Prepared: 2026-10-20 (Asia/Manila, +08:00). **Request only; not authorized or
-executed.** Separate from the [approved direction](p3-u3a-approved-completion-direction.md).
-No retained access or custody discovery occurred in preparing this request.
+Prepared: 2026-10-20 (Asia/Manila, +08:00). **Completed under two separately
+approved limited sessions.** The first stopped before capabilities and was
+revoked/403. After corrected parsing/display-name validation and complete
+native disposable workflow testing, the separately approved second session
+passed all identity and ten-path capability comparisons and was revoked/403.
+Owner accepted and closed the named checkpoint as successfully completed.
+Both authorizations are consumed; no additional login is authorized.
+[Current sanitized findings](../status/p3-u3a-retained-capability-session-2.md).
+Retained remediation, backup capture and inventory access remain unapproved.
+Separate backup/maintenance availability remains unknown. No custody discovery.
+The [consolidated backup/maintenance design](p3-u3a-sustainable-openbao-administration-design.md)
+is prepared for separate review only. The exact original requested scope follows
+for traceability.
 
 ## Requested decision
 

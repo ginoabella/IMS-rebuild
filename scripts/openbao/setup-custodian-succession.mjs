@@ -3,6 +3,7 @@ import { readFileSync, existsSync, writeFileSync } from 'node:fs';
 import { custodianSuccessionPlan } from './custodian-succession-plan.mjs';
 import { protectedFile, ProtectedBaoClient } from './protected-client.mjs';
 import { requireRecoveryCheckpoint } from './recovery-checkpoint.mjs';
+import { readCustodianPassword } from './custodian-password.mjs';
 process.umask(0o077);
 let stage = 'approval',
   issuedToken;
@@ -57,8 +58,7 @@ try {
     requireRecoveryCheckpoint(value);
     // The human must retain this exact password in separate protected custody.
     // No generation or unattended login mechanism is introduced here.
-    const password = protectedFile('/human/password', 128).toString('utf8');
-    if (!/^[A-Za-z0-9_-]{43,128}$/.test(password)) throw new Error();
+    const password = readCustodianPassword();
     const provider = new ProtectedBaoClient(
       '/recovery/custodian.token',
       '/seal/ca.crt',

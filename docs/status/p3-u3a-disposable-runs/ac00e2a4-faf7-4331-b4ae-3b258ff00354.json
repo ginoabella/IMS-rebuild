@@ -1,0 +1,24 @@
+{
+  "operationId": "ac00e2a4-faf7-4331-b4ae-3b258ff00354",
+  "image": "postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6",
+  "sharedDatabaseAccess": false,
+  "providerAccess": false,
+  "checks": [
+    {
+      "name": "all_repository_migration_sources",
+      "passed": true,
+      "count": 15
+    }
+  ],
+  "status": "failed",
+  "failure": {
+    "stage": "owner_sql_acceptance",
+    "code": "0A000"
+  },
+  "cleanup": {
+    "exactContainerAbsent": true,
+    "namedVolumesCreated": 0,
+    "hostPortsPublished": 0,
+    "retainedMounts": 0
+  }
+}

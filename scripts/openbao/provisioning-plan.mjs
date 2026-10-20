@@ -1,4 +1,5 @@
 // Pure deployment plan. No token, material, network call or root-recovery operation.
+import { restrictedIssuanceRule } from './restricted-issuance-rule.mjs';
 const uuid = /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
 const self = `path "auth/token/lookup-self" { capabilities = ["read"] }
 path "auth/token/renew-self" { capabilities = ["update"] }
@@ -84,10 +85,7 @@ export function provisioningPlan(input) {
       name: `${lifecycle}-restricted-issuer`,
       policy: roles
         .filter((x) => x.name.startsWith(`${lifecycle}-`))
-        .map(
-          (x) =>
-            `path "auth/token/create/${x.name}" { capabilities = ["update"] }`,
-        )
+        .map(restrictedIssuanceRule)
         .concat(self)
         .join('\n'),
     });

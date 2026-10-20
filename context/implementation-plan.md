@@ -297,8 +297,11 @@ readiness remain dependent on this phase.
 P3-U3a follows the [approved October 20 completion direction and focused plan](../docs/planning/p3-u3a-approved-completion-direction.md).
 Local canonical owner/grants, isolated workers, definitions/binding/claim/adoption
 and credential lifecycle work proceeds with disposable services independently of
-retained administration. Named retained access and concrete retained execution are
-separate pending gates. The 60-second attestation timing amendment is approved in
+retained administration. The named ten-path custodian verification checkpoint is
+owner-accepted and closed within its limits; both login authorizations are consumed.
+Further retained access and concrete remediation remain separate pending gates.
+The [consolidated backup/maintenance design](../docs/planning/p3-u3a-sustainable-openbao-administration-design.md)
+is prepared for separate review only. The 60-second attestation timing amendment is approved in
 principle only, pending implementation and real transaction/failure acceptance;
 see the [security contract](../docs/architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use).
 Local development, retained remediation, a end-to-end acceptance and production

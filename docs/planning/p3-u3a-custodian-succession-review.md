@@ -156,3 +156,16 @@ execution, verify that this same user holds the protected password and can
 perform the fresh login. No password file or account has been created. Approval of the architecture is not evidence of
 installation; fresh-login, ACL, lifetime and issuer-successor tests remain required
 inside an authorized window before administrator retirement.
+
+## Protected password file representation — October 20 clarification
+
+The [October 19 execution record](../status/p3-u3a-recovery-execution.md#fresh-password-custody-confirmed-and-operation-executed)
+already omitted one final line ending from the maintenance copy without rewriting
+the owner's file. `custodian-password.mjs` now makes that exact framing contract
+shared by setup, manual-session and limited-verification helpers: one 43–128-byte
+ASCII letters/digits/underscore/hyphen credential, optionally followed by one LF
+or CRLF. No trimming, embedded/repeated whitespace, BOM, non-ASCII or credential
+normalization is accepted. Protected-file framing may occupy at most 130 bytes;
+the credential length/security requirements are unchanged. See the
+[compatibility and single-session outcome](../status/p3-u3a-custodian-handoff-followup.md).
+The original handoff and account password were preserved.

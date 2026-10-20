@@ -251,10 +251,17 @@ export async function reviewDisposable(c) {
   // Maintenance must demonstrate original-to-candidate transitions, not just no-op writes.
   out.maintenanceBaselines = [];
   for (const p of proposal.policies) {
-    const body =
+    const candidate =
       p.name === c.human.policyName
         ? c.human.policy
         : plan.policies.find((x) => x.name === p.name).policy;
+    // Reconstruct only the historical unconstrained issuance blocks for this
+    // disposable transition rehearsal. The immutable reviewed hash below must
+    // match before the fixture installs anything; production plans stay hardened.
+    const body = candidate.replaceAll(
+      /path "(auth\/token\/create\/[^"\n]+)" \{\n {2}capabilities = \["update"\]\n {2}required_parameters = [^\n]+\n {2}allowed_parameters = \{\n(?: {4}[^\n]+\n)+ {2}\}\n\}/g,
+      'path "$1" { capabilities = ["update"] }',
+    );
     check(
       createHash('sha256').update(body).digest('hex') ===
         p.expectedCurrentSha256,

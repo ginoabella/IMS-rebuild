@@ -1,0 +1,29 @@
+{
+  "principal": "platform-owner-custodian",
+  "mechanism": "platform-custodian/userpass",
+  "startedAt": "2026-10-20T07:25:43.063Z",
+  "state": "stopped",
+  "stage": "self_lookup",
+  "loginAttempts": 1,
+  "capabilityBatches": 0,
+  "identityChecks": {
+    "lookupSucceeded": true,
+    "expectedUsername": true,
+    "expectedLoginPath": true,
+    "expectedDisplayName": false,
+    "expectedPolicies": true,
+    "noIdentityPolicies": true,
+    "noPeriod": true,
+    "orphan": true,
+    "serviceToken": true,
+    "unlimitedUses": true,
+    "boundedTTL": true,
+    "boundedCreationTTL": true,
+    "explicitMaximum900": true
+  },
+  "capabilities": [],
+  "differences": ["expectedDisplayName"],
+  "cleanup": "revoked_and_denial_confirmed",
+  "backupAuthorityAvailability": "unknown",
+  "finishedAt": "2026-10-20T07:25:43.848Z"
+}

@@ -9,6 +9,10 @@ export class AuthorizationDeadlineCandidate {
   #absolute;
   #lease;
   #blocked = false;
+  #paused = false;
+  #pauseEpoch = 0;
+  #reconciliationAttempts = 0;
+  #reconciling = false;
   #settings;
   constructor(identity, clock, settings = {}) {
     this.#settings = {
@@ -17,6 +21,7 @@ export class AuthorizationDeadlineCandidate {
       safetyMarginMs: 3000,
       clockDivergenceMs: 250,
       minimumRenewalSeconds: 60,
+      maximumReconciliationAttempts: 2,
       expectedPolicy: undefined,
       ...settings,
     };
@@ -41,7 +46,9 @@ export class AuthorizationDeadlineCandidate {
       this.#fail('deadline_clock_untrusted');
     if (
       !Number.isInteger(this.#settings.maximumSeconds) ||
-      this.#settings.maximumSeconds > 86400
+      this.#settings.maximumSeconds > 86400 ||
+      !Number.isInteger(this.#settings.maximumReconciliationAttempts) ||
+      this.#settings.maximumReconciliationAttempts > 3
     )
       this.#fail('deadline_configuration');
     this.#identity = this.#validate(identity);
@@ -70,6 +77,7 @@ export class AuthorizationDeadlineCandidate {
       d.explicit_max_ttl !== this.#settings.maximumSeconds ||
       d.orphan !== true ||
       d.renewable !== true ||
+      d.type !== 'service' ||
       (d.period ?? 0) !== 0 ||
       !Array.isArray(d.policies) ||
       d.policies.length !== 1 ||
@@ -90,7 +98,11 @@ export class AuthorizationDeadlineCandidate {
     ]);
   }
   remainingMs() {
+    return this.#remainingMs();
+  }
+  #remainingMs(allowPaused = false) {
     if (this.#blocked) throw new Error('deadline_paused');
+    if (this.#paused && !allowPaused) throw new Error('deadline_paused');
     const wall = this.#clock.wall(),
       mono = this.#clock.monotonic();
     if (
@@ -107,14 +119,20 @@ export class AuthorizationDeadlineCandidate {
     return Math.min(this.#absolute, this.#lease) - now;
   }
   check(budgetMs = 0) {
+    this.#check(budgetMs);
+  }
+  #check(budgetMs = 0, allowPaused = false) {
     if (!Number.isFinite(budgetMs) || budgetMs < 0)
       this.#fail('deadline_budget_invalid');
-    if (this.remainingMs() <= budgetMs)
-      throw new Error('deadline_reprovision_required');
+    const remaining = this.#remainingMs(allowPaused);
+    if (remaining <= 0) this.#fail('deadline_reprovision_required');
+    if (remaining <= budgetMs) throw new Error('deadline_reprovision_required');
   }
   observeRenewal(response, identity) {
     this.check();
     const lease = response?.value?.auth?.lease_duration;
+    if (response?.status === 403 || response?.status === 404)
+      this.#fail('deadline_authority_revoked');
     if (
       response?.status !== 200 ||
       !Number.isInteger(lease) ||
@@ -122,7 +140,7 @@ export class AuthorizationDeadlineCandidate {
       lease > Math.min(3600, this.#settings.maximumSeconds) ||
       response.value.auth.renewable !== true
     )
-      this.#fail('deadline_renewal_uncertain');
+      this.#pause();
     if (this.#validate(identity) !== this.#identity)
       this.#fail('deadline_identity_changed');
     this.#lease =
@@ -132,7 +150,85 @@ export class AuthorizationDeadlineCandidate {
     this.check();
   }
   renewalUnavailable() {
-    this.#fail('deadline_renewal_uncertain');
+    this.#check(0, true);
+    this.#pause();
+  }
+  #pause() {
+    this.#paused = true;
+    this.#pauseEpoch++;
+    throw new Error('deadline_renewal_uncertain');
+  }
+  async reconcile(lookupSelf, budgetMs = 5000) {
+    // Investigation only: composition must bind lookupSelf to the SAME token.
+    // This path never renews, issues or swaps a token. Consumption stays paused.
+    if (!this.#paused || this.#blocked)
+      throw new Error('deadline_reconciliation_unavailable');
+    if (this.#reconciling)
+      throw new Error('deadline_reconciliation_in_progress');
+    this.#check(budgetMs, true);
+    if (
+      this.#reconciliationAttempts >=
+      this.#settings.maximumReconciliationAttempts
+    )
+      this.#fail('deadline_reconciliation_exhausted');
+    this.#reconciliationAttempts++;
+    this.#reconciling = true;
+    const epoch = this.#pauseEpoch;
+    const abort = new globalThis.AbortController();
+    let timer;
+    try {
+      const response = await Promise.race([
+        Promise.resolve().then(() => lookupSelf(abort.signal)),
+        new Promise((_, reject) => {
+          timer = setTimeout(() => {
+            abort.abort();
+            reject(new Error('deadline_reconciliation_uncertain'));
+          }, budgetMs);
+        }),
+      ]);
+      // Both the old lease and original maximum must still be valid. A late
+      // lookup cannot resurrect authority, even if the provider reports it live.
+      this.#check(0, true);
+      if (epoch !== this.#pauseEpoch)
+        throw new Error('deadline_reconciliation_uncertain');
+      if (response?.status === 403 || response?.status === 404)
+        this.#fail('deadline_authority_revoked');
+      if (response?.status !== 200)
+        throw new Error('deadline_reconciliation_uncertain');
+      const identity = response.value?.data;
+      if (this.#validate(identity) !== this.#identity)
+        this.#fail('deadline_identity_changed');
+      if (
+        !Number.isInteger(identity.ttl) ||
+        identity.ttl < 1 ||
+        identity.ttl > Math.min(3600, this.#settings.maximumSeconds)
+      )
+        this.#fail('deadline_identity_invalid');
+      const lease =
+        Date.parse(identity.expire_time) -
+        this.#settings.skewBoundMs -
+        this.#settings.safetyMarginMs;
+      // Validate the proposed bound before changing authority or unpausing.
+      const priorLease = this.#lease;
+      this.#lease = Math.min(
+        lease,
+        this.#clock.wall() +
+          identity.ttl * 1000 -
+          this.#settings.skewBoundMs -
+          this.#settings.safetyMarginMs,
+      );
+      try {
+        this.#check(0, true);
+      } catch (error) {
+        this.#lease = priorLease;
+        throw error;
+      }
+      this.#paused = false;
+      return { state: 'same_token_reconciled' };
+    } finally {
+      clearTimeout(timer);
+      this.#reconciling = false;
+    }
   }
   async run(work, budgetMs = 5000) {
     this.check(budgetMs);

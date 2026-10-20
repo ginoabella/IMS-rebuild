@@ -9,6 +9,11 @@ import { reviewDeadline } from './disposable-deadline-review.mjs';
 import { reviewDisposable } from './disposable-review.mjs';
 import { provisioningPlan } from './provisioning-plan.mjs';
 import { custodianSuccessionPlan } from './custodian-succession-plan.mjs';
+import {
+  verifyCustodian,
+  expectedCapabilities,
+} from './verify-custodian-capabilities.mjs';
+import { parseCustodianPassword } from './custodian-password.mjs';
 
 process.umask(0o077);
 const ca = readFileSync('/custody/ca.crt');
@@ -204,8 +209,12 @@ try {
     const replacement = proposal.policies.find((p) => p.name === policy.name);
     if (replacement)
       need(
-        sha(policy.policy) === replacement.expectedCurrentSha256,
-        'baseline_hash_mismatch',
+        policy.policy ===
+          replacement.proposedPolicy.replaceAll(
+            /("policies" = )\["([^"\n]+)"\]/g,
+            '$1[["$2"]]',
+          ),
+        'generated_candidate_mismatch',
       );
     await required('sys/policies/acl/' + policy.name, {
       policy: replacement?.proposedPolicy ?? policy.policy,
@@ -224,6 +233,50 @@ try {
     ...human.userConfiguration,
     password,
   });
+  // Exercise the exact bounded verifier against the fresh native TLS fixture
+  // before any retained use. Track only its request names and safe outcome.
+  const verificationCalls = [];
+  let verificationToken;
+  const verified = await verifyCustodian(
+    async (path, body, token) => {
+      verificationCalls.push(path);
+      if (path === 'sys/capabilities-self')
+        need(
+          JSON.stringify(body) ===
+            JSON.stringify({ paths: Object.keys(expectedCapabilities) }),
+          'verification_scope_mismatch',
+        );
+      const response = await api(path, body, token);
+      if (path === `auth/${human.authMount}/login/${human.username}`) {
+        verificationToken = remember(response);
+      }
+      return response;
+    },
+    parseCustodianPassword(Buffer.from(password + '\r\n')),
+  );
+  results.nativeCapabilityVerification = verified;
+  need(
+    JSON.stringify(verificationCalls) ===
+      JSON.stringify([
+        `auth/${human.authMount}/login/${human.username}`,
+        'auth/token/lookup-self',
+        'sys/capabilities-self',
+        'auth/token/revoke-self',
+        'auth/token/lookup-self',
+      ]),
+    'verification_request_sequence_mismatch',
+  );
+  need(
+    verified.state === 'verified' &&
+      verified.loginAttempts === 1 &&
+      verified.capabilityBatches === 1 &&
+      verified.capabilities.length === 10 &&
+      verified.differences.length === 0 &&
+      verified.cleanup === 'revoked_and_denial_confirmed',
+    'native_capability_verification_failed',
+  );
+  live.delete(verificationToken);
+  results.nativeCapabilityVerification.requestSequenceVerified = true;
   const session = (
     await required(
       'auth/' + human.authMount + '/login/' + human.username,
@@ -234,6 +287,14 @@ try {
   const sessionAttributes = (
     await required('auth/token/lookup-self', undefined, session)
   ).data;
+  // Fresh synthetic fixture only. Compare native custom-mount naming without
+  // emitting any raw identity field, token, accessor or credential.
+  results.nativeUserpassDisplayName = {
+    customMountPrefixMatches:
+      sessionAttributes.display_name === `${human.authMount}-${human.username}`,
+    defaultUserpassPrefixMatches:
+      sessionAttributes.display_name === `userpass-${human.username}`,
+  };
   need(
     sessionAttributes.explicit_max_ttl === 900 &&
       sessionAttributes.ttl <= 900 &&

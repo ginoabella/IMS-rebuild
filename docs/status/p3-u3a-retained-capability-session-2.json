@@ -1,0 +1,99 @@
+{
+  "principal": "platform-owner-custodian",
+  "mechanism": "platform-custodian/userpass",
+  "startedAt": "2026-10-20T07:46:06.360Z",
+  "state": "verified",
+  "stage": "capability_batch",
+  "loginAttempts": 1,
+  "capabilityBatches": 1,
+  "identityChecks": {
+    "lookupSucceeded": true,
+    "expectedUsername": true,
+    "expectedLoginPath": true,
+    "expectedDisplayName": true,
+    "expectedPolicies": true,
+    "noIdentityPolicies": true,
+    "noPeriod": true,
+    "orphan": true,
+    "serviceToken": true,
+    "unlimitedUses": true,
+    "boundedTTL": true,
+    "boundedCreationTTL": true,
+    "explicitMaximum900": true
+  },
+  "capabilities": [
+    {
+      "path": "sys/storage/raft/snapshot",
+      "expected": ["deny"],
+      "observed": ["deny"],
+      "matches": true
+    },
+    {
+      "path": "sys/policies/acl/platform-deployment-maintainer",
+      "expected": ["deny"],
+      "observed": ["deny"],
+      "matches": true
+    },
+    {
+      "path": "sys/policies/acl/endpoint-restricted-issuer",
+      "expected": ["create", "read", "update"],
+      "observed": ["create", "read", "update"],
+      "matches": true
+    },
+    {
+      "path": "sys/policies/acl/trunk-restricted-issuer",
+      "expected": ["create", "read", "update"],
+      "observed": ["create", "read", "update"],
+      "matches": true
+    },
+    {
+      "path": "sys/policies/acl",
+      "expected": ["list"],
+      "observed": ["list"],
+      "matches": true
+    },
+    {
+      "path": "auth/token/roles",
+      "expected": ["list"],
+      "observed": ["list"],
+      "matches": true
+    },
+    {
+      "path": "sys/auth",
+      "expected": ["read"],
+      "observed": ["read"],
+      "matches": true
+    },
+    {
+      "path": "identity/entity/id",
+      "expected": ["deny"],
+      "observed": ["deny"],
+      "matches": true
+    },
+    {
+      "path": "identity/group/id",
+      "expected": ["deny"],
+      "observed": ["deny"],
+      "matches": true
+    },
+    {
+      "path": "auth/token/accessors",
+      "expected": ["list", "sudo"],
+      "observed": ["list", "sudo"],
+      "matches": true
+    }
+  ],
+  "differences": [],
+  "cleanup": "revoked_and_denial_confirmed",
+  "backupAuthorityAvailability": "unknown",
+  "session": {
+    "policies": ["platform-deployment-maintainer"],
+    "identityPolicies": [],
+    "period": 0,
+    "ttlSeconds": 899,
+    "creationTTLSeconds": 900,
+    "explicitMaximumSeconds": 900,
+    "renewable": true
+  },
+  "finishedAt": "2026-10-20T07:46:07.340Z"
+}

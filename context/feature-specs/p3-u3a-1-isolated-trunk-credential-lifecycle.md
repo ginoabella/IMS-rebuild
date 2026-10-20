@@ -1,6 +1,6 @@
 # P3-U3a-1 — Isolated trunk credential lifecycle
 
-Status: in progress, updated 2026-10-20 (Asia/Manila, +08:00). Independent local implementation is authorized by the [approved completion direction](../../docs/planning/p3-u3a-approved-completion-direction.md); retained access/remediation remains unapproved. Provider/provisioning primitives and the single recovery/handoff executed; canonical owner integration and real acceptance remain outstanding.
+Status: in progress, updated 2026-10-20 (Asia/Manila, +08:00). Independent local implementation is authorized by the [approved completion direction](../../docs/planning/p3-u3a-approved-completion-direction.md); the separately approved second limited retained session passed all identity and ten-path capability checks, with revocation/403 confirmed and both authorizations consumed; remediation remains unapproved ([findings](../../docs/status/p3-u3a-retained-capability-session-2.md)). Provider/provisioning primitives and the single recovery/handoff executed; canonical owner integration and real acceptance remain outstanding.
 Parent: [P3-U3a](p3-u3a-protected-trunk-and-gateway-definitions.md).
 Authority: user's explicit approval of the [OpenBao review](../../docs/planning/p3-u3a-openbao-trunk-credential-review.md).
 This is the parent's required focused refinement, preceding authenticated resource
@@ -9,7 +9,10 @@ integration. It does not replace a/b/c or weaken a acceptance.
 ## Starting state and prerequisites
 
 Reuse the retained TLS OpenBao server and existing PostgreSQL/queue/audit owners.
-No trunk owner exists yet. Require an authorized shared platform custodian capable
+At the original starting point no trunk owner existed. A local source
+migration/grants/read-port foundation is now [disposable-tested](../../docs/status/p3-u3a-trunk-owner-foundation.md);
+no shared deployment, current-authority admission, attestation, reserve command,
+worker/runtime composition or binding integration is established. Require an authorized shared platform custodian capable
 of mount/policy/token-role administration and a concrete approved non-secret
 provider profile. The synthetic digest-only/no-registration profile is conditionally approved. Endpoint administration is excluded. Root recovery and listener
 weakening require separate exact approval; do not infer them from this review.

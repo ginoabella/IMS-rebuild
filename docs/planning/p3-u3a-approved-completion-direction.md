@@ -3,8 +3,13 @@
 Decision recorded: 2026-10-20 (Asia/Manila, +08:00).
 Source: owner's **MyIMS P3-U3a — Security Simplification and Completion Direction
 Approval**, accepting the [October 20 proposal](p3-u3a-security-simplification-and-completion-proposal.md)
-with the conditions below. Direction approval is complete; retained access and
-retained execution are **not approved**. P3-U3a remains in progress and incomplete.
+with the conditions below. Direction approval is complete. The first separately
+approved capability session stopped at the display-name check and was revoked/403.
+The separately approved second session passed corrected identity and all ten
+capabilities after native disposable workflow testing; revocation/403 confirmed.
+[Current findings](../status/p3-u3a-retained-capability-session-2.md). Both limited
+authorizations are consumed. Retained remediation execution is **not approved**.
+P3-U3a remains in progress and incomplete.
 This record controls current planning; historical proposals and evidence retain
 their original scope and results.
 
@@ -99,15 +104,32 @@ cause is unresolved. Do not weaken its lost-issuance fault precondition.
 | Boundary | Current status | Gate to advance |
 | --- | --- | --- |
 | Local implementation/disposable verification | Authorized; implementation and integration outstanding | Required focused checks per checkpoint; no additional ordinary local approval |
-| Retained authority verification | Not authorized; existing backup/maintenance availability unknown | Separate [named-access request](p3-u3a-retained-authority-verification-request.md); no custody search |
+| Retained authority verification | Owner-accepted and successfully closed within named ten-path scope; intended restricted custodian permissions function; revoke/403 confirmed; both authorizations consumed | [Current findings and limits](../status/p3-u3a-retained-capability-session-2.md); separate backup/maintenance availability unknown; further access needs approval; no custody search |
 | Retained security remediation | Not authorized; 48-hour maximum finding unresolved | Current effective inventory and backup-first route, then exact reviewed execution package; separately approve any new/expanded lasting privilege |
 | Transaction timing | Approved in principle only | Implementation plus real transaction/failure evidence before runtime acceptance |
 | Provider timing disposition | Conditional only; 500/overrun remain failures | Proven conservative consumption controls and explicit documented disposition; preserve raw assertions |
 | P3-U3a end-to-end | Incomplete | All applicable A/L criteria, retained prerequisites, recovery proof and final graph |
 | Production/live integrations | Excluded | Later owning-unit approvals and measured readiness, HA/custody/clock/capacity/joint recovery/RPO/RTO |
 
-The principal remaining approval decisions are the named-access scope and the
-concrete retained execution package. Missing existing authority may require a
+Both named-access authorizations have been consumed within their limits; the
+second session established the ten current capability sets, with confirmed cleanup. The principal remaining approval decision is the concrete retained
+execution package. Missing existing authority may require a
 separately reviewed lasting privilege decision within that package. Recovery,
 restoration, live activation and production remain outside both gates unless
 expressly authorized in their own later scope.
+
+Owner follow-up on October 20 accepts the stable snapshot backup identity and
+separately controlled attended maintenance authority as the preferred direction
+for further design review only, with no implementation authorization.
+
+## Accepted checkpoint and administrative design review — October 20
+
+The owner accepted the named verification evidence and closed that checkpoint
+successfully. Do not repeat capability checks or expand the functioning custodian
+without new approval. This is neither full inventory nor backup readiness.
+The [consolidated sustainable administration design](p3-u3a-sustainable-openbao-administration-design.md)
+is prepared for separate review and supersedes the older temporary-ticket route
+as the preferred direction. No retained login, credential creation, protected
+inventory access, policy change or backup/maintenance implementation is authorized.
+Independent local lifecycle/owner/grants/workers/binding work continues, with the
+native renewal/expiry and integration acceptance failures preserved.

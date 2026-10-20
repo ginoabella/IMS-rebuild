@@ -560,7 +560,13 @@ not accepted for runtime use before implementation and real transaction/failure
 tests. Database finalization must independently check current business authority,
 exact owner/installation/generation, replay protection and freshness. Prefer stable,
 separately controlled existing backup/maintenance authority. New/expanded retained
-privilege, retained access and execution remain separately gated.
+privilege, retained access and execution remain separately gated. The named custodian
+capability checkpoint is now owner-accepted and successfully closed within its
+exact ten-path scope: [evidence and limits](../docs/status/p3-u3a-retained-capability-session-2.md).
+The account functions with intended restricted permissions; both session approvals
+are consumed. Complete privilege inventory and backup readiness are not established.
+The [consolidated sustainable administration design](../docs/planning/p3-u3a-sustainable-openbao-administration-design.md)
+is proposed for separate review only, with no retained implementation authorized.
 Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
 tested complete-array request constraints without changing retained policies.
 Ordinary issuance/rejection passed. Later disposable work reconciled exact
@@ -568,8 +574,14 @@ immutable endpoint create races and rejects unexpected effective authority; reta
 inventory/integration, provider expiry errors and precision remain unresolved. The separate maintenance design
 must resolve snapshot access and self-policy denial before a retained execution
 request; no backup-gate exception or new authority is implicitly approved.
-Provider policies/roles and separate issuer custody are installed; canonical trunk
-owner/schema/runtime composition and completed binding remain outstanding.
+Provider policies/roles and separate issuer custody are installed. Canonical trunk
+owner foundation source migration/grants and an exact-reference read port are now
+[verified in isolated PostgreSQL](../docs/status/p3-u3a-trunk-owner-foundation.md),
+with no shared database migration or runtime wiring. It provides immutable metadata
+and savepoint-safe same-transaction audit evidence, not current business authority,
+provider qualification or binding. Owner admission/finalization functions, full
+lifecycle state/results, protected worker/runtime composition and completed
+binding/claim/adoption remain outstanding.
 
 
 P3-U1a adds the [protected desired registry](../docs/architecture/pbx-registry.md)

@@ -7,7 +7,8 @@ import {
   writeFileSync,
   unlinkSync,
 } from 'node:fs';
-import { protectedFile, ProtectedBaoClient } from './protected-client.mjs';
+import { ProtectedBaoClient } from './protected-client.mjs';
+import { readCustodianPassword } from './custodian-password.mjs';
 process.umask(0o077);
 const username = 'platform-owner-custodian';
 let stage = 'session_custody',
@@ -73,8 +74,7 @@ try {
   if (action === 'open') {
     if (existsSync(tokenFile) || existsSync(accessorFile)) throw new Error();
     stage = 'human_login';
-    const password = protectedFile('/human/password', 128).toString('utf8');
-    if (!/^[A-Za-z0-9_-]{43,128}$/.test(password)) throw new Error();
+    const password = readCustodianPassword();
     const ca = readFileSync('/trust/ca.crt');
     const response = await bao(
       ca,

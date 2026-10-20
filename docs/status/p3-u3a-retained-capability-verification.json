@@ -1,0 +1,13 @@
+{
+  "state": "preflight_failed",
+  "stage": "documented_password_format",
+  "loginAttempts": 0,
+  "sessionsIssued": 0,
+  "capabilityBatches": 0,
+  "cleanup": "no_session_requested",
+  "helperRemoved": true,
+  "backupAuthorityAvailability": "unknown",
+  "capabilities": "unobserved",
+  "retainedRemediationAuthorized": false,
+  "verificationLimit": "Exact documented protected input failed local format validation; no provider request occurred."
+}
