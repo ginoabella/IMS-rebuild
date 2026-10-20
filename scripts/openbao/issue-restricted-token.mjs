@@ -26,7 +26,9 @@ try {
   if (
     !Array.isArray(policies) ||
     policies.length !== 1 ||
-    policies[0] !== `${lifecycle}-restricted-issuer`
+    policies[0] !== `${lifecycle}-restricted-issuer` ||
+    (identity.data?.identity_policies?.length ?? 0) !== 0 ||
+    (identity.data?.period ?? 0) !== 0
   )
     throw new Error();
   const result = await issuer.required(
@@ -52,6 +54,8 @@ try {
     if (
       actual.policies?.length !== 1 ||
       actual.policies[0] !== role.configuration.allowed_policies[0] ||
+      (actual.identity_policies?.length ?? 0) !== 0 ||
+      (actual.period ?? 0) !== 0 ||
       actual.orphan !== true ||
       actual.renewable !== role.configuration.renewable ||
       !Number.isFinite(actual.ttl) ||

@@ -57,3 +57,18 @@ GET operation recovery uses the returned canonical UUID and requires its exact
 originating operator/node/extension. If an acceptance response is lost, repeat
 the exact POST with the original caller key and fingerprint to recover that UUID;
 never allocate a new intent merely because the response was uncertain.
+
+## P3-U3a disposable concurrency and renewal correction — 2026-10-20
+
+Create-only KV-v2 ACLs may return 403 for a losing CAS-zero create after another
+caller creates the path. `prepare` reconciles that write denial only through a
+fresh exact version-1 binding/material read. Mismatched, inaccessible, missing or
+destroyed generations still fail. Worker update authority remains absent.
+
+Renewal success requires a renewable integral lease of 60–3600 seconds. A failed,
+malformed or lost response does not advance the worker's renewal schedule. These
+source changes passed disposable adapter/race and TLS fault checks; retained
+owner/API integration was not rerun. Provider near-expiry 500 and measured
+subsecond absolute-expiry overrun remain failed acceptance findings in the
+[follow-up report](../status/p3-u3a-disposable-review-followup.md). No precise,
+immutable server-wide 24-hour ceiling or retained deployment is established.

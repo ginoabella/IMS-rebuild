@@ -5,6 +5,8 @@ import { readFileSync, writeFileSync, unlinkSync } from 'node:fs';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { execFileSync } from 'node:child_process';
+import { reviewDeadline } from './disposable-deadline-review.mjs';
+import { reviewDisposable } from './disposable-review.mjs';
 import { provisioningPlan } from './provisioning-plan.mjs';
 import { custodianSuccessionPlan } from './custodian-succession-plan.mjs';
 
@@ -514,6 +516,25 @@ try {
     ),
   );
   const candidatePositivesPass = !results.failures.length;
+  if (candidatePositivesPass) {
+    stage = 'disposable_review';
+    results.review = { overlap: [], maintenance: [], faultCheckpoints: [] };
+    await reviewDisposable({
+      report: results.review,
+      api,
+      required,
+      remember,
+      revoke,
+      need,
+      root,
+      session,
+      issuers,
+      plan,
+      human,
+      proposal,
+      ca,
+    });
+  }
   stage = 'role_configuration_variants';
   const target = plan.roles.find((r) => r.name.startsWith('trunk-verifier-'));
   for (const max of [0, 172800]) {
@@ -669,6 +690,17 @@ try {
       scaledIssuer,
     )
   ).auth.client_token;
+  const scaledIdentity = (
+    await required('auth/token/lookup-self', undefined, scaled)
+  ).data;
+  const scaledDeadline = Date.parse(scaledIdentity.issue_time) + 6000;
+  results.absoluteTimestamps = {
+    issueTime: scaledIdentity.issue_time,
+    initialExpireTime: scaledIdentity.expire_time,
+    creationTime: scaledIdentity.creation_time,
+    explicitMaximum: scaledIdentity.explicit_max_ttl,
+  };
+  let previousExpiry = scaledIdentity.expire_time;
   let renewals = 0;
   results.acceleratedRenewalResponses = [];
   while (Date.now() - scaledStart < 7500) {
@@ -678,10 +710,48 @@ try {
       { increment: '48h' },
       scaled,
     );
+    const lookup = await api('auth/token/lookup-self', undefined, scaled);
+    const overrunMs =
+      lookup.status === 200
+        ? Date.parse(lookup.value.data.expire_time) - scaledDeadline
+        : null;
+    if (overrunMs > 0)
+      results.failures.push({
+        stage,
+        label: 'scaled_expiry_extended',
+        overrunMs,
+      });
+    if (response.status !== 200 && lookup.status === 200)
+      need(
+        lookup.value.data.expire_time === previousExpiry,
+        'failed_renewal_extended_expiry',
+      );
     results.acceleratedRenewalResponses.push({
       status: response.status,
       leaseDuration: response.value.auth?.lease_duration ?? null,
+      elapsedMs: Date.now() - scaledStart,
+      expireTime: lookup.value.data?.expire_time ?? null,
+      overrunMs,
+      failedRenewalPreservedExpiry:
+        response.status !== 200 && lookup.status === 200
+          ? lookup.value.data.expire_time === previousExpiry
+          : null,
+      errors: (response.value.errors ?? []).map((e) =>
+        /past.*max.*ttl/i.test(e)
+          ? 'past_max_ttl'
+          : /lease.*not found/i.test(e)
+            ? 'lease_not_found'
+            : /permission denied/i.test(e)
+              ? 'permission_denied'
+              : 'other_' + sha(String(e)),
+      ),
+      lookupStatus: lookup.status,
+      expireWithinOriginalMaximum:
+        lookup.status === 200
+          ? Date.parse(lookup.value.data.expire_time) <= scaledDeadline
+          : null,
     });
+    if (lookup.status === 200) previousExpiry = lookup.value.data.expire_time;
     if (response.status === 200) {
       need(response.value.auth.lease_duration <= 6, 'scaled_renewal_unbounded');
       renewals++;
@@ -705,6 +775,18 @@ try {
     'scaled_absolute_boundary_failed',
   );
   await revoke(scaled);
+  if (process.env.MYIMS_DISPOSABLE_DEADLINE === '1') {
+    stage = 'disposable_authorization_deadline';
+    results.deadlineReview = await reviewDeadline({
+      api,
+      required,
+      remember,
+      revoke,
+      need,
+      issuer: scaledIssuer,
+      role: scaledName,
+    });
+  }
   await revoke(scaledIssuer);
   results.absoluteBoundary = {
     exactTokensInspectedSeconds: 86400,
@@ -713,7 +795,7 @@ try {
     renewals,
     finalLookup: 403,
   };
-  stage = 'unchanged_runtime_issuance_helper';
+  stage = 'runtime_issuance_helper_identity_hardened';
   results.runtimeHelperChecks = [];
   for (const lifecycle of ['endpoint', 'trunk']) {
     writeFileSync('/custody/issuer.token', issuers[lifecycle], {
@@ -845,6 +927,98 @@ try {
     { options: { cas: 0 }, data: {} },
     cleanup.token,
   );
+  stage = 'endpoint_repeated_races';
+  results.endpointRaceReview = [];
+  const rawReplay = await api(
+    endpointPath,
+    { options: { cas: 0 }, data: {} },
+    worker.token,
+  );
+  need(rawReplay.status === 403, 'endpoint_create_only_acl_not_reproduced');
+  results.endpointCreateOnlyReplayStatus = rawReplay.status;
+  for (let i = 0; i < 20; i++) {
+    const b = {
+      ...binding,
+      operationId: randomUUID(),
+      generationId: randomUUID(),
+    };
+    const p = endpointPath.replace(binding.operationId, b.operationId);
+    const prepared = await Promise.allSettled(
+      Array.from({ length: 4 }, () => worker.adapter.prepare(b)),
+    );
+    need(
+      prepared.every((r) => r.status === 'fulfilled'),
+      'endpoint_repeated_prepare_failed',
+    );
+    const initial = (await required(p + '?version=1', undefined, worker.token))
+      .data;
+    const digest = sha(JSON.stringify(initial.data));
+    await Promise.all([worker.adapter.prepare(b), worker.adapter.prepare(b)]);
+    const replay = (await required(p + '?version=1', undefined, worker.token))
+      .data;
+    need(
+      replay.metadata.version === 1 &&
+        sha(JSON.stringify(replay.data)) === digest,
+      'endpoint_generation_changed',
+    );
+    let wrongRejected = false;
+    try {
+      await worker.adapter.prepare({ ...b, generationId: randomUUID() });
+    } catch (error) {
+      wrongRejected = error.code === 'material_invalid';
+    }
+    need(wrongRejected, 'endpoint_wrong_generation_accepted');
+    const raced = await Promise.allSettled([
+      cleanup.adapter.destroy(b),
+      worker.adapter.prepare(b),
+      cleanup.adapter.destroy(b),
+    ]);
+    need(
+      raced.some((r) => r.status === 'fulfilled' && r.value === 'destroyed'),
+      'endpoint_cleanup_race_failed',
+    );
+    need(
+      (await cleanup.adapter.destroy(b)) === 'destroyed',
+      'endpoint_cleanup_retry_failed',
+    );
+    let resurrectionDenied = false;
+    try {
+      await worker.adapter.prepare(b);
+    } catch (error) {
+      resurrectionDenied = error.code === 'provider_access_denied';
+    }
+    need(resurrectionDenied, 'endpoint_resurrection_accepted');
+    const metadata = (
+      await required(
+        p.replace('/data/', '/metadata/'),
+        undefined,
+        cleanup.token,
+      )
+    ).data;
+    need(
+      metadata.current_version === 1 &&
+        metadata.versions['1'].destroyed === true,
+      'endpoint_cleanup_wrong_version',
+    );
+    need(
+      (await worker.adapter.verify(b)) === 'unavailable',
+      'endpoint_cleanup_verification',
+    );
+    results.endpointRaceReview.push({
+      iteration: i,
+      concurrentCreates: 4,
+      prepared: 4,
+      unchangedVersion: 1,
+      exactReplay: true,
+      wrongGenerationRejected: true,
+      cleanupRetry: 'destroyed',
+      resurrectionDenied: true,
+      cleanupRace: raced.map((r) => ({
+        status: r.status,
+        code: r.status === 'rejected' ? r.reason.code : null,
+      })),
+    });
+  }
   stage = 'endpoint_renew_destroy_expiry';
   await worker.adapter.renew();
   const renewal = (

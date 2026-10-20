@@ -1,9 +1,23 @@
 # P3-U3a — Retained lifetime maintenance and backup proposal
 
 2026-10-19 UTC. **Design review only. No retained execution authorization.**
+The user subsequently approved disposable-only investigation and rootless design
+validation. [Follow-up findings and prerequisites](../status/p3-u3a-disposable-review-followup.md)
+and the [exact rehearsed manifest](p3-u3a-rootless-maintenance-rehearsal-manifest.json)
+supersede the pending-disposable-test statements below; retained execution, including
+the three pre-backup configuration writes, remains unapproved.
+
 The previous single recovery authorization is consumed. This proposal neither
-requests nor permits repeat root recovery. The disposable test authorization
-permits preparing this document, not performing the steps below.
+requests nor permits repeat root recovery. The disposable test authorization permits the isolated rehearsal, not performing
+the steps below against retained OpenBao.
+
+The latest [failure-state and authorization review](p3-u3a-retained-failure-and-authorization-review.md)
+provides the precise no-root retained cleanup limits and alternatives comparison.
+Its [new exact draft](p3-u3a-retained-maintenance-authorization-draft.json) is not
+execution-ready. Existing backup/maintenance authority is unknown rather than
+proven unavailable; the owner must establish that distinction before an exception
+can be justified. [Security acceptance rationale](../status/p3-u3a-security-acceptance-rationale.md)
+records the test-only deadline investigation and outstanding runtime integration.
 
 ## Proposed changes and decision gates
 
@@ -82,8 +96,9 @@ bearer, and a maximum five-minute non-renewable orphan ticket token.
    automatically elevating the ticket for cleanup. Do not invent a delete grant.
 5. Only after the checkpoint, use the human's existing exact prefix authority to
    replace the ticket policy with narrowly bounded maintenance/cleanup authority:
-   read and update only the three named target policy paths; updates constrained
-   to their reviewed final bodies; delete only the operation's own temporary
+   read only the three named policies through exact native `sys/policy/<name>`
+   aliases and update only their exact `sys/policies/acl/<name>` paths, constrained
+   to the reviewed final base64-encoded bodies; delete only the operation's own temporary
    policy and role. No generic policies, auth/user configuration, token creation,
    root generation, endpoint/trunk material access, lease revocation or snapshot
    restore permission. The ticket remains limited to the same five-minute
@@ -100,11 +115,15 @@ bearer, and a maximum five-minute non-renewable orphan ticket token.
    verify failure of subsequent token lookup. Revoke the human sessions and
    remove owned private token files. Keep sanitized audit/evidence and backups.
 
-This option needs further **disposable** proof of parameter matching for complete
-policy-body strings containing wildcard paths, native snapshot access, policy
-replacement/cleanup races and failure at every bootstrap checkpoint. A literal
-policy-body allowlist must not accidentally act as a glob. Do not approve or
-implement this option as exact-body bounded authority until those tests pass.
+The follow-up disposable rehearsal covers complete-body matching (base64 request,
+decoded readback/hash), native snapshot access, separate synthetic audit capture/append
+preservation and storage/corruption/overwrite faults, cleanup races and injected stops
+after every proposed write/checkpoint. The raw complete-body control accepted the
+exact body and rejected the tested internal wildcard substitution. The base64
+manifest avoids glob metacharacters. Snapshot decryptability/restore, retained audit
+capture, elapsed lifetime soaks and full integration remain unproven; interruption
+can leave inert objects requiring separate cleanup review. These limits and the
+provider renewal/expiry findings prevent an unqualified execution-readiness claim.
 The two prefix-maintenance permissions are already administratively powerful;
 this procedure does not claim that provider ACLs enforce human approval or protect
 against an intentionally malicious authorized policy writer. The overlap finding
@@ -157,8 +176,9 @@ or automatically generate root on failure.
 ## Scope of the next approval
 
 Review the corrected array matching, observed overlap/expiry limitations, and
-whether to authorize a **disposable rehearsal of a specific backup/bootstrap
-manifest**, or instead provide an existing authorized snapshot/maintenance route.
+the completed disposable rehearsal and its remaining risks, then either provide
+an existing authorized snapshot/maintenance route or separately decide the exact
+pre-backup exception. No existing protected principal was sought or assumed.
 Retained execution must await a later exact manifest, verified rehearsal and
 explicit approval covering any bootstrap exception, backup gate, administrative
 scope, cleanup and restoration risks. There is no root recovery, retained restart,

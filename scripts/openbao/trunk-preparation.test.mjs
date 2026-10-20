@@ -23,6 +23,9 @@ import {
 const backend = createRequire(
   new URL('../../services/backend/package.json', import.meta.url),
 );
+const { OpenBaoEndpointProvider } = backend(
+  './dist/modules/telephony/adapters/credentials/openbao.js',
+);
 const { OpenBaoTrunkProvider } = backend(
   './dist/modules/telephony/adapters/credentials/trunk-openbao.js',
 );
@@ -191,7 +194,10 @@ test('protected HTTPS adapter pins CAS/version/identity and distinguishes denied
       mutation = null,
       writes = 0,
       loseAck = false,
-      lease = 3600;
+      lease = 3600,
+      renewStatus = 200,
+      renewBody,
+      loseRenewal = false;
     const paths = [];
     server = createServer(
       {
@@ -210,9 +216,16 @@ test('protected HTTPS adapter pins CAS/version/identity and distinguishes denied
           return;
         }
         if (req.url === '/v1/auth/token/renew-self') {
+          if (loseRenewal) {
+            res.destroy();
+            return;
+          }
+          res.writeHead(renewStatus);
           res.end(
             JSON.stringify({
-              auth: { lease_duration: lease, renewable: true },
+              ...(renewBody ?? {
+                auth: { lease_duration: lease, renewable: true },
+              }),
             }),
           );
           return;
@@ -310,6 +323,52 @@ test('protected HTTPS adapter pins CAS/version/identity and distinguishes denied
       provider.renew(),
       (e) => e.code === 'token_reprovision_required',
     );
+    const endpointProvider = new OpenBaoEndpointProvider({
+      endpoint: `https://127.0.0.1:${server.address().port}`,
+      caFile: join(dir, 'cert.pem'),
+      tokenFile,
+      installationId: installation,
+    });
+    lease = 3600;
+    await endpointProvider.renew();
+    for (const scenario of [
+      { status: 500, body: { errors: ['past the max TTL, cannot renew'] } },
+      { status: 403, body: {} },
+      { status: 200, body: {} },
+      ...[null, 0, 30, 3601, 1.5, '3600'].map((lease_duration) => ({
+        status: 200,
+        body: { auth: { lease_duration, renewable: true } },
+      })),
+      {
+        status: 200,
+        body: { auth: { lease_duration: 3600, renewable: false } },
+      },
+    ]) {
+      renewStatus = scenario.status;
+      renewBody = scenario.body;
+      await assert.rejects(provider.renew(), (e) =>
+        [
+          'provider_unavailable',
+          'access_denied',
+          'token_reprovision_required',
+        ].includes(e.code),
+      );
+      await assert.rejects(endpointProvider.renew(), (e) =>
+        ['provider_unavailable', 'provider_access_denied'].includes(e.code),
+      );
+    }
+    renewStatus = 200;
+    renewBody = undefined;
+    loseRenewal = true;
+    await assert.rejects(
+      provider.renew(),
+      (e) => e.code === 'provider_unavailable',
+    );
+    await assert.rejects(
+      endpointProvider.renew(),
+      (e) => e.code === 'provider_unavailable',
+    );
+    loseRenewal = false;
     stored = null;
     loseAck = true;
     const writesBeforeLoss = writes;

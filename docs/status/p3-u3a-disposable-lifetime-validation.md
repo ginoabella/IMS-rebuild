@@ -2,6 +2,10 @@
 
 2026-10-19 UTC. **Retained remediation is not authorized. P3-U3a is incomplete.**
 
+Follow-up investigations, client fixes, maintenance rehearsal and additional expiry
+findings are recorded in the [2026-10-20 report](p3-u3a-disposable-review-followup.md).
+The results below preserve the original checkpoint.
+
 The approved disposable validation found that the original three replacement
 policies reject the existing helpers' normal array-form requests. A corrected
 complete-array candidate passed the 14-path issuance/request matrix, but the
@@ -81,15 +85,15 @@ array behavior. These constraints apply to token creation, not KV-v2 data fields
 
 Final operation `36a2cc33-f2c7-487c-baee-a0a12f5c4de1` ran
 2026-10-19 07:26:18.270–07:26:42.758 UTC; diagnostic exit 1.
-The [final sanitized evidence](p3-u3a-disposable-lifetime-evidence.json) records
+The [original checkpoint evidence](p3-u3a-disposable-runs/36a2cc33-f2c7-487c-baee-a0a12f5c4de1.json) records
 actual response codes and attributes for every path. Across the two approved
 installation identifiers:
 
-| Caller policy | Exact creation paths | Approved request |
-| --- | --- | --- |
-| `endpoint-restricted-issuer` | Four worker/cleanup, two expiry fixture paths | Runtime 1h / explicit 24h / renewable; fixture 1s / explicit 1s / non-renewable |
-| `trunk-restricted-issuer` | Six importer/verifier/cleanup paths | 1h / explicit 24h / renewable |
-| `platform-deployment-maintainer` | Two fixed platform issuer replacement paths | 24h / explicit 24h / non-renewable |
+| Caller policy                    | Exact creation paths                          | Approved request                                                                |
+| -------------------------------- | --------------------------------------------- | ------------------------------------------------------------------------------- |
+| `endpoint-restricted-issuer`     | Four worker/cleanup, two expiry fixture paths | Runtime 1h / explicit 24h / renewable; fixture 1s / explicit 1s / non-renewable |
+| `trunk-restricted-issuer`        | Six importer/verifier/cleanup paths           | 1h / explicit 24h / renewable                                                   |
+| `platform-deployment-maintainer` | Two fixed platform issuer replacement paths   | 24h / explicit 24h / non-renewable                                              |
 
 Each request also requires its exact one-element policy array and
 `no_default_policy: true`. Native human authentication and fixed replacement

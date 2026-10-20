@@ -1,0 +1,2749 @@
+{
+  "operationId": "f5b6c006-70e5-4891-b405-f7b43d64338d",
+  "image": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "candidate": "array",
+  "containers": [
+    "myims-lifetime-f5b6c006-provider",
+    "myims-lifetime-f5b6c006-helper"
+  ],
+  "validation": {
+    "startedAt": "2026-10-19T23:49:12.887Z",
+    "paths": [
+      {
+        "path": "auth/token/create/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "ttl": 3599,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "ttl": 3599,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "ttl": 3599,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "ttl": 3600,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "ttl": 3600,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "ttl": 3600,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "ttl": 3599,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "ttl": 3599,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "ttl": 3599,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "ttl": 3600,
+          "explicitMaximum": 86400,
+          "renewable": true
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"],
+          "ttl": 1,
+          "explicitMaximum": 1,
+          "renewable": false
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
+          "ttl": 1,
+          "explicitMaximum": 1,
+          "renewable": false
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/platform-endpoint-issuer",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["endpoint-restricted-issuer"],
+          "ttl": 86400,
+          "explicitMaximum": 86400,
+          "renewable": false
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      },
+      {
+        "path": "auth/token/create/platform-trunk-issuer",
+        "positiveStatus": 200,
+        "positive": {
+          "orphan": true,
+          "identityPolicies": [],
+          "period": 0,
+          "policies": ["trunk-restricted-issuer"],
+          "ttl": 86400,
+          "explicitMaximum": 86400,
+          "renewable": false
+        },
+        "negative": [
+          {
+            "label": "missing_policies",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_no_default_policy",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_explicit_max_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "missing_renewable",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "excessive_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "both_excessive",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_max",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_ttl",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_seconds_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_max_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_minutes",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "equivalent_ttl_number",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_root",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_other_installation",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_plus_default",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_empty",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "policy_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_enabled",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "default_string",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "renewable_changed",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "zero_period",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "display_name",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "num_uses",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "no_parent",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "token_type",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "entity_alias",
+            "status": 403,
+            "rejected": true
+          },
+          {
+            "label": "unknown_parameter",
+            "status": 403,
+            "rejected": true
+          }
+        ]
+      }
+    ],
+    "failures": [
+      {
+        "stage": "disposable_review",
+        "label": "execution_failed"
+      }
+    ],
+    "revoked": 36,
+    "expired": 5,
+    "tests": [
+      {
+        "label": "fixed_issuer_positive",
+        "path": "platform-endpoint-issuer",
+        "status": 200
+      },
+      {
+        "label": "fixed_issuer_positive",
+        "path": "platform-trunk-issuer",
+        "status": 200
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "issuer_alternative_path",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "human_self_policy_write",
+        "status": 403,
+        "rejected": true
+      },
+      {
+        "label": "human_snapshot_without_grant",
+        "status": 403,
+        "rejected": true
+      }
+    ],
+    "providerVersion": "2.7.1",
+    "lastRequest": {
+      "path": "sys/policy/endpoint-restricted-issuer",
+      "status": 200
+    },
+    "policyHashes": [
+      {
+        "name": "endpoint-restricted-issuer",
+        "baselineSha256": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b",
+        "candidateSha256": "5bd6e2c2f5e5d266ae8f0e57b845eaeb4931db9cf0b74d4a26a72bbfd017afda"
+      },
+      {
+        "name": "trunk-restricted-issuer",
+        "baselineSha256": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae",
+        "candidateSha256": "8077e9a15727da7fa0ab3a72398022a6bdca8bf7bb9002104a2778b65dab5703"
+      },
+      {
+        "name": "platform-deployment-maintainer",
+        "baselineSha256": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64",
+        "candidateSha256": "df4964543f0f840167ec395e71f841ddf29875d9ad57cb43fb5ba5107f514b5b"
+      }
+    ],
+    "humanAuthentication": "native_userpass_900_second_orphan_session",
+    "constraintDiagnostics": [
+      {
+        "constrainedParameter": "policies",
+        "status": 403
+      },
+      {
+        "constrainedParameter": "no_default_policy",
+        "status": 200
+      },
+      {
+        "constrainedParameter": "ttl",
+        "status": 200
+      },
+      {
+        "constrainedParameter": "explicit_max_ttl",
+        "status": 200
+      },
+      {
+        "constrainedParameter": "renewable",
+        "status": 200
+      },
+      {
+        "constrainedParameter": "complete_array_with_all_other_constraints",
+        "status": 200
+      }
+    ],
+    "review": {
+      "overlap": [
+        {
+          "kind": "exact_widened",
+          "status": 200,
+          "maximum": 172800
+        },
+        {
+          "kind": "exact_deny",
+          "status": 403,
+          "maximum": null
+        },
+        {
+          "kind": "wildcard_widened",
+          "status": 403,
+          "maximum": null
+        },
+        {
+          "kind": "generic_create",
+          "status": 200,
+          "maximum": 172800
+        },
+        {
+          "kind": "native_identity_exact_widened",
+          "status": 200,
+          "maximum": 172800,
+          "tokenPolicyCount": 1,
+          "identityPolicyCount": 1,
+          "strictInventoryAccepted": false
+        },
+        {
+          "kind": "native_group_exact_widened",
+          "status": 200,
+          "maximum": 172800,
+          "identityPolicyCount": 1
+        }
+      ],
+      "maintenance": [
+        {
+          "test": "ticket_parameter",
+          "changed": "ttl",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "explicit_max_ttl",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "renewable",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "period",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "policies",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "display_name",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "ttl",
+          "status": 403
+        },
+        {
+          "test": "ticket_parameter",
+          "changed": "no_default_policy",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "auth/token/create",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "sys/policies/acl/endpoint-maintenance-1385348c-4cb2-405d-b2e9-bc25bbffe4b6",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "sys/storage/raft/snapshot",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "sys/storage/raft/snapshot-force",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "sys/generate-root/attempt",
+          "status": 405
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "sys/mounts/review",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "myims-endpoint/data/anything",
+          "status": 403
+        },
+        {
+          "test": "snapshot_scope",
+          "path": "auth/token/revoke-accessor",
+          "status": 403
+        },
+        {
+          "test": "exact_body_negative",
+          "target": "endpoint-restricted-issuer",
+          "status": 403
+        },
+        {
+          "test": "exact_body_negative",
+          "target": "endpoint-restricted-issuer",
+          "status": 403
+        },
+        {
+          "test": "exact_body_negative",
+          "target": "endpoint-restricted-issuer",
+          "status": 403
+        },
+        {
+          "test": "exact_body_negative",
+          "target": "endpoint-restricted-issuer",
+          "status": 403
+        }
+      ],
+      "faultCheckpoints": [
+        {
+          "checkpoint": "snapshot_validation",
+          "injected": "truncated_archive",
+          "rejected": true
+        }
+      ],
+      "identityHelperRejected": true,
+      "maintenanceBaselines": [
+        {
+          "name": "endpoint-restricted-issuer",
+          "sha256": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b"
+        },
+        {
+          "name": "trunk-restricted-issuer",
+          "sha256": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae"
+        },
+        {
+          "name": "platform-deployment-maintainer",
+          "sha256": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64"
+        }
+      ],
+      "ticketAttributes": {
+        "explicitMaximum": 300,
+        "renewable": false,
+        "orphan": true,
+        "policies": [
+          "endpoint-maintenance-1385348c-4cb2-405d-b2e9-bc25bbffe4b6"
+        ],
+        "identityPolicies": []
+      },
+      "snapshot": {
+        "snapshotSha256": "b209b70246997eff7bfd8bad1534225497807699fdba8c2add9fb782ee245c05",
+        "index": 373,
+        "term": 3,
+        "sealedChecksumPresent": true,
+        "restorationNotPerformed": true,
+        "bytes": 72734
+      },
+      "rawPolicyBodyGlob": {
+        "status": 403,
+        "changedBodyAccepted": false,
+        "exactBodyStatus": 204
+      }
+    },
+    "failureCode": "review_pre_write_hash_mismatch",
+    "remainingKnownTokens": 0,
+    "finishedAt": "2026-10-19T23:49:25.889Z",
+    "status": "failed"
+  },
+  "workerExit": 1,
+  "cleanup": {
+    "containers": [
+      {
+        "container": "myims-lifetime-f5b6c006-helper",
+        "absent": true
+      },
+      {
+        "container": "myims-lifetime-f5b6c006-provider",
+        "absent": true
+      }
+    ],
+    "network": "myims-lifetime-f5b6c006",
+    "networkAbsent": true,
+    "temporaryDirectoryAbsent": true,
+    "namedVolumesCreated": 0
+  }
+}

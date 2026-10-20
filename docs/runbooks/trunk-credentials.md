@@ -117,7 +117,6 @@ stopped. The policy below remains the required contract; see the
 [hardening review](../planning/p3-u3a-token-lifetime-hardening-review.md) before
 any changes. Normal helper validation alone does not establish provider enforcement.
 
-
 Runtime importer/verifier/cleanup token requests use one-hour TTL, a 24-hour
 explicit maximum, fixed installation policy, orphan service tokens and no default
 policy. Cleanup is mounted only for an explicit maintenance run. The verifier

@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-20 Asia/Manila +08:00",
+  "status": "security_acceptance_incomplete",
+  "retainedProviderAccessPerformed": false,
+  "checks": {
+    "defaultFullGraph": {
+      "command": "./dev check",
+      "exitCode": 1,
+      "privateLocalLog": "/tmp/myims-p3-u3a-nondisruptive-check.log",
+      "logSha256": "f97fd73561a2a9b8609af8ac9fa18b7eb4514ede5e967e20382bff712692c23b",
+      "finding": "Credential browser lost-issuance recovery visibility assertion failed. Earlier static/build/config, foundation/durability/storage/identity/deployment and preceding session checks passed. Root cause unresolved; retry passes do not erase this failure."
+    },
+    "focusedCredentialBrowser": {
+      "command": "./dev exec pnpm check:staff-auth --browser",
+      "exitCode": 0,
+      "privateLocalLog": "/tmp/myims-p3-u3a-credential-browser-investigation.log",
+      "logSha256": "fb04da0ee4bacb5beb641f23c929132ca28d8cd02a92a1acd02559337550ec27"
+    },
+    "defaultSessionRerun": {
+      "command": "./dev exec pnpm check:session-foundation",
+      "exitCode": 0,
+      "privateLocalLog": "/tmp/myims-p3-u3a-session-rerun.log",
+      "logSha256": "07dd75193440a5235a53a98fec48281342e0440dd9935b095645fb70250425cd",
+      "finding": "Complete default session stage passed, including committed-201 lost-response precondition; no application fix or relaxed security assertions."
+    },
+    "focusedSecurity": {
+      "command": "./dev exec node --test scripts/openbao/authorization-deadline.test.mjs scripts/openbao/trunk-preparation.test.mjs scripts/openbao/provisioning-preflight.test.mjs scripts/openbao/custodian-succession-plan.test.mjs scripts/openbao/recovery-checkpoint.test.mjs scripts/openbao/recovery-inventory.test.mjs",
+      "exitCode": 0,
+      "privateLocalLog": "/tmp/myims-p3-u3a-focused-security-check.log",
+      "logSha256": "d7a19a717dfe255b081e691b0de1f3f327dfc7e96e9b9444c7201c426b658186",
+      "passed": 26
+    },
+    "sharedUi": {
+      "command": "./dev exec pnpm check:ui",
+      "exitCode": 0,
+      "privateLocalLog": "/tmp/myims-p3-u3a-ui-check.log",
+      "logSha256": "9b23c6e43d629aa5f30f1702fd1026ab6388be33d3044445b87dac9235960ac0",
+      "passed": 12
+    },
+    "desiredInventory": {
+      "command": "./dev exec pnpm check:extension-inventory --inventory",
+      "status": "passed",
+      "exitCode": 0,
+      "privateLocalLog": "/tmp/myims-p3-u3a-inventory-check.log",
+      "logSha256": "a3d9e887705eef4aa3bd79f53819a8007bf1bc560153fc28ecdb72b9d2ce390b",
+      "finding": "Desired inventory A-01\u201307 passed with isolated database/Redis removal; no endpointAccess/provider selection supplied."
+    },
+    "disposableDeadlineReview": {
+      "command": "python3 scripts/openbao/check-token-lifetime-hardening.py --candidate array --review-deadline",
+      "exitCode": 1,
+      "operationId": "50e2eb4c-965c-4e29-ae7d-6928b650cd66",
+      "evidence": "p3-u3a-disposable-deadline-evidence.json",
+      "finding": "Deadline component passed; native HTTP 500 and eight reported lifetime overruns (maximum 669 ms) remain failing acceptance evidence."
+    }
+  },
+  "excludedOrOutstanding": [
+    "Retained provider credential/lifecycle and inventory-browser flags",
+    "Real retained trunk issuance/import/qualification",
+    "Canonical trunk owner/binding PostgreSQL/Redis/two-HTTP finalization acceptance",
+    "Live SIP/PBX observation/registration/activation",
+    "Production clock qualification and authorization-deadline integration",
+    "Elapsed 24-hour lifetime soak",
+    "Retained policy/auth/role/token/lease/storage/network mutation, restart, recovery or restore"
+  ],
+  "interpretation": "Not a clean full-pipeline pass. Separate reruns and disposable component evidence are reported independently."
+}

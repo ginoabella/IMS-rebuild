@@ -172,3 +172,15 @@ versions and retains metadata. This fixture teardown is separate from applicatio
 retirement: test generations never reach a phone, revision consumer or live PBX.
 An interrupted teardown retains the manifest for exact owner recovery. Never
 apply this fixture mechanism to real retained generations.
+
+## Current P3-U3a restriction — 2026-10-20
+
+The [disposable follow-up](../status/p3-u3a-disposable-review-followup.md) records
+policy overlap, renewal 500 and subsecond expiry-overrun findings. The runtime
+issuance helper now refuses extra identity policies and a period, and the endpoint
+adapter verifies exact-generation race reconciliation and valid renewal leases.
+These checks do not authorize executing provisioning, rotation, recovery or
+integration commands against retained OpenBao. The previous single recovery
+permission is consumed. Existing separately authorized snapshot/maintenance
+custody has not been sought; a pre-backup bootstrap exception remains unapproved.
+Follow the report's separate execution prerequisites before retained work.

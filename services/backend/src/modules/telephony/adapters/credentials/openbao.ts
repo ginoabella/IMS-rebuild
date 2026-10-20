@@ -146,10 +146,23 @@ export class OpenBaoEndpointProvider
   }
   async prepare(b: CredentialBinding) {
     if ((await this.read(b)) === 'verified') return;
-    const response = await this.call(`myims-endpoint/data/${this.path(b)}`, {
-      options: { cas: 0 },
-      data: { ...b, password: randomBytes(32).toString('hex') },
-    });
+    let response: { status: number; value: unknown };
+    try {
+      response = await this.call(`myims-endpoint/data/${this.path(b)}`, {
+        options: { cas: 0 },
+        data: { ...b, password: randomBytes(32).toString('hex') },
+      });
+    } catch (error) {
+      // Create-only ACLs can reject a losing CAS-zero write as an update (403).
+      // Accept only an independently readable, exact immutable generation.
+      if (
+        error instanceof CredentialProviderError &&
+        error.code === 'provider_access_denied' &&
+        (await this.read(b)) === 'verified'
+      )
+        return;
+      throw error;
+    }
     // CAS races/unknown responses are always reconciled by exact read; never overwrite.
     if (response.status !== 200 && response.status !== 400)
       throw new CredentialProviderError('material_invalid', false);
@@ -161,7 +174,18 @@ export class OpenBaoEndpointProvider
   }
   async renew() {
     const r = await this.call('auth/token/renew-self', { increment: '1h' });
-    if (r.status !== 200)
+    const value = r.value as {
+      auth?: { lease_duration?: unknown; renewable?: unknown };
+    };
+    const lease = value?.auth?.lease_duration;
+    if (
+      r.status !== 200 ||
+      typeof lease !== 'number' ||
+      !Number.isInteger(lease) ||
+      lease < 60 ||
+      lease > 3600 ||
+      value?.auth?.renewable !== true
+    )
       throw new CredentialProviderError('provider_access_denied', false);
   }
   async destroy(b: CredentialBinding): Promise<'destroyed' | 'absent'> {

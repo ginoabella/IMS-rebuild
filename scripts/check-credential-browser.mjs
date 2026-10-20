@@ -45,6 +45,10 @@ export async function checkCredentialBrowser({
     urls = [],
     output = [];
   let fixtureBackend;
+  const authStatuses = [],
+    detailStatuses = [];
+  let lastSessionExpiry = null,
+    droppedStatus = null;
   let browser,
     selected,
     dropPath = null,
@@ -339,6 +343,7 @@ export async function checkCredentialBrowser({
           (incoming) => {
             if (dropPath === req.url && req.method === 'POST') {
               dropPath = null;
+              droppedStatus = incoming.statusCode;
               incoming.resume();
               res.destroy();
               return;
@@ -424,6 +429,32 @@ export async function checkCredentialBrowser({
     const operator = await browser.newContext({ ignoreHTTPSErrors: true }),
       recipient = await browser.newContext({ ignoreHTTPSErrors: true });
     page = await operator.newPage();
+    page.on('response', async (response) => {
+      const path = new URL(response.url()).pathname;
+      if (/^\/platform\/tenants\/[a-f0-9-]{36}$/.test(path)) {
+        detailStatuses.push(response.status());
+        if (detailStatuses.length > 8) detailStatuses.shift();
+      }
+      if (!['/platform/auth/session', '/platform/auth/sign-in'].includes(path))
+        return;
+      authStatuses.push(response.status());
+      if (authStatuses.length > 12) authStatuses.shift();
+      if (response.status() === 200 || response.status() === 201) {
+        try {
+          const d = await response.json();
+          if (
+            Number.isFinite(d.idleExpiresAt) &&
+            Number.isFinite(d.absoluteExpiresAt)
+          )
+            lastSessionExpiry = {
+              idle: d.idleExpiresAt,
+              absolute: d.absoluteExpiresAt,
+            };
+        } catch {
+          /* No raw response or credential diagnostics. */
+        }
+      }
+    });
     const form = await recipient.newPage();
     for (const p of [page, form]) p.on('request', (r) => urls.push(r.url()));
     async function login() {
@@ -577,6 +608,11 @@ export async function checkCredentialBrowser({
     await expect(
       page.getByRole('button', { name: 'Retry access', exact: true }),
     ).toBeVisible();
+    assert.equal(
+      droppedStatus,
+      201,
+      'Lost issuance fixture requires committed 201',
+    );
     assert.equal(await page.getByLabel('One-time handoff code').count(), 0);
     await delay(1100);
     await page
@@ -790,6 +826,27 @@ export async function checkCredentialBrowser({
       'PASS credential A-07: late disclosure fencing and same/foreign-owner staff issuer isolation; real qualified staff login and protected command-center recovery',
     );
   } catch (error) {
+    const safeSession = {
+      authStatuses,
+      detailStatuses,
+      droppedStatus,
+      idleRemainingMs: lastSessionExpiry
+        ? lastSessionExpiry.idle - Date.now()
+        : null,
+      absoluteRemainingMs: lastSessionExpiry
+        ? lastSessionExpiry.absolute - Date.now()
+        : null,
+      signInVisible: page
+        ? await page
+            .getByRole('button', { name: 'Sign in', exact: true })
+            .isVisible()
+            .catch(() => false)
+        : false,
+    };
+    console.log(
+      'CHECK credential browser failure metadata ' +
+        JSON.stringify(safeSession),
+    );
     const location =
       error instanceof Error
         ? error.stack

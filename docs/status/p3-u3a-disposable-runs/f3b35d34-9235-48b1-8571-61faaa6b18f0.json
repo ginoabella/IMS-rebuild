@@ -17,9 +17,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
-          ],
+          "policies": ["endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -189,9 +187,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
-          ],
+          "policies": ["endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -361,9 +357,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"
-          ],
+          "policies": ["trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -533,9 +527,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"
-          ],
+          "policies": ["trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -705,9 +697,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
-          ],
+          "policies": ["trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -877,9 +867,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
-          ],
+          "policies": ["endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1049,9 +1037,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
-          ],
+          "policies": ["endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
           "ttl": 3599,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1221,9 +1207,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"
-          ],
+          "policies": ["trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1393,9 +1377,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"
-          ],
+          "policies": ["trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1565,9 +1547,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
-          ],
+          "policies": ["trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
           "ttl": 3600,
           "explicitMaximum": 86400,
           "renewable": true
@@ -1737,9 +1717,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
-          ],
+          "policies": ["endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"],
           "ttl": 0,
           "explicitMaximum": 1,
           "renewable": false
@@ -1909,9 +1887,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
-          ],
+          "policies": ["endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"],
           "ttl": 1,
           "explicitMaximum": 1,
           "renewable": false
@@ -2081,9 +2057,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "endpoint-restricted-issuer"
-          ],
+          "policies": ["endpoint-restricted-issuer"],
           "ttl": 86400,
           "explicitMaximum": 86400,
           "renewable": false
@@ -2253,9 +2227,7 @@
           "orphan": true,
           "identityPolicies": [],
           "period": 0,
-          "policies": [
-            "trunk-restricted-issuer"
-          ],
+          "policies": ["trunk-restricted-issuer"],
           "ttl": 86399,
           "explicitMaximum": 86400,
           "renewable": false

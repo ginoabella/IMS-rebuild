@@ -16,10 +16,22 @@ Proposed decisions and approval scope are prepared in the
 Both reviews were explicitly approved on 2026-10-19. The [focused lifecycle refinement](p3-u3a-1-isolated-trunk-credential-lifecycle.md) precedes authenticated integration. Concrete compatible deployment profiles and an authorized platform provisioning identity remain prerequisites; full a completion requires real owner/binding evidence.
 
 The single approved recovery/handoff and endpoint regressions have executed, but
-a real token-lifetime override failed the 24-hour maximum contract. Work is blocked
-for the user's mandatory [separate privilege review](../../docs/planning/p3-u3a-token-lifetime-hardening-review.md);
-no further recovery or provider remediation is authorized. This is not completion
-of the focused lifecycle owner or A-01–07.
+real token-lifetime override failed the maximum contract. The user's follow-up
+accepts the corrected complete-array candidate for disposable testing only and
+authorizes policy-composition, renewal, concurrency and rootless maintenance design
+investigation. [Follow-up evidence](../../docs/status/p3-u3a-disposable-review-followup.md)
+records the resulting findings, fixes and rehearsal. Retained remediation remains
+blocked, including the separate three-write pre-backup exception. No further root
+recovery, retained modification/restart, SIP/PBX activation or deployment is
+authorized. This is not completion of the focused lifecycle owner or A-01–07.
+
+The 2026-10-20 follow-up accepts disposable design evidence and authorizes an
+original-issuance application-deadline investigation and permitted non-disruptive
+verification. The [security rationale](../../docs/status/p3-u3a-security-acceptance-rationale.md)
+distinguishes the test-only guard from unimplemented runtime/finalization integration.
+The [conditional retained failure/authorization proposal](../../docs/planning/p3-u3a-retained-failure-and-authorization-review.md)
+is separate; existing backup authority is unknown and the pre-backup exception
+remains unapproved. Provider HTTP 500 and fractional-expiry findings remain open.
 
 ## Starting state and decision gates
 

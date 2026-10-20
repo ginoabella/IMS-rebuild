@@ -17,7 +17,9 @@ IMAGE = 'quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba47
 NODE = 'node:22.23.3-bookworm-slim'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--candidate', choices=['original', 'array'], default='array')
-variant = parser.parse_args().candidate
+parser.add_argument('--review-deadline', action='store_true', help='Also probe the experimental application deadline; separate evidence output')
+options = parser.parse_args()
+variant = options.candidate
 proposal_name = 'p3-u3a-token-lifetime-hardening' + ('-array' if variant == 'array' else '') + '-manifest.json'
 operation = str(uuid.uuid4())
 network = 'myims-lifetime-' + operation[:8]
@@ -74,9 +76,11 @@ audit "file" "endpoint" {
     run(['docker', 'network', 'create', '--internal', network])
     run(['docker', 'run', '-d', '--name', provider, '--label', 'myims.disposable-lifetime=' + operation, '--user', '1003:1003', '--network', network, '--network-alias', 'endpoint-secrets', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true', '--tmpfs', '/bao/data:uid=1003,gid=1003,mode=0700', '--tmpfs', '/tmp:uid=1003,gid=1003,mode=0700', '-v', str(root / 'server.hcl') + ':/bao/config/server.hcl:ro', '-v', str(root / 'server.crt') + ':/bao/tls/server.crt:ro', '-v', str(root / 'server.key') + ':/bao/tls/server.key:ro', '-v', str(root / 'audit') + ':/bao/audit', IMAGE, 'server', '-config=/bao/config/server.hcl'])
     args = ['docker', 'run', '-d', '--name', helper, '--label', 'myims.disposable-lifetime=' + operation, '--user', '1003:1003', '--network', network, '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true']
+    if options.review_deadline:
+        args += ['-e', 'MYIMS_DISPOSABLE_DEADLINE=1']
     for directory in ['private', 'output', 'custody']:
         args += ['--tmpfs', '/' + directory + ':uid=1003,gid=1003,mode=0700']
-    args += ['-v', str(PROJECT / 'scripts/openbao') + ':/openbao:ro', '-v', str(PROJECT / 'services/backend/dist') + ':/backend/dist:ro', '-v', str(PROJECT / 'services/backend/package.json') + ':/backend/package.json:ro', '-v', str(PROJECT / 'docs/planning' / proposal_name) + ':/proposal.json:ro', '-v', str(root / 'manifest.json') + ':/manifest.json:ro', '-v', str(root / 'server.crt') + ':/custody/ca.crt:ro', NODE, 'node', '-e', 'setInterval(()=>{},1000)']
+    args += ['-v', str(root / 'audit') + ':/fixture-audit:ro', '-v', str(PROJECT / 'scripts/openbao') + ':/openbao:ro', '-v', str(PROJECT / 'services/backend/dist') + ':/backend/dist:ro', '-v', str(PROJECT / 'services/backend/package.json') + ':/backend/package.json:ro', '-v', str(PROJECT / 'docs/planning' / proposal_name) + ':/proposal.json:ro', '-v', str(root / 'manifest.json') + ':/manifest.json:ro', '-v', str(root / 'server.crt') + ':/custody/ca.crt:ro', NODE, 'node', '-e', 'setInterval(()=>{},1000)']
     run(args)
     # Verify exact owned resources: one internal network, no ports/named volumes,
     # only enumerated fixture/public-source mounts. No retained directory mount.
@@ -106,7 +110,7 @@ finally:
     if cleaned.returncode == 0:
         shutil.rmtree(root)
     evidence['cleanup'] = {'containers': cleanup, 'network': network, 'networkAbsent': network_absent, 'temporaryDirectoryAbsent': not root.exists(), 'namedVolumesCreated': 0}
-    output = PROJECT / ('docs/status/p3-u3a-disposable-' + ('original-policy' if variant == 'original' else 'lifetime') + '-evidence.json')
+    output = PROJECT / ('docs/status/p3-u3a-disposable-' + ('deadline' if options.review_deadline else 'original-policy' if variant == 'original' else 'lifetime') + '-evidence.json')
     serialized = json.dumps(evidence, indent=2) + '\n'
     archive = PROJECT / ('docs/status/p3-u3a-disposable-runs/' + operation + '.json')
     archive.parent.mkdir(exist_ok=True)
