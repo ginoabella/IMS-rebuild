@@ -589,11 +589,18 @@ required. Readiness requires verified retrieval/decryption/native OpenBao restor
 coordinated PostgreSQL recovery, generation reconciliation and measured RPO/RTO.
 The [Restic evaluation](../docs/status/p3-u3a-restic-backup-evaluation.md) passed its
 26 disposable checks; retained/production acceptance is not established. Existing
-installer, backup-first and snapshot-identity provisioning gates remain separate;
-no retained implementation, additional login, privilege expansion, pre-backup
-exception, deployment, destructive cleanup or root recovery is authorized.
-Independent P3-U3a work continues and remains incomplete. Garage application
-storage is unchanged.
+OpenBao installer, backup-first and snapshot-identity provisioning gates remain
+separate. The owner subsequently approved bounded development storage installation;
+the administrator-created UID/GID 12010 account and isolated TLS/append-only Rest
+Server are now verified running with no published ports and a 2-GiB pilot cap.
+The repository is uninitialized; independent credential/key custody and real capture
+are not accepted. [Installation state and limits](../docs/status/p3-u3a-development-backup-installation.md).
+A snapshot-only TLS/AppRole helper is implemented as a separately tagged disposable
+candidate; it adds no retained identity, provider network or automatic runtime
+wiring. Additional retained OpenBao login/privilege expansion, backup-first
+exceptions, production deployment, destructive cleanup and root recovery remain
+unauthorized. Independent P3-U3a work continues and remains incomplete. Garage
+application storage is unchanged.
 Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
 tested complete-array request constraints without changing retained policies.
 Ordinary issuance/rejection passed. Later disposable work reconciled exact

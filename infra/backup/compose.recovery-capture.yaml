@@ -1,0 +1,101 @@
+# PREPARATION ONLY. Manual profiles; never include in ./dev or backup startup.
+# Exact retained execution, host preparation and provider isolation need approval.
+name: myims-recovery-${MYIMS_OPENBAO_RECOVERY_OPERATION:?Explicit reviewed operation UUID required}
+x-capture-helper: &capture-helper
+  image: sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1
+  pull_policy: never
+  user: '1003:1003'
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  restart: 'no'
+  mem_limit: 768m
+  pids_limit: 32
+  tmpfs: ['/tmp:rw,noexec,nosuid,nodev,size=384m,mode=1777']
+  labels:
+    myims.backup.capture.operation: ${MYIMS_OPENBAO_RECOVERY_OPERATION}
+  logging:
+    driver: local
+    options: { max-size: '2m', max-file: '3' }
+services:
+  capture-helper:
+    <<: *capture-helper
+    profiles: [manual-capture]
+    entrypoint: [node]
+    command: [-e, 'setInterval(()=>{},1000)']
+    networks: [isolated-provider]
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777
+      - /recovery:rw,noexec,nosuid,nodev,size=1m,uid=1003,gid=1003,mode=0700
+    volumes:
+      - type: bind
+        source: /home/gino/projects/IMS-rebuild/.local/endpoint-credentials/seal.json
+        target: /seal/seal.json
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: /home/gino/projects/IMS-rebuild/.local/endpoint-credentials/ca.crt
+        target: /seal/ca.crt
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: /srv/myims-openbao-recovery-development/${MYIMS_OPENBAO_RECOVERY_OPERATION}/capture
+        target: /backup
+        bind: { create_host_path: false }
+      - provider-audit:/audit:ro
+  archive-capture:
+    <<: *capture-helper
+    profiles: [manual-capture-archive]
+    group_add: ['12010'] # Read only the mounted public recipient; no client credentials.
+    network_mode: none
+    command:
+      - archive-recovery
+      - /input
+      - /output
+      - /recipient
+      - ${MYIMS_OPENBAO_RECOVERY_OPERATION}
+    volumes:
+      - type: bind
+        source: /srv/myims-openbao-recovery-development/${MYIMS_OPENBAO_RECOVERY_OPERATION}/capture
+        target: /input
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: /srv/myims-openbao-recovery-development/${MYIMS_OPENBAO_RECOVERY_OPERATION}/encrypted/baseline
+        target: /output
+        bind: { create_host_path: false }
+      - type: bind
+        source: /srv/myims-backup-development/public/recipient.txt
+        target: /recipient
+        read_only: true
+        bind: { create_host_path: false }
+  archive-audit:
+    <<: *capture-helper
+    profiles: [manual-capture-audit]
+    group_add: ['12010']
+    network_mode: none
+    command:
+      - archive-recovery-audit
+      - /audit
+      - /output
+      - /recipient
+      - ${MYIMS_OPENBAO_RECOVERY_OPERATION}
+    volumes:
+      - provider-audit:/audit:ro
+      - type: bind
+        source: /srv/myims-openbao-recovery-development/${MYIMS_OPENBAO_RECOVERY_OPERATION}/encrypted/audit-after
+        target: /output
+        bind: { create_host_path: false }
+      - type: bind
+        source: /srv/myims-backup-development/public/recipient.txt
+        target: /recipient
+        read_only: true
+        bind: { create_host_path: false }
+volumes:
+  provider-audit:
+    external: true
+    name: myims-rebuild-dev_endpoint-secrets-audit
+networks:
+  isolated-provider:
+    external: true
+    name: myims-rebuild-dev_openbao-recovery

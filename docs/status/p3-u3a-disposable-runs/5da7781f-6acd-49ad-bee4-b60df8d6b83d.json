@@ -1,0 +1,24 @@
+{
+  "operationId": "5da7781f-6acd-49ad-bee4-b60df8d6b83d",
+  "startedAt": "2026-10-21T05:37:54.915593+00:00",
+  "scope": "disposable-native-only",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "toolingImage": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+  "checks": [
+    {
+      "name": "no_published_ports",
+      "passed": true
+    }
+  ],
+  "lastFixtureApi": "sys/audit/fixture",
+  "status": "failed",
+  "failureType": "HTTPError",
+  "httpStatus": 400,
+  "cleanup": {
+    "containersAbsent": true,
+    "networkAbsent": true,
+    "temporaryKeysAbsent": true,
+    "namedVolumesCreated": false
+  },
+  "finishedAt": "2026-10-21T05:38:03.662871+00:00"
+}

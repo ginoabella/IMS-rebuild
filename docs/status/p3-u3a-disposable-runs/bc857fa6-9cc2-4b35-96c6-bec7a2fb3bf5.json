@@ -1,0 +1,38 @@
+{
+  "operationId": "bc857fa6-9cc2-4b35-96c6-bec7a2fb3bf5",
+  "retainedAccess": false,
+  "rootRecoveryExercised": false,
+  "repositoryAccessed": false,
+  "checks": [
+    {
+      "name": "candidate_image_matches_all_capture_archive_and_cleanup_sources",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "708152492db111c096299e69cf4b4d6e7ff8da2d11ab3833906e99496ade51c1",
+  "toolsImageId": "sha256:7cec7d0ccc8af69eafb19ade4ff9f5dff8692a7b4b7e5f27cf19cb1e7984f829",
+  "artifactHashes": {
+    "scripts/backup/archive.mjs": "f338da844a61cb3cc1e105015ba1505ac906568623645128d9bb5b3d81d5f225",
+    "scripts/backup/main.mjs": "17db8b21130cd59bdf082289947d6160e2d2e7ea94a3e10a2a4e5e747a23aa0a",
+    "scripts/backup/recovery-capture.mjs": "7121b4c48e20804be1e3ebab56b036a1fc7d76e1a06a6607d3b485ee11a821a3",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781",
+    "scripts/openbao/protected-client.mjs": "1d6ddd82da91419288a0ff0656a1d19907f51113200d33f0e69a2a06da18d770",
+    "scripts/openbao/recovery-backup.mjs": "2c00102a0390e4ad5af3386eaac15431d64a5b5ecbd3b60d02bc0c5c88b4853b",
+    "scripts/openbao/recover-custodian.mjs": "ad6b75ea7238be3e196c25ff64ca52dd0d350b703626b96002f3a0112df6f244",
+    "scripts/openbao/finish-recovery.mjs": "5defe02890e6dd75cb5bf12aef3ae4f79148b0a4d8223ef707d28d09ea114a2a"
+  },
+  "lastFixtureApi": "sys/health",
+  "status": "failed",
+  "failure": {
+    "stage": "actual_native_capture_and_root_cleanup",
+    "type": "RuntimeError",
+    "code": "fixture_command_failed"
+  },
+  "freshFixtureLog": "2026-10-21T08:23:37.302Z [INFO]  storage.raft: entering candidate state: node=\"Node at 127.0.0.1:8201 [Candidate]\" term=3\n2026-10-21T08:23:37.302Z [INFO]  storage.raft: pre-vote successful, starting election: term=3 tally=1 refused=0 votesNeeded=1\n2026-10-21T08:23:37.303Z [INFO]  storage.raft: election won: term=3 tally=1\n2026-10-21T08:23:37.303Z [INFO]  storage.raft: entering leader state: leader=\"Node at 127.0.0.1:8201 [Leader]\"\n2026-10-21T08:23:37.301Z [INFO]  core: pre-seal teardown starting\n2026-10-21T08:23:37.303Z [INFO]  core: stopping raft active node\n2026-10-21T08:23:37.304Z [INFO]  core: pre-seal teardown complete\n2026-10-21T08:23:37.304Z [INFO]  core: entering read-enabled standby mode\n2026-10-21T08:23:37.304Z [INFO]  core: post-unseal setup starting\n2026-10-21T08:23:37.304Z [INFO]  core: successfully setup plugin catalog: plugin-directory=\"\"\n2026-10-21T08:23:37.312Z [INFO]  core: reading transactional mount table\n2026-10-21T08:23:37.314Z [INFO]  core: successfully mounted: type=system version=\"v2.7.1+builtin.bao\" path=sys/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.315Z [INFO]  core: successfully mounted: type=identity version=\"v2.7.1+builtin.bao\" path=identity/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.316Z [INFO]  core: successfully mounted: type=cubbyhole version=\"v2.7.1+builtin.bao\" path=cubbyhole/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.316Z [INFO]  core: reading transactional auth mount table\n2026-10-21T08:23:37.316Z [INFO]  core: successfully mounted: type=token version=\"v2.7.1+builtin.bao\" path=token/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.317Z [INFO]  rollback: Starting the rollback manager with 256 workers\n2026-10-21T08:23:37.318Z [INFO]  core: skipping lease restoration - standby\n2026-10-21T08:23:37.318Z [INFO]  core: enabled audit backend: path=endpoint/ type=file\n2026-10-21T08:23:37.305Z [INFO]  core: acquired lock, enabling active operation\n2026-10-21T08:23:37.319Z [INFO]  rollback: starting rollback manager\n2026-10-21T08:23:37.319Z [INFO]  core: entities restored\n2026-10-21T08:23:37.319Z [INFO]  core: groups restored\n2026-10-21T08:23:37.320Z [INFO]  core: post-unseal setup complete\n2026-10-21T08:23:37.329Z [INFO]  core: pre-seal teardown starting\n2026-10-21T08:23:37.329Z [INFO]  core: stopping raft active node\n2026-10-21T08:23:37.330Z [INFO]  rollback: stopping rollback manager\n2026-10-21T08:23:37.331Z [INFO]  core: pre-seal teardown complete\n2026-10-21T08:23:37.331Z [INFO]  core: post-unseal setup starting\n2026-10-21T08:23:37.331Z [INFO]  core: loaded wrapping token key\n2026-10-21T08:23:37.331Z [INFO]  core: successfully setup plugin catalog: plugin-directory=\"\"\n2026-10-21T08:23:37.332Z [INFO]  core: reading transactional mount table\n2026-10-21T08:23:37.333Z [INFO]  core: successfully mounted: type=system version=\"v2.7.1+builtin.bao\" path=sys/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.334Z [INFO]  core: successfully mounted: type=identity version=\"v2.7.1+builtin.bao\" path=identity/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.334Z [INFO]  core: successfully mounted: type=cubbyhole version=\"v2.7.1+builtin.bao\" path=cubbyhole/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.335Z [INFO]  core: reading transactional auth mount table\n2026-10-21T08:23:37.336Z [INFO]  core: successfully mounted: type=token version=\"v2.7.1+builtin.bao\" path=token/ namespace=\"ID: root. Path: \"\n2026-10-21T08:23:37.336Z [INFO]  rollback: Starting the rollback manager with 256 workers\n2026-10-21T08:23:37.337Z [INFO]  core: restoring leases\n2026-10-21T08:23:37.337Z [INFO]  core: enabled audit backend: path=endpoint/ type=file\n2026-10-21T08:23:37.338Z [INFO]  expiration: lease restore complete\n2026-10-21T08:23:37.338Z [INFO]  rollback: starting rollback manager\n2026-10-21T08:23:37.339Z [INFO]  core: entities restored\n2026-10-21T08:23:37.339Z [INFO]  core: groups restored\n2026-10-21T08:23:37.339Z [INFO]  core: starting raft active node\n2026-10-21T08:23:37.339Z [INFO]  storage.raft: starting autopilot: config=\"&{false 0 10s 24h0m0s 1000 0 10s}\" reconcile_interval=0s\n2026-10-21T08:23:37.340Z [INFO]  core: post-unseal setup complete\n2026-10-21T08:23:37.341Z [INFO]  core: usage gauge collection is disabled\n2026-10-21T08:23:38.359Z [INFO]  storage.raft: starting snapshot up to: index=32\n2026-10-21T08:23:38.361Z [INFO]  storage.raft: snapshot complete up to: index=32\n",
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

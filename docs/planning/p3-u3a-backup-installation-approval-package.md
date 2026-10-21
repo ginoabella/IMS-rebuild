@@ -89,6 +89,13 @@ implementation approval; a generic provider recommendation cannot substitute.
 
 ## Minimal Restic installation plan (review only)
 
+The [consolidated development installation request](p3-u3a-development-backup-installation-request.md)
+now names candidate services/profiles, exact proposed paths/volume, custody,
+network/startup behavior, schedules, unresolved operational owners and controlled
+first-backup/joint-recovery steps. [Docker artifacts](../../infra/backup/compose.yaml)
+are prepared and disposable-only; no retained installation is authorized.
+
+
 1. Prepare reviewed Docker artifacts using the evaluated pins: Rest Server
    `restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5`
    and Restic `restic/restic:0.19.1@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510`.

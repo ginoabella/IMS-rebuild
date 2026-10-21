@@ -176,5 +176,13 @@
     "privateDevelopmentRtoHours": 4,
     "productionTargets": "agree-and-measure-before-readiness",
     "pruningAuthorized": false
-  }
+  },
+  "developmentArtifacts": {
+    "reviewManifest": "../../infra/backup/review-manifest.json",
+    "installationRequest": "p3-u3a-development-backup-installation-request.md",
+    "evidence": "../status/p3-u3a-restic-development-artifacts.md",
+    "retainedExecutionAuthorized": false,
+    "hostStorageInstallationApproved": true
+  },
+  "retainedExecutionScope": "OpenBao provisioning and maintenance remain unauthorized; separate bounded development host/storage approval is recorded in infra/backup/review-manifest.json"
 }

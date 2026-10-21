@@ -1,0 +1,134 @@
+{
+  "operationId": "e3b0e343-78ee-4cdf-9682-9fe2db8c4ef6",
+  "startedAt": "2026-10-21T02:39:49.844801+00:00",
+  "serverImage": "restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+  "clientImage": "restic/restic:0.19.1@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "native_snapshot_identity_restore_material_child_and_renewal_denied",
+      "passed": true,
+      "deniedPaths": [
+        "sys/storage/raft/snapshot",
+        "sys/storage/raft/snapshot-force",
+        "auth/token/create",
+        "auth/token/renew-self",
+        "synthetic/data/fixture"
+      ],
+      "tokenRevoked403": true
+    },
+    {
+      "name": "native_snapshot_only_approle_tls_capture_revoke_403",
+      "passed": true,
+      "snapshotBytes": 26137
+    },
+    {
+      "name": "native_raft_snapshot_and_separate_audit",
+      "passed": true,
+      "snapshotBytes": 26137,
+      "auditRecords": 43
+    },
+    {
+      "name": "age_encryption_before_backup",
+      "passed": true
+    },
+    {
+      "name": "reviewed_compose_profiles_and_no_ports",
+      "passed": true
+    },
+    {
+      "name": "actual_archive_helper_passed",
+      "passed": true
+    },
+    {
+      "name": "anonymous_denied",
+      "passed": true
+    },
+    {
+      "name": "other_repository_denied",
+      "passed": true
+    },
+    {
+      "name": "host_installer_readonly_tls_auth_probe",
+      "passed": true
+    },
+    {
+      "name": "uploader_rejects_untrusted_tls_sanitized",
+      "passed": true
+    },
+    {
+      "name": "native_backup",
+      "passed": true,
+      "snapshotId": "3be214ea36f9ba294e424555af4fe2b11d6e6bc2e0b3b547c91b3bf01bce3d03"
+    },
+    {
+      "name": "native_integrity_check",
+      "passed": true
+    },
+    {
+      "name": "writer_read_access_explicit",
+      "passed": true,
+      "securityBoundary": "authenticated repository clients can read"
+    },
+    {
+      "name": "config_overwrite_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "config_delete_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "snapshot_delete_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "repository_delete_denied",
+      "passed": true,
+      "http": 405
+    },
+    {
+      "name": "snapshot_overwrite_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "repository_pack_contains_no_plaintext",
+      "passed": true
+    }
+  ],
+  "developmentArtifacts": true,
+  "snapshotCandidate": true,
+  "serverVersion": "rest-server version rest-server 0.14.0 compiled with go1.24.3 on linux/amd64",
+  "clientVersion": "restic 0.19.1 compiled with go1.26.4 on linux/amd64",
+  "serverImageMetadata": {
+    "id": "sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/rest-server@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5"
+    ]
+  },
+  "clientImageMetadata": {
+    "id": "sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510"
+    ]
+  },
+  "status": "failed",
+  "failure": {
+    "stage": "append_only_security",
+    "type": "URLError",
+    "code": "details_suppressed"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumeAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

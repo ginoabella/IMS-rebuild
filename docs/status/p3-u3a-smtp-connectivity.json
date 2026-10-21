@@ -1,0 +1,11 @@
+{
+  "checkedAt": "2026-10-21T02:40:28.804780+00:00",
+  "server": "smtp.office365.com",
+  "port": 587,
+  "authenticationAttempted": false,
+  "emailSent": false,
+  "reachable": true,
+  "verifiedStarttls": true,
+  "tlsVersion": "TLSv1.3",
+  "smtpAuthAdvertised": true
+}

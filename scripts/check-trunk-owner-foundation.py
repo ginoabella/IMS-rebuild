@@ -4,6 +4,7 @@ Host: python3 scripts/check-trunk-owner-foundation.py
 All database writes and roles exist only in one fresh network-none tmpfs container.
 """
 import json
+import hashlib
 import pathlib
 import re
 import select
@@ -19,6 +20,12 @@ adapter_container = container + '-adapter'
 database = 'myims_trunk_fixture_' + operation.replace('-', '')
 evidence = {'operationId': operation, 'image': IMAGE, 'sharedDatabaseAccess': False, 'providerAccess': False, 'checks': []}
 stage = 'start'
+evidence['sourceArtifacts'] = {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in [
+    'scripts/check-trunk-owner-foundation.py', 'scripts/check-trunk-reservations.mjs',
+    'scripts/check-protected-work-isolation.mjs',
+    'services/backend/src/modules/telephony/adapters/db/trunk-reservations.ts',
+    'services/backend/src/infrastructure/worker/delivery.ts',
+]}
 
 
 def run(args, sql=None, timeout=60):
@@ -120,12 +127,28 @@ try:
         dependency = mounts[destination]
         assert dependency['Type'] == 'volume'
         runner += ['--mount', 'type=volume,src=' + dependency['Name'] + ',dst=' + destination + ',readonly']
-    for source in ['services/backend/dist', 'scripts/check-trunk-owner-references.mjs']:
+    for source in ['services/backend/dist', 'scripts/check-trunk-owner-references.mjs', 'scripts/check-trunk-owner-transitions.mjs', 'scripts/check-trunk-reservations.mjs', 'scripts/check-protected-work-isolation.mjs', 'packages/config/dist', 'packages/config/package.json', 'packages/contracts/dist', 'packages/contracts/package.json']:
         runner += ['--mount', 'type=bind,src=' + str(ROOT / source) + ',dst=/workspace/' + source + ',readonly']
     runner += [workspace['Image'], 'scripts/check-trunk-owner-references.mjs']
     adapter_result = json.loads(run(runner))
     assert adapter_result['status'] == 'passed'
     evidence['checks'].append({'name': 'actual_typescript_reference_adapter', 'passed': True, 'checks': adapter_result['checks']})
+    stage = 'actual_typescript_terminal_adapter'
+    runner[-1] = 'scripts/check-trunk-owner-transitions.mjs'
+    transition_result = json.loads(run(runner))
+    assert transition_result['status'] == 'passed'
+    evidence['checks'].append({'name': 'actual_typescript_terminal_adapter', 'passed': True, 'checks': transition_result['checks']})
+    stage = 'actual_typescript_reservation_adapter'
+    runner[-1] = 'scripts/check-trunk-reservations.mjs'
+    reservation_result = json.loads(run(runner))
+    assert reservation_result['status'] == 'passed'
+    evidence['checks'].append({'name': 'actual_typescript_reservation_adapter', 'passed': True, 'checks': reservation_result['checks']})
+    stage = 'protected_work_queue_isolation'
+    runner[-1] = 'scripts/check-protected-work-isolation.mjs'
+    isolation_output = run(runner)
+    isolation_results = [json.loads(line) for line in isolation_output.splitlines() if line.startswith('{')]
+    isolation_result = next(row for row in isolation_results if row.get('status') == 'passed')
+    evidence['checks'].append({'name': 'protected_work_queue_isolation', 'passed': True, 'checks': isolation_result['checks']})
     stage = 'existing_role_membership_gate'
     foundation = (ROOT / 'infra/database/migrations/20261020000000_trunk_credential_owner_foundation/migration.sql').read_text()
     # A NOLOGIN/NOINHERIT role is still assumable through membership. Demonstrate

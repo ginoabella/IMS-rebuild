@@ -1,0 +1,305 @@
+{
+  "recordedAt": "2026-10-21T02:27:38.822838+00:00",
+  "scope": "approved-development-storage-only",
+  "volumeCreated": true,
+  "volume": "myims-backup-development_repository",
+  "repositoryInitialized": false,
+  "hostAccountCreated": true,
+  "hostPathsCreated": true,
+  "retainedRestServerStarted": true,
+  "schedulingEnabled": false,
+  "openbaoAccess": false,
+  "custodianChanged": false,
+  "emailSent": true,
+  "hostAdministratorExecutionPending": false,
+  "proposedPilotRepositoryQuotaBytes": 2147483648,
+  "retentionCapacityAccepted": false,
+  "initialMeasuredHostAvailableBytes": 15314505728,
+  "smtp": {
+    "host": "smtp.office365.com",
+    "port": 587,
+    "security": "STARTTLS",
+    "username": "itsg.notification@sscgi.com",
+    "sender": "itsg.notification@sscgi.com",
+    "recipient": "itsg.notification@sscgi.com",
+    "passwordFile": "/srv/myims-backup-development/notification/smtp.password",
+    "passwordConfigured": true,
+    "deliveryVerified": true,
+    "authenticationVerified": true,
+    "exchangeDeliveryVerified": true,
+    "mailboxReceiptConfirmedByOwner": true,
+    "mailboxDeliveryVerified": true
+  },
+  "nativeDisposableProbeOperationId": "057973f8-872b-4faf-be14-36835e4942fb",
+  "syntheticSmtpTestsPassed": 11,
+  "nonrootInstallGuardPassed": true,
+  "malformedCredentialProbeSanitized": true,
+  "retainedTransportCredentialsVerified": true,
+  "smtpPasswordConfigured": true,
+  "retainedRepositoryCredentialsCustodyVerified": true,
+  "storageVerificationOperationId": "913d6609-f220-4b75-8a9b-e238e2ce9320",
+  "smtpConfigurationValidation": {
+    "source": "owner-reported administrator command",
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "status": "passed",
+    "configurationValid": true,
+    "messageSubmitted": false,
+    "mailboxDeliveryVerified": false,
+    "automaticRetry": false
+  },
+  "smtpDeliveryAttempt": {
+    "source": "owner-reported administrator command",
+    "date": "2026-10-21 UTC",
+    "event": "notification_test",
+    "status": "passed",
+    "smtpAuthenticationVerified": true,
+    "messageSubmitted": true,
+    "mailboxDeliveryVerified": true,
+    "automaticRetry": false,
+    "recipientObservation": "owner confirmed receipt in inbox",
+    "exchangeDeliveryVerified": true
+  },
+  "smtpDiagnostics": {
+    "liveDiagnosticRun": true,
+    "source": "owner-reported administrator command",
+    "date": "2026-10-21 UTC",
+    "status": "passed",
+    "configurationValid": true,
+    "smtpAuthenticationVerified": true,
+    "messageSubmitted": false,
+    "mailboxDeliveryVerified": false,
+    "automaticRetry": false
+  },
+  "smtpDiagnosticHistory": [
+    {
+      "stageReporting": true,
+      "authenticationOnlyMode": "--check-smtp",
+      "liveDiagnosticRun": true,
+      "source": "owner-reported administrator command",
+      "date": "2026-10-21 UTC",
+      "verifiedStages": [
+        "smtp_connect",
+        "smtp_ehlo",
+        "smtp_starttls",
+        "smtp_tls_ehlo"
+      ],
+      "failedStage": "smtp_authentication",
+      "reason": "authentication_rejected",
+      "smtpCode": 535,
+      "messageSubmitted": false,
+      "mailboxDeliveryVerified": false,
+      "automaticRetry": false
+    }
+  ],
+  "smtpDeliveryHistory": [
+    {
+      "source": "owner-reported administrator command",
+      "date": "2026-10-21 UTC",
+      "status": "failed",
+      "stage": "smtp_delivery",
+      "messageSubmitted": "unconfirmed",
+      "automaticRetry": false
+    }
+  ],
+  "smtpMessageTrace": {
+    "source": "owner-provided Exchange message trace screenshot",
+    "messageTime": "2026-10-21T11:12:00+08:00",
+    "sender": "itsg.notification@sscgi.com",
+    "recipient": "itsg.notification@sscgi.com",
+    "subject": "MyIMS development backup: notification_test",
+    "status": "Delivered",
+    "mailboxReceiptConfirmedByOwner": true
+  },
+  "smtpInboxConfirmation": {
+    "source": "owner confirmation in conversation",
+    "date": "2026-10-21 UTC",
+    "receivedInInbox": true,
+    "event": "notification_test"
+  },
+  "ageRecipient": {
+    "publicRecipient": "age1fz9942ksf7frzwc90tmwtqr4qfz857fautmkjjgz7me7mj9xjafsdnaykq",
+    "source": "owner supplied public recipient",
+    "syntaxAndEncryptionAccepted": true,
+    "toolingImage": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+    "hostInstalled": true,
+    "privateKeyCustodyConfirmed": false,
+    "privateKeyPossessionVerified": true,
+    "privateKeyStoredOutsideMyimsOwnerConfirmed": true,
+    "privateKeyExcludedFromBackupHostConfirmed": false,
+    "independentRecoveryCopyCountConfirmed": false,
+    "hostInstallationSource": "owner-reported administrator local_checks_passed; existing matching file",
+    "decryptionValidationSource": "owner-reported Windows challenge plaintext SHA256 matched",
+    "independentCopyCountVerified": false
+  },
+  "openbaoSealFileMetadata": {
+    "source": "owner-reported administrator stat command",
+    "date": "2026-10-21 UTC",
+    "path": "/home/gino/projects/IMS-rebuild/.local/endpoint-credentials/seal.json",
+    "type": "regular file",
+    "mode": "0600",
+    "uid": 1003,
+    "gid": 1003,
+    "keyContentsRead": false,
+    "usabilityVerified": false,
+    "independentCopyVerified": false
+  },
+  "custodyPlanning": {
+    "sealCustodian": "owner",
+    "offHostSealCopy": "owner-requested assumption: different host",
+    "offHostSealTransferVerified": false,
+    "resticCredentialsEscrowVerified": true
+  },
+  "authorityPreparation": {
+    "retainedExecutionAuthorized": false,
+    "nativeDisposableOperationId": "17af92f6-cde0-4648-99cd-a6574aaf3bc2",
+    "checksPassed": 39,
+    "administratorReadinessTestsPassed": 4,
+    "hostReadinessExecutionPending": false
+  },
+  "administratorLocalReadiness": {
+    "source": "owner-reported administrator command",
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "command": "sudo python3 scripts/backup-host/check-development-readiness.py --install-public-recipient",
+    "result": {
+      "status": "local_checks_passed",
+      "checks": {
+        "publicRecipient": {
+          "matchesSuppliedPublicRecipient": true,
+          "installedNow": false,
+          "protectedFilePermissions": true
+        },
+        "openbaoSealFileMetadata": true,
+        "resticPasswordFileMetadata": true,
+        "restServerCredentialFileMetadata": true,
+        "smtpPasswordFileMetadata": true
+      },
+      "secretContentsRead": false,
+      "networkRequests": 0,
+      "repositoryInitialized": false,
+      "openbaoChanges": false,
+      "independentCustodyVerified": false,
+      "readyForRetainedRecovery": false
+    }
+  },
+  "resticEscrowExport": {
+    "prepared": true,
+    "executed": true,
+    "syntheticTestsPassed": 5,
+    "source": "owner-reported administrator command",
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "result": {
+      "status": "encrypted_export_created",
+      "encryptedOutput": "/home/gino/.myims-recovery-transfer/restic-recovery.age",
+      "ciphertextSha256": "b1d99286f4bca9ef0ded663aa08f9e476396364e25e12975dc9d6c82c5490314",
+      "secretContentsPrinted": false,
+      "sealOrPrivateAgeKeyRead": false,
+      "offHostCopyVerified": false,
+      "repositoryInitialized": false,
+      "openbaoChanges": false
+    },
+    "windowsTransfer": {
+      "source": "owner-reported Windows SCP and SHA256",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "sha256": "b1d99286f4bca9ef0ded663aa08f9e476396364e25e12975dc9d6c82c5490314",
+      "matches": true,
+      "offHostCiphertextCopyVerified": true,
+      "packageDecryptionVerified": true,
+      "internalManifestVerified": true
+    },
+    "windowsVerification": {
+      "source": "owner-reported Windows verifier result",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "result": {
+        "status": "recovery_package_verified",
+        "packageDecryptionVerified": true,
+        "internalManifestVerified": true,
+        "credentialFilesVerified": 3,
+        "recoveryFolder": "C:\\Users\\Administrator\\MyIMS-Restic-Recovery-af6298c6-1797-4025-812a-94926a8e92f1",
+        "credentialsPrinted": false,
+        "repositoryAccessTested": false,
+        "openbaoChanges": false
+      }
+    },
+    "resticCredentialRecoveryCopyVerified": true
+  },
+  "sealCustodyPreparation": {
+    "source": "owner-reported Windows helper JSON",
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "status": "separate_seal_escrow_recipient_prepared",
+    "publicRecipient": "age13k8j7hctfxentgjgd4g30qww3q2rfppz56ve87s7sw9sjmqluc4q9ysrkf",
+    "custodyFolder": "C:\\Users\\Administrator\\MyIMS-OpenBao-Seal-Custody-75d9cfa7-d2ad-41ce-9830-ca9b7941336a",
+    "identityCreatedNow": true,
+    "privateKeyPrinted": false,
+    "openbaoSealKeyRead": false,
+    "openbaoChanges": false,
+    "sealCopyCreated": false,
+    "publicRecipientValidatedByPinnedAge": true,
+    "wrappingKeyDecryptionVerified": true,
+    "sealExportPrepared": true,
+    "sealExportExecuted": true,
+    "syntheticSealExportTestsPassed": 6,
+    "sealExportResult": {
+      "source": "owner-reported administrator command",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "result": {
+        "status": "encrypted_export_created",
+        "encryptedOutput": "/home/gino/.myims-seal-recovery-transfer/openbao-seal-recovery.age",
+        "ciphertextSha256": "c837afabc352ea14a8eaa055d2bb599469d32b21d4b44c94bd7795c2662d4a04",
+        "secretContentsPrinted": false,
+        "sealFileRead": true,
+        "privateAgeKeyRead": false,
+        "sourceSealFileChanged": false,
+        "openbaoRequests": 0,
+        "keyUsabilityAgainstProviderVerified": false,
+        "offHostCopyVerified": false,
+        "repositoryInitialized": false,
+        "openbaoChanges": false
+      }
+    },
+    "windowsCiphertextTransfer": {
+      "source": "owner-reported Windows SCP and SHA256",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "sha256": "c837afabc352ea14a8eaa055d2bb599469d32b21d4b44c94bd7795c2662d4a04",
+      "matches": true,
+      "offHostCiphertextCopyVerified": true,
+      "decryptionVerified": false
+    },
+    "windowsSealVerifierExecuted": true,
+    "windowsSealVerification": {
+      "source": "owner-reported Windows JSON",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "result": {
+        "status": "seal_recovery_package_verified",
+        "packageDecryptionVerified": true,
+        "internalManifestVerified": true,
+        "sealFilesVerified": 1,
+        "recoveryFolder": "C:\\Users\\Administrator\\MyIMS-OpenBao-Seal-Recovery-ebd59182-09f6-471d-a3e2-0cc8fc54f4b4",
+        "sealContentsPrinted": false,
+        "keyUsabilityAgainstProviderVerified": false,
+        "openbaoRequests": 0,
+        "openbaoChanges": false
+      }
+    },
+    "independentSealRecoveryCopyVerified": true,
+    "keyUsabilityAgainstProviderVerified": false
+  },
+  "sealCustodyPreparationHistory": [
+    {
+      "source": "owner-reported Windows result",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "status": "stopped",
+      "stage": "public_recipient",
+      "custodyFolder": "C:\\Users\\Administrator\\MyIMS-OpenBao-Seal-Custody-fdb1d3a3-92d6-4b95-a36e-1f4253043685",
+      "privateKeyCreation": "no usable identity in existing file; owner-reported native parser result",
+      "privateKeyPrinted": false,
+      "sameFolderResumePrepared": true,
+      "resumeExecuted": true,
+      "sealCopyCreated": false,
+      "privateIdentityFileAndAclChecksPassed": true,
+      "privateIdentityValidityVerified": false,
+      "publicRecipientKnown": false,
+      "directDiagnostic": "no identities found",
+      "existingFolderPreserved": true
+    }
+  ]
+}

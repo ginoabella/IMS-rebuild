@@ -154,3 +154,35 @@ freshness, stale proof, authority invalidation, wrong identity/generation, repla
 response loss and rollback. No runtime activation is authorized by this text.
 The [completion plan](../planning/p3-u3a-approved-completion-direction.md) defines
 the matrix and separate local/retained/end-to-end/production boundaries.
+
+## Isolated terminal reservation adapter — October 21
+
+The inactive `TrunkReservationTransitions` database adapter now performs an exact
+reserved-to-cancelled/failed transition, immutable history and application audit
+in one transaction. It matches the full node/installation/binding/generation/
+operation scope plus original actor/correlation, locks that reservation, replays
+only the same terminal result and rejects opposite terminal states. The database
+independently enforces same-transaction evidence at commit.
+
+[Real disposable evidence](../status/p3-u3a-trunk-reservation-transitions.md) covers
+missing-audit rollback, runtime-role denial, wrong scope/context and concurrent
+change-once/replay behavior. This is a lower-level owner persistence adapter, not
+an authenticated cancellation API, current authority check, qualification/claim
+attestation, worker/provider cleanup or runtime timing acceptance. No source
+migration, standing role membership or entrypoint wiring is added. Captured versions
+remain provenance. Existing provider/lifetime/browser findings remain unresolved.
+
+## Reservation persistence and reserved-worker namespaces — October 21
+
+The inactive `TrunkReservations` adapter adds exact existing-binding reservation
+creation, monotonic allocation, immutable replay and atomic history/audit to the
+owner foundation. Its required `lockIntent` stage belongs after current authority
+and before node/peer/binding locks. It does not validate current sessions or create
+qualification; captured versions remain provenance. Protected command/admission
+composition is still required before use. No role or grant was expanded.
+
+Ordinary queue consumption and generic exhaustion reconciliation exclude both
+`endpoint.credential.*` and `trunk.credential.*`. The endpoint consumer remains
+exact-contract and installation filtered. This reserves namespace ownership without
+activating a trunk worker or permitting ordinary consumers to touch future secret
+work. [Implementation and real database/queue evidence](../status/p3-u3a-reservation-and-worker-isolation.md).

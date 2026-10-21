@@ -1,0 +1,17 @@
+{
+  "recordedAt": "2026-10-21T02:53:24.771215+00:00",
+  "imageId": "sha256:26377e0cd9b334596febb35685363ad108ef4ba0e2f81f8958a82bc009c92743",
+  "sourceFaultTests": {
+    "command": "node --test /opt/scripts/backup/snapshot.test.mjs",
+    "passed": 15,
+    "failed": 0
+  },
+  "smtpSyntheticContractTests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/backup-host/check-alert.py",
+    "passed": 7,
+    "failed": 0
+  },
+  "smtpMailboxAuthenticationAttempted": false,
+  "emailSent": false,
+  "retainedOpenbaoAccess": false
+}

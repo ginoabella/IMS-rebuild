@@ -1,0 +1,13 @@
+**
+!scripts/
+!scripts/backup/
+!scripts/backup/**
+!scripts/openbao/
+!scripts/openbao/recovery-snapshot.mjs
+!scripts/openbao/protected-client.mjs
+!scripts/openbao/recovery-backup.mjs
+!scripts/openbao/recover-custodian.mjs
+!scripts/openbao/finish-recovery.mjs
+!infra/
+!infra/backup/
+!infra/backup/Dockerfile

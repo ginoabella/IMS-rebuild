@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "date": "2026-10-21 Asia/Manila (+08:00)",
+  "status": "disposable-verified-inactive-source-candidate",
+  "retainedExecutionAuthorized": false,
+  "retainedOpenbaoProvisioningAuthorized": false,
+  "existingCustodianChangeAuthorized": false,
+  "candidateImage": "myims-backup-tools:snapshot-candidate",
+  "testedCandidateImageId": "sha256:26377e0cd9b334596febb35685363ad108ef4ba0e2f81f8958a82bc009c92743",
+  "nativePassingOperationId": "ebb98134-10c8-4855-a6d4-490ea64dd9a7",
+  "nativeChecksPassed": 35,
+  "syntheticSourceFaultGroupsPassed": 15,
+  "artifacts": {
+    "infra/backup/Dockerfile": "8b8b9b5238d60d8e40545aa07d61cfd1a9e69a781314c83868a6716771a66fe0",
+    "scripts/backup-evaluation/check-restic.py": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "scripts/backup/archive.mjs": "51bd687ad82519aedd45d7bc81054ef725f4ee23665a843dc86f7b303ed7d98b",
+    "scripts/backup/archive.test.mjs": "2c46c635f561e2c3ab304d05fdec5940d3ee260043c232e3c0e7585903dd02d9",
+    "scripts/backup/audit-poll.mjs": "d82e2822df3b5f3852189f5696e8069e457821c6d0a796c8e40ca003ff8abd73",
+    "scripts/backup/main.mjs": "a32e31cc1d2498bf21064b71520415410101d41aa6dd90766248225e77310d6e",
+    "scripts/backup/snapshot.mjs": "71e7299516122f1aeacb95d853b40ec2cf50998eb13a9ea5808132444897917e",
+    "scripts/backup/snapshot.test.mjs": "a1891916b6dc20f85edeb6a6eac3416c3ea1e9edf7e3c92eeb014b85d54fb689",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781"
+  },
+  "retainedProviderAccess": false,
+  "retainedToolingTagChanged": false,
+  "pending": [
+    "independently-authorized-existing-installer-and-backup-first-route",
+    "separate-exact-native-identity-provisioning",
+    "retained-source-network-and-audit-composition",
+    "rotation-supervisor-alerting-and-housekeeping",
+    "joint-postgresql-generation-reconciliation-and-measured-rpo-rto"
+  ],
+  "previousReviewedArtifactHashes": {
+    "scripts/backup-evaluation/check-restic.py": "e75b99a838277a3b9e06d8f82ea6ea0c963cdb907bf85e34653860fd69533417"
+  },
+  "custodyManualCheckpoint": "Owner-reported Windows backup-age challenge, Restic credentials and separately wrapped seal recovery packages verified; retained repository access and provider key usability remain untested."
+}

@@ -27,6 +27,10 @@ Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-
 Backup platform: [approved Restic architecture/security requirements](architecture/backup-platform.md)
 and [minimal installation plan and remaining approval gates](planning/p3-u3a-backup-installation-approval-package.md).
 Platform selection is approved; retained execution and production readiness remain gated.
+[Development Docker installation request](planning/p3-u3a-development-backup-installation-request.md)
+and [artifact verification](status/p3-u3a-restic-development-artifacts.md) record the current checkpoint.
+[Installed storage and snapshot source continuation](status/p3-u3a-snapshot-source-candidate.md)
+records the latest verification and remaining activation gates.
 
 Backend foundation: [startup, migrations and health](runbooks/backend-foundation.md)
 and [P1-U3 verification evidence](status/p1-u3-evidence.md).
@@ -328,3 +332,9 @@ P3-U3a local owner foundation: [migration/grants/read-port evidence and limits](
 Real isolated SQL checks and backend build passed; authority-checked commands,
 protected worker/provider composition and binding/claim/adoption remain unfinished.
 No shared database migration or runtime activation was performed.
+
+
+P3-U3a continued preparation: [manual recovery capture request and remaining controller gates](planning/p3-u3a-development-recovery-capture-request.md),
+[actual native capture/handoff evidence](status/p3-u3a-recovery-capture-handoff-evidence.json),
+and [reservation persistence and protected-work exclusion](status/p3-u3a-reservation-and-worker-isolation.md).
+These checkpoints do not authorize retained recovery or complete P3-U3a.

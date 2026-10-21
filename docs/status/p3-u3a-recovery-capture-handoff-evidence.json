@@ -1,0 +1,77 @@
+{
+  "operationId": "5353b91f-4f87-4bc8-a9b9-74de988634c2",
+  "retainedAccess": false,
+  "rootRecoveryExercised": true,
+  "repositoryAccessed": false,
+  "checks": [
+    {
+      "name": "candidate_image_matches_all_capture_archive_and_cleanup_sources",
+      "passed": true
+    },
+    {
+      "name": "initial_fixture_root_revoked_403_before_quorum_recovery",
+      "passed": true
+    },
+    {
+      "name": "actual_native_capture_helper_and_root_finisher_pass",
+      "passed": true
+    },
+    {
+      "name": "temporary_fixture_root_revoked_403_by_actual_finisher",
+      "passed": true
+    },
+    {
+      "name": "native_capture_archived_after_root_cleanup_with_no_provider_network",
+      "passed": true
+    },
+    {
+      "name": "actual_ciphertext_handoff_preserves_operation_hash_and_private_custody",
+      "passed": true
+    },
+    {
+      "name": "native_capture_decrypts_with_all_seven_members_and_internal_hashes",
+      "passed": true
+    },
+    {
+      "name": "inventory_retained_privately_without_root_bearer_and_no_authority_claim",
+      "passed": true
+    },
+    {
+      "name": "post_cleanup_audit_has_independent_ciphertext_handoff",
+      "passed": true
+    },
+    {
+      "name": "separate_encrypted_audit_covers_fixture_root_revocation",
+      "passed": true
+    },
+    {
+      "name": "installed_and_snapshot_candidate_tags_unchanged",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "0474a5d18a40a473f798fce1b50b8280a42e7a0db0d5f4ae22ff0a2deae1cf64",
+  "toolsImageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
+  "artifactHashes": {
+    "scripts/backup/archive.mjs": "f338da844a61cb3cc1e105015ba1505ac906568623645128d9bb5b3d81d5f225",
+    "scripts/backup/main.mjs": "17db8b21130cd59bdf082289947d6160e2d2e7ea94a3e10a2a4e5e747a23aa0a",
+    "scripts/backup/recovery-capture.mjs": "7121b4c48e20804be1e3ebab56b036a1fc7d76e1a06a6607d3b485ee11a821a3",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781",
+    "scripts/openbao/protected-client.mjs": "1d6ddd82da91419288a0ff0656a1d19907f51113200d33f0e69a2a06da18d770",
+    "scripts/openbao/recovery-backup.mjs": "2c00102a0390e4ad5af3386eaac15431d64a5b5ecbd3b60d02bc0c5c88b4853b",
+    "scripts/openbao/recover-custodian.mjs": "ad6b75ea7238be3e196c25ff64ca52dd0d350b703626b96002f3a0112df6f244",
+    "scripts/openbao/finish-recovery.mjs": "5defe02890e6dd75cb5bf12aef3ae4f79148b0a4d8223ef707d28d09ea114a2a"
+  },
+  "lastFixtureApi": "auth/token/lookup-self",
+  "hostHandoffSha256": "83d84174fc4dfe65b9004ed70400202282b98fef47f64083ea3c75f9c3dfeb23",
+  "retainedToolingImages": {
+    "myims-backup-tools:development-candidate": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+    "myims-backup-tools:snapshot-candidate": "sha256:26377e0cd9b334596febb35685363ad108ef4ba0e2f81f8958a82bc009c92743"
+  },
+  "status": "passed",
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

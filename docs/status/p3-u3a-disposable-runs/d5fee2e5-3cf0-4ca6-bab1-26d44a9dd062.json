@@ -1,0 +1,36 @@
+{
+  "operationId": "d5fee2e5-3cf0-4ca6-bab1-26d44a9dd062",
+  "retainedAccess": false,
+  "rootRecoveryExercised": false,
+  "repositoryAccessed": false,
+  "checks": [
+    {
+      "name": "candidate_image_matches_all_capture_archive_and_cleanup_sources",
+      "passed": true
+    }
+  ],
+  "sourceSha256": "b50a22c3bcc4c72ef67f8e2fc296081b8d2cfc15a90bcfc5675a8b99aea90bbf",
+  "toolsImageId": "sha256:e014af7decee9a3a7a072ca227cd1f6d42cad27069b869c8369ed27a0a1efa3a",
+  "artifactHashes": {
+    "scripts/backup/archive.mjs": "1d16a3b02f4d2773ce8a5499749f19f17242c59e1200461a2ceb7ebd4ba58763",
+    "scripts/backup/main.mjs": "2838f47ff9064545a67abc63a67bb2004aee9b5daa202a1c4d86d924e21ab31c",
+    "scripts/backup/recovery-capture.mjs": "7d93f4a69b794b5a9c2fae4a1a930193f5b00eecc530ca56002ca77b09edc8c8",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781",
+    "scripts/openbao/protected-client.mjs": "1d6ddd82da91419288a0ff0656a1d19907f51113200d33f0e69a2a06da18d770",
+    "scripts/openbao/recovery-backup.mjs": "2c00102a0390e4ad5af3386eaac15431d64a5b5ecbd3b60d02bc0c5c88b4853b",
+    "scripts/openbao/recover-custodian.mjs": "ad6b75ea7238be3e196c25ff64ca52dd0d350b703626b96002f3a0112df6f244",
+    "scripts/openbao/finish-recovery.mjs": "5defe02890e6dd75cb5bf12aef3ae4f79148b0a4d8223ef707d28d09ea114a2a"
+  },
+  "status": "failed",
+  "failure": {
+    "stage": "setup",
+    "type": "TimeoutError",
+    "code": "details_suppressed"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

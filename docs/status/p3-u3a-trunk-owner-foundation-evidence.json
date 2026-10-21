@@ -1,5 +1,5 @@
 {
-  "operationId": "e4730229-b687-4ca2-bd94-b4d852ac0cb8",
+  "operationId": "43d72a6d-dac0-4acb-90cb-d1eea6c0672e",
   "image": "postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6",
   "sharedDatabaseAccess": false,
   "providerAccess": false,
@@ -32,10 +32,48 @@
       ]
     },
     {
+      "name": "actual_typescript_terminal_adapter",
+      "passed": true,
+      "checks": [
+        "actual_adapter_missing_audit_rolls_back_transition_and_history_at_commit",
+        "exact_scope_actor_context_and_runtime_grants_deny_transition",
+        "two_concurrent_adapter_calls_change_once_replay_without_duplicate_audit_terminal_conflict_denied"
+      ]
+    },
+    {
+      "name": "actual_typescript_reservation_adapter",
+      "passed": true,
+      "checks": [
+        "required_intent_lock_exact_scope_versions_no_extra_material_and_runtime_denials",
+        "missing_audit_rolls_back_generation_reservation_and_history",
+        "concurrent_identical_intent_commits_one_generation_receipt_history_and_audit",
+        "changed_intent_and_second_active_preparation_rejected_without_effect",
+        "terminal_same_intent_replays_retained_state_without_new_generation",
+        "distinct_concurrent_intents_serialize_binding_allocate_monotonic_ordinal_and_one_active",
+        "caller_mutation_during_audit_cannot_change_committed_scope_or_receipt"
+      ]
+    },
+    {
+      "name": "protected_work_queue_isolation",
+      "passed": true,
+      "checks": [
+        "ordinary_delivery_and_invalid_job_failure_remain_functional",
+        "ordinary_and_endpoint_consumers_leave_reserved_trunk_and_future_endpoint_jobs_unclaimed",
+        "generic_exhaustion_reconciliation_does_not_write_protected_results_or_receipts"
+      ]
+    },
+    {
       "name": "existing_role_flags_and_all_membership_edges_rejected",
       "passed": true
     }
   ],
+  "sourceArtifacts": {
+    "scripts/check-trunk-owner-foundation.py": "7b8f1746058a23b268ea3d6d96fe6ee6f755309f72649c60b45e90fdc564bd7c",
+    "scripts/check-trunk-reservations.mjs": "498a7f97dca5b455b38ab2fb2617c33ef0ef893bedc659ae58b89c3c6a2819f7",
+    "scripts/check-protected-work-isolation.mjs": "1e75da646e5da1181737286916895c9890411b54514c381e0d06a310c00018e1",
+    "services/backend/src/modules/telephony/adapters/db/trunk-reservations.ts": "c83117fe609a4b20d7add3416a394ee12987eaf75a459840bb0c0012b1365151",
+    "services/backend/src/infrastructure/worker/delivery.ts": "0e0efaa4dc24bb37fa8af9a403be2be1f70708e718578a4072391f8e2f1b3166"
+  },
   "status": "passed",
   "cleanup": {
     "exactContainerAbsent": true,

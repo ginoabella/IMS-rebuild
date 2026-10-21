@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "preparedAt": "2026-10-21 Asia/Manila (+08:00)",
+  "status": "development-storage-installed-verified-backup-readiness-pending",
+  "retainedExecutionAuthorized": true,
+  "custodianChangeAuthorized": false,
+  "snapshotIdentityProvisioningAuthorized": false,
+  "rootRecoveryAuthorized": false,
+  "productionDeploymentAuthorized": false,
+  "destructiveCleanupAuthorized": false,
+  "toolingImage": "myims-backup-tools:development-candidate",
+  "testedToolingImageId": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+  "disposablePassingOperationId": "b33b839f-6563-4082-b075-f929d7dc1286",
+  "artifacts": {
+    "docs/planning/p3-u3a-development-backup-installation-request.md": "62619079bfae9f3e8dabda7c786291e458bc0d4e269e6fc1609a35fd9b0856fa",
+    "infra/backup/Dockerfile": "8b8b9b5238d60d8e40545aa07d61cfd1a9e69a781314c83868a6716771a66fe0",
+    "infra/backup/Dockerfile.dockerignore": "39bbd426b62dbcdb1d94e57a8bf7d6499f7d3a513c31eb40bfa552d18f17d56d",
+    "infra/backup/compose.yaml": "f82e07b78708e57e7a29e8adb481555b8527ba79be996e114dfda525b4411408",
+    "infra/backup/development.env.example": "fee422055a53f7a49b9ee483f26673b63f631d2781f6990581f7c815309a8605",
+    "scripts/backup-evaluation/check-restic.py": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "scripts/backup/archive.mjs": "51bd687ad82519aedd45d7bc81054ef725f4ee23665a843dc86f7b303ed7d98b",
+    "scripts/backup/archive.test.mjs": "2c46c635f561e2c3ab304d05fdec5940d3ee260043c232e3c0e7585903dd02d9",
+    "scripts/backup/audit-poll.mjs": "d82e2822df3b5f3852189f5696e8069e457821c6d0a796c8e40ca003ff8abd73",
+    "scripts/backup/main.mjs": "a32e31cc1d2498bf21064b71520415410101d41aa6dd90766248225e77310d6e",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781",
+    "scripts/backup-host/prepare-development-host.py": "5f60c076e8e9f485ff978abbaf34d3702fa53b0d0faeca95fec6c80410895810",
+    "scripts/backup-host/storage-probe.mjs": "30789ad3963997da7d816122d41832630408446d3624b809541ca69d068adbb8",
+    "scripts/backup-host/send-alert.py": "6b7d8ce33cfe91852672b53cec24ac49788d3760a48b175104736cae85869efe",
+    "scripts/backup-host/check-alert.py": "4348d3c3b6f9ef1887bcf7d55086218788d7c73024cc953eb3dd59ebf3babc7f",
+    "scripts/backup-host/verify-development-storage.py": "1449eb4bca009b395ea244323c4a333b9a5981533d32e06d35055f1ca8c25f4b",
+    "infra/backup/development-age-recipient.txt": "93d39d31e383a29a4a10fa71b9478b335205e03f551d3c931a280d3e0698df80",
+    "scripts/backup-host/check-development-readiness.py": "4888b1b861c25462dcf17baa07dab2ea38e0ce76d578b93814d5c4d8672faeed",
+    "scripts/backup-host/check-development-readiness.test.py": "f52966fabb3404bbab0a4e1b295cf071754f19c990d772a78f9f7479efe26c2a"
+  },
+  "unresolved": [
+    "named-installer-and-existing-backup-first-route",
+    "retained-snapshot-identity-source-and-rotation-acceptance",
+    "audit-rotation-supervisor-alerting-and-housekeeping",
+    "named-operations-owners-and-measured-settings",
+    "isolated-postgresql-coordinated-recovery-and-measured-rpo-rto",
+    "measured-retention-capacity-beyond-2gib-pilot",
+    "retained-repository-access-and-provider-seal-key-usability"
+  ],
+  "previousReviewedArtifactHashes": {
+    "docs/planning/p3-u3a-development-backup-installation-request.md": "249f95a6f2ba3da3e27a9aeaf98bf3930901595ad7e9804c87b86ee51260b7c6",
+    "infra/backup/Dockerfile": "8b8b9b5238d60d8e40545aa07d61cfd1a9e69a781314c83868a6716771a66fe0",
+    "infra/backup/Dockerfile.dockerignore": "39bbd426b62dbcdb1d94e57a8bf7d6499f7d3a513c31eb40bfa552d18f17d56d",
+    "infra/backup/compose.yaml": "f82e07b78708e57e7a29e8adb481555b8527ba79be996e114dfda525b4411408",
+    "infra/backup/development.env.example": "fee422055a53f7a49b9ee483f26673b63f631d2781f6990581f7c815309a8605",
+    "scripts/backup-evaluation/check-restic.py": "1699ee0c5b6a6420eb6f6e50148ff05bd37c190b734f5e2ff6a60e7a4cf2b89c",
+    "scripts/backup/archive.mjs": "51bd687ad82519aedd45d7bc81054ef725f4ee23665a843dc86f7b303ed7d98b",
+    "scripts/backup/archive.test.mjs": "2c46c635f561e2c3ab304d05fdec5940d3ee260043c232e3c0e7585903dd02d9",
+    "scripts/backup/audit-poll.mjs": "d82e2822df3b5f3852189f5696e8069e457821c6d0a796c8e40ca003ff8abd73",
+    "scripts/backup/main.mjs": "a32e31cc1d2498bf21064b71520415410101d41aa6dd90766248225e77310d6e",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781"
+  },
+  "authorizedRetainedScope": [
+    "exact-empty-development-volume-creation",
+    "host-administrator-run-reviewed-host-preparation-and-isolated-rest-server-start"
+  ],
+  "approvalLimitations": [
+    "no-openbao-login-or-provisioning",
+    "no-backup-first-exception",
+    "no-repository-init-before-independent-credential-custody",
+    "no-retained-capture-restore-or-pruning",
+    "no-timer-activation-before-operational-and-recovery-gates",
+    "no-production-or-custodian-change"
+  ],
+  "approvalRecord": "docs/status/p3-u3a-development-backup-installation.md",
+  "emailAlert": {
+    "host": "smtp.office365.com",
+    "port": 587,
+    "security": "STARTTLS",
+    "username": "itsg.notification@sscgi.com",
+    "sender": "itsg.notification@sscgi.com",
+    "recipient": "itsg.notification@sscgi.com",
+    "passwordFile": "/srv/myims-backup-development/notification/smtp.password",
+    "passwordConfigured": true,
+    "deliveryVerified": true,
+    "networkStarttlsVerified": true,
+    "configurationValidationSource": "owner-reported administrator command",
+    "lastDeliveryAttempt": "notification_test submitted successfully; Exchange trace Delivered; owner confirmed inbox receipt",
+    "authenticationVerified": true,
+    "authenticationValidationSource": "owner-reported administrator --check-smtp passed",
+    "messageSubmitted": true,
+    "deliveryValidationSource": "owner-provided Exchange message trace: Delivered, 2026-10-21 11:12 UTC+08:00",
+    "mailboxReceiptConfirmedByOwner": true
+  },
+  "hostAdministratorHandoffRequired": false,
+  "hostInstallationDisposableProbeOperationId": "057973f8-872b-4faf-be14-36835e4942fb",
+  "storageVerificationOperationId": "913d6609-f220-4b75-8a9b-e238e2ce9320",
+  "repositoryInitialized": false,
+  "snapshotSourceCandidate": {
+    "manifest": "infra/backup/snapshot-candidate-review.json",
+    "retainedExecutionAuthorized": false
+  },
+  "ageRecipient": {
+    "publicRecipient": "age1fz9942ksf7frzwc90tmwtqr4qfz857fautmkjjgz7me7mj9xjafsdnaykq",
+    "validation": "pinned age encrypt accepted; isolated no-network disposable container, empty input discarded",
+    "hostInstalled": true,
+    "privateKeyCustodyConfirmed": false,
+    "privateKeyPossessionVerified": true,
+    "intendedPrivateKeyCustodian": "owner",
+    "hostInstallationSource": "owner-reported administrator local_checks_passed",
+    "decryptionValidationSource": "owner-reported Windows challenge plaintext SHA256 matched"
+  },
+  "authorityPreparationManifest": "infra/backup/authority-preparation-review.json",
+  "recoveryCaptureCandidate": {
+    "manifest": "infra/backup/recovery-capture-request.json",
+    "retainedExecutionAuthorized": false
+  },
+  "installedSourceScope": "Artifact hashes and tested tooling image record the installed storage-stage review. Changed archive/Dockerfile sources belong to the separately disabled recovery-capture candidate; do not rebuild or reactivate the installed tag from candidate preparation."
+}

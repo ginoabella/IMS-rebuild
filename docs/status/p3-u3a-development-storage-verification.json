@@ -1,0 +1,19 @@
+{
+  "operationId": "913d6609-f220-4b75-8a9b-e238e2ce9320",
+  "verifiedAt": "2026-10-21T02:53:27.466623+00:00",
+  "storageRunning": true,
+  "serviceIdentity": "12010:12010",
+  "isolationVerified": true,
+  "probe": {
+    "status": "passed",
+    "tlsHostnameAndCaValidated": true,
+    "authenticatedAccessVerified": true,
+    "anonymousDenied": true,
+    "otherRepositoryDenied": true,
+    "repositoryInitialized": false,
+    "repositoryWrites": 0
+  },
+  "openbaoAccess": false,
+  "backupReady": false,
+  "helperAbsent": true
+}

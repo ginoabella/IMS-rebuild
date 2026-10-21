@@ -1,0 +1,203 @@
+{
+  "operationId": "60df525b-9032-42e2-a4a6-8cd76698aed1",
+  "startedAt": "2026-10-21T07:25:03.351734+00:00",
+  "serverImage": "restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+  "clientImage": "restic/restic:0.19.1@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "normal_fixture_root_generation_disabled_and_initial_root_revoked",
+      "passed": true
+    },
+    {
+      "name": "independent_fixture_deadline_guard_armed_before_recovery_config",
+      "passed": true,
+      "maximumSeconds": 840
+    },
+    {
+      "name": "fresh_fixture_seal_quorum_root_recovery",
+      "passed": true,
+      "retainedKeyUsed": false,
+      "rootWrittenToDisk": false
+    },
+    {
+      "name": "fixture_audit_continuity_across_recovery_restart",
+      "passed": true
+    },
+    {
+      "name": "native_raft_snapshot_and_separate_audit",
+      "passed": true,
+      "snapshotBytes": 22041,
+      "auditRecords": 29
+    },
+    {
+      "name": "age_encryption_before_backup",
+      "passed": true
+    },
+    {
+      "name": "reviewed_compose_profiles_and_no_ports",
+      "passed": true
+    },
+    {
+      "name": "actual_archive_helper_passed",
+      "passed": true
+    },
+    {
+      "name": "anonymous_denied",
+      "passed": true
+    },
+    {
+      "name": "other_repository_denied",
+      "passed": true
+    },
+    {
+      "name": "host_installer_readonly_tls_auth_probe",
+      "passed": true
+    },
+    {
+      "name": "uploader_rejects_untrusted_tls_sanitized",
+      "passed": true
+    },
+    {
+      "name": "native_backup",
+      "passed": true,
+      "snapshotId": "56afd588fba3969b5a9958b5dcd0425a3de8d568f0cfd8baabbeb31e6b39dd42"
+    },
+    {
+      "name": "native_integrity_check",
+      "passed": true
+    },
+    {
+      "name": "writer_read_access_explicit",
+      "passed": true,
+      "securityBoundary": "authenticated repository clients can read"
+    },
+    {
+      "name": "config_overwrite_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "config_delete_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "snapshot_delete_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "repository_delete_denied",
+      "passed": true,
+      "http": 405
+    },
+    {
+      "name": "snapshot_overwrite_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "repository_pack_contains_no_plaintext",
+      "passed": true
+    },
+    {
+      "name": "data_pack_overwrite_denied",
+      "passed": true,
+      "http": 403,
+      "originalBytesUnchanged": true
+    },
+    {
+      "name": "data_pack_delete_denied",
+      "passed": true,
+      "http": 403,
+      "originalBytesUnchanged": true
+    },
+    {
+      "name": "client_forget_denied",
+      "passed": true,
+      "exitCode": 3
+    },
+    {
+      "name": "config_overwrite_denied_after_restart",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "snapshot_delete_denied_after_restart",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "actual_repository_check_data_helper",
+      "passed": true
+    },
+    {
+      "name": "actual_separate_audit_helper_and_uploader",
+      "passed": true
+    },
+    {
+      "name": "uploader_rejects_plaintext_spool",
+      "passed": true
+    },
+    {
+      "name": "append_new_snapshot_after_restart",
+      "passed": true
+    },
+    {
+      "name": "integrity_after_restart_and_append",
+      "passed": true
+    },
+    {
+      "name": "isolated_restore_and_manifest",
+      "passed": true
+    },
+    {
+      "name": "age_decrypt_restored_ciphertext",
+      "passed": true
+    },
+    {
+      "name": "restored_snapshot_and_audit_integrity",
+      "passed": true
+    }
+  ],
+  "developmentArtifacts": true,
+  "snapshotCandidate": false,
+  "backupFirstProvisioning": true,
+  "recoveryAuthorityCandidate": true,
+  "lastFixtureApi": "synthetic/data/fixture",
+  "serverVersion": "rest-server version rest-server 0.14.0 compiled with go1.24.3 on linux/amd64",
+  "clientVersion": "restic 0.19.1 compiled with go1.26.4 on linux/amd64",
+  "serverImageMetadata": {
+    "id": "sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/rest-server@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5"
+    ]
+  },
+  "clientImageMetadata": {
+    "id": "sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510"
+    ]
+  },
+  "status": "failed",
+  "failure": {
+    "stage": "isolated_native_restore",
+    "type": "RuntimeError",
+    "code": "synthetic_native_restore_value_unavailable",
+    "transportCause": null,
+    "httpStatus": null
+  },
+  "cleanup": {
+    "recoveryGuardStopped": true,
+    "recoveryGuardDirectoryRemoved": true,
+    "containersAbsent": true,
+    "extraRecoveryVolumesAbsent": true,
+    "volumeAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

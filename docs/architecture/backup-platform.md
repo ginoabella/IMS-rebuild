@@ -88,6 +88,39 @@ planning. Agree production targets and measure both against coordinated recovery
 hourly scheduling alone proves neither. Size staging, repository capacity and
 additional-copy lag using measured snapshot/audit growth and restore throughput.
 
+## Development artifact checkpoint
+
+The [separate candidate Compose project](../../infra/backup/compose.yaml) and
+[installation request](../planning/p3-u3a-development-backup-installation-request.md)
+implement offline native-snapshot validation/age packaging, separate cursor-based
+audit capture and authenticated TLS Restic upload with file-held credentials. All
+services require explicit profiles, an existing external volume and approved
+paths/UID/GID/quota; no automatic restart, default MyIMS integration or retained
+activation occurs. The collector requires reviewed rename/create rotation and an
+ordered segment list; missing continuity stops it. Its cursor proves local durable
+encrypted spooling, not remote upload success. The bounded spool is never pruned
+automatically. Capture identity, scheduling/alerting/rotation/housekeeping and joint
+retained recovery acceptance remain separate unfinished gates.
+
+The owner subsequently approved the bounded development installation. The
+administrator-created account and isolated Rest Server are verified running;
+[installed-state evidence](../status/p3-u3a-development-storage-verification.json)
+confirms TLS CA/hostname validation, anonymous/other-repository denial and zero
+repository writes. The repository is uninitialized. The 2-GiB pilot quota is not
+accepted full retention capacity. No timer, real native capture, pruning or restore
+is enabled. SMTP reachability/STARTTLS is verified independently of mailbox
+credentials and delivery; the alert helper requires an explicit event for sending.
+The actual installed public recipient path is empty, so independent age/key custody
+remains an actionable prerequisite.
+
+An inactive snapshot-only AppRole candidate validates issued scope and denied
+capabilities, obtains a bounded native snapshot, confirms owned-token revoke/403
+before output, and journals uncertain attempts to block subsequent logins. Its
+exclusive lock spans authentication, capture, cleanup and durable output. It is
+built/tested under a separate image tag; the installed tooling tag and provider
+remain unchanged. Retained provisioning and clock/rotation/supervisor/joint-recovery
+acceptance remain gated.
+
 ## Acceptance and authority
 
 The [disposable Restic evaluation](../status/p3-u3a-restic-backup-evaluation.md)
@@ -123,3 +156,15 @@ retained restoration and seal access also require explicit scope-specific approv
 No pre-backup exception is approved. Independent P3-U3a implementation and disposable
 verification continue; P3-U3a remains incomplete until applicable security and
 end-to-end acceptance checks pass.
+
+
+### Development recovery capture staging
+
+Private recovery capture staging uses administrator-owned
+`/srv/myims-openbao-recovery-development`, outside the backup-service-owned root.
+Its operation directories are root:root 0700; only exact capture/encryption children
+are owned by the isolated OpenBao helper UID/GID 1003. Backup clients and the uploader
+receive ciphertext and receipts only. An attended host handoff uses protected file
+and directory descriptors, exclusive writes and operation/hash checks to transfer
+ciphertext into the backup spool as UID/GID 12010. This layout grants no OpenBao
+recovery or service activation authority. Timers and cleanup remain separately gated.

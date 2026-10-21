@@ -1,0 +1,181 @@
+{
+  "version": 1,
+  "status": "preparation-in-progress-not-execution-ready",
+  "ownerAcceptedPreparationPlan": true,
+  "retainedExecutionAuthorized": false,
+  "rootRecoveryAuthorized": false,
+  "openbaoProvisioningAuthorized": false,
+  "custodianChangeAuthorized": false,
+  "backupFirstExceptionApproved": false,
+  "custodianToPreserve": "platform-owner-custodian",
+  "intendedSealCustodian": "owner (user-confirmed)",
+  "offHostSealStorage": "owner-held Windows copy; owner-reported ciphertext hash, separate wrapping-key decryption, internal manifest, seal schema and account ACL verified",
+  "independentCopyVerified": true,
+  "publicRecipientHostInstallationConfirmed": true,
+  "resticCredentialsEscrowConfirmed": true,
+  "candidateBackupWritesReference": "docs/planning/p3-u3a-backup-installation-review-manifest.json#/backupProvisioning",
+  "proposedRecoveryWindowSeconds": 840,
+  "recoveryWindowApproved": false,
+  "pending": [
+    "named-openbao-operation-owner-and-current-prestate",
+    "exact-bounded-recovery-artifacts-and-disposable-rehearsal-if-no-existing-installer",
+    "separate-final-operation-approval",
+    "retained-fresh-native-snapshot-separate-audit-encrypted-destination-and-recovery-checkpoint-before-provisioning"
+  ],
+  "artifacts": {
+    "scripts/backup-host/check-development-readiness.py": "4888b1b861c25462dcf17baa07dab2ea38e0ce76d578b93814d5c4d8672faeed",
+    "scripts/backup-host/check-development-readiness.test.py": "f52966fabb3404bbab0a4e1b295cf071754f19c990d772a78f9f7479efe26c2a",
+    "scripts/backup-evaluation/check-restic.py": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "docs/planning/p3-u3a-backup-authority-establishment-plan.md": "d3d4680e169b645398a5d947b50ad25e9a2828b0df0bd24ed0e60bfab9d09ad3",
+    "docs/status/p3-u3a-age-decryption-challenge.age": "cbafac048437ba925ebb1bc1e60346f70356b71696953e7b9dee53ac931e1e4c",
+    "docs/status/p3-u3a-age-decryption-challenge.json": "89b5384d17bca21931d0ab4b6967e773cfb6bb54f4355b2dbe791d1716774c4d",
+    "scripts/backup-host/export-restic-recovery.py": "df9997fe06c1b9aad50ac51f6f3614db94ddac53a09a41f57c49a1b837808c05",
+    "scripts/backup-host/export-restic-recovery.test.py": "2f387b3646916f6a16b81564a9baf85d8ac868ec8eb14b1f66745de45e779f6a",
+    "scripts/backup-host/verify-restic-recovery-windows.ps1": "e74c9d3b1d14efe62a78c0614ef294b243698edb51f0888669d2404447c90617",
+    "scripts/backup-host/prepare-seal-custody-windows.ps1": "533be1547dfc3c5d73a650163c965db6f2b30a0d6208b7ac329bd637dac94f89",
+    "scripts/backup-host/export-openbao-seal-recovery.py": "d9698fc0377da4896de06f4eabe510f7151532eaf3f6b069e9a8ebdd6b8a0ef1",
+    "scripts/backup-host/export-openbao-seal-recovery.test.py": "d5fe91b89b9f6e700a45c1323bd5c5a4e6e2b7d0146231154b27c3211e5bc175",
+    "infra/backup/openbao-seal-escrow-recipient.txt": "4a884a7a3a74208fd8d41c805c026ef7c478b6918eea58d6cbb19214c39c80d2",
+    "scripts/backup-host/verify-openbao-seal-recovery-windows.ps1": "5078d0bf3f4cd7f0beeb8cf00db8f9606df0e6dd001dbdd3ae84f22531efd2f2"
+  },
+  "nativeBackupFirstRehearsal": {
+    "operationId": "17af92f6-cde0-4648-99cd-a6574aaf3bc2",
+    "checksPassed": 39,
+    "status": "passed",
+    "recoveryGenerationExercised": false,
+    "cleanupVerified": true
+  },
+  "administratorReadinessTestsPassed": 4,
+  "evidence": "docs/status/p3-u3a-backup-authority-preparation.md",
+  "administratorLocalReadiness": "owner-reported local_checks_passed",
+  "ageIndependentDecryptionConfirmed": true,
+  "ageIndependentDecryptionSource": "owner-reported Windows challenge SHA256 matched",
+  "resticEscrowExport": {
+    "prepared": true,
+    "executed": true,
+    "syntheticTestsPassed": 5,
+    "includesSealKey": false,
+    "output": "/home/gino/.myims-recovery-transfer/restic-recovery.age",
+    "source": "owner-reported administrator command",
+    "ciphertextSha256": "b1d99286f4bca9ef0ded663aa08f9e476396364e25e12975dc9d6c82c5490314",
+    "offHostCopyVerified": true,
+    "packageDecryptionVerified": true,
+    "windowsVerifierPrepared": true,
+    "windowsVerifierExecuted": true,
+    "internalManifestVerified": true,
+    "windowsVerificationSource": "owner-reported recovery_package_verified; 3 files; account-restricted folder",
+    "repositoryAccessTested": false
+  },
+  "sealCustodyPreparation": {
+    "source": "owner-reported Windows helper JSON",
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "status": "separate_seal_escrow_recipient_prepared",
+    "publicRecipient": "age13k8j7hctfxentgjgd4g30qww3q2rfppz56ve87s7sw9sjmqluc4q9ysrkf",
+    "custodyFolder": "C:\\Users\\Administrator\\MyIMS-OpenBao-Seal-Custody-75d9cfa7-d2ad-41ce-9830-ca9b7941336a",
+    "identityCreatedNow": true,
+    "privateKeyPrinted": false,
+    "openbaoSealKeyRead": false,
+    "openbaoChanges": false,
+    "sealCopyCreated": false,
+    "publicRecipientValidatedByPinnedAge": true,
+    "wrappingKeyDecryptionVerified": true,
+    "sealExportPrepared": true,
+    "sealExportExecuted": true,
+    "syntheticSealExportTestsPassed": 6,
+    "sealExportResult": {
+      "source": "owner-reported administrator command",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "result": {
+        "status": "encrypted_export_created",
+        "encryptedOutput": "/home/gino/.myims-seal-recovery-transfer/openbao-seal-recovery.age",
+        "ciphertextSha256": "c837afabc352ea14a8eaa055d2bb599469d32b21d4b44c94bd7795c2662d4a04",
+        "secretContentsPrinted": false,
+        "sealFileRead": true,
+        "privateAgeKeyRead": false,
+        "sourceSealFileChanged": false,
+        "openbaoRequests": 0,
+        "keyUsabilityAgainstProviderVerified": false,
+        "offHostCopyVerified": false,
+        "repositoryInitialized": false,
+        "openbaoChanges": false
+      }
+    },
+    "windowsCiphertextTransfer": {
+      "source": "owner-reported Windows SCP and SHA256",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "sha256": "c837afabc352ea14a8eaa055d2bb599469d32b21d4b44c94bd7795c2662d4a04",
+      "matches": true,
+      "offHostCiphertextCopyVerified": true,
+      "decryptionVerified": false
+    },
+    "windowsSealVerifierPrepared": true,
+    "windowsSealVerifierExecuted": true,
+    "windowsSealVerification": {
+      "source": "owner-reported Windows JSON",
+      "date": "2026-10-21 Asia/Manila (+08:00)",
+      "result": {
+        "status": "seal_recovery_package_verified",
+        "packageDecryptionVerified": true,
+        "internalManifestVerified": true,
+        "sealFilesVerified": 1,
+        "recoveryFolder": "C:\\Users\\Administrator\\MyIMS-OpenBao-Seal-Recovery-ebd59182-09f6-471d-a3e2-0cc8fc54f4b4",
+        "sealContentsPrinted": false,
+        "keyUsabilityAgainstProviderVerified": false,
+        "openbaoRequests": 0,
+        "openbaoChanges": false
+      }
+    },
+    "independentSealRecoveryCopyVerified": true,
+    "keyUsabilityAgainstProviderVerified": false
+  },
+  "sealCustodyPreparationHistory": [
+    {
+      "windowsWrappingKeyHelperPrepared": true,
+      "windowsWrappingKeyCreated": "unconfirmed-after-keygen-stage-stop",
+      "publicRecipientKnown": false,
+      "sealExportExecuted": false,
+      "openbaoChanges": false,
+      "windowsAttemptSource": "owner-reported Windows stopped result",
+      "custodyFolder": "C:\\Users\\Administrator\\MyIMS-OpenBao-Seal-Custody-fdb1d3a3-92d6-4b95-a36e-1f4253043685",
+      "lastStage": "public_recipient",
+      "sameFolderResumePrepared": true,
+      "resumeExecuted": true,
+      "privateIdentityFileAndAclChecksPassed": true,
+      "privateIdentityValidityVerified": false,
+      "existingIdentityUsable": false,
+      "directDiagnostic": "owner-reported age-keygen -y: no identities found",
+      "existingFolderPreserved": true,
+      "nextAction": "explicit fresh invocation of corrected helper, new protected folder; no overwrite/deletion"
+    }
+  ],
+  "previousReviewedArtifactHashes": {
+    "scripts/backup-evaluation/check-restic.py": "9de35c91ca796d308a724da1eaa14c862a73359b735fa4eadffeb994b4208ef1",
+    "docs/planning/p3-u3a-backup-authority-establishment-plan.md": "8358658577a93018042b35749021fc59a14ee6a67b631101723117f6f43d995e"
+  },
+  "nativeRecoveryRehearsal": {
+    "operationId": "502dec41-e8e7-4644-bd75-4b8766b7b766",
+    "status": "passed",
+    "checksPassed": 51,
+    "checksTotal": 51,
+    "harnessSha256": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "recoveryGenerationExercised": true,
+    "isolatedRestoreSourceUnreachable": true,
+    "freshScopedRestoreAuthentication": true,
+    "custodianConfigurationPreserved": true,
+    "cleanupVerified": true,
+    "retainedAccess": false,
+    "evidence": "docs/status/p3-u3a-recovery-authority-candidate-evidence.json",
+    "limitations": [
+      "fresh synthetic state only; not the existing capture/finish host procedure",
+      "retained provider key usability untested",
+      "current effective authority inventory unverified",
+      "joint PostgreSQL recovery and measured RPO/RTO pending"
+    ],
+    "toolsImageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1"
+  },
+  "recoveryCaptureCandidate": {
+    "manifest": "infra/backup/recovery-capture-request.json",
+    "retainedExecutionAuthorized": false,
+    "retainedHostControllerValidated": false
+  }
+}

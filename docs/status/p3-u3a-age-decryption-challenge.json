@@ -1,0 +1,15 @@
+{
+  "scope": "non-sensitive offline decryption exercise; no retained backup or seal material",
+  "recipient": "age1fz9942ksf7frzwc90tmwtqr4qfz857fautmkjjgz7me7mj9xjafsdnaykq",
+  "ciphertextSha256": "cbafac048437ba925ebb1bc1e60346f70356b71696953e7b9dee53ac931e1e4c",
+  "plaintextSha256": "adf8e0a83cdf13fa1cafcd3fe5b5113320f82e59822f0b09cc56bcb436a4a910",
+  "ownerDecryptionConfirmed": true,
+  "privateKeyHandledByAgent": false,
+  "confirmation": {
+    "source": "owner-reported Windows decryption SHA256",
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "sha256": "adf8e0a83cdf13fa1cafcd3fe5b5113320f82e59822f0b09cc56bcb436a4a910",
+    "matches": true,
+    "privateKeyHandledByAgent": false
+  }
+}

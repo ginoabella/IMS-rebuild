@@ -232,13 +232,18 @@ export class DeliveryWorker {
   private async claim(): Promise<DeliveryJob | undefined> {
     // pg-boss 10.4.2 has no work-type selector. Preserve its standard queue claim
     // semantics while filtering canonical immutable intent BEFORE SKIP LOCKED claim.
+    // Both credential namespaces are reserved. Unknown future secret work must
+    // remain untouched by ordinary consumption and generic exhaustion recovery.
     // pg-boss still owns expiry, retry scheduling and complete/fail transitions.
     const result = await this.pool.query<DeliveryJob>(
       `
       WITH next AS (
         SELECT j.id FROM pgboss.job j
+        LEFT JOIN public.outbox_work w ON w.id::text=j.data->>'workId'
         WHERE j.name=$1 AND j.state<'active' AND j.start_after<now()
-        AND (COALESCE((SELECT w.work_type FROM public.outbox_work w WHERE w.id::text=j.data->>'workId'),'')=$2)=$3
+        AND (($3 AND w.work_type=$2) OR (NOT $3
+          AND COALESCE(w.work_type,'') NOT LIKE 'endpoint.credential.%'
+          AND COALESCE(w.work_type,'') NOT LIKE 'trunk.credential.%'))
         AND (NOT $3 OR EXISTS (
           SELECT 1 FROM public.endpoint_credential_operations o
           WHERE o.work_id::text=j.data->>'workId' AND o.installation_id=$4::uuid
@@ -329,7 +334,7 @@ export class DeliveryWorker {
       `INSERT INTO public.work_results(work_id,handler,attempts,outcome,failure_code,first_attempt_at,last_attempt_at,finished_at)
       SELECT DISTINCT ON (w.id) w.id,'sample.deliver',j.retry_count+1,'failed','queue_exhausted',j.started_on,j.started_on,clock_timestamp()
       FROM pgboss.job j JOIN public.outbox_work w ON w.id::text=j.data->>'workId'
-      WHERE j.name=$1 AND j.state='failed' AND w.work_type<>'endpoint.credential.prepare'
+      WHERE j.name=$1 AND j.state='failed' AND w.work_type NOT LIKE 'endpoint.credential.%' AND w.work_type NOT LIKE 'trunk.credential.%'
       AND NOT EXISTS (SELECT 1 FROM pgboss.job live WHERE live.name=$1 AND live.data->>'workId'=w.id::text AND live.state<'completed')
       AND NOT EXISTS (SELECT 1 FROM public.work_results r WHERE r.work_id=w.id AND r.outcome<>'pending')
       ORDER BY w.id,j.retry_count DESC,j.started_on DESC LIMIT $2

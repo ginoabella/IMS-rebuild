@@ -1,0 +1,209 @@
+{
+  "version": 1,
+  "status": "draft-not-execution-ready",
+  "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+  "scope": "one-development-recovery-for-native-backup-and-current-metadata-capture-only",
+  "proposedOperator": "gino, attended trusted Docker host administrator; final operation approval required",
+  "retainedExecutionAuthorized": false,
+  "rootRecoveryAuthorized": false,
+  "repositoryInitializationAuthorized": false,
+  "policyAuthRoleWritesAuthorized": false,
+  "snapshotIdentityProvisioningAuthorized": false,
+  "custodianChangeAuthorized": false,
+  "productionAuthorized": false,
+  "destructiveCleanupAuthorized": false,
+  "backupFirstExceptionApproved": false,
+  "maximumIsolationSeconds": 840,
+  "snapshotDownloadMaximumSeconds": 30,
+  "snapshotMaximumBytes": 134217728,
+  "archiveInputMaximumBytesEach": 134217728,
+  "newRootGenerationAttemptsMaximum": 1,
+  "automaticLoginOrMutationRetries": 0,
+  "currentCustodian": "platform-owner-custodian",
+  "initialRepository": "rest:https://rest-server:8000/uploader/",
+  "storagePilotQuotaBytes": 2147483648,
+  "custodyEvidence": "docs/status/p3-u3a-development-backup-installation-evidence.json",
+  "preparationEvidence": "docs/status/p3-u3a-backup-authority-preparation.md",
+  "currentProviderDockerMetadata": {
+    "name": "myims-rebuild-dev-endpoint-secrets-1",
+    "imageId": "sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+    "running": true,
+    "readOnlyRoot": true,
+    "restartPolicy": {
+      "Name": "unless-stopped",
+      "MaximumRetryCount": 0
+    },
+    "publishedPorts": {},
+    "networkNames": [
+      "myims-rebuild-dev_endpoint-credentials"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "name": "myims-rebuild-dev_endpoint-secrets-audit",
+        "source": "/var/lib/docker/volumes/myims-rebuild-dev_endpoint-secrets-audit/_data",
+        "destination": "/bao/audit",
+        "readWrite": true
+      },
+      {
+        "type": "volume",
+        "name": "myims-rebuild-dev_endpoint-secrets-data",
+        "source": "/var/lib/docker/volumes/myims-rebuild-dev_endpoint-secrets-data/_data",
+        "destination": "/bao/data",
+        "readWrite": true
+      },
+      {
+        "type": "bind",
+        "name": null,
+        "source": "/home/gino/projects/IMS-rebuild/infra/openbao/server.hcl",
+        "destination": "/bao/config/server.hcl",
+        "readWrite": false
+      },
+      {
+        "type": "bind",
+        "name": null,
+        "source": "/home/gino/projects/IMS-rebuild/.local/endpoint-credentials/server.crt",
+        "destination": "/bao/tls/server.crt",
+        "readWrite": false
+      },
+      {
+        "type": "bind",
+        "name": null,
+        "source": "/home/gino/projects/IMS-rebuild/.local/endpoint-credentials/server.key",
+        "destination": "/bao/tls/server.key",
+        "readWrite": false
+      }
+    ]
+  },
+  "normalConfigurationSha256": "e099070041db8d29a6ba0b9c6b00629cf2d2b2805706e0cda135dc4011e6bed5",
+  "artifacts": {
+    "infra/openbao/server.hcl": "e099070041db8d29a6ba0b9c6b00629cf2d2b2805706e0cda135dc4011e6bed5",
+    "infra/docker/compose.credentials.yaml": "936b55dd178d5e92ed07547951c2076db68e333ce3622a942abb9c39b0a6f7b0",
+    "infra/docker/compose.openbao-recovery.yaml": "d16977b20fecefecc5edd93cec47cc85b07da2ac32f6316826618462841bf3db",
+    "scripts/openbao/prepare-recovery-config.mjs": "4b2bf34ca00e900f2ad4dd136e843b6b2c50c43304ec8bc4a5be0cbc245736f2",
+    "scripts/openbao/recover-custodian.mjs": "ad6b75ea7238be3e196c25ff64ca52dd0d350b703626b96002f3a0112df6f244",
+    "scripts/openbao/recovery-backup.mjs": "2c00102a0390e4ad5af3386eaac15431d64a5b5ecbd3b60d02bc0c5c88b4853b",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781",
+    "scripts/openbao/protected-client.mjs": "1d6ddd82da91419288a0ff0656a1d19907f51113200d33f0e69a2a06da18d770",
+    "scripts/openbao/finish-recovery.mjs": "5defe02890e6dd75cb5bf12aef3ae4f79148b0a4d8223ef707d28d09ea114a2a",
+    "scripts/openbao/recovery-deadline.mjs": "ab94a21e3825435a23044455281bed6cf5a550a094f20c15fbdc82cfb2c531d0",
+    "scripts/backup/archive.mjs": "f338da844a61cb3cc1e105015ba1505ac906568623645128d9bb5b3d81d5f225",
+    "scripts/backup/main.mjs": "17db8b21130cd59bdf082289947d6160e2d2e7ea94a3e10a2a4e5e747a23aa0a",
+    "scripts/backup/audit-poll.mjs": "d82e2822df3b5f3852189f5696e8069e457821c6d0a796c8e40ca003ff8abd73",
+    "scripts/backup-evaluation/check-restic.py": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "infra/backup/Dockerfile": "bcb19a5c47a6456707106314fce394aa9cfcfafed79683034281b5ba1043bc41",
+    "infra/backup/Dockerfile.dockerignore": "a659b46b5dd876d36f9fd355690a7052bad2a0755beaf8750e05b65d31483a33",
+    "infra/backup/compose.recovery-capture.yaml": "95a4f1600c29804fd46cc4421643a76412a51ab66341fbaffc670d62c1fe8eb4",
+    "scripts/backup/recovery-capture.mjs": "7121b4c48e20804be1e3ebab56b036a1fc7d76e1a06a6607d3b485ee11a821a3",
+    "scripts/backup/recovery-capture.test.mjs": "ac92c17f3126d7dabd926dc6c173f5a87600410e8656e66b74127c15939b5ad4",
+    "scripts/backup-host/recovery-handoff.py": "83d84174fc4dfe65b9004ed70400202282b98fef47f64083ea3c75f9c3dfeb23",
+    "scripts/backup-host/recovery-handoff.test.py": "c20bf93e2905ae7e689abb3edb04b384064b2bc383f620e39ce8fd7eb9dde9ec",
+    "scripts/backup-evaluation/check-recovery-capture.py": "0474a5d18a40a473f798fce1b50b8280a42e7a0db0d5f4ae22ff0a2deae1cf64",
+    "docs/planning/p3-u3a-development-recovery-capture-request.md": "c037771ba7cb1146ce61c186bd735c800148f59791778461ea26163686c11220"
+  },
+  "pending": [
+    "retained-host-empty-directory-and-one-shot-unseal-transport-preflight",
+    "provider-compose-recreation-and-deadline-label-ownership-through-normal-restoration",
+    "protected-current-metadata-capture-review-scope-acceptance",
+    "separate-owner-final-recovery-and-repository-init-approval"
+  ],
+  "laterProvisioning": "No policy/auth/role/user writes in this request. Current inventory must be reviewed separately before approving the four existing snapshot-identity provisioning objects.",
+  "previousReviewedArtifactHashes": {
+    "scripts/backup-evaluation/check-restic.py": "485fbdbe25d70e81f20945734422f051594c0dc85375b04bf6b6ed418f157599"
+  },
+  "nativeRecoveryRehearsal": {
+    "operationId": "502dec41-e8e7-4644-bd75-4b8766b7b766",
+    "status": "passed",
+    "checksPassed": 51,
+    "checksTotal": 51,
+    "harnessSha256": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "recoveryGenerationExercised": true,
+    "isolatedRestoreSourceUnreachable": true,
+    "freshScopedRestoreAuthentication": true,
+    "custodianConfigurationPreserved": true,
+    "cleanupVerified": true,
+    "retainedAccess": false,
+    "evidence": "docs/status/p3-u3a-recovery-authority-candidate-evidence.json",
+    "limitations": [
+      "fresh synthetic state only; not the existing capture/finish host procedure",
+      "retained provider key usability untested",
+      "current effective authority inventory unverified",
+      "joint PostgreSQL recovery and measured RPO/RTO pending"
+    ],
+    "toolsImageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1"
+  },
+  "hostStaging": {
+    "operationDirectory": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d",
+    "capture": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/capture",
+    "encrypted": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/encrypted/baseline",
+    "auditEncrypted": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/encrypted/audit-after",
+    "spool": "/srv/myims-backup-development/encrypted-spool",
+    "directories": [
+      {
+        "path": "/srv/myims-openbao-recovery-development",
+        "uid": 0,
+        "gid": 0,
+        "mode": "0700"
+      },
+      {
+        "path": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d",
+        "uid": 0,
+        "gid": 0,
+        "mode": "0700"
+      },
+      {
+        "path": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/capture",
+        "uid": 1003,
+        "gid": 1003,
+        "mode": "0700"
+      },
+      {
+        "path": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/encrypted",
+        "uid": 1003,
+        "gid": 1003,
+        "mode": "0700"
+      },
+      {
+        "path": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/encrypted/baseline",
+        "uid": 1003,
+        "gid": 1003,
+        "mode": "0700"
+      },
+      {
+        "path": "/srv/myims-openbao-recovery-development/24096f3d-bf41-4ec2-9e12-95e2057c115d/encrypted/audit-after",
+        "uid": 1003,
+        "gid": 1003,
+        "mode": "0700"
+      }
+    ]
+  },
+  "manualServiceManifest": "infra/backup/compose.recovery-capture.yaml",
+  "candidateToolsImage": {
+    "imageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
+    "tag": "myims-backup-tools:recovery-capture-candidate",
+    "retainedActivationAuthorized": false
+  },
+  "postCleanupAudit": {
+    "separateEncryptedArtifact": true,
+    "rotationContinuityVerified": false,
+    "maximumBytes": 134217728,
+    "cleanupAuthorized": false
+  },
+  "nativeCaptureHandoff": {
+    "operationId": "5353b91f-4f87-4bc8-a9b9-74de988634c2",
+    "status": "passed",
+    "checksPassed": 11,
+    "toolsImageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
+    "sourceSha256": "0474a5d18a40a473f798fce1b50b8280a42e7a0db0d5f4ae22ff0a2deae1cf64",
+    "hostHandoffSha256": "83d84174fc4dfe65b9004ed70400202282b98fef47f64083ea3c75f9c3dfeb23",
+    "retainedAccess": false,
+    "cleanupVerified": true,
+    "evidence": "docs/status/p3-u3a-recovery-capture-handoff-evidence.json"
+  },
+  "verification": {
+    "bundledArchiveAuditSnapshotTestsPassed": 35,
+    "syntheticHostHandoffTestsPassed": 6,
+    "manualComposeGraphValidated": true,
+    "retainedHostControllerValidated": false
+  }
+}

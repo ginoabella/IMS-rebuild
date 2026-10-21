@@ -1,0 +1,101 @@
+{
+  "operationId": "eba384ed-7709-4892-aeba-574c83e1c747",
+  "startedAt": "2026-10-21T05:39:13.773680+00:00",
+  "scope": "disposable-native-only",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "toolingImage": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+  "checks": [
+    {
+      "name": "no_published_ports",
+      "passed": true
+    },
+    {
+      "name": "native_names_review_and_cleanup",
+      "passed": true
+    },
+    {
+      "name": "empty_role_list_accepted_natively",
+      "passed": true
+    },
+    {
+      "name": "only_mount_names_types_exported",
+      "passed": true
+    },
+    {
+      "name": "no_fixture_secrets_exported",
+      "passed": true
+    },
+    {
+      "name": "exact_seven_request_order",
+      "passed": false
+    }
+  ],
+  "lastFixtureApi": "auth/platform-custodian/users/platform-owner-custodian",
+  "helperResult": {
+    "principal": "platform-owner-custodian",
+    "mechanism": "platform-custodian/userpass",
+    "startedAt": "2026-10-21T05:39:26.219Z",
+    "state": "reviewed",
+    "stage": "tokenRoleNames",
+    "loginAttempts": 1,
+    "metadataRequests": 3,
+    "metadata": {
+      "authMounts": [
+        {
+          "name": "platform-custodian/",
+          "type": "userpass"
+        },
+        {
+          "name": "token/",
+          "type": "token"
+        }
+      ],
+      "policyNames": [
+        "default",
+        "platform-deployment-maintainer",
+        "root"
+      ],
+      "tokenRoleNames": []
+    },
+    "identityChecks": {
+      "lookupSucceeded": true,
+      "expectedUsername": true,
+      "expectedLoginPath": true,
+      "expectedDisplayName": true,
+      "expectedPolicies": true,
+      "noIdentityPolicies": true,
+      "noPeriod": true,
+      "orphan": true,
+      "serviceToken": true,
+      "unlimitedUses": true,
+      "boundedTTL": true,
+      "boundedCreationTTL": true,
+      "explicitMaximum900": true
+    },
+    "capabilities": [],
+    "differences": [],
+    "cleanup": "revoked_and_denial_confirmed",
+    "backupAuthorityAvailability": "unknown",
+    "session": {
+      "policies": [
+        "platform-deployment-maintainer"
+      ],
+      "identityPolicies": [],
+      "period": 0,
+      "ttlSeconds": 899,
+      "creationTTLSeconds": 900,
+      "explicitMaximumSeconds": 900,
+      "renewable": true
+    },
+    "finishedAt": "2026-10-21T05:39:26.784Z"
+  },
+  "status": "failed",
+  "failureType": "RuntimeError",
+  "cleanup": {
+    "containersAbsent": true,
+    "networkAbsent": true,
+    "temporaryKeysAbsent": true,
+    "namedVolumesCreated": false
+  },
+  "finishedAt": "2026-10-21T05:39:28.573391+00:00"
+}

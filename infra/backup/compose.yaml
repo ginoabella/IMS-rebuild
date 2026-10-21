@@ -1,0 +1,132 @@
+# Review-only, separate project. No default service and no connection to MyIMS networks.
+name: myims-backup-development
+x-helper: &helper
+  image: myims-backup-tools:development-candidate
+  build:
+    context: ../..
+    dockerfile: infra/backup/Dockerfile
+  platform: linux/amd64
+  user: '${MYIMS_BACKUP_UID:?Supply approved backup service uid}:${MYIMS_BACKUP_GID:?Supply approved backup service gid}'
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: ['/tmp:rw,noexec,nosuid,nodev,size=384m,mode=1777']
+  mem_limit: 768m
+  pids_limit: 64
+  restart: 'no'
+  logging:
+    driver: local
+    options: { max-size: '2m', max-file: '3' }
+services:
+  rest-server:
+    profiles: [retained-install]
+    image: restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5
+    user: '${MYIMS_BACKUP_UID:?Supply approved backup service uid}:${MYIMS_BACKUP_GID:?Supply approved backup service gid}'
+    entrypoint: [/usr/bin/rest-server]
+    command:
+      - --path=/data
+      - --listen=:8000
+      - --append-only
+      - --private-repos
+      - --htpasswd-file=/run/auth/htpasswd
+      - --tls
+      - --tls-cert=/run/tls/server.crt
+      - --tls-key=/run/tls/server.key
+      - --tls-min-ver=1.3
+      - --max-size=${MYIMS_BACKUP_REPOSITORY_BYTES:?Supply reviewed repository quota}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: ['/tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777']
+    mem_limit: 256m
+    pids_limit: 64
+    restart: 'no'
+    networks: [repository]
+    volumes:
+      - repository:/data
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT:?Supply approved absolute host root}/server-auth'
+        target: /run/auth
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/server-tls'
+        target: /run/tls
+        read_only: true
+        bind: { create_host_path: false }
+    logging:
+      driver: local
+      options: { max-size: '2m', max-file: '3' }
+  archive:
+    <<: *helper
+    profiles: [manual-archive]
+    network_mode: none
+    command: [archive, /input, /output, /run/public/recipient.txt]
+    volumes:
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/snapshot-input'
+        target: /input
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/encrypted-spool'
+        target: /output
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/public'
+        target: /run/public
+        read_only: true
+        bind: { create_host_path: false }
+  audit-collector:
+    <<: *helper
+    profiles: [manual-audit]
+    network_mode: none
+    entrypoint: [node, /opt/scripts/backup/audit-poll.mjs]
+    command: [/audit, /state, /output]
+    volumes:
+      - type: bind
+        source: '${MYIMS_BACKUP_AUDIT_SOURCE:?Supply exact approved audit source directory}'
+        target: /audit
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/audit-state'
+        target: /state
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/encrypted-spool'
+        target: /output
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/public'
+        target: /run/public
+        read_only: true
+        bind: { create_host_path: false }
+  uploader:
+    <<: *helper
+    profiles: [manual-upload]
+    networks: [repository]
+    command: [upload, /input, /run/client, /receipts]
+    volumes:
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/encrypted-spool'
+        target: /input
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/client'
+        target: /run/client
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: '${MYIMS_BACKUP_ROOT}/receipts'
+        target: /receipts
+        bind: { create_host_path: false }
+volumes:
+  repository:
+    external: true
+    name: '${MYIMS_BACKUP_VOLUME:?Supply existing approved backup volume name}'
+networks:
+  repository:
+    name: ${MYIMS_BACKUP_NETWORK:-myims-backup-development_repository}
+    internal: true
