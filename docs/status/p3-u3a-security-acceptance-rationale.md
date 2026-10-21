@@ -18,6 +18,19 @@ real transaction/failure acceptance. Neither retained access nor retained execut
 is authorized. This planning update changes none of the observations, failed
 assertions or evidence boundaries below. Security acceptance remains incomplete.
 
+## Backup requirements decision — 2026-10-21
+
+The owner approved Restic + append-only Rest Server through Docker for development
+and production. See the [authoritative backup security requirements](../architecture/backup-platform.md).
+Timed S3 Object Lock COMPLIANCE retention is deferred, not a mandatory initial
+production criterion. Existing-data overwrite/delete/prune denial for ordinary
+clients, separate reviewed administration, encryption/key/seal custody, audit
+continuity, production independent host/copy protection and measured joint recovery
+remain mandatory. The disposable Restic native restoration evidence is not retained
+or production acceptance. Installer/backup-first/snapshot identity gates remain
+separate; no retained execution, privilege expansion or root recovery is authorized.
+All other security and integration findings below remain unresolved as recorded.
+
 ## Acceptance rationale by boundary
 
 | Boundary                        | Supported result                                                                                                                                                   | Remaining condition                                                                                                      |

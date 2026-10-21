@@ -1,0 +1,126 @@
+{
+  "operationId": "1fab76f0-229f-4935-b745-ab34e240baef",
+  "startedAt": "2026-10-21T00:39:47.746629+00:00",
+  "serverImage": "restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+  "clientImage": "restic/restic:0.19.1@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "age_encryption_before_backup",
+      "passed": true
+    },
+    {
+      "name": "anonymous_denied",
+      "passed": true
+    },
+    {
+      "name": "other_repository_denied",
+      "passed": true
+    },
+    {
+      "name": "native_backup",
+      "passed": true,
+      "snapshotId": "b5c61574dfaf65f7683003b0455d5696ddaf27f8f5b0041085a46058ffcf26e3"
+    },
+    {
+      "name": "native_integrity_check",
+      "passed": true
+    },
+    {
+      "name": "writer_read_access_explicit",
+      "passed": true,
+      "securityBoundary": "authenticated repository clients can read"
+    },
+    {
+      "name": "config_overwrite_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "config_delete_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "snapshot_delete_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "repository_delete_denied",
+      "passed": false,
+      "http": 405
+    },
+    {
+      "name": "snapshot_overwrite_denied",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "client_forget_denied",
+      "passed": true,
+      "exitCode": 3
+    },
+    {
+      "name": "config_overwrite_denied_after_restart",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "snapshot_delete_denied_after_restart",
+      "passed": true,
+      "http": 403
+    },
+    {
+      "name": "append_new_snapshot_after_restart",
+      "passed": true
+    },
+    {
+      "name": "integrity_after_restart_and_append",
+      "passed": true
+    },
+    {
+      "name": "isolated_restore_and_manifest",
+      "passed": true
+    },
+    {
+      "name": "age_decrypt_restored_ciphertext",
+      "passed": true
+    },
+    {
+      "name": "lock_delete_exception_observed",
+      "passed": true,
+      "createHttp": 200,
+      "deleteHttp": 200
+    },
+    {
+      "name": "isolated_network_and_storage",
+      "passed": true,
+      "hostPublishedPorts": 0,
+      "retainedMounts": 0
+    }
+  ],
+  "serverVersion": "rest-server version rest-server 0.14.0 compiled with go1.24.3 on linux/amd64",
+  "clientVersion": "restic 0.19.1 compiled with go1.26.4 on linux/amd64",
+  "serverImageMetadata": {
+    "id": "sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/rest-server@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5"
+    ]
+  },
+  "clientImageMetadata": {
+    "id": "sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510"
+    ]
+  },
+  "status": "failed",
+  "cleanup": {
+    "containersAbsent": true,
+    "volumeAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

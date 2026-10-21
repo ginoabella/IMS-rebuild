@@ -1,0 +1,21 @@
+{
+  "operationId": "30f431ed-eb5c-4a01-b762-d599c608fc04",
+  "startedAt": "2026-10-21T00:31:34.317273+00:00",
+  "seaweedImage": "chrislusf/seaweedfs:4.48@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "checks": [],
+  "startupDiagnostics": "",
+  "status": "failed",
+  "failure": {
+    "stage": "storage_start",
+    "type": "RuntimeError",
+    "code": "fixture_exited_before_port_binding"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

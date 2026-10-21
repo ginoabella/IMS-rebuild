@@ -1,8 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "status": "review-only-not-executable",
   "preparedAt": "2026-10-21 Asia/Manila (+08:00)",
-  "authority": "design-direction-only",
+  "authority": "architecture-and-requirements-only-no-retained-execution",
   "retainedExecutionAuthorized": false,
   "preservePrincipal": "platform-owner-custodian",
   "requiredUnresolvedFacts": {
@@ -10,7 +10,6 @@
     "installerPrincipalAndMechanism": null,
     "installerAuthorizationReference": null,
     "backupBeforeFirstWriteEvidence": null,
-    "immutableRetentionEnforcement": null,
     "archiveEncryptionRecipientAndIndependentKeyCustodian": null,
     "sealRecoveryCustodianAndAvailability": null,
     "hostJobOwner": null,
@@ -19,7 +18,13 @@
     "alertRecipientAndMechanism": null,
     "postgresRecoveryPointAndOwner": null,
     "measuredSnapshotAuditSizesAndUploadDuration": null,
-    "backupDestinationEndpointStorageAndOwner": null
+    "backupDestinationEndpointStorageAndOwner": null,
+    "appendOnlyEnforcementAndControlledPruning": null,
+    "recoverableRepositoryCredentialsCustody": null,
+    "productionIndependentRecoveryCopyOrReviewedSafeguard": null,
+    "authenticatedTlsNetworkAndCapacityControls": null,
+    "retentionVerificationScheduleAndRecoveryTargets": null,
+    "exactDockerSchedulerAndCollectorArtifacts": null
   },
   "candidateBoundsNotApproved": {
     "backupTokenSeconds": 300,
@@ -84,7 +89,7 @@
       "protectedOutput": "SecretID and accessor go only to approved custody; never this manifest"
     }
   ],
-  "firstBackupGate": "Verified encrypted native snapshot at the approved destination plus audit continuity and recovery prerequisites before maintenance provisioning; before all writes unless separately approved exact exception. Same-host SeaweedFS accepted for development; off-host storage required for production.",
+  "firstBackupGate": "Verified encrypted native snapshot at the approved destination plus audit continuity and recovery prerequisites before maintenance provisioning; before all writes unless separately approved exact exception. Same-host Rest Server accepted for development; production requires independently administered physical backup server/NAS and independently protected recovery copy or equivalent reviewed safeguard. No backup-first exception approved.",
   "maintenanceProvisioningAfterBackup": [
     {
       "method": "POST",
@@ -121,12 +126,55 @@
   },
   "activationGate": "Exact bodies tested on pinned disposable 2.7.1, owner-supplied facts, protected pre-state and effective-authority review, hashes and host artifacts finalized, separate explicit approval; this file is not an executor input.",
   "storagePlacementDecision": {
-    "software": "SeaweedFS community edition",
-    "development": "Same physical host as development environment is owner-accepted; dedicated Docker container and persistent storage proposed",
-    "production": "Separate physical machine required",
+    "software": "Restic + append-only Rest Server through Docker",
+    "development": "Same physical host as development environment is owner-accepted; dedicated Rest Server Docker container and persistent storage proposed",
+    "production": "Independently administered physical backup server or NAS; restricted network, authenticated TLS, monitored capacity and additional independently protected recovery copy or equivalent reviewed backup-host-compromise safeguard required",
     "developmentHostLossRecoveryEstablished": false,
     "exactDeploymentApproved": false,
     "encryptionAndIndependentKeyCustodyRequired": true,
-    "backupFirstStillRequired": true
+    "backupFirstStillRequired": true,
+    "scope": "development-and-production"
+  },
+  "storageEvaluation": {
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "scope": "disposable-only",
+    "seaweedImage": "chrislusf/seaweedfs:4.48@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d",
+    "seaweedAcceptance": "failed-concurrent-retention-and-legal-hold-metadata-loss",
+    "evidence": "../status/p3-u3a-seaweedfs-backup-evaluation.md",
+    "retainedInstallationAuthorized": false,
+    "selectedPlatformEvidence": "../status/p3-u3a-restic-backup-evaluation.md",
+    "selectedPlatform": "Restic + append-only Rest Server",
+    "disposableChecksPassed": 26,
+    "productionReadinessEstablished": false
+  },
+  "platformDecision": {
+    "approved": true,
+    "date": "2026-10-21 Asia/Manila (+08:00)",
+    "supersedes": [
+      "Backblaze B2 primary-platform preference",
+      "SeaweedFS primary-platform preference",
+      "mandatory initial timed S3 Object Lock COMPLIANCE retention"
+    ],
+    "timedComplianceRetentionRequiredForInitialAcceptance": false,
+    "timedImmutableRetention": "future-security-enhancement-not-current-blocker",
+    "sameAgeArchivesManifestsAndResticWorkflow": true,
+    "ordinaryClientExistingDataOverwriteDeletePruneAllowed": false,
+    "lockFileDeletionProtocolException": true,
+    "administrativePruning": "separately-controlled-authority-and-reviewed-retention-deletion-procedures",
+    "securityRequirements": "../architecture/backup-platform.md",
+    "p3u3aComplete": false
+  },
+  "candidateOperationsNotApproved": {
+    "hourlyRetentionDays": 30,
+    "monthlyRetentionMonths": 12,
+    "auditRetentionMonths": 13,
+    "repositoryCheck": "weekly",
+    "fullDataRead": "monthly",
+    "restoreExercise": "before-readiness-quarterly-and-after-relevant-change",
+    "freshnessIncidentMinutes": 75,
+    "privateDevelopmentRpoHours": 2,
+    "privateDevelopmentRtoHours": 4,
+    "productionTargets": "agree-and-measure-before-readiness",
+    "pruningAuthorized": false
   }
 }

@@ -1,0 +1,274 @@
+{
+  "operationId": "d12729d2-e08f-4e0d-a699-d337293a0237",
+  "startedAt": "2026-10-21T00:37:38.085126+00:00",
+  "seaweedImage": "chrislusf/seaweedfs:4.48@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "bucket_versioning_enabled",
+      "passed": true
+    },
+    {
+      "name": "default_compliance_30_days",
+      "passed": true
+    },
+    {
+      "name": "native_raft_snapshot_structure",
+      "passed": true,
+      "bytes": 19993
+    },
+    {
+      "name": "separate_audit_records",
+      "passed": true,
+      "bytes": 7956,
+      "records": 7
+    },
+    {
+      "name": "age_encryption_before_upload",
+      "passed": true
+    },
+    {
+      "name": "least_privilege_upload_unique_key",
+      "passed": true,
+      "http": 200
+    },
+    {
+      "name": "uploader_read_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_list_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_other_prefix_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_bucket_create_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_delete_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_version_delete_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_retention_change_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_bucket_policy_change_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_bucket_retention_change_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_cannot_override_default_with_short_governance",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_cannot_override_default_with_short_compliance",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_cannot_supply_past_retention",
+      "passed": true,
+      "http": 400,
+      "code": "InvalidRequest"
+    },
+    {
+      "name": "conditional_same_key_upload_denied",
+      "passed": true,
+      "http": 412,
+      "code": "PreconditionFailed"
+    },
+    {
+      "name": "object_inherits_compliance_retention",
+      "passed": true
+    },
+    {
+      "name": "admin_locked_version_delete_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "admin_bypass_header_delete_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "admin_retention_shorten_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "admin_retention_remove_denied",
+      "passed": true,
+      "http": 400,
+      "code": "InvalidRequest"
+    },
+    {
+      "name": "admin_compliance_to_governance_denied",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "versioning_suspend_denied",
+      "passed": true,
+      "http": 409,
+      "code": "InvalidBucketState"
+    },
+    {
+      "name": "locked_bucket_delete_denied",
+      "passed": true,
+      "http": 409,
+      "code": "BucketNotEmpty"
+    },
+    {
+      "name": "admin_compliance_extension_persists",
+      "passed": true
+    },
+    {
+      "name": "admin_cannot_undo_retention_extension",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "existing_retention_survives_bucket_default_removal",
+      "passed": true
+    },
+    {
+      "name": "existing_version_delete_denied_without_bucket_default",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "raw_same_key_put_preserves_original_version",
+      "passed": true,
+      "rawUploadHttp": 200,
+      "newVersionCreated": true
+    },
+    {
+      "name": "raw_put_changes_current_version",
+      "passed": true
+    },
+    {
+      "name": "retention_and_bytes_survive_restart",
+      "passed": true
+    },
+    {
+      "name": "admin_delete_denied_after_restart",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "admin_shorten_denied_after_restart",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "uploader_read_denied_after_restart",
+      "passed": true,
+      "http": 403,
+      "code": "AccessDenied"
+    },
+    {
+      "name": "same_archive_and_uploader_second_independent_endpoint",
+      "passed": true,
+      "separateVolume": true,
+      "endpointConfigurationOnly": true,
+      "physicallySeparateHostTested": false
+    },
+    {
+      "name": "decrypt_and_integrity_manifest",
+      "passed": true
+    },
+    {
+      "name": "wrong_age_identity_rejected",
+      "passed": true
+    },
+    {
+      "name": "native_snapshot_checksums",
+      "passed": true
+    },
+    {
+      "name": "manifest_detects_changed_snapshot",
+      "passed": true
+    },
+    {
+      "name": "corrupt_ciphertext_rejected",
+      "passed": true
+    },
+    {
+      "name": "native_raft_restore_and_synthetic_value",
+      "passed": true,
+      "separateContainer": true,
+      "separateAuditPreserved": true
+    },
+    {
+      "name": "isolated_fixture_mounts_and_network",
+      "passed": true,
+      "retainedMounts": 0
+    }
+  ],
+  "binaryVersion": "version 30GB 4.48 530be3e37 linux amd64",
+  "imageId": "sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d",
+  "architecture": "amd64",
+  "repoDigests": [
+    "chrislusf/seaweedfs@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d"
+  ],
+  "lastSyntheticBaoRequest": {
+    "path": "synthetic/data/fixture",
+    "method": "GET"
+  },
+  "encryptedArchive": {
+    "sha256": "e64a2b168d0e8508dea9edc9f56d033223bd14ed9cbaffbfb60a8de492965389",
+    "bytes": 17129
+  },
+  "objectVersionId": "671f9b921f9a431d32af9e6235e52906",
+  "strictUnconditionalOverwriteRejection": false,
+  "status": "passed_with_limitations",
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

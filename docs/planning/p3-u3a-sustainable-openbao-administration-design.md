@@ -50,7 +50,7 @@ Names below are proposals, not existing principals or installed configuration.
 | Existing `platform-owner-custodian` | Existing intended restricted permissions only; future attended work separately authorized | Existing protected personal custody; no new snapshot, self-policy or generic administrative grant |
 | `platform-raft-snapshot-reader` | `read` on exact `sys/storage/raft/snapshot`; self lookup/revoke; capability self-query for bounded preflight | Dedicated job identity; no secret KV read/list, inventory, child issuance, policy/role/auth edits, snapshot POST/force-restore or renewal |
 | Host audit collector | Read only the exact configured audit file/closed segments and safe deployment manifest through OS permissions | No OpenBao bearer or seal key; no audit truncate/replace, provider data-volume access or API audit reconfiguration |
-| Archive uploader | Create unique objects in one approved off-host backup prefix and verify upload completion | No provider network or bearer, seal keys, restore read, archive delete/overwrite or retention bypass |
+| Archive uploader | Restic backup of age ciphertext to its scoped append-only repository; verify commit/integrity | Can read repository ciphertext; no provider bearer/network, age private/seal keys, data delete/overwrite/prune, maintenance credential or direct storage mount |
 | Attended deployment maintenance | Independently authorized metadata inspection and named maintenance targets described below | Separately unlocked human custody; no self-policy/auth edit, generic issuance, material read, restore, root or unattended human login |
 | Recovery/restore operator | Only the exact isolated test or incident scope later approved | Offline recovery custody and separate restoration authorization; neither backup nor routine maintenance can restore |
 
@@ -136,7 +136,9 @@ host supervisor may start isolated containers; no helper receives a Docker socke
    A bounded encrypted staging directory is outside every application/source mount;
    no bearer, SecretID, password or accessor enters its public manifest.
 5. After provider session cleanup, a separate uploader with no provider access sends
-   encrypted artifacts to the independently administered off-host destination.
+   age-encrypted artifacts through Restic to the approved append-only Rest Server
+   repository (same-host development permitted; independently administered physical
+   backup host/NAS required for production).
    Verify remote completion and stored-object integrity before declaring success.
    Keep a protected manifest tying snapshot, audit boundaries, configuration version,
    encryption-key version and upload acknowledgement to one backup run. Public
@@ -159,45 +161,45 @@ silently bypassed. A later second audit device is a separately reviewed availabi
 improvement, not a prerequisite to adding another service now. See
 [OpenBao audit behavior](https://openbao.org/docs/audit/).
 
-## Off-host storage, retention and operating targets
+## Approved Restic storage, retention and operating targets
 
-**Owner placement decision — 2026-10-21 (Asia/Manila, +08:00):** use free,
-open-source SeaweedFS as the proposed backup destination. Same-host Docker is
-accepted for development; production requires a separate physical machine.
-This scoped decision supersedes off-host-only wording below for development
-placement. Same-host copies cannot establish host-loss disaster recovery or
-protection from the underlying host administrator. Exact endpoint/storage/owner,
-retention enforcement and recovery evidence remain unresolved. Encryption/key
-custody, audit continuity and backup-first ordering still apply; no retained
-execution, installation or pre-backup exception is authorized. See the updated
-[installation package](p3-u3a-backup-installation-approval-package.md).
+The owner's final 2026-10-21 (Asia/Manila, +08:00) decision standardizes Docker
+Restic + append-only Rest Server for development and production. It supersedes B2
+and SeaweedFS preferences. The [authoritative backup security contract](../architecture/backup-platform.md)
+defines placement, custody, operations and acceptance. Same-host development
+accepts shared host/disk/admin failure risk. Production requires an independently
+administered physical backup server or NAS, restricted network, authenticated TLS,
+capacity monitoring and an additional independently protected recovery copy or
+equivalent reviewed backup-host-compromise safeguard. Garage is unchanged.
 
-Use an owner-designated existing remote backup destination where possible. An
-independently administered object store with enforced versioning/retention is the
-fallback design; SeaweedFS is now the proposed implementation under the placement
-decision above, with no deployment or connection performed. The local Garage
-and provider data volumes on this development host do not satisfy off-host custody.
+The owner explicitly accepts no reliable server-enforced timed COMPLIANCE
+retention. Timed immutable retention is a future enhancement, not an initial
+acceptance blocker. Ordinary clients cannot overwrite/delete/prune existing data;
+lock deletion is the narrow Restic protocol exception. Separately controlled
+attended administration reviews preservation windows, trusted capture receipts and
+suspicious snapshots before pruning. Server/host administration can bypass
+append-only mode and therefore needs separate protection. Writer ciphertext read,
+garbage/capacity and lock interference risks remain explicit.
 
-Use encryption in transit and authenticated encryption for stored bundles. Archive
-decryption keys belong to separate owner-controlled recovery custody, with a
-recorded key version and tested access independent of the failed provider. Do not
-make recovery depend solely on keys/credentials held inside the OpenBao being
-restored. Retain old decryption key versions until every dependent backup expires.
-The backup writer cannot erase archives or reduce retention; independently
-controlled lifecycle rules perform expiry. Source-host compromise must not grant
-delete rights to the off-host repository. Protected restore readers are activated
-only for an approved test or incident.
+Keep the same native snapshot/separate audit/age-encrypted archives and manifests
+across environments. Recoverable repository credentials and independently held
+age private keys must survive source/provider/backup-host loss. Retain old key
+versions until dependent data expires; keep seal/recovery custody separate.
+The [26-check disposable evaluation](../status/p3-u3a-restic-backup-evaluation.md)
+does not establish retained/production acceptance. No retained installation,
+additional login, privilege expansion or backup-first exception is authorized.
 
 Recommended initial **private-development proposals**, not approved/measured SLOs:
 
 | Item | Proposed default for review |
 | --- | --- |
 | Snapshot cadence | Hourly, plus a verified fresh run immediately before approved privileged changes |
-| Backup retention | Original target: hourly 48 hours, daily 30 days, monthly 12 months. The installation review identifies conflict with 30-day immutability and recommends hourly 30 days plus monthly 12 months; retention configuration remains unapproved |
-| Audit retention | Continuous off-host preservation for at least 13 months, covering the oldest retained snapshot through present |
-| Backup destination protection | Immutable minimum retention of 30 days; longer monthly retention independently enforced; no writer bypass |
-| Freshness alerts | Missed run or incomplete audit/upload alerts immediately; no successful off-host set for 75 minutes is an incident |
+| Backup retention | Hourly 30 days plus monthly 12 months as administrative preservation windows; configuration and separately controlled pruning remain unapproved |
+| Audit retention | Continuous separate preservation at the approved destination for at least 13 months, covering the oldest retained snapshot through present; production requires independent host/copy protection |
+| Backup destination protection | Append-only existing-data overwrite/delete/prune denial; separately controlled administrative deletion. Timed immutable retention deferred, not mandatory |
+| Freshness alerts | Missed run or incomplete audit/upload alerts immediately; no successful set at the approved destination for 75 minutes is an incident |
 | Recovery objectives | Proposed RPO at most two hours and RTO at most four hours; accept only after timed joint restore exercises |
+| Repository verification | Proposed weekly checks and monthly full data reads, plus verification after maintenance/storage change; approve bounded schedule against measured size |
 | Restore testing | Before backup readiness is claimed, quarterly thereafter, and after relevant provider/seal/storage/key changes |
 | Human/machine access review | Quarterly and upon custodian/role changes; review owned credentials before expiration |
 
@@ -324,7 +326,7 @@ The two-capability direction is now approved, with AppRole accepted for disposab
 fallback validation. Rotation/retention configuration and measured recovery
 objectives remain pending; planning targets are not operating guarantees.
 To prepare any execution request, also supply the named operator/custodian,
-existing authorized installer route, actual off-host destination and independent
+existing authorized installer route, actual approved destination and independent
 key custody, audit collector access, measured transfer limits and exact immutable
 policy/auth/role/body manifest. Those facts are deliberately unresolved here.
 Design approval alone permits no retained installation or login.
@@ -335,7 +337,8 @@ Before declaring backup/administration ready, pass disposable native tests for
 snapshot GET versus denied POST/force-restore/material/admin access; exact workload
 and human identity/TTL/overlap/generic-issuance denials; SecretID rotation and lost
 login/cleanup; separate audit append/rotation/gap/truncation faults; corruption,
-partial upload, encryption-key loss, overwrite/delete denial and retention faults;
+partial upload, encryption-key loss, append-only overwrite/delete/forget/prune denial,
+protected administrative retention/deletion and production independent-copy faults;
 an isolated full decrypt/unseal/joint-database restore and revived-authority review;
 and partial administrative writes, writer exclusion and exact cleanup. Then repeat
 only the explicitly approved retained acceptance scope. Existing recovery and

@@ -1,10 +1,26 @@
 # P3-U3a — Minimal backup installation and authority proposal
 
-Prepared 2026-10-21 (Asia/Manila, +08:00). **Separate review package; not execution
-approval or an executable installation plan.** Source: owner's Sustainable OpenBao
-Administration Design Review, approving the two-capability direction only.
-The owner subsequently said the existing operator, destination and key custodian
-are not yet known and requested recommendations. Unknown does not mean absent.
+Updated 2026-10-21 (Asia/Manila, +08:00). **Architecture/requirements decision
+recorded; review-only installation plan, no retained execution authorization.**
+Source: owner's **P3-U3a — Final Backup Platform Selection for Development and
+Production** decision. The existing two-capability OpenBao direction and custodian
+restrictions remain unchanged. Unknown operational authority does not mean absent.
+
+## Approved platform and evaluation boundary
+
+**Restic + append-only Rest Server through Docker is selected for both development
+and production**, superseding B2/SeaweedFS primary-platform preferences. The owner
+explicitly accepts the absence of reliable server-enforced timed COMPLIANCE
+retention. Timed immutable retention is a future security enhancement, not a current
+acceptance blocker. The [authoritative backup security contract](../architecture/backup-platform.md)
+preserves all other custody, recovery and operational requirements.
+
+The [Restic evaluation](../status/p3-u3a-restic-backup-evaluation.md) passed 26/26
+disposable native backup/restart/append-only/retrieval/decryption/restore checks.
+The [SeaweedFS evaluation](../status/p3-u3a-seaweedfs-backup-evaluation.md) remains
+historical evidence of failed concurrent retention/hold enforcement. Neither
+report establishes retained installation or production readiness. No retained
+service, credential, snapshot identity or schedule was created by this decision.
 
 ## Recommended small implementation
 
@@ -19,25 +35,21 @@ timer and a separate OS audit collector. Use the current provider and network;
 no new scheduler service, database, secret store or OpenBao restart is needed by
 this design. Actual host service installation still needs its own approval.
 
-The owner requested free, open-source Docker storage and accepted **same-host
-SeaweedFS for development**, with a **separate physical machine required for
-production** (2026-10-21, Asia/Manila, +08:00). SeaweedFS replaces the earlier B2
-recommendation in this proposal. Its community edition is Apache-2.0 licensed;
-Docker/S3 and Object Lock are documented in the [project](https://github.com/seaweedfs/seaweedfs)
-and [retention guide](https://github.com/seaweedfs/seaweedfs/wiki/S3-Object-Lock-and-Retention).
-Select and pin a release/image digest and validate permissions and retention
-before installation. Actual endpoint, bucket, persistent storage and owner remain
-unassigned; no container or bucket has been created.
+Use one dedicated long-running append-only Rest Server container and persistent
+repository volume; run the pinned Restic client in short-lived Docker containers.
+Preserve identical age archives, manifests and backup workflow across environments.
+Development may share the MyIMS host, accepting shared host/disk/admin failure and
+no off-host recovery guarantee. Production requires an independently administered
+physical backup server or NAS, restricted ingress, authenticated TLS with CA/name
+validation, capacity monitoring and an additional independently protected recovery
+copy or equivalent reviewed backup-host-compromise safeguard. Exact endpoints,
+volumes, custodians and safeguards are unresolved. Garage remains unchanged.
 
-The development placement decision permits a dedicated SeaweedFS Docker container
-with separately scoped persistent storage on this host. It accepts shared host,
-disk and host-administrator failure risks; it does not establish off-host disaster
-recovery or protection against a host administrator deleting the underlying files.
-Production must use separately hosted storage and independently controlled
-administration. Encryption, protected key custody, audit continuity, retention,
-backup-before-write and isolated recovery testing remain required in both scopes.
-This placement approval does not authorize retained OpenBao access/provisioning,
-job installation, backup capture, policy changes, restart, restore or root recovery.
+Ordinary clients have no overwrite/delete/prune access to existing data or storage
+mount; separately controlled administrators perform reviewed maintenance. Restic
+clients can read repository ciphertext; age private keys remain independently held.
+Lock-file deletion is the protocol exception, not permission to delete backup data.
+Retained deployment, service activation and OpenBao access need separate approval.
 
 Encrypt bundles with [age public-key encryption](https://github.com/FiloSottile/age).
 The job holds only a reviewed recipient/public key. Recommend the owner keep the
@@ -45,7 +57,8 @@ private identity in two protected copies on separate off-host media/locations,
 with any unlocking password available independently of this host and OpenBao.
 Test decryption from each copy in an isolated exercise; retain prior key versions
 until dependent archives expire. This adds a command-line utility, not another
-secret service. No key has been generated or read. Archive keys and seal/unseal
+secret service. No retained archive key has been generated or read; evaluation-only
+synthetic keys were generated and removed. Archive keys and seal/unseal
 shares are distinct; neither belongs in the ordinary backup set.
 
 Recommend the repository owner initially be accountable for the destination,
@@ -61,11 +74,11 @@ processes and its host; a second trusted recovery custodian remains an owner cho
 | --- | --- |
 | Existing backup/maintenance route | Unknown; obtain non-secret operator/job name, mechanism, approved scope and recent success/recovery evidence from the owner |
 | Installer principal and authority | Unknown; identify an independently authorized existing installer and the authorization reference; custodian is unsuitable |
-| Actual backup destination/owner | SeaweedFS selected for this proposal; same-host Docker accepted for development, separate machine required for production. Exact endpoint, bucket/prefix, persistent volumes, owner and retention configuration remain unresolved |
+| Actual backup destination/owner | Restic/append-only Rest Server selected for both environments; exact per-environment TLS endpoint/repository, persistent volume, credentials, host/admin owner, capacity and production independent-copy/safeguard plan remain unresolved |
 | Protected encryption custody | Not established; owner names custodian, public recipient fingerprint, two private-copy locations described without secrets and independent unlock procedure |
 | Seal/TLS recovery custody | Existing protected arrangements are not re-inspected; name responsible custodian and separately authorize availability verification |
 | Host job, audit and rotation owners | Proposed owner responsibility, unconfirmed; name alert recipient and existing notification channel too |
-| Audit source and measured capacity | Source configuration describes a separate audit file; actual segment ownership, rotation mechanism, size/rate and off-host continuity are unverified |
+| Audit source and measured capacity | Source configuration describes a separate audit file; actual segment ownership, rotation mechanism, size/rate and destination continuity are unverified |
 | Joint PostgreSQL recovery | Owner/recovery point and generation-reconciliation procedure must be named; source migration success is not a database backup |
 | Size, duration and budget | Snapshot/audit growth, remote transfer, service quotas and restore throughput are unmeasured; approve limits only after disposable tests and separately authorized retained measurement |
 
@@ -73,6 +86,34 @@ The [review manifest](p3-u3a-backup-installation-review-manifest.json) records t
 as unresolved values. It deliberately cannot authorize execution. Destination,
 key custody and installer facts must be filled and reviewed **before** retained
 implementation approval; a generic provider recommendation cannot substitute.
+
+## Minimal Restic installation plan (review only)
+
+1. Prepare reviewed Docker artifacts using the evaluated pins: Rest Server
+   `restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5`
+   and Restic `restic/restic:0.19.1@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510`.
+   These are evaluated candidates, not a claim about latest releases. Require
+   `--append-only`, `--private-repos`, protected authentication, validated TLS,
+   restricted networking, persistent data, read-only container root and dropped
+   capabilities. No job receives a Docker socket or repository filesystem mount.
+2. After separate deployment approval, initialize separately scoped development
+   and production repositories through attended administration, escrow recoverable
+   repository credentials independently, and hand only scoped append-only client
+   credentials to the uploader. Keep full-access maintenance off the client path;
+   do not disable append-only mode on a client-reachable endpoint for maintenance.
+3. Resolve the existing installer/backup-first gates below before any OpenBao
+   provisioning; validate necessary snapshot-only identity and rotation in
+   disposable services. Capture native Raft plus separate audit/config/manifest,
+   age-encrypt, clean up the provider token, then invoke Restic on encrypted output.
+4. Verify append-only negatives/restart, TLS/auth isolation, outage/capacity/audit
+   alerting, credential rotation and repository integrity in disposable services.
+   Candidate operations schedule: weekly repository checks and monthly full data
+   reads; retain bounded execution and alerts. Establish production independently
+   protected copy/safeguard and verify its recovery before production acceptance.
+5. Pass the separately authorized isolated joint recovery exercise below before
+   enabling the retained hourly timer/continuous audit collector. Quarterly restore
+   exercises and post-maintenance repository verification remain required. All
+   retained provisioning, initialization and activation in this plan await approval.
 
 ## Exact installation authority and backup-first order
 
@@ -89,8 +130,9 @@ The preferred order under a separately approved operation is:
    ten-path custodian check does not satisfy this. Stop if scope is incomplete.
 2. Preserve a fresh native snapshot, complete separate audit checkpoint, encrypted
    destination acknowledgement and recovery prerequisites **before the first write**.
-   The owner accepts same-host SeaweedFS for development; production requires
-   off-host acknowledgement. This changes placement only, not backup-first order.
+   The owner accepts same-host Rest Server for development; production requires
+   independent backup-host acknowledgement and its reviewed recovery-copy safeguard.
+   Platform selection does not waive backup-first order.
    Installation prerequisites and host/storage preparation do not waive this gate.
 3. If a new backup identity is necessary, install only the four backup POSTs below;
    read back exact configuration, deliver protected credentials and perform the
@@ -217,11 +259,13 @@ and gap/truncation tests remain mandatory implementation work.
 Use unique run/object names, exclusive writes, 0700/0600 custody, bounded encrypted
 staging outside application mounts, fsync and member/hash validation. Final quota
 must include measured audit volume; no unbounded spool on an unavailable remote.
-Upload only after provider cleanup; require integrity acknowledgement and enforced
-retention confirmation. Use only the minimal metadata read needed for that check;
-no download/delete/retention-bypass rights on the routine writer. Verify actual
-remote overwrite/delete resistance; a new object version alone is not proof that
-an old version cannot be deleted. Mark a set successful only after all gates pass.
+Run Restic backup only after provider cleanup; require repository commit and
+integrity acknowledgement tied to an independently protected run receipt. Restic
+writers can read repository ciphertext and hold the repository password; age
+private keys stay absent. Verify append-only configuration and actual existing-data
+overwrite/delete/forget/prune denial, with only lock-file deletion excepted. No
+maintenance credential or direct data-volume access reaches the job. Mark a set
+successful only after all applicable gates pass.
 
 Storage/network/encryption/audit/cleanup uncertainty preserves the prior remote
 set, quarantines partial output within its quota, emits safe stage/time/count
@@ -232,25 +276,24 @@ known-weaker rollback, restore or root fallback occurs automatically.
 
 ## Storage and recovery constraints to approve
 
-The earlier 48-hour hourly tier conflicts with a 30-day immutable minimum:
-hourly objects cannot be deleted after 48 hours while still locked. Recommend
-retaining **all hourly sets for 30 days**, plus independently protected monthly
-sets for 12 months. Daily sets are then redundant within those first 30 days.
-Do not silently shorten immutability to preserve the smaller tier.
+Retain the candidate **hourly sets for 30 days plus monthly sets for 12 months**,
+with audit covering at least 13 months and the oldest retained snapshot through
+present. These are administrative preservation windows pending configuration
+approval, not timed immutable locks. The former 30-day COMPLIANCE minimum is no
+longer mandatory. Separately controlled attended maintenance reviews trusted
+receipts/capture times and suspicious additions before exact forget/prune selection;
+never trust attacker-controlled timestamps or snapshot counts alone. Ordinary
+clients cannot perform destructive maintenance. Verify recovery sets and the
+production independent copy or reviewed equivalent safeguard before separately approved pruning, then check the
+repository and record deletions. No destructive command is authorized here.
 
-Budget approximately 720 hourly sets plus up to 12 monthly sets. At the proposed
-128-MiB snapshot cutoff, 732 snapshots alone need about **91.5 GiB**, excluding
-audit, configuration, encryption overhead, temporary staging and versions. This
-is conservative planning arithmetic, not actual cluster size or a bill estimate.
-Monthly 12-month retention must be enforced by independently controlled remote
-configuration or an attended retention increase before a set is acknowledged as
-a monthly archive; a 30-day bucket default alone is insufficient. The routine
-writer cannot shorten or bypass retention.
-Thirteen months of audit can dominate storage; its rate is unknown. Remote
-retention, quota, region, cost, owner availability and achievable restore throughput
-must be reviewed after selection. Same-host SeaweedFS is explicitly accepted
-for development but supplies no independent off-host custody. Production requires
-a separate physical machine. Existing Garage application storage is unchanged.
+Budget approximately 720 hourly plus up to 12 monthly snapshots: at the proposed
+128-MiB cutoff, 732 full snapshot inputs total about **91.5 GiB**, excluding audit,
+configuration, encryption overhead, staging and additional copies. This is planning
+arithmetic, not measured Restic repository usage or a deduplication guarantee.
+Measure growth, transfer/restore throughput and audit rate before approving quota,
+spool and capacity warning/critical thresholds. Review the production recovery
+copy/safeguard's independent custody, lag, verification and host-compromise recovery.
 
 Hourly snapshots, a 75-minute freshness incident threshold, two-hour RPO,
 four-hour RTO and quarterly exercises remain private-development planning targets.
@@ -273,12 +316,36 @@ teardown. Restore permission and seal access are not conferred by this package.
 
 ## Review outcome and continued local work
 
-The smallest next decision is selection of the destination/custody/owners and
-identification of an existing authorized installer and backup route. Accepting
-this proposal would still not authorize retained execution while those facts,
-exact host artifacts, native AppRole/lifetime/rotation/negative tests, inventory
-scope and recovery evidence are unresolved. No approval question is being used
-to imply that those missing prerequisites are already satisfied.
+Platform selection and acceptance of the timed-retention limitation are settled.
+Remaining concrete approvals are listed below; none is supplied by this decision.
+
+1. **Deployment and custody configuration:** name each environment's repository/TLS
+   endpoint, host, persistent volume, administrator, job/audit/rotation/alert owners,
+   allowed network peers, CA/certificate custody and capacity thresholds. Name the
+   production additional-copy custodian or equivalent safeguard and its independent
+   deletion authority, copy lag and recovery test. Approve public age recipient,
+   independent private-key copies, recoverable Restic credentials and separate seal
+   custody references without putting secrets in this repository.
+2. **OpenBao authority and backup-first gate:** identify an already independently
+   authorized installer and existing backup route from non-secret records; separately
+   authorize exact access/effective-authority and pre-state inspection. If a new
+   snapshot identity is needed, approve the exact manifest bodies only after the
+   first-backup gate; the four-write bootstrap exception above remains unapproved
+   and needs its own explicit decision if genuinely necessary. No root recovery or
+   custodian expansion is included.
+3. **Exact installation/activation scope:** review Docker/host scheduler/collector
+   artifacts, pinned images, mounts/permissions, TLS/authentication, rollback and
+   credential handoff; approve exact retained host/service activation separately.
+   This package defines the plan but installs nothing. Production deployment needs
+   its own explicit authorization and satisfied production controls.
+4. **Operations configuration:** approve tested token/rotation/use limits, cadence,
+   administrative retention windows, verification schedule, alerts/response owners,
+   capacity/spool budget and measured recovery targets. Destructive forget/prune
+   requires separately controlled authority and reviewed operation-specific scope.
+5. **Recovery acceptance scope:** explicitly authorize isolated retained archive
+   retrieval/decryption, seal access/native restore, PostgreSQL recovery point,
+   generation/authority reconciliation and exact teardown. Record measured RPO/RTO
+   and additional-copy/safeguard recovery results before production readiness.
 
 Independent canonical owner/grants, worker isolation, provider integration,
 definitions, binding, claim/adoption and transaction testing remain authorized.

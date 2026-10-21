@@ -15,6 +15,8 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 IMAGE = 'postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6'
 operation = str(uuid.uuid4())
 container = 'myims-trunk-owner-' + operation[:8]
+adapter_container = container + '-adapter'
+database = 'myims_trunk_fixture_' + operation.replace('-', '')
 evidence = {'operationId': operation, 'image': IMAGE, 'sharedDatabaseAccess': False, 'providerAccess': False, 'checks': []}
 stage = 'start'
 
@@ -25,16 +27,17 @@ def run(args, sql=None, timeout=60):
         # SQL contains synthetic identities only; report a bounded SQLSTATE rather
         # than connection settings or raw SQL/provider/application output.
         state = re.search(r'ERROR:\s+([0-9A-Z]{5})\b', result.stderr)
-        raise RuntimeError(state.group(1) if state else 'command_failed')
+        adapter_failure = re.search(r'TRUNK_ADAPTER_FAILURE_[A-Za-z0-9_]+', result.stderr)
+        raise RuntimeError(state.group(1) if state else adapter_failure.group(0) if adapter_failure else 'command_failed')
     return result.stdout
 
 
 def query(sql):
-    return run(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-v', 'VERBOSITY=sqlstate', '-U', 'postgres', '-d', 'postgres'], sql)
+    return run(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-v', 'VERBOSITY=sqlstate', '-U', 'postgres', '-d', database], sql)
 
 
 def rejects(sql, expected):
-    result = subprocess.run(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-v', 'VERBOSITY=sqlstate', '-U', 'postgres', '-d', 'postgres'], input=sql, text=True, capture_output=True, timeout=60)
+    result = subprocess.run(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-v', 'ON_ERROR_STOP=1', '-v', 'VERBOSITY=sqlstate', '-U', 'postgres', '-d', database], input=sql, text=True, capture_output=True, timeout=60)
     if result.returncode == 0 or expected not in result.stderr:
         raise RuntimeError('expected_sql_denial_missing')
 
@@ -59,6 +62,7 @@ try:
         time.sleep(0.2)
     else:
         raise RuntimeError('database_unavailable')
+    run(['docker', 'exec', container, 'createdb', '-U', 'postgres', database])
     stage = 'migrations'
     # Prisma owns this table in normal deploy; minimal fixture satisfies only the
     # foundation migration's SELECT grant while applying all actual SQL sources.
@@ -78,7 +82,7 @@ try:
     # Neither incomplete generation/reservation is ever committed.
     def generation_insert(suffix):
         return "INSERT INTO public.trunk_credential_generations(id,binding_id,node_id,installation_id,peer_id,ordinal,operation_id) SELECT '00000000-0000-4000-8000-00000000050" + suffix + "',binding_id,node_id,installation_id,peer_id,2,'00000000-0000-4000-8000-00000000060" + suffix + "' FROM public.trunk_credential_generations WHERE id='00000000-0000-4000-8000-000000000501';"
-    holder = subprocess.Popen(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', 'postgres'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
+    holder = subprocess.Popen(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', database], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
     try:
         holder.stdin.write("BEGIN; SET LOCAL ROLE myims_trunk_owner; SET LOCAL idle_in_transaction_session_timeout='10s'; " + generation_insert('3') + "\n\\echo binding_locked\n")
         holder.stdin.flush()
@@ -101,6 +105,27 @@ try:
         if holder.stdout:
             holder.stdout.close()
     evidence['checks'].append({'name': 'two_session_binding_lock_timeout_release_and_no_partial_generation', 'passed': True})
+    stage = 'actual_typescript_reference_adapter'
+    # Select only compiled source and dependency mounts; never inherit workspace
+    # secrets, application environment, retained networks or the whole checkout.
+    workspace = json.loads(run(['docker', 'inspect', 'myims-rebuild-dev-workspace-1']))[0]
+    mounts = {m['Destination']: m for m in workspace['Mounts']}
+    runner = ['docker', 'run', '--rm', '--name', adapter_container,
+              '--label', 'myims.trunk-owner-fixture=' + operation,
+              '--network', 'container:' + container, '--read-only',
+              '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
+              '--user', '1000:1000', '--workdir', '/workspace', '--entrypoint', 'node',
+              '-e', 'TRUNK_OWNER_FIXTURE_DATABASE=' + database]
+    for destination in ['/workspace/node_modules', '/workspace/services/backend/node_modules']:
+        dependency = mounts[destination]
+        assert dependency['Type'] == 'volume'
+        runner += ['--mount', 'type=volume,src=' + dependency['Name'] + ',dst=' + destination + ',readonly']
+    for source in ['services/backend/dist', 'scripts/check-trunk-owner-references.mjs']:
+        runner += ['--mount', 'type=bind,src=' + str(ROOT / source) + ',dst=/workspace/' + source + ',readonly']
+    runner += [workspace['Image'], 'scripts/check-trunk-owner-references.mjs']
+    adapter_result = json.loads(run(runner))
+    assert adapter_result['status'] == 'passed'
+    evidence['checks'].append({'name': 'actual_typescript_reference_adapter', 'passed': True, 'checks': adapter_result['checks']})
     stage = 'existing_role_membership_gate'
     foundation = (ROOT / 'infra/database/migrations/20261020000000_trunk_credential_owner_foundation/migration.sql').read_text()
     # A NOLOGIN/NOINHERIT role is still assumable through membership. Demonstrate
@@ -121,9 +146,12 @@ except Exception as error:
     evidence['status'] = 'failed'
     evidence['failure'] = {'stage': stage, 'code': str(error) if isinstance(error, RuntimeError) else type(error).__name__}
 finally:
+    subprocess.run(['docker', 'rm', '-f', adapter_container], capture_output=True, timeout=30)
     subprocess.run(['docker', 'rm', '-f', container], capture_output=True, timeout=30)
     absent = subprocess.run(['docker', 'inspect', container], capture_output=True, timeout=15).returncode != 0
-    evidence['cleanup'] = {'exactContainerAbsent': absent, 'namedVolumesCreated': 0, 'hostPortsPublished': 0, 'retainedMounts': 0}
+    adapter_absent = subprocess.run(['docker', 'inspect', adapter_container], capture_output=True, timeout=15).returncode != 0
+    evidence['cleanup'] = {'exactContainerAbsent': absent, 'adapterContainerAbsent': adapter_absent, 'namedVolumesCreated': 0, 'hostPortsPublished': 0, 'retainedServiceDataMounts': 0, 'dependencyVolumesReadOnly': True}
+    absent = absent and adapter_absent
     evidence['status'] = evidence.get('status', 'failed') if absent else 'failed'
     output = ROOT / 'docs/status/p3-u3a-trunk-owner-foundation-evidence.json'
     archive = ROOT / ('docs/status/p3-u3a-disposable-runs/' + operation + '.json')

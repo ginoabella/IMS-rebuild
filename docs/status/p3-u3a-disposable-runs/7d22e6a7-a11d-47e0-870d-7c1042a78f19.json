@@ -1,0 +1,38 @@
+{
+  "operationId": "7d22e6a7-a11d-47e0-870d-7c1042a78f19",
+  "image": "postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6",
+  "sharedDatabaseAccess": false,
+  "providerAccess": false,
+  "checks": [
+    {
+      "name": "all_repository_migration_sources",
+      "passed": true,
+      "count": 15
+    },
+    {
+      "name": "runtime_owner_grants_exact_scope_immutable_provenance_ordinal_and_audit_rollback",
+      "passed": true
+    },
+    {
+      "name": "audited_terminal_transition_no_resurrection_retained_reference",
+      "passed": true
+    },
+    {
+      "name": "two_session_binding_lock_timeout_release_and_no_partial_generation",
+      "passed": true
+    }
+  ],
+  "status": "failed",
+  "failure": {
+    "stage": "actual_typescript_reference_adapter",
+    "code": "command_failed"
+  },
+  "cleanup": {
+    "exactContainerAbsent": true,
+    "adapterContainerAbsent": true,
+    "namedVolumesCreated": 0,
+    "hostPortsPublished": 0,
+    "retainedServiceDataMounts": 0,
+    "dependencyVolumesReadOnly": true
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "operationId": "61e2a4d9-8df1-4379-9f98-81cfd8ad3cab",
+  "operationId": "e4730229-b687-4ca2-bd94-b4d852ac0cb8",
   "image": "postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6",
   "sharedDatabaseAccess": false,
   "providerAccess": false,
@@ -22,6 +22,16 @@
       "passed": true
     },
     {
+      "name": "actual_typescript_reference_adapter",
+      "passed": true,
+      "checks": [
+        "actual_runtime_adapter_returns_exact_terminal_reference",
+        "wrong_node_installation_binding_generation_return_absent",
+        "expired_snapshot_and_base_table_denied_pool_recovers",
+        "malformed_ambiguous_scope_mismatched_rows_rejected_safe_projection"
+      ]
+    },
+    {
       "name": "existing_role_flags_and_all_membership_edges_rejected",
       "passed": true
     }
@@ -29,8 +39,10 @@
   "status": "passed",
   "cleanup": {
     "exactContainerAbsent": true,
+    "adapterContainerAbsent": true,
     "namedVolumesCreated": 0,
     "hostPortsPublished": 0,
-    "retainedMounts": 0
+    "retainedServiceDataMounts": 0,
+    "dependencyVolumesReadOnly": true
   }
 }

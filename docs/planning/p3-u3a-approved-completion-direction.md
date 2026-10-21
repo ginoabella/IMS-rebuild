@@ -150,11 +150,20 @@ snapshot, inventory access, policy write, restart, restore, recovery or live
 activation is authorized. Independent local checkpoints remain authorized and
 P3-U3a remains incomplete with all prior security/integration findings preserved.
 
-### SeaweedFS placement decision — October 21
+### Final backup platform decision — October 21
 
-The owner requested free, open-source Docker storage, then accepted SeaweedFS
-on the development host and required a separate physical machine in production.
-The installation proposal now uses SeaweedFS instead of the B2 recommendation.
+The owner selected Docker Restic + append-only Rest Server for development and
+production, superseding earlier B2 and SeaweedFS preferences. The absence of
+reliable server-enforced timed COMPLIANCE retention is explicitly accepted; timed
+immutable retention is a future enhancement, not an initial acceptance blocker.
+The [backup security contract](../architecture/backup-platform.md) preserves all
+other controls. Development may share its host; production requires an independently
+administered physical backup server/NAS, restricted network, authenticated TLS,
+capacity monitoring and an independently protected additional recovery copy or
+equivalent reviewed backup-host-compromise safeguard. The
+[installation plan and remaining approvals](p3-u3a-backup-installation-approval-package.md)
+remain review-only. P3-U3a remains incomplete pending applicable security/end-to-end
+acceptance; independent development continues without waiting for timed retention.
 This accepts shared-host failure risk only for development; it does not establish
 off-host recovery or approve deployment, retained access, privileged writes,
 backup capture or any pre-backup exception. All other backup/custody controls and

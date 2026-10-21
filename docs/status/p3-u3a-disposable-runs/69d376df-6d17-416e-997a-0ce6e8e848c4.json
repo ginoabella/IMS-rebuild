@@ -1,0 +1,50 @@
+{
+  "operationId": "69d376df-6d17-416e-997a-0ce6e8e848c4",
+  "startedAt": "2026-10-21T00:39:17.826250+00:00",
+  "serverImage": "restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+  "clientImage": "restic/restic:0.19.1@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "age_encryption_before_backup",
+      "passed": true
+    },
+    {
+      "name": "anonymous_denied",
+      "passed": true
+    },
+    {
+      "name": "other_repository_denied",
+      "passed": true
+    }
+  ],
+  "serverVersion": "rest-server version rest-server 0.14.0 compiled with go1.24.3 on linux/amd64",
+  "clientVersion": "restic 0.19.1 compiled with go1.26.4 on linux/amd64",
+  "serverImageMetadata": {
+    "id": "sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/rest-server@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5"
+    ]
+  },
+  "clientImageMetadata": {
+    "id": "sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510",
+    "architecture": "amd64",
+    "repoDigests": [
+      "restic/restic@sha256:136600b6ff6843d61d355f7f71f460a166429f35de6fd11b568fece3c9a4d510"
+    ]
+  },
+  "commandDiagnostic": "{\"message_type\":\"error\",\"error\":{\"message\":\"openfile for readdirnames failed: open /input: permission denied\"},\"during\":\"archival\",\"item\":\"/input\"}\n{\"message_type\":\"error\",\"error\":{\"message\":\"openfile for readdirnames failed: open /input: permission denied\"},\"during\":\"scan\",\"item\":\"/input\"}\n{\"message_type\":\"exit_error\",\"code\":1,\"message\":\"Fatal: unable to save snapshot: snapshot is empty\"}\n",
+  "status": "failed",
+  "failure": {
+    "stage": "backup",
+    "type": "RuntimeError",
+    "code": "command_failed_docker"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumeAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}

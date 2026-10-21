@@ -570,15 +570,30 @@ has owner approval of its two-capability direction only as of October 21. Native
 AppRole is accepted for disposable fallback validation, with numeric settings
 pending testing/configuration approval. The [installation review package](../docs/planning/p3-u3a-backup-installation-approval-package.md)
 keeps actual installer/destination/key custody unresolved and proposes one host
-workflow, separate audit and encrypted immutable off-host storage. No retained
-implementation, additional login or backup-first exception is authorized. The owner
-subsequently selected free, open-source SeaweedFS for the backup proposal and
-accepted same-host Docker placement for development; production requires a
-separate physical machine. Development accepts shared host/storage failure risk
-and establishes no off-host recovery guarantee. Encryption, independent protected
-key custody, audit continuity, retention and backup-first ordering still apply.
-Exact deployment and retained execution remain pending. Existing Garage
-application storage is unchanged.
+workflow with separate audit preservation. The owner's final October 21 decision
+selects **Docker-deployed Restic + append-only Rest Server for development and
+production**, superseding B2 and SeaweedFS primary-platform preferences. The
+[backup platform and security contract](../docs/architecture/backup-platform.md)
+defines the authoritative requirements. Same age-encrypted archives, integrity
+manifests and Restic workflow apply across environments. Timed S3 Object Lock
+COMPLIANCE retention is explicitly deferred as a future security enhancement,
+not mandatory for initial acceptance. Ordinary clients cannot overwrite/delete/
+prune existing data; separately controlled administrators review retention/deletion.
+Same-host development accepts shared host/disk/admin failure risk. Production
+requires an independently administered physical backup server or NAS, restricted
+network, authenticated TLS, monitored capacity, and an additional independently
+protected recovery copy or equivalent reviewed backup-host-compromise safeguard.
+Native Raft snapshots, separate audit, recoverable repository credentials,
+independently held age private keys and separate seal/recovery custody remain
+required. Readiness requires verified retrieval/decryption/native OpenBao restore,
+coordinated PostgreSQL recovery, generation reconciliation and measured RPO/RTO.
+The [Restic evaluation](../docs/status/p3-u3a-restic-backup-evaluation.md) passed its
+26 disposable checks; retained/production acceptance is not established. Existing
+installer, backup-first and snapshot-identity provisioning gates remain separate;
+no retained implementation, additional login, privilege expansion, pre-backup
+exception, deployment, destructive cleanup or root recovery is authorized.
+Independent P3-U3a work continues and remains incomplete. Garage application
+storage is unchanged.
 Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
 tested complete-array request constraints without changing retained policies.
 Ordinary issuance/rejection passed. Later disposable work reconciled exact

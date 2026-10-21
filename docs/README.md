@@ -24,6 +24,10 @@ and [verified results and limits](status/development-container-evidence.md).
 
 Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-services.md).
 
+Backup platform: [approved Restic architecture/security requirements](architecture/backup-platform.md)
+and [minimal installation plan and remaining approval gates](planning/p3-u3a-backup-installation-approval-package.md).
+Platform selection is approved; retained execution and production readiness remain gated.
+
 Backend foundation: [startup, migrations and health](runbooks/backend-foundation.md)
 and [P1-U3 verification evidence](status/p1-u3-evidence.md).
 

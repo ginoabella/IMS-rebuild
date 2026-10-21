@@ -1,0 +1,39 @@
+{
+  "operationId": "13e692f3-353d-4a2c-9430-f1432d1ed973",
+  "startedAt": "2026-10-21T00:33:56.328415+00:00",
+  "seaweedImage": "chrislusf/seaweedfs:4.48@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "bucket_versioning_enabled",
+      "passed": true
+    },
+    {
+      "name": "default_compliance_30_days",
+      "passed": true
+    }
+  ],
+  "binaryVersion": "version 30GB 4.48 530be3e37 linux amd64",
+  "imageId": "sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d",
+  "architecture": "amd64",
+  "repoDigests": [
+    "chrislusf/seaweedfs@sha256:4e61d15fd35994cb1e43e1e553dff106794841fd9a99ade2fc8c8bfce4d7872d"
+  ],
+  "lastSyntheticBaoRequest": {
+    "path": "sys/audit/eval",
+    "method": "POST"
+  },
+  "status": "failed",
+  "failure": {
+    "stage": "synthetic_native_snapshot",
+    "type": "HTTPError",
+    "code": "http_400"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networkAbsent": true,
+    "privateWorkDirectoryAbsent": true
+  }
+}
