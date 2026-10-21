@@ -566,7 +566,19 @@ exact ten-path scope: [evidence and limits](../docs/status/p3-u3a-retained-capab
 The account functions with intended restricted permissions; both session approvals
 are consumed. Complete privilege inventory and backup readiness are not established.
 The [consolidated sustainable administration design](../docs/planning/p3-u3a-sustainable-openbao-administration-design.md)
-is proposed for separate review only, with no retained implementation authorized.
+has owner approval of its two-capability direction only as of October 21. Native
+AppRole is accepted for disposable fallback validation, with numeric settings
+pending testing/configuration approval. The [installation review package](../docs/planning/p3-u3a-backup-installation-approval-package.md)
+keeps actual installer/destination/key custody unresolved and proposes one host
+workflow, separate audit and encrypted immutable off-host storage. No retained
+implementation, additional login or backup-first exception is authorized. The owner
+subsequently selected free, open-source SeaweedFS for the backup proposal and
+accepted same-host Docker placement for development; production requires a
+separate physical machine. Development accepts shared host/storage failure risk
+and establishes no off-host recovery guarantee. Encryption, independent protected
+key custody, audit continuity, retention and backup-first ordering still apply.
+Exact deployment and retained execution remain pending. Existing Garage
+application storage is unchanged.
 Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
 tested complete-array request constraints without changing retained policies.
 Ordinary issuance/rejection passed. Later disposable work reconciled exact

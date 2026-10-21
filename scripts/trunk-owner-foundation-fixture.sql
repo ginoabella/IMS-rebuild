@@ -149,3 +149,25 @@ BEGIN
  IF EXISTS(SELECT 1 FROM public.trunk_credential_generations WHERE id='00000000-0000-4000-8000-000000000502') THEN RAISE EXCEPTION 'Conflicting preparation did not roll back generation'; END IF;
 END;
 $body$;
+
+-- A fully evidenced terminal transition preserves its exact generation forever.
+BEGIN;
+SET LOCAL ROLE myims_trunk_owner;
+UPDATE public.trunk_credential_reservations SET state='cancelled',terminal_at=clock_timestamp()
+WHERE id='00000000-0000-4000-8000-000000000601';
+INSERT INTO public.trunk_credential_reservation_history(operation_id,state)
+VALUES('00000000-0000-4000-8000-000000000601','cancelled');
+INSERT INTO public.audit_events(id,event_type,schema_version,actor_kind,actor_reference,identity_plane,target_type,target_reference,correlation_id,metadata)
+VALUES('00000000-0000-4000-8000-000000000804','trunk.credential.cancelled',1,'platform_operator','00000000-0000-4000-8000-000000000001','platform','trunk_credential_operation','00000000-0000-4000-8000-000000000601','trunk-fixture','{"bindingId":"00000000-0000-4000-8000-000000000401","generationId":"00000000-0000-4000-8000-000000000501"}');
+COMMIT;
+SET ROLE myims_trunk_owner;
+SELECT pg_temp.expect_code('UPDATE public.trunk_credential_reservations SET state=''reserved'',terminal_at=NULL','23514');
+SELECT pg_temp.expect_code('UPDATE public.trunk_credential_reservations SET state=''failed'',terminal_at=clock_timestamp()','23514');
+RESET ROLE;
+SET SESSION AUTHORIZATION myims_runtime;
+DO $body$ BEGIN
+ IF NOT EXISTS(SELECT 1 FROM public.trunk_credential_owner_references WHERE generation_id='00000000-0000-4000-8000-000000000501' AND generation_ordinal=1 AND reservation_state='cancelled') THEN
+  RAISE EXCEPTION 'Terminal provenance disappeared';
+ END IF;
+END; $body$;
+RESET SESSION AUTHORIZATION;

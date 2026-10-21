@@ -1,6 +1,6 @@
 # P3-U3a — Canonical trunk owner database foundation
 
-Checkpoint: 2026-10-20 (Asia/Manila, +08:00). Local foundation within approved
+Checkpoint: 2026-10-20; extended verification 2026-10-21 (Asia/Manila, +08:00). Local foundation within approved
 checkpoint 2 and lifecycle L-01; neither L-01 in full, A-04 nor P3-U3a is complete.
 No retained provider/custody access or shared database migration occurred.
 
@@ -88,3 +88,24 @@ the psql-only fixture. Full Prisma deployment/default graph and endpoint/queue/A
 regressions were not rerun here. Native provider HTTP 500/expiry failures and the
 unresolved browser recovery finding remain unchanged. Backup/maintenance work
 remains design-only and no experimental runtime control was activated.
+
+## October 21 — terminal and concurrent-generation verification
+
+Extended the disposable-only SQL fixture with a successful same-transaction
+owner cancellation/history/audit commit, retained exact cancelled-generation
+reference, and denied terminal resurrection/change. Extended the host harness
+with two independent real PostgreSQL sessions: one generation insert holds the
+binding lock inside the protection trigger, the second times out with SQLSTATE
+55P03, then succeeds and rolls back after the holder rolls back. Neither partial
+generation survives. This tests the foundation's locking behavior, not a usable
+reservation command, full claim race or independently checked business authority.
+
+`python3 scripts/check-trunk-owner-foundation.py` passed, exit 0: all 15 source
+migrations, original grant/provenance/audit constraints, new terminal/concurrency
+checks and all existing role-flag/membership hazards. Exact disposable container
+removal verified; zero named volumes, published ports or retained mounts. No
+shared PostgreSQL, OpenBao or PBX access. [Immutable run](p3-u3a-disposable-runs/61e2a4d9-8df1-4379-9f98-81cfd8ad3cab.json).
+Python syntax and documentation/manifest checks are recorded in the tracker.
+Runtime TypeScript/migrations did not change; application build/default graph
+and actual SQL-adapter invocation were not rerun or newly established here.
+All previously listed acceptance limits and security failures remain.

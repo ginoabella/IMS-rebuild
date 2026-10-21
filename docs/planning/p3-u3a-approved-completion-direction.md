@@ -133,3 +133,29 @@ as the preferred direction. No retained login, credential creation, protected
 inventory access, policy change or backup/maintenance implementation is authorized.
 Independent local lifecycle/owner/grants/workers/binding work continues, with the
 native renewal/expiry and integration acceptance failures preserved.
+
+## Sustainable administration direction approval — October 21
+
+The owner approved the consolidated two-capability design direction, preserving
+the existing custodian and preferring an independently authorized existing route.
+Native AppRole is accepted for disposable fallback validation; numeric lifecycle
+settings need testing and later configuration approval. The owner has not yet
+identified the existing operator, destination or key custodian and requested
+recommendations. The [minimal installation package](p3-u3a-backup-installation-approval-package.md)
+provides candidate exact bodies/hashes, authority order, separately unapproved
+four-write pre-backup exception, host bounds and storage/recovery constraints.
+Actual facts, effective-authority scope, native tests and host artifacts must be
+reviewed before retained implementation. No retained login, identity creation,
+snapshot, inventory access, policy write, restart, restore, recovery or live
+activation is authorized. Independent local checkpoints remain authorized and
+P3-U3a remains incomplete with all prior security/integration findings preserved.
+
+### SeaweedFS placement decision — October 21
+
+The owner requested free, open-source Docker storage, then accepted SeaweedFS
+on the development host and required a separate physical machine in production.
+The installation proposal now uses SeaweedFS instead of the B2 recommendation.
+This accepts shared-host failure risk only for development; it does not establish
+off-host recovery or approve deployment, retained access, privileged writes,
+backup capture or any pre-backup exception. All other backup/custody controls and
+unresolved installer/acceptance gates remain in effect.

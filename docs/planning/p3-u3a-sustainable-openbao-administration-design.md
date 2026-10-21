@@ -1,9 +1,18 @@
 # P3-U3a — Sustainable OpenBao backup and maintenance design
 
-Prepared 2026-10-20 (Asia/Manila, +08:00). **For separate design review only.**
+Prepared 2026-10-20; direction approved 2026-10-21 (Asia/Manila, +08:00).
+**Design direction only; no retained implementation approval.**
 Source: owner's **Acceptance of Custodian Capability Verification Results and Next
 Direction**. No retained login, protected inventory/custody access, permanent
 credential creation, policy change, backup capture, restart or restore is authorized.
+The owner approved the two-capability direction, existing-route preference and
+native AppRole fallback for disposable validation. Lifetime/use/rotation values
+require practical testing and later configuration approval. See the
+[minimal installation-authority and backup package](p3-u3a-backup-installation-approval-package.md)
+and its exact review-only manifest. Installer, actual destination and independent
+key custody remain unresolved; no backup-first exception is approved. The owner
+has not identified these facts and requested recommendations.
+
 This is the consolidated preferred administrative design; earlier temporary-ticket
 and pre-backup-write manifests remain historical, unapproved contingencies.
 
@@ -152,9 +161,21 @@ improvement, not a prerequisite to adding another service now. See
 
 ## Off-host storage, retention and operating targets
 
+**Owner placement decision — 2026-10-21 (Asia/Manila, +08:00):** use free,
+open-source SeaweedFS as the proposed backup destination. Same-host Docker is
+accepted for development; production requires a separate physical machine.
+This scoped decision supersedes off-host-only wording below for development
+placement. Same-host copies cannot establish host-loss disaster recovery or
+protection from the underlying host administrator. Exact endpoint/storage/owner,
+retention enforcement and recovery evidence remain unresolved. Encryption/key
+custody, audit continuity and backup-first ordering still apply; no retained
+execution, installation or pre-backup exception is authorized. See the updated
+[installation package](p3-u3a-backup-installation-approval-package.md).
+
 Use an owner-designated existing remote backup destination where possible. An
 independently administered object store with enforced versioning/retention is the
-fallback design; no vendor/account is selected or connected here. The local Garage
+fallback design; SeaweedFS is now the proposed implementation under the placement
+decision above, with no deployment or connection performed. The local Garage
 and provider data volumes on this development host do not satisfy off-host custody.
 
 Use encryption in transit and authenticated encryption for stored bundles. Archive
@@ -172,7 +193,7 @@ Recommended initial **private-development proposals**, not approved/measured SLO
 | Item | Proposed default for review |
 | --- | --- |
 | Snapshot cadence | Hourly, plus a verified fresh run immediately before approved privileged changes |
-| Backup retention | Hourly sets for 48 hours, daily sets for 30 days, monthly sets for 12 months; no weekly tier |
+| Backup retention | Original target: hourly 48 hours, daily 30 days, monthly 12 months. The installation review identifies conflict with 30-day immutability and recommends hourly 30 days plus monthly 12 months; retention configuration remains unapproved |
 | Audit retention | Continuous off-host preservation for at least 13 months, covering the oldest retained snapshot through present |
 | Backup destination protection | Immutable minimum retention of 30 days; longer monthly retention independently enforced; no writer bypass |
 | Freshness alerts | Missed run or incomplete audit/upload alerts immediately; no successful off-host set for 75 minutes is an incident |
@@ -299,8 +320,9 @@ installation. No pre-backup exception or repeat root recovery is recommended for
 immediate execution. Keep the known retained weakness visible while this gate is
 unresolved; continue local work. Do not silently use the old temporary-ticket plan.
 
-For design review, accept/change the two-capability model, proposed AppRole/human
-fallback, rotation and retention defaults, recovery objectives and restore cadence.
+The two-capability direction is now approved, with AppRole accepted for disposable
+fallback validation. Rotation/retention configuration and measured recovery
+objectives remain pending; planning targets are not operating guarantees.
 To prepare any execution request, also supply the named operator/custodian,
 existing authorized installer route, actual off-host destination and independent
 key custody, audit collector access, measured transfer limits and exact immutable

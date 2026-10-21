@@ -1,5 +1,5 @@
 {
-  "operationId": "a2bf30e6-7238-433f-bd77-88e70f1fe8e6",
+  "operationId": "61e2a4d9-8df1-4379-9f98-81cfd8ad3cab",
   "image": "postgis/postgis:17-3.5@sha256:01a6a70e41e6c4467c8f55f6063555ed72db2d6662cd0d571040d42eadaeb6f6",
   "sharedDatabaseAccess": false,
   "providerAccess": false,
@@ -11,6 +11,14 @@
     },
     {
       "name": "runtime_owner_grants_exact_scope_immutable_provenance_ordinal_and_audit_rollback",
+      "passed": true
+    },
+    {
+      "name": "audited_terminal_transition_no_resurrection_retained_reference",
+      "passed": true
+    },
+    {
+      "name": "two_session_binding_lock_timeout_release_and_no_partial_generation",
       "passed": true
     },
     {

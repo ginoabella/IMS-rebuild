@@ -1,0 +1,132 @@
+{
+  "version": 1,
+  "status": "review-only-not-executable",
+  "preparedAt": "2026-10-21 Asia/Manila (+08:00)",
+  "authority": "design-direction-only",
+  "retainedExecutionAuthorized": false,
+  "preservePrincipal": "platform-owner-custodian",
+  "requiredUnresolvedFacts": {
+    "existingRouteDisposition": null,
+    "installerPrincipalAndMechanism": null,
+    "installerAuthorizationReference": null,
+    "backupBeforeFirstWriteEvidence": null,
+    "immutableRetentionEnforcement": null,
+    "archiveEncryptionRecipientAndIndependentKeyCustodian": null,
+    "sealRecoveryCustodianAndAvailability": null,
+    "hostJobOwner": null,
+    "rotationOwner": null,
+    "auditCollectorSourceAndOwner": null,
+    "alertRecipientAndMechanism": null,
+    "postgresRecoveryPointAndOwner": null,
+    "measuredSnapshotAuditSizesAndUploadDuration": null,
+    "backupDestinationEndpointStorageAndOwner": null
+  },
+  "candidateBoundsNotApproved": {
+    "backupTokenSeconds": 300,
+    "secretIdSeconds": 2592000,
+    "secretIdUses": 1000,
+    "rotateBeforeExpirySeconds": 604800,
+    "maintenanceSessionSeconds": 900,
+    "preChangeBackupMaxAgeSeconds": 900,
+    "jobSeconds": 600,
+    "cleanupSeconds": 60,
+    "snapshotBytes": 134217728,
+    "snapshotDownloadSeconds": 30,
+    "snapshotHourlyUtcMinute": 10,
+    "persistentCatchUp": false,
+    "automaticLoginRetries": 0,
+    "concurrency": 1
+  },
+  "backupProvisioning": [
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/platform-raft-snapshot-reader",
+      "body": {
+        "policy": "path \"sys/storage/raft/snapshot\" { capabilities = [\"read\"] }\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\n"
+      },
+      "policyUtf8Sha256": "ab94f14956e6a7a9a1574c4d524f31154378eec7a4fbad76c4912640e18fd2ff"
+    },
+    {
+      "method": "POST",
+      "path": "sys/auth/platform-backup",
+      "body": {
+        "type": "approle",
+        "description": "Dedicated scheduled Raft snapshot authentication",
+        "config": {
+          "default_lease_ttl": "300s",
+          "max_lease_ttl": "300s"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "auth/platform-backup/role/platform-raft-snapshot-reader",
+      "body": {
+        "bind_secret_id": true,
+        "secret_id_ttl": "720h",
+        "secret_id_num_uses": 1000,
+        "token_policies": [
+          "platform-raft-snapshot-reader"
+        ],
+        "token_no_default_policy": true,
+        "token_type": "service",
+        "token_ttl": "300s",
+        "token_max_ttl": "300s",
+        "token_explicit_max_ttl": "300s",
+        "token_period": 0,
+        "token_num_uses": 0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id",
+      "body": {},
+      "protectedOutput": "SecretID and accessor go only to approved custody; never this manifest"
+    }
+  ],
+  "firstBackupGate": "Verified encrypted native snapshot at the approved destination plus audit continuity and recovery prerequisites before maintenance provisioning; before all writes unless separately approved exact exception. Same-host SeaweedFS accepted for development; off-host storage required for production.",
+  "maintenanceProvisioningAfterBackup": [
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/platform-backup-maintenance",
+      "body": {
+        "policy": "path \"sys/policies/acl/platform-deployment-maintainer\" { capabilities = [\"read\", \"update\"] }\npath \"sys/policies/acl/endpoint-restricted-issuer\" { capabilities = [\"read\", \"update\"] }\npath \"sys/policies/acl/trunk-restricted-issuer\" { capabilities = [\"read\", \"update\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/role-id\" { capabilities = [\"read\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id\" { capabilities = [\"update\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/lookup\" { capabilities = [\"update\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/destroy\" { capabilities = [\"update\"] }\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\n"
+      },
+      "policyUtf8Sha256": "190c9080e7807ea5cda19778dc1df5c5dca3b1c49bd7d1646e243ab115ae3e63"
+    },
+    {
+      "method": "POST",
+      "path": "auth/platform-custodian/users/platform-backup-maintainer",
+      "bodyWithoutProtectedPassword": {
+        "token_policies": [
+          "platform-backup-maintenance"
+        ],
+        "token_no_default_policy": true,
+        "token_type": "service",
+        "token_ttl": "900s",
+        "token_max_ttl": "900s",
+        "token_explicit_max_ttl": "900s",
+        "token_period": 0,
+        "token_num_uses": 0
+      },
+      "protectedInput": "Fresh separately controlled password supplied outside argv/environment/logs/application mounts"
+    }
+  ],
+  "exception": {
+    "approved": false,
+    "scope": "Only backupProvisioning four POSTs, if no backup-first route can be established and an independently authorized non-root installer is established",
+    "maintenanceBeforeFirstBackup": false,
+    "rootRecovery": false,
+    "custodianExpansion": false
+  },
+  "activationGate": "Exact bodies tested on pinned disposable 2.7.1, owner-supplied facts, protected pre-state and effective-authority review, hashes and host artifacts finalized, separate explicit approval; this file is not an executor input.",
+  "storagePlacementDecision": {
+    "software": "SeaweedFS community edition",
+    "development": "Same physical host as development environment is owner-accepted; dedicated Docker container and persistent storage proposed",
+    "production": "Separate physical machine required",
+    "developmentHostLossRecoveryEstablished": false,
+    "exactDeploymentApproved": false,
+    "encryptionAndIndependentKeyCustodyRequired": true,
+    "backupFirstStillRequired": true
+  }
+}

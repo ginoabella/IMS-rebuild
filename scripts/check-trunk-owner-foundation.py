@@ -6,6 +6,7 @@ All database writes and roles exist only in one fresh network-none tmpfs contain
 import json
 import pathlib
 import re
+import select
 import subprocess
 import time
 import uuid
@@ -70,6 +71,36 @@ try:
     stage = 'owner_sql_acceptance'
     query((ROOT / 'scripts/trunk-owner-foundation-fixture.sql').read_text())
     evidence['checks'].append({'name': 'runtime_owner_grants_exact_scope_immutable_provenance_ordinal_and_audit_rollback', 'passed': True})
+    evidence['checks'].append({'name': 'audited_terminal_transition_no_resurrection_retained_reference', 'passed': True})
+    stage = 'concurrent_generation_binding_lock'
+    # Two real sessions enter the SECURITY DEFINER generation trigger. The first
+    # holds its binding lock; the second must time out, then succeed after rollback.
+    # Neither incomplete generation/reservation is ever committed.
+    def generation_insert(suffix):
+        return "INSERT INTO public.trunk_credential_generations(id,binding_id,node_id,installation_id,peer_id,ordinal,operation_id) SELECT '00000000-0000-4000-8000-00000000050" + suffix + "',binding_id,node_id,installation_id,peer_id,2,'00000000-0000-4000-8000-00000000060" + suffix + "' FROM public.trunk_credential_generations WHERE id='00000000-0000-4000-8000-000000000501';"
+    holder = subprocess.Popen(['docker', 'exec', '-i', container, 'psql', '-X', '-q', '-A', '-t', '-v', 'ON_ERROR_STOP=1', '-U', 'postgres', '-d', 'postgres'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
+    try:
+        holder.stdin.write("BEGIN; SET LOCAL ROLE myims_trunk_owner; SET LOCAL idle_in_transaction_session_timeout='10s'; " + generation_insert('3') + "\n\\echo binding_locked\n")
+        holder.stdin.flush()
+        available, _, _ = select.select([holder.stdout], [], [], 5)
+        if not available or holder.stdout.readline().strip() != 'binding_locked':
+            raise RuntimeError('generation_lock_holder_unavailable')
+        rejects("BEGIN; SET LOCAL ROLE myims_trunk_owner; SET LOCAL lock_timeout='250ms'; " + generation_insert('4') + " ROLLBACK;", '55P03')
+        holder.stdin.write('ROLLBACK;\n')
+        holder.stdin.close()
+        if holder.wait(timeout=5) != 0:
+            raise RuntimeError('generation_lock_holder_failed')
+        query("BEGIN; SET LOCAL ROLE myims_trunk_owner; SET LOCAL lock_timeout='2s'; " + generation_insert('4') + " ROLLBACK;")
+        query("DO $body$ BEGIN IF (SELECT count(*) FROM public.trunk_credential_generations)<>1 THEN RAISE EXCEPTION 'Uncommitted generation survived'; END IF; END; $body$;")
+    finally:
+        if holder.poll() is None:
+            holder.kill()
+            holder.wait(timeout=5)
+        if holder.stdin and not holder.stdin.closed:
+            holder.stdin.close()
+        if holder.stdout:
+            holder.stdout.close()
+    evidence['checks'].append({'name': 'two_session_binding_lock_timeout_release_and_no_partial_generation', 'passed': True})
     stage = 'existing_role_membership_gate'
     foundation = (ROOT / 'infra/database/migrations/20261020000000_trunk_credential_owner_foundation/migration.sql').read_text()
     # A NOLOGIN/NOINHERIT role is still assumable through membership. Demonstrate
