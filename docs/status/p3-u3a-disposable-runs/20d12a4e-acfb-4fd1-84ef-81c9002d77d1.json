@@ -1,0 +1,945 @@
+{
+  "operationId": "20d12a4e-acfb-4fd1-84ef-81c9002d77d1",
+  "startedAt": "2026-10-22T05:34:24.579060+00:00",
+  "scope": "disposable-native-only",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "toolingImage": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+  "checks": [
+    {
+      "name": "no_published_ports",
+      "passed": true
+    },
+    {
+      "name": "native_route_review_and_cleanup",
+      "passed": true
+    },
+    {
+      "name": "fourteen_complete_role_responses",
+      "passed": true
+    },
+    {
+      "name": "two_exact_proposed_policy_hashes",
+      "passed": true
+    },
+    {
+      "name": "direct_installer_and_mappings_not_established",
+      "passed": true
+    },
+    {
+      "name": "no_fixture_secrets_exported",
+      "passed": true
+    },
+    {
+      "name": "exact_twenty_one_native_requests",
+      "passed": true
+    },
+    {
+      "name": "only_login_capabilities_cleanup_are_posts",
+      "passed": true
+    }
+  ],
+  "lastFixtureApi": "auth/platform-custodian/users/platform-owner-custodian",
+  "helperResult": {
+    "principal": "platform-owner-custodian",
+    "mechanism": "platform-custodian/userpass",
+    "startedAt": "2026-10-22T05:34:34.818Z",
+    "state": "verified",
+    "stage": "capability_batch",
+    "loginAttempts": 1,
+    "capabilityBatches": 1,
+    "identityChecks": {
+      "lookupSucceeded": true,
+      "expectedUsername": true,
+      "expectedLoginPath": true,
+      "expectedDisplayName": true,
+      "expectedPolicies": true,
+      "noIdentityPolicies": true,
+      "noPeriod": true,
+      "orphan": true,
+      "serviceToken": true,
+      "unlimitedUses": true,
+      "boundedTTL": true,
+      "boundedCreationTTL": true,
+      "explicitMaximum900": true
+    },
+    "capabilities": [
+      {
+        "path": "sys/storage/raft/snapshot",
+        "expected": [
+          "deny"
+        ],
+        "observed": [
+          "deny"
+        ],
+        "matches": true
+      },
+      {
+        "path": "sys/policies/acl/platform-deployment-maintainer",
+        "expected": [
+          "deny"
+        ],
+        "observed": [
+          "deny"
+        ],
+        "matches": true
+      },
+      {
+        "path": "sys/policies/acl/endpoint-restricted-issuer",
+        "expected": [
+          "create",
+          "read",
+          "update"
+        ],
+        "observed": [
+          "create",
+          "read",
+          "update"
+        ],
+        "matches": true
+      },
+      {
+        "path": "sys/policies/acl/trunk-restricted-issuer",
+        "expected": [
+          "create",
+          "read",
+          "update"
+        ],
+        "observed": [
+          "create",
+          "read",
+          "update"
+        ],
+        "matches": true
+      },
+      {
+        "path": "sys/policies/acl",
+        "expected": [
+          "list"
+        ],
+        "observed": [
+          "list"
+        ],
+        "matches": true
+      },
+      {
+        "path": "auth/token/roles",
+        "expected": [
+          "list"
+        ],
+        "observed": [
+          "list"
+        ],
+        "matches": true
+      },
+      {
+        "path": "sys/auth",
+        "expected": [
+          "read"
+        ],
+        "observed": [
+          "read"
+        ],
+        "matches": true
+      },
+      {
+        "path": "identity/entity/id",
+        "expected": [
+          "deny"
+        ],
+        "observed": [
+          "deny"
+        ],
+        "matches": true
+      },
+      {
+        "path": "identity/group/id",
+        "expected": [
+          "deny"
+        ],
+        "observed": [
+          "deny"
+        ],
+        "matches": true
+      },
+      {
+        "path": "auth/token/accessors",
+        "expected": [
+          "list",
+          "sudo"
+        ],
+        "observed": [
+          "list",
+          "sudo"
+        ],
+        "matches": true
+      }
+    ],
+    "differences": [],
+    "cleanup": "revoked_and_denial_confirmed",
+    "backupAuthorityAvailability": "unknown",
+    "session": {
+      "policies": [
+        "platform-deployment-maintainer"
+      ],
+      "identityPolicies": [],
+      "period": 0,
+      "ttlSeconds": 900,
+      "creationTTLSeconds": 900,
+      "explicitMaximumSeconds": 900,
+      "renewable": true
+    },
+    "finishedAt": "2026-10-22T05:34:35.446Z",
+    "routeReview": {
+      "capabilities": [
+        {
+          "path": "sys/storage/raft/snapshot",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/platform-deployment-maintainer",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/endpoint-restricted-issuer",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/trunk-restricted-issuer",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "sys/policies/acl",
+          "observed": [
+            "list"
+          ]
+        },
+        {
+          "path": "auth/token/roles",
+          "observed": [
+            "list"
+          ]
+        },
+        {
+          "path": "sys/auth",
+          "observed": [
+            "read"
+          ]
+        },
+        {
+          "path": "identity/entity/id",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "identity/group/id",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/token/accessors",
+          "observed": [
+            "list",
+            "sudo"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/platform-raft-snapshot-reader",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/auth/platform-backup",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-backup/role/platform-raft-snapshot-reader",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/platform-backup-rotation",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-custodian/users/platform-backup-maintainer",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-custodian/users/platform-owner-custodian",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/platform-endpoint-issuer",
+          "observed": [
+            "read"
+          ]
+        },
+        {
+          "path": "auth/token/roles/platform-trunk-issuer",
+          "observed": [
+            "read"
+          ]
+        }
+      ],
+      "roles": [
+        {
+          "name": "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "responseSha256": "4116dd1c8bb15f4a6d4a71e449df6009c6fcff126f4d097a97a8c0964b35a19c",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "responseSha256": "55fa67fe426ea676476b2ddb47413ae9cf86aaf08df2871e78498dd7df579b92",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "responseSha256": "532900d653a25ea0a37bc6802ab43993676d1d3e3b6d9fdff64b7f1aea158478",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "responseSha256": "9035c65672ad2d15c47b3ced783181dc6e57e52f7e92aece32f88dc1dc750b8b",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "responseSha256": "ed5fcfdbc6988d26ed1ffe7bac60a3981c53717d020967d4a28474edec384cac",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "responseSha256": "012bcee3eee4c159e55378c8b34c9cb7a5a189c473e92bffd7d6a90b119942d3",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "responseSha256": "6a5b098fba469110a6634fbd51da26ff6202b1486d6eb936223d24a84d1550e7",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "responseSha256": "d3ec27c843665cdaf78f6f52194ce2e2d385b5aa8d3f10ec9abeaeb60ac25b46",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "responseSha256": "676fa42539bb4cc81aa274f839f4063874fc79d5a0ce6c233691e3dbf9fb066b",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "responseSha256": "2239e27d1e9ecc50a13f84c3eabe8d9c650e3daff1daeeab0c622cc7b57c58e7",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "responseSha256": "25defa08833d10179b03b72939f6264d1b9ac0cc976f6a374efb4e0f46c84bfe",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "responseSha256": "2f11ebf9ed49fafaf139c86324b4018b416a063a0bb05b970a813c26698e19c9",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "platform-endpoint-issuer",
+          "responseSha256": "3df342ec0ec14b49c38d82b25b5de32437ab4b1372a3763b38952f7cc9643a36",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        },
+        {
+          "name": "platform-trunk-issuer",
+          "responseSha256": "2b5131fedac9f61fb802863f4c52f6ca3bc0b4fbba440e6234b1b7be4f75eee2",
+          "returnedFields": [
+            "allowed_entity_aliases",
+            "allowed_policies",
+            "allowed_policies_glob",
+            "disallowed_policies",
+            "disallowed_policies_glob",
+            "explicit_max_ttl",
+            "name",
+            "orphan",
+            "path_suffix",
+            "period",
+            "renewable",
+            "token_explicit_max_ttl",
+            "token_no_default_policy",
+            "token_period",
+            "token_type"
+          ],
+          "differentConfiguredFields": [],
+          "additionalFields": [
+            "allowed_entity_aliases",
+            "explicit_max_ttl",
+            "name",
+            "path_suffix",
+            "period",
+            "token_no_default_policy"
+          ]
+        }
+      ],
+      "policies": [
+        {
+          "path": "sys/policies/acl/endpoint-restricted-issuer",
+          "currentSha256": "5bd6e2c2f5e5d266ae8f0e57b845eaeb4931db9cf0b74d4a26a72bbfd017afda",
+          "matchesHistorical": false,
+          "matchesProposed": true
+        },
+        {
+          "path": "sys/policies/acl/trunk-restricted-issuer",
+          "currentSha256": "8077e9a15727da7fa0ab3a72398022a6bdca8bf7bb9002104a2778b65dab5703",
+          "matchesHistorical": false,
+          "matchesProposed": true
+        }
+      ],
+      "installerEstablished": false,
+      "mappingsEstablished": false,
+      "scope": "Named custodian only; other installer routes remain unknown"
+    }
+  },
+  "observedAuditRequests": [
+    {
+      "path": "auth/platform-custodian/login/platform-owner-custodian",
+      "operation": "update"
+    },
+    {
+      "path": "auth/token/lookup-self",
+      "operation": "read"
+    },
+    {
+      "path": "sys/capabilities-self",
+      "operation": "update"
+    },
+    {
+      "path": "auth/token/roles/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/platform-endpoint-issuer",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/roles/platform-trunk-issuer",
+      "operation": "read"
+    },
+    {
+      "path": "sys/policies/acl/endpoint-restricted-issuer",
+      "operation": "read"
+    },
+    {
+      "path": "sys/policies/acl/trunk-restricted-issuer",
+      "operation": "read"
+    },
+    {
+      "path": "auth/token/revoke-self",
+      "operation": "update"
+    },
+    {
+      "path": "auth/token/lookup-self",
+      "operation": "read"
+    }
+  ],
+  "status": "passed",
+  "cleanup": {
+    "containersAbsent": true,
+    "networkAbsent": true,
+    "temporaryKeysAbsent": true,
+    "namedVolumesCreated": false
+  },
+  "finishedAt": "2026-10-22T05:34:37.163036+00:00"
+}

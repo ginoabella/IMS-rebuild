@@ -1,0 +1,293 @@
+{
+  "operationId": "50671e63-35fc-44f2-91ca-c90ba4e0de2d",
+  "startedAt": "2026-10-22T05:33:35.503805+00:00",
+  "scope": "disposable-native-only",
+  "openbaoImage": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "toolingImage": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
+  "checks": [
+    {
+      "name": "no_published_ports",
+      "passed": true
+    },
+    {
+      "name": "native_route_review_and_cleanup",
+      "passed": false
+    }
+  ],
+  "lastFixtureApi": "auth/platform-custodian/users/platform-owner-custodian",
+  "helperResult": {
+    "principal": "platform-owner-custodian",
+    "mechanism": "platform-custodian/userpass",
+    "startedAt": "2026-10-22T05:33:46.384Z",
+    "state": "stopped",
+    "stage": "capability_batch",
+    "loginAttempts": 1,
+    "capabilityBatches": 1,
+    "identityChecks": {
+      "lookupSucceeded": true,
+      "expectedUsername": true,
+      "expectedLoginPath": true,
+      "expectedDisplayName": true,
+      "expectedPolicies": true,
+      "noIdentityPolicies": true,
+      "noPeriod": true,
+      "orphan": true,
+      "serviceToken": true,
+      "unlimitedUses": true,
+      "boundedTTL": true,
+      "boundedCreationTTL": true,
+      "explicitMaximum900": true
+    },
+    "capabilities": [],
+    "differences": [
+      "request_failed_or_uncertain"
+    ],
+    "cleanup": "revoked_and_denial_confirmed",
+    "backupAuthorityAvailability": "unknown",
+    "session": {
+      "policies": [
+        "platform-deployment-maintainer"
+      ],
+      "identityPolicies": [],
+      "period": 0,
+      "ttlSeconds": 899,
+      "creationTTLSeconds": 900,
+      "explicitMaximumSeconds": 900,
+      "renewable": true
+    },
+    "finishedAt": "2026-10-22T05:33:47.138Z",
+    "routeReview": {
+      "capabilities": [
+        {
+          "path": "sys/storage/raft/snapshot",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/platform-deployment-maintainer",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/endpoint-restricted-issuer",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/trunk-restricted-issuer",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "sys/policies/acl",
+          "observed": [
+            "list"
+          ]
+        },
+        {
+          "path": "auth/token/roles",
+          "observed": [
+            "list"
+          ]
+        },
+        {
+          "path": "sys/auth",
+          "observed": [
+            "read"
+          ]
+        },
+        {
+          "path": "identity/entity/id",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "identity/group/id",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/token/accessors",
+          "observed": [
+            "list",
+            "sudo"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/platform-raft-snapshot-reader",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/auth/platform-backup",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-backup/role/platform-raft-snapshot-reader",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "sys/policies/acl/platform-backup-rotation",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-custodian/users/platform-backup-maintainer",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/platform-custodian/users/platform-owner-custodian",
+          "observed": [
+            "deny"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+          "observed": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        {
+          "path": "auth/token/roles/platform-endpoint-issuer",
+          "observed": [
+            "read"
+          ]
+        },
+        {
+          "path": "auth/token/roles/platform-trunk-issuer",
+          "observed": [
+            "read"
+          ]
+        }
+      ],
+      "roles": [],
+      "policies": [],
+      "installerEstablished": false,
+      "mappingsEstablished": false,
+      "scope": "Named custodian only; other installer routes remain unknown"
+    }
+  },
+  "status": "failed",
+  "failureType": "RuntimeError",
+  "cleanup": {
+    "containersAbsent": true,
+    "networkAbsent": true,
+    "temporaryKeysAbsent": true,
+    "namedVolumesCreated": false
+  },
+  "finishedAt": "2026-10-22T05:33:48.687451+00:00"
+}

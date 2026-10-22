@@ -1,0 +1,57 @@
+{
+  "operationId": "dbeec0cc-74f2-4d59-b57c-94ca4f6729d8",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "closed_prior_operation_label_and_exact_provider_metadata_reconciled",
+      "passed": true
+    },
+    {
+      "name": "native_complete_fixture_prestate_pinned",
+      "passed": true
+    },
+    {
+      "name": "native_ciphertext_upload_and_readonly_retrieval_before_writes",
+      "passed": true
+    },
+    {
+      "name": "actual_nine_write_provisioning_core",
+      "passed": true
+    },
+    {
+      "name": "native_maintenance_login_policy_readback_denials_and_revoke",
+      "passed": true
+    },
+    {
+      "name": "scoped_postinstall_snapshot_after_root_revoke_and_restoration",
+      "passed": true
+    },
+    {
+      "name": "backup_precedes_all_nine_writes",
+      "passed": true
+    },
+    {
+      "name": "root_revoked_and_normal_tls_405_restored_before_guard_cancellation",
+      "passed": true
+    },
+    {
+      "name": "final_provider_running_on_only_normal_network_with_original_restart_policy",
+      "passed": true
+    }
+  ],
+  "status": "passed",
+  "lastFixtureApi": "auth/token/revoke-self",
+  "faultAfterWrite": null,
+  "controllerSha256": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+  "provisionerSha256": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+  "harnessSha256": "54358e9e609f15516dbe05b33a9f5b05b188befbfb1dc392f4f5aa813cf0d76e",
+  "fixtureAdapterSha256": "e515442c341dabbfb3716b6b7463aa8d59052f79ae365ba99f5fe0f7c82c4895",
+  "initializerSha256": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+  "cleanup": {
+    "deadlineWatcherStopped": true,
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}

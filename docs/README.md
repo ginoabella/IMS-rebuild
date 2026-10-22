@@ -30,6 +30,13 @@ Current development backup operations: [runbook and maintenance gates](runbooks/
 [exact rotation/remediation candidate](planning/p3-u3a-backup-maintenance-review.json),
 and [disposable native rotation evidence and limits](status/p3-u3a-backup-maintenance-review.md).
 The one-time capture/upload is complete; scheduling and recovery readiness remain incomplete.
+[Current installer-route review and guarded-bootstrap handoff](status/p3-u3a-current-installer-route.md)
+records the verified installation denial and next controller work.
+[Guarded controller implementation and native rehearsal](status/p3-u3a-bootstrap-controller.md)
+records backup-first provisioning and partial-write containment.
+[Completed host wiring and post-install verification](status/p3-u3a-bootstrap-host-wiring.md)
+and the [concrete one-time execution request](planning/p3-u3a-bootstrap-execution-request.md)
+record the next separately approved retained operation.
 
 Backup platform: [approved Restic architecture/security requirements](architecture/backup-platform.md)
 and [minimal installation plan and remaining approval gates](planning/p3-u3a-backup-installation-approval-package.md).

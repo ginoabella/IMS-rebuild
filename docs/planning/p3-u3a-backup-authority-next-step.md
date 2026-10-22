@@ -8,6 +8,24 @@ is complete and consumed; it cannot authorize installation or another recovery.
 Read the [authority findings](../status/p3-u3a-captured-authority-review.md) and
 [operations runbook](../runbooks/p3-u3a-development-backup.md) first.
 
+## Current continuation result
+
+Owner reapproved this plan and continuation on October 22. The [current read-only
+installer review](../status/p3-u3a-current-installer-route.md) verified that the
+named custodian is denied all backup/rotation installation paths; its sole fresh
+session was revoked/403. The [nine-write guarded-bootstrap preparation](p3-u3a-guarded-bootstrap-preparation.json)
+now records exact candidate changes, backup-before-write ordering and remaining
+controller prerequisites. It is not executable. The [guarded controller core and native rehearsal](../status/p3-u3a-bootstrap-controller.md)
+now pass backup-first success and lost-response checks. Complete retained host
+adapters and operation packaging before requesting separate root-bootstrap execution
+approval; do not reuse the consumed capture controller or initialize the repository.
+
+The [host wiring/post-install rehearsal](../status/p3-u3a-bootstrap-host-wiring.md) is
+now complete within its disposable boundary. The [concrete one-time guarded
+bootstrap execution request](p3-u3a-bootstrap-execution-request.md) is ready for its
+separate root/staging/installation approval. Reapproval of this operating-model
+plan alone does not execute that request.
+
 ## Minimal installation candidate
 
 ### Recommended simpler operating model

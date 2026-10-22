@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "status": "guarded-bootstrap-preparation-not-executable",
+  "operator": "gino",
+  "currentRouteReviewOperation": "9ee70f51-7deb-42c5-8693-31416618bd2c",
+  "currentRouteVerifiedAt": "2026-10-22T05:35:32.208200+00:00",
+  "rootRecoveryAuthorized": false,
+  "retainedExecutionAuthorized": false,
+  "timerActivationAuthorized": false,
+  "preservePrincipal": "platform-owner-custodian",
+  "writes": [
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/endpoint-restricted-issuer",
+      "historicalPreStateSha256": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b",
+      "policyUtf8Sha256": "5bd6e2c2f5e5d266ae8f0e57b845eaeb4931db9cf0b74d4a26a72bbfd017afda",
+      "body": {
+        "policy": "path \"auth/token/create/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1s\"]\n    \"explicit_max_ttl\" = [\"1s\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/create/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1s\"]\n    \"explicit_max_ttl\" = [\"1s\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/renew-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }"
+      },
+      "precondition": "exact-live-policy-hash-equals-historical-prestate"
+    },
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/trunk-restricted-issuer",
+      "historicalPreStateSha256": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae",
+      "policyUtf8Sha256": "8077e9a15727da7fa0ab3a72398022a6bdca8bf7bb9002104a2778b65dab5703",
+      "body": {
+        "policy": "path \"auth/token/create/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/renew-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }"
+      },
+      "precondition": "exact-live-policy-hash-equals-historical-prestate"
+    },
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/platform-deployment-maintainer",
+      "historicalPreStateSha256": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64",
+      "policyUtf8Sha256": "df4964543f0f840167ec395e71f841ddf29875d9ad57cb43fb5ba5107f514b5b",
+      "body": {
+        "policy": "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/mounts\" { capabilities = [\"read\"] }\npath \"sys/auth\" { capabilities = [\"read\"] }\npath \"sys/policies/acl\" { capabilities = [\"list\"] }\npath \"auth/token/roles\" { capabilities = [\"list\"] }\npath \"auth/token/accessors\" { capabilities = [\"list\", \"sudo\"] }\npath \"auth/token/lookup-accessor\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-accessor\" { capabilities = [\"update\"] }\npath \"sys/policies/acl/endpoint-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/roles/endpoint-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/create/platform-endpoint-issuer\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-restricted-issuer\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"24h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/roles/platform-endpoint-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/trunk-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/roles/trunk-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/create/platform-trunk-issuer\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-restricted-issuer\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"24h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/roles/platform-trunk-issuer\" { capabilities = [\"read\"] }\npath \"auth/platform-custodian/users/platform-owner-custodian/password\" { capabilities = [\"update\"] }\npath \"sys/policies/acl/platform-deployment-maintainer\" { capabilities = [\"deny\"] }\npath \"auth/token/create\" { capabilities = [\"deny\"] }\npath \"auth/token/create-orphan\" { capabilities = [\"deny\"] }\npath \"sys/generate-root/*\" { capabilities = [\"deny\"] }"
+      },
+      "precondition": "exact-live-policy-hash-equals-historical-prestate"
+    },
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/platform-raft-snapshot-reader",
+      "body": {
+        "policy": "path \"sys/storage/raft/snapshot\" { capabilities = [\"read\"] }\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\n"
+      },
+      "policyUtf8Sha256": "ab94f14956e6a7a9a1574c4d524f31154378eec7a4fbad76c4912640e18fd2ff",
+      "precondition": "target-absent-before-first-write"
+    },
+    {
+      "method": "POST",
+      "path": "sys/auth/platform-backup",
+      "body": {
+        "type": "approle",
+        "description": "Dedicated scheduled Raft snapshot authentication",
+        "config": {
+          "default_lease_ttl": "300s",
+          "max_lease_ttl": "300s"
+        }
+      },
+      "precondition": "target-absent-before-first-write"
+    },
+    {
+      "method": "POST",
+      "path": "auth/platform-backup/role/platform-raft-snapshot-reader",
+      "body": {
+        "bind_secret_id": true,
+        "secret_id_ttl": "720h",
+        "secret_id_num_uses": 1000,
+        "token_policies": [
+          "platform-raft-snapshot-reader"
+        ],
+        "token_no_default_policy": true,
+        "token_type": "service",
+        "token_ttl": "300s",
+        "token_max_ttl": "300s",
+        "token_explicit_max_ttl": "300s",
+        "token_period": 0,
+        "token_num_uses": 0
+      },
+      "precondition": "target-absent-before-first-write"
+    },
+    {
+      "method": "POST",
+      "path": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id",
+      "body": {},
+      "protectedOutput": "Exclusive snapshot custody; SecretID/accessor never committed or printed",
+      "precondition": "new-exact-role-verified"
+    },
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/platform-backup-rotation",
+      "body": {
+        "policy": "path \"auth/platform-backup/role/platform-raft-snapshot-reader/role-id\" { capabilities = [\"read\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"ttl\",\"num_uses\"]\n  allowed_parameters = {\n    \"ttl\" = [\"720h\"]\n    \"num_uses\" = [\"1000\"]\n  }\n}\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/lookup\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"secret_id_accessor\"]\n  allowed_parameters = { \"secret_id_accessor\" = [] }\n}\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/destroy\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"secret_id_accessor\"]\n  allowed_parameters = { \"secret_id_accessor\" = [] }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }"
+      },
+      "policyUtf8Sha256": "7ff2a700d79257e5a069327a3c4184bdc139d48588e97352f8ada4605015641b",
+      "precondition": "target-absent-before-first-write"
+    },
+    {
+      "method": "POST",
+      "path": "auth/platform-custodian/users/platform-backup-maintainer",
+      "bodyWithoutProtectedPassword": {
+        "token_policies": [
+          "platform-backup-rotation"
+        ],
+        "token_ttl": 900,
+        "token_max_ttl": 900,
+        "token_explicit_max_ttl": 900,
+        "token_no_default_policy": true,
+        "token_period": 0,
+        "token_type": "service",
+        "token_num_uses": 0
+      },
+      "protectedInput": "Fresh separately custodied random password from protected file; no argv/environment/report",
+      "precondition": "user-absent-and-existing-auth-mount-unchanged"
+    }
+  ],
+  "writesSha256": "2cc32111586587b704563b76a49c392c55337de19d39149cdf3ac55e8f920729",
+  "rootGenerationMaximumAttempts": 1,
+  "maximumIsolationSeconds": 840,
+  "preChangeBackupMaximumAgeSeconds": 900,
+  "automaticMutationRetries": 0,
+  "prerequisites": [
+    "new-operation-id-and-exclusive-fsynced-intent-before-any-provider-action",
+    "current-source-native-integrated-controller-rehearsal-and-pinned-artifacts",
+    "exact-current-provider-name-image-mounts-network-and-closed-prior-operation-label",
+    "new-root-protected-staging-and-separate-output-custody",
+    "independent-backup-age-key-seal-and-repository-custody-confirmed",
+    "separate-exact-guarded-root-bootstrap-execution-authorization"
+  ],
+  "sequence": [
+    "arm-independent-deadline-before-isolation-and-unseal",
+    "one-root-generation-attempt-in-isolated-helper-tmpfs",
+    "review-complete-current-policies-role-aliases-user-mappings-and-identity-contributions",
+    "capture-fresh-native-snapshot-and-independent-audit-before-any-provisioning-write",
+    "encrypt-to-existing-public-recipient-network-disabled",
+    "ciphertext-only-handoff-upload-to-existing-repository-and-read-only-retrieval-hash-verification",
+    "recheck-freshness-guard-and-complete-target-prestate-before-first-write",
+    "apply-nine-exact-writes-once-in-order-with-protected-credential-outputs",
+    "native-issuance-parameter-and-lifetime-acceptance-and-snapshot-rotation-identity-denials",
+    "finally-cancel-root-generation-revoke-root-confirm-403",
+    "restore-normal-TLS-mounts-network-and-unseal-confirm-health-and-anonymous-generation-405",
+    "cancel-guard-only-after-root-revocation-and-normal-restoration-then-restore-restart-policy",
+    "encrypt-and-upload-separate-post-cleanup-audit-and-post-install-snapshot-with-new-scoped-identity"
+  ],
+  "partialState": "On ambiguous write stop, preserve exact intent/prestate/acknowledgments; revoke root and restore protection. No automatic replay, deletion, rollback or extra root generation. Reconcile separately.",
+  "unresolvedBeforeExecution": [
+    "integrated-controller-and-failure-rehearsal",
+    "exact-operation-window-and-artifact-hashes",
+    "new-private-staging-and-protected-output-handoff",
+    "fresh-backup-and-full-root-only-prestate-gates-at-execution"
+  ],
+  "exclusions": [
+    "repository-initialization",
+    "existing-custodian-account-change",
+    "runtime-activation",
+    "timer",
+    "production",
+    "pruning",
+    "retained-restore",
+    "application-postgresql-redis-asterisk-changes"
+  ]
+}

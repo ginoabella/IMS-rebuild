@@ -177,7 +177,11 @@ function encryptLocked(output, recipientFile, files, details) {
         sha256: digest(ciphertext),
         capturedAt: new Date().toISOString(),
         kind: details.kind ?? 'snapshot',
-        ...(['recovery-capture', 'recovery-audit'].includes(details.kind)
+        ...([
+          'recovery-capture',
+          'recovery-audit',
+          'bootstrap-post-install',
+        ].includes(details.kind)
           ? { captureOperationId: details.captureOperationId }
           : {}),
       }),

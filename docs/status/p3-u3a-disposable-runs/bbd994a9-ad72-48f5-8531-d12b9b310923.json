@@ -1,0 +1,41 @@
+{
+  "operationId": "bbd994a9-ad72-48f5-8531-d12b9b310923",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "closed_prior_operation_label_and_exact_provider_metadata_reconciled",
+      "passed": true
+    },
+    {
+      "name": "native_complete_fixture_prestate_pinned",
+      "passed": true
+    },
+    {
+      "name": "native_ciphertext_upload_and_readonly_retrieval_before_writes",
+      "passed": true
+    },
+    {
+      "name": "lost_native_write_reply_stops_without_retry_and_preserves_partial_journal",
+      "passed": true
+    }
+  ],
+  "status": "failed",
+  "lastFixtureApi": "auth/token/revoke-self",
+  "fixtureActionFailure": {
+    "status": "fixture-action-failed",
+    "action": "install",
+    "lastPath": "sys/auth/platform-backup"
+  },
+  "failure": {
+    "code": "PermissionError",
+    "phase": "audit_encrypted"
+  },
+  "syntheticProviderLog": "\n==> OpenBao server configuration:\n\n             Api Address: https://endpoint-secrets:8200\n                     Cgo: disabled\n         Cluster Address: https://endpoint-secrets:8201\n   Environment Variables: HOME, HOSTNAME, PATH\n              Go Version: go1.27.1\n              Listener 1: tcp (addr: \"0.0.0.0:8200\", cluster address: \"0.0.0.0:8201\", max_request_duration: \"1m30s\", max_request_json_memory: \"34078720\", max_request_json_strings: \"1000\", max_request_size: \"33554432\", tls: \"enabled\")\n               Log Level: warn\n           Recovery Mode: false\n                 Storage: raft (HA available)\n                 Version: OpenBao v2.7.1, committed 2026-10-01T15:32:54Z\n             Version Sha: a5db72cef75c24b920ade02065b18dd8eb666bac\n\n==> OpenBao server started!\n2026-10-22T06:10:31.939Z [WARN]  storage.raft: heartbeat timeout reached, starting election: last-leader-addr= last-leader-id=\n",
+  "cleanup": {
+    "deadlineWatcherStopped": true,
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}

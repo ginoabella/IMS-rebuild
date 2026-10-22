@@ -1,0 +1,52 @@
+{
+  "operationId": "eb22ad17-f9e1-478a-8409-08c81c236818",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "closed_prior_operation_label_and_exact_provider_metadata_reconciled",
+      "passed": true
+    },
+    {
+      "name": "host_guard_health_and_backup_freshness_checked_for_each_write",
+      "passed": true
+    },
+    {
+      "name": "prechange_backup_retrieval_verified",
+      "passed": true
+    },
+    {
+      "name": "postinstall_backup_independently_encrypted_uploaded_and_retrieved",
+      "passed": true
+    },
+    {
+      "name": "postinstall_is_a_different_restic_snapshot",
+      "passed": true
+    },
+    {
+      "name": "root_revoked_and_normal_tls_405_restored_before_guard_cancellation",
+      "passed": true
+    },
+    {
+      "name": "final_provider_running_on_only_normal_network_with_original_restart_policy",
+      "passed": true
+    }
+  ],
+  "status": "passed",
+  "lastFixtureApi": "auth/token/revoke-self",
+  "syntheticPolicyPrestate": "three-unconstrained-issuance-policies-not-retained-bytes",
+  "faultAfterWrite": null,
+  "controllerSha256": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+  "provisionerSha256": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+  "harnessSha256": "f02836c3a4c4b58d9c83ff9e9257c544a108cd0800e8ae8f00fba168053b316c",
+  "hostPortsSha256": "268802ccdfd3847e833d5eabf637db365579e912d253297606ef7ca5a6edac64",
+  "helperSha256": "defb03cbeda813021989875e2f9ed03e0866fade9a97f0aa15cb426fe7a018fc",
+  "bridgeSha256": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
+  "initializerSha256": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+  "cleanup": {
+    "deadlineWatcherStopped": true,
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}

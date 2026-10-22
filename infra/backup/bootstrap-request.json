@@ -1,0 +1,804 @@
+{
+  "version": 1,
+  "status": "review-only-unapproved-retained-bootstrap",
+  "operationId": "d6550071-561a-4339-bc15-50a5b22ac43d",
+  "retainedExecutionAuthorized": false,
+  "rootRecoveryAuthorized": false,
+  "repositoryInitializationAuthorized": false,
+  "timerActivationAuthorized": false,
+  "productionAuthorized": false,
+  "destructiveCleanupAuthorized": false,
+  "ownerApproval": {
+    "approved": false,
+    "consumed": false,
+    "executionStarted": false
+  },
+  "maximumIsolationSeconds": 840,
+  "preChangeBackupMaximumAgeSeconds": 900,
+  "automaticRetries": 0,
+  "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+  "candidateToolsImage": {
+    "imageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1"
+  },
+  "previousOperationEvidence": "docs/status/p3-u3a-development-capture-execution.json",
+  "previousOperationEvidenceSha256": "06208990e6c3a9f0d2dc9243fd51ed9137ede24b49512682136c94bf56709032",
+  "currentProviderDockerMetadata": {
+    "name": "myims-rebuild-dev-endpoint-secrets-1",
+    "imageId": "sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+    "running": true,
+    "readOnlyRoot": true,
+    "restartPolicy": {
+      "Name": "unless-stopped",
+      "MaximumRetryCount": 0
+    },
+    "publishedPorts": {},
+    "networkNames": [
+      "myims-rebuild-dev_endpoint-credentials"
+    ],
+    "mounts": [
+      {
+        "type": "volume",
+        "name": "myims-rebuild-dev_endpoint-secrets-audit",
+        "source": "/var/lib/docker/volumes/myims-rebuild-dev_endpoint-secrets-audit/_data",
+        "destination": "/bao/audit",
+        "readWrite": true
+      },
+      {
+        "type": "volume",
+        "name": "myims-rebuild-dev_endpoint-secrets-data",
+        "source": "/var/lib/docker/volumes/myims-rebuild-dev_endpoint-secrets-data/_data",
+        "destination": "/bao/data",
+        "readWrite": true
+      },
+      {
+        "type": "bind",
+        "name": null,
+        "source": "/home/gino/projects/IMS-rebuild/infra/openbao/server.hcl",
+        "destination": "/bao/config/server.hcl",
+        "readWrite": false
+      },
+      {
+        "type": "bind",
+        "name": null,
+        "source": "/home/gino/projects/IMS-rebuild/.local/endpoint-credentials/server.crt",
+        "destination": "/bao/tls/server.crt",
+        "readWrite": false
+      },
+      {
+        "type": "bind",
+        "name": null,
+        "source": "/home/gino/projects/IMS-rebuild/.local/endpoint-credentials/server.key",
+        "destination": "/bao/tls/server.key",
+        "readWrite": false
+      }
+    ]
+  },
+  "recoveryConfigurationSha256": "637626eed9eb5bb64227786942de5f7dd12a488f82e631db72b4f1b7fdad3aaa",
+  "candidate": {
+    "version": 1,
+    "status": "guarded-bootstrap-preparation-not-executable",
+    "operator": "gino",
+    "currentRouteReviewOperation": "9ee70f51-7deb-42c5-8693-31416618bd2c",
+    "currentRouteVerifiedAt": "2026-10-22T05:35:32.208200+00:00",
+    "rootRecoveryAuthorized": false,
+    "retainedExecutionAuthorized": false,
+    "timerActivationAuthorized": false,
+    "preservePrincipal": "platform-owner-custodian",
+    "writes": [
+      {
+        "method": "POST",
+        "path": "sys/policies/acl/endpoint-restricted-issuer",
+        "historicalPreStateSha256": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b",
+        "policyUtf8Sha256": "5bd6e2c2f5e5d266ae8f0e57b845eaeb4931db9cf0b74d4a26a72bbfd017afda",
+        "body": {
+          "policy": "path \"auth/token/create/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1s\"]\n    \"explicit_max_ttl\" = [\"1s\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/create/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1s\"]\n    \"explicit_max_ttl\" = [\"1s\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/renew-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }"
+        },
+        "precondition": "exact-live-policy-hash-equals-historical-prestate"
+      },
+      {
+        "method": "POST",
+        "path": "sys/policies/acl/trunk-restricted-issuer",
+        "historicalPreStateSha256": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae",
+        "policyUtf8Sha256": "8077e9a15727da7fa0ab3a72398022a6bdca8bf7bb9002104a2778b65dab5703",
+        "body": {
+          "policy": "path \"auth/token/create/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/renew-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }"
+        },
+        "precondition": "exact-live-policy-hash-equals-historical-prestate"
+      },
+      {
+        "method": "POST",
+        "path": "sys/policies/acl/platform-deployment-maintainer",
+        "historicalPreStateSha256": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64",
+        "policyUtf8Sha256": "df4964543f0f840167ec395e71f841ddf29875d9ad57cb43fb5ba5107f514b5b",
+        "body": {
+          "policy": "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/mounts\" { capabilities = [\"read\"] }\npath \"sys/auth\" { capabilities = [\"read\"] }\npath \"sys/policies/acl\" { capabilities = [\"list\"] }\npath \"auth/token/roles\" { capabilities = [\"list\"] }\npath \"auth/token/accessors\" { capabilities = [\"list\", \"sudo\"] }\npath \"auth/token/lookup-accessor\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-accessor\" { capabilities = [\"update\"] }\npath \"sys/policies/acl/endpoint-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/roles/endpoint-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/create/platform-endpoint-issuer\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-restricted-issuer\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"24h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/roles/platform-endpoint-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/trunk-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/roles/trunk-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/create/platform-trunk-issuer\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-restricted-issuer\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"24h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/roles/platform-trunk-issuer\" { capabilities = [\"read\"] }\npath \"auth/platform-custodian/users/platform-owner-custodian/password\" { capabilities = [\"update\"] }\npath \"sys/policies/acl/platform-deployment-maintainer\" { capabilities = [\"deny\"] }\npath \"auth/token/create\" { capabilities = [\"deny\"] }\npath \"auth/token/create-orphan\" { capabilities = [\"deny\"] }\npath \"sys/generate-root/*\" { capabilities = [\"deny\"] }"
+        },
+        "precondition": "exact-live-policy-hash-equals-historical-prestate"
+      },
+      {
+        "method": "POST",
+        "path": "sys/policies/acl/platform-raft-snapshot-reader",
+        "body": {
+          "policy": "path \"sys/storage/raft/snapshot\" { capabilities = [\"read\"] }\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\n"
+        },
+        "policyUtf8Sha256": "ab94f14956e6a7a9a1574c4d524f31154378eec7a4fbad76c4912640e18fd2ff",
+        "precondition": "target-absent-before-first-write"
+      },
+      {
+        "method": "POST",
+        "path": "sys/auth/platform-backup",
+        "body": {
+          "type": "approle",
+          "description": "Dedicated scheduled Raft snapshot authentication",
+          "config": {
+            "default_lease_ttl": "300s",
+            "max_lease_ttl": "300s"
+          }
+        },
+        "precondition": "target-absent-before-first-write"
+      },
+      {
+        "method": "POST",
+        "path": "auth/platform-backup/role/platform-raft-snapshot-reader",
+        "body": {
+          "bind_secret_id": true,
+          "secret_id_ttl": "720h",
+          "secret_id_num_uses": 1000,
+          "token_policies": [
+            "platform-raft-snapshot-reader"
+          ],
+          "token_no_default_policy": true,
+          "token_type": "service",
+          "token_ttl": "300s",
+          "token_max_ttl": "300s",
+          "token_explicit_max_ttl": "300s",
+          "token_period": 0,
+          "token_num_uses": 0
+        },
+        "precondition": "target-absent-before-first-write"
+      },
+      {
+        "method": "POST",
+        "path": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id",
+        "body": {},
+        "protectedOutput": "Exclusive snapshot custody; SecretID/accessor never committed or printed",
+        "precondition": "new-exact-role-verified"
+      },
+      {
+        "method": "POST",
+        "path": "sys/policies/acl/platform-backup-rotation",
+        "body": {
+          "policy": "path \"auth/platform-backup/role/platform-raft-snapshot-reader/role-id\" { capabilities = [\"read\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"ttl\",\"num_uses\"]\n  allowed_parameters = {\n    \"ttl\" = [\"720h\"]\n    \"num_uses\" = [\"1000\"]\n  }\n}\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/lookup\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"secret_id_accessor\"]\n  allowed_parameters = { \"secret_id_accessor\" = [] }\n}\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/destroy\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"secret_id_accessor\"]\n  allowed_parameters = { \"secret_id_accessor\" = [] }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }"
+        },
+        "policyUtf8Sha256": "7ff2a700d79257e5a069327a3c4184bdc139d48588e97352f8ada4605015641b",
+        "precondition": "target-absent-before-first-write"
+      },
+      {
+        "method": "POST",
+        "path": "auth/platform-custodian/users/platform-backup-maintainer",
+        "bodyWithoutProtectedPassword": {
+          "token_policies": [
+            "platform-backup-rotation"
+          ],
+          "token_ttl": 900,
+          "token_max_ttl": 900,
+          "token_explicit_max_ttl": 900,
+          "token_no_default_policy": true,
+          "token_period": 0,
+          "token_type": "service",
+          "token_num_uses": 0
+        },
+        "protectedInput": "Fresh separately custodied random password from protected file; no argv/environment/report",
+        "precondition": "user-absent-and-existing-auth-mount-unchanged"
+      }
+    ],
+    "writesSha256": "2cc32111586587b704563b76a49c392c55337de19d39149cdf3ac55e8f920729",
+    "rootGenerationMaximumAttempts": 1,
+    "maximumIsolationSeconds": 840,
+    "preChangeBackupMaximumAgeSeconds": 900,
+    "automaticMutationRetries": 0,
+    "prerequisites": [
+      "new-operation-id-and-exclusive-fsynced-intent-before-any-provider-action",
+      "current-source-native-integrated-controller-rehearsal-and-pinned-artifacts",
+      "exact-current-provider-name-image-mounts-network-and-closed-prior-operation-label",
+      "new-root-protected-staging-and-separate-output-custody",
+      "independent-backup-age-key-seal-and-repository-custody-confirmed",
+      "separate-exact-guarded-root-bootstrap-execution-authorization"
+    ],
+    "sequence": [
+      "arm-independent-deadline-before-isolation-and-unseal",
+      "one-root-generation-attempt-in-isolated-helper-tmpfs",
+      "review-complete-current-policies-role-aliases-user-mappings-and-identity-contributions",
+      "capture-fresh-native-snapshot-and-independent-audit-before-any-provisioning-write",
+      "encrypt-to-existing-public-recipient-network-disabled",
+      "ciphertext-only-handoff-upload-to-existing-repository-and-read-only-retrieval-hash-verification",
+      "recheck-freshness-guard-and-complete-target-prestate-before-first-write",
+      "apply-nine-exact-writes-once-in-order-with-protected-credential-outputs",
+      "native-issuance-parameter-and-lifetime-acceptance-and-snapshot-rotation-identity-denials",
+      "finally-cancel-root-generation-revoke-root-confirm-403",
+      "restore-normal-TLS-mounts-network-and-unseal-confirm-health-and-anonymous-generation-405",
+      "cancel-guard-only-after-root-revocation-and-normal-restoration-then-restore-restart-policy",
+      "encrypt-and-upload-separate-post-cleanup-audit-and-post-install-snapshot-with-new-scoped-identity"
+    ],
+    "partialState": "On ambiguous write stop, preserve exact intent/prestate/acknowledgments; revoke root and restore protection. No automatic replay, deletion, rollback or extra root generation. Reconcile separately.",
+    "unresolvedBeforeExecution": [
+      "integrated-controller-and-failure-rehearsal",
+      "exact-operation-window-and-artifact-hashes",
+      "new-private-staging-and-protected-output-handoff",
+      "fresh-backup-and-full-root-only-prestate-gates-at-execution"
+    ],
+    "exclusions": [
+      "repository-initialization",
+      "existing-custodian-account-change",
+      "runtime-activation",
+      "timer",
+      "production",
+      "pruning",
+      "retained-restore",
+      "application-postgresql-redis-asterisk-changes"
+    ],
+    "operationId": "d6550071-561a-4339-bc15-50a5b22ac43d",
+    "roles": [
+      {
+        "name": "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": true,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "no_default_policy": true,
+          "ttl": "1h",
+          "explicit_max_ttl": "24h",
+          "renewable": true
+        }
+      },
+      {
+        "name": "endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": false,
+          "token_explicit_max_ttl": 1,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+          ],
+          "no_default_policy": true,
+          "ttl": "1s",
+          "explicit_max_ttl": "1s",
+          "renewable": false
+        }
+      },
+      {
+        "name": "endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": false,
+          "token_explicit_max_ttl": 1,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+          ],
+          "no_default_policy": true,
+          "ttl": "1s",
+          "explicit_max_ttl": "1s",
+          "renewable": false
+        }
+      },
+      {
+        "name": "platform-endpoint-issuer",
+        "configuration": {
+          "allowed_policies": [
+            "endpoint-restricted-issuer"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": false,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "endpoint-restricted-issuer"
+          ],
+          "no_default_policy": true,
+          "ttl": "24h",
+          "explicit_max_ttl": "24h",
+          "renewable": false
+        }
+      },
+      {
+        "name": "platform-trunk-issuer",
+        "configuration": {
+          "allowed_policies": [
+            "trunk-restricted-issuer"
+          ],
+          "disallowed_policies": [
+            "default",
+            "root"
+          ],
+          "allowed_policies_glob": [],
+          "disallowed_policies_glob": [],
+          "orphan": true,
+          "renewable": false,
+          "token_explicit_max_ttl": 86400,
+          "token_period": 0,
+          "token_type": "service"
+        },
+        "request": {
+          "policies": [
+            "trunk-restricted-issuer"
+          ],
+          "no_default_policy": true,
+          "ttl": "24h",
+          "explicit_max_ttl": "24h",
+          "renewable": false
+        }
+      }
+    ],
+    "policyBaseline": {
+      "default": "1b6ea8e97975b572c64fcc41c30e1aa0560fb2c680687b5dbdc874bdbef823a9",
+      "endpoint-cleanup-06530ab4-bc5f-4a08-bef1-7f31ee0f0b0f": "cf7341686d4a7d7547ebc7551bc70bd5f9e7d40c2809ac8ac8d23b9b95793606",
+      "endpoint-cleanup-1217aa69-83d1-4e90-8315-f51637588faf": "05a00baa2941a3b61b439426a83ec5ddf44d707c83f7949909fab7df534cf252",
+      "endpoint-cleanup-1def3b0f-c868-419e-b856-2268993deba5": "093e48745af05031b075b79a977a09c6d6b7112fef3344b43429c03557e35220",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-0ae492f8-3483-4507-bc9c-40e616a6abee": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-2019ad4c-a742-433f-9138-5543d36f5fd2": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-20f6239c-c675-49aa-93ba-59a214e4dada": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-2e5861a8-5b71-4f19-8787-fbc9443aa519": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-4192e225-3127-4f06-bf3f-f37333c8c26a": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-4bdfb2cb-652d-4dcc-97c3-1706b6416af9": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-7f7d3d1f-ab4b-450d-b690-295e3e58aaa1": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-9f36c596-a355-464e-9230-ca3d4cedab7d": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-ac5cf76b-e00a-4469-b333-e6beee173bc8": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-b8322e0a-6c0f-48bf-ac7f-6c7796549700": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-d2dbf5e3-dbd4-4c2d-8bd4-598b18a2b5fe": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db-edd4e6e0-0677-4329-9cdf-1c85b4ba5b21": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "endpoint-cleanup-5d0ba7c5-24ab-4de6-9aff-13307fb71071": "af4354b237aa9a5c4ce7138e9d06a1652a8128d60f3fc46f806efb20a399ad92",
+      "endpoint-cleanup-a8e59ecd-0510-4e76-bceb-cdb40ea044b0": "5a3ce56dfd9984787d8d4184ce02b9c2a1cc2c49c2cbeb57a71c5f8640ae993d",
+      "endpoint-cleanup-b7b2d036-9083-4edb-b841-a1c6acb163c0": "b3ea2f1804202dff41d6346db7d5f2d0d8c9a97c4aff5a64e7246db31b65fcfd",
+      "endpoint-cleanup-df0be940-bbc8-4427-86f5-5fb1626eecd9": "b7ca5649db85fd7b438347d1f36bc0ae59f3997740f9244ca9e7a151bacc4f9a",
+      "endpoint-cleanup-e3bc9b35-c7e6-42f3-8336-d2921ed7f5ef": "5c59a527070b592329a523499889791295f88ea2b6f8c57d280a8dc9923e82ab",
+      "endpoint-cleanup-f631ca84-e4c1-4d0d-b35f-7ef4508de215": "713b607fbde87617a2fcb11d8f3cf72036e2d5e58723271ba3316c45145191de",
+      "endpoint-cleanup-ffd334cc-4974-4bd6-961e-e2aafd4317e7": "a45d443c5f929786ac2507c4bc1534acd49a5e2405c133fdb33ef22d3acaa1c2",
+      "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488": "5d320a991bd3d5f03a883e8f8bb1ea030d3f41b4cb0362fe070b634a2e53a591",
+      "endpoint-development-admin": "a1f79eb8a68d6797cdddd6d5237c62a78940f9d94ba1227c7d5d27bc0a7a299b",
+      "endpoint-restricted-issuer": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b",
+      "endpoint-worker-06530ab4-bc5f-4a08-bef1-7f31ee0f0b0f": "cf786c32acd87a76f2d967b14e7a2d4d40864e25111c03e1cc0c44d68b2f8708",
+      "endpoint-worker-1217aa69-83d1-4e90-8315-f51637588faf": "5384a7611f19de4d245af076648ece085d7d083e9129efbdca93ad27297d4e1f",
+      "endpoint-worker-1def3b0f-c868-419e-b856-2268993deba5": "e09aea80e964f4cdb144d7d295c1b2afaa86c1577c04853cac552cf02551c938",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-0ae492f8-3483-4507-bc9c-40e616a6abee": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-2019ad4c-a742-433f-9138-5543d36f5fd2": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-20f6239c-c675-49aa-93ba-59a214e4dada": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-2e5861a8-5b71-4f19-8787-fbc9443aa519": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-4192e225-3127-4f06-bf3f-f37333c8c26a": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-4bdfb2cb-652d-4dcc-97c3-1706b6416af9": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-7f7d3d1f-ab4b-450d-b690-295e3e58aaa1": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-9f36c596-a355-464e-9230-ca3d4cedab7d": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-ac5cf76b-e00a-4469-b333-e6beee173bc8": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-b8322e0a-6c0f-48bf-ac7f-6c7796549700": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-d2dbf5e3-dbd4-4c2d-8bd4-598b18a2b5fe": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db-edd4e6e0-0677-4329-9cdf-1c85b4ba5b21": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "endpoint-worker-5d0ba7c5-24ab-4de6-9aff-13307fb71071": "8dd9e9a85adf0ea775963174304f5f779ed999765951805b87f0cece70dadc5e",
+      "endpoint-worker-a8e59ecd-0510-4e76-bceb-cdb40ea044b0": "c60af9d576ade3ba2b6e3eaa53e398c44bdfe11bba5334b8304fdcdd1c3b17c8",
+      "endpoint-worker-b7b2d036-9083-4edb-b841-a1c6acb163c0": "eea5889228b249778bb5acf55e2404b692245929d00af2a27cc99d060533d131",
+      "endpoint-worker-df0be940-bbc8-4427-86f5-5fb1626eecd9": "78c5af2350fb48a1110f1d4659902ac77bad0dc2f5afe1825b62c1a2638c548d",
+      "endpoint-worker-e3bc9b35-c7e6-42f3-8336-d2921ed7f5ef": "aceaba5600f4ac75f334ea2a4adbf43fe8dfe260dede3fb9c76d09bff46a0bcd",
+      "endpoint-worker-f631ca84-e4c1-4d0d-b35f-7ef4508de215": "574632b4c293787d26abbbe4c795f1b500061d520de4be2968558786323caca6",
+      "endpoint-worker-ffd334cc-4974-4bd6-961e-e2aafd4317e7": "665adbc135212157eed586b612d75cb9061c8aeff53180f78aa59a529d751b00",
+      "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488": "cd1fb0229186a629f9fe1601acb89f9166d00fd665e3cea7aa7e33fdf0040901",
+      "platform-deployment-maintainer": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64",
+      "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db": "f80873e9aed96fc4724da252d1c61179112153624515c491329f93529e5fa1bd",
+      "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488": "77a6a60b0d10570456d99f3021006fe71ff5e297ea58cd3076d387db1030feae",
+      "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db": "9bcbcf182d71a2023002c6eb287abb25ad78e107d124f434aa1c8226bd684fff",
+      "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488": "bd12653f111c45255ab7e4fb30b24d81e895c8e70a16ea2acf8ef22ee26f3ca5",
+      "trunk-restricted-issuer": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae",
+      "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db": "d2de89198bcfac4cdbfc1695fd7d66c03ae230527385fa9168987303e5ad9933",
+      "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488": "d0685fb7715138e0b66c8a6d59f01c9e8f0a40f4d6a58812ecc8f9d7ba8b6429"
+    }
+  },
+  "directories": {
+    "capture": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/capture",
+    "baseline": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/encrypted/baseline",
+    "preAudit": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/encrypted/pre-audit",
+    "postAudit": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/encrypted/post-audit",
+    "postSnapshot": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/post-snapshot",
+    "postEncrypted": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/encrypted/post-install",
+    "snapshotCredentials": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/snapshot-credentials",
+    "maintenance": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/maintenance",
+    "installState": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/install-state",
+    "snapshotState": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/snapshot-state",
+    "prechangeSpool": "/srv/myims-backup-development/bootstrap/d6550071-561a-4339-bc15-50a5b22ac43d/prechange",
+    "postinstallSpool": "/srv/myims-backup-development/bootstrap/d6550071-561a-4339-bc15-50a5b22ac43d/postinstall",
+    "receipts": "/srv/myims-backup-development/bootstrap/d6550071-561a-4339-bc15-50a5b22ac43d/receipts"
+  },
+  "stagingPrepared": false,
+  "artifacts": {
+    "infra/openbao/server.hcl": "e099070041db8d29a6ba0b9c6b00629cf2d2b2805706e0cda135dc4011e6bed5",
+    "infra/docker/compose.yaml": "e8204418819996b400ffbd156e6987765f5e3b466cf9a5e148ffcbe78fb15e94",
+    "infra/docker/compose.credentials.yaml": "936b55dd178d5e92ed07547951c2076db68e333ce3622a942abb9c39b0a6f7b0",
+    "infra/docker/compose.openbao-recovery.yaml": "d16977b20fecefecc5edd93cec47cc85b07da2ac32f6316826618462841bf3db",
+    "infra/docker/compose.openbao-restoration.yaml": "21cc68ddb98ff77a2161fcda17e5141998ebf7559f43b512104c72a1abfeab7e",
+    "infra/backup/compose.recovery-capture.yaml": "1ba0077e6142f0dd0fc8619d17fcc4c1232e9b124a42cde90cd421d6bf5089df",
+    "docs/planning/p3-u3a-guarded-bootstrap-preparation.json": "6799ab3c3a3e0fa43d4cb0a4f21dd38487742459bf9bb9641bc08e635001c2ea",
+    "docs/planning/p3-u3a-bootstrap-policy-baseline.json": "d6caecfc2d41605eab88841a50490f7ecbc51e3a2be1606ef694a2e6f298b415",
+    "scripts/backup/archive-post-install.mjs": "c13dafeb580c9f0035a64fa3ca923993f2740feaec95c7e0ebce48fa8c59d4f1",
+    "scripts/backup/archive.mjs": "b52e07e287cad4f4d27668955462a8e179d82f39c74f426a12c358442c3eefb7",
+    "scripts/backup/audit-poll.mjs": "d82e2822df3b5f3852189f5696e8069e457821c6d0a796c8e40ca003ff8abd73",
+    "scripts/backup/ciphertext-handoff.mjs": "daa74b35e5d67c031c2b0fd63b0cfd1e0817863c74c45ad69b58f4c5e47616c7",
+    "scripts/backup/main.mjs": "17db8b21130cd59bdf082289947d6160e2d2e7ea94a3e10a2a4e5e747a23aa0a",
+    "scripts/backup/recovery-capture.mjs": "7121b4c48e20804be1e3ebab56b036a1fc7d76e1a06a6607d3b485ee11a821a3",
+    "scripts/backup/repository-check.mjs": "f9236e619cecc91f2f8741953af8c3b14b6fa0538849c9e6ba52452b9947555e",
+    "scripts/backup/repository-initialize.mjs": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+    "scripts/backup/snapshot.mjs": "71e7299516122f1aeacb95d853b40ec2cf50998eb13a9ea5808132444897917e",
+    "scripts/backup/verify-bootstrap-upload.mjs": "4e489ff305e72cb4ff364d1ae57ec22d475b0dbd9756ad264859332c5f1fcf2d",
+    "scripts/backup/verify-upload.mjs": "9c93f114c0fa59e2b40c3bfac303364a65e213dc021a059f34110a9075abf8a3",
+    "scripts/openbao/authorization-deadline-candidate.mjs": "5220cc3627ec3e9196d28a3478788ff0373f8fc25c7dbf0701e54fd27fcc4d6b",
+    "scripts/openbao/backup-bootstrap-plan.mjs": "b4b8e091e1f398d217b93f849d031101862e5d9286f44d8752353510adfa597c",
+    "scripts/openbao/backup-maintenance-plan.mjs": "210d349b1b0576c2eba9821efd04b5e8d87352a8d086af1a070591edc26d2eea",
+    "scripts/openbao/bootstrap-action.mjs": "3750d772320eddce2fedcef0b05acd77bb4b2cde256dbee819dbbf261b2f8a3f",
+    "scripts/openbao/bootstrap-prestate.mjs": "86f2b2fe8bfc3dd33095db0da9b0ef8b42b13c5a4b9af6d4202d5cd377106d96",
+    "scripts/openbao/bootstrap-provision.mjs": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+    "scripts/openbao/check-custodian.mjs": "626d62e8f254fddd049d5412fa4cf021a69cb85637b7dd5c868274b27d8eec12",
+    "scripts/openbao/check-recovery-deadline.mjs": "6abf580fe2f911c8e9abdc4cc6b14b5e063e540fb5e1cf711447057636ef0d80",
+    "scripts/openbao/check-trunk-provider.mjs": "dfc128adbf594fc9a103f275cb21220ff47434a85f25f5f7658dff9231789a6a",
+    "scripts/openbao/custodian-password.mjs": "9da206a83b5db5e8f64f65b65e96e6c68e3d4002c43476bab0d90297eede95d4",
+    "scripts/openbao/custodian-succession-plan.mjs": "d3f88b595f0a39b74ff0f448cefde0b157c86f7b2b1062c759e3f69ad90e4b69",
+    "scripts/openbao/disposable-audit-backup.mjs": "0c4aa92884a03d45647b5438e7d5f837e207ed7e6391ec271c000d98d24004df",
+    "scripts/openbao/disposable-deadline-review.mjs": "11484280ea4d28a200f56e4733c65d5ad5284a64929f6e94a9d838a7f214c6a2",
+    "scripts/openbao/disposable-review-interruptions.mjs": "39af3e2c21a135eb7addc38c908769b72dcb8a3c69d175b0a465ae28159b1f82",
+    "scripts/openbao/disposable-review.mjs": "71f0c7d36a31e4cba4bde1918a7d3e3668aafdb8a92fea87ec7e199c0028d074",
+    "scripts/openbao/endpoint-restricted.mjs": "cd087058093f1062d5a3c18073fcb53d1e7b08355040baabe0cb3f7fdf4f351f",
+    "scripts/openbao/finish-recovery.mjs": "5defe02890e6dd75cb5bf12aef3ae4f79148b0a4d8223ef707d28d09ea114a2a",
+    "scripts/openbao/guard-gate.mjs": "40d6273e7add890efd16bbadfd5047d80ef06d62686b257fc97f84d23e8105c2",
+    "scripts/openbao/human-custodian-session.mjs": "0f74c67ea0db0f33e9091d478a3fbe0b2a3463d0316ca289000ccdae93f0af39",
+    "scripts/openbao/issue-lifecycle-issuer.mjs": "355702799514cf7c6efcd92dd275c25dfc66e4891c5ad56e3035adfd3ff30cab",
+    "scripts/openbao/issue-restricted-token.mjs": "0ff76dedcf385e3d7af85e729d63a937bd014f0ca04e10ed7d59aff5bf31b3e8",
+    "scripts/openbao/prepare-recovery-config.mjs": "4b2bf34ca00e900f2ad4dd136e843b6b2c50c43304ec8bc4a5be0cbc245736f2",
+    "scripts/openbao/protected-client.mjs": "1d6ddd82da91419288a0ff0656a1d19907f51113200d33f0e69a2a06da18d770",
+    "scripts/openbao/provision-restricted-roles.mjs": "d858e82853983b438d62c3a4215b4cecdd552239152e0f038b1b9d3ad129fa1f",
+    "scripts/openbao/provisioning-plan.mjs": "a4376062f3333a42c43ff3dd6dd8620eee802f7b82a94f82ee1c39d7187b36f7",
+    "scripts/openbao/provisioning-preflight.mjs": "1870ff0f61ae61504126e27aed25e9cbd205f0270b5df350b28c5616d60d654f",
+    "scripts/openbao/recover-custodian.mjs": "ad6b75ea7238be3e196c25ff64ca52dd0d350b703626b96002f3a0112df6f244",
+    "scripts/openbao/recovery-backup.mjs": "2c00102a0390e4ad5af3386eaac15431d64a5b5ecbd3b60d02bc0c5c88b4853b",
+    "scripts/openbao/recovery-checkpoint.mjs": "53265bab7ce0bbbc905607ccdc7dcacd5a7266ea4ba127f42611b13e110a3fe9",
+    "scripts/openbao/recovery-deadline.mjs": "ab94a21e3825435a23044455281bed6cf5a550a094f20c15fbdc82cfb2c531d0",
+    "scripts/openbao/recovery-inventory.mjs": "afe913595f81d84d6fb0733e6be12d0b7c848ca80cd8e63afc22ba3cc72e6468",
+    "scripts/openbao/recovery-snapshot.mjs": "9b62b1343f242c8f50ddbe46e6820a9918c5cbf75d7b1e6042931bee819ba781",
+    "scripts/openbao/recovery-unseal.mjs": "68c294727633500cf1e84e5506d5132749e9eafacf9ea4d056fd2916762f54c1",
+    "scripts/openbao/restricted-issuance-rule.mjs": "fb1f26d631fb78b7604227068076686883cb4d3d024a2cd9920cb4cddf606479",
+    "scripts/openbao/review-authority-metadata.mjs": "76f77a2170270970b4727961441f55d0c40484cc976fb9c1f3a66770be707372",
+    "scripts/openbao/review-captured-authority.mjs": "b4107e6b7d471f38e1c444e2f6af6b4daf39264edfd65fa62aa2d9a0dc897167",
+    "scripts/openbao/review-installer-route.mjs": "aeb930b86a1bf3023389cd0498516a476591d7be8555f33cd5da807f13dff7ec",
+    "scripts/openbao/setup-custodian-succession.mjs": "aa644ab1e5b0addd8adbc735dbf2557ccea648864d4ae6ad178f0b333af20301",
+    "scripts/openbao/token-lifetime-disposable.mjs": "187bee3d94daf773d5377f3b7284bb968d5aae1369a8f9a3d420b70f37cb6ff3",
+    "scripts/openbao/token-replacement-candidate.mjs": "555c265c96c9df5bf25cb1b21ccbb1965fbfeed84fb7aff7748db75a94d502b6",
+    "scripts/openbao/verify-custodian-capabilities.mjs": "efb1528db019b8a5f397731c5e7edef2cc55d818233663cb79e6988b9e7bdf12",
+    "scripts/backup-host/bootstrap-controller.py": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+    "scripts/backup-host/bootstrap-host-ports.py": "5aa5a88ce68aefbd43b32c1d280e9f5ba91dcdaa6407fca48ded85aca0c384c6",
+    "scripts/backup-host/guard-bridge.py": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
+    "scripts/backup-host/execute-bootstrap.py": "31afc24711dc4dea18b2b3f16e5c56fb3ceef665b0dc87d777a4c249fff23863",
+    "scripts/backup-host/bootstrap-staging.py": "70918f2016a6e318b5943e686ab59bf8c050d50849813294f11e15b2ae796be6",
+    "scripts/backup-host/bootstrap-request.py": "93a475638d858812f570180014e5243fa69b2cfd21dc196a6bdb589468e41583",
+    "scripts/backup-host/execute-development-capture.py": "ff3149286f40b12d4517fa11160b9a499f350e256f3ab511fffb453f072db52d"
+  },
+  "hostWork": "/home/gino/projects/IMS-rebuild/.local/bootstrap-operations/d6550071-561a-4339-bc15-50a5b22ac43d",
+  "statusOutput": "/home/gino/projects/IMS-rebuild/docs/status/p3-u3a-bootstrap-execution-d6550071-561a-4339-bc15-50a5b22ac43d.json",
+  "credentialHandoff": {
+    "maintenancePasswordSource": "/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d/maintenance/password",
+    "operatorTarget": "/home/gino/.openbao-backup-maintainer/password",
+    "operatorUid": 1002,
+    "operatorGid": 1002,
+    "targetMode": "0600",
+    "parentMode": "0700",
+    "installationChangesCustodianPassword": false
+  },
+  "activationRequires": [
+    "independent-fresh-decryption",
+    "isolated-joint-postgresql-recovery",
+    "measured-rpo-rto",
+    "confirmed-alerts-capacity-and-rotation-custody"
+  ],
+  "limitations": [
+    "no-current-authority-inferred-from-historical-baseline",
+    "no-recovery-or-write-without-exact-execution-approval"
+  ],
+  "reviewPackageSha256": "07907f91e232a093bd0d125413995d03c8099fa0ae887c5232c9859338eacc85"
+}
