@@ -30,6 +30,7 @@ parser.add_argument('--tools-image', default='myims-backup-tools:development-can
 parser.add_argument('--recovery-authority-candidate', action='store_true', help='Fresh disposable TLS/Raft recovery path only; requires backup-first provisioning')
 parser.add_argument('--backup-first-provisioning', action='store_true', help='Disposable installer rehearsal: verify backup and isolated restore before four backup identity writes; no recovery or retained access')
 parser.add_argument('--snapshot-candidate', action='store_true', help='Exercise the inactive snapshot-only TLS/AppRole source helper')
+parser.add_argument('--initialize-helper', action='store_true', help='Test operation-bound initializer with native TLS Restic; disposable only')
 parser.add_argument('--development-artifacts', action='store_true', help='Test the candidate Compose services/helpers with TLS and file credentials')
 options = parser.parse_args()
 if options.recovery_authority_candidate and not options.backup_first_provisioning:
@@ -38,6 +39,8 @@ if options.backup_first_provisioning and (not options.development_artifacts or o
     parser.error('--backup-first-provisioning requires --development-artifacts and excludes --snapshot-candidate')
 if options.snapshot_candidate and not options.development_artifacts:
     parser.error('--snapshot-candidate requires --development-artifacts')
+if options.initialize_helper and not options.development_artifacts:
+    parser.error('--initialize-helper requires --development-artifacts')
 os.umask(0o077)
 operation = str(uuid.uuid4())
 prefix = 'myims-restic-eval-' + operation[:8]
@@ -470,10 +473,26 @@ try:
                                (ROOT / 'scripts/backup-host/storage-probe.mjs').read_bytes()).stdout)
         record('host_installer_readonly_tls_auth_probe', probe['status'] == 'passed' and probe['repositoryWrites'] == 0 and not probe['repositoryInitialized'])
     stage = 'backup'
-    restic('init')
+    if options.initialize_helper:
+        init_name = prefix + '-helper-initialize'
+        containers.append(init_name)
+        init_command = ['docker', 'run', '--rm', '--name', init_name, '--network', network,
+                        '--user', str(os.getuid()) + ':' + str(os.getgid()), '--read-only', '--cap-drop', 'ALL',
+                        '--security-opt', 'no-new-privileges:true', '--tmpfs', '/tmp:mode=1777',
+                        '-v', str(work / 'client') + ':/run/client:ro', '-v', str(work / 'receipts') + ':/receipts',
+                        '-v', str(ROOT / 'scripts/backup/repository-initialize.mjs') + ':/opt/scripts/backup/repository-initialize.mjs:ro',
+                        '--entrypoint', 'node', TOOLS, '/opt/scripts/backup/repository-initialize.mjs', operation]
+        initialized = json.loads(run(init_command).stdout)
+        record('operation_bound_native_initialization_verifies_config_and_empty_repository', initialized['status'] == 'repository_initialized' and initialized['verifiedEmpty'])
+        original_config = http('GET', '/uploader/config')[1]
+        repeated = run(init_command, check=False)
+        record('repeated_initialization_refused_with_repository_configuration_unchanged', repeated.returncode != 0 and http('GET', '/uploader/config')[1] == original_config)
+        evidence['initializerSha256'] = hashlib.sha256((ROOT / 'scripts/backup/repository-initialize.mjs').read_bytes()).hexdigest()
+    else:
+        restic('init')
     if options.development_artifacts:
         compose_helper('uploader')
-        receipt = json.loads(next((work / 'receipts').glob('*.json')).read_text())
+        receipt = next(value for value in (json.loads(path.read_text()) for path in (work / 'receipts').glob('*.json')) if value.get('command') == 'upload')
         backup = type('Result', (), {'stdout': json.dumps({'message_type': 'summary', 'snapshot_id': receipt['snapshotId']}).encode()})()
         wrong = work / 'client/ca.crt'
         original_ca = wrong.read_bytes()
@@ -827,7 +846,7 @@ finally:
     }
     if not all(evidence['cleanup'].values()):
         evidence['status'] = 'failed'
-    for dest in [ROOT / ('docs/status/p3-u3a-recovery-authority-candidate-evidence.json' if options.recovery_authority_candidate else 'docs/status/p3-u3a-backup-first-provisioning-evidence.json' if options.backup_first_provisioning else 'docs/status/p3-u3a-snapshot-source-evidence.json' if options.snapshot_candidate else 'docs/status/p3-u3a-restic-development-evidence.json' if options.development_artifacts else 'docs/status/p3-u3a-restic-evaluation-evidence.json'), ROOT / 'docs/status/p3-u3a-disposable-runs' / (operation + '.json')]:
+    for dest in [ROOT / ('docs/status/p3-u3a-repository-initializer-evidence.json' if options.initialize_helper else 'docs/status/p3-u3a-recovery-authority-candidate-evidence.json' if options.recovery_authority_candidate else 'docs/status/p3-u3a-backup-first-provisioning-evidence.json' if options.backup_first_provisioning else 'docs/status/p3-u3a-snapshot-source-evidence.json' if options.snapshot_candidate else 'docs/status/p3-u3a-restic-development-evidence.json' if options.development_artifacts else 'docs/status/p3-u3a-restic-evaluation-evidence.json'), ROOT / 'docs/status/p3-u3a-disposable-runs' / (operation + '.json')]:
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(json.dumps(evidence, indent=2) + '\n')
     print(json.dumps(evidence))

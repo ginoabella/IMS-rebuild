@@ -1,0 +1,7 @@
+# Manual restoration phase: ordinary HCL/network/mounts from compose.credentials,
+# with deadline ownership retained until root revocation and TLS readiness pass.
+services:
+  endpoint-secrets:
+    restart: 'no'
+    labels:
+      myims.openbao.recovery.operation: ${MYIMS_OPENBAO_RECOVERY_OPERATION:?Explicit approved operation UUID required}

@@ -1,0 +1,336 @@
+{
+  "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+  "status": "development-capture-upload-and-ciphertext-retrieval-complete",
+  "stagingOwnerReported": true,
+  "stagingContainerMetadataCheck": {
+    "status": "passed",
+    "stagingEmpty": true,
+    "stagingCustodyVerified": true,
+    "sealMetadataVerified": true,
+    "sealContentsRead": false,
+    "auditWithinBound": true,
+    "auditBytes": 8164106,
+    "providerRequests": 0
+  },
+  "rootGenerationAttempted": true,
+  "repositoryInitialized": true,
+  "providerIsolationStarted": true,
+  "backupCustodyPreflight": {
+    "status": "passed",
+    "clientMetadata": true,
+    "spoolAndReceiptsEmpty": true,
+    "backupRecipientMatches": true,
+    "privateCredentialContentsRead": false,
+    "networkRequests": 0
+  },
+  "phase": "ciphertext_retrieval_verified",
+  "events": [
+    {
+      "phase": "repository_initialization",
+      "at": "2026-10-22T00:43:45.147630+00:00"
+    },
+    {
+      "phase": "repository_initialized",
+      "at": "2026-10-22T00:43:50.054084+00:00"
+    },
+    {
+      "phase": "arming_deadline",
+      "at": "2026-10-22T00:43:50.054432+00:00"
+    },
+    {
+      "phase": "isolating_provider",
+      "at": "2026-10-22T00:43:50.401416+00:00"
+    },
+    {
+      "phase": "initial_unseal",
+      "at": "2026-10-22T00:43:57.075013+00:00"
+    },
+    {
+      "phase": "initial_unseal_verified",
+      "at": "2026-10-22T00:43:59.099061+00:00"
+    },
+    {
+      "phase": "one_root_generation_attempt",
+      "at": "2026-10-22T00:43:59.318156+00:00"
+    },
+    {
+      "phase": "native_capture",
+      "at": "2026-10-22T00:44:00.450830+00:00"
+    },
+    {
+      "phase": "native_capture_complete",
+      "at": "2026-10-22T00:44:02.058491+00:00"
+    },
+    {
+      "phase": "same_operation_root_finalization",
+      "at": "2026-10-22T00:44:02.059783+00:00"
+    },
+    {
+      "phase": "root_revocation_verified",
+      "at": "2026-10-22T00:44:02.559843+00:00"
+    },
+    {
+      "phase": "normal_configuration_restoration",
+      "at": "2026-10-22T00:44:02.704810+00:00"
+    },
+    {
+      "phase": "normal_restoration_verified",
+      "at": "2026-10-22T00:44:15.757235+00:00"
+    },
+    {
+      "phase": "deadline_cancelled",
+      "at": "2026-10-22T00:44:15.923081+00:00"
+    },
+    {
+      "phase": "normal_restart_policy_restored",
+      "at": "2026-10-22T00:44:16.092678+00:00"
+    },
+    {
+      "phase": "revoked_root_helper_removed",
+      "at": "2026-10-22T00:44:16.576565+00:00"
+    },
+    {
+      "phase": "offline_baseline_encryption",
+      "at": "2026-10-22T00:44:16.893240+00:00"
+    },
+    {
+      "phase": "baseline_encrypted",
+      "at": "2026-10-22T00:44:18.871572+00:00"
+    },
+    {
+      "phase": "offline_post_cleanup_audit_encryption",
+      "at": "2026-10-22T00:44:18.873232+00:00"
+    },
+    {
+      "phase": "audit_encrypted",
+      "at": "2026-10-22T00:44:20.777791+00:00"
+    },
+    {
+      "phase": "awaiting_ciphertext_handoff",
+      "at": "2026-10-22T00:44:20.779409+00:00"
+    },
+    {
+      "phase": "spool_handoff_verified",
+      "at": "2026-10-22T00:58:22.378179+00:00"
+    },
+    {
+      "phase": "repository_upload",
+      "at": "2026-10-22T00:58:55.603375+00:00"
+    },
+    {
+      "phase": "repository_uploaded",
+      "at": "2026-10-22T00:58:58.953282+00:00"
+    },
+    {
+      "phase": "upload_receipt_verified",
+      "at": "2026-10-22T01:01:08.969564+00:00"
+    },
+    {
+      "phase": "ciphertext_retrieval_verified",
+      "at": "2026-10-22T01:01:36.090868+00:00"
+    }
+  ],
+  "rootRevocationVerified": true,
+  "normalRestorationVerified": true,
+  "freshStagingMetadata": {
+    "emptyStaging": true,
+    "sealMetadata": true,
+    "sealContentsRead": false,
+    "auditBytes": 8164106
+  },
+  "preflightVerified": true,
+  "repository": {
+    "status": "repository_initialized",
+    "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+    "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+    "version": 2,
+    "verifiedEmpty": true,
+    "completedAt": "2026-10-22T00:43:49.712Z",
+    "automaticRetry": false
+  },
+  "deadlineGuard": {
+    "state": "deadline_armed",
+    "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+    "directory": "/tmp/myims-recovery-deadline-24096f3d-bf41-4ec2-9e12-95e2057c115d-DYD17E",
+    "watcherPid": 1049207,
+    "deadline": "2026-10-22T00:57:50.059Z"
+  },
+  "retainedKeyUsabilityVerified": true,
+  "captureComplete": true,
+  "deadlineCancelled": true,
+  "normalRestartPolicyRestored": true,
+  "captureHelperRemoved": true,
+  "baselineArchive": {
+    "status": "passed",
+    "stage": "recovery_capture_archive",
+    "operationId": "439f1f62-c87e-43e9-becd-989ab4ffcc2c"
+  },
+  "postCleanupAuditArchive": {
+    "status": "passed",
+    "stage": "recovery_audit_archive",
+    "operationId": "e23b33ee-e3e0-4a97-b761-e3ad83ba9ae9"
+  },
+  "plaintextStagingPreserved": true,
+  "independentOfflineArtifactVerification": {
+    "sources": {
+      "before.snapshot": {
+        "sha256": "2aaa6f26982a623941402ccb983078db03b6a1a6a02503bc76f67f0570bf07ed",
+        "bytes": 284205
+      },
+      "before.audit.json": {
+        "sha256": "0c34e5a400204b4be1404d3d9686bf86adacf6267f7613421c6c3dc05eb83c3a",
+        "bytes": 8179419
+      },
+      "audit-configuration.json": {
+        "sha256": "c3ee66ffc6c2f2e1ff858f67a51169d120be5439ac5ca5a59ce715b6f7415090",
+        "bytes": 452
+      },
+      "snapshot-integrity.json": {
+        "sha256": "abec73ec6b69e541a401b36f6664ab47981c6a85c80a7dc3b4458c35e8bf078c",
+        "bytes": 168
+      },
+      "inventory-start.json": {
+        "sha256": "5298f723909c64b0900cd6501e6286ae2b088b126015b9bb00c1925a1631c79f",
+        "bytes": 3449
+      },
+      "inventory.json": {
+        "sha256": "6336a674908adeb6dc6c098e81a79e31f1c7ea03b87d7b4f4f484082bf411ede",
+        "bytes": 60822
+      },
+      "download-complete.json": {
+        "sha256": "16e81e4fb9918d42f8eaaed918d97962737d25a590060eb08960422bc176433b",
+        "bytes": 247
+      }
+    },
+    "artifacts": {
+      "baseline": {
+        "archiveId": "439f1f62-c87e-43e9-becd-989ab4ffcc2c",
+        "kind": "recovery-capture",
+        "sha256": "39d1c570244874db0750cabcaefe450757757a93ad2623e3b27f5f9aaa8d995f",
+        "bytes": 590553,
+        "capturedAt": "2026-10-22T00:44:18.623Z",
+        "ciphertextVerified": true
+      },
+      "audit-after": {
+        "archiveId": "e23b33ee-e3e0-4a97-b761-e3ad83ba9ae9",
+        "kind": "recovery-audit",
+        "sha256": "a54b5104623962236500dbcd02779d4b1f4fb372f707045215cbfbcff9f30268",
+        "bytes": 416144,
+        "capturedAt": "2026-10-22T00:44:20.444Z",
+        "ciphertextVerified": true
+      }
+    },
+    "plaintextPrinted": false,
+    "providerRequests": 0
+  },
+  "finalDockerMetadata": {
+    "running": true,
+    "imageMatches": true,
+    "networkNames": ["myims-rebuild-dev_endpoint-credentials"],
+    "restartPolicy": "unless-stopped",
+    "noPublishedPorts": true,
+    "readOnlyRoot": true,
+    "closedOperationLabel": "24096f3d-bf41-4ec2-9e12-95e2057c115d"
+  },
+  "deadlineWatcherExited": true,
+  "deadlineRecordPreserved": true,
+  "measuredIsolationToProtectedRestorationSeconds": 25.356,
+  "maximumIsolationSeconds": 840,
+  "repositoryUploadPerformed": true,
+  "ciphertextHandoffPerformed": true,
+  "verifiedAt": "2026-10-22T00:45:33.020410+00:00",
+  "executedControllerSha256": "a44b0b68247963b893a17048e627367882caac4dffc92a53a29764ff01be43e2",
+  "executedControllerSourcePreserved": ".local/recovery-capture/24096f3d-bf41-4ec2-9e12-95e2057c115d/executed-controller.py",
+  "consumedOperationReplayRefusedWithoutProviderAccess": true,
+  "refusedReplayPreservesEvidence": true,
+  "controllerSafetyGroupsPassed": 5,
+  "ownerReportedCiphertextHandoffVerified": true,
+  "spoolHandoffVerification": {
+    "status": "spool_handoff_independently_verified",
+    "archives": [
+      {
+        "operationId": "439f1f62-c87e-43e9-becd-989ab4ffcc2c",
+        "sha256": "39d1c570244874db0750cabcaefe450757757a93ad2623e3b27f5f9aaa8d995f",
+        "bytes": 590553
+      },
+      {
+        "operationId": "e23b33ee-e3e0-4a97-b761-e3ad83ba9ae9",
+        "sha256": "a54b5104623962236500dbcd02779d4b1f4fb372f707045215cbfbcff9f30268",
+        "bytes": 416144
+      }
+    ],
+    "custody": "12010:12010/0600",
+    "noPriorUploadReceipt": true,
+    "providerRequests": 0
+  },
+  "uploadHelperResult": {
+    "status": "passed",
+    "stage": "repository_operation",
+    "operationId": "42aec76d-652e-4150-94a1-31c26910e02e"
+  },
+  "repositoryUploadReceipt": {
+    "operationId": "42aec76d-652e-4150-94a1-31c26910e02e",
+    "command": "upload",
+    "archives": [
+      {
+        "operationId": "439f1f62-c87e-43e9-becd-989ab4ffcc2c",
+        "sha256": "39d1c570244874db0750cabcaefe450757757a93ad2623e3b27f5f9aaa8d995f",
+        "bytes": 590553
+      },
+      {
+        "operationId": "e23b33ee-e3e0-4a97-b761-e3ad83ba9ae9",
+        "sha256": "a54b5104623962236500dbcd02779d4b1f4fb372f707045215cbfbcff9f30268",
+        "bytes": 416144
+      }
+    ],
+    "completedAt": "2026-10-22T00:58:58.553Z",
+    "snapshotId": "e259689800a00c5a42109a9c8e72a49a6a908bc659ea79a3f9dc0b1ca0d10582",
+    "status": "passed"
+  },
+  "repositoryCiphertextRetrievalVerification": {
+    "status": "uploaded_ciphertext_retrieval_verified",
+    "captureOperationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+    "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+    "uploadReceiptId": "42aec76d-652e-4150-94a1-31c26910e02e",
+    "snapshotId": "e259689800a00c5a42109a9c8e72a49a6a908bc659ea79a3f9dc0b1ca0d10582",
+    "verified": [
+      {
+        "archiveId": "439f1f62-c87e-43e9-becd-989ab4ffcc2c",
+        "sha256": "39d1c570244874db0750cabcaefe450757757a93ad2623e3b27f5f9aaa8d995f",
+        "bytes": 590553,
+        "receiptSha256": "2d53dc04d8a8666b6958ee7abd5d2c14aae3e4b2edf296b4c0dc91c2a027036e"
+      },
+      {
+        "archiveId": "e23b33ee-e3e0-4a97-b761-e3ad83ba9ae9",
+        "sha256": "a54b5104623962236500dbcd02779d4b1f4fb372f707045215cbfbcff9f30268",
+        "bytes": 416144,
+        "receiptSha256": "1ebb446f0eb461ff32ac3e799bd7cae3028acf2557253ac046e0b1fa408ec7fe"
+      }
+    ],
+    "exactSnapshotFileCount": 4,
+    "repositoryWrites": 0,
+    "providerAccessed": false,
+    "decryptionPerformed": false,
+    "plaintextPrinted": false
+  },
+  "repositoryCiphertextRetrievalVerified": true,
+  "verificationHelperSha256": "9c93f114c0fa59e2b40c3bfac303364a65e213dc021a059f34110a9075abf8a3",
+  "transferHelperCleanup": {
+    "uploadHelperAbsent": true,
+    "verificationHelperAbsent": true
+  },
+  "uploadIntentPreserved": true,
+  "ciphertextSpoolPreserved": true,
+  "freshBackupAgeDecryptionVerified": false,
+  "freshBackupNativeRestoreVerified": false,
+  "jointPostgresqlRecoveryVerified": false,
+  "effectiveAuthorityApproved": false,
+  "ongoingBackupIdentityProvisioned": false,
+  "completedAt": "2026-10-22T01:03:25.889680+00:00",
+  "postTransferProviderDockerMetadata": {
+    "running": true,
+    "normalNetworkOnly": true,
+    "normalRestartPolicy": true,
+    "providerApiRequests": 0
+  }
+}

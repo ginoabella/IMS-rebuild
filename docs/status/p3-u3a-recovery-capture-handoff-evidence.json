@@ -1,5 +1,5 @@
 {
-  "operationId": "5353b91f-4f87-4bc8-a9b9-74de988634c2",
+  "operationId": "5bdfc810-38f6-4ba6-a7ff-44e9e821238f",
   "retainedAccess": false,
   "rootRecoveryExercised": true,
   "repositoryAccessed": false,
@@ -13,11 +13,27 @@
       "passed": true
     },
     {
+      "name": "compose_replacement_retains_exact_deadline_label",
+      "passed": true
+    },
+    {
       "name": "actual_native_capture_helper_and_root_finisher_pass",
       "passed": true
     },
     {
       "name": "temporary_fixture_root_revoked_403_by_actual_finisher",
+      "passed": true
+    },
+    {
+      "name": "normal_network_replacement_retains_deadline_owner_restart_no_and_no_ports",
+      "passed": true
+    },
+    {
+      "name": "normal_restoration_one_shot_unseal_tls_health_and_anonymous_405",
+      "passed": true
+    },
+    {
+      "name": "deadline_cancelled_only_after_actual_root_finisher_and_protected_restoration",
       "passed": true
     },
     {
@@ -49,7 +65,7 @@
       "passed": true
     }
   ],
-  "sourceSha256": "0474a5d18a40a473f798fce1b50b8280a42e7a0db0d5f4ae22ff0a2deae1cf64",
+  "sourceSha256": "bc1f8ea6214da9bc2e9f287570ca7e2546e1ae777665717dc12596cf835dd374",
   "toolsImageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
   "artifactHashes": {
     "scripts/backup/archive.mjs": "f338da844a61cb3cc1e105015ba1505ac906568623645128d9bb5b3d81d5f225",
@@ -61,8 +77,8 @@
     "scripts/openbao/recover-custodian.mjs": "ad6b75ea7238be3e196c25ff64ca52dd0d350b703626b96002f3a0112df6f244",
     "scripts/openbao/finish-recovery.mjs": "5defe02890e6dd75cb5bf12aef3ae4f79148b0a4d8223ef707d28d09ea114a2a"
   },
-  "lastFixtureApi": "auth/token/lookup-self",
-  "hostHandoffSha256": "83d84174fc4dfe65b9004ed70400202282b98fef47f64083ea3c75f9c3dfeb23",
+  "lastFixtureApi": "sys/seal-status",
+  "hostHandoffSha256": "e4c9b39ba183d80c143476386d141d5ca116ca381a39f70bdf91879267155834",
   "retainedToolingImages": {
     "myims-backup-tools:development-candidate": "sha256:4d459195b6509cc5a1f2d5b18eb395a7598d5db4f1939bccd61d3093a653d21e",
     "myims-backup-tools:snapshot-candidate": "sha256:26377e0cd9b334596febb35685363ad108ef4ba0e2f81f8958a82bc009c92743"

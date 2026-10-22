@@ -43,6 +43,36 @@ def directory(path, owner):
         raise ValueError('directory_custody')
 
 
+def prepare(operation):
+    """Create only the declared empty layout; never repair or reuse an operation."""
+    paths = layout(operation)
+    entries = paths['directories']
+    root = Path(entries[0]['path'])
+    # Refuse a pre-existing operation before creating any children. Partial
+    # preparation stays accounted for and requires attended review.
+    if os.path.lexists(paths['operationDirectory']):
+        raise ValueError('operation_exists')
+    if os.path.lexists(root):
+        directory(root, (0, 0))
+    else:
+        # Ancestors must be real directories and not writable by other users.
+        for parent in root.parents:
+            value = parent.lstat()
+            if (not stat.S_ISDIR(value.st_mode) or value.st_uid != 0 or value.st_mode & 0o022):
+                raise ValueError('unsafe_parent')
+        root.mkdir(mode=0o700)
+    for entry in entries[1:]:
+        path = Path(entry['path'])
+        path.mkdir(mode=0o700)
+        os.chown(path, entry['uid'], entry['gid'])
+        directory(path, (entry['uid'], entry['gid']))
+        if list(path.iterdir()):
+            raise ValueError('nonempty_staging')
+    return {'status': 'empty_staging_prepared', 'operationId': operation,
+            'providerAccessed': False, 'credentialContentsRead': False,
+            'existingObjectsChanged': False, 'automaticRetry': False}
+
+
 def read_cipher_input(path, owner, limit, dir_fd=None):
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=dir_fd)
     try:
@@ -160,10 +190,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--operation-id', required=True)
     parser.add_argument('--handoff', action='store_true')
+    parser.add_argument('--prepare', action='store_true')
     parser.add_argument('--artifact', choices=['baseline', 'audit-after'], default='baseline')
     args = parser.parse_args()
     try:
         paths = layout(args.operation_id)
+        if args.prepare:
+            if args.handoff or os.geteuid() != 0:
+                raise ValueError('exclusive_administrator_preparation_required')
+            print(json.dumps(prepare(args.operation_id)))
+            return 0
         if not args.handoff:
             print(json.dumps({'status': 'plan_only', **paths, 'filesRead': False,
                               'directoriesCreated': False, 'retainedExecutionAuthorized': False}))

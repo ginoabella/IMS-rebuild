@@ -30,6 +30,8 @@ secrets = []
 stage = 'setup'
 deadline = time.monotonic() + 240
 source = None
+guard = None
+normal_network = prefix + "-normal"
 evidence = {'operationId': operation, 'retainedAccess': False, 'rootRecoveryExercised': True,
             'repositoryAccessed': False, 'checks': [], 'sourceSha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest()}
 
@@ -95,7 +97,7 @@ try:
          '-out', str(work / 'server.crt'), '-days', '1', '-subj', '/CN=endpoint-secrets', '-addext', 'subjectAltName=DNS:endpoint-secrets'])
     for path in [work / 'server.key', work / 'server.crt']:
         path.chmod(0o644)  # Synthetic TLS fixture only; protected enclosing host directory.
-    for purpose in ['audit', 'capture', 'encrypted', 'public']:
+    for purpose in ['audit', 'capture', 'encrypted', 'public', 'data']:
         name = prefix + '-' + purpose
         volumes.append(name)
         run(['docker', 'volume', 'create', '--label', 'myims.recovery-capture-fixture=' + operation, name])
@@ -105,20 +107,29 @@ try:
         run(['docker', 'run', '--rm', '--name', owner, '--network', 'none', '--user', '0:0', '--read-only',
              '--cap-drop', 'ALL', '--cap-add', 'CHOWN', '-v', name + ':/owned', '--entrypoint', 'sh', BAO,
              '-c', 'chmod 0750 /owned && chown 0:12010 /owned' if purpose == 'public' else 'chmod 0700 /owned && chown 1003:1003 /owned'])
-    audit_volume, capture_volume, encrypted_volume, public_volume = volumes
+    audit_volume, capture_volume, encrypted_volume, public_volume, data_volume = volumes
     run(['docker', 'network', 'create', '--internal', '--label', 'myims.recovery-capture-fixture=' + operation, network])
     config = 'disable_mlock=true\napi_addr="https://endpoint-secrets:8200"\ncluster_addr="https://127.0.0.1:8201"\nstorage "raft" { path="/bao/data" node_id="capture-fixture" }\nlistener "tcp" { address="0.0.0.0:8200" tls_cert_file="/bao/config/server.crt" tls_key_file="/bao/config/server.key" disable_unauthed_generate_root_endpoints=false }\naudit "file" "endpoint" { options { file_path="/bao/audit/endpoint.json" log_raw="false" } }\n'
     (work / 'server.hcl').write_text(config)
     (work / 'server.hcl').chmod(0o644)
     source = prefix + '-source'
     containers.append(source)
-    run(['docker', 'run', '-d', '--name', source, '--label', 'myims.recovery-capture-fixture=' + operation,
-         '--network', network, '--network-alias', 'endpoint-secrets', '--user', '1003:1003', '--read-only',
-         '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges:true',
-         '--tmpfs', '/tmp:uid=1003,gid=1003', '--tmpfs', '/bao/data:uid=1003,gid=1003,mode=0700',
-         '-v', audit_volume + ':/bao/audit', '-v', str(work / 'server.hcl') + ':/bao/config/server.hcl:ro',
-         '-v', str(work / 'server.crt') + ':/bao/config/server.crt:ro', '-v', str(work / 'server.key') + ':/bao/config/server.key:ro',
-         BAO, 'server', '-config=/bao/config/server.hcl'])
+    run(['docker', 'network', 'create', '--internal', '--label', 'myims.recovery-capture-fixture=' + operation, normal_network])
+    service = {'image': BAO, 'container_name': source, 'user': '1003:1003', 'read_only': True,
+               'restart': 'no', 'cap_drop': ['ALL'], 'security_opt': ['no-new-privileges:true'],
+               'labels': {'myims.recovery-capture-fixture': operation, 'myims.openbao.recovery.operation': operation},
+               'entrypoint': ['/usr/bin/bao'], 'command': ['server', '-config=/bao/config/server.hcl'],
+               'tmpfs': ['/tmp:uid=1003,gid=1003'],
+               'volumes': [audit_volume + ':/bao/audit', data_volume + ':/bao/data', str(work / 'server.hcl') + ':/bao/config/server.hcl:ro',
+                           str(work / 'server.crt') + ':/bao/config/server.crt:ro', str(work / 'server.key') + ':/bao/config/server.key:ro'],
+               'networks': {'isolated': {'aliases': ['endpoint-secrets']}}}
+    graph = {'services': {'endpoint-secrets': service}, 'networks': {'isolated': {'external': True, 'name': network},
+              'normal': {'external': True, 'name': normal_network}},
+             'volumes': {name: {'external': True} for name in [audit_volume, data_volume]}}
+    compose_file = work / 'compose.json'
+    compose_file.write_text(json.dumps(graph))
+    compose = ['docker', 'compose', '-p', prefix, '-f', str(compose_file)]
+    run([*compose, 'up', '-d', '--no-deps', 'endpoint-secrets'])
     source_info = json.loads(run(['docker', 'inspect', source]).stdout)[0]
     address = 'https://' + source_info['NetworkSettings']['Networks'][network]['IPAddress'] + ':8200'
     tls = ssl.create_default_context(cafile=str(work / 'server.crt'))
@@ -152,12 +163,36 @@ try:
         raise RuntimeError('initial_root_revocation_unconfirmed')
     except urllib.error.HTTPError as error:
         check('initial_fixture_root_revoked_403_before_quorum_recovery', error.code == 403)
+    stage = 'compose_recreation_with_deadline'
+    guard = json.loads(run(['node', str(ROOT / 'scripts/openbao/recovery-deadline.mjs'), 'start', operation,
+                           time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime(time.time() + 240))]).stdout)
+    first_id = source_info['Id']
+    run([*compose, 'up', '-d', '--no-deps', '--force-recreate', 'endpoint-secrets'])
+    source_info = json.loads(run(['docker', 'inspect', source]).stdout)[0]
+    address = 'https://' + source_info['NetworkSettings']['Networks'][network]['IPAddress'] + ':8200'
+    check('compose_replacement_retains_exact_deadline_label', source_info['Id'] != first_id and
+          source_info['Config']['Labels']['myims.openbao.recovery.operation'] == operation and
+          source_info['HostConfig']['RestartPolicy']['Name'] == 'no')
+    run(['node', str(ROOT / 'scripts/openbao/recovery-deadline.mjs'), 'assert-ready', operation, guard['directory']])
+    for _ in range(100):
+        try:
+            if api('sys/seal-status')['sealed']:
+                break
+        except Exception:
+            pass
+        time.sleep(.2)
+    else:
+        raise RuntimeError('recreated_fixture_not_sealed')
     stage = 'actual_native_capture_and_root_cleanup'
     bootstrap = """import fs from 'node:fs';
 const input=JSON.parse(fs.readFileSync(0,'utf8'));
 fs.writeFileSync('/seal/ca.crt',fs.readFileSync('/fixture-ca'),{mode:0o600,flag:'wx'});
 fs.writeFileSync('/seal/seal.json',JSON.stringify({key:input.seal}),{mode:0o600,flag:'wx'});
 fs.writeFileSync('/recovery/confirmed.json',JSON.stringify({operationId:input.operationId,executeRecovery:true,confirmedAt:new Date().toISOString()}),{mode:0o600,flag:'wx'});
+process.argv=[process.execPath,'/opt/scripts/openbao/recovery-unseal.mjs','unseal'];
+await import('/opt/scripts/openbao/recovery-unseal.mjs');
+await new Promise(r=>setTimeout(r,1500));
+if(process.exitCode)throw new Error('fixture_unseal_failed');
 process.argv=[process.execPath,'/opt/scripts/openbao/recover-custodian.mjs',input.operationId];
 await import('/opt/scripts/openbao/recover-custodian.mjs');
 if(!process.exitCode)await import('/opt/scripts/openbao/recovery-backup.mjs');
@@ -165,11 +200,54 @@ if(!process.exitCode)await import('/opt/scripts/openbao/finish-recovery.mjs');
 """
     capture = helper('capture', ['--input-type=module', '-e', bootstrap],
                      ['--tmpfs', '/recovery:uid=1003,gid=1003,mode=0700', '--tmpfs', '/seal:uid=1003,gid=1003,mode=0700', '-v', capture_volume + ':/backup',
-                      '-v', audit_volume + ':/audit:ro', '-v', str(work / 'server.crt') + ':/fixture-ca:ro'],
+                      '-v', audit_volume + ':/audit:ro', '-v', str(work / 'server.crt') + ':/fixture-ca:ro', '-v', str(ROOT / 'scripts/openbao/recovery-unseal.mjs') + ':/opt/scripts/openbao/recovery-unseal.mjs:ro'],
                      network, json.dumps({'operationId': operation, 'seal': init['keys_base64'][0]}).encode())
     results = [json.loads(line) for line in capture.stdout.splitlines() if line]
-    check('actual_native_capture_helper_and_root_finisher_pass', [row.get('state') for row in results] == ['recovered_in_tmpfs', 'backup_and_inventory_preserved', 'root_revoked'])
+    check('actual_native_capture_helper_and_root_finisher_pass', [row.get('state') for row in results] == ['unsealed_active', 'recovered_in_tmpfs', 'backup_and_inventory_preserved', 'root_revoked'])
     check('temporary_fixture_root_revoked_403_by_actual_finisher', results[-1].get('state') == 'root_revoked')
+    stage = 'compose_normal_restoration_under_same_deadline'
+    (work / 'protected.hcl').write_text(config.replace('disable_unauthed_generate_root_endpoints=false', 'disable_unauthed_generate_root_endpoints=true'))
+    (work / 'protected.hcl').chmod(0o644)
+    service['volumes'][2] = str(work / 'protected.hcl') + ':/bao/config/server.hcl:ro'
+    service['networks'] = {'normal': {'aliases': ['endpoint-secrets']}}
+    compose_file.write_text(json.dumps(graph))
+    isolated_id = source_info['Id']
+    run(['node', str(ROOT / 'scripts/openbao/recovery-deadline.mjs'), 'assert-ready', operation, guard['directory']])
+    run([*compose, 'up', '-d', '--no-deps', '--force-recreate', 'endpoint-secrets'])
+    source_info = json.loads(run(['docker', 'inspect', source]).stdout)[0]
+    address = 'https://' + source_info['NetworkSettings']['Networks'][normal_network]['IPAddress'] + ':8200'
+    check('normal_network_replacement_retains_deadline_owner_restart_no_and_no_ports',
+          source_info['Id'] != isolated_id and list(source_info['NetworkSettings']['Networks']) == [normal_network] and
+          source_info['Config']['Labels']['myims.openbao.recovery.operation'] == operation and
+          source_info['HostConfig']['RestartPolicy']['Name'] == 'no' and not source_info['HostConfig']['PortBindings'])
+    for _ in range(100):
+        try:
+            if api('sys/seal-status')['sealed']:
+                break
+        except Exception:
+            pass
+        time.sleep(.2)
+    readiness = """import fs from 'node:fs';
+const input=JSON.parse(fs.readFileSync(0,'utf8'));
+fs.writeFileSync('/seal/ca.crt',fs.readFileSync('/fixture-ca'),{mode:0o600,flag:'wx'});
+fs.writeFileSync('/seal/seal.json',JSON.stringify({key:input.seal}),{mode:0o600,flag:'wx'});
+process.argv=[process.execPath,'/opt/scripts/openbao/recovery-unseal.mjs','unseal'];
+await import('/opt/scripts/openbao/recovery-unseal.mjs');
+if(process.exitCode)throw new Error('fixture_unseal_failed');
+await new Promise(r=>setTimeout(r,1500));
+process.argv[2]='verify-protected';
+await import('/opt/scripts/openbao/recovery-unseal.mjs?protected');
+"""
+    restored = helper('restoration', ['--input-type=module', '-e', readiness],
+                      ['--tmpfs', '/seal:uid=1003,gid=1003,mode=0700', '-v', str(work / 'server.crt') + ':/fixture-ca:ro',
+                       '-v', str(ROOT / 'scripts/openbao/recovery-unseal.mjs') + ':/opt/scripts/openbao/recovery-unseal.mjs:ro'],
+                      normal_network, json.dumps({'seal': init['keys_base64'][0]}).encode())
+    restored_results = [json.loads(line)['state'] for line in restored.stdout.splitlines() if line]
+    check('normal_restoration_one_shot_unseal_tls_health_and_anonymous_405',
+          restored_results == ['unsealed_active', 'protected_active_generation_denied'])
+    run(['node', str(ROOT / 'scripts/openbao/recovery-deadline.mjs'), 'assert-ready', operation, guard['directory']])
+    run(['node', str(ROOT / 'scripts/openbao/recovery-deadline.mjs'), 'cancel', operation, guard['directory']])
+    check('deadline_cancelled_only_after_actual_root_finisher_and_protected_restoration', True)
     stage = 'offline_archive'
     # Synthetic age identity is generated independently of the provider.
     name = prefix + '-age-keygen'
@@ -264,10 +342,25 @@ finally:
     for name in volumes:
         run(['docker', 'volume', 'rm', name], check=False)
     run(['docker', 'network', 'rm', network], check=False)
+    run(['docker', 'network', 'rm', normal_network], check=False)
+    if guard:
+        if not (Path(guard['directory']) / 'cancelled').exists() and not (Path(guard['directory']) / 'outcome.json').exists():
+            os.kill(guard['watcherPid'], 15)
+        for _ in range(60):
+            try:
+                state = Path('/proc/' + str(guard['watcherPid']) + '/stat').read_text().split(') ')[1].split()[0]
+                if state in ['Z', 'X']:
+                    break
+            except FileNotFoundError:
+                break
+            time.sleep(.1)
+        else:
+            evidence['status'] = 'failed'
+        shutil.rmtree(guard['directory'])
     shutil.rmtree(work)
     evidence['cleanup'] = {'containersAbsent': all(run(['docker', 'inspect', name], check=False).returncode != 0 for name in containers),
                            'volumesAbsent': all(run(['docker', 'volume', 'inspect', name], check=False).returncode != 0 for name in volumes),
-                           'networkAbsent': run(['docker', 'network', 'inspect', network], check=False).returncode != 0,
+                           'networkAbsent': all(run(['docker', 'network', 'inspect', name], check=False).returncode != 0 for name in [network, normal_network]),
                            'privateWorkDirectoryAbsent': not work.exists()}
     if not all(evidence['cleanup'].values()):
         evidence['status'] = 'failed'

@@ -1,0 +1,33 @@
+{
+  "operationId": "05e946cd-ccd4-4ee6-b7fd-c7b8e143581e",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "actual_controller_initializes_then_captures_and_revokes_one_root",
+      "passed": true
+    },
+    {
+      "name": "actual_controller_restores_tls_405_before_guard_cancellation_and_restart",
+      "passed": true
+    },
+    {
+      "name": "actual_controller_removes_root_helper_and_encrypts_both_artifacts",
+      "passed": true
+    },
+    {
+      "name": "final_provider_running_on_only_normal_network_with_original_restart_policy",
+      "passed": true
+    }
+  ],
+  "status": "passed",
+  "lastFixtureApi": "auth/token/revoke-self",
+  "controllerSha256": "a44b0b68247963b893a17048e627367882caac4dffc92a53a29764ff01be43e2",
+  "initializerSha256": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+  "cleanup": {
+    "deadlineWatcherStopped": true,
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}

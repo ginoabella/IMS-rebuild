@@ -1,9 +1,9 @@
 {
   "version": 1,
-  "status": "draft-not-execution-ready",
+  "status": "complete-development-capture-upload-and-ciphertext-retrieval",
   "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
   "scope": "one-development-recovery-for-native-backup-and-current-metadata-capture-only",
-  "proposedOperator": "gino, attended trusted Docker host administrator; final operation approval required",
+  "proposedOperator": "gino, attended trusted Docker host administrator; owner scope approval received 2026-10-22 Asia/Manila",
   "retainedExecutionAuthorized": false,
   "rootRecoveryAuthorized": false,
   "repositoryInitializationAuthorized": false,
@@ -34,9 +34,7 @@
       "MaximumRetryCount": 0
     },
     "publishedPorts": {},
-    "networkNames": [
-      "myims-rebuild-dev_endpoint-credentials"
-    ],
+    "networkNames": ["myims-rebuild-dev_endpoint-credentials"],
     "mounts": [
       {
         "type": "volume",
@@ -90,26 +88,35 @@
     "scripts/backup/archive.mjs": "f338da844a61cb3cc1e105015ba1505ac906568623645128d9bb5b3d81d5f225",
     "scripts/backup/main.mjs": "17db8b21130cd59bdf082289947d6160e2d2e7ea94a3e10a2a4e5e747a23aa0a",
     "scripts/backup/audit-poll.mjs": "d82e2822df3b5f3852189f5696e8069e457821c6d0a796c8e40ca003ff8abd73",
-    "scripts/backup-evaluation/check-restic.py": "a376a748fb4fa87cffa5f2946e9dbdabb4f4c38ff98c079913e83a09aee949c5",
+    "scripts/backup-evaluation/check-restic.py": "0fb2ca28e3ffec4c38f362ec76382a27929e604acdaf4572f59ae9a7be174123",
     "infra/backup/Dockerfile": "bcb19a5c47a6456707106314fce394aa9cfcfafed79683034281b5ba1043bc41",
     "infra/backup/Dockerfile.dockerignore": "a659b46b5dd876d36f9fd355690a7052bad2a0755beaf8750e05b65d31483a33",
-    "infra/backup/compose.recovery-capture.yaml": "95a4f1600c29804fd46cc4421643a76412a51ab66341fbaffc670d62c1fe8eb4",
+    "infra/backup/compose.recovery-capture.yaml": "1ba0077e6142f0dd0fc8619d17fcc4c1232e9b124a42cde90cd421d6bf5089df",
     "scripts/backup/recovery-capture.mjs": "7121b4c48e20804be1e3ebab56b036a1fc7d76e1a06a6607d3b485ee11a821a3",
     "scripts/backup/recovery-capture.test.mjs": "ac92c17f3126d7dabd926dc6c173f5a87600410e8656e66b74127c15939b5ad4",
+    "scripts/backup-host/recovery-handoff.py": "e4c9b39ba183d80c143476386d141d5ca116ca381a39f70bdf91879267155834",
+    "scripts/backup-host/recovery-handoff.test.py": "4a018f15feb8068a9ac90fabae44447a78a370ea6559837c781cf412fdbfd70a",
+    "scripts/backup-evaluation/check-recovery-capture.py": "bc1f8ea6214da9bc2e9f287570ca7e2546e1ae777665717dc12596cf835dd374",
+    "docs/planning/p3-u3a-development-recovery-capture-request.md": "25437db11abe408ae1d23882ed78020e555374470c06bee36a1f1c75eedea787",
+    "scripts/openbao/recovery-unseal.mjs": "68c294727633500cf1e84e5506d5132749e9eafacf9ea4d056fd2916762f54c1",
+    "scripts/openbao/recovery-unseal.test.mjs": "22b7399699c4b94d4176ece4685dfab189d3b9b3d1bf13883a6f7aca3123545e",
+    "infra/docker/compose.openbao-restoration.yaml": "21cc68ddb98ff77a2161fcda17e5141998ebf7559f43b512104c72a1abfeab7e",
+    "scripts/backup/repository-initialize.mjs": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+    "scripts/backup/repository-initialize.test.mjs": "eef783f78da2be3d121e935079cffea4f3b3e4503f1bca35ffa42176758daceb",
+    "scripts/backup-host/execute-development-capture.py": "ff3149286f40b12d4517fa11160b9a499f350e256f3ab511fffb453f072db52d",
+    "scripts/backup-host/execute-development-capture.test.py": "354b1d1d7b6f6abadebe0182e0b4ab4475720740fa6835b056d673b62120f8c0",
+    "scripts/backup-evaluation/check-development-controller.py": "7357ca2d96d7179ce46364fec539a59775eafc83ace0cffaad9c555b20851240",
+    "scripts/backup/verify-upload.mjs": "9c93f114c0fa59e2b40c3bfac303364a65e213dc021a059f34110a9075abf8a3"
+  },
+  "pending": [],
+  "laterProvisioning": "No policy/auth/role/user writes in this request. Current inventory must be reviewed separately before approving the four existing snapshot-identity provisioning objects.",
+  "previousReviewedArtifactHashes": {
+    "scripts/backup-evaluation/check-restic.py": "485fbdbe25d70e81f20945734422f051594c0dc85375b04bf6b6ed418f157599",
+    "infra/backup/compose.recovery-capture.yaml": "95a4f1600c29804fd46cc4421643a76412a51ab66341fbaffc670d62c1fe8eb4",
     "scripts/backup-host/recovery-handoff.py": "83d84174fc4dfe65b9004ed70400202282b98fef47f64083ea3c75f9c3dfeb23",
     "scripts/backup-host/recovery-handoff.test.py": "c20bf93e2905ae7e689abb3edb04b384064b2bc383f620e39ce8fd7eb9dde9ec",
     "scripts/backup-evaluation/check-recovery-capture.py": "0474a5d18a40a473f798fce1b50b8280a42e7a0db0d5f4ae22ff0a2deae1cf64",
     "docs/planning/p3-u3a-development-recovery-capture-request.md": "c037771ba7cb1146ce61c186bd735c800148f59791778461ea26163686c11220"
-  },
-  "pending": [
-    "retained-host-empty-directory-and-one-shot-unseal-transport-preflight",
-    "provider-compose-recreation-and-deadline-label-ownership-through-normal-restoration",
-    "protected-current-metadata-capture-review-scope-acceptance",
-    "separate-owner-final-recovery-and-repository-init-approval"
-  ],
-  "laterProvisioning": "No policy/auth/role/user writes in this request. Current inventory must be reviewed separately before approving the four existing snapshot-identity provisioning objects.",
-  "previousReviewedArtifactHashes": {
-    "scripts/backup-evaluation/check-restic.py": "485fbdbe25d70e81f20945734422f051594c0dc85375b04bf6b6ed418f157599"
   },
   "nativeRecoveryRehearsal": {
     "operationId": "502dec41-e8e7-4644-bd75-4b8766b7b766",
@@ -175,13 +182,26 @@
         "gid": 1003,
         "mode": "0700"
       }
-    ]
+    ],
+    "ownerReportedPreparation": {
+      "date": "2026-10-22",
+      "timezone": "Asia/Manila",
+      "result": {
+        "status": "empty_staging_prepared",
+        "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+        "providerAccessed": false,
+        "credentialContentsRead": false,
+        "existingObjectsChanged": false,
+        "automaticRetry": false
+      }
+    }
   },
   "manualServiceManifest": "infra/backup/compose.recovery-capture.yaml",
   "candidateToolsImage": {
     "imageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
     "tag": "myims-backup-tools:recovery-capture-candidate",
-    "retainedActivationAuthorized": false
+    "retainedActivationAuthorized": false,
+    "activationRequiresCompletedHostPreflight": true
   },
   "postCleanupAudit": {
     "separateEncryptedArtifact": true,
@@ -190,20 +210,126 @@
     "cleanupAuthorized": false
   },
   "nativeCaptureHandoff": {
-    "operationId": "5353b91f-4f87-4bc8-a9b9-74de988634c2",
+    "operationId": "5bdfc810-38f6-4ba6-a7ff-44e9e821238f",
     "status": "passed",
-    "checksPassed": 11,
+    "checksPassed": 15,
     "toolsImageId": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
-    "sourceSha256": "0474a5d18a40a473f798fce1b50b8280a42e7a0db0d5f4ae22ff0a2deae1cf64",
-    "hostHandoffSha256": "83d84174fc4dfe65b9004ed70400202282b98fef47f64083ea3c75f9c3dfeb23",
+    "sourceSha256": "bc1f8ea6214da9bc2e9f287570ca7e2546e1ae777665717dc12596cf835dd374",
+    "hostHandoffSha256": "e4c9b39ba183d80c143476386d141d5ca116ca381a39f70bdf91879267155834",
     "retainedAccess": false,
     "cleanupVerified": true,
-    "evidence": "docs/status/p3-u3a-recovery-capture-handoff-evidence.json"
+    "evidence": "docs/status/p3-u3a-recovery-capture-handoff-evidence.json",
+    "composeRecreationExercised": true,
+    "protectedNormalNetworkRestorationExercised": true,
+    "retainedHostExecutorAccepted": false
   },
   "verification": {
     "bundledArchiveAuditSnapshotTestsPassed": 35,
-    "syntheticHostHandoffTestsPassed": 6,
+    "syntheticHostHandoffTestsPassed": 8,
     "manualComposeGraphValidated": true,
-    "retainedHostControllerValidated": false
-  }
+    "retainedHostControllerValidated": true,
+    "oneShotUnsealTestGroupsPassed": 4,
+    "retainedRecoveryRestorationHelperGraphsRendered": true,
+    "workspaceLint": "passed",
+    "workspaceTypecheck": "passed",
+    "changedFileFormatting": "passed",
+    "aggregateDevCheck": "failed-at-format-check-on-19-untouched-documentation-and-evidence-files",
+    "restorationHelperNormalNetworkOnlyGraph": "passed",
+    "manualCaptureComposeDefaultStartupServices": 0,
+    "workspaceBuild": "passed",
+    "entrypointChecks": "4/4-passed",
+    "configurationTests": "6/6-passed",
+    "separateRemainingGraphCommand": "./dev exec sh -c 'pnpm typecheck && pnpm build && pnpm check:entrypoints && pnpm check:config'",
+    "nativeControllerMethods": "4/4-integration-groups-passed",
+    "initializerNativeRegression": "36/36-passed",
+    "initializerFaultGroups": 3,
+    "controllerSequencingGroups": 5,
+    "consumedOperationReplayPreservesEvidence": "passed"
+  },
+  "ownerApproval": {
+    "date": "2026-10-22",
+    "timezone": "Asia/Manila",
+    "scope": "development-native-backup-and-current-metadata-capture-only",
+    "consumed": true,
+    "executionStarted": true,
+    "technicalPreconditionsRequired": true,
+    "repositoryInitialization": "once-only-if-exact-approved-repository-is-uninitialized",
+    "metadataScopeAccepted": true,
+    "effectiveAuthorityApproved": false,
+    "repositoryInitializationConsumed": true,
+    "captureCompleted": true,
+    "remainingEncryptedTransferAuthorized": false,
+    "requestCompleted": true
+  },
+  "hostAccessDependency": {
+    "operatorUid": 1002,
+    "required": "interactive-host-administrator-authentication",
+    "sudoNoninteractiveAvailable": false,
+    "stagingPrepared": true,
+    "providerAccessAttempted": true
+  },
+  "recoveryConfigurationSha256": "637626eed9eb5bb64227786942de5f7dd12a488f82e631db72b4f1b7fdad3aaa",
+  "retainedMetadataOnlyPreflight": {
+    "date": "2026-10-22",
+    "checks": {
+      "image": true,
+      "running": true,
+      "readOnlyRoot": true,
+      "restart": true,
+      "ports": true,
+      "networks": true,
+      "mounts": true,
+      "noRecoveryLabel": true
+    },
+    "credentialContentsRead": false,
+    "providerApiAccessed": false,
+    "notFinalExecutionPreflight": true
+  },
+  "nativeControllerEvidence": "docs/status/p3-u3a-native-controller-evidence.json",
+  "initializerEvidence": "docs/status/p3-u3a-repository-initializer-evidence.json",
+  "executionEvidence": "docs/status/p3-u3a-development-capture-execution.json",
+  "executionSummary": {
+    "rootRevocationVerified": true,
+    "protectedNormalRestorationVerified": true,
+    "isolationSeconds": 25.356,
+    "watcherExited": true,
+    "ciphertextHandoffPerformed": true,
+    "repositoryUploadPerformed": true,
+    "plaintextStagingPreserved": true,
+    "executedControllerSha256": "a44b0b68247963b893a17048e627367882caac4dffc92a53a29764ff01be43e2",
+    "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+    "artifacts": {
+      "baseline": {
+        "archiveId": "439f1f62-c87e-43e9-becd-989ab4ffcc2c",
+        "kind": "recovery-capture",
+        "sha256": "39d1c570244874db0750cabcaefe450757757a93ad2623e3b27f5f9aaa8d995f",
+        "bytes": 590553,
+        "capturedAt": "2026-10-22T00:44:18.623Z",
+        "ciphertextVerified": true
+      },
+      "audit-after": {
+        "archiveId": "e23b33ee-e3e0-4a97-b761-e3ad83ba9ae9",
+        "kind": "recovery-audit",
+        "sha256": "a54b5104623962236500dbcd02779d4b1f4fb372f707045215cbfbcff9f30268",
+        "bytes": 416144,
+        "capturedAt": "2026-10-22T00:44:20.444Z",
+        "ciphertextVerified": true
+      }
+    },
+    "repositoryCiphertextRetrievalVerified": true,
+    "uploadReceiptId": "42aec76d-652e-4150-94a1-31c26910e02e",
+    "snapshotId": "e259689800a00c5a42109a9c8e72a49a6a908bc659ea79a3f9dc0b1ca0d10582",
+    "verifiedSnapshotFileCount": 4,
+    "freshBackupAgeDecryptionVerified": false,
+    "freshBackupNativeRestoreVerified": false,
+    "jointPostgresqlRecoveryVerified": false,
+    "requestCompleted": true
+  },
+  "laterAcceptance": [
+    "current-effective-authority-review-before-snapshot-identity-provisioning",
+    "ongoing-backup-identity-rotation-scheduling-audit-continuity-alerts",
+    "off-host-fresh-backup-retrieval-age-decryption-and-isolated-native-restore",
+    "joint-postgresql-and-credential-generation-reconciliation-with-measured-rpo-rto",
+    "remaining-p3-u3a-trunk-gateway-lifecycle-and-http-acceptance"
+  ]
 }

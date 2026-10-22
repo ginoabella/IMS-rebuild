@@ -1,0 +1,441 @@
+{
+  "version": 1,
+  "status": "offline-review-complete-installation-blocked",
+  "source": {
+    "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+    "sha256": "6336a674908adeb6dc6c098e81a79e31f1c7ea03b87d7b4f4f484082bf411ede",
+    "capturedAt": "2026-10-22T00:44:01.416Z"
+  },
+  "providerAccessed": false,
+  "credentialsRead": false,
+  "providerWritesAuthorized": false,
+  "effectiveAuthorityEstablished": false,
+  "comparisonScope": "Exact generated policy bytes and listed token-role fields only; no HCL semantics or effective ACL evaluation",
+  "policies": [
+    {
+      "name": "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparison": "exact-match",
+      "expectedSha256": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "capturedSha256": "ef46f861112ce8f283857c50ab0e62246e8bd4bd4fc3c39f2b2ba25ab19db477",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparison": "exact-match",
+      "expectedSha256": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "capturedSha256": "e55276a38a518bf331682abad026ced58afd9df2ba20e71f4d24cbbd1ddfd05c",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparison": "exact-match",
+      "expectedSha256": "9bcbcf182d71a2023002c6eb287abb25ad78e107d124f434aa1c8226bd684fff",
+      "capturedSha256": "9bcbcf182d71a2023002c6eb287abb25ad78e107d124f434aa1c8226bd684fff",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparison": "exact-match",
+      "expectedSha256": "d2de89198bcfac4cdbfc1695fd7d66c03ae230527385fa9168987303e5ad9933",
+      "capturedSha256": "d2de89198bcfac4cdbfc1695fd7d66c03ae230527385fa9168987303e5ad9933",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparison": "exact-match",
+      "expectedSha256": "f80873e9aed96fc4724da252d1c61179112153624515c491329f93529e5fa1bd",
+      "capturedSha256": "f80873e9aed96fc4724da252d1c61179112153624515c491329f93529e5fa1bd",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparison": "exact-match",
+      "expectedSha256": "cd1fb0229186a629f9fe1601acb89f9166d00fd665e3cea7aa7e33fdf0040901",
+      "capturedSha256": "cd1fb0229186a629f9fe1601acb89f9166d00fd665e3cea7aa7e33fdf0040901",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparison": "exact-match",
+      "expectedSha256": "5d320a991bd3d5f03a883e8f8bb1ea030d3f41b4cb0362fe070b634a2e53a591",
+      "capturedSha256": "5d320a991bd3d5f03a883e8f8bb1ea030d3f41b4cb0362fe070b634a2e53a591",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparison": "exact-match",
+      "expectedSha256": "bd12653f111c45255ab7e4fb30b24d81e895c8e70a16ea2acf8ef22ee26f3ca5",
+      "capturedSha256": "bd12653f111c45255ab7e4fb30b24d81e895c8e70a16ea2acf8ef22ee26f3ca5",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparison": "exact-match",
+      "expectedSha256": "d0685fb7715138e0b66c8a6d59f01c9e8f0a40f4d6a58812ecc8f9d7ba8b6429",
+      "capturedSha256": "d0685fb7715138e0b66c8a6d59f01c9e8f0a40f4d6a58812ecc8f9d7ba8b6429",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparison": "exact-match",
+      "expectedSha256": "77a6a60b0d10570456d99f3021006fe71ff5e297ea58cd3076d387db1030feae",
+      "capturedSha256": "77a6a60b0d10570456d99f3021006fe71ff5e297ea58cd3076d387db1030feae",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 0,
+        "expectedAllowedParameters": 0,
+        "capturedUnconditionalTokenCreateGrants": 0
+      }
+    },
+    {
+      "name": "endpoint-restricted-issuer",
+      "comparison": "different-unresolved",
+      "expectedSha256": "5bd6e2c2f5e5d266ae8f0e57b845eaeb4931db9cf0b74d4a26a72bbfd017afda",
+      "capturedSha256": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 6,
+        "expectedAllowedParameters": 6,
+        "capturedUnconditionalTokenCreateGrants": 6
+      }
+    },
+    {
+      "name": "trunk-restricted-issuer",
+      "comparison": "different-unresolved",
+      "expectedSha256": "8077e9a15727da7fa0ab3a72398022a6bdca8bf7bb9002104a2778b65dab5703",
+      "capturedSha256": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 6,
+        "expectedAllowedParameters": 6,
+        "capturedUnconditionalTokenCreateGrants": 6
+      }
+    },
+    {
+      "name": "platform-deployment-maintainer",
+      "comparison": "different-unresolved",
+      "expectedSha256": "df4964543f0f840167ec395e71f841ddf29875d9ad57cb43fb5ba5107f514b5b",
+      "capturedSha256": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64",
+      "issuanceConstraintIndicators": {
+        "capturedRequiredParameters": 0,
+        "capturedAllowedParameters": 0,
+        "expectedRequiredParameters": 2,
+        "expectedAllowedParameters": 2,
+        "capturedUnconditionalTokenCreateGrants": 2
+      }
+    }
+  ],
+  "roles": [
+    {
+      "name": "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "platform-endpoint-issuer",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    },
+    {
+      "name": "platform-trunk-issuer",
+      "comparedFields": [
+        "allowed_policies",
+        "allowed_policies_glob",
+        "disallowed_policies",
+        "disallowed_policies_glob",
+        "orphan",
+        "renewable",
+        "token_explicit_max_ttl",
+        "token_period",
+        "token_type"
+      ],
+      "differentFields": [],
+      "present": true
+    }
+  ],
+  "counts": {
+    "capturedPolicies": 59,
+    "capturedRoles": 14,
+    "tokens": 1,
+    "leases": 0
+  },
+  "dedicatedBackupAuthPresent": false,
+  "dedicatedBackupPolicyPresent": false,
+  "blockers": [
+    "Captured privileged policies lack the proposed issuance parameter constraints; historical-contract and remediation review required",
+    "Token-role response aliases and additional fields are not fully evaluated",
+    "Userpass user mappings, identity entities/groups and current live effective capabilities were not captured",
+    "No independently authorized direct installer route established",
+    "Rotation owner and authority, scheduling, audit continuity, alerts and joint recovery acceptance remain unresolved"
+  ],
+  "reviewedAt": "2026-10-22T01:22:25.456Z",
+  "reviewSourceSha256": {
+    "scripts/openbao/review-captured-authority.mjs": "b4107e6b7d471f38e1c444e2f6af6b4daf39264edfd65fa62aa2d9a0dc897167",
+    "scripts/openbao/provisioning-plan.mjs": "a4376062f3333a42c43ff3dd6dd8620eee802f7b82a94f82ee1c39d7187b36f7",
+    "scripts/openbao/custodian-succession-plan.mjs": "d3f88b595f0a39b74ff0f448cefde0b157c86f7b2b1062c759e3f69ad90e4b69",
+    "scripts/openbao/restricted-issuance-rule.mjs": "fb1f26d631fb78b7604227068076686883cb4d3d024a2cd9920cb4cddf606479"
+  },
+  "helperImage": "sha256:3abcd3135ba8a4b7c924792f4ecf760ba6b2020f193338cbba91191eae8d67d1",
+  "execution": {
+    "network": "none",
+    "user": "1003:1003",
+    "rootFilesystem": "read-only",
+    "capabilities": "ALL dropped",
+    "mounts": ["captured inventory read-only", "public review source read-only"]
+  }
+}

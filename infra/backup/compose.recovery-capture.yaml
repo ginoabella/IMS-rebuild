@@ -18,6 +18,28 @@ x-capture-helper: &capture-helper
     driver: local
     options: { max-size: '2m', max-file: '3' }
 services:
+  restoration-helper:
+    <<: *capture-helper
+    profiles: [manual-restoration]
+    entrypoint: [node, /opt/scripts/openbao/recovery-unseal.mjs]
+    command: [verify-protected]
+    networks: [normal-provider]
+    volumes:
+      - type: bind
+        source: /home/gino/projects/IMS-rebuild/scripts/openbao/recovery-unseal.mjs
+        target: /opt/scripts/openbao/recovery-unseal.mjs
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: /home/gino/projects/IMS-rebuild/.local/endpoint-credentials/seal.json
+        target: /seal/seal.json
+        read_only: true
+        bind: { create_host_path: false }
+      - type: bind
+        source: /home/gino/projects/IMS-rebuild/.local/endpoint-credentials/ca.crt
+        target: /seal/ca.crt
+        read_only: true
+        bind: { create_host_path: false }
   capture-helper:
     <<: *capture-helper
     profiles: [manual-capture]
@@ -28,6 +50,11 @@ services:
       - /tmp:rw,noexec,nosuid,nodev,size=16m,mode=1777
       - /recovery:rw,noexec,nosuid,nodev,size=1m,uid=1003,gid=1003,mode=0700
     volumes:
+      - type: bind
+        source: /home/gino/projects/IMS-rebuild/scripts/openbao/recovery-unseal.mjs
+        target: /opt/scripts/openbao/recovery-unseal.mjs
+        read_only: true
+        bind: { create_host_path: false }
       - type: bind
         source: /home/gino/projects/IMS-rebuild/.local/endpoint-credentials/seal.json
         target: /seal/seal.json
@@ -96,6 +123,9 @@ volumes:
     external: true
     name: myims-rebuild-dev_endpoint-secrets-audit
 networks:
+  normal-provider:
+    external: true
+    name: myims-rebuild-dev_endpoint-credentials
   isolated-provider:
     external: true
     name: myims-rebuild-dev_openbao-recovery

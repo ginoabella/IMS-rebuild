@@ -16,6 +16,38 @@ ARCHIVE = '00000000-0000-4000-8000-000000000002'
 
 
 class HandoffTests(unittest.TestCase):
+    def test_prepare_creates_only_empty_declared_directories_and_refuses_reuse(self):
+        with tempfile.TemporaryDirectory(prefix='myims-stage-test-') as temporary:
+            root = Path(temporary) / 'private'
+            root.mkdir(mode=0o700)
+            original = module.directory
+            def synthetic_directory(path, owner):
+                original(path, (os.getuid(), os.getgid()))
+            with patch.object(module, 'RECOVERY_ROOT', root), patch.object(module, 'directory', synthetic_directory), patch.object(module.os, 'chown') as chown:
+                result = module.prepare(OP)
+                self.assertEqual(result['status'], 'empty_staging_prepared')
+                self.assertEqual(chown.call_count, 5)
+                for child in ['capture', 'encrypted/baseline', 'encrypted/audit-after']:
+                    self.assertEqual(list((root / OP / child).iterdir()), [])
+                with self.assertRaisesRegex(ValueError, 'operation_exists'):
+                    module.prepare(OP)
+
+    def test_prepare_refuses_symlink_root_and_preserves_partial_operation(self):
+        with tempfile.TemporaryDirectory(prefix='myims-stage-test-') as temporary:
+            root = Path(temporary) / 'private'
+            root.symlink_to(Path(temporary), target_is_directory=True)
+            with patch.object(module, 'RECOVERY_ROOT', root):
+                with self.assertRaises(ValueError):
+                    module.prepare(OP)
+            root.unlink()
+            root.mkdir(mode=0o700)
+            (root / OP).mkdir(mode=0o700)
+            (root / OP / 'partial').write_text('preserve')
+            with patch.object(module, 'RECOVERY_ROOT', root):
+                with self.assertRaisesRegex(ValueError, 'operation_exists'):
+                    module.prepare(OP)
+            self.assertEqual((root / OP / 'partial').read_text(), 'preserve')
+
     def fixture(self):
         root = tempfile.TemporaryDirectory(prefix='myims-cipher-handoff-')
         self.addCleanup(root.cleanup)

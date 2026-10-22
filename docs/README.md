@@ -24,6 +24,11 @@ and [verified results and limits](status/development-container-evidence.md).
 
 Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-services.md).
 
+Current development backup operations: [runbook and maintenance gates](runbooks/p3-u3a-development-backup.md),
+[offline authority findings](status/p3-u3a-captured-authority-review.md), and
+[disabled authority/installation next step](planning/p3-u3a-backup-authority-next-step.md).
+The one-time capture/upload is complete; scheduling and recovery readiness remain incomplete.
+
 Backup platform: [approved Restic architecture/security requirements](architecture/backup-platform.md)
 and [minimal installation plan and remaining approval gates](planning/p3-u3a-backup-installation-approval-package.md).
 Platform selection is approved; retained execution and production readiness remain gated.

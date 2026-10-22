@@ -1,0 +1,16 @@
+{
+  "operationId": "bdaa20bd-1325-4637-94ec-f8699cd2dd40",
+  "retainedAccess": false,
+  "checks": [],
+  "status": "failed",
+  "failure": {
+    "code": "TimeoutError",
+    "phase": "fixture-bootstrap"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}
