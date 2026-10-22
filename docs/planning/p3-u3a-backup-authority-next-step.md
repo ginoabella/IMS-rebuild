@@ -1,5 +1,12 @@
 # P3-U3a next authority and backup installation review
 
+**Latest result:** corrected package explicitly approved and executed once; all nine
+writes and both encrypted backup retrievals succeeded. Root revoked, normal
+protection restored and guard/helpers closed. Owner password handoff is complete
+and its private custody was verified without reading the password. [Execution evidence and next guidance](../status/p3-u3a-bootstrap-retained-execution.md).
+The earlier pending statements below describe preparation history; execution
+authorization is now consumed and must not be replayed.
+
 October 22, 2026. **Operating model approved by the owner; concrete retained execution remains gated below.** This document
 supersedes older pending-capture descriptions only for current sequencing. It
 does not modify their historical approval boundaries. The capture/upload request
@@ -25,6 +32,18 @@ now complete within its disposable boundary. The [concrete one-time guarded
 bootstrap execution request](p3-u3a-bootstrap-execution-request.md) is ready for its
 separate root/staging/installation approval. Reapproval of this operating-model
 plan alone does not execute that request.
+
+## Operator command implementation
+
+After the separately approved bootstrap and password handoff, the
+[operator command guide](../status/p3-u3a-backup-operations.md) now provides
+status, explicit run-now and attended rotation. Mutations default to a plan and
+require an attended administrator with `--execute`. Commands use the installed
+scoped identities; they do not reuse consumed bootstrap authorization. Disposable
+native success and focused uncertainty/atomicity tests establish the implementation
+boundary. Retained mutation acceptance, independent decryption/joint recovery and
+operational readiness still precede scheduling. Earlier candidate wording below
+is historical where superseded by completed bootstrap and command evidence.
 
 ## Minimal installation candidate
 
@@ -60,7 +79,7 @@ installer authorization route remains unverified.
   human password or maintenance privileges. Configure failure/expiry/capacity
   alerts to the owner's confirmed destination before activation.
 - Expose three operator commands: status, run-now and attended credential-rotate.
-  These are proposed interfaces, not installed commands. Keep the current
+  These interfaces are now implemented as documented above, without timer activation. Keep the current
   candidate 30-day SecretID and remind at day 23; validate the use budget against
   the chosen cadence. Automate bounded staging/verification for rotation, but
   require the operator to unlock the maintenance credential. Defer unattended

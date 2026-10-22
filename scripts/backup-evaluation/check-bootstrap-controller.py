@@ -24,6 +24,8 @@ BAO = 'quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474d
 SERVER = 'restic/rest-server:0.14.0@sha256:d2aff06f47eb38637dff580c3e6bce4af98f386c396a25d32eb6727ec96214a5'
 parser=argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--lost-response-after-write',type=int,choices=range(9))
+parser.add_argument('--operator-commands',action='store_true')
+parser.add_argument('--recovery-verification',action='store_true')
 options=parser.parse_args()
 op = str(uuid.uuid4())
 prefix = 'myims-bootstrap-eval-' + op[:8]
@@ -35,6 +37,12 @@ SOURCES = ['scripts/backup-host/bootstrap-controller.py','scripts/backup-host/bo
  'scripts/backup/archive.mjs','scripts/backup/archive-post-install.mjs','scripts/backup/ciphertext-handoff.mjs','scripts/backup/verify-bootstrap-upload.mjs','scripts/backup/repository-check.mjs',
  'scripts/backup-evaluation/bootstrap-run-action.mjs']
 evidence['sourceSha256']={name:hashlib.sha256((ROOT/name).read_bytes()).hexdigest() for name in SOURCES}
+if options.operator_commands:
+    for name in ['scripts/backup-host/backup-operations.py','scripts/backup-operations/rotation.mjs','scripts/backup-evaluation/operator-commands-fixture.py']:
+        evidence['sourceSha256'][name]=hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
+if options.recovery_verification:
+    for name in ['scripts/backup-recovery/request.mjs','scripts/backup-recovery/retrieve.mjs','scripts/backup-recovery/verify.mjs']:
+        evidence['sourceSha256'][name]=hashlib.sha256((ROOT/name).read_bytes()).hexdigest()
 controller = None
 provider = None
 initial = None
@@ -186,7 +194,12 @@ try:
          '-v', str(work / 'server.key') + ':/tls.key:ro', '-v', str(work / 'htpasswd') + ':/auth:ro',
          '--entrypoint', '/usr/bin/rest-server', SERVER, '--path=/data', '--listen=:8000', '--append-only', '--private-repos',
          '--htpasswd-file=/auth', '--tls', '--tls-cert=/tls.crt', '--tls-key=/tls.key', '--tls-min-ver=1.3'])
-    key = helper('age-key', ['-e', "const c=require('node:child_process');const k=c.execFileSync('age-keygen');const r=c.execFileSync('age-keygen',['-y'],{input:k});process.stdout.write(r)"]).stdout
+    if options.recovery_verification:
+        (work/'verification-key').mkdir(mode=0o700)
+        helper('verification-key-owner',['-e',"require('node:fs').chownSync('/owned',12010,12010)"],['-v',str(work/'verification-key')+':/owned'],user='0:0',caps=['CHOWN'])
+        key=helper('age-key',['-e',"const c=require('node:child_process');c.execFileSync('age-keygen',['-o','/key/identity'],{stdio:'pipe'});process.stdout.write(c.execFileSync('age-keygen',['-y','/key/identity']))"],['-v',str(work/'verification-key')+':/key'],user='12010:12010').stdout
+    else:
+        key = helper('age-key', ['-e', "const c=require('node:child_process');const k=c.execFileSync('age-keygen');const r=c.execFileSync('age-keygen',['-y'],{input:k});process.stdout.write(r)"]).stdout
     (work / 'recipient.txt').write_bytes(key)
     (work / 'recipient.txt').chmod(0o644)
     # Render source graph, then substitute ONLY fixture resources in a private copy.
@@ -285,6 +298,33 @@ try:
     check('root_revoked_and_normal_tls_405_restored_before_guard_cancellation',record['rootRevocationVerified'] and record['normalRestorationVerified'] and record['deadlineCancelled'])
     final = json.loads(run(['docker', 'inspect', provider]).stdout)[0]
     check('final_provider_running_on_only_normal_network_with_original_restart_policy', final['State']['Running'] and list(final['NetworkSettings']['Networks']) == [normal_network] and final['HostConfig']['RestartPolicy']['Name'] == 'unless-stopped')
+    if options.operator_commands:
+        if options.lost_response_after_write is not None:raise RuntimeError('incompatible_fixture_modes')
+        spec4=importlib.util.spec_from_file_location('operator_commands_fixture',ROOT/'scripts/backup-evaluation/operator-commands-fixture.py')
+        operator_fixture=importlib.util.module_from_spec(spec4);spec4.loader.exec_module(operator_fixture)
+        containers.extend(operator_fixture.exercise(ROOT,work,config,controller,helper,check))
+    if options.recovery_verification:
+        fixture_evidence={**controller.record,'status':'installed-and-both-backups-retrieved','operationId':op,
+            'events':[*controller.record['events'],{'phase':'bootstrap_complete','at':datetime.now(timezone.utc).isoformat()}]}
+        public_source=work/'verification-evidence.json';public_source.write_text(json.dumps(fixture_evidence));public_source.chmod(0o644)
+        request_bytes=helper('verification-request',['/scripts/backup-recovery/request.mjs','/evidence.json'],
+            ['-v',str(ROOT/'scripts')+':/scripts:ro','-v',str(public_source)+':/evidence.json:ro']).stdout
+        public_request=work/'verification-request.json';public_request.write_bytes(request_bytes);public_request.chmod(0o644)
+        request_hash=hashlib.sha256(request_bytes).hexdigest()
+        (work/'retrieved-verification').mkdir(mode=0o700)
+        helper('verification-output-owner',['-e',"require('node:fs').chownSync('/output',12010,12010)"],
+            ['-v',str(work/'retrieved-verification')+':/output'],user='0:0',caps=['CHOWN'])
+        retrieved=ports._container('recovery-verification-export','backup-recovery/retrieve.mjs',[request_hash],
+            [(str(public_request),'/request.json',True,'bind'),(config['client'],'/run/client',True,'bind'),
+             (str(work/'retrieved-verification'),'/output',False,'bind')],network=backup_network,user='12010:12010')
+        check('independent_exact_snapshot_export_has_five_files_and_no_repository_writes',retrieved.get('status')=='verification-bundle-retrieved' and retrieved.get('files')==5 and retrieved.get('repositoryWrites')==0)
+        verified=json.loads(helper('offline-owner-verification',['/scripts/backup-recovery/verify.mjs','--request','/bundle/verification-request.json',
+            '--request-sha256',request_hash,'--bundle','/bundle','--identity','/identity'],
+            ['-v',str(ROOT/'scripts')+':/scripts:ro','-v',str(work/'retrieved-verification')+':/bundle:ro',
+             '-v',str(work/'verification-key/identity')+':/identity:ro'],user='12010:12010').stdout)
+        check('independent_real_age_decryption_verifies_native_snapshot_and_separate_audit',verified.get('status')=='independent-archive-integrity-verified' and len(verified.get('archives',[]))==2 and verified['archives'][0].get('nativeSnapshotIntegrityVerified') and verified['archives'][1].get('auditJsonIntegrityVerified'))
+        check('offline_verification_writes_no_plaintext_and_makes_no_restore_or_joint_recovery_claim',verified.get('plaintextWritten') is False and verified.get('providerAccessed') is False and verified.get('repositoryAccessed') is False and verified.get('nativeRestorePerformed') is False and verified.get('jointPostgresRecoveryEstablished') is False)
+        evidence['offlineVerification']=verified
     evidence['controllerSha256'] = hashlib.sha256((ROOT / 'scripts/backup-host/bootstrap-controller.py').read_bytes()).hexdigest()
     evidence['provisionerSha256'] = hashlib.sha256((ROOT / 'scripts/openbao/bootstrap-provision.mjs').read_bytes()).hexdigest()
     evidence['harnessSha256'] = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
@@ -311,6 +351,8 @@ finally:
     if 'ports' in locals(): containers.extend(ports.containers)
     if controller and controller.helper:
         containers.append(controller.helper)
+    if controller:
+        containers.extend(controller.record.get('operatorFixtureContainers',[]))
     for name in containers:
         run(['docker', 'rm', '-f', name], check=False)
     guard_stopped = True
@@ -345,7 +387,7 @@ finally:
                            'networksAbsent': all(run(['docker', 'network', 'inspect', name], check=False).returncode != 0 for name in networks), 'privateFixtureRemoved': not work.exists()}
     if not all(evidence['cleanup'].values()):
         evidence['status'] = 'failed'
-    for path in [ROOT / ('docs/status/p3-u3a-bootstrap-host-evidence.json' if options.lost_response_after_write is None else 'docs/status/p3-u3a-bootstrap-host-fault-evidence.json'), ROOT / 'docs/status/p3-u3a-disposable-runs' / (op + '.json')]:
+    for path in [ROOT / ('docs/status/p3-u3a-backup-recovery-verification-native.json' if options.recovery_verification else ('docs/status/p3-u3a-backup-operations-native.json' if options.operator_commands else ('docs/status/p3-u3a-bootstrap-host-evidence.json' if options.lost_response_after_write is None else 'docs/status/p3-u3a-bootstrap-host-fault-evidence.json'))), ROOT / 'docs/status/p3-u3a-disposable-runs' / (op + '.json')]:
         path.write_text(json.dumps(evidence, indent=2) + '\n')
     print(json.dumps(evidence))
     if evidence['status'] != 'passed':

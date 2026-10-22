@@ -1,0 +1,98 @@
+{
+  "operationId": "3794b83c-606d-4fef-9544-9010b74e0bdb",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "closed_prior_operation_label_and_exact_provider_metadata_reconciled",
+      "passed": true
+    },
+    {
+      "name": "semantic_prestate_reviews_existing_custodian_entity_and_all_role_aliases",
+      "passed": true
+    },
+    {
+      "name": "host_guard_health_and_backup_freshness_checked_for_each_write",
+      "passed": true
+    },
+    {
+      "name": "prechange_backup_retrieval_verified",
+      "passed": true
+    },
+    {
+      "name": "postinstall_backup_independently_encrypted_uploaded_and_retrieved",
+      "passed": true
+    },
+    {
+      "name": "postinstall_is_a_different_restic_snapshot",
+      "passed": true
+    },
+    {
+      "name": "root_revoked_and_normal_tls_405_restored_before_guard_cancellation",
+      "passed": true
+    },
+    {
+      "name": "final_provider_running_on_only_normal_network_with_original_restart_policy",
+      "passed": true
+    },
+    {
+      "name": "operator_run_now_scoped_capture_encryption_exact_retrieval",
+      "passed": true
+    },
+    {
+      "name": "operator_rotation_verified_adopted_retired_and_both_human_sessions_revoked",
+      "passed": true
+    },
+    {
+      "name": "operator_atomic_active_pointer_preserves_previous_custody",
+      "passed": true
+    },
+    {
+      "name": "operator_rotated_identity_produces_distinct_retrieved_snapshot",
+      "passed": true
+    },
+    {
+      "name": "operator_commands_no_root_recovery_or_scheduling",
+      "passed": true
+    },
+    {
+      "name": "exercised_sources_unchanged_during_run",
+      "passed": true
+    }
+  ],
+  "status": "passed",
+  "sourceSha256": {
+    "scripts/backup-host/bootstrap-controller.py": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+    "scripts/backup-host/bootstrap-host-ports.py": "5aa5a88ce68aefbd43b32c1d280e9f5ba91dcdaa6407fca48ded85aca0c384c6",
+    "scripts/backup-host/guard-bridge.py": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
+    "scripts/openbao/bootstrap-action.mjs": "3750d772320eddce2fedcef0b05acd77bb4b2cde256dbee819dbbf261b2f8a3f",
+    "scripts/openbao/bootstrap-prestate.mjs": "86f2b2fe8bfc3dd33095db0da9b0ef8b42b13c5a4b9af6d4202d5cd377106d96",
+    "scripts/openbao/guard-gate.mjs": "40d6273e7add890efd16bbadfd5047d80ef06d62686b257fc97f84d23e8105c2",
+    "scripts/openbao/bootstrap-provision.mjs": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+    "scripts/backup/archive.mjs": "b52e07e287cad4f4d27668955462a8e179d82f39c74f426a12c358442c3eefb7",
+    "scripts/backup/archive-post-install.mjs": "c13dafeb580c9f0035a64fa3ca923993f2740feaec95c7e0ebce48fa8c59d4f1",
+    "scripts/backup/ciphertext-handoff.mjs": "daa74b35e5d67c031c2b0fd63b0cfd1e0817863c74c45ad69b58f4c5e47616c7",
+    "scripts/backup/verify-bootstrap-upload.mjs": "4e489ff305e72cb4ff364d1ae57ec22d475b0dbd9756ad264859332c5f1fcf2d",
+    "scripts/backup/repository-check.mjs": "f9236e619cecc91f2f8741953af8c3b14b6fa0538849c9e6ba52452b9947555e",
+    "scripts/backup-evaluation/bootstrap-run-action.mjs": "2f2ce9a8c8cf429f9ba6b602917ca83c155cfbd283f6a65c41e5efa97664748f",
+    "scripts/backup-host/backup-operations.py": "be9427efb90d10a6d0aeaddb0e037a69238d8c8ec13a1f56a3045ab3a0af58fb",
+    "scripts/backup-operations/rotation.mjs": "6229a5bb71a5c0ad4a3ec7d19a5424a6339151c4d4a512089c4147e72d8d08f7",
+    "scripts/backup-evaluation/operator-commands-fixture.py": "99d09122dbe9a95a51ca230fe61e02a2baabe02ffbc2fa705096a1e709e490f9"
+  },
+  "lastFixtureApi": "auth/token/revoke-self",
+  "syntheticPolicyPrestate": "three-unconstrained-issuance-policies-not-retained-bytes",
+  "faultAfterWrite": null,
+  "controllerSha256": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+  "provisionerSha256": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+  "harnessSha256": "d633c48a87f66821d24c49535db9733dd3898d73f39f6a2088209c678ff5f079",
+  "hostPortsSha256": "5aa5a88ce68aefbd43b32c1d280e9f5ba91dcdaa6407fca48ded85aca0c384c6",
+  "helperSha256": "3750d772320eddce2fedcef0b05acd77bb4b2cde256dbee819dbbf261b2f8a3f",
+  "bridgeSha256": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
+  "initializerSha256": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+  "cleanup": {
+    "deadlineWatcherStopped": true,
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "status": "maintenance-password-handed-off",
+  "operationId": "d6550071-561a-4339-bc15-50a5b22ac43d",
+  "verifiedAt": "2026-10-22T07:43:50.241284+00:00",
+  "operatorReportedSourcePreserved": true,
+  "operatorReportedPasswordPrinted": false,
+  "target": "/home/gino/.openbao-backup-maintainer/password",
+  "operatorUid": 1002,
+  "operatorGid": 1002,
+  "targetMode": "0600",
+  "parentMode": "0700",
+  "regularFileSingleLinkVerified": true,
+  "credentialContentsRead": false,
+  "providerAccessed": false,
+  "bootstrapExecutionEvidence": "docs/status/p3-u3a-bootstrap-execution-d6550071-561a-4339-bc15-50a5b22ac43d.json",
+  "originalExecutionEvidencePreserved": true
+}

@@ -1,32 +1,50 @@
 # P3-U3a development backup operations and maintenance
 
-Current checkpoint: October 22, 2026. **One-time capture/upload complete;
-unattended backup and recovery readiness incomplete.** Track work in the
-[progress tracker](../../context/progress-tracker.md), review the
-[authority findings](../status/p3-u3a-captured-authority-review.md), and use the
-[approved model and gated installation direction](../planning/p3-u3a-backup-authority-next-step.md)
-for remaining authority/installation work. The [exact narrowed rotation candidate
-and native verification](../status/p3-u3a-backup-maintenance-review.md) supersedes
-the older broad maintenance candidate; no rotation command is installed yet.
+Current checkpoint: October 22, 2026 (+08:00). **Snapshot and maintenance
+identities installed; two fresh encrypted backups retrieved; owner password
+handoff complete. Scheduling and recovery readiness remain incomplete.**
 
-## Resources, custody and completed operation
+Current guidance and completed password handoff evidence are in the
+[retained execution evidence](../status/p3-u3a-bootstrap-retained-execution.md).
+The [operator command guide](../status/p3-u3a-backup-operations.md) now provides
+status, explicit run-now and attended rotation, including uncertainty handling
+and the disposable-native verification boundary. Start with:
 
-| Resource            | Current state / responsibility                                                                                                                                                                                                                                                   |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Operation           | `24096f3d-bf41-4ec2-9e12-95e2057c115d`; root recovery, repository initialization, capture and upload consumed. No automatic retry.                                                                                                                                               |
-| Provider            | `myims-rebuild-dev-endpoint-secrets-1`; protected configuration restored, root revoked/lookup 403. No dedicated backup identity installed by the completed operation.                                                                                                            |
-| Capture source      | `/srv/myims-openbao-recovery-development/<operation>/capture`; root-protected enclosing directories, capture UID/GID 1003. Contains sensitive plaintext; preserve, do not copy into checkout or log.                                                                             |
-| Storage             | `myims-backup-development-rest-server-1`; append-only, private authenticated TLS, UID/GID 12010, 2-GiB development cap. Same physical host accepted for development; host-loss recovery unproven.                                                                                |
-| Repository          | ID `8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b`, version 2. Snapshot `e259689800a00c5a42109a9c8e72a49a6a908bc659ea79a3f9dc0b1ca0d10582`.                                                                                                                   |
-| Custody             | Owner holds separate Windows recovery material; archive private age key stays outside MyIMS. Prior Windows package checks do not prove decryption of this fresh uploaded archive. Passwords, seal material and repository credentials remain outside reports/application mounts. |
-| Operating ownership | `gino`: current trusted host administrator and human custodian owner. Capture helper UID 1003 and upload UID 12010 are execution identities, not unattended operational ownership. Installer, rotation/job/audit/alert/recovery owners need explicit assignment.                 |
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 scripts/backup-host/backup-operations.py status
+```
 
-The [operation evidence](../status/p3-u3a-development-capture-execution.json)
-records both ciphertext hashes, upload receipt and exact four-file read-only
-retrieval verification. Source plaintext, ciphertext spool, receipts, closed host
-intent/config/executed source and closed deadline record remain accounted for.
-Deletion requires a separate exact cleanup decision after recovery/custody review.
-Do not repeat old staging/handoff/capture/init/upload commands.
+The [independent archive verification guide](p3-u3a-independent-archive-verification.md)
+now provides exact read-only ciphertext export and owner-run offline integrity
+verification. Retained export/off-host owner execution is pending; no private key
+should be copied to this server.
+
+The [isolated joint-recovery rehearsal](../status/p3-u3a-isolated-joint-recovery.md)
+now exercises native PostgreSQL/OpenBao restore and report-only trunk generation
+comparison using disposable data. It grants no retained restore or credential-use
+authority and does not satisfy complete application recovery or scheduling gates.
+
+Track remaining work in the [progress tracker](../../context/progress-tracker.md)
+and [approved operating model](../planning/p3-u3a-backup-authority-next-step.md).
+
+## Current resources and custody
+
+| Resource | Current state / responsibility |
+| --- | --- |
+| Bootstrap operation | `d6550071-561a-4339-bc15-50a5b22ac43d`; approved execution consumed, nine writes acknowledged, root revoked/403 and protected restoration verified. No replay. |
+| Provider | `myims-rebuild-dev-endpoint-secrets-1`; normal TLS/HCL/mounts/private network/restart policy restored, active health and anonymous generation 405 verified. |
+| Snapshot identity | Dedicated `platform-backup` AppRole, `platform-raft-snapshot-reader`; no default policy, 300-second token maximum; initial SecretID 30 days/1,000 uses. Custody only in protected operation `snapshot-credentials`, never application mounts. |
+| Attended maintenance | `gino`, separate `platform-backup-maintainer` account, 900-second maximum, constrained rotation policy; password handed off to `/home/gino/.openbao-backup-maintainer/password`. Existing custodian account preserved. |
+| Plaintext and protected outputs | `/srv/myims-openbao-recovery-development/d6550071-561a-4339-bc15-50a5b22ac43d`; preserve sensitive capture, separate credentials, maintenance output and install state; never copy into checkout/logs. |
+| Storage | `myims-backup-development-rest-server-1`; append-only private authenticated TLS, UID/GID 12010, 2-GiB development cap. Same physical host; host-loss recovery unproven. |
+| Repository | ID `8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b`; separate pre/post snapshots and exact four-file retrieval recorded in execution evidence. Already initialized; never reinitialize. |
+| Recovery keys | Owner holds separate Windows recovery material; private age key stays outside MyIMS. Fresh ciphertext retrieval does not prove independent decryption or joint recovery. |
+| Activation | Status/run-now/attended rotation commands implemented; retained mutation acceptance and recovery/alerts/capacity remain. No timer or continuous audit collector activated. |
+
+The earlier capture operation `24096f3d-bf41-4ec2-9e12-95e2057c115d` is also
+closed and consumed. Its [historical evidence](../status/p3-u3a-development-capture-execution.json)
+and artifacts remain preserved. Do not repeat old staging/capture/init/upload
+commands. The administrator password handoff is complete; do not rerun it. Deletion needs a separate exact cleanup decision.
 
 ## Repeatable offline authority comparison
 
@@ -81,6 +99,6 @@ storage and an additional independently protected copy or reviewed safeguard.
 After every approved operation, update the tracker, immutable operation evidence,
 custody inventory, installed artifact hashes and this current-state table. Record
 test failures and unresolved findings without converting a successful substep into
-P3-U3a completion. Fresh decryption, native/joint restore, effective authority,
+P3-U3a completion. Fresh decryption, native/joint restore, ongoing authority review,
 ongoing operations, trunk/gateway integration and existing lifetime/HTTP/browser
 issues remain open.

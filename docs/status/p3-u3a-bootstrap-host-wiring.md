@@ -1,5 +1,12 @@
 # P3-U3a retained-host wiring and complete backup rehearsal
 
+**Latest result:** corrected package explicitly approved and executed once; all nine
+writes and both encrypted backup retrievals succeeded. Root revoked, normal
+protection restored and guard/helpers closed. Owner password handoff is complete
+and its private custody was verified without reading the password. [Execution evidence and next guidance](p3-u3a-bootstrap-retained-execution.md).
+The earlier pending statements below describe preparation history; execution
+authorization is now consumed and must not be replayed.
+
 October 22, 2026 (Asia/Manila, +08:00). Owner authorized continued host wiring and
 post-install verification. **Implementation and disposable rehearsal complete;
 retained execution remains disabled. P3-U3a remains incomplete.** The separately
@@ -95,9 +102,11 @@ and initializes only its own repository during setup. It does not establish curr
 retained policy/mapping state, actual new staging, actual maintenance handoff, fresh
 independent decryption, joint recovery or scheduling readiness.
 
-Next is owner review/approval of the single concrete bootstrap request, followed
-by its administrator staging command and the already-prepared agent preflight/
-execution. Stop on current-state differences rather than normalize/overwrite them.
+The owner has approved the single concrete bootstrap request and its exact review
+digest. Administrator staging is pending because this agent session requires
+interactive sudo authentication. After the owner runs the reviewed staging command,
+continue with the already-prepared agent preflight/execution and a fresh bounded
+window; no repeat approval is required. Stop on current-state differences rather than normalize/overwrite them.
 No new root execution or provider access is authorized by this status document.
 
 Final checks: **38/38** archive/capture/snapshot/handoff tests in the pinned,
@@ -105,6 +114,32 @@ network-disabled tooling container; **24/24** Node authority/provisioning/guard
 regressions in the Docker workspace; **15/15** host controller/bridge/package
 checks. Scoped ESLint/formatting, Python syntax, source/digest bindings and local
 links passed. Public package validation passed with provider/custody access false;
-execution and staging flags remain false. Full application suites were not rerun
+owner execution approval is now recorded, while staging remains false and the
+operation remains unconsumed/unstarted. Full application suites were not rerun
 for these deployment-only changes; the existing unrelated full-graph formatting
 limitation remains recorded.
+
+## Staging parent-check correction — October 22, 2026 (+08:00)
+
+The owner's staging attempt refused `unsafe_parent`. The helper incorrectly
+required every ancestor to be root-owned, although the installed backup host
+preparer intentionally creates `/srv/myims-backup-development` as
+UID/GID 12010, mode 0700. Metadata-only inspection confirmed this exact custody,
+an empty root-owned mode-0700 `bootstrap` parent, and absence of both operation
+directories. No credential contents or provider API were accessed.
+
+The helper now allows only that exact service-owned ancestor with exact UID/GID
+12010 and mode 0700. Other ancestors must be real root-owned directories, with
+root group and no group/other writes. It validates both complete ancestor chains
+before creating any missing parent. Existing host ownership and operation paths,
+nine provider writes, guard and cleanup behavior are unchanged. Existing operation
+directories still refuse reuse; the empty parent from the failed attempt is safe.
+
+Seven focused package/staging tests pass, including exact-path/custody negatives
+and refusal before mkdir. The original owner approval remains recorded against
+`07907f91e232a093bd0d125413995d03c8099fa0ae887c5232c9859338eacc85`. The corrected package is
+`76ac9c1e4e280427145290dbd08569175e3b618486ef094ef93e1bb7e5d2fbc4`; only the pinned staging helper changed.
+Retained/root execution flags remain false until the owner approves this corrected
+source binding. No new root attempt or execution window has started. The owner can
+rerun the same administrator staging command in the execution request; after successful preparation
+and acceptance of this correction, the agent verifies staging and continues.

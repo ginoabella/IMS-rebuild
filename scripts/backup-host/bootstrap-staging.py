@@ -7,6 +7,19 @@ from pathlib import Path
 import stat
 
 
+def validate_parent(part):
+    s = part.lstat()
+    if not stat.S_ISDIR(s.st_mode) or stat.S_ISLNK(s.st_mode):
+        raise ValueError('unsafe_parent')
+    # The installed backup service owns this exact private host root. All
+    # bootstrap parents and other ancestors must still be root-owned.
+    if part == Path('/srv/myims-backup-development'):
+        if (s.st_uid, s.st_gid, stat.S_IMODE(s.st_mode)) != (12010, 12010, 0o700):
+            raise ValueError('unsafe_backup_service_parent')
+    elif s.st_uid != 0 or s.st_gid != 0 or s.st_mode & 0o022:
+        raise ValueError('unsafe_parent')
+
+
 def prepare(request):
     if os.geteuid() != 0:
         raise ValueError('administrator_required')
@@ -24,15 +37,18 @@ def prepare(request):
     spool = backup / operation
     if os.path.lexists(base) or os.path.lexists(spool):
         raise ValueError('operation_exists_no_repair')
+    # Check both complete ancestor chains before creating anything. A prior
+    # refusal may have left an empty parent, but never reuse an operation.
     for parent in [root, backup]:
-        if not parent.exists():
-            parent.mkdir(mode=0o700)
-        for part in [parent,*parent.parents]:
-            s=part.lstat()
-            if not stat.S_ISDIR(s.st_mode) or stat.S_ISLNK(s.st_mode) or s.st_uid != 0 or s.st_mode & 0o022:
-                raise ValueError('unsafe_parent')
-        if stat.S_IMODE(parent.lstat().st_mode) != 0o700:
+        for part in parent.parents:
+            validate_parent(part)
+        if os.path.lexists(parent):
+            validate_parent(parent)
+        if os.path.lexists(parent) and stat.S_IMODE(parent.lstat().st_mode) != 0o700:
             raise ValueError('unsafe_parent_mode')
+    for parent in [root, backup]:
+        if not os.path.lexists(parent):
+            parent.mkdir(mode=0o700)
     base.mkdir(mode=0o700);spool.mkdir(mode=0o700)
     (base/'encrypted').mkdir(mode=0o700)
     os.chown(base/'encrypted',1003,1003)

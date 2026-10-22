@@ -20,6 +20,24 @@ class Tests(unittest.TestCase):
   r=builder.build_request(OP);r['directories']['maintenance']='/tmp/unreviewed-target'
   with patch.object(staging.os,'geteuid',return_value=0),patch.object(staging.Path,'mkdir',side_effect=AssertionError('unreviewed path')):
    with self.assertRaises(ValueError):staging.prepare(r)
+ def test_only_exact_private_backup_service_ancestor_is_allowed(self):
+  import stat
+  from types import SimpleNamespace
+  path=Path('/srv/myims-backup-development')
+  good=SimpleNamespace(st_uid=12010,st_gid=12010,st_mode=stat.S_IFDIR|0o700)
+  with patch.object(staging.Path,'lstat',return_value=good):
+   staging.validate_parent(path)
+   for other in [Path('/srv'),path/'bootstrap',Path('/srv/other-backup')]:
+    with self.assertRaises(ValueError):staging.validate_parent(other)
+  for uid,gid,mode in [(0,0,stat.S_IFDIR|0o700),(12010,0,stat.S_IFDIR|0o700),(12010,12010,stat.S_IFDIR|0o750),(12010,12010,stat.S_IFLNK|0o700)]:
+   with patch.object(staging.Path,'lstat',return_value=SimpleNamespace(st_uid=uid,st_gid=gid,st_mode=mode)):
+    with self.assertRaises(ValueError):staging.validate_parent(path)
+ def test_all_ancestors_checked_before_creating_missing_parents(self):
+  r=builder.build_request(OP)
+  def validate(path):
+   if path==Path('/srv/myims-backup-development'):raise ValueError('unsafe_backup_service_parent')
+  with patch.object(staging.os,'geteuid',return_value=0),patch.object(staging.os.path,'lexists',return_value=False),patch.object(staging,'validate_parent',side_effect=validate),patch.object(staging.Path,'mkdir',side_effect=AssertionError('mkdir before parent validation')):
+   with self.assertRaisesRegex(ValueError,'unsafe_backup_service_parent'):staging.prepare(r)
  def test_new_status_record_is_operation_bound_before_any_provider_call(self):
   import tempfile,json
   with tempfile.TemporaryDirectory() as d:

@@ -1,0 +1,49 @@
+{
+  "status": "retained-ciphertext-export-and-owner-custody-verified",
+  "operationId": "f870564b-45b5-4b34-a5c9-949df4a35194",
+  "verifiedAt": "2026-10-22T08:42:32.743476+00:00",
+  "ownerDirectory": "/home/gino/.myims-backup-verification/f870564b-45b5-4b34-a5c9-949df4a35194",
+  "protectedStaging": "/srv/myims-backup-development/verification-exports/f870564b-45b5-4b34-a5c9-949df4a35194",
+  "requestSha256": "2a0f686e9097a72ab6875273aaf6b6cd8c05c8488bc0323cbba93e84343c222b",
+  "snapshotId": "c51f8a679a86d29265af9b4588b1f76d537e7cacb09ce1bc75e660bd60015324",
+  "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+  "verifiedFiles": [
+    {
+      "file": "verification-request.json",
+      "bytes": 1097,
+      "sha256": "2a0f686e9097a72ab6875273aaf6b6cd8c05c8488bc0323cbba93e84343c222b"
+    },
+    {
+      "file": "eb024207-3b6e-4ea0-b912-745cd0bc3ede.age",
+      "bytes": 196234,
+      "sha256": "d91d5426f4c6b28cb70b76e307eec43a39b827167e6307db2f69d4ab804c916b"
+    },
+    {
+      "file": "eb024207-3b6e-4ea0-b912-745cd0bc3ede.json",
+      "bytes": 341,
+      "sha256": "51b9deaec804bd9b0c4b9b5b329a15287608c4e7e559b16b4b3c8be3a991ad73"
+    },
+    {
+      "file": "42d3c34e-8ca1-42a9-a9e3-37146c01be56.age",
+      "bytes": 475494,
+      "sha256": "533ba9b39666318934311869923d0b7e5ed06ec852be25dc37ac2ad8498daa2f"
+    },
+    {
+      "file": "42d3c34e-8ca1-42a9-a9e3-37146c01be56.json",
+      "bytes": 333,
+      "sha256": "145a806a1e68b58b32412274dc40b9f563f5f066b033d44625db6eb4e1c2a806"
+    }
+  ],
+  "uid": 1002,
+  "gid": 1002,
+  "directoryMode": "0700",
+  "fileMode": "0600",
+  "singleLinksVerified": true,
+  "operatorReportedSourcePreserved": true,
+  "operatorReportedRepositoryWrites": 0,
+  "providerAccessed": false,
+  "privateKeyRead": false,
+  "decryptionPerformed": false,
+  "plaintextWritten": false,
+  "ownerOffHostVerificationPending": true
+}

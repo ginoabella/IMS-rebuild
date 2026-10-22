@@ -1,0 +1,56 @@
+{
+  "operationId": "42c1f039-4bf2-4825-9209-2e259978b9ff",
+  "retainedAccess": false,
+  "fixtureOnly": true,
+  "checks": [
+    {
+      "name": "actual_migrations_and_retained_terminal_owner_provenance",
+      "passed": true
+    },
+    {
+      "name": "initial_root_revoked_before_snapshot_and_fresh_scoped_reader_cleanup",
+      "passed": true
+    },
+    {
+      "name": "quiescent_pair_encrypted_decrypted_and_hash_bound",
+      "passed": true
+    }
+  ],
+  "status": "failed",
+  "sourceSha256": {
+    "scripts/backup-evaluation/check-joint-recovery.py": "888740754f86641fb0a1f6f8f69107ccb1c021acb5a46b28154b7cd593d75580",
+    "scripts/backup-recovery/reconcile.py": "4eadf27c89b30e334227f2f6502623671dff6d97b00d70084bcf2b4f30737ad4",
+    "scripts/backup-recovery/joint-fixture-archive.mjs": "a0ec5a6934dd63acdbcedb1a86f0501504b08ecdd563e1cc6d04697c2c7324db",
+    "scripts/backup-recovery/verify.mjs": "2aeb837ab6d3c8cf4cca7f5f0cd0f4cb89a7318f90b043da605368891381e74a",
+    "scripts/backup/archive.mjs": "b52e07e287cad4f4d27668955462a8e179d82f39c74f426a12c358442c3eefb7",
+    "scripts/trunk-owner-foundation-fixture.sql": "af5df8665e8191b92426392f99164d3d7b55d8af19c23cbeccf619a02657fc82",
+    "infra/database/migrations/20261004000000_foundation/migration.sql": "e416ab8087cbc382504dcd820008064cb87838228b4da92cb4fa67404da8f77c",
+    "infra/database/migrations/20261004010000_audit_outbox/migration.sql": "b76e10e0a04a757d51c6f7a92201390ca3edb92fbe2aecd882f6ded61628ee98",
+    "infra/database/migrations/20261004020000_worker_delivery/migration.sql": "a056fa6bf613c971cf35222a46b5cd1c3602235c1df7099f06447d71e8bbc15c",
+    "infra/database/migrations/20261004030000_scoped_work_keys/migration.sql": "972fc988964e2b0138499d51ed2c4c016299812c6a1683d1a115b2548477b1a8",
+    "infra/database/migrations/20261005000000_canonical_identities/migration.sql": "55c079166eff72e86619ace8711998f41f28eaaab61838357de69500e1eed7c4",
+    "infra/database/migrations/20261005010000_canonical_authority/migration.sql": "3865e3acdd340a007e5527a7ff5bc6cf178c664b612c9e8f4895a3fb7dd52da1",
+    "infra/database/migrations/20261006000000_session_fences/migration.sql": "967a71c3f5a2c05f7958035de3547edd83e6a0a6a30cf9b27d950b649676a191",
+    "infra/database/migrations/20261007000000_draft_tenant_receipts/migration.sql": "8a954c57c518e89fd57666ab3849b2832714d484101f576e7ddaed34357d395a",
+    "infra/database/migrations/20261007010000_credential_actions/migration.sql": "db1ebb470af4ff13ce6fa36d572bae9c7740a2c04311ad43ee64972c6bd77541",
+    "infra/database/migrations/20261014000000_pbx_registry/migration.sql": "4b96ead183a7e3203a42082d45391a466876a1fb4c8d6591eed67db59531c1a3",
+    "infra/database/migrations/20261014010000_pbx_observation/migration.sql": "467ae59765e1b157c00bca8e1571ea2c8851a0a61746b7c4b02b10281451c002",
+    "infra/database/migrations/20261014020000_pbx_observation_grants/migration.sql": "384254d0e967c15fc449fe90383b3d800c722014563fbb46cc66af5a6828f089",
+    "infra/database/migrations/20261015000000_extension_inventory/migration.sql": "d3a202b30f8f45c079cf761bcf2ed2be1fec75c6d6f59b24f3670fecd83bba09",
+    "infra/database/migrations/20261016000000_endpoint_credentials/migration.sql": "fa60dcc1acb6fa67de7b4e05016ec41423ed84b37964071e98e4743f93a0e042",
+    "infra/database/migrations/20261020000000_trunk_credential_owner_foundation/migration.sql": "48faeaa5c22afa50156005b6e1deb56d0acabf6b938d4fd0569644f99ef0ac50"
+  },
+  "fixtureCaptureSeconds": 3.297,
+  "failure": {
+    "phase": "intentional_post_checkpoint_drift",
+    "type": "HTTPError",
+    "code": "details-suppressed"
+  },
+  "cleanup": {
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  },
+  "completedAt": "2026-10-22T09:00:40.082154+00:00"
+}

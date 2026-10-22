@@ -1,0 +1,122 @@
+{
+  "operationId": "d2ef84b3-0a5a-4451-a7ae-0abffa3813ff",
+  "retainedAccess": false,
+  "checks": [
+    {
+      "name": "closed_prior_operation_label_and_exact_provider_metadata_reconciled",
+      "passed": true
+    },
+    {
+      "name": "semantic_prestate_reviews_existing_custodian_entity_and_all_role_aliases",
+      "passed": true
+    },
+    {
+      "name": "host_guard_health_and_backup_freshness_checked_for_each_write",
+      "passed": true
+    },
+    {
+      "name": "prechange_backup_retrieval_verified",
+      "passed": true
+    },
+    {
+      "name": "postinstall_backup_independently_encrypted_uploaded_and_retrieved",
+      "passed": true
+    },
+    {
+      "name": "postinstall_is_a_different_restic_snapshot",
+      "passed": true
+    },
+    {
+      "name": "root_revoked_and_normal_tls_405_restored_before_guard_cancellation",
+      "passed": true
+    },
+    {
+      "name": "final_provider_running_on_only_normal_network_with_original_restart_policy",
+      "passed": true
+    },
+    {
+      "name": "independent_exact_snapshot_export_has_five_files_and_no_repository_writes",
+      "passed": true
+    },
+    {
+      "name": "independent_real_age_decryption_verifies_native_snapshot_and_separate_audit",
+      "passed": true
+    },
+    {
+      "name": "offline_verification_writes_no_plaintext_and_makes_no_restore_or_joint_recovery_claim",
+      "passed": true
+    },
+    {
+      "name": "exercised_sources_unchanged_during_run",
+      "passed": true
+    }
+  ],
+  "status": "passed",
+  "sourceSha256": {
+    "scripts/backup-host/bootstrap-controller.py": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+    "scripts/backup-host/bootstrap-host-ports.py": "5aa5a88ce68aefbd43b32c1d280e9f5ba91dcdaa6407fca48ded85aca0c384c6",
+    "scripts/backup-host/guard-bridge.py": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
+    "scripts/openbao/bootstrap-action.mjs": "3750d772320eddce2fedcef0b05acd77bb4b2cde256dbee819dbbf261b2f8a3f",
+    "scripts/openbao/bootstrap-prestate.mjs": "86f2b2fe8bfc3dd33095db0da9b0ef8b42b13c5a4b9af6d4202d5cd377106d96",
+    "scripts/openbao/guard-gate.mjs": "40d6273e7add890efd16bbadfd5047d80ef06d62686b257fc97f84d23e8105c2",
+    "scripts/openbao/bootstrap-provision.mjs": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+    "scripts/backup/archive.mjs": "b52e07e287cad4f4d27668955462a8e179d82f39c74f426a12c358442c3eefb7",
+    "scripts/backup/archive-post-install.mjs": "c13dafeb580c9f0035a64fa3ca923993f2740feaec95c7e0ebce48fa8c59d4f1",
+    "scripts/backup/ciphertext-handoff.mjs": "daa74b35e5d67c031c2b0fd63b0cfd1e0817863c74c45ad69b58f4c5e47616c7",
+    "scripts/backup/verify-bootstrap-upload.mjs": "4e489ff305e72cb4ff364d1ae57ec22d475b0dbd9756ad264859332c5f1fcf2d",
+    "scripts/backup/repository-check.mjs": "f9236e619cecc91f2f8741953af8c3b14b6fa0538849c9e6ba52452b9947555e",
+    "scripts/backup-evaluation/bootstrap-run-action.mjs": "2f2ce9a8c8cf429f9ba6b602917ca83c155cfbd283f6a65c41e5efa97664748f",
+    "scripts/backup-recovery/request.mjs": "9428e395525190f574d344a088e66f3ab9a6feac8d19125aadaf71ee6da6db1d",
+    "scripts/backup-recovery/retrieve.mjs": "e3fa187ec62535b642934cf1516592a726ee228442672ae6cffea3ea2645d432",
+    "scripts/backup-recovery/verify.mjs": "2aeb837ab6d3c8cf4cca7f5f0cd0f4cb89a7318f90b043da605368891381e74a"
+  },
+  "lastFixtureApi": "auth/token/revoke-self",
+  "syntheticPolicyPrestate": "three-unconstrained-issuance-policies-not-retained-bytes",
+  "faultAfterWrite": null,
+  "offlineVerification": {
+    "status": "independent-archive-integrity-verified",
+    "captureOperationId": "d2ef84b3-0a5a-4451-a7ae-0abffa3813ff",
+    "repositoryId": "138ae5145b1ca99d08eb84486c6f844c53c965ad90642aa6ac6aa80c1d66dd13",
+    "snapshotId": "af0a6357e68ef5ddb32f76b1a3906503b28a8678b57d78247659754baf7c59e0",
+    "requestSha256": "f336886c2a3a18e8f9a825bc917cc59f790cbbc2749dc0d3fdbb54bbd96b8ef4",
+    "archives": [
+      {
+        "kind": "bootstrap-post-install",
+        "archiveId": "11569fcd-8891-4db3-bb6b-cba6ce96413f",
+        "nativeSnapshotIntegrityVerified": true,
+        "snapshotSha256": "f3c111e9a093dcf0dd3be8ad17d4dd6d30b4b2825e8bddad06d6c417a783a229",
+        "index": 106,
+        "term": 5,
+        "sealedChecksumCryptographicallyVerified": false
+      },
+      {
+        "kind": "recovery-audit",
+        "archiveId": "0927377e-ea42-41a6-9a1c-f4a69cced8e4",
+        "auditJsonIntegrityVerified": true,
+        "records": 309,
+        "auditContinuityEstablished": false
+      }
+    ],
+    "verifiedAt": "2026-10-22T08:33:29.984Z",
+    "plaintextWritten": false,
+    "secretsPrinted": false,
+    "providerAccessed": false,
+    "repositoryAccessed": false,
+    "nativeRestorePerformed": false,
+    "jointPostgresRecoveryEstablished": false
+  },
+  "controllerSha256": "9fd136d4f8fdbc8cb2f6d2d3200c89bc99324faa21c30c6159ab88e3bffb7c1c",
+  "provisionerSha256": "d1d31dfa6b9790d46706352d5301144f2119a0969de8a3d3c2ea2379ca450bf9",
+  "harnessSha256": "c2c1d147f3aa9bde3688385c616cb26718434ca53bb5ad2edf6b23a6a283a5ca",
+  "hostPortsSha256": "5aa5a88ce68aefbd43b32c1d280e9f5ba91dcdaa6407fca48ded85aca0c384c6",
+  "helperSha256": "3750d772320eddce2fedcef0b05acd77bb4b2cde256dbee819dbbf261b2f8a3f",
+  "bridgeSha256": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
+  "initializerSha256": "008ee9094a727ef11a22db7e62750ddb54eccd1724a5067d63eadc3fd7216359",
+  "cleanup": {
+    "deadlineWatcherStopped": true,
+    "containersAbsent": true,
+    "volumesAbsent": true,
+    "networksAbsent": true,
+    "privateFixtureRemoved": true
+  }
+}

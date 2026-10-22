@@ -1,0 +1,25 @@
+{
+  "format": 1,
+  "purpose": "independent-post-install-archive-verification",
+  "captureOperationId": "d6550071-561a-4339-bc15-50a5b22ac43d",
+  "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+  "snapshotId": "c51f8a679a86d29265af9b4588b1f76d537e7cacb09ce1bc75e660bd60015324",
+  "sourceEvidenceSha256": "f0022ea1f09e9dab8655c177cc3b7065d3a593c1e3faad586f58a989c392f6da",
+  "sourceCompletedAt": "2026-10-22T07:38:58.896718+00:00",
+  "archives": [
+    {
+      "archiveId": "eb024207-3b6e-4ea0-b912-745cd0bc3ede",
+      "kind": "bootstrap-post-install",
+      "sha256": "d91d5426f4c6b28cb70b76e307eec43a39b827167e6307db2f69d4ab804c916b",
+      "bytes": 196234,
+      "receiptSha256": "51b9deaec804bd9b0c4b9b5b329a15287608c4e7e559b16b4b3c8be3a991ad73"
+    },
+    {
+      "archiveId": "42d3c34e-8ca1-42a9-a9e3-37146c01be56",
+      "kind": "recovery-audit",
+      "sha256": "533ba9b39666318934311869923d0b7e5ed06ec852be25dc37ac2ad8498daa2f",
+      "bytes": 475494,
+      "receiptSha256": "145a806a1e68b58b32412274dc40b9f563f5f066b033d44625db6eb4e1c2a806"
+    }
+  ]
+}

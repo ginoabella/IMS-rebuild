@@ -1,17 +1,32 @@
 {
   "version": 1,
-  "status": "review-only-unapproved-retained-bootstrap",
+  "status": "execution-consumed-bootstrap-and-maintenance-handoff-complete",
   "operationId": "d6550071-561a-4339-bc15-50a5b22ac43d",
-  "retainedExecutionAuthorized": false,
-  "rootRecoveryAuthorized": false,
+  "retainedExecutionAuthorized": true,
+  "rootRecoveryAuthorized": true,
   "repositoryInitializationAuthorized": false,
   "timerActivationAuthorized": false,
   "productionAuthorized": false,
   "destructiveCleanupAuthorized": false,
   "ownerApproval": {
-    "approved": false,
-    "consumed": false,
-    "executionStarted": false
+    "approved": true,
+    "consumed": true,
+    "executionStarted": true,
+    "approvedBy": "gino",
+    "approvedAt": "2026-10-22T07:37:39.085875+00:00",
+    "authorizationReference": "Owner explicitly selected Approve corrected package and execute on 2026-10-22 for digest 76ac9c1e4e280427145290dbd08569175e3b618486ef094ef93e1bb7e5d2fbc4.",
+    "approvedPackageSha256": "76ac9c1e4e280427145290dbd08569175e3b618486ef094ef93e1bb7e5d2fbc4",
+    "previousPackageApproval": {
+      "approved": true,
+      "consumed": false,
+      "executionStarted": false,
+      "approvedBy": "gino",
+      "approvedAt": "2026-10-22T07:30:59.802896+00:00",
+      "authorizationReference": "Owner message on 2026-10-22: yes approving it and please continue; exact reviewed one-time bootstrap execution request.",
+      "approvedPackageSha256": "07907f91e232a093bd0d125413995d03c8099fa0ae887c5232c9859338eacc85"
+    },
+    "notBefore": "2026-10-22T07:37:39.085943+00:00",
+    "notAfter": "2026-10-22T07:52:39.085943+00:00"
   },
   "maximumIsolationSeconds": 840,
   "preChangeBackupMaximumAgeSeconds": 900,
@@ -709,7 +724,7 @@
     "postinstallSpool": "/srv/myims-backup-development/bootstrap/d6550071-561a-4339-bc15-50a5b22ac43d/postinstall",
     "receipts": "/srv/myims-backup-development/bootstrap/d6550071-561a-4339-bc15-50a5b22ac43d/receipts"
   },
-  "stagingPrepared": false,
+  "stagingPrepared": true,
   "artifacts": {
     "infra/openbao/server.hcl": "e099070041db8d29a6ba0b9c6b00629cf2d2b2805706e0cda135dc4011e6bed5",
     "infra/docker/compose.yaml": "e8204418819996b400ffbd156e6987765f5e3b466cf9a5e148ffcbe78fb15e94",
@@ -775,7 +790,7 @@
     "scripts/backup-host/bootstrap-host-ports.py": "5aa5a88ce68aefbd43b32c1d280e9f5ba91dcdaa6407fca48ded85aca0c384c6",
     "scripts/backup-host/guard-bridge.py": "2d90fbb742b917d9faa1041120104a076ef38a4ee5ad4291960c6c49557b9ee7",
     "scripts/backup-host/execute-bootstrap.py": "31afc24711dc4dea18b2b3f16e5c56fb3ceef665b0dc87d777a4c249fff23863",
-    "scripts/backup-host/bootstrap-staging.py": "70918f2016a6e318b5943e686ab59bf8c050d50849813294f11e15b2ae796be6",
+    "scripts/backup-host/bootstrap-staging.py": "f73c50127a199f5695d85c329b9c9efdca9a074bc1914ecb39972bf6a0e048bf",
     "scripts/backup-host/bootstrap-request.py": "93a475638d858812f570180014e5243fa69b2cfd21dc196a6bdb589468e41583",
     "scripts/backup-host/execute-development-capture.py": "ff3149286f40b12d4517fa11160b9a499f350e256f3ab511fffb453f072db52d"
   },
@@ -800,5 +815,5 @@
     "no-current-authority-inferred-from-historical-baseline",
     "no-recovery-or-write-without-exact-execution-approval"
   ],
-  "reviewPackageSha256": "07907f91e232a093bd0d125413995d03c8099fa0ae887c5232c9859338eacc85"
+  "reviewPackageSha256": "76ac9c1e4e280427145290dbd08569175e3b618486ef094ef93e1bb7e5d2fbc4"
 }

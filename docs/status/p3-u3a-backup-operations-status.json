@@ -1,0 +1,14 @@
+{
+  "status": "development-backup-status",
+  "bootstrapComplete": true,
+  "schedulingActive": false,
+  "schedulingReadiness": "incomplete",
+  "providerApiAccessed": false,
+  "credentialContentsRead": false,
+  "remainingUseCount": "unknown",
+  "externalAlertDelivery": "not-performed",
+  "hostMetadata": "verified",
+  "runtimeState": "administrator-required",
+  "attentionRequired": true,
+  "lastBootstrapRetrievalAt": "2026-10-22T07:38:58.896718+00:00"
+}

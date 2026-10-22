@@ -1,10 +1,27 @@
 # P3-U3a one-time guarded development bootstrap execution request
 
-October 22, 2026, Asia/Manila (+08:00). **Concrete package prepared for owner
-review; retained execution is disabled and has not started.** This is the separate
+**Latest result:** corrected package explicitly approved and executed once; all nine
+writes and both encrypted backup retrievals succeeded. Root revoked, normal
+protection restored and guard/helpers closed. Owner password handoff is complete
+and its private custody was verified without reading the password. [Execution evidence and next guidance](../status/p3-u3a-bootstrap-retained-execution.md).
+The earlier pending statements below describe preparation history; execution
+authorization is now consumed and must not be replayed.
+
+October 22, 2026, Asia/Manila (+08:00). **Original package approved; staging correction is ready for review. Execution has not started.** This is the separate
 root-bootstrap request required by the approved
 [next-step plan](p3-u3a-backup-authority-next-step.md). Earlier plan/preparation
-approvals and consumed capture approvals do not authorize this operation.
+approvals and consumed capture approvals do not authorize this operation. The
+owner’s latest explicit approval now authorizes this exact operation and digest.
+
+Approval recorded for package
+`07907f91e232a093bd0d125413995d03c8099fa0ae887c5232c9859338eacc85`.
+Public source/package validation passed unchanged. Administrator staging is the
+remaining prerequisite: `sudo -n true` reports interactive authentication required
+in the agent session. The subsequent staging attempt stopped before creating
+operation directories; see the correction below. No provider isolation, root
+generation or provisioning has started. The attended execution window will be
+recorded after staging and the corrected source binding are verified. Original
+approval remains unconsumed and bound to the original package digest.
 
 ## Exact requested operation
 
@@ -104,7 +121,7 @@ Safe public-package check now (no Docker/provider/custody access):
 PYTHONDONTWRITEBYTECODE=1 python3 scripts/backup-host/execute-bootstrap.py infra/backup/bootstrap-request.json
 ```
 
-**After this exact bootstrap is approved**, the owner prepares fresh staging from
+**Approved; administrator staging is pending.** The owner prepares fresh staging from
 an authenticated host terminal:
 
 ```sh
@@ -125,3 +142,28 @@ sudo python3 scripts/backup-host/bootstrap-staging.py infra/backup/bootstrap-req
 
 It refuses incomplete installation, a changed handoff target, unsafe source/target
 custody or an existing target password. No credential should be pasted into chat.
+
+## Staging parent-check correction — October 22, 2026 (+08:00)
+
+The owner's staging attempt refused `unsafe_parent`. The helper incorrectly
+required every ancestor to be root-owned, although the installed backup host
+preparer intentionally creates `/srv/myims-backup-development` as
+UID/GID 12010, mode 0700. Metadata-only inspection confirmed this exact custody,
+an empty root-owned mode-0700 `bootstrap` parent, and absence of both operation
+directories. No credential contents or provider API were accessed.
+
+The helper now allows only that exact service-owned ancestor with exact UID/GID
+12010 and mode 0700. Other ancestors must be real root-owned directories, with
+root group and no group/other writes. It validates both complete ancestor chains
+before creating any missing parent. Existing host ownership and operation paths,
+nine provider writes, guard and cleanup behavior are unchanged. Existing operation
+directories still refuse reuse; the empty parent from the failed attempt is safe.
+
+Seven focused package/staging tests pass, including exact-path/custody negatives
+and refusal before mkdir. The original owner approval remains recorded against
+`07907f91e232a093bd0d125413995d03c8099fa0ae887c5232c9859338eacc85`. The corrected package is
+`76ac9c1e4e280427145290dbd08569175e3b618486ef094ef93e1bb7e5d2fbc4`; only the pinned staging helper changed.
+Retained/root execution flags remain false until the owner approves this corrected
+source binding. No new root attempt or execution window has started. The owner can
+rerun the same administrator staging command above; after successful preparation
+and acceptance of this correction, the agent verifies staging and continues.
