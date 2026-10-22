@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "status": "review-only-not-executable",
+  "operatingModelApproved": "2026-10-22 Asia/Manila (+08:00)",
+  "operator": "gino",
+  "retainedExecutionAuthorized": false,
+  "historicalSource": {
+    "operationId": "24096f3d-bf41-4ec2-9e12-95e2057c115d",
+    "sha256": "6336a674908adeb6dc6c098e81a79e31f1c7ea03b87d7b4f4f484082bf411ede",
+    "capturedAt": "2026-10-22T00:44:01.416Z"
+  },
+  "preservePrincipal": "platform-owner-custodian",
+  "privilegedPolicyRemediation": [
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/endpoint-restricted-issuer",
+      "historicalPreStateSha256": "9f0cec55206ab9b9e2ef914e8c7e71affd0c62293da4f902adede3f430730c9b",
+      "policyUtf8Sha256": "5bd6e2c2f5e5d266ae8f0e57b845eaeb4931db9cf0b74d4a26a72bbfd017afda",
+      "body": {
+        "policy": "path \"auth/token/create/endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1s\"]\n    \"explicit_max_ttl\" = [\"1s\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/create/endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1s\"]\n    \"explicit_max_ttl\" = [\"1s\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/renew-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/trunk-restricted-issuer",
+      "historicalPreStateSha256": "e8aa9287a425c39cdc10dce6371d055dc13db95bd49f9c53786241f1b3a994ae",
+      "policyUtf8Sha256": "8077e9a15727da7fa0ab3a72398022a6bdca8bf7bb9002104a2778b65dab5703",
+      "body": {
+        "policy": "path \"auth/token/create/trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/create/trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"1h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [true]\n  }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/renew-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "sys/policies/acl/platform-deployment-maintainer",
+      "historicalPreStateSha256": "7a692eaa4294967c94e0d5959c2bc0e732dfb5aeb6f2ff79c29a317a57221b64",
+      "policyUtf8Sha256": "df4964543f0f840167ec395e71f841ddf29875d9ad57cb43fb5ba5107f514b5b",
+      "body": {
+        "policy": "path \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/mounts\" { capabilities = [\"read\"] }\npath \"sys/auth\" { capabilities = [\"read\"] }\npath \"sys/policies/acl\" { capabilities = [\"list\"] }\npath \"auth/token/roles\" { capabilities = [\"list\"] }\npath \"auth/token/accessors\" { capabilities = [\"list\", \"sudo\"] }\npath \"auth/token/lookup-accessor\" { capabilities = [\"update\"] }\npath \"auth/token/revoke-accessor\" { capabilities = [\"update\"] }\npath \"sys/policies/acl/endpoint-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/roles/endpoint-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/create/platform-endpoint-issuer\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"endpoint-restricted-issuer\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"24h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/roles/platform-endpoint-issuer\" { capabilities = [\"read\"] }\npath \"sys/policies/acl/trunk-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/roles/trunk-*\" { capabilities = [\"create\", \"read\", \"update\"] }\npath \"auth/token/create/platform-trunk-issuer\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"policies\",\"no_default_policy\",\"ttl\",\"explicit_max_ttl\",\"renewable\"]\n  allowed_parameters = {\n    \"policies\" = [[\"trunk-restricted-issuer\"]]\n    \"no_default_policy\" = [true]\n    \"ttl\" = [\"24h\"]\n    \"explicit_max_ttl\" = [\"24h\"]\n    \"renewable\" = [false]\n  }\n}\npath \"auth/token/roles/platform-trunk-issuer\" { capabilities = [\"read\"] }\npath \"auth/platform-custodian/users/platform-owner-custodian/password\" { capabilities = [\"update\"] }\npath \"sys/policies/acl/platform-deployment-maintainer\" { capabilities = [\"deny\"] }\npath \"auth/token/create\" { capabilities = [\"deny\"] }\npath \"auth/token/create-orphan\" { capabilities = [\"deny\"] }\npath \"sys/generate-root/*\" { capabilities = [\"deny\"] }"
+      }
+    }
+  ],
+  "completeRoleConfigurationsToVerify": [
+    {
+      "name": "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-importer-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-verifier-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-cleanup-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-importer-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-verifier-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": true,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-cleanup-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "no_default_policy": true,
+        "ttl": "1h",
+        "explicit_max_ttl": "24h",
+        "renewable": true
+      }
+    },
+    {
+      "name": "endpoint-worker-expiring-58adb785-5384-41ce-9c72-ccda6ea554db",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": false,
+        "token_explicit_max_ttl": 1,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-worker-58adb785-5384-41ce-9c72-ccda6ea554db"
+        ],
+        "no_default_policy": true,
+        "ttl": "1s",
+        "explicit_max_ttl": "1s",
+        "renewable": false
+      }
+    },
+    {
+      "name": "endpoint-worker-expiring-fff38aad-2e3c-4149-aa3f-88f715d1b488",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": false,
+        "token_explicit_max_ttl": 1,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-worker-fff38aad-2e3c-4149-aa3f-88f715d1b488"
+        ],
+        "no_default_policy": true,
+        "ttl": "1s",
+        "explicit_max_ttl": "1s",
+        "renewable": false
+      }
+    },
+    {
+      "name": "platform-endpoint-issuer",
+      "configuration": {
+        "allowed_policies": [
+          "endpoint-restricted-issuer"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": false,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "endpoint-restricted-issuer"
+        ],
+        "no_default_policy": true,
+        "ttl": "24h",
+        "explicit_max_ttl": "24h",
+        "renewable": false
+      }
+    },
+    {
+      "name": "platform-trunk-issuer",
+      "configuration": {
+        "allowed_policies": [
+          "trunk-restricted-issuer"
+        ],
+        "disallowed_policies": [
+          "default",
+          "root"
+        ],
+        "allowed_policies_glob": [],
+        "disallowed_policies_glob": [],
+        "orphan": true,
+        "renewable": false,
+        "token_explicit_max_ttl": 86400,
+        "token_period": 0,
+        "token_type": "service"
+      },
+      "request": {
+        "policies": [
+          "trunk-restricted-issuer"
+        ],
+        "no_default_policy": true,
+        "ttl": "24h",
+        "explicit_max_ttl": "24h",
+        "renewable": false
+      }
+    }
+  ],
+  "rotation": {
+    "policyName": "platform-backup-rotation",
+    "policy": "path \"auth/platform-backup/role/platform-raft-snapshot-reader/role-id\" { capabilities = [\"read\"] }\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"ttl\",\"num_uses\"]\n  allowed_parameters = {\n    \"ttl\" = [\"720h\"]\n    \"num_uses\" = [\"1000\"]\n  }\n}\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/lookup\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"secret_id_accessor\"]\n  allowed_parameters = { \"secret_id_accessor\" = [] }\n}\npath \"auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/destroy\" {\n  capabilities = [\"update\"]\n  required_parameters = [\"secret_id_accessor\"]\n  allowed_parameters = { \"secret_id_accessor\" = [] }\n}\npath \"auth/token/lookup-self\" { capabilities = [\"read\"] }\npath \"auth/token/revoke-self\" { capabilities = [\"update\"] }\npath \"sys/capabilities-self\" { capabilities = [\"update\"] }",
+    "policyUtf8Sha256": "7ff2a700d79257e5a069327a3c4184bdc139d48588e97352f8ada4605015641b",
+    "username": "platform-backup-maintainer",
+    "authMount": "platform-custodian",
+    "userConfiguration": {
+      "token_policies": [
+        "platform-backup-rotation"
+      ],
+      "token_ttl": 900,
+      "token_max_ttl": 900,
+      "token_explicit_max_ttl": 900,
+      "token_no_default_policy": true,
+      "token_period": 0,
+      "token_type": "service",
+      "token_num_uses": 0
+    },
+    "issuancePath": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id",
+    "issuanceRequest": {
+      "ttl": "720h",
+      "num_uses": "1000"
+    },
+    "roleIdPath": "auth/platform-backup/role/platform-raft-snapshot-reader/role-id",
+    "lookupPath": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/lookup",
+    "retirementPath": "auth/platform-backup/role/platform-raft-snapshot-reader/secret-id-accessor/destroy",
+    "protectedPasswordRequired": true,
+    "replacementOrder": [
+      "exclusive-protected-stage",
+      "login-and-check-token-bounds-and-capabilities",
+      "self-revoke-and-confirm-403",
+      "atomic-credential-replacement",
+      "retire-old-accessor",
+      "verify-old-login-denied-without-automatic-retry"
+    ],
+    "ambiguousResult": "Stop and preserve protected state; reconcile read-only before any repeat or retirement"
+  },
+  "gates": [
+    "current-complete-effective-authority-and-direct-installer",
+    "fresh-backup-before-first-write-and-independent-audit",
+    "exact-prestate-operation-window-hashes-and-partial-state-scope",
+    "retained-native-lifetime-and-denial-acceptance",
+    "fresh-independent-decryption-and-isolated-joint-postgresql-recovery-before-scheduling"
+  ],
+  "activationAuthorized": false,
+  "rootRecoveryAuthorized": false
+}

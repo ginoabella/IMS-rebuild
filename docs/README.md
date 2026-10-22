@@ -26,7 +26,9 @@ Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-
 
 Current development backup operations: [runbook and maintenance gates](runbooks/p3-u3a-development-backup.md),
 [offline authority findings](status/p3-u3a-captured-authority-review.md), and
-[disabled authority/installation next step](planning/p3-u3a-backup-authority-next-step.md).
+[approved operating model and gated installation next step](planning/p3-u3a-backup-authority-next-step.md),
+[exact rotation/remediation candidate](planning/p3-u3a-backup-maintenance-review.json),
+and [disposable native rotation evidence and limits](status/p3-u3a-backup-maintenance-review.md).
 The one-time capture/upload is complete; scheduling and recovery readiness remain incomplete.
 
 Backup platform: [approved Restic architecture/security requirements](architecture/backup-platform.md)
@@ -337,7 +339,6 @@ P3-U3a local owner foundation: [migration/grants/read-port evidence and limits](
 Real isolated SQL checks and backend build passed; authority-checked commands,
 protected worker/provider composition and binding/claim/adoption remain unfinished.
 No shared database migration or runtime activation was performed.
-
 
 P3-U3a continued preparation: [manual recovery capture request and remaining controller gates](planning/p3-u3a-development-recovery-capture-request.md),
 [actual native capture/handoff evidence](status/p3-u3a-recovery-capture-handoff-evidence.json),

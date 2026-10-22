@@ -1,0 +1,64 @@
+{
+  "operationId": "0b16db61-ee31-4608-8aaf-ef6b912cdbff",
+  "image": "quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf",
+  "retainedAccess": false,
+  "scope": "Disposable HTTP dev-mode native ACL/AppRole/userpass rotation only; no TLS/Raft/recovery or retained lifetime acceptance",
+  "checks": [
+    {
+      "name": "exact_issuance_and_forbidden_parameters_endpoint-restricted-issuer",
+      "passed": true
+    },
+    {
+      "name": "exact_issuance_and_forbidden_parameters_trunk-restricted-issuer",
+      "passed": true
+    },
+    {
+      "name": "exact_issuance_and_forbidden_parameters_platform-deployment-maintainer",
+      "passed": true
+    },
+    {
+      "name": "separate_human_policy_and_900_second_maximum",
+      "passed": true
+    },
+    {
+      "name": "fixed_secret_id_lifetime_and_use_budget",
+      "passed": true
+    },
+    {
+      "name": "missing_parameters_and_issuance_overrides_denied",
+      "passed": true
+    },
+    {
+      "name": "rotation_cannot_install_edit_roles_issue_tokens_read_secrets_or_snapshot_restore",
+      "passed": true
+    },
+    {
+      "name": "accessor_requests_require_only_exact_accessor_parameter",
+      "passed": true
+    },
+    {
+      "name": "workload_has_only_snapshot_policy_and_300_second_maximum",
+      "passed": true
+    },
+    {
+      "name": "replacement_verified_before_old_accessor_retirement_and_old_login_denied",
+      "passed": true
+    },
+    {
+      "name": "human_and_workload_self_revocation_confirmed_403",
+      "passed": true
+    },
+    {
+      "name": "no_host_publication_or_retained_mounts",
+      "passed": true
+    }
+  ],
+  "planSha256": "55439c9317b4569b9a8c993965b12880d7b72cab8251c6bf1265c97f9e442d8f",
+  "harnessSha256": "b779a908af9dae672e8f738f3179fc4d13bd566e9daae11ed222b5db251ee7ed",
+  "lastRequestPath": "auth/token/lookup-self",
+  "status": "passed",
+  "cleanup": {
+    "containerAbsent": true,
+    "networkAbsent": true
+  }
+}

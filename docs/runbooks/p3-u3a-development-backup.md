@@ -4,8 +4,10 @@ Current checkpoint: October 22, 2026. **One-time capture/upload complete;
 unattended backup and recovery readiness incomplete.** Track work in the
 [progress tracker](../../context/progress-tracker.md), review the
 [authority findings](../status/p3-u3a-captured-authority-review.md), and use the
-[disabled next-step proposal](../planning/p3-u3a-backup-authority-next-step.md)
-for remaining authority/installation work.
+[approved model and gated installation direction](../planning/p3-u3a-backup-authority-next-step.md)
+for remaining authority/installation work. The [exact narrowed rotation candidate
+and native verification](../status/p3-u3a-backup-maintenance-review.md) supersedes
+the older broad maintenance candidate; no rotation command is installed yet.
 
 ## Resources, custody and completed operation
 

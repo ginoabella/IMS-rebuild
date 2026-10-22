@@ -1,6 +1,6 @@
 # P3-U3a next authority and backup installation review
 
-October 22, 2026. **Disabled proposal; no execution authorized.** This document
+October 22, 2026. **Operating model approved by the owner; concrete retained execution remains gated below.** This document
 supersedes older pending-capture descriptions only for current sequencing. It
 does not modify their historical approval boundaries. The capture/upload request
 is complete and consumed; it cannot authorize installation or another recovery.
@@ -9,6 +9,51 @@ Read the [authority findings](../status/p3-u3a-captured-authority-review.md) and
 [operations runbook](../runbooks/p3-u3a-development-backup.md) first.
 
 ## Minimal installation candidate
+
+### Recommended simpler operating model
+
+Owner requested minimal routine operations and approved this document on October
+22. The operating model below is adopted. Exact identity/policy installation and
+activation still depend on the concrete evidence specified in this document.
+
+The [exact narrowed rotation and remediation candidate](p3-u3a-backup-maintenance-review.json)
+and [native verification/status](../status/p3-u3a-backup-maintenance-review.md)
+now replace the older broad maintenance candidate for further implementation.
+`gino` is the designated attended operator; a current independent OpenBao
+installer authorization route remains unverified.
+
+- Name `gino` as the proposed attended installer/operator. A human name alone
+  grants no OpenBao access. Prefer a verified existing authorized route; if none
+  can be established, prepare one separately approved guarded bootstrap, with
+  fresh backup-first evidence, exact changes and privileged-token revocation.
+  Do not keep a root credential or make recovery a routine backup dependency.
+- During that bounded installation, reconcile and apply exact reviewed issuance
+  constraints to the three affected policies and verify full role configuration,
+  positive requests, forbidden parameters and actual token lifetimes. Existing
+  HTTP 500/expiry findings remain open until native tests demonstrate resolution.
+- Preserve the existing custodian account. Add one separately protected attended
+  backup-maintenance account for the same owner, with only reviewed metadata and
+  exact backup-role credential-rotation permissions for ongoing use. Exclude
+  standing ACL/auth installation edits, generic issuance, KV reads and restore.
+  This deliberately narrows the older broad maintenance-policy candidate; prepare
+  a new exact policy before requesting implementation, rather than reuse it.
+- Use one snapshot-only workload identity and one host timer controlling the
+  isolated capture/encrypt/upload stages. Routine jobs never receive either
+  human password or maintenance privileges. Configure failure/expiry/capacity
+  alerts to the owner's confirmed destination before activation.
+- Expose three operator commands: status, run-now and attended credential-rotate.
+  These are proposed interfaces, not installed commands. Keep the current
+  candidate 30-day SecretID and remind at day 23; validate the use budget against
+  the chosen cadence. Automate bounded staging/verification for rotation, but
+  require the operator to unlock the maintenance credential. Defer unattended
+  rotation authority. Keep restore and administrative pruning separate.
+
+The expected routine is checking status/alerts, one attended monthly rotation and
+scheduled recovery exercises. The owner may hold both human roles while their
+credentials remain separate. One-time installer powers must not remain attached
+to the rotation account. Scheduling follows successful credential/access tests,
+fresh backup retrieval/decryption and isolated joint-store recovery acceptance;
+all cadence/retention/RPO/RTO numbers remain proposals until approved and measured.
 
 Exact candidate bodies remain in `backupProvisioning` of the
 [review-only manifest](p3-u3a-backup-installation-review-manifest.json).
@@ -40,8 +85,9 @@ mean proving that its policy-writing authority cannot escalate privileges.
 
 Development host administration is currently performed by owner `gino` through
 the trusted Docker/host boundary. This does not establish an OpenBao installer,
-rotation operator or unattended job owner. Those roles remain unassigned pending
-explicit owner designation.
+rotation operator or unattended job owner. The approved model designates `gino` as attended operator and rotation owner;
+current OpenBao credentials/authority and job/audit/alert ownership still require
+verification before installation or activation.
 
 Before any approved write, record exact pre-state, operation ID, source hashes,
 time window, outputs and postconditions. On ambiguous response or partial success,
