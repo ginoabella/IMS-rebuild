@@ -9,3 +9,33 @@ AGENT.md
 docs/planning/
 
 .local
+
+# Historical approval/evidence bytes and machine outputs must remain unchanged.
+# Archived planning documents retain the same exclusion as docs/planning/.
+docs/archive/
+docs/runbooks/backup-key-check-windows.md
+docs/status/p3-u3a-authority-metadata-review.json
+docs/status/p3-u3a-authority-metadata-review.md
+docs/status/p3-u3a-backup-authority-preparation.md
+docs/status/p3-u3a-bootstrap-retained-execution.md
+docs/status/p3-u3a-development-backup-installation.md
+docs/status/p3-u3a-disposable-deadline-evidence.json
+docs/status/p3-u3a-disposable-lifetime-evidence.json
+docs/status/p3-u3a-disposable-runs/1d71a4dd-4e17-4e1d-aa55-cf7680fcf453.json
+docs/status/p3-u3a-disposable-runs/20d12a4e-acfb-4fd1-84ef-81c9002d77d1.json
+docs/status/p3-u3a-disposable-runs/22edf33d-56bb-4620-81c0-a4d72be8d770.json
+docs/status/p3-u3a-disposable-runs/253a426f-5008-4430-aa1d-3d0fc0f76ffe.json
+docs/status/p3-u3a-disposable-runs/2dedf0ac-add6-47e7-8dfe-45e8ef659cf2.json
+docs/status/p3-u3a-disposable-runs/50671e63-35fc-44f2-91ca-c90ba4e0de2d.json
+docs/status/p3-u3a-disposable-runs/7439a1ed-3cbd-45b7-bd27-a425daebfaf6.json
+docs/status/p3-u3a-disposable-runs/d7bc6241-4cde-4b18-91b7-ad004b56e41a.json
+docs/status/p3-u3a-disposable-runs/e31d6ef7-ce65-4095-8c2b-58d926c34040.json
+docs/status/p3-u3a-disposable-runs/eba384ed-7709-4892-aeba-574c83e1c747.json
+docs/status/p3-u3a-disposable-runs/ed337f01-13a2-4aee-a7c3-a49c72908844.json
+docs/status/p3-u3a-independent-archive-verification.md
+docs/status/p3-u3a-joint-recovery-native.json
+docs/status/p3-u3a-provisioning-preexecution.md
+docs/status/p3-u3a-reservation-and-worker-isolation.md
+docs/status/p3-u3a-restic-backup-evaluation.md
+docs/status/p3-u3a-seaweedfs-backup-evaluation.md
+infra/backup/bootstrap-request.json

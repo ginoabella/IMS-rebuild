@@ -1,4 +1,5 @@
 export interface PbxProfile {
+  unmanagedIngress?: readonly string[];
   installationId: string;
   targetAlias: string;
   aliases: readonly string[];

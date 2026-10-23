@@ -1,3 +1,6 @@
+import { PeersController } from '../../../telephony/adapters/http/peers.controller';
+import { Peers } from '../../../telephony/application/peers';
+import { FilePbxCatalog } from '../../../telephony/adapters/connectivity/catalog';
 import { EndpointCredentialsController } from '../../../telephony/adapters/http/endpoint-credentials.controller';
 import { EndpointCredentialRuntime } from '../../../telephony/adapters/db/endpoint-credential-runtime';
 import { EndpointCredentials } from '../../../telephony/application/endpoint-credentials';
@@ -34,12 +37,18 @@ export class PlatformAuthHttpModule {
       controllers: [
         PbxController,
         InventoryController,
+        PeersController,
         EndpointCredentialsController,
         PlatformAuthController,
         PlatformTenantsController,
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: Peers,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.peers,
+        },
         PlatformCurrentSession,
         {
           provide: EndpointCredentialRuntime,
@@ -63,7 +72,15 @@ export class PlatformAuthHttpModule {
           provide: InventoryRuntime,
           inject: [TransactionAuthority],
           useFactory: (authority: TransactionAuthority) =>
-            new InventoryRuntime(config.database.url, authority),
+            new InventoryRuntime(
+              config.database.url,
+              authority,
+              undefined,
+              (installationId) =>
+                new FilePbxCatalog(config.pbxCatalogFile).reservedSources(
+                  installationId,
+                ),
+            ),
         },
         {
           provide: ExtensionInventory,

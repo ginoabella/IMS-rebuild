@@ -1,3 +1,4 @@
+import { checkPeerBrowser } from './check-peer-browser.mjs';
 import { checkInventoryBrowser } from './check-inventory-browser.mjs';
 // Actual production Next app, HTTPS ingress, and independent real-service replicas.
 import assert from 'node:assert/strict';
@@ -41,6 +42,7 @@ export async function checkPlatformBrowser({
   pbxFixture,
   pbxUsername,
   inventoryBrowser = false,
+  peerBrowser = false,
 }) {
   const ingressSecret = randomBytes(32).toString('hex');
   secrets.push(ingressSecret);
@@ -501,7 +503,7 @@ export async function checkPlatformBrowser({
     });
     assert.equal(await redis.get(key(passiveToken)), before);
     phase = 'draft tenant browser';
-    if (!inventoryBrowser)
+    if (!inventoryBrowser && !peerBrowser)
       await checkDraftTenantBrowser({
         page,
         context,
@@ -551,6 +553,27 @@ export async function checkPlatformBrowser({
       await expect(
         page.getByRole('heading', { name: 'Platform console', exact: true }),
       ).toBeVisible();
+      await page.goto(`${config.origin}/ui-preview`);
+      await expect(page.getByLabel('Unfinished notes')).toBeVisible();
+    }
+    if (peerBrowser) {
+      phase = 'IP-peer resources browser/API';
+      await checkPeerBrowser({
+        page,
+        context,
+        config,
+        owner,
+        login,
+        select,
+        a,
+        b,
+        holdResponse,
+        ingress,
+        issue,
+        staffFacts,
+        redis,
+        key,
+      });
       await page.goto(`${config.origin}/ui-preview`);
       await expect(page.getByLabel('Unfinished notes')).toBeVisible();
     }

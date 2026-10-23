@@ -1,8 +1,9 @@
 # P3-U3a — Trunks and gateways
 
-Status: planned; replacement sub-unit approved October 23, 2026, Asia/Manila
-(+08:00). Next implementation unit. Earlier preparation is reusable evidence,
-not completion of this replacement's API/browser acceptance.
+Status: **complete**, 2026-10-23 10:29 +08:00 (Asia/Manila), within approved private-development IP-peer scope.
+[A-01–05 evidence](../../docs/status/p3-u3a-evidence.md) records the real PostgreSQL,
+API/browser, regression and normal-check results. Replacement approved October 23,
+2026 (+08:00). Parent P3-U3 remains incomplete.
 
 Parent: [P3-U3 development delivery](p3-u3-development-resource-management.md).
 The parent owns shared resource rules and DEV-01–07. This child replaces the old

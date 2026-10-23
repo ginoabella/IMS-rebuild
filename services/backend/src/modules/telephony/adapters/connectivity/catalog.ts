@@ -17,6 +17,15 @@ function name(value: unknown): value is string {
 }
 export class FilePbxCatalog implements ApprovedPbxCatalog {
   private readonly targets = new Map<string, Readonly<PbxProfile>>();
+  reservedSources(installationId: string): readonly string[] {
+    return [
+      ...new Set(
+        [...this.targets.values()]
+          .filter((p) => p.installationId === installationId)
+          .flatMap((p) => p.unmanagedIngress ?? []),
+      ),
+    ];
+  }
   constructor(file?: string) {
     if (!file) return;
     try {
@@ -39,6 +48,7 @@ export class FilePbxCatalog implements ApprovedPbxCatalog {
             'tlsServerName',
             'addresses',
             'credentialAliases',
+            'unmanagedIngress',
           ])
         )
           fail();
@@ -76,7 +86,17 @@ export class FilePbxCatalog implements ApprovedPbxCatalog {
           !p.addresses.every((a) => typeof a === 'string' && isIP(a) !== 0)
         )
           fail();
+        if (
+          p.unmanagedIngress !== undefined &&
+          (!Array.isArray(p.unmanagedIngress) ||
+            p.unmanagedIngress.length > 100 ||
+            !p.unmanagedIngress.every(
+              (a) => typeof a === 'string' && isIP(a) !== 0 && !a.includes('%'),
+            ))
+        )
+          fail();
         const profile: Readonly<PbxProfile> = Object.freeze({
+          unmanagedIngress: (p.unmanagedIngress ?? []) as string[],
           installationId: p.installationId.toLowerCase(),
           targetAlias: p.targetAlias as string,
           aliases: Object.freeze([...p.aliases]),

@@ -218,6 +218,44 @@ try {
     },
   );
   await check(
+    'PATCH forwarding retains origin and authentication checks',
+    async () => {
+      const path =
+        '/platform/pbx-nodes/00000000-0000-4000-8000-000000000001/peers/trunks/00000000-0000-4000-8000-000000000002/status';
+      for (const headers of [
+        {},
+        { origin: 'https://foreign.example' },
+        { origin: [browserOrigin, 'https://foreign.example'] },
+        { origin: browserOrigin, authorization: 'Bearer rejected-placeholder' },
+      ])
+        assert.equal(
+          (await probe(path, { method: 'PATCH', headers, body: '{}' })).status,
+          403,
+        );
+      // A valid-origin PATCH reaches the protected route, which still requires
+      // authentication. It must not be rejected by the ingress method allowlist.
+      assert.equal(
+        (
+          await probe(path, {
+            method: 'PATCH',
+            headers: {
+              origin: browserOrigin,
+              'content-type': 'application/json',
+            },
+            body: JSON.stringify({ expectedVersion: 1, enabled: true }),
+          })
+        ).status,
+        401,
+      );
+      for (const method of ['PUT', 'DELETE', 'OPTIONS'])
+        assert.equal(
+          (await probe(path, { method, headers: { origin: browserOrigin } }))
+            .status,
+          403,
+        );
+    },
+  );
+  await check(
     'forged forwarding stripped and socket attribution retained',
     async () => {
       const response = await probe('/platform/auth/csrf', {

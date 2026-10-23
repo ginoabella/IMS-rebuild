@@ -67,9 +67,15 @@ function fixture(content) {
 }
 if (inventoryBrowser || observing)
   inventoryAcceptance = inventoryPbxAcceptance(pbxAccess);
-if (process.argv[2] === '--extension-inventory')
+if (['--extension-inventory', '--peer-browser'].includes(process.argv[2]))
   console.log(
-    JSON.stringify({ check: 'extension-inventory', redisFixture: name }),
+    JSON.stringify({
+      check:
+        process.argv[2] === '--peer-browser'
+          ? 'trunk-gateways'
+          : 'extension-inventory',
+      redisFixture: name,
+    }),
   );
 if (observing)
   console.log(
@@ -201,10 +207,13 @@ try {
   if (inventoryAcceptance) inventoryAcceptance.close();
   if (created) docker(['rm', '-f', '-v', name]);
   rmSync(directory, { recursive: true, force: true });
-  if (process.argv[2] === '--extension-inventory')
+  if (['--extension-inventory', '--peer-browser'].includes(process.argv[2]))
     console.log(
       JSON.stringify({
-        check: 'extension-inventory',
+        check:
+          process.argv[2] === '--peer-browser'
+            ? 'trunk-gateways'
+            : 'extension-inventory',
         redisFixture: name,
         cleanup: 'removed',
       }),

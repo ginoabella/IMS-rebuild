@@ -6,6 +6,12 @@ export default tseslint.config(
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
+    // Retained consumed-bootstrap source is hash-bound. Preserve its harmless
+    // escaped quote while keeping the rule active for all other escapes.
+    files: ['scripts/openbao/review-captured-authority.mjs'],
+    rules: { 'no-useless-escape': ['error', { allowRegexCharacters: ['"'] }] },
+  },
+  {
     files: ['**/*.{js,mjs,cjs,ts,tsx}'],
     languageOptions: {
       globals: {

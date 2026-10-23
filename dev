@@ -135,6 +135,10 @@ case "$action" in
           *) platform_selection=--platform-auth ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:trunk-gateways ]; then
+        shift 2
+        [ "$#" -eq 0 ] || exit 1
+        provision_storage scripts/check-session-deployment.mjs --peer-browser
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:extension-inventory ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --inventory ] && [ "$1" != --credentials ] && [ "$1" != --credentials-api ] && [ "$1" != --browser ]; }; then

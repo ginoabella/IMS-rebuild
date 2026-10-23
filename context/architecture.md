@@ -214,6 +214,13 @@ lines, and contract files above 400 lines. Require a reason or split by use case
 these are review signals, not mechanical limits. Splitting must clarify ownership
 and keep the workflow traceable.
 
+P3-U3a adds [desired IP-peer trunks/gateways](../docs/architecture/trunks-and-gateways.md)
+using canonical node/installation ownership, module-owned PostgreSQL resources,
+node-serialized dependency checks, actor audit and operator-scoped create receipts.
+The existing console and platform session guards own its browser/API paths. Optional
+nonsecret `unmanagedIngress` in the existing PBX catalog reserves known source hosts.
+Resource saves remain entirely passive with respect to PBX/provider/secret-store access.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

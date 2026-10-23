@@ -17,6 +17,8 @@ import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+const peerBrowser = process.argv[2] === '--peer-browser';
+if (peerBrowser) await import('./check-peer-catalog.mjs');
 const inventoryBrowser = process.argv[2] === '--inventory-browser';
 if (inventoryBrowser) await import('./check-inventory-composition.mjs');
 const endpointCredentials = [
@@ -29,7 +31,7 @@ const selection = process.argv
   .map((x) =>
     ['--endpoint-credentials', '--endpoint-credentials-api'].includes(x)
       ? '--extension-inventory'
-      : x === '--inventory-browser'
+      : ['--inventory-browser', '--peer-browser'].includes(x)
         ? '--platform-browser'
         : x,
   );
@@ -401,6 +403,10 @@ try {
         databaseFixture: name,
       }),
     );
+  if (peerBrowser)
+    console.log(
+      JSON.stringify({ check: 'trunk-gateways', databaseFixture: name }),
+    );
   await deploy();
   await deploy();
   await owner.connect();
@@ -484,6 +490,7 @@ try {
           ? pbxAccess
           : undefined,
       inventoryBrowser,
+      peerBrowser,
       browserChecks: selection[0] !== '--platform-http',
       browserOnly: [
         '--platform-browser',
@@ -556,7 +563,10 @@ try {
       browserChecks: selection[0] !== '--credential-api',
       browserOnly: selection[0] === '--credential-browser',
     });
+  // The peer selection owns API/browser acceptance. The default normal graph
+  // retains all shared lifecycle/lost-response assertions below.
   if (
+    !peerBrowser &&
     ![
       '--staff-http',
       '--credential-browser',
@@ -1349,7 +1359,7 @@ try {
       [name],
     );
     await admin.query(`DROP DATABASE ${name}`);
-    if (selection[0] === '--extension-inventory') {
+    if (selection[0] === '--extension-inventory' || peerBrowser) {
       assert.equal(
         (
           await admin.query(
@@ -1361,7 +1371,7 @@ try {
       );
       console.log(
         JSON.stringify({
-          check: 'extension-inventory',
+          check: peerBrowser ? 'trunk-gateways' : 'extension-inventory',
           databaseFixture: name,
           cleanup: 'removed',
         }),

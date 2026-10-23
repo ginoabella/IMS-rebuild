@@ -17,5 +17,12 @@ export function consoleReturnPath(value: string | null | undefined): string {
     return value;
   if (value && /^\/pbx-nodes\/[0-9a-f-]{36}\/inventory$/i.test(value))
     return value;
+  if (
+    value &&
+    /^\/pbx-nodes\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/peers$/i.test(
+      value,
+    )
+  )
+    return value;
   return '/';
 }

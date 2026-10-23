@@ -69,10 +69,13 @@ export function createIngress(material) {
         req.headers.host !== 'localhost:3443' ||
         !single('origin') ||
         !single('sec-fetch-site') ||
-        !['GET', 'HEAD', 'POST'].includes(req.method)
+        !['GET', 'HEAD', 'POST', 'PATCH'].includes(req.method)
       )
         return deny(403);
-      if (req.method === 'POST' && req.headers.origin !== browserOrigin)
+      if (
+        ['POST', 'PATCH'].includes(req.method) &&
+        req.headers.origin !== browserOrigin
+      )
         return deny(403);
       if (
         ['GET', 'HEAD'].includes(req.method) &&

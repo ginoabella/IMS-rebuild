@@ -2339,3 +2339,15 @@ remain evidence; earlier next-step/acceptance gates are superseded by the
 - 2026-10-16 15:33 +08:00 (Asia/Manila) — Completed P3-U2c and parent P3-U2 under the conditional private-development G-03 approval. All C/parent criteria, required checks and exact cleanup/restoration passed; [final evidence](../docs/status/p3-u2c-evidence.md). In Progress cleared; detailed earlier checkpoints archived.
 
 - 2026-10-16 10:49 +08:00 (Asia/Manila) — Completed P3-U2b B-01–07 under the user's conditional G-02 private-development approval. Real provider/lifecycle/security/recovery evidence, complete inventory/queue regressions and final full Docker graph passed, exit 0. Fixture material accounted for and exact owned resources removed; normal runtime readiness verified. In Progress cleared. Approved recovery and deferred production/delivery/live-apply boundaries are recorded in [final evidence](../docs/status/p3-u2b-evidence.md). Earlier checkpoints moved to tracker history.
+
+
+## 2026-10-23 — Previous completed checkpoint retained during P3-U3a completion
+
+### P3-U2c / parent P3-U2 checkpoint
+
+- **Status:** completed within conditionally approved private development; 2026-10-16 15:33 +08:00 (Asia/Manila).
+- **Requirement:** [C-01–07](feature-specs/p3-u2c-operator-inventory-browser-and-integrated-handoff.md), parent AC-01–11; [final evidence](../docs/status/p3-u2c-evidence.md).
+- **Delivered:** protected inventory/profile/credential browser, bounded named forwarding, exact passive observation composition, operator-bound mounted recovery and explicit uncertainty/version review. PBX detail links to **Manage extension inventory**.
+- **Verification:** combined inventory/real credentials/browser, PBX registry/observation/browser, platform auth, durability, full `./dev check`, all 12 shared UI checks and final automatic-token-cleanup credential rerun passed, exit 0. Actual SIP REGISTER/expiry-zero and service outages are distinguished from injected faults in the evidence.
+- **Preservation/cleanup:** exact original Asterisk configuration/routing/object/running baseline restored; no calls, fixtures or lock remain. Generations accounted for, temporary tokens revoked/removed, disposable databases/containers absent. Ordinary canonical node/version and empty inventory preserved; platform/staff HTTPS ready and health checks passed, backend live/ready 200.
+- **Handoff:** [browser contract](../docs/architecture/extension-inventory-browser.md), [operator/recovery guide](../docs/runbooks/extension-inventory-browser.md). P3-U4/U5, P4 and P8 retain routing, live apply/recovery/revocation, allocation, tenant readiness and browser calling. Production and the Phase 3 gate remain incomplete; no expanded PBX permissions or deployment approval is claimed.

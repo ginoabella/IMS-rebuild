@@ -50,6 +50,7 @@ export async function checkPlatformAuth({
   commitProxy,
   pbxAccess,
   inventoryBrowser = false,
+  peerBrowser = false,
   browserChecks = true,
   browserOnly = false,
 }) {
@@ -186,14 +187,32 @@ export async function checkPlatformAuth({
   }
   const limiterConfig = parseLimiterConfig({
     LIMITER_TRUSTED_PROXIES: '127.0.0.1',
-    ...(inventoryBrowser
+    ...(inventoryBrowser || peerBrowser
       ? { LIMITER_PLATFORM_PROTECTED_WINDOW_SECONDS: '1' }
       : {}),
   });
   let pbxFixture;
-  const pbxCatalogFile = pbxAccess
-    ? join(directory, 'catalog.json')
-    : undefined;
+  const pbxCatalogFile =
+    pbxAccess || peerBrowser ? join(directory, 'catalog.json') : undefined;
+  if (peerBrowser)
+    writeFileSync(
+      pbxCatalogFile,
+      JSON.stringify([
+        {
+          installationId: 'f4000000-0000-4000-8000-000000000001',
+          targetAlias: 'offline-peer',
+          aliases: [],
+          host: 'offline-peer.invalid',
+          transport: 'ami-tls',
+          port: 5039,
+          tlsServerName: 'offline-peer.invalid',
+          addresses: ['192.0.2.249'],
+          credentialAliases: ['offline-peer'],
+          unmanagedIngress: ['192.0.2.250'],
+        },
+      ]),
+      { mode: 0o600 },
+    );
   if (pbxAccess) {
     pbxFixture = await pbxBrowserFixture(appUrl, pbxAccess, secrets);
     writeFileSync(pbxCatalogFile, JSON.stringify(pbxFixture.catalog), {
@@ -374,6 +393,7 @@ export async function checkPlatformAuth({
       pbxFixture,
       pbxUsername,
       inventoryBrowser,
+      peerBrowser,
       username: browserName,
       password,
       owner,

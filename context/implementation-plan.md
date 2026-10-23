@@ -302,7 +302,7 @@ credential/backup acceptance gates. Use the approved replacement a → b → c s
 [b: simple credentials](feature-specs/p3-u3b-simple-trunk-credentials.md), and
 [c: DID inventory/integration](feature-specs/p3-u3c-did-inventory-and-integration.md).
 Each child delivers its actual API/browser workflow; no final browser-only gate.
-Start with IP-peer desired CRUD using existing transactions, permissions and audit.
+P3-U3a IP-peer desired CRUD and its browser are complete; [evidence](../docs/status/p3-u3a-evidence.md). Next is b, preserving the same transactions, permissions and audit.
 Retain OpenBao and introduce a practical trusted setup/administration path rather
 than completing the separate attestation/claim/cleanup-worker subsystem.
 Backup automation and recovery certification are operational work, not a P3-U3

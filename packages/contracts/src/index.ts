@@ -81,3 +81,4 @@ export type {
   InventoryApiErrorDto,
 } from './extension-inventory';
 export * from './endpoint-credentials';
+export * from './trunk-gateways';
