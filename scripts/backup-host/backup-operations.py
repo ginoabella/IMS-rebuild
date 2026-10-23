@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 from pathlib import Path
 import stat
 import subprocess
@@ -87,10 +88,30 @@ def context():
     return request, evidence
 
 
+def duration_seconds(value):
+    match = re.fullmatch(r'([1-9][0-9]*)([smhd])', str(value))
+    if not match:
+        raise ValueError('credential_lifetime_unconfirmed')
+    return int(match[1]) * {'s':1, 'm':60, 'h':3600, 'd':86400}[match[2]]
+
+
+def credential_lifetime(active):
+    # Rotations verify the issued SecretID TTL by accessor lookup before adoption.
+    # The initial generation must additionally respect its source-bound mount cap.
+    value = active.get('secretIdTtlSeconds', 2592000)
+    if type(value) is not int or not 0 < value <= 2592000:
+        raise ValueError('credential_lifetime_unconfirmed')
+    return timedelta(seconds=value)
+
+
 def initial_generation(request, evidence):
     # Use the earlier operation start as a conservative local age bound. This is
     # not a live SecretID lookup and does not claim remaining provider use count.
+    writes = {item['path']:item.get('body') for item in request['candidate']['writes']}
+    maximum = duration_seconds(writes['sys/auth/platform-backup']['config']['max_lease_ttl'])
+    intended = duration_seconds(writes['auth/platform-backup/role/platform-raft-snapshot-reader']['secret_id_ttl'])
     return {'operationId': request['operationId'], 'credentials': request['directories']['snapshotCredentials'],
+            'secretIdTtlSeconds':min(maximum, intended),
             'accessorFile': request['directories']['installState'] + '/snapshot-secret.json',
             'createdAt': evidence['events'][0]['at']}
 
@@ -190,9 +211,10 @@ class Commands:
             if origin.tzinfo is None or origin > now:
                 raise ValueError('generation_clock')
             value.update(credentialGeneration=active['operationId'],
-                rotationReminderDue=now >= origin + timedelta(days=23),
-                credentialAgeLimitReached=now >= origin + timedelta(days=30),
-                credentialAgeBasis='conservative-local-issuance-bound',
+                rotationReminderDue=now >= origin + min(timedelta(days=23), credential_lifetime(active)),
+                credentialAgeLimitReached=now >= origin + credential_lifetime(active),
+                credentialAgeBasis='conservative-local-issuance-and-ttl-bound',
+                credentialLifetimeSeconds=int(credential_lifetime(active).total_seconds()),
                 pendingOperation=(read_record(self.runtime / 'pending.json') if (self.runtime / 'pending.json').exists() else None),
                 lastOperation=(read_record(self.runtime / 'last.json') if (self.runtime / 'last.json').exists() else None),
                 lastSuccessfulBackup=(read_record(self.runtime / 'last-backup.json') if (self.runtime / 'last-backup.json').exists() else {
@@ -321,7 +343,7 @@ class Commands:
             active = self.generation()
             if command == 'run-now':
                 created = datetime.fromisoformat(active['createdAt'])
-                if created.tzinfo is None or not timedelta(0) <= datetime.now(timezone.utc)-created < timedelta(days=30):
+                if created.tzinfo is None or not timedelta(0) <= datetime.now(timezone.utc)-created < credential_lifetime(active):
                     raise ValueError('rotate_before_capture')
             self.op = str(uuid.uuid4())
             self.work = self.runtime / self.op

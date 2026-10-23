@@ -3,7 +3,7 @@
 **Subsequent owner decision — 2026-10-21 (Asia/Manila, +08:00):** Docker Restic +
 append-only Rest Server is now selected for development and production. Timed
 COMPLIANCE retention is deferred as a future enhancement, not an initial acceptance
-blocker. See the [current authoritative backup requirements](../architecture/backup-platform.md).
+blocker. See the [current authoritative backup requirements](../archive/p3-u3/2026-10-23/docs/architecture/backup-platform.md).
 The evaluation below preserves its original assertions and tested scope; platform
 approval does not authorize retained execution or establish production readiness.
 

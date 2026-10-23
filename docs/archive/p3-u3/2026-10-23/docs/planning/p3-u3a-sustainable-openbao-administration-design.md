@@ -22,7 +22,7 @@ Keep the functioning `platform-owner-custodian` account unchanged. Close its nam
 capability-verification checkpoint as **successfully completed and owner-accepted**:
 all expected identity/lifetime assertions and ten capability sets matched, session
 revocation was acknowledged and confirmed by 403. Both session authorizations are
-consumed. See the [final evidence and limits](../status/p3-u3a-retained-capability-session-2.md).
+consumed. See the [final evidence and limits](../../../../../status/p3-u3a-retained-capability-session-2.md).
 The account functions with its intended restricted permissions on the verified
 paths; it cannot capture snapshots or edit `platform-deployment-maintainer`.
 This is not a complete privilege inventory, ongoing authorization to log in, or
@@ -185,7 +185,7 @@ Keep the same native snapshot/separate audit/age-encrypted archives and manifest
 across environments. Recoverable repository credentials and independently held
 age private keys must survive source/provider/backup-host loss. Retain old key
 versions until dependent data expires; keep seal/recovery custody separate.
-The [26-check disposable evaluation](../status/p3-u3a-restic-backup-evaluation.md)
+The [26-check disposable evaluation](../../../../../status/p3-u3a-restic-backup-evaluation.md)
 does not establish retained/production acceptance. No retained installation,
 additional login, privilege expansion or backup-first exception is authorized.
 
@@ -353,7 +353,7 @@ need acceptance. Preserve native renewal HTTP 500, subsecond expiry observations
 the retained 48-hour-maximum finding and unresolved browser-recovery failure.
 P3-U3a remains incomplete.
 
-Local continuation checkpoint: the [canonical owner database foundation](../status/p3-u3a-trunk-owner-foundation.md)
+Local continuation checkpoint: the [canonical owner database foundation](../../../../../status/p3-u3a-trunk-owner-foundation.md)
 is now implemented in source and verified against disposable PostgreSQL, including
 grants, provenance and savepoint-safe audit rollback. It is not wired into runtime
 and supplies no authority-checked command, verification, worker or claim API. This

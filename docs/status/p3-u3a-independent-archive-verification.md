@@ -2,11 +2,11 @@
 
 October 22, 2026, Asia/Manila (+08:00). **Read-only export and owner-run offline
 verification implemented; retained ciphertext export and owner custody verified.
-Owner off-host copy/decryption remain pending; P3-U3a incomplete.**
+Owner Windows copy/decryption passed October 23, 2026 (+08:00); P3-U3a incomplete.**
 
 Use the [owner runbook](../runbooks/p3-u3a-independent-archive-verification.md).
-The owner has now completed the administrator-only ciphertext export. The next
-step is the owner-run off-host copy and offline verifier. No additional bootstrap
+The owner has now completed the administrator-only ciphertext export. The owner also completed off-host Windows decryption and integrity verification;
+see the [owner-reported result](p3-u3a-owner-archive-verification.json). No additional bootstrap
 approval is requested or reused. No retained repository/key/provider access took
 place during implementation; the public default plan reads only source evidence.
 
@@ -19,7 +19,7 @@ exact ciphertext lengths; UID/GID 1002, directories 0700, regular single-link fi
 0600. No private key, plaintext or provider was accessed for that check.
 [Export evidence](p3-u3a-retained-verification-export.json). Protected source
 preservation and zero repository writes are recorded from the operator report.
-Continue with the filled-in owner Windows/offline instructions; do not rerun export.
+Owner verification is complete; preserve the export and do not rerun it.
 
 ## Delivered
 
@@ -81,11 +81,15 @@ They use only synthetic keys and inputs.
 
 ## Remaining acceptance
 
-Owner copies the five verified ciphertext/public files from the completed export
-to their machine and runs the offline verifier with their existing
-private key file. Share only its sanitized JSON success. This will establish
-independent decryption for the retained installation checkpoint, not another
-capture, successful restore, achieved freshness or measured disaster-recovery RTO.
+Owner-reported Windows verification passed at 2026-10-23 07:48:47 +08:00
+(Node v24.22.1). The report matches the pinned request, repository, snapshot and
+both archive identities; snapshot integrity and 5,593 audit records passed.
+No plaintext was written and no provider/repository access was reported.
+[Sanitized evidence](p3-u3a-owner-archive-verification.json) records the exact report
+and [Windows paths](../runbooks/p3-u3a-independent-archive-verification.md#recorded-windows-locations).
+The private key was not handled by the agent. Windows ACL audit and OS-level
+network disconnection were not independently established. This verifies the exact
+installation checkpoint, not freshness, native restore or disaster-recovery RTO.
 
 Retained status/run-now/rotation acceptance, isolated compatible OpenBao native
 restore using independently held seal material, matching PostgreSQL recovery point

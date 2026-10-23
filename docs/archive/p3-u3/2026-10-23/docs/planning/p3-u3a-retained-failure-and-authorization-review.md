@@ -81,8 +81,8 @@ states in this proposal. If availability remains unknown, execution stays blocke
 
 ## Exact proposed scope, distinct from security acceptance
 
-The [retained authorization draft manifest](p3-u3a-retained-maintenance-authorization-draft.json)
-is generated from the accepted [rehearsal manifest](p3-u3a-rootless-maintenance-rehearsal-manifest.json),
+The [retained authorization draft manifest](../../../../../planning/p3-u3a-retained-maintenance-authorization-draft.json)
+is generated from the accepted [rehearsal manifest](../../../../../planning/p3-u3a-rootless-maintenance-rehearsal-manifest.json),
 with a new proposed operation UUID, exact temporary names/paths, full baseline and
 bootstrap bodies/hashes, ticket request/role, final base64 bodies and cleanup
 paths. It contains no credentials. Reserving a name is not creating an object.

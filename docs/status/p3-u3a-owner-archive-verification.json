@@ -1,0 +1,48 @@
+{
+  "evidenceSource": "owner-reported Windows verifier output supplied in chat",
+  "verifiedAtLocal": "2026-10-23T07:48:47.106+08:00",
+  "platform": "Windows PowerShell",
+  "nodeVersionOwnerReported": "v24.22.1",
+  "exportOperationId": "f870564b-45b5-4b34-a5c9-949df4a35194",
+  "windowsPathsOwnerConfirmed": {
+    "backupAgeIdentity": "C:\\MyIMS-Recovery\\myims-age-identity.txt",
+    "passphraseEncryptedIdentityCopyFromHistory": "C:\\MyIMS-Recovery\\myims-age-identity.escrow.age",
+    "verificationRoot": "C:\\Users\\Administrator\\MyIMS-Archive-Verification-5c58f9a3-2ddf-4de3-9b83-f439335d145e"
+  },
+  "encryptedIdentityCopyCurrentlyVerified": false,
+  "privateKeyHandledByAgent": false,
+  "windowsAclAuditedByVerifier": false,
+  "networkDisconnectionIndependentlyConfirmed": false,
+  "report": {
+    "status": "independent-archive-integrity-verified",
+    "captureOperationId": "d6550071-561a-4339-bc15-50a5b22ac43d",
+    "repositoryId": "8f2337728f88192a57301f5ee51e405a6625955054c15079675fbdf907b8da6b",
+    "snapshotId": "c51f8a679a86d29265af9b4588b1f76d537e7cacb09ce1bc75e660bd60015324",
+    "requestSha256": "2a0f686e9097a72ab6875273aaf6b6cd8c05c8488bc0323cbba93e84343c222b",
+    "archives": [
+      {
+        "kind": "bootstrap-post-install",
+        "archiveId": "eb024207-3b6e-4ea0-b912-745cd0bc3ede",
+        "nativeSnapshotIntegrityVerified": true,
+        "snapshotSha256": "b8f0686d3e465504cf24a69280ae3249016b946dc0371a31b5e4197a6185605d",
+        "index": 1655,
+        "term": 22,
+        "sealedChecksumCryptographicallyVerified": false
+      },
+      {
+        "kind": "recovery-audit",
+        "archiveId": "42d3c34e-8ca1-42a9-a9e3-37146c01be56",
+        "auditJsonIntegrityVerified": true,
+        "records": 5593,
+        "auditContinuityEstablished": false
+      }
+    ],
+    "verifiedAt": "2026-10-22T23:48:47.106Z",
+    "plaintextWritten": false,
+    "secretsPrinted": false,
+    "providerAccessed": false,
+    "repositoryAccessed": false,
+    "nativeRestorePerformed": false,
+    "jointPostgresRecoveryEstablished": false
+  }
+}

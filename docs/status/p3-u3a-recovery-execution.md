@@ -5,7 +5,7 @@
 ## Authority and limits
 
 The user explicitly authorized one isolated controlled-development OpenBao recovery
-operation, including the approved [custodian succession design](../planning/p3-u3a-custodian-succession-review.md),
+operation, including the approved [custodian succession design](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-custodian-succession-review.md),
 subject to every checkpoint in the [readiness report](p3-u3a-provisioning-preexecution.md)
 and the final execution request in the conversation. This supersedes earlier
 pending-approval wording; it does not establish that prerequisites or acceptance
@@ -180,7 +180,7 @@ remains revoked, provider restoration verified and the old policy remains retire
 The earlier rehearsal missed this override before retirement; that was a gap in
 pre-execution verification. Endpoint regressions passed, but **provisioning is not
 accepted and P3-U3a is not complete**. The
-[hardening review](../planning/p3-u3a-token-lifetime-hardening-review.md) includes
+[hardening review](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-token-lifetime-hardening-review.md) includes
 concrete request constraints for review/disposable validation and identifies the
 unresolved backup/maintenance authority prerequisites before any retained changes.
 
@@ -188,6 +188,6 @@ The user subsequently authorized disposable-only validation. The
 [follow-up evidence](p3-u3a-disposable-lifetime-validation.md) records the failed
 original array constraint, corrected 14-path/434-negative matrix, privileged
 overlap counterexample, expiry HTTP 500 and direct endpoint concurrency failure.
-The [maintenance/backup proposal](../planning/p3-u3a-retained-lifetime-maintenance-proposal.md)
+The [maintenance/backup proposal](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-lifetime-maintenance-proposal.md)
 is for separate design review. No retained remediation or further recovery was
 performed; this historical operation's authorization remains consumed.

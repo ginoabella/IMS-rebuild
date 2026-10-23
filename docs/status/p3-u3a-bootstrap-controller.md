@@ -107,7 +107,7 @@ and harness SHA256. No source was changed during the current-source final runs.
 
 The [completed shared host wiring and post-install backup verification](p3-u3a-bootstrap-host-wiring.md)
 now supersedes the implementation-pending items below. The [concrete execution
-request](../planning/p3-u3a-bootstrap-execution-request.md) remains disabled pending
+request](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-bootstrap-execution-request.md) remains disabled pending
 its separate approval and fresh staging. Earlier core-only evidence stays historical.
 
 ## Commands and remaining installation work

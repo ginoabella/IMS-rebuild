@@ -1,7 +1,7 @@
 # P3-U3a — Local complete-array helper alignment
 
 Checkpoint: 2026-10-20 (Asia/Manila, +08:00). Authorized local checkpoint 1
-under the [approved completion direction](../planning/p3-u3a-approved-completion-direction.md).
+under the [approved completion direction](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-approved-completion-direction.md).
 This checkpoint completes policy-generation/preflight alignment only; P3-U3a and
 the remaining lifecycle-helper work are incomplete.
 

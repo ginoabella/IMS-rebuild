@@ -10,7 +10,7 @@ completed and closed**, October 20 (+08:00). `platform-owner-custodian` function
 with its intended restricted permissions on the exact verified paths. No expansion
 or repeated capability check is authorized. Complete privilege inventory and backup
 readiness remain unestablished. The
-[consolidated administrative design](../planning/p3-u3a-sustainable-openbao-administration-design.md)
+[consolidated administrative design](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-sustainable-openbao-administration-design.md)
 is prepared for separate review only. P3-U3a remains incomplete.
 
 ## Prerequisite disposable verification

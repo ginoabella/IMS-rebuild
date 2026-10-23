@@ -75,7 +75,7 @@ immutable server-wide 24-hour ceiling or retained deployment is established.
 
 ## Approved P3-U3a lifecycle follow-up — 2026-10-20
 
-The [approved completion direction](../planning/p3-u3a-approved-completion-direction.md)
+The [approved completion direction](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-approved-completion-direction.md)
 authorizes local bounded same-token reconciliation and pre-maximum replacement
 with conservative consumption controls. Preserve the one-hour initial runtime
 lease, 86,400-second configured explicit maximum and failed-response rejection.

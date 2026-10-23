@@ -1,7 +1,7 @@
 # P3-U3a — Inactive controlled replacement candidate
 
 Local checkpoint: 2026-10-20 (Asia/Manila, +08:00), under the
-[approved completion direction](../planning/p3-u3a-approved-completion-direction.md).
+[approved completion direction](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-approved-completion-direction.md).
 This is a synthetic candidate within checkpoint 1; runtime activation, full
 checkpoint acceptance and P3-U3a completion remain outstanding.
 

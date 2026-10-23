@@ -203,7 +203,7 @@ recorded in each evidence object; no named volumes were created. Synthetic audit
 TLS private key and tmpfs storage are removed, while sanitized evidence is retained.
 No fixture action restores or alters retained configuration.
 
-The [separate maintenance/backup proposal](../planning/p3-u3a-retained-lifetime-maintenance-proposal.md)
+The [separate maintenance/backup proposal](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-lifetime-maintenance-proposal.md)
 identifies missing snapshot/self-policy authority, the backup-before-change
 bootstrap conflict, a tightly scoped rootless option requiring further disposable
 rehearsal and explicit exception approval, restoration prerequisites and risks.

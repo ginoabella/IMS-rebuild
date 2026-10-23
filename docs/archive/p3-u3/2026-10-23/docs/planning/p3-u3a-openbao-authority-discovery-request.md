@@ -1,6 +1,6 @@
 # P3-U3a — Bounded existing-authority metadata review request
 
-2026-10-21 UTC. Owner explicitly approved this exact metadata review. **Completed; the one-session authorization is consumed.** No further login or wider reads are authorized. See [results](../status/p3-u3a-authority-metadata-review.md).
+2026-10-21 UTC. Owner explicitly approved this exact metadata review. **Completed; the one-session authorization is consumed.** No further login or wider reads are authorized. See [results](../../../../../status/p3-u3a-authority-metadata-review.md).
 
 ## Problem and useful outcome
 

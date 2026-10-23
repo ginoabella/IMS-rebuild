@@ -534,89 +534,34 @@ separate prerequisites.
 
 ## Telephony Architecture
 
-P3-U3a's approved private-development trunk credential preparation adds isolated
-protected import/exact-verification and restricted deployment policy-plan helpers.
-These are not wired into HTTP or existing workers. The [trunk owner contract](../docs/architecture/trunk-credentials.md)
-and [token runbook](../docs/runbooks/trunk-credentials.md) record delivered versus
-outstanding boundaries. The synthetic digest-only profile and provisioning design
-are conditionally approved; the user subsequently authorized one isolated recovery
-operation subject to mandatory custody, backup, deadline and restoration gates.
-The approved [human custodian succession design](../docs/planning/p3-u3a-custodian-succession-review.md)
-now provides verified 15-minute maintenance access after recovered-root retirement.
-The single operation completed with protected backup/inventory gates and verified
-normal restoration; [execution evidence](../docs/status/p3-u3a-recovery-execution.md).
-Endpoint/trunk issuers are restricted to the two approved installation manifests;
-no further recovery or expanded privileges are authorized. A later real token
-override probe found a 48-hour explicit maximum instead of the required 24 hours;
-[security acceptance remains incomplete](../docs/planning/p3-u3a-token-lifetime-hardening-review.md).
-The [2026-10-20 approved direction](../docs/planning/p3-u3a-approved-completion-direction.md)
-authorizes independent local owner/grants/worker/API/binding and lifecycle work.
-Retain one-hour runtime leases and 86,400-second configured explicit maxima; adopt
-complete-array constraints as the hardening candidate. Bounded same-token renewal
-reconciliation and pre-maximum replacement require proven conservative consumption
-controls; 500/uncertain replies never extend authority. The [trunk contract](../docs/architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use)
-records the conditional 60-second attestation timing amendment: approved in principle,
-not accepted for runtime use before implementation and real transaction/failure
-tests. Database finalization must independently check current business authority,
-exact owner/installation/generation, replay protection and freshness. Prefer stable,
-separately controlled existing backup/maintenance authority. New/expanded retained
-privilege, retained access and execution remain separately gated. The named custodian
-capability checkpoint is now owner-accepted and successfully closed within its
-exact ten-path scope: [evidence and limits](../docs/status/p3-u3a-retained-capability-session-2.md).
-The account functions with intended restricted permissions; both session approvals
-are consumed. Complete privilege inventory and backup readiness are not established.
-The [consolidated sustainable administration design](../docs/planning/p3-u3a-sustainable-openbao-administration-design.md)
-has owner approval of its two-capability direction only as of October 21. Native
-AppRole is accepted for disposable fallback validation, with numeric settings
-pending testing/configuration approval. The [installation review package](../docs/planning/p3-u3a-backup-installation-approval-package.md)
-keeps actual installer/destination/key custody unresolved and proposes one host
-workflow with separate audit preservation. The owner's final October 21 decision
-selects **Docker-deployed Restic + append-only Rest Server for development and
-production**, superseding B2 and SeaweedFS primary-platform preferences. The
-[backup platform and security contract](../docs/architecture/backup-platform.md)
-defines the authoritative requirements. Same age-encrypted archives, integrity
-manifests and Restic workflow apply across environments. Timed S3 Object Lock
-COMPLIANCE retention is explicitly deferred as a future security enhancement,
-not mandatory for initial acceptance. Ordinary clients cannot overwrite/delete/
-prune existing data; separately controlled administrators review retention/deletion.
-Same-host development accepts shared host/disk/admin failure risk. Production
-requires an independently administered physical backup server or NAS, restricted
-network, authenticated TLS, monitored capacity, and an additional independently
-protected recovery copy or equivalent reviewed backup-host-compromise safeguard.
-Native Raft snapshots, separate audit, recoverable repository credentials,
-independently held age private keys and separate seal/recovery custody remain
-required. Readiness requires verified retrieval/decryption/native OpenBao restore,
-coordinated PostgreSQL recovery, generation reconciliation and measured RPO/RTO.
-The [Restic evaluation](../docs/status/p3-u3a-restic-backup-evaluation.md) passed its
-26 disposable checks; retained/production acceptance is not established. Existing
-OpenBao installer, backup-first and snapshot-identity provisioning gates remain
-separate. The owner subsequently approved bounded development storage installation;
-the administrator-created UID/GID 12010 account and isolated TLS/append-only Rest
-Server are now verified running with no published ports and a 2-GiB pilot cap.
-The repository is uninitialized; independent credential/key custody and real capture
-are not accepted. [Installation state and limits](../docs/status/p3-u3a-development-backup-installation.md).
-A snapshot-only TLS/AppRole helper is implemented as a separately tagged disposable
-candidate; it adds no retained identity, provider network or automatic runtime
-wiring. Additional retained OpenBao login/privilege expansion, backup-first
-exceptions, production deployment, destructive cleanup and root recovery remain
-unauthorized. Independent P3-U3a work continues and remains incomplete. Garage
-application storage is unchanged.
-Subsequent [disposable-only validation](../docs/status/p3-u3a-disposable-lifetime-validation.md)
-tested complete-array request constraints without changing retained policies.
-Ordinary issuance/rejection passed. Later disposable work reconciled exact
-immutable endpoint create races and rejects unexpected effective authority; retained
-inventory/integration, provider expiry errors and precision remain unresolved. The separate maintenance design
-must resolve snapshot access and self-policy denial before a retained execution
-request; no backup-gate exception or new authority is implicitly approved.
-Provider policies/roles and separate issuer custody are installed. Canonical trunk
-owner foundation source migration/grants and an exact-reference read port are now
-[verified in isolated PostgreSQL](../docs/status/p3-u3a-trunk-owner-foundation.md),
-with no shared database migration or runtime wiring. It provides immutable metadata
-and savepoint-safe same-transaction audit evidence, not current business authority,
-provider qualification or binding. Owner admission/finalization functions, full
-lifecycle state/results, protected worker/runtime composition and completed
-binding/claim/adoption remain outstanding.
+P3-U3 follows the owner-approved October 23, 2026
+[development resource-management specification](feature-specs/p3-u3-development-resource-management.md).
+Use the existing backend, PostgreSQL, platform sessions and console for desired
+trunk/gateway/DID CRUD. Keep typed validation, canonical installation ownership,
+ordinary transactions/versions/audit, existing access checks and secret redaction.
+Saved settings do not apply live PBX configuration or establish voice readiness.
 
+Retain OpenBao. A trusted setup command will store trunk material and publish
+stable nonsecret credential IDs/labels/versions; HTTP/Next select metadata without
+fetching material. A practical development administrator and the service identities
+actually needed replace the unfinished separate importer/verifier/cleanup/attestation
+pipeline. Fresh 60-second owner proofs, generation-ordinal protocols and exhaustive
+short-lived-token certification are not current P3-U3 requirements. See the
+[current trunk credential contract](../docs/architecture/trunk-credentials.md).
+Existing schema/helpers may be reused; no table, secret or worker is removed merely
+because the previous design was archived.
+
+Backup/recovery administration is a separate operational workstream. Keep existing
+Restic/append-only Rest Server and age-encrypted archives, with manual development
+backup/recovery as the simple operating direction. Owner Windows decryption of the
+installation checkpoint passed. The first routine backup's expired 300-second
+SecretID and pending operation remain unresolved and preserved; scheduling remains
+inactive. That repair does not gate independent feature work. Production backup,
+HA, capacity and recovery targets remain unestablished. See the
+[current backup scope](../docs/architecture/backup-platform.md) and
+[operations guide](../docs/runbooks/p3-u3a-development-backup.md).
+The [legacy design archive](../docs/archive/p3-u3/2026-10-23/README.md) retains old
+requirements and execution context; it does not override the current specification.
 
 P3-U1a adds the [protected desired registry](../docs/architecture/pbx-registry.md)
 under [approved local connectivity policy](../docs/planning/p3-u1a-connectivity-contract-review.md).

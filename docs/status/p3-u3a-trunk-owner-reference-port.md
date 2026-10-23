@@ -1,7 +1,7 @@
 # P3-U3a — Exact owner reference adapter checkpoint
 
 2026-10-21 (Asia/Manila, +08:00). Independent local work under approved
-[completion checkpoint 2](../planning/p3-u3a-approved-completion-direction.md).
+[completion checkpoint 2](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-approved-completion-direction.md).
 P3-U3a remains incomplete. No application runtime was activated or migrated.
 
 The existing `TrunkOwnerReferences` SQL adapter now rejects ambiguous results,

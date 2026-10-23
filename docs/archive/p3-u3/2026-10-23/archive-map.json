@@ -1,0 +1,170 @@
+[
+  {
+    "original": "context/feature-specs/p3-u3-trunks-gateways-and-dids.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/context/feature-specs/p3-u3-trunks-gateways-and-dids.md",
+    "originalSha256": "d294d043639450144f3e91bd30d44c6ae37a8ea234034f4d558f8a6430450c28",
+    "archivedSha256": "6b890e6fdc7c481a4798fc86fb68135d149966a85a932293b79b6e2bd01b08e0",
+    "navigationStubRetained": true
+  },
+  {
+    "original": "context/feature-specs/p3-u3a-1-isolated-trunk-credential-lifecycle.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/context/feature-specs/p3-u3a-1-isolated-trunk-credential-lifecycle.md",
+    "originalSha256": "7342ebc801c696413e9c411bcef3a9a7b2c5205bb4ff2a86ab3d493abb80edd6",
+    "archivedSha256": "e2f4b1a4dd595ed4c7fc8d536b10d9914e344006573e91b841ab70e8d7b92051",
+    "navigationStubRetained": true
+  },
+  {
+    "original": "context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md",
+    "originalSha256": "923748d083d137afd795f80121bcb71da9d89978ec08d96dc3c406ae886ba320",
+    "archivedSha256": "4ca0f9bd56fa03d1bc074278312d36dc0409e16b5b5d5cc920115c4cce4de813",
+    "navigationStubRetained": true
+  },
+  {
+    "original": "context/feature-specs/p3-u3b-did-inventory-and-dependency-safe-resource-removal.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/context/feature-specs/p3-u3b-did-inventory-and-dependency-safe-resource-removal.md",
+    "originalSha256": "f66be50bd45a7d5a94b19f4bae0127733834affbbd37de7c4d3ab68478f251ca",
+    "archivedSha256": "d6160514bdecb4491380e7c3d0578e387f7d63f8302a606c800350d21a0c8da7",
+    "navigationStubRetained": true
+  },
+  {
+    "original": "context/feature-specs/p3-u3c-operator-resource-browser-and-integrated-handoff.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/context/feature-specs/p3-u3c-operator-resource-browser-and-integrated-handoff.md",
+    "originalSha256": "601273868e597c6ae22fdcba03f6cd67d956068de86352e93a14a00d40a4ecc5",
+    "archivedSha256": "1c12be90c1b81b16aeaa4d4d83ddc4f0613ed7ad0d88d22ff3e943fbef1db1fa",
+    "navigationStubRetained": true
+  },
+  {
+    "original": "docs/architecture/backup-platform.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/architecture/backup-platform.md",
+    "originalSha256": "1c81589be7edde4b181d3157c6e32b689a7d11605e145c96f08edd75f3c9087b",
+    "archivedSha256": "d198e034d801b0636309f7e027018ceb090718195a3fc524f539d46e0bb3424a",
+    "navigationStubRetained": true
+  },
+  {
+    "original": "docs/architecture/trunk-credentials.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/architecture/trunk-credentials.md",
+    "originalSha256": "16d1672a6bc3254b4596c3a66272596fa923edb47e0e0d79b3d05017617a3b34",
+    "archivedSha256": "13908eb4615bc717bfbe0189ffc65809805da4ad2dc46ae2acc5ce74e86c612b",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-approved-completion-direction.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-approved-completion-direction.md",
+    "originalSha256": "2a25c62296256c18a814c90704bcf682617d77a3b1e9b78e8c697d0480f2b07e",
+    "archivedSha256": "8c00db2c45145aa56d65a3fc015c896424239b718b2cb4e30a2c5797370c3c23",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-backup-authority-next-step.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-backup-authority-next-step.md",
+    "originalSha256": "186b59dda973dae5fe4d58f98bcc4ff5efd427674987ccaf92e4a72967f31383",
+    "archivedSha256": "7511557de2e390073dd18fdea745b78251160c9630d7bfc1eeec25f9b40f812a",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-backup-installation-approval-package.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-backup-installation-approval-package.md",
+    "originalSha256": "a86850ae607ed542fa5ae18901ca449618c3f2856024ef81ee84057ad0fb6ebf",
+    "archivedSha256": "d485bb0c4b227a82eafb3b9ac69f6e74c827a704e9f28d24dd711f33ab9a9598",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-backup-secretid-ttl-correction.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-backup-secretid-ttl-correction.md",
+    "originalSha256": "f28dcd16bdf9e7a474cfec3cf1ba370b8aad297ee39cefdf8317c59eedc90ad5",
+    "archivedSha256": "81a0cf9900c57b4f7282706c1ff1845b54e502d5c1b2ae4acca9ccb99ae477a3",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-bootstrap-execution-request.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-bootstrap-execution-request.md",
+    "originalSha256": "8e64c56ddd9530f38a422fb324a2683afc9a12f1b5b459e557861aeef705c6e6",
+    "archivedSha256": "ab8f536e18b3c7a39a8e5e7c91b7fa50a3032990cbf4c48736591264af4bb535",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-custodian-succession-review.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-custodian-succession-review.md",
+    "originalSha256": "b9386a13c4f4ce9a2cfedae3258ba2d6d605be20dd62e9dd253a19ba885b874a",
+    "archivedSha256": "916aa7e4a3dd12701d689ad7172386aff81ea5739cd7570f84678ea86184abed",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-definition-contract-review.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-definition-contract-review.md",
+    "originalSha256": "d7b37e4f832f2d9c0646552330adb6637df622935e0bc69fe6554da103a3346b",
+    "archivedSha256": "37ddbda31bd8f46c3cb7fb8877e438702128710b554a356b6c652023468bb54f",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-openbao-authority-discovery-request.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-openbao-authority-discovery-request.md",
+    "originalSha256": "f0ccc3b6ec1ce224d9653f72be66d1779bba81532345f02539b07c0a3bbbdc69",
+    "archivedSha256": "5ec448dc035c93521d4a01d9491ad59bcfc006ca7bf41267d3e453aca98b8386",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-openbao-trunk-credential-review.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-openbao-trunk-credential-review.md",
+    "originalSha256": "4d92e79e01abeda669c0845fcdd966673af0e75180fe461d4eb6aaf9e745be81",
+    "archivedSha256": "0872d009b16704b610a396d5b0836c28eb633236527b12ce9fc6493a2ad686e6",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-provisioning-and-provider-profile-review.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-provisioning-and-provider-profile-review.md",
+    "originalSha256": "60c3c405f6889ba98859ae6377d9e7af3beb3787ee61277438af6a4b1d33eb8f",
+    "archivedSha256": "63969d4fd15edda298d9aab15f63c101a255baff7bc732735bf121546ac2369c",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-retained-authority-verification-request.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-authority-verification-request.md",
+    "originalSha256": "f070a30455bd1cb3c561b4e88a13126835937739f83a9712611dc213cd4b41cd",
+    "archivedSha256": "b3065c2d734331c0765f80b18cdf0c4d5cd90b0b00c4c03edea276e1314ddb1e",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-retained-failure-and-authorization-review.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-failure-and-authorization-review.md",
+    "originalSha256": "11203199d2415c0b28d0d8bdd34e84543e5fcd8ce2a67457d0efcc7cf9750e37",
+    "archivedSha256": "9e74d0d5141d819ce72cecf5af0504555c687be3d58f5aad4c34476cc2c19425",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-retained-lifetime-maintenance-proposal.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-lifetime-maintenance-proposal.md",
+    "originalSha256": "0688d3fe207c235837b69431fdea19df2a56d92955c0e78bdfaa53a3a9bb3eeb",
+    "archivedSha256": "cd1061737aab3a0979971eb7c5f36e440814a1ffeaf52a31d2e9e5006cc798ee",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-security-simplification-and-completion-proposal.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-security-simplification-and-completion-proposal.md",
+    "originalSha256": "53b95029c31c0c5e3dfb0a5a289c4295752506957330ae066839070fded2c3e4",
+    "archivedSha256": "390e97915ea319d5f323d221cf88519e3aedf1fd86922085a6a8f6f0a728dbb6",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-sustainable-openbao-administration-design.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-sustainable-openbao-administration-design.md",
+    "originalSha256": "a177e98138b41ba5913f1de7f269d372d93056991090a19c0932ce3e95a027c9",
+    "archivedSha256": "548e522c5c1078daf05e2d0701f61dfb1fdeebe89600fbd97df8ba956abb9e23",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/planning/p3-u3a-token-lifetime-hardening-review.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/planning/p3-u3a-token-lifetime-hardening-review.md",
+    "originalSha256": "384294501dd243c628b37315812cc94485aef5c17529b163e6e7b1255a95758f",
+    "archivedSha256": "0253332d5fbd2c40e23db07bbda18767e001f28d71cf36cbc78b7304fc85f36a",
+    "navigationStubRetained": false
+  },
+  {
+    "original": "docs/runbooks/trunk-credentials.md",
+    "archived": "docs/archive/p3-u3/2026-10-23/docs/runbooks/trunk-credentials.md",
+    "originalSha256": "980b7a2e2558703e6625c079075c2ab731d54cc7680cbdf0a784a5ec835d14a4",
+    "archivedSha256": "5084a487b6ee0e0f55d8e7313daf0486d8f451ea5b2931797a1479fe1245ad7b",
+    "navigationStubRetained": false
+  }
+]

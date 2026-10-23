@@ -1,0 +1,29 @@
+{
+  "evidenceSource": "owner-reported administrator status output supplied in chat",
+  "recordedDateLocal": "2026-10-23",
+  "timezone": "Asia/Manila",
+  "report": {
+    "status": "development-backup-status",
+    "bootstrapComplete": true,
+    "schedulingActive": false,
+    "schedulingReadiness": "incomplete",
+    "providerApiAccessed": false,
+    "credentialContentsRead": false,
+    "remainingUseCount": "unknown",
+    "externalAlertDelivery": "not-performed",
+    "hostMetadata": "verified",
+    "credentialGeneration": "d6550071-561a-4339-bc15-50a5b22ac43d",
+    "rotationReminderDue": false,
+    "credentialAgeLimitReached": false,
+    "credentialAgeBasis": "conservative-local-issuance-bound",
+    "pendingOperation": null,
+    "lastOperation": null,
+    "lastSuccessfulBackup": {
+      "snapshotId": "c51f8a679a86d29265af9b4588b1f76d537e7cacb09ce1bc75e660bd60015324",
+      "retrievedAt": "2026-10-22T07:38:58.896718+00:00",
+      "source": "bootstrap"
+    },
+    "lastBootstrapRetrievalAt": "2026-10-22T07:38:58.896718+00:00",
+    "attentionRequired": false
+  }
+}

@@ -2,7 +2,7 @@
 
 2026-10-20 (Asia/Manila, +08:00). Source: owner's **Approval of Limited Retained
 Custodian Capability Verification**, authorizing the single attended session in the
-[reviewed request](../planning/p3-u3a-retained-authority-verification-request.md).
+[reviewed request](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-authority-verification-request.md).
 
 ## Current follow-up
 

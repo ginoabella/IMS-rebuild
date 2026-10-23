@@ -10,7 +10,7 @@ authorization is now consumed and must not be replayed.
 October 22, 2026 (Asia/Manila, +08:00). Owner authorized continued host wiring and
 post-install verification. **Implementation and disposable rehearsal complete;
 retained execution remains disabled. P3-U3a remains incomplete.** The separately
-reviewable [execution request](../planning/p3-u3a-bootstrap-execution-request.md)
+reviewable [execution request](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-bootstrap-execution-request.md)
 is now concrete; prior plan approval is not reused as root authorization.
 
 ## Delivered behavior

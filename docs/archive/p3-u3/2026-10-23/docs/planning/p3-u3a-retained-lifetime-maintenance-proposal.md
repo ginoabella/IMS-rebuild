@@ -8,8 +8,8 @@ unapproved contingencies, not the routine next step.
 
 2026-10-19 UTC. **Design review only. No retained execution authorization.**
 The user subsequently approved disposable-only investigation and rootless design
-validation. [Follow-up findings and prerequisites](../status/p3-u3a-disposable-review-followup.md)
-and the [exact rehearsed manifest](p3-u3a-rootless-maintenance-rehearsal-manifest.json)
+validation. [Follow-up findings and prerequisites](../../../../../status/p3-u3a-disposable-review-followup.md)
+and the [exact rehearsed manifest](../../../../../planning/p3-u3a-rootless-maintenance-rehearsal-manifest.json)
 supersede the pending-disposable-test statements below; retained execution, including
 the three pre-backup configuration writes, remains unapproved.
 
@@ -19,22 +19,22 @@ the steps below against retained OpenBao.
 
 The latest [failure-state and authorization review](p3-u3a-retained-failure-and-authorization-review.md)
 provides the precise no-root retained cleanup limits and alternatives comparison.
-Its [new exact draft](p3-u3a-retained-maintenance-authorization-draft.json) is not
+Its [new exact draft](../../../../../planning/p3-u3a-retained-maintenance-authorization-draft.json) is not
 execution-ready. Existing backup/maintenance authority is unknown rather than
 proven unavailable; the owner must establish that distinction before an exception
-can be justified. [Security acceptance rationale](../status/p3-u3a-security-acceptance-rationale.md)
+can be justified. [Security acceptance rationale](../../../../../status/p3-u3a-security-acceptance-rationale.md)
 records the test-only deadline investigation and outstanding runtime integration.
 
 ## Proposed changes and decision gates
 
-The [original manifest](p3-u3a-token-lifetime-hardening-manifest.json) failed normal
-array-form issuance in the pinned provider. The [array-form candidate](p3-u3a-token-lifetime-hardening-array-manifest.json)
+The [original manifest](../../../../../planning/p3-u3a-token-lifetime-hardening-manifest.json) failed normal
+array-form issuance in the pinned provider. The [array-form candidate](../../../../../planning/p3-u3a-token-lifetime-hardening-array-manifest.json)
 preserves the same three policy names, exact 14 paths, capabilities, installations,
 five required parameters, TTLs and renewability. Its only body change from the
 original proposal is `"policies" = [["exact-policy-name"]]` instead of
 `"policies" = ["exact-policy-name"]`. Runtime requests remain unchanged.
 
-Read the [disposable evidence report](../status/p3-u3a-disposable-lifetime-validation.md)
+Read the [disposable evidence report](../../../../../status/p3-u3a-disposable-lifetime-validation.md)
 before approving either design or execution. A deliberately privileged overlapping
 policy widened the maximum, and accelerated renewal encountered a provider error.
 These observations must remain visible in the decision; they are not replaced

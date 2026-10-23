@@ -7,7 +7,7 @@ with the conditions below. Direction approval is complete. The first separately
 approved capability session stopped at the display-name check and was revoked/403.
 The separately approved second session passed corrected identity and all ten
 capabilities after native disposable workflow testing; revocation/403 confirmed.
-[Current findings](../status/p3-u3a-retained-capability-session-2.md). Both limited
+[Current findings](../../../../../status/p3-u3a-retained-capability-session-2.md). Both limited
 authorizations are consumed. Retained remediation execution is **not approved**.
 P3-U3a remains in progress and incomplete.
 This record controls current planning; historical proposals and evidence retain
@@ -104,7 +104,7 @@ cause is unresolved. Do not weaken its lost-issuance fault precondition.
 | Boundary | Current status | Gate to advance |
 | --- | --- | --- |
 | Local implementation/disposable verification | Authorized; implementation and integration outstanding | Required focused checks per checkpoint; no additional ordinary local approval |
-| Retained authority verification | Owner-accepted and successfully closed within named ten-path scope; intended restricted custodian permissions function; revoke/403 confirmed; both authorizations consumed | [Current findings and limits](../status/p3-u3a-retained-capability-session-2.md); separate backup/maintenance availability unknown; further access needs approval; no custody search |
+| Retained authority verification | Owner-accepted and successfully closed within named ten-path scope; intended restricted custodian permissions function; revoke/403 confirmed; both authorizations consumed | [Current findings and limits](../../../../../status/p3-u3a-retained-capability-session-2.md); separate backup/maintenance availability unknown; further access needs approval; no custody search |
 | Retained security remediation | Not authorized; 48-hour maximum finding unresolved | Current effective inventory and backup-first route, then exact reviewed execution package; separately approve any new/expanded lasting privilege |
 | Transaction timing | Approved in principle only | Implementation plus real transaction/failure evidence before runtime acceptance |
 | Provider timing disposition | Conditional only; 500/overrun remain failures | Proven conservative consumption controls and explicit documented disposition; preserve raw assertions |

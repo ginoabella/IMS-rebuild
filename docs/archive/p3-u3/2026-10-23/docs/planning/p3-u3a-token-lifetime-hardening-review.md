@@ -28,7 +28,7 @@ token with `ttl: "48h"` and `explicit_max_ttl: "48h"` through its approved role.
 
 The token was self-revoked and subsequent lookup returned 403. All other known
 test tokens were also self-revoked and verified; zero token files remained.
-The unexpected attributes were preserved as [non-secret evidence](../status/p3-u3a-token-lifetime-finding.json),
+The unexpected attributes were preserved as [non-secret evidence](../../../../../status/p3-u3a-token-lifetime-finding.json),
 then the exact test helper was removed. This test stopped before periodic-token,
 material import or provider cleanup tests; no trunk material was written.
 Renewal beyond 24 hours was **not** attempted or demonstrated. The reported
@@ -61,7 +61,7 @@ P3-U3a is incomplete; provisioning security acceptance is **not passed**.
 
 Use provider-enforced request constraints on the **existing exact token-creation
 paths**, in addition to post-issuance checks. The
-[proposed manifest](p3-u3a-token-lifetime-hardening-manifest.json) contains exact
+[proposed manifest](../../../../../planning/p3-u3a-token-lifetime-hardening-manifest.json) contains exact
 replacement bodies and expected current body hashes for three policies:
 
 1. `endpoint-restricted-issuer`: six existing exact runtime/expiry paths across
@@ -90,9 +90,9 @@ constraints work on the pinned 2.7.1 server; that requires a disposable rehearsa
 The user subsequently approved **disposable-only validation** with isolated matching
 version/configuration, all three exact path sets, actual token attributes, bypass
 probes, regressions, cleanup and a separately developed maintenance/backup proposal.
-That work is recorded in the [disposable report](../status/p3-u3a-disposable-lifetime-validation.md).
+That work is recorded in the [disposable report](../../../../../status/p3-u3a-disposable-lifetime-validation.md).
 The original scalar constraint failed normal array-form issuance. A
-[complete-array candidate](p3-u3a-token-lifetime-hardening-array-manifest.json) passed
+[complete-array candidate](../../../../../planning/p3-u3a-token-lifetime-hardening-array-manifest.json) passed
 14 approved path requests and 434 negative requests, but overlap, expiry-error and
 endpoint concurrency findings remain unresolved. Retained acceptance is not passed;
 no negative assertion or application-only replacement was used to hide the findings.

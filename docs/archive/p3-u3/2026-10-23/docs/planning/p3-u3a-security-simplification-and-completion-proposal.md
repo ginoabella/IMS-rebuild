@@ -27,8 +27,8 @@ Tenant and installation isolation, credential confidentiality, least-privilege
 runtime access, fail-closed authorization, auditability and recoverability remain
 mandatory. The configured maximum remains **86,400 seconds (24 hours)**.
 
-This proposal follows review of [AGENT.md](../../AGENT.md), its required context,
-the [progress tracker](../../context/progress-tracker.md), approved credential
+This proposal follows review of [AGENT.md](../../../../../../AGENT.md), its required context,
+the [progress tracker](../../../../../../context/progress-tracker.md), approved credential
 reviews, current adapters/helpers and the latest evidence. The architecture review
 was read-only: no retained OpenBao access, custody discovery or privilege changes
 were performed. Creating this document changes documentation only.
@@ -240,12 +240,12 @@ these gates by recording them.
 
 ## Repository evidence and decision sources
 
-- [Current progress tracker](../../context/progress-tracker.md)
+- [Current progress tracker](../../../../../../context/progress-tracker.md)
 - [Approved isolated trunk credential review](p3-u3a-openbao-trunk-credential-review.md)
 - [Trunk owner architecture and implementation limits](../architecture/trunk-credentials.md)
 - [Token-lifetime finding and hardening proposal](p3-u3a-token-lifetime-hardening-review.md)
-- [Disposable follow-up evidence](../status/p3-u3a-disposable-review-followup.md)
-- [Latest security rationale and deadline investigation](../status/p3-u3a-security-acceptance-rationale.md)
+- [Disposable follow-up evidence](../../../../../status/p3-u3a-disposable-review-followup.md)
+- [Latest security rationale and deadline investigation](../../../../../status/p3-u3a-security-acceptance-rationale.md)
 - [Retained failure and authorization proposal](p3-u3a-retained-failure-and-authorization-review.md)
 
 P3-U3a remains incomplete. Its core delivery work can proceed locally while

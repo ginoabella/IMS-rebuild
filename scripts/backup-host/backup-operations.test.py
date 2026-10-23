@@ -14,6 +14,28 @@ spec.loader.exec_module(module)
 
 
 class Tests(unittest.TestCase):
+    def test_bootstrap_lifetime_respects_mount_ceiling_not_requested_30_days(self):
+        request=json.loads(module.REQUEST.read_text())
+        evidence={'events':[{'at':'2026-10-22T07:38:00+00:00'}]}
+        active=module.initial_generation(request,evidence)
+        self.assertEqual(active['secretIdTtlSeconds'],300)
+        self.assertEqual(module.credential_lifetime(active).total_seconds(),300)
+        for invalid in [0,-1,True,'300',2592001]:
+            with self.assertRaises(ValueError):module.credential_lifetime({'secretIdTtlSeconds':invalid})
+
+    def test_status_reports_expired_short_initial_secretid_without_provider_login(self):
+        with tempfile.TemporaryDirectory() as d:
+            c=module.Commands({'candidateToolsImage':{'imageId':'fixture'}},
+                {'events':[{'at':'2026-10-22T00:00:00+00:00'}], 'postinstallBackup':{'snapshotId':'fixture'}},Path(d))
+            c.generation=lambda:{'operationId':'fixture','createdAt':'2000-01-01T00:00:00+00:00','secretIdTtlSeconds':300}
+            with patch.object(module.os,'geteuid',return_value=0),patch.object(c,'preflight'),patch.object(module,'private_directory'):
+                value=c.status()
+            self.assertTrue(value['credentialAgeLimitReached'])
+            self.assertTrue(value['rotationReminderDue'])
+            self.assertTrue(value['attentionRequired'])
+            self.assertEqual(value['credentialLifetimeSeconds'],300)
+            self.assertFalse(value['providerApiAccessed'])
+
     def test_nonadministrator_refuses_before_any_host_or_provider_action(self):
         c = module.Commands({'candidateToolsImage':{'imageId':'fixture'}}, {})
         with patch.object(module.os, 'geteuid', return_value=1002), patch.object(c, 'preflight', side_effect=AssertionError('preflight too early')):
@@ -139,6 +161,15 @@ class Tests(unittest.TestCase):
                 c.execute('credential-rotate')
                 self.assertEqual(module.read_record(c.runtime/'last-backup.json'),saved)
                 self.assertEqual(module.read_record(c.runtime/'last.json')['status'],'credentials-rotated')
+                self.assertFalse((c.runtime/'pending.json').exists())
+
+    def test_short_secretid_refuses_capture_even_before_intended_30_day_cutoff(self):
+        from datetime import datetime,timedelta,timezone
+        with tempfile.TemporaryDirectory() as d:
+            c,stack=self.execution_fixture(Path(d))
+            c.generation=lambda:{'createdAt':(datetime.now(timezone.utc)-timedelta(minutes=6)).isoformat(),'secretIdTtlSeconds':300}
+            with stack,patch.object(c,'backup',side_effect=AssertionError('expired credential used')):
+                with self.assertRaisesRegex(ValueError,'rotate_before_capture'):c.execute('run-now')
                 self.assertFalse((c.runtime/'pending.json').exists())
 
     def test_local_age_limit_refuses_capture_before_any_attempt(self):

@@ -15,9 +15,9 @@ retention. Timed immutable retention is a future security enhancement, not a cur
 acceptance blocker. The [authoritative backup security contract](../architecture/backup-platform.md)
 preserves all other custody, recovery and operational requirements.
 
-The [Restic evaluation](../status/p3-u3a-restic-backup-evaluation.md) passed 26/26
+The [Restic evaluation](../../../../../status/p3-u3a-restic-backup-evaluation.md) passed 26/26
 disposable native backup/restart/append-only/retrieval/decryption/restore checks.
-The [SeaweedFS evaluation](../status/p3-u3a-seaweedfs-backup-evaluation.md) remains
+The [SeaweedFS evaluation](../../../../../status/p3-u3a-seaweedfs-backup-evaluation.md) remains
 historical evidence of failed concurrent retention/hold enforcement. Neither
 report establishes retained installation or production readiness. No retained
 service, credential, snapshot identity or schedule was created by this decision.
@@ -82,17 +82,17 @@ processes and its host; a second trusted recovery custodian remains an owner cho
 | Joint PostgreSQL recovery | Owner/recovery point and generation-reconciliation procedure must be named; source migration success is not a database backup |
 | Size, duration and budget | Snapshot/audit growth, remote transfer, service quotas and restore throughput are unmeasured; approve limits only after disposable tests and separately authorized retained measurement |
 
-The [review manifest](p3-u3a-backup-installation-review-manifest.json) records these
+The [review manifest](../../../../../planning/p3-u3a-backup-installation-review-manifest.json) records these
 as unresolved values. It deliberately cannot authorize execution. Destination,
 key custody and installer facts must be filled and reviewed **before** retained
 implementation approval; a generic provider recommendation cannot substitute.
 
 ## Minimal Restic installation plan (review only)
 
-The [consolidated development installation request](p3-u3a-development-backup-installation-request.md)
+The [consolidated development installation request](../../../../../planning/p3-u3a-development-backup-installation-request.md)
 now names candidate services/profiles, exact proposed paths/volume, custody,
 network/startup behavior, schedules, unresolved operational owners and controlled
-first-backup/joint-recovery steps. [Docker artifacts](../../infra/backup/compose.yaml)
+first-backup/joint-recovery steps. [Docker artifacts](../../../../../../infra/backup/compose.yaml)
 are prepared and disposable-only; no retained installation is authorized.
 
 
@@ -356,7 +356,7 @@ Remaining concrete approvals are listed below; none is supplied by this decision
 
 Independent canonical owner/grants, worker isolation, provider integration,
 definitions, binding, claim/adoption and transaction testing remain authorized.
-The [owner foundation](../status/p3-u3a-trunk-owner-foundation.md) is only a local
+The [owner foundation](../../../../../status/p3-u3a-trunk-owner-foundation.md) is only a local
 checkpoint. Retained 48-hour maximum, native HTTP 500/expiry counterexamples,
 browser-recovery finding, conditional transaction timing and integrated A/L
 acceptance remain unresolved. **P3-U3a is incomplete.**

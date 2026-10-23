@@ -2,7 +2,7 @@
 
 2026-10-21 UTC. **Completed, exit 0; approval consumed.**
 
-[Approved scope](../planning/p3-u3a-openbao-authority-discovery-request.md),
+[Approved scope](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-openbao-authority-discovery-request.md),
 [machine evidence](p3-u3a-authority-metadata-review.json).
 
 ## Result

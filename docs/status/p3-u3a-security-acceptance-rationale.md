@@ -4,13 +4,13 @@
 The user's latest review accepts prior disposable design evidence and the
 create/read-only reconciliation approach for continued development. It authorizes
 investigation and permitted non-disruptive verification, not retained execution.
-The separate [retained failure/authorization proposal](../planning/p3-u3a-retained-failure-and-authorization-review.md)
+The separate [retained failure/authorization proposal](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-retained-failure-and-authorization-review.md)
 and [exact authorization draft](../planning/p3-u3a-retained-maintenance-authorization-draft.json)
 are not execution approvals.
 
 ## Subsequent direction approval — 2026-10-20
 
-The [approved completion direction](../planning/p3-u3a-approved-completion-direction.md)
+The [approved completion direction](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-approved-completion-direction.md)
 now authorizes independent local lifecycle/owner/API implementation, bounded
 same-token reconciliation and controlled pre-maximum replacement. The transaction
 timing clarification is approved in principle only, pending implementation and
@@ -21,7 +21,7 @@ assertions or evidence boundaries below. Security acceptance remains incomplete.
 ## Backup requirements decision — 2026-10-21
 
 The owner approved Restic + append-only Rest Server through Docker for development
-and production. See the [authoritative backup security requirements](../architecture/backup-platform.md).
+and production. See the [authoritative backup security requirements](../archive/p3-u3/2026-10-23/docs/architecture/backup-platform.md).
 Timed S3 Object Lock COMPLIANCE retention is deferred, not a mandatory initial
 production criterion. Existing-data overwrite/delete/prune denial for ordinary
 clients, separate reviewed administration, encryption/key/seal custody, audit

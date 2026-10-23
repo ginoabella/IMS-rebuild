@@ -3,7 +3,7 @@
 **Latest result:** corrected package explicitly approved and executed once; all nine
 writes and both encrypted backup retrievals succeeded. Root revoked, normal
 protection restored and guard/helpers closed. Owner password handoff is complete
-and its private custody was verified without reading the password. [Execution evidence and next guidance](../status/p3-u3a-bootstrap-retained-execution.md).
+and its private custody was verified without reading the password. [Execution evidence and next guidance](../../../../../status/p3-u3a-bootstrap-retained-execution.md).
 The earlier pending statements below describe preparation history; execution
 authorization is now consumed and must not be replayed.
 
@@ -26,7 +26,7 @@ approval remains unconsumed and bound to the original package digest.
 ## Exact requested operation
 
 Operation **`d6550071-561a-4339-bc15-50a5b22ac43d`**, attended operator `gino`.
-The [source/hash-bound request](../../infra/backup/bootstrap-request.json) contains
+The [source/hash-bound request](../../../../../../infra/backup/bootstrap-request.json) contains
 the exact nine write bodies, all source hashes, historical policy baseline,
 provider/repository identities, staging/output paths and protected handoff.
 Its `reviewPackageSha256` binds the reviewable package; execution approval must
@@ -108,7 +108,7 @@ capacity/rotation operations still precede any scheduling or readiness claim.
 
 ## Review and commands
 
-[Wiring/rehearsal evidence](../status/p3-u3a-bootstrap-host-wiring.md) distinguishes
+[Wiring/rehearsal evidence](../../../../../status/p3-u3a-bootstrap-host-wiring.md) distinguishes
 real native behavior, injected loss and remaining retained-only facts. Native tests
 use the same host ports, semantic reviewer, provisioning core, handoff, guard bridge,
 archive and upload/retrieval code with synthetic identities/networks/volumes. The

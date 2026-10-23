@@ -3,7 +3,8 @@
 October 22, 2026, Asia/Manila (+08:00). **Fixture-only paired capture, encrypted
 round trip, native restores and report-only generation reconciliation implemented.**
 This does not authorize retained restore, credential activation or scheduling.
-Owner-side decryption of the retained export is still pending independently.
+Owner-reported Windows decryption of the retained export passed October 23, 2026
+(+08:00); [separate evidence](p3-u3a-owner-archive-verification.json).
 
 ## Implemented boundary
 
@@ -144,6 +145,8 @@ post-restore authority fencing and operator approval of exact target scope.
 Scheduling remains inactive. Existing renewal HTTP 500/fractional-expiry/browser,
 focused lifecycle and trunk/gateway/two-HTTP acceptance remain open.
 
-The owner's next independent action remains the
-[filled-in Windows copy and offline verification steps](../runbooks/p3-u3a-independent-archive-verification.md#owner-run-offline-verification)
-for the already exported retained ciphertext. No private key should be sent here.
+The owner completed Windows copy/decryption/integrity verification for the
+retained ciphertext; [report and recorded paths](p3-u3a-owner-archive-verification.json).
+Next is attended retained command acceptance, starting with administrator status;
+retained joint recovery and operational gates remain open. No private key should
+be sent here.

@@ -6,7 +6,7 @@ Non-disruptive preparation/implementation may proceed. The user subsequently
 approved the custodian succession design and explicitly authorized one isolated
 recovery operation, subject to all safeguards. The single operation executed after fresh custody and backup checks; a subsequent
 token-lifetime finding blocks acceptance at the
-[execution checkpoint](../status/p3-u3a-recovery-execution.md).**
+[execution checkpoint](../../../../../status/p3-u3a-recovery-execution.md).**
 
 The user's conditions take precedence over the suggested approval wording below:
 use an existing valid authorized custodian first; preserve endpoint permissions,
@@ -56,7 +56,7 @@ The approved OpenBao review explicitly says:
 
 See [section 2](p3-u3a-openbao-trunk-credential-review.md#2-storage-and-ownership-boundary).
 The normal listener currently disables root-generation endpoints in
-[server.hcl](../../infra/openbao/server.hcl). The existing bootstrap command
+[server.hcl](../../../../../../infra/openbao/server.hcl). The existing bootstrap command
 revokes its root token and removes its bootstrap file after setup. Source review
 therefore does not establish an available, valid platform custodian token today.
 No private token value has been read or tested for this document.
@@ -143,7 +143,7 @@ controls; actual restriction and orphan-token behavior require real ACL tests.
 ## Subsequent October 19 readiness review
 
 The user explicitly withheld execution authorization. The updated
-[pre-execution report](../status/p3-u3a-provisioning-preexecution.md) records the
+[pre-execution report](../../../../../status/p3-u3a-provisioning-preexecution.md) records the
 required disposable deadline demonstration, full-graph rerun, exact restoration
 baseline and tested/unverified safeguards. Unexpected privileged ACL/token/lease/
 policy findings stop the procedure for separate review; this later condition
@@ -223,7 +223,7 @@ Successful recovery does not imply successful trunk lifecycle acceptance.
 
 The [OpenBao TCP listener reference](https://openbao.org/docs/configuration/listener/tcp/)
 documents the recovery-endpoint switch. The [root-generation API](https://openbao.org/api-docs/system/generate-root/)
-describes the quorum process. The repository's [previous recovery record](../runbooks/endpoint-credentials.md#provisioning-checkpoint-and-recovery-gate--2026-10-16)
+describes the quorum process. The repository's [previous recovery record](../../../../../runbooks/endpoint-credentials.md#provisioning-checkpoint-and-recovery-gate--2026-10-16)
 is precedent and evidence of the old event; its approval does not approve this new window.
 
 ## What completion will mean

@@ -4,6 +4,51 @@ October 22, 2026, Asia/Manila (+08:00). Status, explicit run-now and attended
 credential rotation are implemented after the completed bootstrap/handoff.
 Scheduling, independent recovery readiness and P3-U3a remain incomplete.
 
+## Failed-operation local inspection complete — October 23, 2026 (+08:00)
+
+The owner successfully ran the administrator-only inspector. [Exact report](p3-u3a-backup-operation-local-inspection.json).
+Snapshot/encrypted/spool/receipt directories are empty, only the staged audit
+remains (2 files / 477,406 bytes), and the journal records no upload stage.
+The attempt has no cleanup result. Preserve pending/journal/staged evidence;
+this report does not close the operation or authorize another run. Local
+inspection is complete; next prepare the separately authorized guarded mount
+correction, then evidenced closure and verified replacement under the repair gates.
+
+## Snapshot login expiry diagnosed — October 23, 2026 (+08:00)
+
+Actual audit issuance TTL was 300 seconds: the AppRole mount ceiling clipped the
+requested 30-day SecretID. The failed operation reached login after expiry.
+[Diagnosis](p3-u3a-backup-secretid-expiry-diagnosis.json) and
+[exact proposed correction / required execution gates](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-backup-secretid-ttl-correction.md).
+Local status and capture cutoff now account for the source-bound initial mount
+ceiling, with **14/14** focused checks passed. Routine replacements continue to
+require actual 30-day TTL verification before adoption. The previous 30-day-only
+status output is historical and was misleading for this initial generation.
+Do not retry or rotate yet: the mount is unchanged and this exact operation remains
+pending until attended reconciliation. The proposed mount correction requires a
+new authorized guarded package, not reuse of consumed bootstrap authority.
+
+## Retained run-now unconfirmed — October 23, 2026 (+08:00)
+
+The owner's first `run-now --execute` returned `operation-unconfirmed` with
+`details-suppressed`; [exact output](p3-u3a-backup-operations-run-now-unconfirmed.json).
+Completion, failure phase and side effects are unknown. Do not retry, rotate or
+clear pending records. Next obtain read-only administrator status and reconcile
+its exact operation evidence. Agent cannot read root-owned runtime evidence
+because sudo requires interactive authentication. Scheduling remains inactive.
+
+## Retained acceptance checkpoint — October 23, 2026 (+08:00)
+
+Owner-reported administrator status passed: host metadata verified, no pending
+operation, no age cutoff/reminder and no attention flag. The last successful backup
+is still the bootstrap snapshot whose owner Windows integrity verification passed.
+[Administrator status report](p3-u3a-backup-operations-admin-status.json).
+This status performs no provider login or repository query. Next run one attended
+`run-now --execute` from the project root, then inspect its result before rotation.
+If it fails or leaves pending state, preserve the operation and diagnose it;
+no automatic retry or pending-state removal. Routine backup/rotation acceptance
+and scheduling readiness remain incomplete.
+
 ## Commands and boundaries
 
 Run from the project root:
@@ -21,9 +66,11 @@ the current generation, pending state and last successful routine backup. It doe
 not read credentials, log into OpenBao, query the repository or test live provider
 health. With administrator access and no routine operation yet, it reports the bootstrap's verified retrieval;
 afterward it reports the last successful routine backup independently of the last
-rotation/failure. Remaining SecretID use count is explicitly unknown. A day-23
-rotation reminder and day-30 capture cutoff use a conservative local issuance
-bound, not a live expiry assertion. `attentionRequired` reports host uncertainty,
+rotation/failure. Remaining SecretID use count is explicitly unknown. Verified 30-day generations use a day-23
+rotation reminder and day-30 capture cutoff. The initial generation is additionally
+bounded by the source-bound bootstrap auth mount maximum (300 seconds); its
+reminder/capture cutoff cannot exceed that lifetime. These are conservative local
+issuance/lifetime bounds, not live expiry assertions. `attentionRequired` reports host uncertainty,
 inaccessible runtime state, a pending/failed operation or a due rotation reminder.
 It does not assert achieved freshness, RPO/RTO or readiness.
 

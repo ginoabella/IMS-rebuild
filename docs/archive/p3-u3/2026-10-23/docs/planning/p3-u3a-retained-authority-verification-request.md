@@ -7,7 +7,7 @@ native disposable workflow testing, the separately approved second session
 passed all identity and ten-path capability comparisons and was revoked/403.
 Owner accepted and closed the named checkpoint as successfully completed.
 Both authorizations are consumed; no additional login is authorized.
-[Current sanitized findings](../status/p3-u3a-retained-capability-session-2.md).
+[Current sanitized findings](../../../../../status/p3-u3a-retained-capability-session-2.md).
 Retained remediation, backup capture and inventory access remain unapproved.
 Separate backup/maintenance availability remains unknown. No custody discovery.
 The [consolidated backup/maintenance design](p3-u3a-sustainable-openbao-administration-design.md)

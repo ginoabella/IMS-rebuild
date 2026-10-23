@@ -1,0 +1,16 @@
+{
+  "evidenceSource": "owner-reported capture-state find output supplied in chat",
+  "recordedDateLocal": "2026-10-23",
+  "timezone": "Asia/Manila",
+  "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+  "captureAttempt": {
+    "operationId": "f581c3c3-b082-468c-a8f5-40083f0df9fe",
+    "startedAt": "2026-10-22T23:54:11.850Z"
+  },
+  "resultRecordInSuppliedOutput": false,
+  "tokenCleanupConfirmed": false,
+  "tokenStillActiveEstablished": false,
+  "pendingStateChanged": false,
+  "retryPerformed": false,
+  "nextStep": "Read-only local inspection of exact pending operation journal and output inventories."
+}

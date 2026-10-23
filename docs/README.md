@@ -24,27 +24,12 @@ and [verified results and limits](status/development-container-evidence.md).
 
 Shared infrastructure: [Docker services and Asterisk bootstrap](runbooks/shared-services.md).
 
-Current development backup operations: [runbook and maintenance gates](runbooks/p3-u3a-development-backup.md),
-[offline authority findings](status/p3-u3a-captured-authority-review.md), and
-[approved operating model and gated installation next step](planning/p3-u3a-backup-authority-next-step.md),
-[exact rotation/remediation candidate](planning/p3-u3a-backup-maintenance-review.json),
-and [disposable native rotation evidence and limits](status/p3-u3a-backup-maintenance-review.md).
-The one-time capture/upload is complete; scheduling and recovery readiness remain incomplete.
-[Current installer-route review and guarded-bootstrap handoff](status/p3-u3a-current-installer-route.md)
-records the verified installation denial and next controller work.
-[Guarded controller implementation and native rehearsal](status/p3-u3a-bootstrap-controller.md)
-records backup-first provisioning and partial-write containment.
-[Completed host wiring and post-install verification](status/p3-u3a-bootstrap-host-wiring.md)
-and the [concrete one-time execution request](planning/p3-u3a-bootstrap-execution-request.md)
-record the next separately approved retained operation.
-
-Backup platform: [approved Restic architecture/security requirements](architecture/backup-platform.md)
-and [minimal installation plan and remaining approval gates](planning/p3-u3a-backup-installation-approval-package.md).
-Platform selection is approved; retained execution and production readiness remain gated.
-[Development Docker installation request](planning/p3-u3a-development-backup-installation-request.md)
-and [artifact verification](status/p3-u3a-restic-development-artifacts.md) record the current checkpoint.
-[Installed storage and snapshot source continuation](status/p3-u3a-snapshot-source-candidate.md)
-records the latest verification and remaining activation gates.
+Development backups: [current operations and known failure](runbooks/p3-u3a-development-backup.md),
+[backup scope](architecture/backup-platform.md), and
+[completed owner Windows verification/key locations](runbooks/p3-u3a-independent-archive-verification.md).
+Scheduling and routine backup acceptance remain incomplete. Backup operations are
+separate from P3-U3 feature delivery. Previous designs are in the
+[P3-U3 archive](archive/p3-u3/2026-10-23/README.md).
 
 Backend foundation: [startup, migrations and health](runbooks/backend-foundation.md)
 and [P1-U3 verification evidence](status/p1-u3-evidence.md).
@@ -303,51 +288,23 @@ and [controlled acceptance recovery](runbooks/extension-inventory-browser.md).
 [P3-U2c evidence](status/p3-u2c-evidence.md) records actual checks, failures and cleanup;
 it reconciles all criteria, required regressions and verified restoration.
 
-P3-U3: [Trunks, gateways and DIDs — parent spec and adopted split](../context/feature-specs/p3-u3-trunks-gateways-and-dids.md). The user adopted the sequential a → b → c split on 2026-10-16 (Asia/Manila, +08:00). a is in progress following the 2026-10-19 definition/OpenBao approvals; b/c remain planned. Concrete provisioning/profile prerequisites, DID identity and remaining removal policy stay with their owning reviews.
+P3-U3: [Current development specification](../context/feature-specs/p3-u3-development-resource-management.md),
+owner-approved October 23, 2026 (+08:00). The parent defines shared rules; current
+replacement children deliver a working API/browser increment each:
 
-- [P3-U3a — Protected trunk and gateway definitions](../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md)
-- [P3-U3b — DID inventory and dependency-safe resource removal](../context/feature-specs/p3-u3b-did-inventory-and-dependency-safe-resource-removal.md)
-- [P3-U3c — Operator resource browser and integrated handoff](../context/feature-specs/p3-u3c-operator-resource-browser-and-integrated-handoff.md)
+- [P3-U3a — Trunks and gateways](../context/feature-specs/p3-u3a-trunks-and-gateways.md)
+- [P3-U3b — Simple trunk credentials](../context/feature-specs/p3-u3b-simple-trunk-credentials.md)
+- [P3-U3c — DID inventory and integration](../context/feature-specs/p3-u3c-did-inventory-and-integration.md)
 
-- [P3-U3a trunk/gateway contract — approved private development](planning/p3-u3a-definition-contract-review.md) — approved resource/connection and initial lifecycle policies; authenticated integration requires the approved isolated owner and real evidence.
+Earlier security-heavy lifecycle/backup gates are superseded for this feature.
 
-- [U3A-04 OpenBao trunk credential reuse — approved private development](planning/p3-u3a-openbao-trunk-credential-review.md) — approved isolated import/binding lifecycle, administration remediation and transactional qualification; implementation and real evidence outstanding.
+- [Current trunk credential model](architecture/trunk-credentials.md)
+- [Trusted setup workflow and implementation limits](runbooks/trunk-credentials.md)
+- [Current backup operations and known pending failure](runbooks/p3-u3a-development-backup.md)
+- [Historical designs and archive file map](archive/p3-u3/2026-10-23/README.md)
+- [Consumed bootstrap execution evidence](status/p3-u3a-bootstrap-retained-execution.md)
+- [Completed Windows archive verification](status/p3-u3a-owner-archive-verification.json)
+- [Exact failed-backup local inspection](status/p3-u3a-backup-operation-local-inspection.json)
 
-- [P3-U3a-1 — Focused isolated trunk credential lifecycle](../context/feature-specs/p3-u3a-1-isolated-trunk-credential-lifecycle.md) — required refinement before authenticated integration.
-- [P3-U3a — Recommended provisioning and test provider profile](planning/p3-u3a-provisioning-and-provider-profile-review.md) — plain-language recommendation, exact synthetic profile, protected custody and conditional one-time recovery procedure; profile/provisioning conditionally approved; one recovery operation subsequently authorized with mandatory safeguards.
-
-Trunk preparation: [owner contract](architecture/trunk-credentials.md) and
-[token/provisioning runbook](runbooks/trunk-credentials.md). Conditional private-development
-approval and a single-operation recovery authorization are recorded. No trunk
-lifecycle or definition acceptance is complete yet.
-
-P3-U3a provisioning checkpoint: [recovery pre-execution report](status/p3-u3a-provisioning-preexecution.md)
-records custodian availability, preparation checks, exact maintenance/restoration plan
-and the separately granted user authorization. The single operation has executed.
-The [custodian succession design](planning/p3-u3a-custodian-succession-review.md)
-is approved. The [execution checkpoint](status/p3-u3a-recovery-execution.md) records
-resolved fresh custody, consistent backup, revoked root, independently verified
-succession and normal restoration. Endpoint regressions passed. A subsequent token-lifetime test requires separate
-[hardening review](planning/p3-u3a-token-lifetime-hardening-review.md); full owner/API
-acceptance remains outstanding and no repeat recovery is authorized.
-
-P3-U3a disposable-only follow-up: [validation evidence and unresolved findings](status/p3-u3a-disposable-lifetime-validation.md),
-[complete-array candidate bodies](planning/p3-u3a-token-lifetime-hardening-array-manifest.json),
-and [separate maintenance/backup design](planning/p3-u3a-retained-lifetime-maintenance-proposal.md).
-Retained remediation is unapproved; P3-U3a remains incomplete.
-
-P3-U3a named custodian capability verification is **owner-accepted and closed**
-within its ten-path scope: [final evidence and limits](status/p3-u3a-retained-capability-session-2.md).
-The custodian functions with intended restricted permissions; no further login
-is authorized. The [consolidated sustainable OpenBao backup and maintenance design](planning/p3-u3a-sustainable-openbao-administration-design.md)
-is prepared for separate review; no administrative implementation is authorized.
-
-P3-U3a local owner foundation: [migration/grants/read-port evidence and limits](status/p3-u3a-trunk-owner-foundation.md).
-Real isolated SQL checks and backend build passed; authority-checked commands,
-protected worker/provider composition and binding/claim/adoption remain unfinished.
-No shared database migration or runtime activation was performed.
-
-P3-U3a continued preparation: [manual recovery capture request and remaining controller gates](planning/p3-u3a-development-recovery-capture-request.md),
-[actual native capture/handoff evidence](status/p3-u3a-recovery-capture-handoff-evidence.json),
-and [reservation persistence and protected-work exclusion](status/p3-u3a-reservation-and-worker-isolation.md).
-These checkpoints do not authorize retained recovery or complete P3-U3a.
+Feature APIs/browser, administrator migration and routine backup acceptance remain
+incomplete. See the [tracker](../context/progress-tracker.md) for the next working step.

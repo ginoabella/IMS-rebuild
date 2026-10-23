@@ -3,7 +3,7 @@
 2026-10-19 (UTC). **Design approved; one-time execution explicitly authorized,
 executed once after all gates.** The user's later authorization
 covers the approved succession setup within one isolated recovery operation.
-The [execution checkpoint](../status/p3-u3a-recovery-execution.md) records the
+The [execution checkpoint](../../../../../status/p3-u3a-recovery-execution.md) records the
 resolved fresh human-password custody, actual backup/inventory checks, revoked root,
 independent successor proofs and verified normal restoration. No repeat recovery is
 authorized. Earlier proposed/uninstalled statements below retain design history;
@@ -159,7 +159,7 @@ inside an authorized window before administrator retirement.
 
 ## Protected password file representation — October 20 clarification
 
-The [October 19 execution record](../status/p3-u3a-recovery-execution.md#fresh-password-custody-confirmed-and-operation-executed)
+The [October 19 execution record](../../../../../status/p3-u3a-recovery-execution.md#fresh-password-custody-confirmed-and-operation-executed)
 already omitted one final line ending from the maintenance copy without rewriting
 the owner's file. `custodian-password.mjs` now makes that exact framing contract
 shared by setup, manual-session and limited-verification helpers: one 43–128-byte
@@ -167,5 +167,5 @@ ASCII letters/digits/underscore/hyphen credential, optionally followed by one LF
 or CRLF. No trimming, embedded/repeated whitespace, BOM, non-ASCII or credential
 normalization is accepted. Protected-file framing may occupy at most 130 bytes;
 the credential length/security requirements are unchanged. See the
-[compatibility and single-session outcome](../status/p3-u3a-custodian-handoff-followup.md).
+[compatibility and single-session outcome](../../../../../status/p3-u3a-custodian-handoff-followup.md).
 The original handoff and account password were preserved.

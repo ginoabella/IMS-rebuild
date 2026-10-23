@@ -34,6 +34,16 @@ the private key and not proof of all independent copies or production recovery.
 Do not post private identity bytes or import the key onto MyIMS.
 
 
+## Recorded backup identity location
+
+Owner confirmed on October 23, 2026 (+08:00) that the existing backup identity is
+`C:\MyIMS-Recovery\myims-age-identity.txt` and successfully used it for the
+[retained snapshot/audit verification](p3-u3a-independent-archive-verification.md#recorded-windows-locations).
+Command history records the passphrase-encrypted copy
+`C:\MyIMS-Recovery\myims-age-identity.escrow.age`; its current recoverability was
+not rechecked. These differ from the separate seal wrapping identity below.
+Paths only are documented; never post key contents.
+
 ## Verify the real Restic credential recovery package
 
 After SCP and ciphertext SHA256 match, copy the verifier to Windows PowerShell:

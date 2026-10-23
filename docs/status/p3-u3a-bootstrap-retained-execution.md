@@ -9,7 +9,7 @@ actual private metadata/current provider/repository/network/mount checks passed
 before the launcher. The [machine execution record](p3-u3a-bootstrap-execution-d6550071-561a-4339-bc15-50a5b22ac43d.json)
 and [consumed request](../../infra/backup/bootstrap-request.json) preserve exact
 events, identities and receipt/hash bindings. The original staging-parent refusal
-and narrowly scoped correction remain in the [execution request](../planning/p3-u3a-bootstrap-execution-request.md).
+and narrowly scoped correction remain in the [execution request](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-bootstrap-execution-request.md).
 
 ## Verified result
 
@@ -64,4 +64,4 @@ and agreed alerts/capacity/rotation operations still precede scheduling/readines
 Trunk/gateway definition/lifecycle/two-HTTP acceptance and existing renewal HTTP
 500, fractional-expiry and browser findings remain unfinished. See the
 [operations runbook](../runbooks/p3-u3a-development-backup.md) and
-[feature spec](../../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md).
+[feature spec](../archive/p3-u3/2026-10-23/context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md).

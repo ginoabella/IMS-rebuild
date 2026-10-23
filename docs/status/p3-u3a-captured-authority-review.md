@@ -44,7 +44,7 @@ is a substitute for this comparison or current effective-authority verification.
 3. Establish current mappings, identity contributions, complete role fields and
    effective capabilities through a separately bounded read-only request before
    any write. Stop on additional authority; do not expand scope automatically.
-4. Finalize the [disabled minimal installation proposal](../planning/p3-u3a-backup-authority-next-step.md),
+4. Finalize the [disabled minimal installation proposal](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-backup-authority-next-step.md),
    including credential rotation authority, protected outputs, backup freshness,
    partial-state handling and exact approved artifacts. No automatic recovery or
    broad maintenance account is included.

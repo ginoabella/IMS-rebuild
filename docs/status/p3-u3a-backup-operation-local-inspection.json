@@ -1,0 +1,85 @@
+{
+  "evidenceSource": "owner-reported administrator inspector output supplied in chat",
+  "recordedDateLocal": "2026-10-23",
+  "timezone": "Asia/Manila",
+  "report": {
+    "status": "local-backup-operation-inspected",
+    "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+    "journal": [
+      {
+        "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+        "event": "operation-started",
+        "index": null,
+        "at": "2026-10-22T23:54:05.347084+00:00"
+      },
+      {
+        "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+        "event": "existing-repository-started",
+        "index": null,
+        "at": "2026-10-22T23:54:05.433967+00:00"
+      },
+      {
+        "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+        "event": "existing-repository-verified",
+        "index": null,
+        "at": "2026-10-22T23:54:08.522403+00:00"
+      },
+      {
+        "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+        "event": "post-cleanup-audit-started",
+        "index": null,
+        "at": "2026-10-22T23:54:08.537728+00:00"
+      },
+      {
+        "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+        "event": "post-cleanup-audit-verified",
+        "index": null,
+        "at": "2026-10-22T23:54:10.817633+00:00"
+      },
+      {
+        "operationId": "ec0b8e2d-49d9-45e3-930e-6b769b58f103",
+        "event": "scoped-postinstall-capture-started",
+        "index": null,
+        "at": "2026-10-22T23:54:10.831022+00:00"
+      }
+    ],
+    "captureRecords": [
+      {
+        "kind": "attempt",
+        "operationId": "f581c3c3-b082-468c-a8f5-40083f0df9fe",
+        "startedAt": "2026-10-22T23:54:11.850Z"
+      }
+    ],
+    "inventory": {
+      "snapshot": {
+        "files": 0,
+        "bytes": 0
+      },
+      "encrypted": {
+        "files": 0,
+        "bytes": 0
+      },
+      "audit": {
+        "files": 2,
+        "bytes": 477406
+      },
+      "spool": {
+        "files": 0,
+        "bytes": 0
+      },
+      "receipts": {
+        "files": 0,
+        "bytes": 0
+      }
+    },
+    "cleanupReceiptsComplete": false,
+    "snapshotOutputEmpty": true,
+    "uploadStageRecorded": false,
+    "providerApiAccessed": false,
+    "credentialContentsRead": false,
+    "repositoryAccessed": false,
+    "pendingStateChanged": false,
+    "safeToRetry": false,
+    "requiresAttendedReconciliation": true
+  }
+}

@@ -294,18 +294,20 @@ readiness remain dependent on this phase.
 - **Verification:** Browser workflows, invalid references, collisions, unauthorized
   changes, dependency-aware removal, and secret-redaction checks.
 
-P3-U3a follows the [approved October 20 completion direction and focused plan](../docs/planning/p3-u3a-approved-completion-direction.md).
-Local canonical owner/grants, isolated workers, definitions/binding/claim/adoption
-and credential lifecycle work proceeds with disposable services independently of
-retained administration. The named ten-path custodian verification checkpoint is
-owner-accepted and closed within its limits; both login authorizations are consumed.
-Further retained access and concrete remediation remain separate pending gates.
-The [consolidated backup/maintenance design](../docs/planning/p3-u3a-sustainable-openbao-administration-design.md)
-is prepared for separate review only. The 60-second attestation timing amendment is approved in
-principle only, pending implementation and real transaction/failure acceptance;
-see the [security contract](../docs/architecture/trunk-credentials.md#conditional-attestation-timing--not-accepted-for-runtime-use).
-Local development, retained remediation, a end-to-end acceptance and production
-readiness are separate boundaries. Preserve existing failures and negative tests.
+The owner approved the replacement
+[P3-U3 development specification](feature-specs/p3-u3-development-resource-management.md)
+on October 23, 2026 (+08:00). It supersedes the older parent/children and their
+credential/backup acceptance gates. Use the approved replacement a → b → c sequence:
+[a: trunks/gateways](feature-specs/p3-u3a-trunks-and-gateways.md),
+[b: simple credentials](feature-specs/p3-u3b-simple-trunk-credentials.md), and
+[c: DID inventory/integration](feature-specs/p3-u3c-did-inventory-and-integration.md).
+Each child delivers its actual API/browser workflow; no final browser-only gate.
+Start with IP-peer desired CRUD using existing transactions, permissions and audit.
+Retain OpenBao and introduce a practical trusted setup/administration path rather
+than completing the separate attestation/claim/cleanup-worker subsystem.
+Backup automation and recovery certification are operational work, not a P3-U3
+completion dependency. Existing failed/pending operations remain preserved and
+unfixed. Live apply/routing/tenant readiness remain with later units.
 
 ### P3-U4 — Manage ring groups and dial plans
 

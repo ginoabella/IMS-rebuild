@@ -3,7 +3,7 @@
 **Latest result:** corrected package explicitly approved and executed once; all nine
 writes and both encrypted backup retrievals succeeded. Root revoked, normal
 protection restored and guard/helpers closed. Owner password handoff is complete
-and its private custody was verified without reading the password. [Execution evidence and next guidance](../status/p3-u3a-bootstrap-retained-execution.md).
+and its private custody was verified without reading the password. [Execution evidence and next guidance](../../../../../status/p3-u3a-bootstrap-retained-execution.md).
 The earlier pending statements below describe preparation history; execution
 authorization is now consumed and must not be replayed.
 
@@ -12,22 +12,22 @@ supersedes older pending-capture descriptions only for current sequencing. It
 does not modify their historical approval boundaries. The capture/upload request
 is complete and consumed; it cannot authorize installation or another recovery.
 
-Read the [authority findings](../status/p3-u3a-captured-authority-review.md) and
-[operations runbook](../runbooks/p3-u3a-development-backup.md) first.
+Read the [authority findings](../../../../../status/p3-u3a-captured-authority-review.md) and
+[operations runbook](../../../../../runbooks/p3-u3a-development-backup.md) first.
 
 ## Current continuation result
 
 Owner reapproved this plan and continuation on October 22. The [current read-only
-installer review](../status/p3-u3a-current-installer-route.md) verified that the
+installer review](../../../../../status/p3-u3a-current-installer-route.md) verified that the
 named custodian is denied all backup/rotation installation paths; its sole fresh
-session was revoked/403. The [nine-write guarded-bootstrap preparation](p3-u3a-guarded-bootstrap-preparation.json)
+session was revoked/403. The [nine-write guarded-bootstrap preparation](../../../../../planning/p3-u3a-guarded-bootstrap-preparation.json)
 now records exact candidate changes, backup-before-write ordering and remaining
-controller prerequisites. It is not executable. The [guarded controller core and native rehearsal](../status/p3-u3a-bootstrap-controller.md)
+controller prerequisites. It is not executable. The [guarded controller core and native rehearsal](../../../../../status/p3-u3a-bootstrap-controller.md)
 now pass backup-first success and lost-response checks. Complete retained host
 adapters and operation packaging before requesting separate root-bootstrap execution
 approval; do not reuse the consumed capture controller or initialize the repository.
 
-The [host wiring/post-install rehearsal](../status/p3-u3a-bootstrap-host-wiring.md) is
+The [host wiring/post-install rehearsal](../../../../../status/p3-u3a-bootstrap-host-wiring.md) is
 now complete within its disposable boundary. The [concrete one-time guarded
 bootstrap execution request](p3-u3a-bootstrap-execution-request.md) is ready for its
 separate root/staging/installation approval. Reapproval of this operating-model
@@ -36,7 +36,7 @@ plan alone does not execute that request.
 ## Operator command implementation
 
 After the separately approved bootstrap and password handoff, the
-[operator command guide](../status/p3-u3a-backup-operations.md) now provides
+[operator command guide](../../../../../status/p3-u3a-backup-operations.md) now provides
 status, explicit run-now and attended rotation. Mutations default to a plan and
 require an attended administrator with `--execute`. Commands use the installed
 scoped identities; they do not reuse consumed bootstrap authorization. Disposable
@@ -53,8 +53,8 @@ Owner requested minimal routine operations and approved this document on October
 22. The operating model below is adopted. Exact identity/policy installation and
 activation still depend on the concrete evidence specified in this document.
 
-The [exact narrowed rotation and remediation candidate](p3-u3a-backup-maintenance-review.json)
-and [native verification/status](../status/p3-u3a-backup-maintenance-review.md)
+The [exact narrowed rotation and remediation candidate](../../../../../planning/p3-u3a-backup-maintenance-review.json)
+and [native verification/status](../../../../../status/p3-u3a-backup-maintenance-review.md)
 now replace the older broad maintenance candidate for further implementation.
 `gino` is the designated attended operator; a current independent OpenBao
 installer authorization route remains unverified.
@@ -93,7 +93,7 @@ fresh backup retrieval/decryption and isolated joint-store recovery acceptance;
 all cadence/retention/RPO/RTO numbers remain proposals until approved and measured.
 
 Exact candidate bodies remain in `backupProvisioning` of the
-[review-only manifest](p3-u3a-backup-installation-review-manifest.json).
+[review-only manifest](../../../../../planning/p3-u3a-backup-installation-review-manifest.json).
 That manifest is not an executor input; its older unresolved facts must be
 reconciled against the completed capture and actual custody evidence.
 

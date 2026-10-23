@@ -11,7 +11,12 @@ schedule. Keep the private recovery key on its existing owner-controlled machine
 **Current retained export is complete and independently hash/custody verified:**
 `f870564b-45b5-4b34-a5c9-949df4a35194`. [Export evidence](../status/p3-u3a-retained-verification-export.json).
 Continue with the owner-run Windows steps below; do not rerun the export.
-Off-host copy and owner-key decryption are still pending.
+**Owner Windows verification passed on October 23, 2026 at 07:48:47 +08:00**
+(owner-reported verifier output). Both retained archives decrypted and passed
+integrity checks; audit contains 5,593 records. [Owner report and paths](../status/p3-u3a-owner-archive-verification.json).
+This completes the owner-copy/decryption checkpoint for this exact installation
+snapshot. Native restore, sealed-checksum cryptography, audit continuity, joint
+PostgreSQL recovery and operational acceptance remain open; scheduling inactive.
 
 The [public verification request](../planning/p3-u3a-fresh-backup-verification-request.json)
 binds repository ID, Restic snapshot, the original execution evidence hash,
@@ -53,12 +58,47 @@ possible partial paths; retain them for review. Read-only retrieval may be run
 again into a new UUID directory after diagnosing the failure. No automatic retry
 is performed, and an old directory is never repaired or reused.
 
+## Recorded Windows locations
+
+The owner confirmed the backup identity file exists and used it for the successful
+verification:
+
+```text
+C:\MyIMS-Recovery\myims-age-identity.txt
+```
+
+Command history also records this passphrase-encrypted identity copy; its current
+presence and recoverability were not checked in this checkpoint:
+
+```text
+C:\MyIMS-Recovery\myims-age-identity.escrow.age
+```
+
+The completed verification directory is:
+
+```text
+C:\Users\Administrator\MyIMS-Archive-Verification-5c58f9a3-2ddf-4de3-9b83-f439335d145e
+```
+
+These are path records only. Keep key contents on Windows. The separately held
+`seal-escrow-identity.txt` wraps the OpenBao seal package and is a different key.
+The backup identity is outside the Windows user profile, so searching only
+`C:\Users\Administrator` will not find it. In a new PowerShell session, restore
+these variables to reference the existing verified files:
+
+```powershell
+$RecoveryIdentityFile = 'C:\MyIMS-Recovery\myims-age-identity.txt'
+$VerificationRoot = 'C:\Users\Administrator\MyIMS-Archive-Verification-5c58f9a3-2ddf-4de3-9b83-f439335d145e'
+```
+
+No repeat verification/export is required for this completed checkpoint.
+
 ## Owner-run offline verification
 
 Prerequisites on the owner's computer: Node.js 22 or newer and the existing `age`
 executable on PATH. The verifier is JavaScript using Node built-ins and the
 existing snapshot integrity parser; no package installation is needed. The
-Windows path is prepared but requires actual owner execution for acceptance.
+owner completed this Windows path successfully; see the report above.
 The existing private key file should retain its already verified account-only
 custody. The Node verifier does not audit Windows ACLs. It checks regular,
 single-link key input and additionally checks private mode/owner on POSIX.

@@ -1,7 +1,7 @@
 # P3-U3a approved operating model: exact rotation candidate
 
 October 22, 2026 (Asia/Manila, +08:00). The owner approved the
-[next-step document](../planning/p3-u3a-backup-authority-next-step.md).
+[next-step document](../archive/p3-u3/2026-10-23/docs/planning/p3-u3a-backup-authority-next-step.md).
 The simpler operating model is adopted: `gino` is the attended operator, the
 existing custodian stays in place, and routine rotation uses separate credentials.
 This checkpoint implements the document's requirement to prepare a new exact

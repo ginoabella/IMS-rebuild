@@ -10,7 +10,7 @@ concrete profile/provisioning prerequisites and exclusions still apply.
 
 Requirement: [P3-U3a](../../context/feature-specs/p3-u3a-protected-trunk-and-gateway-definitions.md),
 [parent gates G-01/G-03/G-04 and AC-01–11](../../context/feature-specs/p3-u3-trunks-gateways-and-dids.md).
-Read under [AGENT.md](../../AGENT.md) and its six required context documents.
+Read under [AGENT.md](../../../../../../AGENT.md) and its six required context documents.
 
 ## 1. Recommendation and approval boundary
 
@@ -52,9 +52,9 @@ this review requests decisions rather than recording approval.
 
 | Required starting point | Repository finding | Effect |
 | --- | --- | --- |
-| Verified P3-U1 | [Integrated evidence](../status/p3-u1c-evidence.md) records C-01–07/parent AC-01–11, protected registry, canonical installation identity and real-service checks | Reuse its identity/authority/receipt patterns; recheck affected behavior during implementation |
-| Existing inventory patterns | [Inventory contract](../architecture/extension-inventory.md) and `InventoryStore` expose transaction-bound node/capability/version patterns | Reuse patterns, without making endpoint profiles authoritative for trunks |
-| Current secret owner | [Endpoint credential contract](../architecture/endpoint-credentials.md) grants OpenBao access only to the dedicated endpoint lifecycle | No established trunk reference selector/binding owner was found in the inspected telephony files/contracts |
+| Verified P3-U1 | [Integrated evidence](../../../../../status/p3-u1c-evidence.md) records C-01–07/parent AC-01–11, protected registry, canonical installation identity and real-service checks | Reuse its identity/authority/receipt patterns; recheck affected behavior during implementation |
+| Existing inventory patterns | [Inventory contract](../../../../../architecture/extension-inventory.md) and `InventoryStore` expose transaction-bound node/capability/version patterns | Reuse patterns, without making endpoint profiles authoritative for trunks |
+| Current secret owner | [Endpoint credential contract](../../../../../architecture/endpoint-credentials.md) grants OpenBao access only to the dedicated endpoint lifecycle | No established trunk reference selector/binding owner was found in the inspected telephony files/contracts |
 | Current resources | Telephony source/contracts contain registry, observation, inventory and endpoint credentials; no canonical trunk/gateway APIs were found | New domain contracts and persistence are needed; no delivered trunk behavior is claimed |
 | Future dependency facts | Routing, allocations and configuration revisions belong to later owners | Unknown structural/status safety must reject; no empty adapter or speculative future tables |
 
