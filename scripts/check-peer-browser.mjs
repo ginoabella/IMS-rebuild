@@ -1,11 +1,14 @@
 // Real PostgreSQL + Redis + two production Nest replicas + HTTPS Next browser.
 // PBX targets are deliberately unreachable .invalid names; no telephony process is started.
 import assert from 'node:assert/strict';
+import { checkSimpleTrunkCommand } from './check-simple-trunk-command.mjs';
 import { randomUUID } from 'node:crypto';
 import { expect as baseExpect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 const expect = baseExpect.configure({ timeout: 20000 });
 export async function checkPeerBrowser({
+  trunkAccess,
+  holdResponse,
   page,
   context,
   config,
@@ -25,7 +28,8 @@ export async function checkPeerBrowser({
   );
   const nodeId = randomUUID(),
     otherNode = randomUUID(),
-    installation = 'f4000000-0000-4000-8000-000000000001';
+    installation =
+      trunkAccess?.installationId ?? 'f4000000-0000-4000-8000-000000000001';
   for (const [id, install] of [
     [nodeId, installation],
     [otherNode, randomUUID()],
@@ -113,6 +117,226 @@ export async function checkPeerBrowser({
   }
   const path = (kind, id = '', suffix = '') =>
     `${base}/${kind}${id ? `/${id}` : ''}${suffix ? `/${suffix}` : ''}`;
+  await checkSimpleTrunkCommand(owner, installation);
+  // Metadata fixtures establish the SQL/API/browser boundary only. Real OpenBao
+  // setup acceptance is deliberately tracked separately, never inferred here.
+  const credentialId = randomUUID(),
+    foreignCredential = randomUUID(),
+    unavailableCredential = randomUUID();
+  if (trunkAccess) {
+    let settle;
+    const finished = new Promise((resolve) => {
+      settle = resolve;
+    });
+    const listener = (message) => {
+      if (
+        message.channel === 'myims_trunk_fixture' &&
+        message.payload?.endsWith(`:${credentialId}`)
+      )
+        settle(message.payload.startsWith('ready:'));
+    };
+    owner.on('notification', listener);
+    await owner.query('LISTEN myims_trunk_fixture');
+    console.log(
+      'SIMPLE_TRUNK_FIXTURE_REQUEST ' +
+        JSON.stringify({
+          installationId: installation,
+          credentialId,
+          database: owner.connectionParameters.database,
+        }),
+    );
+    const timeout = setTimeout(() => settle(false), 120000);
+    try {
+      assert.equal(
+        await finished,
+        true,
+        'trusted real OpenBao acceptance must finish before browser fixture mutations',
+      );
+    } finally {
+      clearTimeout(timeout);
+      owner.off('notification', listener);
+      await owner.query('UNLISTEN myims_trunk_fixture');
+    }
+    console.log(
+      'PASS real OpenBao command published actual versions directly into the browser fixture database.',
+    );
+  }
+  for (const [id, install, available] of [
+    [credentialId, installation, true],
+    [
+      foreignCredential,
+      (
+        await owner.query(
+          'SELECT installation_id FROM public.pbx_nodes WHERE id=$1',
+          [otherNode],
+        )
+      ).rows[0].installation_id,
+      true,
+    ],
+    [unavailableCredential, installation, false],
+  ]) {
+    if (trunkAccess && id === credentialId) {
+      await owner.query(
+        'INSERT INTO public.sip_credential_versions(credential_id,material_version,available) VALUES($1,3,false)',
+        [id],
+      );
+      continue;
+    }
+    await owner.query(
+      'INSERT INTO public.sip_credentials(id,installation_id,label,available) VALUES($1,$2,$3,$4)',
+      [id, install, `Credential ${id}`, available],
+    );
+    for (const version of [1, 2, 3])
+      await owner.query(
+        'INSERT INTO public.sip_credential_versions(credential_id,material_version,available) VALUES($1,$2,$3)',
+        [id, version, version !== 3],
+      );
+  }
+  await owner.query('BEGIN');
+  try {
+    await owner.query('SET LOCAL ROLE myims_runtime');
+    await owner.query(
+      'SELECT id FROM public.sip_credentials WHERE id=$1 FOR SHARE',
+      [credentialId],
+    );
+    await owner.query(
+      'SELECT credential_id FROM public.sip_credential_versions WHERE credential_id=$1 FOR SHARE',
+      [credentialId],
+    );
+    await assert.rejects(
+      owner.query('UPDATE public.sip_credentials SET id=id WHERE id=$1', [
+        credentialId,
+      ]),
+      (e) => e.code === '42501',
+    );
+  } finally {
+    await owner.query('ROLLBACK');
+  }
+  const digest = {
+    ...settings,
+    authentication: 'outbound-digest',
+    credential: { id: credentialId, version: 1 },
+  };
+  const registration = {
+    registrar: 'registrar.invalid',
+    realm: 'synthetic.invalid',
+    expiration: 3600,
+    retryInterval: 60,
+    forbiddenRetryInterval: 10,
+  };
+  const selections = await request(path('trunks') + '/credentials/selections');
+  assert.equal(selections.status, 200);
+  assert.ok(
+    selections.data.items.some(
+      (c) => c.id === credentialId && c.version === 1 && c.available,
+    ),
+  );
+  assert.ok(!selections.data.items.some((c) => c.id === foreignCredential));
+  assert.equal(
+    (await request(path('trunks') + '/credentials/selections?extra=1')).status,
+    400,
+  );
+  const authenticated = await create(
+    path('trunks'),
+    trunk('Digest API', { settings: digest }),
+  );
+  const registered = await create(
+    path('trunks'),
+    trunk('Registration API', { settings: { ...digest, registration } }),
+  );
+  assert.equal(authenticated.credentialStatus, 'selected');
+  const rejectedSettings = [
+    { ...digest, credential: { id: foreignCredential, version: 1 } },
+    { ...digest, credential: { id: unavailableCredential, version: 1 } },
+    { ...digest, credential: { id: randomUUID(), version: 1 } },
+    { ...digest, credential: { id: credentialId, version: 3 } },
+    { ...digest, credential: { id: credentialId, version: 99 } },
+  ];
+  for (const bad of rejectedSettings)
+    assert.equal(
+      (
+        await request(
+          path('trunks'),
+          'POST',
+          trunk('Invalid credential', { settings: bad }),
+        )
+      ).data.reason,
+      'invalid_credential',
+    );
+  for (const bad of [
+    { ...settings, credential: digest.credential },
+    { ...settings, registration },
+    { ...digest, registration: { ...registration, realm: '' } },
+    {
+      ...digest,
+      registration: { ...registration, registrar: 'sip://invalid' },
+    },
+    { ...digest, registration: { ...registration, retryInterval: 1 } },
+  ])
+    assert.equal(
+      (
+        await request(
+          path('trunks'),
+          'POST',
+          trunk('Incompatible', { settings: bad }),
+        )
+      ).status,
+      400,
+    );
+  assert.equal(
+    (
+      await request(
+        path('trunks'),
+        'POST',
+        trunk('Inbound digest', { direction: 'inbound', settings: digest }),
+      )
+    ).status,
+    400,
+  );
+  await create(
+    path('gateways'),
+    gateway(
+      'Digest gateway',
+      ['192.0.2.101'],
+      authenticated.id,
+      'sip-provider',
+    ),
+  );
+  const adopted = await request(path('trunks', authenticated.id), 'PATCH', {
+    expectedVersion: 1,
+    name: authenticated.name,
+    direction: 'both',
+    settings: { ...digest, credential: { id: credentialId, version: 2 } },
+  });
+  assert.equal(adopted.status, 200);
+  assert.equal(adopted.data.resource.settings.credential.version, 2);
+  assert.equal(
+    (await request(path('trunks', registered.id))).data.resource.settings
+      .credential.version,
+    1,
+  );
+  assert.equal(
+    (
+      await request(path('trunks', authenticated.id), 'PATCH', {
+        expectedVersion: 1,
+        name: authenticated.name,
+        direction: 'both',
+        settings: digest,
+      })
+    ).data.reason,
+    'stale_version',
+  );
+  const retained = await owner.query(
+    'SELECT material_version FROM public.sip_credential_versions WHERE credential_id=$1 ORDER BY material_version',
+    [credentialId],
+  );
+  assert.deepEqual(
+    retained.rows.map((r) => r.material_version),
+    [1, 2, 3],
+  );
+  console.log(
+    'PASS P3-U3b real SQL/API metadata fixtures: bounded choices, installation/purpose/availability/version checks, digest/registration validation, explicit version adoption and old selection retention. Provider setup not established by fixtures.',
+  );
   select(a);
   const intent = trunk('API primary');
   const original = await create(path('trunks'), intent);
@@ -603,9 +827,18 @@ export async function checkPeerBrowser({
     page.getByRole('button', { name: 'Enable gateway', exact: true }),
   ).toBeVisible();
   await page.getByRole('button', { name: 'Trunks', exact: true }).click();
+  const inspectGate = holdResponse('GET', path('trunks', browserTrunk));
   await page
     .getByRole('button', { name: 'Inspect Browser trunk edited', exact: true })
     .click();
+  await inspectGate.reached;
+  try {
+    await expect(
+      page.getByRole('button', { name: 'Remove trunk', exact: true }),
+    ).toBeDisabled();
+  } finally {
+    inspectGate.release();
+  }
   await page.getByRole('button', { name: 'Remove trunk', exact: true }).click();
   await page
     .getByRole('button', { name: 'Confirm removal', exact: true })
@@ -665,6 +898,45 @@ export async function checkPeerBrowser({
       )
     ).rows[0].count,
     '1',
+  );
+  console.log(
+    'CHECK peer browser: digest, desired registration and version adoption',
+  );
+  await page.getByRole('button', { name: 'Create trunk', exact: true }).click();
+  await page.getByLabel(/^Name/).fill('Browser digest');
+  await page.getByLabel('Remote host or IP').fill('digest.invalid');
+  await page.getByLabel(/^Authentication/).selectOption('outbound-digest');
+  await page
+    .getByLabel('Credential label and version')
+    .selectOption(`${credentialId}:1`);
+  await page.getByLabel('Desired outbound registration').selectOption('on');
+  await page.getByLabel('Registrar host or IP').fill('registrar.invalid');
+  await page.getByLabel('Registration realm').fill('synthetic.invalid');
+  await page.getByRole('button', { name: 'Save trunk', exact: true }).click();
+  await expect(
+    page.getByRole('region', { name: 'Resource detail', exact: true }),
+  ).toContainText('Browser digest');
+  await page.getByRole('button', { name: 'Edit trunk', exact: true }).click();
+  await expect(page.getByLabel('Credential label and version')).toHaveValue(
+    `${credentialId}:1`,
+  );
+  await page
+    .getByLabel('Credential label and version')
+    .selectOption(`${credentialId}:2`);
+  await page.getByRole('button', { name: 'Save trunk', exact: true }).click();
+  await expect(
+    page.getByRole('region', { name: 'Resource form', exact: true }),
+  ).toHaveCount(0);
+  const browserDigest = (
+    await owner.query(
+      "SELECT settings FROM public.sip_trunks WHERE name='Browser digest'",
+    )
+  ).rows[0].settings;
+  assert.equal(browserDigest.credential.version, 2);
+  assert.deepEqual(browserDigest.registration, registration);
+  assert.ok(!JSON.stringify(browserDigest).includes('password'));
+  console.log(
+    'PASS P3-U3b actual HTTPS browser digest + desired registration + explicit credential version adoption.',
   );
   for (const width of [1440, 768, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });

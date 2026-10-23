@@ -26,6 +26,18 @@ const credentials = ['--endpoint-credentials', '--inventory-browser'].includes(
 );
 
 const inventoryBrowser = process.argv[2] === '--inventory-browser';
+const trunkAccess =
+  process.argv[2] === '--peer-browser' &&
+  process.env.MYIMS_TRUNK_INSTALLATION_ID
+    ? { installationId: process.env.MYIMS_TRUNK_INSTALLATION_ID }
+    : null;
+if (
+  trunkAccess &&
+  !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(
+    trunkAccess.installationId,
+  )
+)
+  throw new Error('Invalid real trunk acceptance installation.');
 let inventoryAcceptance;
 let pbxAccess;
 const observing = ['--pbx-observation', '--pbx-browser'].includes(
@@ -87,6 +99,7 @@ if (observing)
   );
 let created = false;
 let endpointCleanupError;
+let trunkFixtureFailed = false;
 try {
   if (credentials) provisionEndpointFixture();
   docker([
@@ -133,7 +146,47 @@ try {
       const line = output.slice(0, newline);
       output = output.slice(newline + 1);
       try {
-        if (credentials && line.startsWith('ENDPOINT_FIXTURE_REQUEST '))
+        if (trunkAccess && line.startsWith('SIMPLE_TRUNK_FIXTURE_REQUEST ')) {
+          const request = JSON.parse(
+            line.slice('SIMPLE_TRUNK_FIXTURE_REQUEST '.length),
+          );
+          if (
+            request.installationId !== trunkAccess.installationId ||
+            !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(
+              request.credentialId ?? '',
+            ) ||
+            !/^myims_session_[a-f0-9]{12}$/.test(request.database ?? '')
+          )
+            throw new Error('Invalid owned trunk fixture request.');
+          const result = spawnSync(
+            process.execPath,
+            [
+              'scripts/trunk-setup-launcher.mjs',
+              'verify',
+              request.installationId,
+            ],
+            {
+              env: {
+                ...process.env,
+                MYIMS_TRUNK_FIXTURE_DATABASE: request.database,
+                MYIMS_TRUNK_FIXTURE_CREDENTIAL_ID: request.credentialId,
+              },
+              encoding: 'utf8',
+              timeout: 120000,
+            },
+          );
+          if (result.status !== 0) {
+            const location =
+              result.stderr?.match(
+                /file:\/\/\/workspace\/scripts\/check-simple-trunk-openbao\.mjs:\d+:\d+/,
+              )?.[0] ?? 'trusted container';
+            console.error(
+              `Real OpenBao check failed at ${location}; exit ${result.status ?? 'interrupted'}`,
+            );
+            trunkFixtureFailed = true;
+          }
+          if (!trunkFixtureFailed) console.log(result.stdout.trim());
+        } else if (credentials && line.startsWith('ENDPOINT_FIXTURE_REQUEST '))
           endpointFixtureRequest(line).catch(() => {
             console.error('Endpoint fixture control failed');
             child.kill('SIGKILL');
@@ -188,6 +241,7 @@ try {
   child.stdin.end(
     JSON.stringify({
       redisUrl: `redis://:${password}@${name}:6379`,
+      ...(trunkAccess ? { trunkAccess } : {}),
       ...(pbxAccess ? { pbxAccess } : {}),
       ...(credentials ? { endpointAccess } : {}),
     }),
@@ -195,7 +249,8 @@ try {
   const timer = setTimeout(() => child.kill('SIGKILL'), 1500000);
   const [code] = await once(child, 'exit');
   clearTimeout(timer);
-  if (code !== 0) throw new Error('Session lifecycle checks failed');
+  if (code !== 0 || trunkFixtureFailed)
+    throw new Error('Session lifecycle checks failed');
 } finally {
   if (credentials) {
     try {

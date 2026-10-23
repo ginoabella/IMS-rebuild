@@ -76,7 +76,7 @@ const { PostgresSessionFences } = backend(
   './dist/modules/identity/adapters/db/session-fences.js',
 );
 const { SafeLogger } = backend('./dist/infrastructure/execution/logging.js');
-const { redisUrl, pbxAccess, endpointAccess } = JSON.parse(
+const { redisUrl, pbxAccess, endpointAccess, trunkAccess } = JSON.parse(
   readFileSync(0, 'utf8'),
 );
 const settings = parseSessionConfig({
@@ -491,6 +491,7 @@ try {
           : undefined,
       inventoryBrowser,
       peerBrowser,
+      trunkAccess,
       browserChecks: selection[0] !== '--platform-http',
       browserOnly: [
         '--platform-browser',
@@ -1073,7 +1074,13 @@ try {
     for (const operation of ['issue', 'rotate', 'revoke']) {
       console.log(`CHECK: real lost-response ${operation}`);
       const p = await proxy();
-      const c = await worker({ redisUrl: p.url });
+      // Exercise the lost Redis response after real canonical work has reached
+      // the proxy, using the supported production timeout as with COMMIT loss.
+      // Fast 200ms expiry fixtures must not preempt the injected network fault.
+      const c = await worker({
+        redisUrl: p.url,
+        config: { ...settings, timeoutMs: defaults.timeoutMs },
+      });
       const session = operation === 'issue' ? null : await issue(a);
       const keysBefore = await redis.keys('*');
       p.arm();

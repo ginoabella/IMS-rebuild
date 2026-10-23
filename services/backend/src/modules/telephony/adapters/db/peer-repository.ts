@@ -12,9 +12,9 @@ const tables = {
   trunks: 'public.sip_trunks',
   gateways: 'public.sip_gateways',
 } as const;
-const common = `id,node_id AS "nodeId",installation_id AS "installationId",name,enabled,version,created_at AS "createdAt",updated_at AS "updatedAt",created_by AS "createdBy",updated_by AS "updatedBy",removed_at AS "removedAt",'not_required'::text AS "credentialStatus"`;
+const common = `id,node_id AS "nodeId",installation_id AS "installationId",name,enabled,version,created_at AS "createdAt",updated_at AS "updatedAt",created_by AS "createdBy",updated_by AS "updatedBy",removed_at AS "removedAt"`;
 function select(kind: PeerResource) {
-  return `SELECT ${common},${kind === 'trunks' ? 'direction,settings' : `kind,trunk_id AS "trunkId",ARRAY(SELECT host(address) FROM public.sip_gateway_sources s WHERE s.gateway_id=sip_gateways.id AND (s.removed_at IS NULL OR s.removed_at=sip_gateways.removed_at) ORDER BY host(address)) AS "sourceAddresses"`} FROM ${tables[kind]}`;
+  return `SELECT ${common},${kind === 'trunks' ? `direction,settings,CASE WHEN settings->>'authentication'='ip-peer' THEN 'not_required' ELSE 'selected' END AS "credentialStatus"` : `'not_required'::text AS "credentialStatus",kind,trunk_id AS "trunkId",ARRAY(SELECT host(address) FROM public.sip_gateway_sources s WHERE s.gateway_id=sip_gateways.id AND (s.removed_at IS NULL OR s.removed_at=sip_gateways.removed_at) ORDER BY host(address)) AS "sourceAddresses"`} FROM ${tables[kind]}`;
 }
 type Row = Omit<PeerDto, 'createdAt' | 'updatedAt' | 'removedAt'> & {
   createdAt: Date;
@@ -43,6 +43,19 @@ export class PeerRepository {
         )
       ).rows[0] ?? null
     );
+  }
+  async credentials(
+    s: ReadSnapshot,
+    installationId: string,
+    after: string | null,
+    limit: number,
+  ) {
+    return (
+      await s.query<import('@myims/contracts').TrunkCredentialSelection>(
+        `SELECT c.id,c.label,c.installation_id AS "installationId",c.purpose,v.material_version AS version,(c.available AND v.available) AS available FROM public.sip_credentials c JOIN public.sip_credential_versions v ON v.credential_id=c.id WHERE c.installation_id=$1 AND ($2::text IS NULL OR (c.id,v.material_version)>(split_part($2,':',1)::uuid,split_part($2,':',2)::integer)) ORDER BY c.id,v.material_version LIMIT $3`,
+        [installationId, after, limit],
+      )
+    ).rows;
   }
   async detail(
     s: ReadSnapshot,
@@ -130,6 +143,14 @@ export class PeerRepository {
       [installationId, v.name, id],
     );
     if (names.rows.length) throw new PeerRejected(409, 'name_conflict');
+    if ('settings' in v && v.settings.credential) {
+      const c = v.settings.credential;
+      const found = await tx.query(
+        `SELECT c.id FROM public.sip_credentials c JOIN public.sip_credential_versions v ON v.credential_id=c.id WHERE c.id=$1 AND c.installation_id=$2 AND c.purpose='outbound-digest' AND c.available AND v.available AND v.material_version=$3 FOR SHARE OF c,v`,
+        [c.id, installationId, c.version],
+      );
+      if (!found.rows.length) throw new PeerRejected(409, 'invalid_credential');
+    }
     if ('sourceAddresses' in v) {
       if (v.trunkId) {
         const trunk = (await this.detail(

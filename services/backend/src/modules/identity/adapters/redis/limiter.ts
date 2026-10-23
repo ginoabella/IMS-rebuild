@@ -11,7 +11,7 @@ import type {
 import { SessionRedisConnection } from './connection';
 // One expiring bounded hash per operation. The hash itself is the allocation
 // registry, eliminating independent attacker-created counter keys and cleanup scans.
-const consume = `
+export const limiterScript = `
 local t=redis.call('TIME')
 local now=tonumber(t[1])*1000+math.floor(tonumber(t[2])/1000)
 local window=tonumber(ARGV[3])
@@ -25,7 +25,18 @@ if not redis.acl_check_cmd('HSET',KEYS[1],'__policy',policy) or
   return {-1,0}
 end
 local existing=redis.call('HGET',KEYS[1],'__policy')
-if existing and (existing ~= policy or redis.call('PTTL',KEYS[1]) <= 0) then return {-1,0} end
+if existing and existing ~= policy then return {-1,0} end
+local ttl=existing and redis.call('PTTL',KEYS[1]) or -2
+if existing and ttl == 0 then
+  -- Redis may retain an expiring hash at the zero-ms boundary during Lua.
+  redis.call('PEXPIREAT',KEYS[1],0)
+  existing=false
+  t=redis.call('TIME')
+  now=tonumber(t[1])*1000+math.floor(tonumber(t[2])/1000)
+  deadline=(math.floor(now/window)+1)*window
+elseif existing and ttl < 0 then
+  return {-1,0}
+end
 local a=redis.call('HGET',KEYS[1],source)
 local b=redis.call('HGET',KEYS[1],identity)
 local allocated=redis.call('HLEN',KEYS[1])-(existing and 1 or 0)
@@ -77,7 +88,7 @@ export class RedisDistributedLimiter implements DistributedLimiter {
     try {
       const p = this.config.policies[operation];
       const raw = await this.connection.run((client) =>
-        client.eval(consume, {
+        client.eval(limiterScript, {
           keys: [`myims:limiter:v1:${operation}`],
           arguments: [
             String(p.source),

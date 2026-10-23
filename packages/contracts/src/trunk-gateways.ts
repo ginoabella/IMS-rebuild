@@ -8,7 +8,15 @@ export interface PeerSettings {
   directMedia: false;
   rtpSymmetric: true;
   forceRport: true;
-  authentication: 'ip-peer';
+  authentication: 'ip-peer' | 'outbound-digest';
+  credential?: { id: string; version: number };
+  registration?: {
+    registrar: string;
+    realm: string;
+    expiration: 3600;
+    retryInterval: 60;
+    forbiddenRetryInterval: 10;
+  };
 }
 export interface TrunkValues {
   name: string;
@@ -33,7 +41,7 @@ export interface PeerRecordDto {
   createdBy: string;
   updatedBy: string;
   removedAt: string | null;
-  credentialStatus: 'not_required';
+  credentialStatus: 'not_required' | 'selected';
 }
 export type TrunkDto = PeerRecordDto & TrunkValues;
 export type GatewayDto = PeerRecordDto & GatewayValues;
@@ -50,6 +58,7 @@ export type PeerConflict =
   | 'name_conflict'
   | 'source_conflict'
   | 'invalid_trunk'
+  | 'invalid_credential'
   | 'referenced'
   | 'request_conflict'
   | 'intent_expired'
@@ -79,4 +88,17 @@ export interface PeerStatusDto {
 }
 export interface RemovePeerDto {
   expectedVersion: number;
+}
+
+export interface TrunkCredentialSelection {
+  id: string;
+  label: string;
+  installationId: string;
+  purpose: 'outbound-digest';
+  version: number;
+  available: boolean;
+}
+export interface TrunkCredentialListDto {
+  items: TrunkCredentialSelection[];
+  nextCursor: string | null;
 }

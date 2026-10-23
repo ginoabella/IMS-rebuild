@@ -1,7 +1,8 @@
 # P3-U3b — Simple trunk credentials
 
-Status: planned; replacement sub-unit approved October 23, 2026, Asia/Manila
-(+08:00). Follows [a](p3-u3a-trunks-and-gateways.md).
+Status: complete within approved private development; October 23, 2026,
+22:34 +08:00 (Asia/Manila). B-01–05 passed; [final evidence](../../docs/status/p3-u3b-evidence.md).
+Follows [a](p3-u3a-trunks-and-gateways.md). Parent P3-U3 remains incomplete.
 
 Parent: [P3-U3 development delivery](p3-u3-development-resource-management.md),
 especially its simple credential setup contract. This b is credential delivery;

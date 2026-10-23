@@ -54,6 +54,11 @@ source/identity/window/capacity tuple. The entire hash expires at its fixed wind
 end; identifying fields cannot outlive the window. No per-client Redis keys,
 permanent tombstones, session scan or unbounded pruning is needed.
 
+At Redis's zero-millisecond expiry boundary, Lua atomically expires the old hash
+before allocating the new window. A missing expiry or a different policy still
+fails closed; positive-TTL exhausted counters remain limited. The deterministic
+real Redis boundary regression covers all four states without timing sleeps.
+
 One bounded Lua script checks configuration consistency, cardinality, prior
 counts and write permissions, establishes expiry before identifying allocation,
 and updates both counters atomically. At most 8,192 identifying fields per

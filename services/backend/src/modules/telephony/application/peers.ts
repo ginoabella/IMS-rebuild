@@ -12,6 +12,7 @@ import type { PbxTransactions } from './pbx-nodes';
 import { PeerRepository } from '../adapters/db/peer-repository';
 import {
   PeerRejected,
+  peerConnection,
   address,
   id,
   invalid,
@@ -58,6 +59,42 @@ export class Peers {
             value: { statusCode: 503, message: 'Service unavailable' },
           };
     }
+  }
+  credentials(nodeInput: unknown, query: unknown) {
+    return this.handle(async () => {
+      const nodeId = id(nodeInput, 'nodeId');
+      const q = object(query, ['after']);
+      const after = q.after === undefined ? null : String(q.after);
+      if (
+        after !== null &&
+        !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}:[1-9][0-9]{0,9}$/.test(
+          after,
+        )
+      )
+        invalid('after');
+      if (after !== null && Number(after.split(':')[1]) > 2147483647)
+        invalid('after');
+      return this.database.read(async (s) => {
+        const node = await this.store.node(s, nodeId);
+        if (!node) throw new PeerRejected(404);
+        const rows = await this.store.credentials(
+          s,
+          node.installationId,
+          after,
+          101,
+        );
+        const items = rows.slice(0, 100),
+          last = items.at(-1);
+        return {
+          status: 200,
+          value: {
+            items,
+            nextCursor:
+              rows.length > 100 && last ? `${last.id}:${last.version}` : null,
+          },
+        };
+      });
+    });
   }
   read(
     kind: PeerResource,
@@ -174,6 +211,21 @@ export class Peers {
             throw new PeerRejected(404);
           if (old && old.version !== expected)
             throw new PeerRejected(409, 'stale_version');
+          if (
+            operation === 'status' &&
+            data.enabled === true &&
+            old &&
+            'settings' in old
+          ) {
+            await this.store.validate(
+              tx,
+              kind,
+              nodeId,
+              node.installationId,
+              resourceId,
+              values(kind, old as unknown as Record<string, unknown>),
+            );
+          }
           if (v) {
             await this.store.validate(
               tx,
@@ -198,8 +250,8 @@ export class Peers {
               operation === 'remove' ||
               (v &&
                 ('settings' in v && 'settings' in prior
-                  ? JSON.stringify(prior.settings) !==
-                      JSON.stringify(v.settings) ||
+                  ? peerConnection(prior.settings) !==
+                      peerConnection(v.settings) ||
                     (prior.direction !== v.direction &&
                       v.direction === 'outbound')
                   : 'kind' in v &&
@@ -215,7 +267,7 @@ export class Peers {
                 'settings' in v &&
                 'settings' in prior &&
                 v.direction === 'outbound' &&
-                JSON.stringify(prior.settings) === JSON.stringify(v.settings);
+                peerConnection(prior.settings) === peerConnection(v.settings);
               const blockers = await this.store.blockers(
                 tx,
                 kind,

@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import type {
+  TrunkCredentialListDto,
+  TrunkCredentialSelection,
   PeerDetailDto,
   PeerDto,
   PeerListDto,
@@ -10,6 +12,11 @@ import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 import { PeerError, peerRequest } from './client';
 type FormValues = {
+  authentication: string;
+  credential: string;
+  registration: string;
+  registrar: string;
+  realm: string;
   name: string;
   direction: string;
   host: string;
@@ -35,6 +42,11 @@ export const empty = (): State => ({
   mode: 'list',
   selected: null,
   values: {
+    authentication: 'ip-peer',
+    credential: '',
+    registration: 'off',
+    registrar: '',
+    realm: '',
     name: '',
     direction: 'both',
     host: '',
@@ -53,6 +65,13 @@ export function form(r: PeerDto): FormValues {
     name: r.name,
     ...('direction' in r
       ? {
+          authentication: r.settings.authentication,
+          credential: r.settings.credential
+            ? `${r.settings.credential.id}:${r.settings.credential.version}`
+            : '',
+          registration: r.settings.registration ? 'on' : 'off',
+          registrar: r.settings.registration?.registrar ?? '',
+          realm: r.settings.registration?.realm ?? '',
           direction: r.direction,
           host: r.settings.host,
           port: String(r.settings.port),
@@ -69,6 +88,8 @@ export function form(r: PeerDto): FormValues {
   };
 }
 const messages: Record<string, string> = {
+  invalid_credential:
+    'This credential version is missing, unavailable or belongs to another installation/purpose. Reload credential choices and choose an available version.',
   stale_version:
     'This resource changed. Reload canonical detail, review it, then use the current version to continue.',
   name_conflict: 'This name is already used on this installation.',
@@ -98,6 +119,45 @@ export function usePeers({ nodeId }: { nodeId: string }) {
     : empty();
   const save = (s: State) =>
     work.record({ ...work.values, [stateKey]: JSON.stringify(s) });
+  const [credentials, setCredentials] = useState<TrunkCredentialSelection[]>(
+    [],
+  );
+  const [credentialCursor, setCredentialCursor] = useState<string | null>(null);
+  const [credentialMessage, setCredentialMessage] = useState('');
+  async function loadCredentials(more = false) {
+    const capture = latest.current.capture();
+    try {
+      const result = await peerRequest<TrunkCredentialListDto>(
+        nodeId,
+        ['peers', 'trunks', 'credentials', 'selections'],
+        'GET',
+        undefined,
+        undefined,
+        more ? credentialCursor : null,
+      );
+      if (!capture.current()) return;
+      setCredentials((old) =>
+        more ? [...old, ...result.items] : result.items,
+      );
+      setCredentialCursor(result.nextCursor);
+      setCredentialMessage(
+        result.items.length
+          ? ''
+          : 'No confirmed credentials. Ask the development administrator to run trunk credential setup.',
+      );
+    } catch (e) {
+      if (capture.current()) {
+        setCredentialMessage('Unable to load credentials. Retry reload.');
+        if (e instanceof AccessError && e.status !== 503)
+          latest.current.rejectAccess(e);
+      }
+    }
+  }
+  useEffect(() => {
+    setCredentials([]);
+    setCredentialCursor(null);
+    if (work.ready) void loadCredentials();
+  }, [nodeId, work.ready, work.operatorId]);
   const [page, setPage] = useState<PeerListDto>();
   const [after, setAfter] = useState<string | null>(null),
     [history, setHistory] = useState<(string | null)[]>([]);
@@ -156,6 +216,8 @@ export function usePeers({ nodeId }: { nodeId: string }) {
   }, [kind, nodeId, after, work.ready, work.operatorId]);
   async function inspect(id: string) {
     if (busy.current) return;
+    busy.current = true;
+    setPending(true);
     const capture = work.capture();
     try {
       const { resource } = await peerRequest<PeerDetailDto>(nodeId, [
@@ -182,6 +244,9 @@ export function usePeers({ nodeId }: { nodeId: string }) {
         setMessage('Unable to load detail. Reload and try again.');
         if (e instanceof AccessError && e.status !== 503) work.rejectAccess(e);
       }
+    } finally {
+      busy.current = false;
+      setPending(false);
     }
   }
   async function review() {
@@ -334,7 +399,26 @@ export function usePeers({ nodeId }: { nodeId: string }) {
               directMedia: false,
               rtpSymmetric: true,
               forceRport: true,
-              authentication: 'ip-peer',
+              authentication: v.authentication,
+              ...(v.authentication === 'outbound-digest'
+                ? {
+                    credential: {
+                      id: v.credential.split(':')[0] ?? '',
+                      version: Number(v.credential.split(':')[1]),
+                    },
+                    ...(v.registration === 'on'
+                      ? {
+                          registration: {
+                            registrar: v.registrar,
+                            realm: v.realm,
+                            expiration: 3600,
+                            retryInterval: 60,
+                            forbiddenRetryInterval: 10,
+                          },
+                        }
+                      : {}),
+                  }
+                : {}),
             },
           }
         : {
@@ -355,6 +439,10 @@ export function usePeers({ nodeId }: { nodeId: string }) {
     });
   }
   return {
+    credentials,
+    credentialCursor,
+    credentialMessage,
+    loadCredentials,
     kind,
     setKind,
     state,

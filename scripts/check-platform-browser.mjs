@@ -43,6 +43,7 @@ export async function checkPlatformBrowser({
   pbxUsername,
   inventoryBrowser = false,
   peerBrowser = false,
+  trunkAccess,
 }) {
   const ingressSecret = randomBytes(32).toString('hex');
   secrets.push(ingressSecret);
@@ -559,6 +560,7 @@ export async function checkPlatformBrowser({
     if (peerBrowser) {
       phase = 'IP-peer resources browser/API';
       await checkPeerBrowser({
+        trunkAccess,
         page,
         context,
         config,
@@ -1074,7 +1076,7 @@ export async function checkPlatformBrowser({
         ? error.stack
             ?.split('\n')
             .filter((line) =>
-              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser|inventory-browser)\.mjs:\d+/.test(
+              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser|inventory-browser|peer-browser)\.mjs:\d+/.test(
                 line,
               ),
             )

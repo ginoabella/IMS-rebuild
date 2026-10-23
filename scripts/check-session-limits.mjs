@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { checkLimiterExpiry } from './check-limiter-expiry.mjs';
 import { randomUUID, randomBytes } from 'node:crypto';
 import { createRequire } from 'node:module';
 import { createServer, connect } from 'node:net';
@@ -68,6 +69,7 @@ export async function checkDistributedLimits({
   const calls = [],
     relays = [],
     users = [];
+  await checkLimiterExpiry(redis);
   const defaults = parseLimiterConfig({});
   assert.deepEqual(defaults.policies['tenant.sign-in'], {
     source: 60,

@@ -51,6 +51,17 @@ function noQuery(q: Record<string, unknown>) {
 @Controller('platform/pbx-nodes/:nodeId/peers/:kind')
 export class PeersController {
   constructor(@Inject(Peers) private readonly peers: Peers) {}
+  @Get('credentials/selections')
+  async credentials(
+    @Param('nodeId') node: string,
+    @Param('kind') k: string,
+    @Query() q: unknown,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    if (kind(k) !== 'trunks')
+      throw new HttpException('Resource not found', 404);
+    return result(await this.peers.credentials(node, q), res);
+  }
   @Get()
   async list(
     @Param('nodeId') node: string,

@@ -51,6 +51,7 @@ export async function checkPlatformAuth({
   pbxAccess,
   inventoryBrowser = false,
   peerBrowser = false,
+  trunkAccess,
   browserChecks = true,
   browserOnly = false,
 }) {
@@ -199,7 +200,9 @@ export async function checkPlatformAuth({
       pbxCatalogFile,
       JSON.stringify([
         {
-          installationId: 'f4000000-0000-4000-8000-000000000001',
+          installationId:
+            trunkAccess?.installationId ??
+            'f4000000-0000-4000-8000-000000000001',
           targetAlias: 'offline-peer',
           aliases: [],
           host: 'offline-peer.invalid',
@@ -394,6 +397,7 @@ export async function checkPlatformAuth({
       pbxUsername,
       inventoryBrowser,
       peerBrowser,
+      trunkAccess,
       username: browserName,
       password,
       owner,

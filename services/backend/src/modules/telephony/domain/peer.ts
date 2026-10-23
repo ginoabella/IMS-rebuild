@@ -88,6 +88,8 @@ export function settings(value: unknown): PeerSettings {
     'rtpSymmetric',
     'forceRport',
     'authentication',
+    'credential',
+    'registration',
   ]);
   if (typeof s.host !== 'string' || s.host.length > 253) invalid('settings');
   let host = s.host.toLowerCase();
@@ -114,14 +116,58 @@ export function settings(value: unknown): PeerSettings {
     s.directMedia !== false ||
     s.rtpSymmetric !== true ||
     s.forceRport !== true ||
-    s.authentication !== 'ip-peer' ||
+    !['ip-peer', 'outbound-digest'].includes(String(s.authentication)) ||
     !Array.isArray(s.codecs) ||
     !s.codecs.length ||
     s.codecs.length > 2 ||
     new Set(s.codecs).size !== s.codecs.length ||
     s.codecs.some((c) => c !== 'ulaw' && c !== 'alaw')
   )
-    invalid('settings', 'Use IP-peer, UDP/RTP and ulaw and/or alaw.');
+    invalid('settings', 'Use UDP/RTP and ulaw and/or alaw.');
+  let credential: PeerSettings['credential'];
+  let registration: PeerSettings['registration'];
+  if (s.authentication === 'ip-peer') {
+    if (s.credential !== undefined || s.registration !== undefined)
+      invalid('settings', 'IP-peer requires no credential or registration.');
+  } else {
+    const c = object(s.credential, ['id', 'version']);
+    credential = { id: id(c.id, 'settings'), version: version(c.version) };
+    if (s.registration !== undefined) {
+      const r = object(s.registration, [
+        'registrar',
+        'realm',
+        'expiration',
+        'retryInterval',
+        'forbiddenRetryInterval',
+      ]);
+      // Reuse the typed host validator; no URLs, probes or arbitrary SIP text.
+      const registrar = settings({
+        ...s,
+        authentication: 'ip-peer',
+        credential: undefined,
+        registration: undefined,
+        host: r.registrar,
+      }).host;
+      if (
+        typeof r.realm !== 'string' ||
+        !/^[a-zA-Z0-9](?:[a-zA-Z0-9.-]{0,251}[a-zA-Z0-9])?$/.test(r.realm) ||
+        r.expiration !== 3600 ||
+        r.retryInterval !== 60 ||
+        r.forbiddenRetryInterval !== 10
+      )
+        invalid(
+          'settings',
+          'Registration requires an explicit registrar/realm and 3600/60/10 timers.',
+        );
+      registration = {
+        registrar,
+        realm: r.realm,
+        expiration: 3600,
+        retryInterval: 60,
+        forbiddenRetryInterval: 10,
+      };
+    }
+  }
   return {
     host,
     port: s.port,
@@ -131,7 +177,9 @@ export function settings(value: unknown): PeerSettings {
     directMedia: false,
     rtpSymmetric: true,
     forceRport: true,
-    authentication: 'ip-peer',
+    authentication: s.authentication as PeerSettings['authentication'],
+    ...(credential ? { credential } : {}),
+    ...(registration ? { registration } : {}),
   };
 }
 export function values(
@@ -146,11 +194,13 @@ export function values(
       data.direction !== 'both'
     )
       invalid('direction');
-    return {
-      name,
-      direction: data.direction,
-      settings: settings(data.settings),
-    };
+    const connection = settings(data.settings);
+    if (data.direction === 'inbound' && connection.authentication !== 'ip-peer')
+      invalid(
+        'settings',
+        'Outbound digest requires outbound or both direction.',
+      );
+    return { name, direction: data.direction, settings: connection };
   }
   if (data.kind !== 'sip-provider' && data.kind !== 'sip-device')
     invalid('kind');
@@ -167,4 +217,19 @@ export function values(
   if (new Set(sources).size !== sources.length)
     invalid('sourceAddresses', 'Duplicate source address.');
   return { name, kind: data.kind, trunkId, sourceAddresses: sources };
+}
+
+// Gateway ingress references depend on connection settings and direction.
+// Outbound auth/version/registration edits do not alter that ingress identity.
+export function peerConnection(s: PeerSettings): string {
+  return JSON.stringify([
+    s.host,
+    s.port,
+    s.transport,
+    s.media,
+    s.codecs,
+    s.directMedia,
+    s.rtpSymmetric,
+    s.forceRport,
+  ]);
 }

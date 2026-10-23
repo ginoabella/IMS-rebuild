@@ -26,7 +26,11 @@ export function PeerDetail({ model }: { model: PeerModel }) {
                   : 'Disabled (desired)'}
             </dd>
             <dt>Credentials</dt>
-            <dd>Not required (IP-peer)</dd>
+            <dd>
+              {r.credentialStatus === 'not_required'
+                ? 'Not required (IP-peer)'
+                : 'Selected version (desired)'}
+            </dd>
             <dt>Created by</dt>
             <dd className="font-mono">
               {r.createdBy} · {r.createdAt}

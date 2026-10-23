@@ -1,5 +1,6 @@
 'use client';
 import { Button, Field, Input, Panel, Select, Textarea } from '@myims/ui-web';
+import { CredentialFields } from './credential-fields';
 import { type PeerModel } from './use-peers';
 export function PeerForm({ model }: { model: PeerModel }) {
   const { state, kind, submit, blocked, errors, v, change, pending, r, save } =
@@ -95,18 +96,18 @@ export function PeerForm({ model }: { model: PeerModel }) {
                     </Select>
                   </Field>
                   <Field id="peer-auth" label="Authentication">
-                    <Select id="peer-auth" value="ip-peer" onChange={() => {}}>
+                    <Select
+                      id="peer-auth"
+                      value={v.authentication}
+                      onChange={(e) => change('authentication', e.target.value)}
+                    >
                       <option value="ip-peer">
                         IP-peer · credentials not required
                       </option>
-                      <option disabled value="digest">
-                        Outbound digest · unavailable
-                      </option>
-                      <option disabled value="registration">
-                        Registration · unavailable
-                      </option>
+                      <option value="outbound-digest">Outbound digest</option>
                     </Select>
                   </Field>
+                  <CredentialFields model={model} />
                   <p>
                     UDP/RTP · direct media off · symmetric RTP and force-rport
                     on.

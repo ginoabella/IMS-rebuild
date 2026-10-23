@@ -11,6 +11,11 @@ import { DeploymentModule } from './deployment.module';
 
 async function main() {
   const command = process.argv[2];
+  if (command === 'trunk-credentials') {
+    const { setupTrunkCredentials } = await import('./trunk-credentials');
+    await setupTrunkCredentials(process.argv.slice(3));
+    return;
+  }
   if (command === 'endpoint-credentials') {
     const { maintainEndpointCredentials } =
       await import('./endpoint-credentials');

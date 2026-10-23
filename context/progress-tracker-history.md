@@ -2351,3 +2351,91 @@ remain evidence; earlier next-step/acceptance gates are superseded by the
 - **Verification:** combined inventory/real credentials/browser, PBX registry/observation/browser, platform auth, durability, full `./dev check`, all 12 shared UI checks and final automatic-token-cleanup credential rerun passed, exit 0. Actual SIP REGISTER/expiry-zero and service outages are distinguished from injected faults in the evidence.
 - **Preservation/cleanup:** exact original Asterisk configuration/routing/object/running baseline restored; no calls, fixtures or lock remain. Generations accounted for, temporary tokens revoked/removed, disposable databases/containers absent. Ordinary canonical node/version and empty inventory preserved; platform/staff HTTPS ready and health checks passed, backend live/ready 200.
 - **Handoff:** [browser contract](../docs/architecture/extension-inventory-browser.md), [operator/recovery guide](../docs/runbooks/extension-inventory-browser.md). P3-U4/U5, P4 and P8 retain routing, live apply/recovery/revocation, allocation, tenant readiness and browser calling. Production and the Phase 3 gate remain incomplete; no expanded PBX permissions or deployment approval is claimed.
+
+
+## 2026-10-23 — P3-U3b implementation and interrupted verification checkpoints
+
+Historical checkpoints below were superseded by the final successful rerun and ordinary HTTPS restoration at 22:34 +08:00 (Asia/Manila).
+
+**P3-U3b — in progress** (2026-10-23, Asia/Manila +08:00). Implementing B-01–05: trusted confirmed OpenBao setup/replacement, metadata selection, digest/desired registration and real-service/browser verification. No runtime acceptance claimed yet. P3-U3c remains planned.
+
+B checkpoint (2026-10-23, Asia/Manila +08:00): protected-file import/replacement,
+durable exact-write recovery, additive SQL metadata/validation and API/browser
+digest/desired registration are implemented. Focused real PostgreSQL/A/B API/HTTPS
+browser, IP-peer and session recovery checks passed, including explicit version
+adoption with a linked gateway. Actual command recovery passed against real SQL
+and a TLS simulator; that does not establish real OpenBao acceptance. The user explicitly approved the prepared migration and synthetic checks. Native
+named-custodian migration succeeded with an actual 86,399-second token and
+86,400-second explicit maximum; routine replacement uses the same command. A public
+CA copy preserves provider file permissions. Real OpenBao exposed a missing create
+capability on scoped KV metadata; that migration correction and real material checks
+are underway. Additive ordinary database migration passed. Normal graph, isolated
+regression and service refresh remain outstanding; endpoint state and backups preserved.
+[Current evidence](../docs/status/p3-u3b-evidence.md).
+B-05 regression investigation also covers the existing limiter expiry boundary: its
+Lua script treats an expiring zero-millisecond TTL as unavailable. A deterministic
+real Redis boundary check failed before the fix. The Lua branch now expires that
+zero-ms hash atomically; missing expiry and policy drift remain unavailable and
+active limits remain enforced. Green regression verification is underway.
+
+B checkpoint (2026-10-23, Asia/Manila +08:00): real retained OpenBao stores and
+retains versions 1/2; controlled response loss publishes no selection until exact
+reconciliation and fences competing work. A separate interrupted process was
+recovered with the same command and protected inputs. Repeated access replacement
+reported actual 86,400-second TTL and `configurationUpdates: 0`, preserving the
+nonrenewable restriction. Standalone extension-inventory regression passed. Real
+import-to-browser wiring and provider audit scans are being verified; full normal
+check remains running. The lifecycle lost-response fixture now uses the supported
+production command timeout, matching its COMMIT-loss companion, while retaining
+all dropped-frame/durable-write assertions and fast expiry cases.
+
+B browser checkpoint (2026-10-23, Asia/Manila +08:00): a final rerun exposed an
+existing detail-load race: actions remained enabled while Inspect fetched canonical
+detail, allowing confirmation to be cleared by its late response. Inspect now uses
+the existing pending/busy guard until canonical detail resolves. The browser suite
+retains its removal/reference assertions. Real-provider fixture metadata is imported
+directly into the isolated browser database; ordinary HTTP/Next receive no provider
+access. Final integrated run and normal graph remain underway.
+
+B real integration checkpoint (2026-10-23, Asia/Manila +08:00): actual OpenBao
+credential `0e131237-c4f1-4047-ba62-c1664c1472b1` versions 1/2 were published directly
+into the isolated browser database by the trusted command. Real API validation,
+HTTPS digest/desired registration selection and explicit version adoption passed,
+as did IP-peer CRUD, reference blockers, keyboard/320px/axe and the held-response
+Inspect guard. Provider audit and expired-token checks passed. The full real-provider/browser command exited 0, including shared-session response
+loss/logout/outage recovery and exact PostgreSQL/Redis teardown. The normal graph
+remains underway; b is still in progress until it and ordinary refresh pass.
+
+B refresh checkpoint (2026-10-23, Asia/Manila +08:00): ordinary development backend
+restarted on the migrated schema and current build; live/ready returned HTTP 200,
+PostgreSQL and both Redis services up. The ordinary HTTPS console will be restored
+after the remaining normal session graph completes.
+
+B final graph checkpoint (2026-10-23, Asia/Manila +08:00): every normal graph suite
+passed, including the final Redis lost-response assertions, staff browser and PBX
+regressions. The wrapper exited 2 afterward because its help text was edited while
+the shell was still reading that file. Current `sh -n dev` passes. A clean unchanged
+`./dev check` rerun and the ordinary HTTPS console restoration are underway. No
+feature acceptance assertion was removed or bypassed; b remains in progress.
+
+Remaining delivery:
+
+- [P3-U3b — Simple trunk credentials](feature-specs/p3-u3b-simple-trunk-credentials.md):
+  trusted setup/replacement command and credential selection in the working trunk forms.
+- [P3-U3c — DID inventory and integration](feature-specs/p3-u3c-did-inventory-and-integration.md):
+  DID APIs/browser, associations/collisions, gateway dependencies and parent acceptance.
+
+Each remaining sub-unit includes its browser delivery. Next is b. Keep existing
+permissions, installation ownership, validation, transactions/versions and audit;
+backup administration remains outside the feature gate.
+
+
+### Previous completed checkpoint — P3-U3a
+
+- **Status:** completed within approved private development; 2026-10-23 10:29 +08:00 (Asia/Manila).
+- **Requirement:** [A-01–05](feature-specs/p3-u3a-trunks-and-gateways.md); [final evidence](../docs/status/p3-u3a-evidence.md). Parent P3-U3 remains incomplete.
+- **Delivered:** desired IP-peer trunks/provider and device gateways, typed PostgreSQL/API contracts, canonical ownership, names/exact-source uniqueness, idempotency, expected versions, atomic actor audit and reference-safe soft removal. PBX detail links to **Manage trunks and gateways**.
+- **Operator workflow:** create/list/detail/edit, desired enable/disable and confirmed removal; retained safe input, actionable blockers, definite rejection correction, stale/uncertain canonical review and exact create retry. Protected sign-in return/navigation, keyboard, narrow layout and axe passed.
+- **Verification:** final real PostgreSQL/A/B API/HTTPS browser command, PBX registry and extension inventory regressions, and full `./dev check` passed, exit 0. Full normal session response-loss assertions remain active and passed. [API/extension boundary](../docs/architecture/trunks-and-gateways.md); [operator guide](../docs/runbooks/trunks-and-gateways.md).
+- **Development refresh/preservation:** additive migration applied; ordinary backend and HTTPS console refreshed, console ready, live/ready 200. Final owned fixtures removed; fatal-case fixture cleanup verified. All 67 consumed source hashes match. No PBX writes, registration, reload, calls or secret-material access by resource saves; retained backup state preserved.
+- **Next:** P3-U3b credentials, then P3-U3c DIDs/integration. Routing/live apply, tenant readiness and production acceptance remain with their owning units.

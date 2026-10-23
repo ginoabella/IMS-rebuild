@@ -10,7 +10,9 @@ inputs. Resources have immutable node/installation UUID ownership, server identi
 name, desired enabled flag (false initially), version and actor/timestamp fields.
 Trunks accept inbound/outbound/both, host/IP, numeric SIP port, UDP/RTP, ulaw/alaw,
 direct media false, symmetric RTP/force-rport true and `ip-peer` authentication.
-Credential status is always `not_required`. Digest and registration await P3-U3b.
+IP-peer credential status is `not_required`. P3-U3b adds desired outbound digest,
+optional registration and explicit selected versions; see the
+[simple credential contract](trunk-credentials.md) and its acceptance state.
 Gateway kinds are `sip-provider` (requires an inbound-capable trunk) and `sip-device`
 (optional trunk). Links must belong to the same canonical installation/node.
 
@@ -38,7 +40,8 @@ Independent HTTP replicas therefore serialize name/source claims, gateway links,
 trunk edits and removals. `PeerRepository.blockers` is the narrow dependency boundary:
 current nonremoved gateway references block trunk removal and connection-setting
 changes, including disabled gateways. Switching a provider-referenced trunk to outbound-only
-also rejects; device links impose no provider-only direction restriction. Name-only and compatible inbound-direction edits can proceed.
+also rejects; device links impose no provider-only direction restriction. Name-only, compatible inbound-direction and outbound credential/version/registration
+edits can proceed. Outbound credential adoption does not change gateway ingress identity.
 P3-U3c must extend this boundary for actual DID dependencies, using the same node
 lock before creating/changing references. No DID, applied-use, allocation, active-call
 or routing owner exists in this resource model today; those owners must register
@@ -73,7 +76,7 @@ Base: `/platform/pbx-nodes/:nodeId/peers/:kind`, where kind is `trunks` or `gate
 Create returns 201, replay/edits/no-ops return 200. Invalid input returns 400 and
 field errors; missing/removed mutation targets return 404. Conflicts return 409
 with `stale_version`, `name_conflict`, `source_conflict`, `invalid_trunk`, `referenced`,
-`reserved_source`, `request_conflict` or `intent_expired`. Reference errors include
+`reserved_source`, `invalid_credential`, `request_conflict` or `intent_expired`. Reference errors include
 up to ten blocker IDs/names. Authority failures use established 401/403 behavior;
 service/uncertain transaction failures return 503 without internals.
 

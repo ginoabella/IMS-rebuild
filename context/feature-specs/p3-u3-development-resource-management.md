@@ -194,8 +194,9 @@ routine backup acceptance remain incomplete. No new root-recovery package is the
 next P3-U3 task.
 
 P3-U3a's IP-peer API/browser is complete within private development; see its
-[acceptance evidence](../../docs/status/p3-u3a-evidence.md). Next implement b's simple
-credential setup/selection in these same records/forms, then c's DID/integration
+[acceptance evidence](../../docs/status/p3-u3a-evidence.md). P3-U3b's simple
+credential setup/selection is also complete within private development; see its
+[final evidence](../../docs/status/p3-u3b-evidence.md). Next is c's DID/integration
 workflow. Parent DEV acceptance remains incomplete. Production security,
 automated backup rotation, continuous audit collection and disaster-recovery
 acceptance remain explicit later operational work.

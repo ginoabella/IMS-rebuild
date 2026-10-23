@@ -7,6 +7,7 @@ const reasons = [
   'name_conflict',
   'source_conflict',
   'invalid_trunk',
+  'invalid_credential',
   'referenced',
   'request_conflict',
   'intent_expired',
@@ -25,8 +26,15 @@ export async function forwardPeers(
     !route(parts, method) ||
     keys.some((k) => !['limit', 'after'].includes(k)) ||
     new Set(keys).size !== keys.length ||
-    (keys.length && !(method === 'GET' && parts.length === 2)) ||
-    (url.searchParams.has('after') && !uuid(url.searchParams.get('after'))) ||
+    (keys.length &&
+      !(
+        method === 'GET' &&
+        (parts.length === 2 || parts[2] === 'credentials')
+      )) ||
+    (url.searchParams.has('after') &&
+      !(parts[2] === 'credentials'
+        ? /^[a-f0-9-]{36}:[1-9][0-9]{0,9}$/.test(url.searchParams.get('after')!)
+        : uuid(url.searchParams.get('after')))) ||
     (url.searchParams.has('limit') &&
       !/^(?:[1-9]|[1-9][0-9]|100)$/.test(url.searchParams.get('limit')!))
   )
@@ -91,7 +99,7 @@ export async function forwardPeers(
         if (Object.hasOwn(data.fieldErrors, k))
           fieldErrors[k] =
             k === 'settings'
-              ? 'Review the host/IP (without a URL), SIP port 1–65535 and ulaw/alaw codecs.'
+              ? 'Review the host/IP, SIP port 1–65535, codecs, outbound direction, credential version and registration registrar/realm.'
               : k === 'sourceAddresses'
                 ? 'Enter 1–32 distinct exact IPv4 or IPv6 hosts, without subnets.'
                 : 'Review this field.';

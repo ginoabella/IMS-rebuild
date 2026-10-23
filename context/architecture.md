@@ -221,6 +221,12 @@ The existing console and platform session guards own its browser/API paths. Opti
 nonsecret `unmanagedIngress` in the existing PBX catalog reserves known source hosts.
 Resource saves remain entirely passive with respect to PBX/provider/secret-store access.
 
+P3-U3b implements the [simple trunk credential boundary](../docs/architecture/trunk-credentials.md):
+trusted setup with actual KV versions and durable uncertain-write recovery; HTTP/Next
+select nonsecret metadata in ordinary expected-version resource transactions. Native
+named-administrator setup/access replacement is a separate trusted command. Referenced
+material is retained; desired digest/registration performs no live application.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,
