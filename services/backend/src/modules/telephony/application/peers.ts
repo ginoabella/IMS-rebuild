@@ -43,7 +43,7 @@ export class Peers {
               statusCode: e.status,
               message:
                 e.status === 400
-                  ? 'Invalid trunk or gateway request'
+                  ? 'Invalid resource request'
                   : e.status === 404
                     ? 'Resource not found'
                     : e.status === 403
@@ -153,7 +153,9 @@ export class Peers {
       const fields =
         kind === 'trunks'
           ? ['name', 'direction', 'settings']
-          : ['name', 'kind', 'trunkId', 'sourceAddresses'];
+          : kind === 'gateways'
+            ? ['name', 'kind', 'trunkId', 'sourceAddresses']
+            : ['name', 'number', 'gatewayId'];
       const data = object(
         input,
         operation === 'create'
@@ -323,7 +325,10 @@ export class Peers {
           enabled: { kind: 'boolean' },
           resourceId: { kind: 'uuid' },
           nodeId: { kind: 'uuid' },
-          resourceKind: { kind: 'enum', values: ['trunks', 'gateways'] },
+          resourceKind: {
+            kind: 'enum',
+            values: ['trunks', 'gateways', 'dids'],
+          },
           operation: {
             kind: 'enum',
             values: ['create', 'edit', 'status', 'remove'],

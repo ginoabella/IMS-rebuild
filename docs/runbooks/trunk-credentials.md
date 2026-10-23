@@ -139,7 +139,7 @@ trunk selections.
 
 ## Operator workflow and availability
 
-Open **PBX detail → Manage trunks and gateways → Create/Edit trunk**. Select
+Open **PBX detail → Manage trunks, gateways and DIDs → Create/Edit trunk**. Select
 **Outbound digest**, then a credential label/version. Registration is optional;
 choose **On (desired only)** and enter an explicit registrar host/IP and realm.
 Timers are fixed at expiration 3600, retry 60 and forbidden retry 10 seconds.

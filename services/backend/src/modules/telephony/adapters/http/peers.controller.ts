@@ -36,7 +36,7 @@ function result(r: PeerResult, res: Response) {
   return r.value;
 }
 function kind(value: string): PeerResource {
-  if (value !== 'trunks' && value !== 'gateways')
+  if (value !== 'trunks' && value !== 'gateways' && value !== 'dids')
     throw new HttpException(
       { statusCode: 404, message: 'Resource not found' },
       404,

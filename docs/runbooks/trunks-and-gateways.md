@@ -1,7 +1,7 @@
 # Manage IP-peer trunks and gateways
 
 Sign in to the platform console, open **PBX nodes**, inspect the intended PBX,
-then choose **Manage trunks and gateways**. Its canonical installation owns all
+then choose **Manage trunks, gateways and DIDs**. Its canonical installation owns all
 records. Management works when the PBX is offline.
 
 1. In **Trunks**, choose **Create trunk**. Enter a unique name, direction, remote
@@ -32,8 +32,10 @@ request** reuses its request ID and returns its original result. Do not invent a
 create request merely because a response was lost. Sign-in/access correction uses the
 existing mounted recovery; browser refresh does not preserve unfinished input.
 
-Digest credentials, registration, DIDs, routing, live apply and tenant voice readiness
-belong to later units. No operation in this screen registers, reloads or calls.
+Digest credentials/desired registration and DIDs are available in the same screen;
+see [credential setup](trunk-credentials.md) and the [integrated DID workflow](did-inventory.md).
+DID references block gateway removal and changes to ingress until relinked/removed.
+Routing, live apply and tenant voice readiness belong to later units. No operation in this screen registers, reloads or calls.
 
 Verification: `./dev exec pnpm check:trunk-gateways` uses disposable PostgreSQL/Redis,
 two actual backend replicas and the production Next HTTPS browser. PBX fixture targets

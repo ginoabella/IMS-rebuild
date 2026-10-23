@@ -6,6 +6,8 @@ const reasons = [
   'stale_version',
   'name_conflict',
   'source_conflict',
+  'number_conflict',
+  'invalid_gateway',
   'invalid_trunk',
   'invalid_credential',
   'referenced',
@@ -93,6 +95,8 @@ export async function forwardPeers(
         'kind',
         'trunkId',
         'sourceAddresses',
+        'number',
+        'gatewayId',
         'expectedVersion',
         'requestId',
       ])
@@ -102,7 +106,9 @@ export async function forwardPeers(
               ? 'Review the host/IP, SIP port 1–65535, codecs, outbound direction, credential version and registration registrar/realm.'
               : k === 'sourceAddresses'
                 ? 'Enter 1–32 distinct exact IPv4 or IPv6 hosts, without subnets.'
-                : 'Review this field.';
+                : k === 'number'
+                  ? 'Enter 1–15 ASCII digits with an optional leading +; only spaces, hyphens and parentheses are removed.'
+                  : 'Review this field.';
     return Response.json(
       {
         statusCode: status,

@@ -336,7 +336,7 @@ export function PbxDetail({ id }: { id: string }) {
             Manage extension inventory
           </Link>
           <Link href={`/pbx-nodes/${node.id}/peers`} className={linkClass}>
-            Manage trunks and gateways
+            Manage trunks, gateways and DIDs
           </Link>
           <PbxForm node={node} onSaved={state.replace} />
           <Button variant="secondary" onClick={state.retry}>

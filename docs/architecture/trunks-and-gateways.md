@@ -1,4 +1,4 @@
-# Desired IP-peer trunks and gateways
+# Desired trunks, gateways and DIDs
 
 P3-U3a implements the IP-peer portion of the [replacement parent](../../context/feature-specs/p3-u3-development-resource-management.md).
 These definitions are passive desired state. No resource operation resolves DNS,
@@ -17,7 +17,7 @@ Gateway kinds are `sip-provider` (requires an inbound-capable trunk) and `sip-de
 (optional trunk). Links must belong to the same canonical installation/node.
 
 The PostgreSQL owner is the telephony module: `sip_trunks`, `sip_gateways`,
-`sip_gateway_sources` and `sip_peer_receipts`. The additive migration retains all
+`sip_gateway_sources`, `sip_dids` and `sip_peer_receipts`. The additive migration retains all
 existing tables and credentials. Restrictive ownership foreign keys, typed checks,
 partial case-insensitive name indexes and exact source indexes back application
 validation. Runtime has no resource DELETE or receipt UPDATE permission. Soft
@@ -42,14 +42,17 @@ current nonremoved gateway references block trunk removal and connection-setting
 changes, including disabled gateways. Switching a provider-referenced trunk to outbound-only
 also rejects; device links impose no provider-only direction restriction. Name-only, compatible inbound-direction and outbound credential/version/registration
 edits can proceed. Outbound credential adoption does not change gateway ingress identity.
-P3-U3c must extend this boundary for actual DID dependencies, using the same node
-lock before creating/changing references. No DID, applied-use, allocation, active-call
-or routing owner exists in this resource model today; those owners must register
-real dependencies before consuming these records.
+P3-U3c extends this boundary with actual nonremoved DID references (including
+disabled DIDs), which block gateway removal and changes to kind, trunk or source
+addresses. Name and desired-status changes remain compatible. DID creation and
+ingress edits take the same node lock before validating a nonremoved gateway.
+Database foreign keys also enforce the exact gateway/node/installation identity.
+No applied-use, allocation, active-call or routing owner exists in this resource
+model today; those owners must register real dependencies before consuming IDs.
 
 The same transaction commits resource/version, sources, actor audit and create
 receipt. Canonical no-ops retain version and produce no business audit. A create
-request UUID is scoped to the operator across both resource types and installations.
+request UUID is scoped to the operator across all three resource types and installations.
 An advisory transaction lock coordinates its SHA-256 canonical-intent receipt;
 same intent replays its original result, changed intent returns `request_conflict`.
 Receipts expire after 30 days and return `intent_expired`; no cleanup job is added.
@@ -62,7 +65,7 @@ snapshots. Body/query unknown fields reject. The named Next forwarder bounds bod
 and responses, validates exact DTO shapes and sanitizes errors. No credential material
 is accepted or emitted.
 
-Base: `/platform/pbx-nodes/:nodeId/peers/:kind`, where kind is `trunks` or `gateways`.
+Base: `/platform/pbx-nodes/:nodeId/peers/:kind`, where kind is `trunks`, `gateways` or `dids`.
 
 | Method/path         | Behavior                                                                              |
 | ------------------- | ------------------------------------------------------------------------------------- |
@@ -76,7 +79,7 @@ Base: `/platform/pbx-nodes/:nodeId/peers/:kind`, where kind is `trunks` or `gate
 Create returns 201, replay/edits/no-ops return 200. Invalid input returns 400 and
 field errors; missing/removed mutation targets return 404. Conflicts return 409
 with `stale_version`, `name_conflict`, `source_conflict`, `invalid_trunk`, `referenced`,
-`reserved_source`, `invalid_credential`, `request_conflict` or `intent_expired`. Reference errors include
+`reserved_source`, `invalid_credential`, `number_conflict`, `invalid_gateway`, `request_conflict` or `intent_expired`. Reference errors include
 up to ten blocker IDs/names. Authority failures use established 401/403 behavior;
 service/uncertain transaction failures return 503 without internals.
 
@@ -93,4 +96,23 @@ fails, so that outcome retains canonical review/exact-create recovery.
 Deployment applies this additive migration through `./dev migrate` before starting
 updated HTTP replicas. Rollback can stop the new consumers while retaining tables;
 there is no destructive down migration. P3-U3b extends the same trunk DTO/forms and
-P3-U3c extends gateway dependencies and delivers DID management.
+P3-U3c extends gateway dependencies and delivers DID management; see the
+[operator workflow](../runbooks/did-inventory.md).
+
+## DID reference and number contract
+
+DID values are `{name, number, gatewayId}`. Use the same bounded CRUD/status/removal
+routes, receipt namespace and audit event (`resourceKind: dids`). DID credential
+status is `not_required`; responses contain no credential material. Canonicalization
+trims outer whitespace and removes only ordinary spaces, hyphens and parentheses.
+An optional leading `+` and 1–15 ASCII digits remain; leading zeros and plus are
+significant, with no country inference. Partial unique indexes reserve exact number
+and case-insensitive name per installation among nonremoved DIDs, including disabled
+records. PostgreSQL independently rejects noncanonical numbers. Lists exclude removed
+DIDs; detail/receipt/audit retain the old ID and gateway reference. New identities may
+reuse released numbers/names. Later routing must deliberately handle alternate forms.
+
+All three resource types share node serialization and transactional audit. Real
+references therefore cannot commit against a concurrently removed gateway/trunk.
+Future routing/apply/tenant consumers must add actual dependency checks here before
+live use, acquire the same node lock, and never cascade or retarget retained IDs.

@@ -2439,3 +2439,59 @@ backup administration remains outside the feature gate.
 - **Verification:** final real PostgreSQL/A/B API/HTTPS browser command, PBX registry and extension inventory regressions, and full `./dev check` passed, exit 0. Full normal session response-loss assertions remain active and passed. [API/extension boundary](../docs/architecture/trunks-and-gateways.md); [operator guide](../docs/runbooks/trunks-and-gateways.md).
 - **Development refresh/preservation:** additive migration applied; ordinary backend and HTTPS console refreshed, console ready, live/ready 200. Final owned fixtures removed; fatal-case fixture cleanup verified. All 67 consumed source hashes match. No PBX writes, registration, reload, calls or secret-material access by resource saves; retained backup state preserved.
 - **Next:** P3-U3b credentials, then P3-U3c DIDs/integration. Routing/live apply, tenant readiness and production acceptance remain with their owning units.
+
+
+## 2026-10-24 — P3-U3c implementation and parent completion
+
+Completion recorded 2026-10-24 00:09 +08:00 (Asia/Manila). Current final evidence is
+[p3-u3c-evidence.md](../docs/status/p3-u3c-evidence.md).
+
+- Implemented DID schema/contracts, exact canonical normalization, shared bounded
+  APIs, actual gateway blockers and all console forms using a/b transactions,
+  versions, receipts, access and audit. Applied the additive ordinary migration.
+- Real PostgreSQL/A/B API checks passed, including number/identity/reference races,
+  retained audit and independent SQL constraints. Real OpenBao versions were
+  imported into the isolated browser database and remain retained.
+- The initial browser fixture omitted the shared label's required suffix; corrected
+  its locator. The next run exposed a real validation-focus bug: focus occurred
+  while the fieldset was disabled. Moved focus until submission settles, retained
+  the required assertion and passed the full integrated browser/session rerun.
+- Deliberately stopped the earlier normal run during builds after lint/format/types
+  to restart against that correction. The final full `./dev check` passed, exit 0.
+  Ordinary HTTPS stop/start, transport/browser checks and live/ready 200 passed;
+  existing identities, shared credentials, endpoint data and backups remain preserved.
+- C-01–05 and DEV-01–07 passed. P3-U3c and parent P3-U3 are complete within approved
+  private development. Routing, apply and tenant readiness remain later work.
+
+### Prior in-progress checkpoint (historical)
+
+**P3-U3 — simplified development delivery, approved October 23, 2026 (+08:00).**
+The [replacement parent](feature-specs/p3-u3-development-resource-management.md)
+remains incomplete. **P3-U3a is completed** within its IP-peer scope; see its
+[evidence](../docs/status/p3-u3a-evidence.md).
+
+**P3-U3b is completed** within approved private development (2026-10-23,
+22:34 +08:00, Asia/Manila). B-01–05 passed: real trusted OpenBao import/replacement,
+confirmed selectable metadata, digest/desired registration API/browser selection,
+explicit version adoption and interruption/response-loss recovery. The clean
+unchanged `./dev check` rerun passed, exit 0; ordinary backend and HTTPS console
+were refreshed and verified. [Final evidence](../docs/status/p3-u3b-evidence.md).
+Detailed implementation/interruption checkpoints are retained in
+[history](progress-tracker-history.md#2026-10-23--p3-u3b-implementation-and-interrupted-verification-checkpoints).
+
+Remaining delivery is [P3-U3c — DID inventory and integration](feature-specs/p3-u3c-did-inventory-and-integration.md):
+DID APIs/browser, associations/collisions, gateway dependencies and parent acceptance.
+**P3-U3c is in progress** (2026-10-23, Asia/Manila, +08:00). Read the repository context, replacement parent and c acceptance; DID migration/contracts, bounded APIs, normalization, gateway blockers and browser list/create/detail/edit/status/removal are implemented. Type checking, focused lint, credential-adoption and inventory regressions passed; the additive development migration applied. Real OpenBao and a/b/c API checks passed; a browser fixture locator was corrected, then a real disabled-fieldset validation-focus bug was found and fixed. The focus assertion remains required. The corrected actual HTTPS DID and integrated a/b/c browser journey passed, including focus, collisions, recovery, blockers, keyboard/reflow/axe and digest adoption. The entire real-provider/PostgreSQL/A/B API/HTTPS browser and shared-session suite passed, exit 0, with exact fixture cleanup. Ordinary HTTPS console refresh, transport/browser check and live/ready 200 also passed, preserving identities/migration history/shared credentials. Full normal check is in its remaining foundation/storage/identity/session stages; the unit is not yet complete. C-01–05 and final DEV-01–07 reconciliation remain unverified; [implementation/evidence record](../docs/status/p3-u3c-evidence.md). Keep existing permissions, installation ownership, validation,
+transactions/versions and audit; backup administration remains outside the feature gate.
+
+
+### Prior latest-completed checkpoint (historical)
+
+## Latest Completed Checkpoint — P3-U3b
+
+- **Status:** completed within approved private development; 2026-10-23 22:34 +08:00 (Asia/Manila). Parent P3-U3 remains incomplete.
+- **Requirement:** [B-01–05](feature-specs/p3-u3b-simple-trunk-credentials.md); [final evidence](../docs/status/p3-u3b-evidence.md).
+- **Delivered:** trusted protected-file credential import/replacement, supported named-custodian access replacement with actual 24-hour nonrenewable lifetime, confirmed metadata selection, digest/optional desired registration and explicit expected-version adoption. Durable exact-write recovery fences genuinely uncertain provider work; old material/selections remain retained. HTTP/Next receive no provider material access.
+- **Verification:** real OpenBao/PostgreSQL/A/B API/HTTPS browser journey and affected inventory/IP-peer/session regressions passed. Final unchanged `./dev check` passed, exit 0. Redis zero-ms expiry and supported-timeout lost-response regressions retain their required assertions.
+- **Development refresh/preservation:** additive migration applied; ordinary backend and HTTPS console refreshed, console ready, live/ready 200 with database/both Redis up. `./dev platform-https-check` passed, exit 0, preserving identities/migration history/shared credentials. No PBX writes, live registration, reload or calls; endpoint state/backups preserved. Owned synthetic provider versions remain retained.
+- **Handoff:** [setup/replacement and recovery guide](../docs/runbooks/trunk-credentials.md). Next is P3-U3c DID/integration; routing/live apply, tenant readiness and production acceptance remain with their owning units.

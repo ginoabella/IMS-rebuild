@@ -38,7 +38,7 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
       >
         Back to PBX detail
       </Link>
-      <h1 className="font-display text-2xl">Trunks and gateways</h1>
+      <h1 className="font-display text-2xl">Trunks, gateways and DIDs</h1>
       <p>
         Desired configuration only. Saving or enabling does not contact a
         provider, register, reload the PBX or establish voice readiness. PBX
@@ -68,6 +68,17 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
           Gateways
         </Button>
         <Button
+          variant={kind === 'dids' ? 'primary' : 'secondary'}
+          disabled={pending}
+          onClick={() => {
+            setKind('dids');
+            setAfter(null);
+            setHistory([]);
+          }}
+        >
+          DIDs
+        </Button>
+        <Button
           variant="secondary"
           disabled={pending}
           onClick={() => void reload()}
@@ -81,20 +92,23 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
         </p>
       )}
       {!!blockers.length && (
-        <Panel aria-label="Referencing gateways">
-          <h2>Referencing gateways</h2>
+        <Panel
+          aria-label={
+            kind === 'trunks' ? 'Referencing gateways' : 'Referencing DIDs'
+          }
+        >
+          <h2>
+            {kind === 'trunks' ? 'Referencing gateways' : 'Referencing DIDs'}
+          </h2>
           <ul>
             {blockers.map((b) => (
               <li key={b.id}>
                 <Button
                   variant="secondary"
                   disabled={pending}
-                  onClick={() => {
-                    setKind('gateways');
-                    setMessage(
-                      `Open gateway ${b.name} (${b.id}) in the gateway list. Remove or relink it before changing the trunk.`,
-                    );
-                  }}
+                  onClick={() =>
+                    void inspect(b.id, kind === 'trunks' ? 'gateways' : 'dids')
+                  }
                 >
                   {b.name}
                 </Button>
@@ -151,7 +165,11 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
       )}
       <Panel aria-label={`${kind} list`}>
         <h2 className="font-display text-xl">
-          {kind === 'trunks' ? 'Trunks' : 'Gateways'}
+          {kind === 'trunks'
+            ? 'Trunks'
+            : kind === 'gateways'
+              ? 'Gateways'
+              : 'DIDs'}
         </h2>
         {!page ? (
           <p role="status">Loading resources…</p>
@@ -164,7 +182,8 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
                   className="flex flex-wrap items-center justify-between gap-2 py-3"
                 >
                   <span className="min-w-0 break-words">
-                    {item.name} ·{' '}
+                    {item.name}
+                    {'number' in item ? ` · ${item.number}` : ''} ·{' '}
                     {item.enabled ? 'Enabled (desired)' : 'Disabled (desired)'}{' '}
                     · v{item.version}
                   </span>
@@ -215,7 +234,8 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
           setConfirm(false);
         }}
       >
-        Create {kind === 'trunks' ? 'trunk' : 'gateway'}
+        Create{' '}
+        {kind === 'trunks' ? 'trunk' : kind === 'gateways' ? 'gateway' : 'DID'}
       </Button>
       <PeerDetail model={model} />
       <PeerForm model={model} />

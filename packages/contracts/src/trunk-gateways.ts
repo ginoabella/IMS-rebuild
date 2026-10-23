@@ -1,4 +1,4 @@
-export type PeerResource = 'trunks' | 'gateways';
+export type PeerResource = 'trunks' | 'gateways' | 'dids';
 export interface PeerSettings {
   host: string;
   port: number;
@@ -45,7 +45,19 @@ export interface PeerRecordDto {
 }
 export type TrunkDto = PeerRecordDto & TrunkValues;
 export type GatewayDto = PeerRecordDto & GatewayValues;
-export type PeerDto = TrunkDto | GatewayDto;
+export interface DidValues {
+  name: string;
+  number: string;
+  gatewayId: string;
+}
+export type DidDto = PeerRecordDto & DidValues;
+export interface CreateDidDto extends DidValues {
+  requestId: string;
+}
+export interface EditDidDto extends DidValues {
+  expectedVersion: number;
+}
+export type PeerDto = TrunkDto | GatewayDto | DidDto;
 export interface PeerListDto {
   items: PeerDto[];
   nextCursor: string | null;
@@ -57,6 +69,8 @@ export type PeerConflict =
   | 'stale_version'
   | 'name_conflict'
   | 'source_conflict'
+  | 'number_conflict'
+  | 'invalid_gateway'
   | 'invalid_trunk'
   | 'invalid_credential'
   | 'referenced'

@@ -304,10 +304,11 @@ credential/backup acceptance gates. Use the approved replacement a → b → c s
 Each child delivers its actual API/browser workflow; no final browser-only gate.
 P3-U3a IP-peer desired CRUD/browser and P3-U3b trusted credentials/browser selection
 are complete within private development; [a evidence](../docs/status/p3-u3a-evidence.md)
-and [b evidence](../docs/status/p3-u3b-evidence.md). Next is c, preserving the same
-transactions, permissions and audit. Parent P3-U3 remains incomplete.
-Retain OpenBao and introduce a practical trusted setup/administration path rather
-than completing the separate attestation/claim/cleanup-worker subsystem.
+and [b evidence](../docs/status/p3-u3b-evidence.md). P3-U3c and parent DEV-01–07
+completed within approved private development on 2026-10-24 (+08:00), preserving
+transactions, permissions and audit; [integrated evidence](../docs/status/p3-u3c-evidence.md).
+OpenBao and the practical trusted setup/administration path are delivered; the
+separate attestation/claim/cleanup-worker subsystem remains inactive.
 Backup automation and recovery certification are operational work, not a P3-U3
 completion dependency. Existing failed/pending operations remain preserved and
 unfixed. Live apply/routing/tenant readiness remain with later units.

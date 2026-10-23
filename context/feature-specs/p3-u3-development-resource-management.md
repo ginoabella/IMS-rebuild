@@ -3,8 +3,9 @@
 Approved direction: October 23, 2026, Asia/Manila (+08:00). The owner explicitly
 approved simplifying the design, prioritizing a working platform and moving
 unnecessary security/operational complexity out of this feature. The owner also
-authorized archiving superseded documentation. Feature implementation remains
-incomplete; this document records requirements, not a runtime acceptance result.
+authorized archiving superseded documentation. P3-U3 and a/b/c completed within approved private development on 2026-10-24
+(+08:00); [final DEV-01–07 evidence](../../docs/status/p3-u3c-evidence.md) records
+the runtime acceptance boundary. This document defines the requirements.
 
 ## Authority and goal
 
@@ -196,7 +197,8 @@ next P3-U3 task.
 P3-U3a's IP-peer API/browser is complete within private development; see its
 [acceptance evidence](../../docs/status/p3-u3a-evidence.md). P3-U3b's simple
 credential setup/selection is also complete within private development; see its
-[final evidence](../../docs/status/p3-u3b-evidence.md). Next is c's DID/integration
-workflow. Parent DEV acceptance remains incomplete. Production security,
+[final evidence](../../docs/status/p3-u3b-evidence.md). P3-U3c DID/integration and
+parent DEV-01–07 acceptance are complete within approved private development; see
+[final integrated evidence](../../docs/status/p3-u3c-evidence.md). Production security,
 automated backup rotation, continuous audit collection and disaster-recovery
 acceptance remain explicit later operational work.

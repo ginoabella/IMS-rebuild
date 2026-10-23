@@ -1,5 +1,6 @@
 import { isIP } from 'node:net';
 import type {
+  DidValues,
   GatewayValues,
   PeerConflict,
   PeerSettings,
@@ -183,9 +184,9 @@ export function settings(value: unknown): PeerSettings {
   };
 }
 export function values(
-  kind: 'trunks' | 'gateways',
+  kind: 'trunks' | 'gateways' | 'dids',
   data: Record<string, unknown>,
-): TrunkValues | GatewayValues {
+): TrunkValues | GatewayValues | DidValues {
   const name = label(data.name);
   if (kind === 'trunks') {
     if (
@@ -202,6 +203,12 @@ export function values(
       );
     return { name, direction: data.direction, settings: connection };
   }
+  if (kind === 'dids')
+    return {
+      name,
+      number: didNumber(data.number),
+      gatewayId: id(data.gatewayId, 'gatewayId'),
+    };
   if (data.kind !== 'sip-provider' && data.kind !== 'sip-device')
     invalid('kind');
   const trunkId = data.trunkId === null ? null : id(data.trunkId, 'trunkId');
@@ -232,4 +239,15 @@ export function peerConnection(s: PeerSettings): string {
     s.rtpSymmetric,
     s.forceRport,
   ]);
+}
+
+export function didNumber(value: unknown): string {
+  if (typeof value !== 'string' || value.length > 320) invalid('number');
+  const number = value.trim().replace(/[ ()-]/g, '');
+  if (!/^\+?[0-9]{1,15}$/.test(number))
+    invalid(
+      'number',
+      'Enter 1–15 ASCII digits with an optional leading +. Spaces, hyphens and parentheses are removed.',
+    );
+  return number;
 }

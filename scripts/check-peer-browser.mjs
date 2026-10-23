@@ -1,6 +1,7 @@
 // Real PostgreSQL + Redis + two production Nest replicas + HTTPS Next browser.
 // PBX targets are deliberately unreachable .invalid names; no telephony process is started.
 import assert from 'node:assert/strict';
+import { checkDidInventory, checkDidBrowser } from './check-did-inventory.mjs';
 import { checkSimpleTrunkCommand } from './check-simple-trunk-command.mjs';
 import { randomUUID } from 'node:crypto';
 import { expect as baseExpect } from '@playwright/test';
@@ -679,6 +680,18 @@ export async function checkPeerBrowser({
       .id,
     device.id,
   );
+  await checkDidInventory({
+    request,
+    direct,
+    create,
+    path,
+    foreign,
+    a,
+    b,
+    owner,
+    session,
+    staffToken: staffSession.token,
+  });
   const audit = (
     await owner.query(
       "SELECT actor_reference,metadata FROM public.audit_events WHERE event_type='telephony.sip-peer.desired-changed'",
@@ -715,10 +728,16 @@ export async function checkPeerBrowser({
     .getByRole('link', { name: 'Back to PBX detail', exact: true })
     .click();
   await page
-    .getByRole('link', { name: 'Manage trunks and gateways', exact: true })
+    .getByRole('link', {
+      name: 'Manage trunks, gateways and DIDs',
+      exact: true,
+    })
     .click();
   await expect(
-    page.getByRole('heading', { name: 'Trunks and gateways', exact: true }),
+    page.getByRole('heading', {
+      name: 'Trunks, gateways and DIDs',
+      exact: true,
+    }),
   ).toBeVisible();
   console.log(
     'CHECK peer browser: form validation and definitive rejection recovery',
@@ -826,6 +845,7 @@ export async function checkPeerBrowser({
   await expect(
     page.getByRole('button', { name: 'Enable gateway', exact: true }),
   ).toBeVisible();
+  await checkDidBrowser({ page, request, path, owner, ingress, browserTrunk });
   await page.getByRole('button', { name: 'Trunks', exact: true }).click();
   const inspectGate = holdResponse('GET', path('trunks', browserTrunk));
   await page

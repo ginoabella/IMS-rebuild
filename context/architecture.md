@@ -227,6 +227,12 @@ select nonsecret metadata in ordinary expected-version resource transactions. Na
 named-administrator setup/access replacement is a separate trusted command. Referenced
 material is retained; desired digest/registration performs no live application.
 
+P3-U3c adds same-installation DID desired inventory in `sip_dids`, exact canonical
+number/name uniqueness, actual gateway blockers and the third tab in the existing
+resource console. It reuses node serialization, create receipts, versions and audit.
+[DID workflow and handoffs](../docs/runbooks/did-inventory.md) define normalization
+and future routing/apply/allocation dependency ownership. No live consumer is added.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

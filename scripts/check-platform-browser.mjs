@@ -1076,7 +1076,7 @@ export async function checkPlatformBrowser({
         ? error.stack
             ?.split('\n')
             .filter((line) =>
-              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser|inventory-browser|peer-browser)\.mjs:\d+/.test(
+              /^\s*at .*check-(?:platform-browser|draft-tenant-browser|pbx-browser|inventory-browser|peer-browser|did-inventory)\.mjs:\d+/.test(
                 line,
               ),
             )

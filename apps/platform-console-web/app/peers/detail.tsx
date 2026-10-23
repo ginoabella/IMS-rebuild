@@ -28,7 +28,9 @@ export function PeerDetail({ model }: { model: PeerModel }) {
             <dt>Credentials</dt>
             <dd>
               {r.credentialStatus === 'not_required'
-                ? 'Not required (IP-peer)'
+                ? 'number' in r
+                  ? 'Not required (DID inventory)'
+                  : 'Not required (IP-peer)'
                 : 'Selected version (desired)'}
             </dd>
             <dt>Created by</dt>
@@ -44,11 +46,13 @@ export function PeerDetail({ model }: { model: PeerModel }) {
             {JSON.stringify(
               'settings' in r
                 ? { direction: r.direction, settings: r.settings }
-                : {
-                    kind: r.kind,
-                    trunkId: r.trunkId,
-                    sourceAddresses: r.sourceAddresses,
-                  },
+                : 'number' in r
+                  ? { number: r.number, gatewayId: r.gatewayId }
+                  : {
+                      kind: r.kind,
+                      trunkId: r.trunkId,
+                      sourceAddresses: r.sourceAddresses,
+                    },
               null,
               2,
             )}
@@ -61,7 +65,12 @@ export function PeerDetail({ model }: { model: PeerModel }) {
                   save({ ...state, mode: 'edit', values: form(r) })
                 }
               >
-                Edit {kind === 'trunks' ? 'trunk' : 'gateway'}
+                Edit{' '}
+                {kind === 'trunks'
+                  ? 'trunk'
+                  : kind === 'gateways'
+                    ? 'gateway'
+                    : 'DID'}
               </Button>
               <Button
                 variant="secondary"
@@ -75,14 +84,23 @@ export function PeerDetail({ model }: { model: PeerModel }) {
                 }
               >
                 {r.enabled ? 'Disable' : 'Enable'}{' '}
-                {kind === 'trunks' ? 'trunk' : 'gateway'}
+                {kind === 'trunks'
+                  ? 'trunk'
+                  : kind === 'gateways'
+                    ? 'gateway'
+                    : 'DID'}
               </Button>
               <Button
                 variant="destructive"
                 disabled={blocked}
                 onClick={() => setConfirm(true)}
               >
-                Remove {kind === 'trunks' ? 'trunk' : 'gateway'}
+                Remove{' '}
+                {kind === 'trunks'
+                  ? 'trunk'
+                  : kind === 'gateways'
+                    ? 'gateway'
+                    : 'DID'}
               </Button>
             </div>
           )}

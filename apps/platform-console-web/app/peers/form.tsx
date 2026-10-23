@@ -12,7 +12,11 @@ export function PeerForm({ model }: { model: PeerModel }) {
         <Panel aria-label="Resource form">
           <h2 className="font-display text-xl">
             {state.mode === 'create' ? 'Create' : 'Edit'}{' '}
-            {kind === 'trunks' ? 'trunk' : 'gateway'}
+            {kind === 'trunks'
+              ? 'trunk'
+              : kind === 'gateways'
+                ? 'gateway'
+                : 'DID'}
           </h2>
           <form
             onSubmit={(e) => {
@@ -113,6 +117,62 @@ export function PeerForm({ model }: { model: PeerModel }) {
                     on.
                   </p>
                 </>
+              ) : kind === 'dids' ? (
+                <>
+                  <Field
+                    id="peer-number"
+                    label="DID number"
+                    error={errors.number}
+                  >
+                    <Input
+                      id="peer-number"
+                      required
+                      maxLength={320}
+                      value={v.number}
+                      aria-invalid={!!errors.number}
+                      aria-describedby={
+                        errors.number
+                          ? 'peer-number-error did-number-help'
+                          : 'did-number-help'
+                      }
+                      onChange={(e) => change('number', e.target.value)}
+                    />
+                  </Field>
+                  <p id="did-number-help">
+                    Spaces, hyphens and parentheses are removed. Use 1–15 ASCII
+                    digits and an optional leading +. Leading zeros and + remain
+                    distinct; no country code is inferred. Disabled DIDs still
+                    reserve their number.
+                  </p>
+                  <p>
+                    Canonical preview:{' '}
+                    <span className="font-mono break-all">
+                      {v.number.trim().replace(/[ ()-]/g, '') || '—'}
+                    </span>
+                  </p>
+                  <Field
+                    id="peer-gatewayId"
+                    label="Gateway ID"
+                    error={errors.gatewayId}
+                  >
+                    <Input
+                      id="peer-gatewayId"
+                      required
+                      maxLength={36}
+                      value={v.gatewayId}
+                      aria-invalid={!!errors.gatewayId}
+                      aria-describedby={
+                        errors.gatewayId ? 'peer-gatewayId-error' : undefined
+                      }
+                      onChange={(e) => change('gatewayId', e.target.value)}
+                    />
+                  </Field>
+                  <p>
+                    Copy the gateway ID from its detail. Choose a nonremoved
+                    gateway on this PBX; multiple DIDs may share it. No tenant
+                    or route destination is assigned.
+                  </p>
+                </>
               ) : (
                 <>
                   <Field
@@ -185,7 +245,12 @@ export function PeerForm({ model }: { model: PeerModel }) {
               {errors.body && <p role="alert">Review the form values.</p>}
               <div className="flex flex-wrap gap-3">
                 <Button type="submit" pending={pending}>
-                  Save {kind === 'trunks' ? 'trunk' : 'gateway'}
+                  Save{' '}
+                  {kind === 'trunks'
+                    ? 'trunk'
+                    : kind === 'gateways'
+                      ? 'gateway'
+                      : 'DID'}
                 </Button>
                 <Button
                   type="button"

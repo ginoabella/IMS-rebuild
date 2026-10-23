@@ -60,10 +60,15 @@ const gateway = shape({
   trunkId: nullable(uuid),
   sourceAddresses: array(text, 32),
 });
+const did = shape({
+  ...common,
+  number: (v) => typeof v === 'string' && /^\+?[0-9]{1,15}$/.test(v),
+  gatewayId: uuid,
+});
 export function route(parts: string[], method: string) {
   return (
     parts[0] === 'peers' &&
-    ['trunks', 'gateways'].includes(parts[1] ?? '') &&
+    ['trunks', 'gateways', 'dids'].includes(parts[1] ?? '') &&
     ((parts.length === 4 &&
       parts[1] === 'trunks' &&
       parts[2] === 'credentials' &&
@@ -84,7 +89,9 @@ export function input(parts: string[], method: string, v: unknown) {
   const fields =
     parts[1] === 'trunks'
       ? ['name', 'direction', 'settings']
-      : ['name', 'kind', 'trunkId', 'sourceAddresses'];
+      : parts[1] === 'gateways'
+        ? ['name', 'kind', 'trunkId', 'sourceAddresses']
+        : ['name', 'number', 'gatewayId'];
   const keys =
     parts[3] === 'remove'
       ? ['expectedVersion']
@@ -131,7 +138,8 @@ export function output(parts: string[], method: string, v: unknown) {
       ),
       nextCursor: nullable(text),
     })(v);
-  const resource = parts[1] === 'trunks' ? trunk : gateway;
+  const resource =
+    parts[1] === 'trunks' ? trunk : parts[1] === 'gateways' ? gateway : did;
   return parts.length === 2 && method === 'GET'
     ? shape({ items: array(resource, 100), nextCursor: nullable(uuid) })(v)
     : shape({ resource })(v);

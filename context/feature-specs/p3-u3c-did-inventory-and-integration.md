@@ -1,7 +1,8 @@
 # P3-U3c — DID inventory and integration
 
-Status: planned; replacement sub-unit approved October 23, 2026, Asia/Manila
-(+08:00). Follows [a](p3-u3a-trunks-and-gateways.md) and
+Status: completed within approved private development, 2026-10-24 00:09 +08:00 (Asia/Manila).
+[C-01–05 and parent DEV-01–07 evidence](../../docs/status/p3-u3c-evidence.md).
+Replacement sub-unit approved October 23, 2026, Asia/Manila (+08:00). Follows [a](p3-u3a-trunks-and-gateways.md) and
 [b](p3-u3b-simple-trunk-credentials.md).
 
 Parent: [P3-U3 development delivery](p3-u3-development-resource-management.md).

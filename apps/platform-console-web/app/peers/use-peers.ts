@@ -25,6 +25,8 @@ type FormValues = {
   kind: string;
   trunkId: string;
   sources: string;
+  number: string;
+  gatewayId: string;
 };
 type Attempt = {
   parts: string[];
@@ -55,6 +57,8 @@ export const empty = (): State => ({
     kind: 'sip-device',
     trunkId: '',
     sources: '',
+    number: '',
+    gatewayId: '',
   },
   attempt: null,
   review: false,
@@ -80,11 +84,13 @@ export function form(r: PeerDto): FormValues {
               ? 'ulaw,alaw'
               : r.settings.codecs.join(','),
         }
-      : {
-          kind: r.kind,
-          trunkId: r.trunkId ?? '',
-          sources: r.sourceAddresses.join('\n'),
-        }),
+      : 'number' in r
+        ? { number: r.number, gatewayId: r.gatewayId }
+        : {
+            kind: r.kind,
+            trunkId: r.trunkId ?? '',
+            sources: r.sourceAddresses.join('\n'),
+          }),
   };
 }
 const messages: Record<string, string> = {
@@ -93,12 +99,15 @@ const messages: Record<string, string> = {
   stale_version:
     'This resource changed. Reload canonical detail, review it, then use the current version to continue.',
   name_conflict: 'This name is already used on this installation.',
+  number_conflict:
+    'This canonical number is already used on this installation, including disabled DIDs.',
+  invalid_gateway: 'Choose a nonremoved gateway on this installation.',
   source_conflict:
     'A source address is already used by another gateway, including disabled gateways.',
   invalid_trunk:
     'Choose a trunk on this installation. Provider gateways require an inbound-capable trunk.',
   referenced:
-    'Existing gateways block this change. Edit or remove the referencing gateways first.',
+    'Existing references block this change. Edit or remove the listed resources first.',
   request_conflict:
     'This request ID already identifies another create. Reload to review the original outcome.',
   intent_expired:
@@ -169,6 +178,14 @@ export function usePeers({ nodeId }: { nodeId: string }) {
     [confirm, setConfirm] = useState(false);
   const busy = useRef(false),
     generation = useRef(0);
+  // A disabled fieldset cannot receive focus. Wait until the submission settles.
+  useEffect(() => {
+    const field = Object.keys(errors)[0];
+    if (!pending && field)
+      document
+        .getElementById(field === 'settings' ? 'peer-host' : `peer-${field}`)
+        ?.focus();
+  }, [errors, pending]);
   useEffect(
     () => () => {
       generation.current++;
@@ -214,26 +231,44 @@ export function usePeers({ nodeId }: { nodeId: string }) {
     setConfirm(false);
     if (work.ready) void reload();
   }, [kind, nodeId, after, work.ready, work.operatorId]);
-  async function inspect(id: string) {
+  async function inspect(id: string, target: PeerResource = kind) {
     if (busy.current) return;
+    const targetDraft = work.values[`peers:${nodeId}:${target}`];
+    if (target !== kind && targetDraft) {
+      const retained: State = JSON.parse(targetDraft);
+      if (retained.attempt || retained.review) {
+        setKind(target);
+        setAfter(null);
+        setHistory([]);
+        return;
+      }
+    }
     busy.current = true;
     setPending(true);
     const capture = work.capture();
     try {
       const { resource } = await peerRequest<PeerDetailDto>(nodeId, [
         'peers',
-        kind,
+        target,
         id,
       ]);
       if (!capture.current() || activeScope.current !== stateKey) return;
-      save({
-        ...state,
-        mode: 'detail',
-        selected: resource,
-        values: form(resource),
-        attempt: null,
-        review: false,
+      latest.current.record({
+        ...latest.current.values,
+        [`peers:${nodeId}:${target}`]: JSON.stringify({
+          ...empty(),
+          mode: 'detail',
+          selected: resource,
+          values: form(resource),
+          attempt: null,
+          review: false,
+        }),
       });
+      if (target !== kind) {
+        setKind(target);
+        setAfter(null);
+        setHistory([]);
+      }
       setMessage('');
       setErrors({});
       setBlockers([]);
@@ -339,13 +374,6 @@ export function usePeers({ nodeId }: { nodeId: string }) {
           setMessage(messages[e.detail.reason ?? ''] ?? e.detail.message);
           setErrors(e.detail.fieldErrors ?? {});
           setBlockers(e.detail.blockers ?? []);
-          const field = Object.keys(e.detail.fieldErrors ?? {})[0];
-          if (field)
-            document
-              .getElementById(
-                field === 'settings' ? 'peer-host' : `peer-${field}`,
-              )
-              ?.focus();
         } else if (
           e instanceof AccessError &&
           (e.status === 403 || e.status === 429)
@@ -421,12 +449,14 @@ export function usePeers({ nodeId }: { nodeId: string }) {
                 : {}),
             },
           }
-        : {
-            name: v.name,
-            kind: v.kind,
-            trunkId: v.trunkId.trim() || null,
-            sourceAddresses: v.sources.split(/[\s,]+/).filter(Boolean),
-          };
+        : kind === 'dids'
+          ? { name: v.name, number: v.number, gatewayId: v.gatewayId.trim() }
+          : {
+              name: v.name,
+              kind: v.kind,
+              trunkId: v.trunkId.trim() || null,
+              sourceAddresses: v.sources.split(/[\s,]+/).filter(Boolean),
+            };
     void run({
       parts: ['peers', kind, ...(state.mode === 'edit' && r ? [r.id] : [])],
       method: state.mode === 'edit' ? 'PATCH' : 'POST',
