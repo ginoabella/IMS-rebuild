@@ -298,6 +298,14 @@ replacement children deliver a working API/browser increment each:
 
 Earlier security-heavy lifecycle/backup gates are superseded for this feature.
 
+P3-U5: [Configuration revisions, apply and recovery — feature spec and adopted split](../context/feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md).
+Parent and all three children are planned. Live-policy decisions U5-01–05 remain
+unresolved; no live apply or Phase 3 completion is claimed.
+
+- [P3-U5a — Revision capture, diff and validation](../context/feature-specs/p3-u5a-revision-capture-diff-and-validation.md)
+- [P3-U5b — Fenced live apply and verified recovery](../context/feature-specs/p3-u5b-fenced-live-apply-and-verified-recovery.md)
+- [P3-U5c — Interruption, failover and integrated Phase 3 handoff](../context/feature-specs/p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md)
+
 P3-U4: [Ring groups and dial plans — feature spec and adopted split](../context/feature-specs/p3-u4-ring-groups-and-dial-plans.md).
 All a/b/c and parent desired-routing acceptance are complete within approved
 private development; [final evidence](status/p3-u4c-evidence.md):

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-10-24 (Asia/Manila, +08:00).
+Last reconciled: 2026-10-25 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -108,7 +108,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U4 and a/b/c are completed under approved R-01–05. Continue with P3-U5 desired revision/diff/compile/apply work after resolving its permitted commands, active-call handling and controlled test destinations. Actual tenant readiness stays with Phase 4; backup administration remains separate.
+1. P3-U4 and a/b/c are completed under approved R-01–05. P3-U5 and its [adopted a/b/c split](feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md#review-and-adopted-implementation-split) remain planned. All three child specs are created for revision review, safe live apply/recovery and integrated fault acceptance. Begin with a's offline boundary; resolve U5-01–05 before their dependent live work. Actual tenant readiness stays with Phase 4 and backup administration remains separate.
 2. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
@@ -210,6 +210,10 @@ for their scope; creating a spec does not approve a proposal.
 - Previously recorded unrelated follow-up: the implementation plan has six source links using an incorrect relative `context/...` prefix. This cleanup preserves the plan; follow-up remains outstanding.
 
 ## Recent Session Notes
+
+- 2026-10-25 (Asia/Manila, +08:00) — User adopted the P3-U5 split by requesting all three child specs. Created [a: revision review/validation](feature-specs/p3-u5a-revision-capture-diff-and-validation.md), [b: fenced apply/verified recovery](feature-specs/p3-u5b-fenced-live-apply-and-verified-recovery.md) and [c: interruption/failover/integration](feature-specs/p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md), each with dependencies, scope, browser outcome, acceptance/checks and handoff. Linked parent/navigation and clarified deterministic versus live AC-02 ownership. Parent/children remain planned; U5-01–05 remain unresolved. Documentation only, without live effects or new runtime evidence.
+
+- 2026-10-25 (Asia/Manila, +08:00) — Prepared and reviewed the [P3-U5 feature spec](feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md). Defined immutable revisions, safe review/validation, external fencing, atomic apply, independent verification, known-good recovery, actual resource/credential pins and AC-01–10. Recommended three sequential sub-units; live apply includes minimum verified rollback rather than deferring it. U5-01–05 record unresolved live-policy/access/fixture decisions. Documentation only; P3-U5 and Phase 3 remain incomplete, with no new runtime verification or live authorization.
 
 - 2026-10-24 23:50 +08:00 (Asia/Manila) — P3-U4c and parent P3-U4 completed within approved private development. C-01–06 and AC-01–08 passed; final real routing/integrated API/browser, all affected regressions, full normal check, migration and ordinary HTTPS/health passed. Exact fixture cleanup and controlled PBX restoration verified. [Evidence](../docs/status/p3-u4c-evidence.md), [operator workflow](../docs/runbooks/outbound-routing.md) and [downstream contract](../docs/architecture/outbound-routing.md). Live apply/bindings/attribution remain later work.
 
