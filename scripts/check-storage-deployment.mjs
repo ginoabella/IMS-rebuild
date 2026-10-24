@@ -119,9 +119,29 @@ try {
     ),
   );
   assert.ok(!mounts.includes('/var/run/docker.sock'));
-  assert.ok(!mounts.some((path) => path.includes('.local')));
+  // The deployment-owned PBX catalog is approved runtime metadata. Keep the
+  // exception exact: neither a writable catalog nor a broader custody directory
+  // may pass the storage runtime's secret-mount exclusion.
+  for (const mount of backend.Mounts.filter((m) =>
+    m.Destination.includes('.local'),
+  )) {
+    assert.deepEqual(
+      {
+        type: mount.Type,
+        source: mount.Source,
+        destination: mount.Destination,
+        writable: mount.RW,
+      },
+      {
+        type: 'bind',
+        source: `${project}/.local/pbx-catalog`,
+        destination: '/workspace/.local/pbx-catalog',
+        writable: false,
+      },
+    );
+  }
   console.log(
-    'PASS: application runtime mounts exclude provider administration, fixture credentials, local secret directory and Docker socket',
+    'PASS: application runtime mounts exclude provider administration, fixture credentials, local secret directories and Docker socket; exact PBX metadata catalog is read-only',
   );
 
   initializeServiceSecrets(`${temporary}/`);

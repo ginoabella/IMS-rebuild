@@ -243,6 +243,19 @@ export class Peers {
                 throw new PeerRejected(409, 'reserved_source');
             }
           }
+          if (
+            old &&
+            'settings' in old &&
+            (operation === 'remove' ||
+              (v &&
+                'settings' in v &&
+                (v.direction === 'inbound' ||
+                  peerConnection(old.settings) !== peerConnection(v.settings))))
+          ) {
+            const blockers = await this.store.outboundBlockers(tx, old.id);
+            if (blockers.length)
+              throw new PeerRejected(409, 'referenced', undefined, blockers);
+          }
           if (old) {
             const prior = values(
               kind,

@@ -126,3 +126,10 @@ establishes no tenant ownership or live use.
 P3-U4b registers [actual inbound references](inbound-routing.md) in this boundary.
 Disabled rules block DID selector edits/removal and gateway structural edits/removal;
 name/status changes remain compatible and node serialization remains mandatory.
+
+P3-U4c registers [actual outbound references](outbound-routing.md). Current
+outbound rules, including disabled ones, block trunk removal, loss of outbound
+direction and connection structure changes. Compatible credential-version,
+registration, name and desired status edits retain references. Canonical node
+serialization and database backstops protect competing writes; soft-removed rule
+history keeps the original trunk UUID without pinning compatible later edits.

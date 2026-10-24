@@ -1,3 +1,5 @@
+import { checkIntegratedRouting } from './check-integrated-routing.mjs';
+import { checkOutboundRouting } from './check-outbound-routing.mjs';
 import { checkInboundRouting } from './check-inbound-routing.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
@@ -156,6 +158,22 @@ export async function checkRouting({
     ingress,
     issue,
     staffFacts,
+  });
+  await checkOutboundRouting({
+    request,
+    direct,
+    create,
+    nodeId,
+    otherNode,
+    installation,
+    owner,
+    page,
+    config,
+    a,
+    b,
+    issue,
+    staffFacts,
+    ingress,
   });
   console.log('CHECK routing: grammar, trusted ownership and group lifecycle');
   // Deterministic grammar/compatibility checks use explicitly trusted allocation facts.
@@ -729,7 +747,7 @@ export async function checkRouting({
   await page.goto(`${config.origin}/pbx-nodes/${nodeId}`);
   await page
     .getByRole('link', {
-      name: 'Routing: groups and reservations',
+      name: 'Routing: groups and rules',
       exact: true,
     })
     .click();
@@ -930,10 +948,19 @@ export async function checkRouting({
   await page.goto(`${config.origin}/pbx-nodes/${nodeId}/routing`);
   await expect(
     page.getByRole('heading', {
-      name: 'Routing: groups and reservations',
+      name: 'Routing: groups and rules',
       exact: true,
     }),
   ).toBeVisible();
+  await checkIntegratedRouting({
+    page,
+    config,
+    nodeId,
+    e1,
+    create,
+    request,
+    owner,
+  });
   console.log(
     'PASS routing actual HTTPS browser: navigation, ordered selectors/preview, group/reservation create/edit/status/removal, input/focus retention, blockers, lost-create/stale recovery, keyboard/reflow/axe and mounted identity fence; unreachable PBX, no live adapter.',
   );

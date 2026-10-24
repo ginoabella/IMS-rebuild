@@ -173,7 +173,11 @@ export function usePeers({ nodeId }: { nodeId: string }) {
   const [message, setMessage] = useState(''),
     [errors, setErrors] = useState<Record<string, string>>({}),
     [blockers, setBlockers] = useState<
-      { id: string; name: string; kind?: 'gateways' | 'dids' | 'inbound' }[]
+      {
+        id: string;
+        name: string;
+        kind?: 'gateways' | 'dids' | 'inbound' | 'outbound';
+      }[]
     >([]);
   const [canonical, setCanonical] = useState<PeerDto | null>(null),
     [pending, setPending] = useState(false),

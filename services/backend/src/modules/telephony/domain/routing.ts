@@ -1,5 +1,6 @@
 import type {
   InboundValues,
+  OutboundValues,
   GroupValues,
   NumberPattern,
   ReservationValues,
@@ -14,7 +15,7 @@ export class RoutingRejected extends Error {
     readonly blockers?: {
       id: string;
       name: string;
-      kind?: 'groups' | 'inbound';
+      kind?: 'groups' | 'inbound' | 'outbound';
     }[],
   ) {
     super(reason);
@@ -25,7 +26,9 @@ export function pattern(value: unknown): NumberPattern {
   if (
     (p.kind !== 'exact' && p.kind !== 'prefix') ||
     typeof p.digits !== 'string' ||
-    !/^[0-9]{1,15}$/.test(p.digits) ||
+    p.digits.length < 1 ||
+    p.digits.length > 15 ||
+    /[^0-9]/.test(p.digits) ||
     typeof p.minLength !== 'number' ||
     typeof p.maxLength !== 'number' ||
     !Number.isInteger(p.minLength) ||
@@ -142,11 +145,13 @@ export function routingValues(
   kind: RoutingKind,
   data: Record<string, unknown>,
 ) {
-  return kind === 'inbound'
-    ? inboundValues(data)
-    : kind === 'groups'
-      ? groupValues(data)
-      : reservationValues(data);
+  return kind === 'outbound'
+    ? outboundValues(data)
+    : kind === 'inbound'
+      ? inboundValues(data)
+      : kind === 'groups'
+        ? groupValues(data)
+        : reservationValues(data);
 }
 export function validateGraph(groups: Pick<GroupDto, 'id' | 'fallback'>[]) {
   if (groups.length > 512) throw new RoutingRejected('graph_limit');
@@ -196,4 +201,53 @@ export function tenantCompatible(
     );
   };
   return visit(root);
+}
+
+export function outboundValues(data: Record<string, unknown>): OutboundValues {
+  const v = {
+    name: label(data.name),
+    pattern: pattern(data.pattern),
+    trunkId: id(data.trunkId, 'trunkId'),
+    priority: data.priority,
+    stripCount: data.stripCount ?? 0,
+    addPrefix: data.addPrefix ?? '',
+  };
+  if (
+    typeof v.priority !== 'number' ||
+    !Number.isInteger(v.priority) ||
+    v.priority < 0 ||
+    v.priority > 2147483647
+  )
+    invalid('priority', 'Use an integer priority 0–2147483647; lower wins.');
+  if (
+    typeof v.stripCount !== 'number' ||
+    !Number.isInteger(v.stripCount) ||
+    v.stripCount < 0 ||
+    v.stripCount > v.pattern.minLength
+  )
+    invalid(
+      'stripCount',
+      'Strip count cannot exceed the shortest matching number.',
+    );
+  if (
+    typeof v.addPrefix !== 'string' ||
+    v.addPrefix.length > 15 ||
+    /[^0-9]/.test(v.addPrefix)
+  )
+    invalid('addPrefix', 'Use at most 15 ASCII digits.');
+  if (
+    v.pattern.minLength - v.stripCount + v.addPrefix.length < 1 ||
+    v.pattern.maxLength - v.stripCount + v.addPrefix.length > 15
+  )
+    invalid('stripCount', 'Every transformed number must contain 1–15 digits.');
+  return v as OutboundValues;
+}
+/** Exact image of a bounded prefix domain under strip/add, including empty fixed prefix. */
+export function transformedDomain(v: OutboundValues): NumberPattern {
+  return {
+    kind: v.pattern.kind,
+    digits: v.addPrefix + v.pattern.digits.slice(v.stripCount),
+    minLength: v.pattern.minLength - v.stripCount + v.addPrefix.length,
+    maxLength: v.pattern.maxLength - v.stripCount + v.addPrefix.length,
+  };
 }

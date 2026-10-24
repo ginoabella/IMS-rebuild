@@ -48,6 +48,9 @@ const app = new Peers(
     validate: async () => {
       checks++;
     },
+    outboundBlockers: async () => [
+      { id: randomUUID(), name: 'Existing outbound rule', kind: 'outbound' },
+    ],
     blockers: async () => [{ id: randomUUID(), name: 'Existing gateway' }],
     edit: async (_tx, _kind, _old, values) => {
       edits++;

@@ -245,6 +245,15 @@ destinations, actual disabled-reference blockers and atomic identities/receipts/
 The routing console shares existing operator recovery. Opaque identities remain
 internal; fixture-only ownership checks do not deliver tenant bindings or live events.
 
+P3-U4c adds [desired outbound rules](../docs/architecture/outbound-routing.md):
+exact/bounded-prefix matching, explicit priorities and trunk references, whole-domain
+strip/add validation, and original/transformed reservation protection. Derived
+length-specific database domains enforce equal-priority exclusion and reservation
+intersections; canonical node locks serialize actual trunk dependency changes.
+The shared routing console previews saved rules without PBX/credential access.
+Internal identities remain unbound; trusted tenant-permission fixtures do not
+establish allocation, live calling permission or operational attribution.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

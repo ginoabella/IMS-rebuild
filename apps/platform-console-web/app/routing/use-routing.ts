@@ -10,6 +10,10 @@ import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 import { RoutingError, routingRequest } from './client';
 type FormValues = {
+  trunkId: string;
+  priority: string;
+  stripCount: string;
+  addPrefix: string;
   gatewayId: string;
   didId: string;
   name: string;
@@ -41,6 +45,10 @@ export const empty = (): State => ({
   mode: 'list',
   selected: null,
   values: {
+    trunkId: '',
+    priority: '100',
+    stripCount: '0',
+    addPrefix: '',
     gatewayId: '',
     didId: '',
     name: '',
@@ -80,7 +88,14 @@ export function form(r: RoutingDto): FormValues {
             fallbackId: r.fallback.kind === 'hangup' ? '' : r.fallback.id,
           }
         : {
-            purpose: r.purpose,
+            ...('trunkId' in r
+              ? {
+                  trunkId: r.trunkId,
+                  priority: String(r.priority),
+                  stripCount: String(r.stripCount),
+                  addPrefix: r.addPrefix,
+                }
+              : { purpose: r.purpose }),
             patternKind: r.pattern.kind,
             digits: r.pattern.digits,
             minLength: String(r.pattern.minLength),
@@ -89,6 +104,11 @@ export function form(r: RoutingDto): FormValues {
   };
 }
 const messages: Record<string, string> = {
+  priority_conflict:
+    'An intersecting rule already claims this priority, including disabled definitions.',
+  reserved_number: 'Original or transformed numbers intersect a reservation.',
+  invalid_trunk: 'Select a nonremoved outbound-capable trunk on this PBX.',
+  outbound_limit: 'At most 512 current outbound rules are supported.',
   selector_conflict:
     'This gateway/DID selector is already claimed, including by disabled rules.',
   invalid_gateway: 'Select an existing gateway on this PBX.',
@@ -96,7 +116,7 @@ const messages: Record<string, string> = {
   stale_version:
     'This definition changed. Reload canonical state, review and use the current version.',
   number_conflict:
-    'This number or pattern intersects an existing extension, group or reservation, including disabled claims.',
+    'This number or pattern intersects an existing extension, group, reservation or outbound domain, including disabled claims.',
   name_conflict: 'This name is already used.',
   invalid_extension: 'Select existing extensions on this PBX.',
   invalid_group: 'Choose a nonremoved fallback group on this PBX.',
@@ -127,7 +147,7 @@ export function useRouting({ nodeId }: { nodeId: string }) {
   const [message, setMessage] = useState(''),
     [errors, setErrors] = useState<Record<string, string>>({}),
     [blockers, setBlockers] = useState<
-      { id: string; name: string; kind?: 'groups' | 'inbound' }[]
+      { id: string; name: string; kind?: 'groups' | 'inbound' | 'outbound' }[]
     >([]);
   const [canonical, setCanonical] = useState<RoutingDto | null>(null),
     [pending, setPending] = useState(false),
@@ -444,38 +464,58 @@ export function valuesForForm(
   kind: RoutingKind,
   v: FormValues,
 ): Record<string, unknown> {
-  return kind === 'inbound'
+  return kind === 'outbound'
     ? {
         name: v.name,
-        gatewayId: v.gatewayId,
-        didId: v.didId || null,
-        destination:
-          v.fallbackKind === 'hangup'
-            ? { kind: 'hangup' }
-            : { kind: v.fallbackKind, id: v.fallbackId },
+        trunkId: v.trunkId,
+        priority: Number(v.priority),
+        stripCount: Number(v.stripCount),
+        addPrefix: v.addPrefix,
+        pattern: {
+          kind: v.patternKind,
+          digits: v.digits,
+          minLength:
+            v.patternKind === 'exact' ? v.digits.length : Number(v.minLength),
+          maxLength:
+            v.patternKind === 'exact' ? v.digits.length : Number(v.maxLength),
+        },
       }
-    : kind === 'groups'
+    : kind === 'inbound'
       ? {
           name: v.name,
-          number: v.number || null,
-          memberIds: v.members.split('\n').filter(Boolean),
-          strategy: v.strategy,
-          timeout: Number(v.timeout),
-          fallback:
+          gatewayId: v.gatewayId,
+          didId: v.didId || null,
+          destination:
             v.fallbackKind === 'hangup'
               ? { kind: 'hangup' }
               : { kind: v.fallbackKind, id: v.fallbackId },
         }
-      : {
-          name: v.name,
-          purpose: v.purpose,
-          pattern: {
-            kind: v.patternKind,
-            digits: v.digits,
-            minLength:
-              v.patternKind === 'exact' ? v.digits.length : Number(v.minLength),
-            maxLength:
-              v.patternKind === 'exact' ? v.digits.length : Number(v.maxLength),
-          },
-        };
+      : kind === 'groups'
+        ? {
+            name: v.name,
+            number: v.number || null,
+            memberIds: v.members.split('\n').filter(Boolean),
+            strategy: v.strategy,
+            timeout: Number(v.timeout),
+            fallback:
+              v.fallbackKind === 'hangup'
+                ? { kind: 'hangup' }
+                : { kind: v.fallbackKind, id: v.fallbackId },
+          }
+        : {
+            name: v.name,
+            purpose: v.purpose,
+            pattern: {
+              kind: v.patternKind,
+              digits: v.digits,
+              minLength:
+                v.patternKind === 'exact'
+                  ? v.digits.length
+                  : Number(v.minLength),
+              maxLength:
+                v.patternKind === 'exact'
+                  ? v.digits.length
+                  : Number(v.maxLength),
+            },
+          };
 }

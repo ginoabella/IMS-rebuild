@@ -299,13 +299,14 @@ replacement children deliver a working API/browser increment each:
 Earlier security-heavy lifecycle/backup gates are superseded for this feature.
 
 P3-U4: [Ring groups and dial plans — feature spec and adopted split](../context/feature-specs/p3-u4-ring-groups-and-dial-plans.md).
-Implementation and all three sub-units remain planned:
+All a/b/c and parent desired-routing acceptance are complete within approved
+private development; [final evidence](status/p3-u4c-evidence.md):
 
 - [P3-U4a — Ring groups and reserved-number protection](../context/feature-specs/p3-u4a-ring-groups-and-reserved-number-protection.md)
 - [P3-U4b — Inbound rules and trusted route identities](../context/feature-specs/p3-u4b-inbound-rules-and-trusted-route-identities.md)
 - [P3-U4c — Outbound rules and integrated routing handoff](../context/feature-specs/p3-u4c-outbound-rules-and-integrated-routing-handoff.md)
 
-Routing-policy decisions R-01–05 remain unresolved; live apply belongs to P3-U5.
+Routing-policy decisions R-01–05 are approved for desired-state development; live apply belongs to P3-U5.
 
 - [Current trunk credential model](architecture/trunk-credentials.md)
 - [Trusted setup workflow and implementation limits](runbooks/trunk-credentials.md)
@@ -319,3 +320,5 @@ Feature APIs/browser, administrator migration and routine backup acceptance rema
 incomplete. See the [tracker](../context/progress-tracker.md) for the next working step.
 
 - [Ring groups and reserved-number management](runbooks/ring-groups.md) — desired-only operator workflow and [namespace/dependency contract](architecture/ring-groups.md).
+
+- [Desired outbound operator workflow](runbooks/outbound-routing.md) and [routing/reservation/identity/dependency contract](architecture/outbound-routing.md).

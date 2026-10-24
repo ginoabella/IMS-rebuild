@@ -143,7 +143,7 @@ export async function forwardPeers(
               blockers: data.blockers.map((b) => ({
                 id: b.id,
                 name: b.name,
-                ...(['gateways', 'dids', 'inbound'].includes(b.kind)
+                ...(['gateways', 'dids', 'inbound', 'outbound'].includes(b.kind)
                   ? { kind: b.kind }
                   : {}),
               })),

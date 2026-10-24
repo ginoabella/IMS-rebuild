@@ -117,6 +117,14 @@ export class PeerRepository {
   }
   // All reference owners must acquire the node lock first, before reading dependencies.
   // DID and gateway changes share this lock with trunk changes.
+  async outboundBlockers(s: ReadSnapshot, id: string) {
+    return (
+      await s.query<{ id: string; name: string; kind: 'outbound' }>(
+        "SELECT id,name,'outbound' AS kind FROM public.outbound_rules WHERE trunk_id=$1 AND removed_at IS NULL ORDER BY id LIMIT 10",
+        [id],
+      )
+    ).rows;
+  }
   async blockers(
     s: ReadSnapshot,
     kind: PeerResource,

@@ -1,4 +1,5 @@
 'use client';
+import { OutboundFields } from './outbound-fields';
 import { Button, Field, Input, Panel, Select } from '@myims/ui-web';
 import type { RoutingModel } from './use-routing';
 import { useRoutingResources } from './use-resources';
@@ -13,6 +14,12 @@ export function RoutingForm({
 }) {
   const { v, state, kind, change, errors, blocked } = m;
   const resources = useRoutingResources(m, nodeId);
+  if (state.mode === 'detail' && kind === 'outbound')
+    return (
+      <Panel aria-label="Outbound associations">
+        <OutboundFields model={m} nodeId={nodeId} inspection />
+      </Panel>
+    );
   if (
     state.mode === 'detail' &&
     state.selected &&
@@ -117,11 +124,13 @@ export function RoutingForm({
     <Panel aria-label="Resource form">
       <h2 className="font-display text-xl">
         {state.mode === 'edit' ? 'Edit' : 'Create'}{' '}
-        {kind === 'inbound'
-          ? 'inbound rule'
-          : kind === 'groups'
-            ? 'group'
-            : 'reservation'}
+        {kind === 'outbound'
+          ? 'outbound rule'
+          : kind === 'inbound'
+            ? 'inbound rule'
+            : kind === 'groups'
+              ? 'group'
+              : 'reservation'}
       </h2>
       <form
         className="mt-4 space-y-4"
@@ -132,7 +141,9 @@ export function RoutingForm({
       >
         <fieldset className="min-w-0 space-y-4" disabled={blocked}>
           {input('name', 'Name')}
-          {kind === 'inbound' ? (
+          {kind === 'outbound' ? (
+            <OutboundFields model={m} nodeId={nodeId} />
+          ) : kind === 'inbound' ? (
             <InboundFields model={m} nodeId={nodeId} resources={resources} />
           ) : kind === 'groups' ? (
             <GroupFields model={m} resources={resources} input={input} />
@@ -176,11 +187,13 @@ export function RoutingForm({
           <div className="flex flex-wrap gap-3">
             <Button type="submit" pending={m.pending}>
               Save{' '}
-              {kind === 'inbound'
-                ? 'inbound rule'
-                : kind === 'groups'
-                  ? 'group'
-                  : 'reservation'}
+              {kind === 'outbound'
+                ? 'outbound rule'
+                : kind === 'inbound'
+                  ? 'inbound rule'
+                  : kind === 'groups'
+                    ? 'group'
+                    : 'reservation'}
             </Button>
             <Button
               type="button"

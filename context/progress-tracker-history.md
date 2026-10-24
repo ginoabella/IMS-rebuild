@@ -2611,3 +2611,33 @@ migration/ordinary console refresh remain pending. [Current evidence](../docs/st
 and limits. Parent P3-U4 and c remain incomplete; R-03 remains unresolved.
 Prior implementation checkpoints are retained in
 [history](progress-tracker-history.md#2026-10-24--p3-u4a-implementation-checkpoints-and-previous-p3-u3c-checkpoint).
+
+
+## 2026-10-24 — P3-U4b completed checkpoint before outbound integration
+
+### P3-U4b completed checkpoint
+
+- **Status:** completed within approved private development; 2026-10-24 18:36 +08:00 (Asia/Manila). B-01–06 passed; parent P3-U4/c remain incomplete.
+- **Requirement/decision:** [inbound rules/identities B-01–06](feature-specs/p3-u4b-inbound-rules-and-trusted-route-identities.md), under explicitly approved R-02 and retained R-01/R-04/R-05; [final evidence](../docs/status/p3-u4b-evidence.md).
+- **Delivered:** desired inbound CRUD/status/removal and exact-DID/catch-all preview, canonical ingress/destination checks, internal route identities, fixture-only fail-closed tenant compatibility, actual disabled-reference blockers and correct resource/routing navigation. Removed history stays intact while eligible DID ingress edits resume after reference removal. No tenant binding or calling eligibility is created.
+- **Verification:** focused real PostgreSQL/shared Redis/two-replica/API/HTTPS browser routing and resource checks passed, including final history/pagination regressions. Inventory API/browser, all PBX selections and full `./dev check` passed, exit 0. Atomic audit/receipt rollback, no-op/replay/stale/lost-response recovery, trusted mapping fixtures, keyboard/reflow/axe and exact fixture cleanup passed.
+- **Development refresh/preservation:** both additive migrations applied; ordinary backend and HTTPS console refreshed/ready. `./dev platform-https-check` passed; live/ready 200 with database/both Redis up. Existing identities, migration history, stored endpoint/trunk material, observer credentials, PBX configuration and backups preserved. Owned inventory test material/tokens cleaned and exact controlled PBX baseline restored. No routing apply or calls.
+- **Handoff:** [operator workflow](../docs/runbooks/inbound-routing.md) and [identity/dependency/API contract](../docs/architecture/inbound-routing.md) for c, P3-U5, P4-U2 and P5-U3. Actual tenant bindings, compilation/apply and live event attribution remain with those owners; R-03 and parent acceptance remain outstanding.
+
+
+### P3-U4c implementation checkpoint
+
+Started October 24, 2026 at 21:32 +08:00. The user approved R-03 and outbound
+R-04 protection before dependent implementation. Delivered outbound persistence,
+contracts/API/browser, full-domain transformations/reservations, actual trunk
+references and internal identities. Initial console type/directive and blocker-
+label checks were corrected. The positive integrated fixture used the protected
+unmanaged address and was corrected after the API rejected it. The normal check
+exposed an unchanged mount assertion conflicting with the approved read-only PBX
+metadata catalog; the exact source/destination/read-only exception passed focused
+storage and the complete normal rerun. Final deterministic removed-trunk and
+maximum-prefix boundary assertions passed a fresh focused rerun after the full
+graph, with scoped lint/format passing. All affected regressions, ordinary additive
+migration, backend/HTTPS refresh and health passed. Final completion: 2026-10-24 23:50 +08:00 (Asia/Manila).
+See [final evidence](../docs/status/p3-u4c-evidence.md) for actual acceptance,
+commands, fixture cleanup and limits. No routing apply or calls.

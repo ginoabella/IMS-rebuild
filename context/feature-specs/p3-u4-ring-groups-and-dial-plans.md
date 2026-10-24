@@ -1,9 +1,10 @@
 # P3-U4 — Manage ring groups and dial plans
 
-Status: in progress; P3-U4a and P3-U4b completed October 24, 2026 within
-approved private development. B-01–06 completed at 2026-10-24 18:36 +08:00 (Asia/Manila).
-R-01/R-02/R-04/R-05 are approved below; R-03 remains unresolved for c.
-Parent acceptance and live routing remain incomplete.
+Status: completed within approved private development, 2026-10-24 23:50 +08:00 (Asia/Manila).
+P3-U4a A-01–06, b B-01–06, c C-01–06 and parent AC-01–08 passed within
+their published boundaries. R-01–05 are approved below.
+[Final acceptance and handoff](../../docs/status/p3-u4c-evidence.md).
+Live apply, tenant calling eligibility and the Phase 3 gate remain later work.
 
 ## Goal and requirements
 
@@ -51,8 +52,7 @@ owners. Preserve existing runtime configuration, secrets and backup operations.
 ## Decisions required before dependent implementation
 
 The user owns these product-policy decisions. R-01/R-04/R-05 are explicitly
-approved in the record below; R-02 is approved below; R-03 remains a recommendation requiring an answer
-before affected c implementation. Record decisions here and in the tracker. Splitting does not resolve a
+approved in the record below; R-02 is approved below; R-03 is approved below for c implementation. Record decisions here and in the tracker. Splitting does not resolve a
 missing policy decision.
 
 | ID   | Recommended contract / question to resolve                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Affected work and resume condition                                                                                                                                                               |
@@ -76,7 +76,7 @@ only the bootstrap default `_X.` hangup rule. Legacy reference examples are not
 imported. No emergency/service policy or outbound permission is inferred.
 R-05: definitions remain unbound/calling-ineligible; reject tenant-binding inputs.
 Future binding must validate every reachable member/fallback against trusted
-canonical allocations. R-02 was subsequently approved for b below; R-03 remains unresolved for c.
+canonical allocations. R-02 was subsequently approved for b below; R-03 is approved below for c.
 
 Routine choices such as file names, endpoint names and pagination implementation
 follow existing conventions without a separate approval gate. P3-U5's permitted
@@ -88,7 +88,20 @@ The user explicitly approved recommended R-02 in the implementation conversation
 trusted gateway plus associated exact DID or explicit gateway catch-all; exact DID
 wins; unmatched numbers reject without a catch-all. Preserve canonical leading
 zeros and `+`, without aliases or country inference. Destinations are extension,
-ring group or hangup. New rules start disabled. R-03 remains unresolved.
+ring group or hangup. New rules start disabled. R-03 was subsequently approved for c below.
+
+### Approved P3-U4c policy — October 24, 2026 (+08:00)
+
+The user explicitly approved the recommended desired-state policy in this
+implementation conversation: exact ASCII digits or bounded digit prefixes with
+1–15 total digits; lower numeric priority wins within the node; equal-priority
+intersections reject, including disabled rules. Rules select one same-installation
+outbound-capable trunk and optionally strip digits/add a literal digit prefix;
+every admitted input must produce 1–15 ASCII digits. No match denies. New rules
+start disabled and unbound. R-04 blocks reservations intersecting either original
+or transformed domains, with no emergency/service exceptions. International and
+service numbers receive no inferred classification or special permission. No live
+calling permission is granted. R-01/R-02/R-05 remain unchanged.
 
 ## Desired-state contract
 
@@ -234,6 +247,7 @@ development under the explicit R-01/R-04/R-05 policy recorded above;
 handoff are published. P3-U4b B-01–06 are completed under approved R-02;
 [inbound evidence](../../docs/status/p3-u4b-evidence.md) and the shared
 [identity/dependency contract](../../docs/architecture/inbound-routing.md) hand off
-to c. R-03 remains unresolved and c is planned. Parent
-P3-U4 remains incomplete until every parent criterion passes. Routing-policy
-approval, implementation, live apply and production readiness are separate states.
+to c. R-03 is approved above. P3-U4c and parent acceptance are completed within
+approved desired-state development; [C-01–06 and AC-01–08 evidence](../../docs/status/p3-u4c-evidence.md)
+reconciles every criterion and downstream boundary. Routing-policy approval,
+desired-state completion, live apply and production readiness remain distinct.

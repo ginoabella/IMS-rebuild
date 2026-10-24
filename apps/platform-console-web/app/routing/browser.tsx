@@ -24,11 +24,13 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
     setConfirm,
   } = m;
   const label =
-    kind === 'inbound'
-      ? 'inbound rule'
-      : kind === 'groups'
-        ? 'group'
-        : 'reservation';
+    kind === 'outbound'
+      ? 'outbound rule'
+      : kind === 'inbound'
+        ? 'inbound rule'
+        : kind === 'groups'
+          ? 'group'
+          : 'reservation';
   return (
     <div className="mx-auto w-full max-w-5xl space-y-4 p-4">
       <Link
@@ -37,33 +39,35 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
       >
         Back to PBX detail
       </Link>
-      <h1 className="font-display text-2xl">
-        Routing: groups and reservations
-      </h1>
+      <h1 className="font-display text-2xl">Routing: groups and rules</h1>
       <p>
         Unbound desired configuration. Saving, enabling and previewing do not
         contact the PBX or establish tenant ownership, calling eligibility or
         live readiness. Disabled definitions retain number claims.
       </p>
       <div className="flex flex-wrap gap-3">
-        {(['groups', 'inbound', 'reservations'] as const).map((k) => (
-          <Button
-            key={k}
-            variant={k === kind ? 'primary' : 'secondary'}
-            disabled={pending}
-            onClick={() => {
-              setKind(k);
-              m.setAfter(null);
-              m.setHistory([]);
-            }}
-          >
-            {k === 'inbound'
-              ? 'Inbound rules'
-              : k === 'groups'
-                ? 'Ring groups'
-                : 'Reserved numbers'}
-          </Button>
-        ))}
+        {(['groups', 'inbound', 'outbound', 'reservations'] as const).map(
+          (k) => (
+            <Button
+              key={k}
+              variant={k === kind ? 'primary' : 'secondary'}
+              disabled={pending}
+              onClick={() => {
+                setKind(k);
+                m.setAfter(null);
+                m.setHistory([]);
+              }}
+            >
+              {k === 'outbound'
+                ? 'Outbound rules'
+                : k === 'inbound'
+                  ? 'Inbound rules'
+                  : k === 'groups'
+                    ? 'Ring groups'
+                    : 'Reserved numbers'}
+            </Button>
+          ),
+        )}
         <Button
           variant="secondary"
           disabled={pending}
@@ -90,7 +94,12 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
                     disabled={pending}
                     onClick={() => void m.inspect(b.id, b.kind ?? 'groups')}
                   >
-                    Open {b.kind === 'inbound' ? 'inbound rule' : 'group'}{' '}
+                    Open{' '}
+                    {b.kind === 'outbound'
+                      ? 'outbound rule'
+                      : b.kind === 'inbound'
+                        ? 'inbound rule'
+                        : 'group'}{' '}
                     {b.name}
                   </Button>
                 )}
@@ -153,11 +162,13 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
       )}
       <Panel aria-label={`${kind} list`}>
         <h2 className="font-display text-xl">
-          {kind === 'inbound'
-            ? 'Inbound rules'
-            : kind === 'groups'
-              ? 'Ring groups'
-              : 'Reserved numbers'}
+          {kind === 'outbound'
+            ? 'Outbound rules'
+            : kind === 'inbound'
+              ? 'Inbound rules'
+              : kind === 'groups'
+                ? 'Ring groups'
+                : 'Reserved numbers'}
         </h2>
         {!page ? (
           <p>Loading definitions…</p>
@@ -171,11 +182,13 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
                 >
                   <span className="min-w-0 break-words">
                     {item.name} ·{' '}
-                    {'destination' in item
-                      ? `${item.didId ? 'Exact DID' : 'Gateway catch-all'} · ${item.destination.kind} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired) · unbound`
-                      : 'memberIds' in item
-                        ? `${item.number ?? 'No dialable number'} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired)`
-                        : `${item.pattern.kind} ${item.pattern.digits} · lengths ${item.pattern.minLength}–${item.pattern.maxLength}`}{' '}
+                    {'trunkId' in item
+                      ? `${item.pattern.kind} ${item.pattern.digits} · priority ${item.priority} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired) · unbound`
+                      : 'destination' in item
+                        ? `${item.didId ? 'Exact DID' : 'Gateway catch-all'} · ${item.destination.kind} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired) · unbound`
+                        : 'memberIds' in item
+                          ? `${item.number ?? 'No dialable number'} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired)`
+                          : `${item.pattern.kind} ${item.pattern.digits} · lengths ${item.pattern.minLength}–${item.pattern.maxLength}`}{' '}
                     · v{item.version}
                   </span>
                   <Button

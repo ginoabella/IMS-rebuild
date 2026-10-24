@@ -1,3 +1,4 @@
+import { previewOutbound } from '../adapters/db/outbound-repository';
 import { createHash, randomUUID } from 'node:crypto';
 import type { RoutingKind, RoutingDto } from '@myims/contracts';
 import type { SnapshotDatabase } from '../../../infrastructure/database/read-snapshot';
@@ -106,6 +107,27 @@ export class Routing {
       });
     });
   }
+  outboundPreview(nodeInput: unknown, input: unknown) {
+    return this.handle(async () => {
+      const nodeId = id(nodeInput, 'nodeId');
+      const data = object(input, ['dialled']);
+      if (
+        typeof data.dialled !== 'string' ||
+        data.dialled.length < 1 ||
+        data.dialled.length > 15 ||
+        /[^0-9]/.test(data.dialled)
+      )
+        invalid('dialled', 'Use 1–15 ASCII digits.');
+      const dialled = data.dialled;
+      return this.database.read(async (s) => {
+        if (!(await this.store.node(s, nodeId))) throw new PeerRejected(404);
+        return {
+          status: 200,
+          value: { ...(await previewOutbound(s, this.store, nodeId, dialled)) },
+        };
+      });
+    });
+  }
   inboundPreview(nodeInput: unknown, input: unknown) {
     return this.handle(async () => {
       const nodeId = id(nodeInput, 'nodeId');
@@ -186,11 +208,27 @@ export class Routing {
         resourceId = op === 'create' ? randomUUID() : id(resourceInput);
       if (k === 'reservations' && op === 'status') throw new PeerRejected(404);
       const fields =
-        k === 'inbound'
-          ? ['name', 'gatewayId', 'didId', 'destination']
-          : k === 'groups'
-            ? ['name', 'number', 'memberIds', 'strategy', 'timeout', 'fallback']
-            : ['name', 'purpose', 'pattern'];
+        k === 'outbound'
+          ? [
+              'name',
+              'pattern',
+              'priority',
+              'trunkId',
+              'stripCount',
+              'addPrefix',
+            ]
+          : k === 'inbound'
+            ? ['name', 'gatewayId', 'didId', 'destination']
+            : k === 'groups'
+              ? [
+                  'name',
+                  'number',
+                  'memberIds',
+                  'strategy',
+                  'timeout',
+                  'fallback',
+                ]
+              : ['name', 'purpose', 'pattern'];
       const data = object(
         input,
         op === 'create'
@@ -256,7 +294,7 @@ export class Routing {
           if (
             op === 'status' &&
             old &&
-            ('memberIds' in old || 'destination' in old)
+            ('memberIds' in old || 'destination' in old || 'trunkId' in old)
           )
             await this.store.validate(
               tx,
@@ -320,7 +358,7 @@ export class Routing {
           nodeId: { kind: 'uuid' },
           resourceKind: {
             kind: 'enum',
-            values: ['groups', 'reservations', 'inbound'],
+            values: ['groups', 'reservations', 'inbound', 'outbound'],
           },
           operation: {
             kind: 'enum',

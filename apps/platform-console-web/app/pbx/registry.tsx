@@ -336,7 +336,7 @@ export function PbxDetail({ id }: { id: string }) {
             Manage extension inventory
           </Link>
           <Link href={`/pbx-nodes/${node.id}/routing`} className={linkClass}>
-            Routing: groups and reservations
+            Routing: groups and rules
           </Link>
           <Link href={`/pbx-nodes/${node.id}/peers`} className={linkClass}>
             Manage trunks, gateways and DIDs

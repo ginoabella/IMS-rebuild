@@ -612,7 +612,7 @@ export async function checkInboundRouting({
   await button('Remove DID').click();
   await button('Confirm removal').click();
   const dependency = page.getByRole('region', {
-    name: 'Referencing inbound rules or resources',
+    name: 'Referencing routing rules or resources',
     exact: true,
   });
   await expect(dependency).toContainText(exact.name);

@@ -331,6 +331,23 @@ export async function checkPeerBrowser({
       'sip-provider',
     ),
   );
+  const outboundReference = await create(
+    `/platform/pbx-nodes/${nodeId}/routing/outbound`,
+    {
+      requestId: randomUUID(),
+      name: 'Credential adoption outbound reference',
+      pattern: {
+        kind: 'exact',
+        digits: '987654321',
+        minLength: 9,
+        maxLength: 9,
+      },
+      priority: 100,
+      trunkId: authenticated.id,
+      stripCount: 0,
+      addPrefix: '',
+    },
+  );
   const adopted = await request(path('trunks', authenticated.id), 'PATCH', {
     expectedVersion: 1,
     name: authenticated.name,
@@ -339,6 +356,25 @@ export async function checkPeerBrowser({
   });
   assert.equal(adopted.status, 200);
   assert.equal(adopted.data.resource.settings.credential.version, 2);
+  assert.equal(
+    (
+      await request(
+        `/platform/pbx-nodes/${nodeId}/routing/outbound/${outboundReference.id}`,
+      )
+    ).data.resource.trunkId,
+    authenticated.id,
+  );
+  assert.equal(
+    (
+      await request(
+        `/platform/pbx-nodes/${nodeId}/routing/outbound/${outboundReference.id}/remove`,
+        'POST',
+        { expectedVersion: 1 },
+      )
+    ).status,
+    200,
+  );
+
   assert.equal(
     (await request(path('trunks', registered.id))).data.resource.settings
       .credential.version,

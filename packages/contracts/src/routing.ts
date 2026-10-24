@@ -1,4 +1,4 @@
-export type RoutingKind = 'groups' | 'reservations' | 'inbound';
+export type RoutingKind = 'groups' | 'reservations' | 'inbound' | 'outbound';
 export type GroupDestination =
   { kind: 'hangup' } | { kind: 'extension' | 'group'; id: string };
 export interface GroupValues {
@@ -46,7 +46,7 @@ export interface InboundPreviewRequest {
   dialled: string;
 }
 export type InboundDto = RoutingRecord & InboundValues & { enabled: boolean };
-export type RoutingDto = GroupDto | ReservationDto | InboundDto;
+export type RoutingDto = GroupDto | ReservationDto | InboundDto | OutboundDto;
 export interface InboundPreviewDto {
   advisory: true;
   callingEligible: false;
@@ -81,7 +81,11 @@ export interface RoutingErrorDto {
   message: string;
   reason?: string;
   fieldErrors?: Record<string, string>;
-  blockers?: { id: string; name: string; kind?: 'groups' | 'inbound' }[];
+  blockers?: {
+    id: string;
+    name: string;
+    kind?: 'groups' | 'inbound' | 'outbound';
+  }[];
 }
 export interface GroupPreviewDto {
   advisory: true;
@@ -92,6 +96,32 @@ export interface GroupPreviewDto {
     id: string;
     version: number;
     kind: 'extension' | 'group';
+    available: boolean;
+  }[];
+  warnings: string[];
+}
+
+export interface OutboundValues {
+  name: string;
+  pattern: NumberPattern;
+  priority: number;
+  trunkId: string;
+  stripCount: number;
+  addPrefix: string;
+}
+export type OutboundDto = RoutingRecord & OutboundValues & { enabled: boolean };
+export type CreateOutboundRequest = OutboundValues & { requestId: string };
+export type EditOutboundRequest = OutboundValues & { expectedVersion: number };
+export interface OutboundPreviewDto {
+  advisory: true;
+  callingEligible: false;
+  reason: 'matched' | 'no_match' | 'disabled_rule' | 'unavailable_trunk';
+  rule: OutboundDto | null;
+  transformed: string | null;
+  resources: {
+    id: string;
+    version: number;
+    kind: 'rule' | 'trunk';
     available: boolean;
   }[];
   warnings: string[];

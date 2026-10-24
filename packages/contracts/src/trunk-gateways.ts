@@ -85,7 +85,7 @@ export interface PeerErrorDto {
   blockers?: {
     id: string;
     name: string;
-    kind?: 'gateways' | 'dids' | 'inbound';
+    kind?: 'gateways' | 'dids' | 'inbound' | 'outbound';
   }[];
 }
 export interface CreateTrunkDto extends TrunkValues {

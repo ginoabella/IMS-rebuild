@@ -1,5 +1,12 @@
+import {
+  outboundSelect,
+  validateOutbound,
+  validateOutboundReservation,
+  saveOutbound,
+} from './outbound-repository';
 import type {
   InboundValues,
+  OutboundValues,
   GroupDto,
   GroupValues,
   ReservationValues,
@@ -16,6 +23,7 @@ import {
   saveInbound,
 } from './inbound-repository';
 const tables = {
+  outbound: 'public.outbound_rules',
   inbound: 'public.inbound_rules',
   groups: 'public.ring_groups',
   reservations: 'public.number_reservations',
@@ -23,6 +31,7 @@ const tables = {
 const common = `id,node_id AS "nodeId",installation_id AS "installationId",name,version,created_at AS "createdAt",updated_at AS "updatedAt",created_by AS "createdBy",updated_by AS "updatedBy",removed_at AS "removedAt"`;
 function select(k: RoutingKind) {
   if (k === 'inbound') return inboundSelect;
+  if (k === 'outbound') return outboundSelect;
   return `SELECT ${common},${k === 'groups' ? `enabled,number,strategy,timeout,ARRAY(SELECT extension_id FROM public.ring_group_members m WHERE m.group_id=ring_groups.id ORDER BY position) AS "memberIds",CASE WHEN fallback_group_id IS NOT NULL THEN jsonb_build_object('kind','group','id',fallback_group_id) WHEN fallback_extension_id IS NOT NULL THEN jsonb_build_object('kind','extension','id',fallback_extension_id) ELSE jsonb_build_object('kind','hangup') END AS fallback` : `purpose,jsonb_build_object('kind',pattern_kind,'digits',digits,'minLength',min_length,'maxLength',max_length) AS pattern`} FROM ${tables[k]}`;
 }
 type Row = Omit<RoutingDto, 'createdAt' | 'updatedAt' | 'removedAt'> & {
@@ -103,7 +112,7 @@ export class RoutingRepository {
     nodeId: string,
     installationId: string,
     id: string,
-    v: GroupValues | ReservationValues | InboundValues,
+    v: GroupValues | ReservationValues | InboundValues | OutboundValues,
   ) {
     if (
       (
@@ -114,6 +123,9 @@ export class RoutingRepository {
       ).rows.length
     )
       throw new RoutingRejected('name_conflict');
+    if ('trunkId' in v)
+      return validateOutbound(s, this, nodeId, installationId, id, v);
+    if ('purpose' in v) await validateOutboundReservation(s, this, nodeId, v);
     if ('destination' in v)
       return validateInbound(s, this, nodeId, installationId, id, v);
     const p =
@@ -173,11 +185,23 @@ export class RoutingRepository {
     nodeId: string,
     installationId: string,
     id: string,
-    v: GroupValues | ReservationValues | InboundValues | null,
+    v: GroupValues | ReservationValues | InboundValues | OutboundValues | null,
     old: RoutingDto | null,
     enabled: boolean,
     remove: boolean,
   ) {
+    if (k === 'outbound')
+      return saveOutbound(
+        tx,
+        this,
+        nodeId,
+        installationId,
+        id,
+        v as OutboundValues | null,
+        old,
+        enabled,
+        remove,
+      );
     if (k === 'inbound')
       return saveInbound(
         tx,
@@ -208,7 +232,7 @@ export class RoutingRepository {
             actor,
           ],
         );
-      else if ('pattern' in v)
+      else if ('purpose' in v)
         await tx.query(
           `INSERT INTO public.number_reservations(id,node_id,installation_id,name,purpose,pattern_kind,digits,min_length,max_length,created_by,updated_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$10)`,
           [
@@ -242,7 +266,7 @@ export class RoutingRepository {
         );
         extra +=
           ',name=$5,number=$6,strategy=$7,timeout=$8,fallback_extension_id=$9,fallback_group_id=$10';
-      } else if (v && 'pattern' in v) {
+      } else if (v && 'purpose' in v) {
         args.push(
           v.name,
           v.purpose,

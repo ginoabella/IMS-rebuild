@@ -94,16 +94,16 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
       {!!blockers.length && (
         <Panel
           aria-label={
-            blockers.some((b) => b.kind === 'inbound')
-              ? 'Referencing inbound rules or resources'
+            blockers.some((b) => b.kind === 'inbound' || b.kind === 'outbound')
+              ? 'Referencing routing rules or resources'
               : kind === 'trunks'
                 ? 'Referencing gateways'
                 : 'Referencing DIDs'
           }
         >
           <h2>
-            {blockers.some((b) => b.kind === 'inbound')
-              ? 'Referencing inbound rules or resources'
+            {blockers.some((b) => b.kind === 'inbound' || b.kind === 'outbound')
+              ? 'Referencing routing rules or resources'
               : kind === 'trunks'
                 ? 'Referencing gateways'
                 : 'Referencing DIDs'}
@@ -111,7 +111,7 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
           <ul>
             {blockers.map((b) => (
               <li key={b.id}>
-                {b.kind === 'inbound' ? (
+                {b.kind === 'inbound' || b.kind === 'outbound' ? (
                   <Link
                     className="text-[var(--accent-primary)] underline"
                     href={`/pbx-nodes/${nodeId}/routing`}

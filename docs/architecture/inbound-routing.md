@@ -75,7 +75,7 @@ are sanitized 503 responses. No secret or opaque route identity is a browser DTO
 ## Internal identity and ownership handoff
 
 `domain/route-identity.ts: routeIdentity(installationId,routeId)` owns the reusable
-v1 generator for inbound and future outbound routes. SHA-256 hashes a domain-tagged
+v1 generator for inbound and outbound desired routes. SHA-256 hashes a domain-tagged
 JSON tuple of canonical installation and route UUIDs. It produces distinct prefixed
 `sourceKey`, `watchIdentity`, `attributionKey`, plus `contextHash`. Persist these only
 at create. Runtime has no UPDATE grants on identity columns. Label, caller-ID and
@@ -94,6 +94,7 @@ Asterisk compiler or live attribution is delivered.
 
 P4-U2 must provide canonical current binding/allocation facts; P3-U5 must preserve
 these mappings in verified configuration; P5-U3 must authenticate real ingress and
-reconcile source/version facts before calling this internal boundary. Shared
-outbound permissions remain P3-U4c/P4 work. Saving/enabling/previewing remains
+reconcile source/version facts before calling this internal boundary. The [outbound contract](outbound-routing.md) extends this generator and provides
+fixture-only outbound compatibility checks; real shared-trunk permissions remain
+P4-U2 work. Saving/enabling/previewing remains
 PBX-offline and has no external effects or calling-readiness implication.

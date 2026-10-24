@@ -1,8 +1,9 @@
 # P3-U4c — Outbound rules and integrated routing handoff
 
-Status: planned. Sub-unit specification created October 24, 2026
-(Asia/Manila, +08:00), following the user's instruction to create the three
-P3-U4 sub-units. No implementation or runtime verification is claimed.
+Status: completed within approved private development, 2026-10-24 23:50 +08:00 (Asia/Manila).
+C-01–06 and parent AC-01–08 passed under explicitly approved R-03/outbound R-04.
+[Final evidence and parent reconciliation](../../docs/status/p3-u4c-evidence.md).
+No live apply, tenant bindings or calling readiness is established.
 
 Parent: [P3-U4 — Ring groups and dial plans](p3-u4-ring-groups-and-dial-plans.md).
 Predecessors: [a — Groups and reservations](p3-u4a-ring-groups-and-reserved-number-protection.md)

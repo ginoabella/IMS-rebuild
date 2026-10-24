@@ -93,3 +93,45 @@ export function resolveRouteTenant(
     return null;
   }
 }
+
+/** Trusted facts from future P4 binding; explicit permission is required for shared trunks. */
+export function outboundTenantCompatible(
+  binding: {
+    installationId: string;
+    routeId: string;
+    version: number;
+    tenantId: string | null;
+    trunkId: string;
+    enabled: boolean;
+  },
+  facts: ReadonlyMap<
+    string,
+    {
+      installationId: string;
+      tenantId: string | null;
+      eligible: boolean;
+      permittedTenantIds: readonly string[];
+    }
+  >,
+): boolean {
+  if (
+    !binding.tenantId ||
+    !binding.enabled ||
+    !Number.isInteger(binding.version) ||
+    binding.version < 1
+  )
+    return false;
+  const route = facts.get(binding.routeId),
+    trunk = facts.get(binding.trunkId);
+  return (
+    !!route &&
+    !!trunk &&
+    route.installationId === binding.installationId &&
+    trunk.installationId === binding.installationId &&
+    route.tenantId === binding.tenantId &&
+    route.eligible &&
+    trunk.eligible &&
+    (trunk.tenantId === null || trunk.tenantId === binding.tenantId) &&
+    trunk.permittedTenantIds.includes(binding.tenantId)
+  );
+}

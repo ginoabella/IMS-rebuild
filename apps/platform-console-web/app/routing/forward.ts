@@ -3,6 +3,10 @@ import { backendRequest, safeError } from '../auth/server';
 import { boundedJsonBody } from '../auth/bounded-body';
 import { input, obj, output, route, uuid } from './validation';
 const reasons = [
+  'priority_conflict',
+  'invalid_trunk',
+  'reserved_number',
+  'outbound_limit',
   'selector_conflict',
   'invalid_gateway',
   'invalid_did',
@@ -82,6 +86,10 @@ export async function forwardRouting(
     const fieldErrors: Record<string, string> = {};
     if (obj(data.fieldErrors))
       for (const k of [
+        'trunkId',
+        'priority',
+        'stripCount',
+        'addPrefix',
         'gatewayId',
         'didId',
         'destination',
@@ -100,17 +108,25 @@ export async function forwardRouting(
       ])
         if (Object.hasOwn(data.fieldErrors, k))
           fieldErrors[k] =
-            k === 'number'
-              ? 'Use a number 1000–899999 or leave empty.'
-              : k === 'timeout'
-                ? 'Use 5–120 seconds per attempt.'
-                : k === 'memberIds'
-                  ? 'Select 1–32 distinct inventory extensions.'
-                  : k === 'fallback'
-                    ? 'Review the fallback destination; cycles are not permitted.'
-                    : k === 'pattern'
-                      ? 'Use ASCII digits and total lengths 1–15.'
-                      : 'Review this field.';
+            k === 'priority'
+              ? 'Use an integer 0–2147483647; lower wins.'
+              : k === 'stripCount'
+                ? 'Strip at most the minimum input length; all outputs must contain 1–15 digits.'
+                : k === 'addPrefix'
+                  ? 'Use up to 15 ASCII digits; all outputs must contain 1–15 digits.'
+                  : k === 'trunkId'
+                    ? 'Choose a nonremoved outbound-capable trunk on this PBX.'
+                    : k === 'number'
+                      ? 'Use a number 1000–899999 or leave empty.'
+                      : k === 'timeout'
+                        ? 'Use 5–120 seconds per attempt.'
+                        : k === 'memberIds'
+                          ? 'Select 1–32 distinct inventory extensions.'
+                          : k === 'fallback'
+                            ? 'Review the fallback destination; cycles are not permitted.'
+                            : k === 'pattern'
+                              ? 'Use ASCII digits and total lengths 1–15.'
+                              : 'Review this field.';
     return Response.json(
       {
         statusCode: status,
@@ -145,7 +161,7 @@ export async function forwardRouting(
               blockers: data.blockers.map((b) => ({
                 id: b.id,
                 name: b.name,
-                ...(['groups', 'inbound'].includes(b.kind)
+                ...(['groups', 'inbound', 'outbound'].includes(b.kind)
                   ? { kind: b.kind }
                   : {}),
               })),
