@@ -445,6 +445,7 @@ export async function checkDidBrowser({
   await expect(buttons('Disable DID')).toBeVisible();
   await buttons('Disable DID').click();
   await expect(buttons('Enable DID')).toBeVisible();
+  await expect(buttons('Edit DID')).toBeEnabled();
   await buttons('Edit DID').focus();
   await page.keyboard.press('Enter');
   await page.getByLabel(/^DID number/).fill('0281234500');

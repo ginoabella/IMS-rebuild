@@ -317,3 +317,5 @@ Routing-policy decisions R-01–05 remain unresolved; live apply belongs to P3-U
 
 Feature APIs/browser, administrator migration and routine backup acceptance remain
 incomplete. See the [tracker](../context/progress-tracker.md) for the next working step.
+
+- [Ring groups and reserved-number management](runbooks/ring-groups.md) — desired-only operator workflow and [namespace/dependency contract](architecture/ring-groups.md).

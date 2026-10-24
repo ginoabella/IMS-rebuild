@@ -1,3 +1,5 @@
+import { RoutingController } from '../../../telephony/adapters/http/routing.controller';
+import { Routing } from '../../../telephony/application/routing';
 import { PeersController } from '../../../telephony/adapters/http/peers.controller';
 import { Peers } from '../../../telephony/application/peers';
 import { FilePbxCatalog } from '../../../telephony/adapters/connectivity/catalog';
@@ -38,12 +40,18 @@ export class PlatformAuthHttpModule {
         PbxController,
         InventoryController,
         PeersController,
+        RoutingController,
         EndpointCredentialsController,
         PlatformAuthController,
         PlatformTenantsController,
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: Routing,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.routing,
+        },
         {
           provide: Peers,
           inject: [InventoryRuntime],

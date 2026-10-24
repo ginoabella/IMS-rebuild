@@ -259,7 +259,7 @@ export class InventoryRepository implements InventoryStore {
         ]);
     return (
       await s.query<{ number: string }>(
-        'SELECT number FROM public.extensions WHERE node_id=$1 AND number=ANY($2::text[]) ORDER BY number::integer',
+        `SELECT n AS number FROM unnest($2::text[]) n WHERE EXISTS (SELECT 1 FROM public.telephony_number_claims c JOIN public.pbx_nodes p ON p.installation_id=c.installation_id WHERE p.id=$1 AND c.digit_length=length(n) AND c.span @> n::bigint) ORDER BY n::integer`,
         [nodeId, numbers],
       )
     ).rows.map((r) => r.number);

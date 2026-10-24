@@ -1,3 +1,4 @@
+import { checkRouting } from './check-routing.mjs';
 // Real PostgreSQL + Redis + two production Nest replicas + HTTPS Next browser.
 // PBX targets are deliberately unreachable .invalid names; no telephony process is started.
 import assert from 'node:assert/strict';
@@ -8,6 +9,7 @@ import { expect as baseExpect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
 const expect = baseExpect.configure({ timeout: 20000 });
 export async function checkPeerBrowser({
+  routingOnly = false,
   trunkAccess,
   holdResponse,
   page,
@@ -118,6 +120,32 @@ export async function checkPeerBrowser({
   }
   const path = (kind, id = '', suffix = '') =>
     `${base}/${kind}${id ? `/${id}` : ''}${suffix ? `/${suffix}` : ''}`;
+  if (routingOnly) {
+    await checkRouting({
+      request,
+      direct,
+      create,
+      path: (...parts) =>
+        `/platform/pbx-nodes/${nodeId}/routing/${parts.join('/')}`,
+      nodeId,
+      otherNode,
+      installation,
+      owner,
+      session,
+      page,
+      context,
+      config,
+      ingress,
+      a,
+      b,
+      issue,
+      staffFacts,
+      login,
+      select,
+      holdResponse,
+    });
+    return;
+  }
   await checkSimpleTrunkCommand(owner, installation);
   // Metadata fixtures establish the SQL/API/browser boundary only. Real OpenBao
   // setup acceptance is deliberately tracked separately, never inferred here.

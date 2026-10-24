@@ -1,9 +1,8 @@
 # P3-U4 — Manage ring groups and dial plans
 
-Status: planned; specification and split review prepared October 24, 2026
-(Asia/Manila, +08:00). Proposed routing policies below require the indicated
-decisions before dependent implementation. No implementation or live verification
-is claimed by this document.
+Status: in progress; P3-U4a completed October 24, 2026 13:14 +08:00
+(Asia/Manila) under explicitly approved R-01/R-04/R-05. R-02/R-03
+remain unresolved for b/c. Parent acceptance and live routing remain incomplete.
 
 ## Goal and requirements
 
@@ -50,9 +49,9 @@ owners. Preserve existing runtime configuration, secrets and backup operations.
 
 ## Decisions required before dependent implementation
 
-The user owns these product-policy decisions. These are recommendations for a
-small first version, not approved requirements. Record the answer here and in the
-tracker before implementing the affected behavior. Splitting does not resolve a
+The user owns these product-policy decisions. R-01/R-04/R-05 are explicitly
+approved in the record below; R-02/R-03 remain recommendations requiring answers
+before affected b/c implementation. Record decisions here and in the tracker. Splitting does not resolve a
 missing policy decision.
 
 | ID   | Recommended contract / question to resolve                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Affected work and resume condition                                                                                                                                                               |
@@ -62,6 +61,21 @@ missing policy decision.
 | R-03 | Outbound rules use exact numbers or a literal digit prefix with explicit minimum/maximum total digit length (1–15); exclude raw Asterisk patterns, regex and arbitrary dial-plan text. Lower numeric priority wins within a scope; overlapping equal-priority rules reject. Destination: one outbound-capable trunk; optional explicit strip-count/add-prefix transformation, validated for nonempty bounded output. No match denies.                                                                                                                         | c; confirm pattern language, priority, overlap policy, number transformations and allowed call classes, including emergency/international/service numbers. No default broad outbound permission. |
 | R-04 | Maintain installation-scoped reserved exact numbers or bounded prefixes with a purpose. Block intersecting dialable groups, extension creation/bulk creation and outbound rules. Disabled definitions retain claims; removal releases a claim only when references allow it. Establish the actual bootstrap/unmanaged/service/emergency reservations by reviewing the controlled installation; do not import legacy examples as defaults.                                                                                                                     | a owns namespace protection; c adds outbound overlap. Confirm initial reservations, management authority and conflict policy before either consumer ships.                                       |
 | R-05 | Create unbound infrastructure definitions before tenants. An unbound group/rule cannot be applied as a tenant route or establish call ownership. A later tenant binding must validate all members, fallbacks, ingress ownership and outbound permission against canonical allocation facts. Shared outbound trunks are allowed only through explicit tenant permissions.                                                                                                                                                                                      | All children and P4-U2 handoff; confirm template-to-binding behavior and tenant compatibility contract. P4-U2 must implement real allocation checks before tenant/live use.                      |
+
+### Approved P3-U4a policy — October 24, 2026 (+08:00)
+
+The user explicitly approved R-01/R-04/R-05 in the implementation conversation.
+R-01 uses the recommended values above, including initially disabled groups.
+R-04: platform operators manage exact ASCII digit numbers or literal digit prefixes
+with explicit minimum/maximum total lengths 1–15. No reservation enable switch.
+Intersecting reservations and existing extension/group claims reject, including
+disabled claims. Referenced groups cannot be removed. Start with no seeded
+reservations: read-only inspection of the running development dial plan confirmed
+only the bootstrap default `_X.` hangup rule. Legacy reference examples are not
+imported. No emergency/service policy or outbound permission is inferred.
+R-05: definitions remain unbound/calling-ineligible; reject tenant-binding inputs.
+Future binding must validate every reachable member/fallback against trusted
+canonical allocations. R-02/R-03 remain unresolved for b/c.
 
 Routine choices such as file names, endpoint names and pagination implementation
 follow existing conventions without a separate approval gate. P3-U5's permitted
@@ -205,8 +219,9 @@ must participate in extension bulk creation; generated identities must not imply
 tenant ownership before P4-U2. These requirements are included above. No separate
 credential, backup, infrastructure or security-certification sub-unit is needed.
 
-All three child specs are created and planned. The user authorized creating the
-sub-unit specifications; this does not resolve routing-policy decisions R-01–05
-or begin implementation. P3-U4 remains planned until implementation starts and
-incomplete until every parent criterion passes. Routing-policy approval,
-implementation, live apply and production readiness are separate states.
+All three child specs are created. P3-U4a is completed within approved private
+development under the explicit R-01/R-04/R-05 policy recorded above;
+[A-01–06 evidence](../../docs/status/p3-u4a-evidence.md) and the operator/dependency
+handoff are published. R-02/R-03 remain unresolved and b/c are planned. Parent
+P3-U4 remains incomplete until every parent criterion passes. Routing-policy
+approval, implementation, live apply and production readiness are separate states.

@@ -82,3 +82,4 @@ export type {
 } from './extension-inventory';
 export * from './endpoint-credentials';
 export * from './trunk-gateways';
+export * from './routing';

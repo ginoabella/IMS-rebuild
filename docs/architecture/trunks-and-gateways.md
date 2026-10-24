@@ -116,3 +116,9 @@ All three resource types share node serialization and transactional audit. Real
 references therefore cannot commit against a concurrently removed gateway/trunk.
 Future routing/apply/tenant consumers must add actual dependency checks here before
 live use, acquire the same node lock, and never cascade or retarget retained IDs.
+
+P3-U4a adds [group/reservation coordination](ring-groups.md) on the same canonical
+node lock, with a database namespace exclusion index shared by extension writes.
+It adds no inbound/outbound rule references yet. P3-U4b/c must register their actual
+gateway/DID/trunk blockers here before consuming resources; saving unbound groups
+establishes no tenant ownership or live use.

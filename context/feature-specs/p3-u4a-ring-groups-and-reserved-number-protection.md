@@ -1,8 +1,9 @@
 # P3-U4a — Ring groups and reserved-number protection
 
-Status: planned. Sub-unit specification created October 24, 2026
-(Asia/Manila, +08:00), following the user's instruction to create the three
-P3-U4 sub-units. No implementation or runtime verification is claimed.
+Status: completed within approved private development, October 24, 2026
+13:14 +08:00 (Asia/Manila). A-01–06 passed; see
+[final evidence](../../docs/status/p3-u4a-evidence.md). The user explicitly approved
+R-01/R-04/R-05 during implementation; parent P3-U4 and b/c remain incomplete.
 
 Parent: [P3-U4 — Ring groups and dial plans](p3-u4-ring-groups-and-dial-plans.md).
 The parent owns shared invariants, routing-policy decisions and AC-01–08.
@@ -23,15 +24,16 @@ No prior routing implementation is assumed.
 
 ## Decisions and dependencies
 
-Resolve parent R-01, R-04 and R-05 before their dependent implementation:
-group numbering/membership/strategy/timeouts/fallbacks, actual reservation policy
-and management authority, and unbound-definition behavior. The parent's values
-are proposals, not approvals. Record decisions in the parent and tracker.
+Parent R-01/R-04/R-05 were explicitly approved before dependent implementation:
+group numbering/membership/strategy/timeouts/fallbacks, reservation grammar and
+operator authority, and unbound-definition behavior. Decisions are recorded in
+the parent and tracker. R-02/R-03 remain pending for b/c.
 
-This child establishes shared exact-number/bounded-prefix reservation matching.
-Outbound rule intersection is added in c. Confirm the approved grammar now so c
-can extend the same validator without a second reservation model. Review actual
-bootstrap/unmanaged usage when establishing reservations; preserve runtime files.
+This child delivers shared exact-number/bounded-prefix reservation matching.
+The approved grammar and namespace mutation contract are documented in the parent
+and delivered architecture handoff; c extends the same validator for outbound
+intersection. Running bootstrap/unmanaged usage was reviewed, no initial number
+reservations were seeded, and runtime files were preserved.
 
 ## Scope and expected result
 
@@ -92,3 +94,8 @@ actual blockers, browser navigation and transaction/recovery conventions. Hand c
 the shared reservation matcher and namespace mutation contract. Future allocation/
 apply owners must add their real dependencies before use. Parent P3-U4, tenant
 readiness and live PBX routing remain incomplete.
+
+Delivered handoff: [operator workflow](../../docs/runbooks/ring-groups.md) and
+[namespace/reference/transaction contract](../../docs/architecture/ring-groups.md).
+Focused command: `./dev exec pnpm check:routing`; actual results, regressions,
+normal check, maintenance scope and limitations are in the final evidence.

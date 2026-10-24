@@ -2495,3 +2495,75 @@ transactions/versions and audit; backup administration remains outside the featu
 - **Verification:** real OpenBao/PostgreSQL/A/B API/HTTPS browser journey and affected inventory/IP-peer/session regressions passed. Final unchanged `./dev check` passed, exit 0. Redis zero-ms expiry and supported-timeout lost-response regressions retain their required assertions.
 - **Development refresh/preservation:** additive migration applied; ordinary backend and HTTPS console refreshed, console ready, live/ready 200 with database/both Redis up. `./dev platform-https-check` passed, exit 0, preserving identities/migration history/shared credentials. No PBX writes, live registration, reload or calls; endpoint state/backups preserved. Owned synthetic provider versions remain retained.
 - **Handoff:** [setup/replacement and recovery guide](../docs/runbooks/trunk-credentials.md). Next is P3-U3c DID/integration; routing/live apply, tenant readiness and production acceptance remain with their owning units.
+
+
+## 2026-10-24 — P3-U4a implementation checkpoints and previous P3-U3c checkpoint
+
+Historical checkpoints below precede the final P3-U4a completion at 13:14 +08:00.
+Pending wording is historical; current delivery state is in the tracker and
+[final P3-U4a evidence](../docs/status/p3-u4a-evidence.md).
+
+### P3-U4a implementation and verification checkpoint (superseded)
+
+**P3-U4a — Ring groups and reserved-number protection: in progress**
+(2026-10-24, Asia/Manila, +08:00), at implementation/verification.
+Requirement: [child A-01–06](feature-specs/p3-u4a-ring-groups-and-reserved-number-protection.md).
+Read repository instructions and required context; reviewed inventory/resource
+contracts and existing persistence coordination. The user explicitly approved the proposed R-01/R-04/R-05 policy in the
+implementation conversation; recorded in the parent spec. Dependent implementation
+may proceed. R-02/R-03 remain unresolved for b/c. Persistence/domain/API and console implementation are underway: additive group/member,
+reservation/receipt tables and a derived PostgreSQL namespace exclusion constraint;
+inventory checks shared claims without upgrading its existing shared node lock.
+Group fallback graphs, strict unbound inputs, versions/audit/receipts and operator-
+bound mounted recovery are implemented and focused acceptance passed. Final normal
+integration checks and development refresh remain pending.
+
+Read-only inspection confirmed that the running development Asterisk's
+`/etc/asterisk/extensions.conf` matches the repository bootstrap: a default `_X.`
+hangup rule, with no specific service/emergency/unmanaged number claims there.
+Legacy reference examples are not the running dial plan and will not be seeded.
+Inventory currently uses node `FOR SHARE` plus per-number advisory locks; resource
+writes use canonical node `FOR UPDATE`. Routing now shares that exclusion boundary
+without upgrading inventory locks. Runtime PBX files and credentials are preserved.
+
+Focused check command added: `./dev exec pnpm check:routing` (isolated real
+PostgreSQL/shared Redis, two HTTP replicas and the actual HTTPS console).
+Verification checkpoint (2026-10-24, Asia/Manila, +08:00):
+`./dev exec pnpm check:routing` passed, including real PostgreSQL/A/B APIs,
+all four required namespace/reference races, audit/receipt rollback, trusted
+ownership fixtures and actual HTTPS group/reservation management, preview,
+validation/focus retention, exact-create/uncertain-edit/stale recovery,
+blocker navigation, removal, keyboard, 320–1440px reflow, axe and mounted logout
+fencing. The surrounding platform browser/session/identity-isolation checks also
+passed. Fixed preview capture after access revalidation; acceptance retains this
+regression. Backend/console typechecks, focused ESLint and
+`./dev exec pnpm check:extension-inventory --inventory` passed. Initial acceptance
+fixture mistakes and a concurrent sign-in transport timeout were resolved before
+the passing focused run; isolated stores were removed by the launcher.
+Resource API/browser regression passed after correcting an existing DID keyboard
+fixture to wait for the Edit control to become enabled. The inventory-browser
+launcher hit an invalid endpoint-fixture issuer (verified-TLS lookup 403); its PBX
+baseline guard restored/cleaned up. Routine existing-role/named-custodian issuer
+replacement then passed with actual 86400-second nonrenewable access, zero policy
+updates and human-session revocation. Stored endpoint material and backups are
+preserved. Selected-lifecycle-only preflight fixes the maintenance helper's
+unrelated legacy trunk comparison; [evidence](../docs/status/p3-u4a-evidence.md#verification-access-maintenance).
+Affected regressions now passed: trunk/gateway/DID API/browser; full PBX registry,
+observation and browser; inventory browser with real OpenBao/controlled observation,
+including exact fixture cleanup and restored PBX baseline. Latest routing rerun
+also passed with explicit removed-destination, same-tenant reachable-graph and
+both group/reservation form reflow/axe checks. Nine maintenance-policy unit checks
+passed. Final `./dev check` passed, exit 0 (lint, format, all typechecks/builds, foundation,
+durability/storage/identity/platform/staff/browser/credential/limit/session/PBX
+regressions). Ordinary development migration/HTTPS refresh and final evidence
+reconciliation remain. Completion still
+requires A-06; this feature remains in progress.
+
+## Latest Completed Checkpoint — P3-U3c / parent P3-U3
+
+- **Status:** completed within approved private development; 2026-10-24 00:09 +08:00 (Asia/Manila). All a/b/c and parent DEV-01–07 criteria passed.
+- **Requirement:** [C-01–05](feature-specs/p3-u3c-did-inventory-and-integration.md) and [parent DEV-01–07](feature-specs/p3-u3-development-resource-management.md); [final evidence](../docs/status/p3-u3c-evidence.md).
+- **Delivered:** canonical DID inventory, same-installation gateway links, disabled-record collisions, real gateway dependencies and dependency-ordered soft removal with retained IDs/audit. PBX navigation completes trunk/gateway/DID forms, digest selection/adoption, validation retention, canonical stale/unknown recovery and actionable blocker inspection.
+- **Verification:** real OpenBao/PostgreSQL/A/B API/HTTPS browser suite passed, exit 0; affected a/b, inventory and credential-adoption regressions passed. Final full `./dev check` passed, exit 0, including builds, foundation, durability, storage, identity, platform/staff/browser, credentials, distributed limits, Redis response loss and PBX registry regressions.
+- **Development refresh/preservation:** additive migration applied; ordinary HTTPS console refreshed and ready. `./dev platform-https-check` passed; live/ready 200 with database/both Redis up. Existing identities/migration history/shared credentials, endpoint material and backups preserved; owned synthetic provider versions retained. No PBX apply, reload, registration or calls.
+- **Handoff:** [operator workflow](../docs/runbooks/did-inventory.md) and [resource/reference contract](../docs/architecture/trunks-and-gateways.md) for P3-U4 routing, P3-U5 apply and P4 allocation. Desired saves/enabled flags establish no live connectivity or voice readiness.

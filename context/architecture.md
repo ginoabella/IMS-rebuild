@@ -233,6 +233,12 @@ resource console. It reuses node serialization, create receipts, versions and au
 [DID workflow and handoffs](../docs/runbooks/did-inventory.md) define normalization
 and future routing/apply/allocation dependency ownership. No live consumer is added.
 
+P3-U4a adds [desired groups and reserved numbers](../docs/architecture/ring-groups.md):
+canonical same-node group/member/fallback references, installation namespace exclusion
+constraints shared with inventory, node-serialized writes, versions/audit/receipts
+and operator-bound routing console recovery. Group definitions remain unbound;
+trusted compatibility fixtures do not deliver allocation or tenant calling readiness.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

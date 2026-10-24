@@ -79,13 +79,21 @@ function fixture(content) {
 }
 if (inventoryBrowser || observing)
   inventoryAcceptance = inventoryPbxAcceptance(pbxAccess);
-if (['--extension-inventory', '--peer-browser'].includes(process.argv[2]))
+if (
+  ['--extension-inventory', '--peer-browser', '--routing-browser'].includes(
+    process.argv[2],
+  )
+)
   console.log(
     JSON.stringify({
       check:
-        process.argv[2] === '--peer-browser'
-          ? 'trunk-gateways'
-          : 'extension-inventory',
+        process.argv[2] === '--routing-browser'
+          ? 'routing'
+          : process.argv[2] === '--routing-browser'
+            ? 'routing'
+            : process.argv[2] === '--peer-browser'
+              ? 'trunk-gateways'
+              : 'extension-inventory',
       redisFixture: name,
     }),
   );
@@ -262,13 +270,19 @@ try {
   if (inventoryAcceptance) inventoryAcceptance.close();
   if (created) docker(['rm', '-f', '-v', name]);
   rmSync(directory, { recursive: true, force: true });
-  if (['--extension-inventory', '--peer-browser'].includes(process.argv[2]))
+  if (
+    ['--extension-inventory', '--peer-browser', '--routing-browser'].includes(
+      process.argv[2],
+    )
+  )
     console.log(
       JSON.stringify({
         check:
-          process.argv[2] === '--peer-browser'
-            ? 'trunk-gateways'
-            : 'extension-inventory',
+          process.argv[2] === '--routing-browser'
+            ? 'routing'
+            : process.argv[2] === '--peer-browser'
+              ? 'trunk-gateways'
+              : 'extension-inventory',
         redisFixture: name,
         cleanup: 'removed',
       }),

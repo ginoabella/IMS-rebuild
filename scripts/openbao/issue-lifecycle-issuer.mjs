@@ -56,9 +56,14 @@ try {
   ).issuerRoles.find((r) => r.name === `platform-${lifecycle}-issuer`);
   stage = 'read_only_preflight';
   const checked = await provisioningPreflight(provider, {
-    mount: plan.mount,
-    policies: plan.policies,
-    roles: [...plan.roles, role],
+    // Routine endpoint replacement must not depend on the superseded trunk
+    // lifecycle plan. Inspect only the selected lifecycle's existing grants.
+    mount: lifecycle === 'endpoint' ? 'myims-endpoint' : plan.mount,
+    policies: plan.policies.filter((p) => p.name.startsWith(`${lifecycle}-`)),
+    roles: [
+      ...plan.roles.filter((r) => r.name.startsWith(`${lifecycle}-`)),
+      role,
+    ],
   });
   if (
     checked.createMount ||

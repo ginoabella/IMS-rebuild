@@ -1,3 +1,5 @@
+import { Routing } from '../../application/routing';
+import { RoutingRepository } from './routing-repository';
 import { Pool } from 'pg';
 import { SnapshotDatabase } from '../../../../infrastructure/database/read-snapshot';
 import { Transaction } from '../../../../infrastructure/database/transaction';
@@ -11,6 +13,7 @@ import { InventoryRepository } from './inventory-repository';
 export class InventoryRuntime {
   readonly service: ExtensionInventory;
   readonly peers: Peers;
+  readonly routing: Routing;
   private readonly pool: Pool;
   private readonly database: SnapshotDatabase;
   constructor(
@@ -30,6 +33,22 @@ export class InventoryRuntime {
     this.pool.on('connect', (client) => client.on('error', () => {}));
     this.pool.on('error', () => {});
     this.database = new SnapshotDatabase(url);
+    this.routing = new Routing(
+      {
+        run: (context, action) =>
+          Transaction.run(
+            this.pool,
+            context,
+            'telephony.routing',
+            logger,
+            action,
+          ),
+      },
+      this.database,
+      authority,
+      new RoutingRepository(),
+      new AuditRepository(),
+    );
     this.peers = new Peers(
       {
         run: (context, action) =>

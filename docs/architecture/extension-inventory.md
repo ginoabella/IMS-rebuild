@@ -210,3 +210,10 @@ unregistered and endpoint absent; other states report unknown. Generated keys
 remain internal. Mutations/receipts preserve a/b desired semantics. No read
 connects to Asterisk. This compatible response extension requires rerunning a/b
 checks and does not establish profile/credential application or readiness.
+
+P3-U4a extends number collision reads to the shared installation claim index for
+extensions, dialable groups and exact/bounded-prefix reservations. Existing node
+`FOR SHARE` and per-number advisory locks remain; group/reservation writes take
+the canonical node `FOR UPDATE` before checking claims. A PostgreSQL exclusion
+constraint backs all writers. Status/profile adoption remains compatible with
+references; no extension removal is added. See [routing coordination](ring-groups.md).
