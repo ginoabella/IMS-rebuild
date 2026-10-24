@@ -1,4 +1,5 @@
 import type {
+  InboundValues,
   GroupValues,
   NumberPattern,
   ReservationValues,
@@ -10,7 +11,11 @@ export { id, invalid, object, version } from './peer';
 export class RoutingRejected extends Error {
   constructor(
     readonly reason: string,
-    readonly blockers?: { id: string; name: string }[],
+    readonly blockers?: {
+      id: string;
+      name: string;
+      kind?: 'groups' | 'inbound';
+    }[],
   ) {
     super(reason);
   }
@@ -118,11 +123,30 @@ export function reservationValues(
     pattern: pattern(data.pattern),
   };
 }
+export function inboundValues(data: Record<string, unknown>): InboundValues {
+  const d = object(data.destination, ['kind', 'id']);
+  if (d.kind !== 'hangup' && d.kind !== 'extension' && d.kind !== 'group')
+    invalid('destination');
+  if (d.kind === 'hangup' && 'id' in d) invalid('destination');
+  return {
+    name: label(data.name),
+    gatewayId: id(data.gatewayId, 'gatewayId'),
+    didId: data.didId === null ? null : id(data.didId, 'didId'),
+    destination:
+      d.kind === 'hangup'
+        ? { kind: 'hangup' }
+        : { kind: d.kind, id: id(d.id, 'destination') },
+  };
+}
 export function routingValues(
   kind: RoutingKind,
   data: Record<string, unknown>,
 ) {
-  return kind === 'groups' ? groupValues(data) : reservationValues(data);
+  return kind === 'inbound'
+    ? inboundValues(data)
+    : kind === 'groups'
+      ? groupValues(data)
+      : reservationValues(data);
 }
 export function validateGraph(groups: Pick<GroupDto, 'id' | 'fallback'>[]) {
   if (groups.length > 512) throw new RoutingRejected('graph_limit');

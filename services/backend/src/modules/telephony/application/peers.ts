@@ -256,12 +256,15 @@ export class Peers {
                       peerConnection(v.settings) ||
                     (prior.direction !== v.direction &&
                       v.direction === 'outbound')
-                  : 'kind' in v &&
-                    'kind' in prior &&
-                    (prior.kind !== v.kind ||
-                      prior.trunkId !== v.trunkId ||
-                      JSON.stringify(prior.sourceAddresses) !==
-                        JSON.stringify(v.sourceAddresses))));
+                  : 'number' in v && 'number' in prior
+                    ? prior.number !== v.number ||
+                      prior.gatewayId !== v.gatewayId
+                    : 'kind' in v &&
+                      'kind' in prior &&
+                      (prior.kind !== v.kind ||
+                        prior.trunkId !== v.trunkId ||
+                        JSON.stringify(prior.sourceAddresses) !==
+                          JSON.stringify(v.sourceAddresses))));
             if (structural) {
               const providerOnly =
                 operation !== 'remove' &&

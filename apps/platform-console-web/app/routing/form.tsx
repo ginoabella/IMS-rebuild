@@ -2,6 +2,7 @@
 import { Button, Field, Input, Panel, Select } from '@myims/ui-web';
 import type { RoutingModel } from './use-routing';
 import { useRoutingResources } from './use-resources';
+import { InboundFields, InboundInspection } from './inbound-fields';
 import { GroupFields } from './group-fields';
 export function RoutingForm({
   model: m,
@@ -12,6 +13,14 @@ export function RoutingForm({
 }) {
   const { v, state, kind, change, errors, blocked } = m;
   const resources = useRoutingResources(m, nodeId);
+  if (
+    state.mode === 'detail' &&
+    state.selected &&
+    'destination' in state.selected
+  )
+    return (
+      <InboundInspection model={m} nodeId={nodeId} resources={resources} />
+    );
   if (
     state.mode === 'detail' &&
     state.selected &&
@@ -108,7 +117,11 @@ export function RoutingForm({
     <Panel aria-label="Resource form">
       <h2 className="font-display text-xl">
         {state.mode === 'edit' ? 'Edit' : 'Create'}{' '}
-        {kind === 'groups' ? 'group' : 'reservation'}
+        {kind === 'inbound'
+          ? 'inbound rule'
+          : kind === 'groups'
+            ? 'group'
+            : 'reservation'}
       </h2>
       <form
         className="mt-4 space-y-4"
@@ -119,7 +132,9 @@ export function RoutingForm({
       >
         <fieldset className="min-w-0 space-y-4" disabled={blocked}>
           {input('name', 'Name')}
-          {kind === 'groups' ? (
+          {kind === 'inbound' ? (
+            <InboundFields model={m} nodeId={nodeId} resources={resources} />
+          ) : kind === 'groups' ? (
             <GroupFields model={m} resources={resources} input={input} />
           ) : (
             <>
@@ -160,7 +175,12 @@ export function RoutingForm({
           {errors.body && <p role="alert">Review the entered fields.</p>}
           <div className="flex flex-wrap gap-3">
             <Button type="submit" pending={m.pending}>
-              Save {kind === 'groups' ? 'group' : 'reservation'}
+              Save{' '}
+              {kind === 'inbound'
+                ? 'inbound rule'
+                : kind === 'groups'
+                  ? 'group'
+                  : 'reservation'}
             </Button>
             <Button
               type="button"

@@ -172,7 +172,9 @@ export function usePeers({ nodeId }: { nodeId: string }) {
     [history, setHistory] = useState<(string | null)[]>([]);
   const [message, setMessage] = useState(''),
     [errors, setErrors] = useState<Record<string, string>>({}),
-    [blockers, setBlockers] = useState<{ id: string; name: string }[]>([]);
+    [blockers, setBlockers] = useState<
+      { id: string; name: string; kind?: 'gateways' | 'dids' | 'inbound' }[]
+    >([]);
   const [canonical, setCanonical] = useState<PeerDto | null>(null),
     [pending, setPending] = useState(false),
     [confirm, setConfirm] = useState(false);

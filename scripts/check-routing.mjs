@@ -1,3 +1,4 @@
+import { checkInboundRouting } from './check-inbound-routing.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -139,6 +140,23 @@ export async function checkRouting({
     request((k === 'groups' ? gp : rp)(g.id, 'remove'), 'POST', {
       expectedVersion: g.version,
     });
+  await checkInboundRouting({
+    request,
+    direct,
+    create,
+    nodeId,
+    otherNode,
+    installation,
+    owner,
+    page,
+    config,
+    a,
+    b,
+    e1,
+    ingress,
+    issue,
+    staffFacts,
+  });
   console.log('CHECK routing: grammar, trusted ownership and group lifecycle');
   // Deterministic grammar/compatibility checks use explicitly trusted allocation facts.
   for (const p of [

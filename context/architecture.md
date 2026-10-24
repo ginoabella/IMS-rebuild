@@ -239,6 +239,12 @@ constraints shared with inventory, node-serialized writes, versions/audit/receip
 and operator-bound routing console recovery. Group definitions remain unbound;
 trusted compatibility fixtures do not deliver allocation or tenant calling readiness.
 
+P3-U4b adds [desired inbound rules and internal route identities](../docs/architecture/inbound-routing.md):
+trusted gateway/associated DID selectors, exact-before-catch-all preview, same-node
+destinations, actual disabled-reference blockers and atomic identities/receipts/audit.
+The routing console shares existing operator recovery. Opaque identities remain
+internal; fixture-only ownership checks do not deliver tenant bindings or live events.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

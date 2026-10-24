@@ -37,7 +37,7 @@ function result(r: RoutingResult, res: Response) {
   return r.value;
 }
 function kind(value: string): RoutingKind {
-  if (value !== 'groups' && value !== 'reservations')
+  if (value !== 'groups' && value !== 'reservations' && value !== 'inbound')
     throw new HttpException(
       { statusCode: 404, message: 'Resource not found' },
       404,
@@ -62,6 +62,8 @@ export class RoutingController {
     @Res({ passthrough: true }) res: Response,
   ) {
     noQuery(q);
+    if (kind(k) === 'inbound')
+      return result(await this.routing.inboundPreview(node, body), res);
     if (kind(k) !== 'groups')
       throw new HttpException('Resource not found', 404);
     return result(await this.routing.preview(node, body), res);

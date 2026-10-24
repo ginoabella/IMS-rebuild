@@ -18,8 +18,8 @@ P3-U2 and its a/b/c sequence are complete within conditional private-development
 scope, including the integrated browser and controlled observation journey.
 P3-U3 and a/b/c are complete within approved private development, including the
 integrated trunk/gateway/DID console and final DEV-01–07 acceptance.
-P3-U4a groups/reservations are complete within approved private development;
-parent P3-U4 awaits b/c. Production, live apply and tenant calling readiness remain
+P3-U4a groups/reservations and P3-U4b inbound rules/identities are complete
+within approved private development; parent P3-U4 awaits c and final acceptance. Production, live apply and tenant calling readiness remain
 with later units.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
@@ -30,12 +30,11 @@ production readiness remain to be delivered.
 
 ## In Progress
 
-No child implementation unit is currently in progress. **P3-U4a is completed**
-within approved private development (2026-10-24 13:14 +08:00, Asia/Manila):
-A-01–06 passed; see the [final evidence](../docs/status/p3-u4a-evidence.md).
-Parent P3-U4 remains incomplete; b/c are planned and R-02/R-03 remain unresolved.
-Prior implementation checkpoints are retained in
-[history](progress-tracker-history.md#2026-10-24--p3-u4a-implementation-checkpoints-and-previous-p3-u3c-checkpoint).
+No child implementation unit is currently in progress. **P3-U4b is completed**
+within approved private development (2026-10-24 18:36 +08:00 (Asia/Manila)); B-01–06 passed.
+See [final evidence](../docs/status/p3-u4b-evidence.md) and
+[prior checkpoints](progress-tracker-history.md#2026-10-24--p3-u4a-completed-checkpoint-and-p3-u4b-implementation).
+Parent P3-U4 remains incomplete pending c and final parent acceptance; R-03 remains unresolved.
 
 **Operational follow-up, outside the feature gate:** owner Windows archive
 verification passed. Existing failed backup `ec0b8e2d-49d9-45e3-930e-6b769b58f103`
@@ -57,14 +56,14 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P3-U4a
+## Latest Completed Checkpoint — P3-U4b
 
-- **Status:** completed within approved private development; 2026-10-24 13:14 +08:00 (Asia/Manila). A-01–06 passed; parent P3-U4 and b/c remain incomplete.
-- **Requirement/decision:** [groups/reservations A-01–06](feature-specs/p3-u4a-ring-groups-and-reserved-number-protection.md), under explicitly approved R-01/R-04/R-05; [final evidence](../docs/status/p3-u4a-evidence.md).
-- **Delivered:** actual group/member/fallback and reserved-number APIs/console, desired status, cycle/ownership checks, namespace constraints shared with individual/bulk stock, atomic audit/version/receipt handling, actionable blockers and soft removal with retained UUIDs. Inputs remain unbound/calling-ineligible; unsupported tenant/opaque bindings reject.
-- **Verification:** `./dev exec pnpm check:routing`, affected inventory API/browser, trunk/gateway/DID and full PBX checks, nine maintenance contract tests and final `./dev check` passed, exit 0. Real PostgreSQL/shared Redis/A/B HTTP/HTTPS browser covers four namespace/reference race classes, rollback, retry/stale/no-op/response loss, owner fencing, keyboard/reflow/axe and exact fixture cleanup.
-- **Development refresh/preservation:** additive migration applied/verified; normal backend and ordinary HTTPS console refreshed/ready. `./dev platform-https-check` passed; live/ready 200 with database/both Redis up. Existing identities/migration history, PBX configuration, stored endpoint/trunk material and backups preserved. Routine invalid test-issuer replacement used the existing native custodian/fixed role, actual 24-hour nonrenewable lease, zero policy changes and revoked human session; scoped helper/preflight correction and limits are recorded in evidence. No routing apply or calls.
-- **Handoff:** [operator workflow](../docs/runbooks/ring-groups.md) and [namespace/reference contract](../docs/architecture/ring-groups.md) for b/c, P3-U5 and P4. R-02/R-03 and actual allocation/apply/rollback dependencies remain with their owners; no tenant or live calling readiness.
+- **Status:** completed within approved private development; 2026-10-24 18:36 +08:00 (Asia/Manila). B-01–06 passed; parent P3-U4/c remain incomplete.
+- **Requirement/decision:** [inbound rules/identities B-01–06](feature-specs/p3-u4b-inbound-rules-and-trusted-route-identities.md), under explicitly approved R-02 and retained R-01/R-04/R-05; [final evidence](../docs/status/p3-u4b-evidence.md).
+- **Delivered:** desired inbound CRUD/status/removal and exact-DID/catch-all preview, canonical ingress/destination checks, internal route identities, fixture-only fail-closed tenant compatibility, actual disabled-reference blockers and correct resource/routing navigation. Removed history stays intact while eligible DID ingress edits resume after reference removal. No tenant binding or calling eligibility is created.
+- **Verification:** focused real PostgreSQL/shared Redis/two-replica/API/HTTPS browser routing and resource checks passed, including final history/pagination regressions. Inventory API/browser, all PBX selections and full `./dev check` passed, exit 0. Atomic audit/receipt rollback, no-op/replay/stale/lost-response recovery, trusted mapping fixtures, keyboard/reflow/axe and exact fixture cleanup passed.
+- **Development refresh/preservation:** both additive migrations applied; ordinary backend and HTTPS console refreshed/ready. `./dev platform-https-check` passed; live/ready 200 with database/both Redis up. Existing identities, migration history, stored endpoint/trunk material, observer credentials, PBX configuration and backups preserved. Owned inventory test material/tokens cleaned and exact controlled PBX baseline restored. No routing apply or calls.
+- **Handoff:** [operator workflow](../docs/runbooks/inbound-routing.md) and [identity/dependency/API contract](../docs/architecture/inbound-routing.md) for c, P3-U5, P4-U2 and P5-U3. Actual tenant bindings, compilation/apply and live event attribution remain with those owners; R-03 and parent acceptance remain outstanding.
 
 ## Completed
 
@@ -74,6 +73,7 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| P3-U4b — inbound rules and trusted route identities | B-01–06 passed: desired inbound APIs/browser/preview, internal identities and fixture-only ownership checks, actual dependency protection, atomic recovery and retained history; normal check and ordinary HTTPS refresh complete. | [Feature evidence](../docs/status/p3-u4b-evidence.md) |
 | P3-U4a — groups and reservations | A-01–06 passed: desired group/member/fallback/reservation APIs/browser, shared namespace races, atomic audit/recovery and dependency-safe removal; normal check and ordinary HTTPS refresh complete. | [Feature evidence](../docs/status/p3-u4a-evidence.md) |
 | P3-U3c / parent P3-U3 | Canonical DID APIs/browser, gateway dependencies and integrated trunk/gateway/DID management; C-01–05 and DEV-01–07 passed, normal check and ordinary HTTPS refresh complete. | [Integrated evidence](../docs/status/p3-u3c-evidence.md) |
 | P3-U3b — simple trunk credentials | Protected trusted OpenBao import/replacement, exact-write recovery and actual digest/desired registration browser selection/adoption; B-01–05 passed, normal check and ordinary HTTPS refresh complete. | [Feature evidence](../docs/status/p3-u3b-evidence.md) |
@@ -107,7 +107,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U4a is completed under approved R-01/R-04/R-05. Continue with P3-U4b after resolving R-02, then c after R-03. The [P3-U4 parent and adopted a/b/c split](feature-specs/p3-u4-ring-groups-and-dial-plans.md#review-and-adopted-implementation-split) defines subsequent b: inbound rules/identities and c: outbound rules/integration. Resolve their applicable R-02/R-03 before implementation and add real resource dependencies before live use. P3-U5 follows routing; backup administration remains separate and tenant readiness stays with Phase 4.
+1. P3-U4a/b are completed under approved R-01/R-02/R-04/R-05. Continue with P3-U4c after resolving R-03 outbound grammar/precedence/permissions. The [parent split](feature-specs/p3-u4-ring-groups-and-dial-plans.md#review-and-adopted-implementation-split) defines c's outbound/integrated handoff and final parent acceptance. P3-U5 follows routing; actual tenant readiness stays with Phase 4 and backup administration remains separate.
 2. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
@@ -118,7 +118,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | --- | --- | --- |
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
-| 3 | P3-U1/P3-U2, P3-U3/a/b/c and P3-U4a complete within development scope; parent P3-U4/b/c, U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
+| 3 | P3-U1/P3-U2, P3-U3/a/b/c and P3-U4a/b complete within development scope; parent P3-U4/c, U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1a/children complete; P4-U1b and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
@@ -142,6 +142,8 @@ The user owns product-policy approvals. Use the authoritative
 for their scope; creating a spec does not approve a proposal.
 
 ### Recorded approvals retained
+
+- October 24, 2026 (+08:00): user explicitly approved recommended R-02, including initially disabled inbound rules, trusted gateway/associated DID or catch-all, exact-first precedence, canonical plus/zero distinctions and extension/group/hangup destinations. [Authoritative decision](feature-specs/p3-u4-ring-groups-and-dial-plans.md#approved-p3-u4b-policy--october-24-2026-0800). R-03 remains unresolved.
 
 - October 23, 2026 (+08:00): user explicitly approved the prepared P3-U3b OpenBao
   migration and synthetic checks for installation
@@ -173,7 +175,7 @@ for their scope; creating a spec does not approve a proposal.
 
 | Area | Affected work and resume condition |
 | --- | --- |
-| P3-U4 routing policy | [R-01/R-04/R-05](feature-specs/p3-u4-ring-groups-and-dial-plans.md#approved-p3-u4a-policy--october-24-2026-0800) are explicitly user-approved for a. R-02 inbound matching and R-03 outbound grammar/precedence remain unresolved for b/c; no live use or calling readiness is approved. |
+| P3-U4 routing policy | [R-01/R-04/R-05](feature-specs/p3-u4-ring-groups-and-dial-plans.md#approved-p3-u4a-policy--october-24-2026-0800) are explicitly user-approved for a. R-02 inbound matching is explicitly approved in the parent; R-03 outbound grammar/precedence remains unresolved for c; no live use or calling readiness is approved. |
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
 | Administrator/tenant lifecycle | General last-admin removal/disablement, platform-account recovery and tenant activation/suspension/retirement effects on routes/active work remain with owning P4/later units. Ordinary admission and scoped P2-U4 credential recovery are already approved. |
@@ -184,6 +186,8 @@ for their scope; creating a spec does not approve a proposal.
 | Production acceptance | Scheduler/HA/secrets/joint-store recovery, measured capacity/latency/accessibility/security/RPO/RTO and required Phase 8 launch scope must be established and verified in Phase 9. |
 
 ## Verification and Limitations
+
+- P3-U4b B-01–06 passed 2026-10-24 18:36 +08:00: real PostgreSQL/shared Redis/two-replica/API/HTTPS routing and resource checks, inventory API/browser, PBX registry/observation/browser and full normal graph passed. Final routing/resource reruns cover historical DID association release and paginated selectors. Both migrations and ordinary backend/HTTPS refresh passed; live/ready 200. [Evidence and declared fixture/integration limits](../docs/status/p3-u4b-evidence.md). No tenant bindings, live routing apply or call attribution is delivered.
 
 - P3-U4a A-01–06 passed 2026-10-24 13:14 +08:00: real PostgreSQL/shared Redis/two HTTP replicas/HTTPS browser, all four namespace/reference races, recovery/authority, 320–1440px/axe, affected inventory/resource/PBX regressions and final `./dev check`, exit 0. Ordinary migration/HTTPS refresh and health passed; fixture stores/material/access cleaned and PBX baseline restored. [Evidence and scoped maintenance](../docs/status/p3-u4a-evidence.md). No routing apply/calls or tenant allocation/readiness.
 
@@ -203,6 +207,8 @@ for their scope; creating a spec does not approve a proposal.
 - Previously recorded unrelated follow-up: the implementation plan has six source links using an incorrect relative `context/...` prefix. This cleanup preserves the plan; follow-up remains outstanding.
 
 ## Recent Session Notes
+
+- 2026-10-24 18:36 +08:00 (Asia/Manila) — P3-U4b completed under explicit R-02 approval. B-01–06, final real routing/resource API/browser reruns, affected inventory/PBX regressions and full normal graph passed. Added a historical-association constraint correction and exercised actual paginated selectors; final migrations/ordinary HTTPS refresh and health passed. [Evidence](../docs/status/p3-u4b-evidence.md) and [operator handoff](../docs/runbooks/inbound-routing.md). Parent/c and R-03 remain incomplete; tenant bindings/live apply/attribution remain later work.
 
 - 2026-10-24 13:14 +08:00 (Asia/Manila) — P3-U4a completed under explicit R-01/R-04/R-05 approval. A-01–06, focused real PostgreSQL/A/B API/HTTPS browser, affected inventory/resource/PBX regressions and full normal check passed. Ordinary backend/HTTPS refreshed and healthy. Fixed preview epoch capture and keyboard fixture timing; routine invalid endpoint test-issuer replacement used existing native custody/role without policy changes. [Evidence/limits](../docs/status/p3-u4a-evidence.md) and [operator handoff](../docs/runbooks/ring-groups.md). Parent/b/c, live apply and tenant readiness remain incomplete; backup work remains separate.
 

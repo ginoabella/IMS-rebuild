@@ -1,8 +1,12 @@
 # P3-U4b — Inbound rules and trusted route identities
 
-Status: planned. Sub-unit specification created October 24, 2026
-(Asia/Manila, +08:00), following the user's instruction to create the three
-P3-U4 sub-units. No implementation or runtime verification is claimed.
+Status: completed within approved private development, 2026-10-24 18:36 +08:00 (Asia/Manila).
+R-02 was explicitly approved by the user; B-01–06 passed.
+[Final evidence](../../docs/status/p3-u4b-evidence.md),
+[operator workflow](../../docs/runbooks/inbound-routing.md) and
+[identity/dependency contract](../../docs/architecture/inbound-routing.md).
+Sub-unit specification created October 24, 2026 (+08:00); parent acceptance,
+actual tenant bindings and live routing remain incomplete.
 
 Parent: [P3-U4 — Ring groups and dial plans](p3-u4-ring-groups-and-dial-plans.md).
 Predecessor: [P3-U4a — Groups and reservations](p3-u4a-ring-groups-and-reserved-number-protection.md).
@@ -22,10 +26,10 @@ not yet exist and are not delivered by this child.
 
 ## Decisions and dependencies
 
-Resolve parent R-02 before implementing inbound selectors, normalization,
-precedence and destination behavior. Carry forward a's resolved R-01/R-04/R-05.
-The recommended exact-DID-before-gateway-catch-all behavior remains a proposal
-until recorded as decided in the parent and tracker.
+R-02 is explicitly user-approved and recorded in the parent and tracker:
+trusted gateway/associated exact DID or explicit catch-all, exact DID first,
+canonical number distinctions, extension/group/hangup destinations and initially
+disabled rules. Carry forward a's resolved R-01/R-04/R-05.
 
 P3-U3's canonical DID distinctions are established: leading zeros and `+` remain
 significant, with no country inference. If a different routing normalization is

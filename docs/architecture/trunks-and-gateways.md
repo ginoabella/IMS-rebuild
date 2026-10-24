@@ -122,3 +122,7 @@ node lock, with a database namespace exclusion index shared by extension writes.
 It adds no inbound/outbound rule references yet. P3-U4b/c must register their actual
 gateway/DID/trunk blockers here before consuming resources; saving unbound groups
 establishes no tenant ownership or live use.
+
+P3-U4b registers [actual inbound references](inbound-routing.md) in this boundary.
+Disabled rules block DID selector edits/removal and gateway structural edits/removal;
+name/status changes remain compatible and node serialization remains mandatory.

@@ -139,7 +139,15 @@ export async function forwardPeers(
             typeof b.name === 'string' &&
             b.name.length <= 320,
         )
-          ? { blockers: data.blockers.map((b) => ({ id: b.id, name: b.name })) }
+          ? {
+              blockers: data.blockers.map((b) => ({
+                id: b.id,
+                name: b.name,
+                ...(['gateways', 'dids', 'inbound'].includes(b.kind)
+                  ? { kind: b.kind }
+                  : {}),
+              })),
+            }
           : {}),
       },
       {

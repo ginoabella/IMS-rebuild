@@ -3,6 +3,9 @@ import { backendRequest, safeError } from '../auth/server';
 import { boundedJsonBody } from '../auth/bounded-body';
 import { input, obj, output, route, uuid } from './validation';
 const reasons = [
+  'selector_conflict',
+  'invalid_gateway',
+  'invalid_did',
   'stale_version',
   'name_conflict',
   'number_conflict',
@@ -79,6 +82,10 @@ export async function forwardRouting(
     const fieldErrors: Record<string, string> = {};
     if (obj(data.fieldErrors))
       for (const k of [
+        'gatewayId',
+        'didId',
+        'destination',
+        'dialled',
         'body',
         'name',
         'number',
@@ -134,7 +141,15 @@ export async function forwardRouting(
             typeof b.name === 'string' &&
             b.name.length <= 320,
         )
-          ? { blockers: data.blockers.map((b) => ({ id: b.id, name: b.name })) }
+          ? {
+              blockers: data.blockers.map((b) => ({
+                id: b.id,
+                name: b.name,
+                ...(['groups', 'inbound'].includes(b.kind)
+                  ? { kind: b.kind }
+                  : {}),
+              })),
+            }
           : {}),
       },
       {

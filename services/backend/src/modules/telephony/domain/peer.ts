@@ -12,7 +12,11 @@ export class PeerRejected extends Error {
     readonly status: number,
     readonly reason?: PeerConflict,
     readonly fieldErrors?: Record<string, string>,
-    readonly blockers?: { id: string; name: string }[],
+    readonly blockers?: {
+      id: string;
+      name: string;
+      kind?: 'gateways' | 'dids' | 'inbound';
+    }[],
   ) {
     super('Peer request rejected');
   }

@@ -94,24 +94,44 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
       {!!blockers.length && (
         <Panel
           aria-label={
-            kind === 'trunks' ? 'Referencing gateways' : 'Referencing DIDs'
+            blockers.some((b) => b.kind === 'inbound')
+              ? 'Referencing inbound rules or resources'
+              : kind === 'trunks'
+                ? 'Referencing gateways'
+                : 'Referencing DIDs'
           }
         >
           <h2>
-            {kind === 'trunks' ? 'Referencing gateways' : 'Referencing DIDs'}
+            {blockers.some((b) => b.kind === 'inbound')
+              ? 'Referencing inbound rules or resources'
+              : kind === 'trunks'
+                ? 'Referencing gateways'
+                : 'Referencing DIDs'}
           </h2>
           <ul>
             {blockers.map((b) => (
               <li key={b.id}>
-                <Button
-                  variant="secondary"
-                  disabled={pending}
-                  onClick={() =>
-                    void inspect(b.id, kind === 'trunks' ? 'gateways' : 'dids')
-                  }
-                >
-                  {b.name}
-                </Button>
+                {b.kind === 'inbound' ? (
+                  <Link
+                    className="text-[var(--accent-primary)] underline"
+                    href={`/pbx-nodes/${nodeId}/routing`}
+                  >
+                    {b.name} · manage in routing
+                  </Link>
+                ) : (
+                  <Button
+                    variant="secondary"
+                    disabled={pending}
+                    onClick={() =>
+                      void inspect(
+                        b.id,
+                        kind === 'trunks' ? 'gateways' : 'dids',
+                      )
+                    }
+                  >
+                    {b.name}
+                  </Button>
+                )}
                 <span className="break-all"> {b.id}</span>
               </li>
             ))}

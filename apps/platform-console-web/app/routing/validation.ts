@@ -42,13 +42,20 @@ const group = shape({
   enabled: literal(true, false),
 });
 const reservation = shape({ ...common, purpose: text, pattern });
+const inbound = shape({
+  ...common,
+  gatewayId: uuid,
+  didId: nullable(uuid),
+  destination: fallback,
+  enabled: literal(true, false),
+});
 export function route(parts: string[], method: string) {
   return (
     parts[0] === 'routing' &&
-    ['groups', 'reservations'].includes(parts[1] ?? '') &&
+    ['groups', 'reservations', 'inbound'].includes(parts[1] ?? '') &&
     ((parts.length === 2 && ['GET', 'POST'].includes(method)) ||
       (parts.length === 3 &&
-        parts[1] === 'groups' &&
+        ['groups', 'inbound'].includes(parts[1] ?? '') &&
         parts[2] === 'preview' &&
         method === 'POST') ||
       (parts.length === 3 &&
@@ -57,7 +64,7 @@ export function route(parts: string[], method: string) {
       (parts.length === 4 &&
         uuid(parts[2]) &&
         ((parts[3] === 'status' &&
-          parts[1] === 'groups' &&
+          ['groups', 'inbound'].includes(parts[1] ?? '') &&
           method === 'PATCH') ||
           (parts[3] === 'remove' && method === 'POST'))))
   );
@@ -65,12 +72,16 @@ export function route(parts: string[], method: string) {
 export function input(parts: string[], method: string, v: unknown) {
   if (!obj(v)) return false;
   const fields =
-    parts[1] === 'groups'
-      ? ['name', 'number', 'memberIds', 'strategy', 'timeout', 'fallback']
-      : ['name', 'purpose', 'pattern'];
+    parts[1] === 'inbound'
+      ? ['name', 'gatewayId', 'didId', 'destination']
+      : parts[1] === 'groups'
+        ? ['name', 'number', 'memberIds', 'strategy', 'timeout', 'fallback']
+        : ['name', 'purpose', 'pattern'];
   const keys =
     parts[2] === 'preview'
-      ? [...fields, 'resourceId']
+      ? parts[1] === 'inbound'
+        ? ['gatewayId', 'dialled']
+        : [...fields, 'resourceId']
       : parts[3] === 'remove'
         ? ['expectedVersion']
         : parts[3] === 'status'
@@ -80,6 +91,9 @@ export function input(parts: string[], method: string, v: unknown) {
             : ['expectedVersion', ...fields];
   return (
     Object.keys(v).every((k) => keys.includes(k)) &&
+    (!('destination' in v) ||
+      (obj(v.destination) &&
+        Object.keys(v.destination).every((k) => ['kind', 'id'].includes(k)))) &&
     (!('fallback' in v) ||
       (obj(v.fallback) &&
         Object.keys(v.fallback).every((k) => ['kind', 'id'].includes(k)))) &&
@@ -91,6 +105,36 @@ export function input(parts: string[], method: string, v: unknown) {
   );
 }
 export function output(parts: string[], method: string, v: unknown) {
+  if (parts[2] === 'preview' && parts[1] === 'inbound')
+    return shape({
+      advisory: literal(true),
+      callingEligible: literal(false),
+      reason: literal(
+        'matched',
+        'unknown_ingress',
+        'no_match',
+        'disabled_rule',
+      ),
+      rule: nullable(inbound),
+      precedence: literal('exact', 'catch_all', null),
+      resources: array(
+        shape({
+          id: uuid,
+          version: positive,
+          kind: literal(
+            'gateway',
+            'did',
+            'trunk',
+            'rule',
+            'extension',
+            'group',
+          ),
+          available: literal(true, false),
+        }),
+        513 * 33 + 5,
+      ),
+      warnings: array(text, 10),
+    })(v);
   if (parts[2] === 'preview')
     return shape({
       advisory: literal(true),
@@ -108,7 +152,12 @@ export function output(parts: string[], method: string, v: unknown) {
       ),
       warnings: array(text, 10),
     })(v);
-  const resource = parts[1] === 'groups' ? group : reservation;
+  const resource =
+    parts[1] === 'inbound'
+      ? inbound
+      : parts[1] === 'groups'
+        ? group
+        : reservation;
   return parts.length === 2 && method === 'GET'
     ? shape({ items: array(resource, 100), nextCursor: nullable(uuid) })(v)
     : shape({ resource })(v);

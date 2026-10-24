@@ -1,4 +1,5 @@
 import type {
+  InboundValues,
   GroupDto,
   GroupValues,
   ReservationValues,
@@ -9,12 +10,19 @@ import type { ReadSnapshot } from '../../../../infrastructure/database/read-snap
 import type { Transaction } from '../../../../infrastructure/database/transaction';
 import { RoutingRejected, validateGraph } from '../../domain/routing';
 import { PeerRepository } from './peer-repository';
+import {
+  inboundSelect,
+  validateInbound,
+  saveInbound,
+} from './inbound-repository';
 const tables = {
+  inbound: 'public.inbound_rules',
   groups: 'public.ring_groups',
   reservations: 'public.number_reservations',
 } as const;
 const common = `id,node_id AS "nodeId",installation_id AS "installationId",name,version,created_at AS "createdAt",updated_at AS "updatedAt",created_by AS "createdBy",updated_by AS "updatedBy",removed_at AS "removedAt"`;
 function select(k: RoutingKind) {
+  if (k === 'inbound') return inboundSelect;
   return `SELECT ${common},${k === 'groups' ? `enabled,number,strategy,timeout,ARRAY(SELECT extension_id FROM public.ring_group_members m WHERE m.group_id=ring_groups.id ORDER BY position) AS "memberIds",CASE WHEN fallback_group_id IS NOT NULL THEN jsonb_build_object('kind','group','id',fallback_group_id) WHEN fallback_extension_id IS NOT NULL THEN jsonb_build_object('kind','extension','id',fallback_extension_id) ELSE jsonb_build_object('kind','hangup') END AS fallback` : `purpose,jsonb_build_object('kind',pattern_kind,'digits',digits,'minLength',min_length,'maxLength',max_length) AS pattern`} FROM ${tables[k]}`;
 }
 type Row = Omit<RoutingDto, 'createdAt' | 'updatedAt' | 'removedAt'> & {
@@ -83,8 +91,8 @@ export class RoutingRepository {
   }
   async blockers(s: ReadSnapshot, nodeId: string, id: string) {
     return (
-      await s.query<{ id: string; name: string }>(
-        `SELECT id,name FROM public.ring_groups WHERE node_id=$1 AND removed_at IS NULL AND (fallback_group_id=$2 OR fallback_extension_id=$2 OR id IN (SELECT group_id FROM public.ring_group_members WHERE extension_id=$2)) ORDER BY id LIMIT 10`,
+      await s.query<{ id: string; name: string; kind: 'groups' | 'inbound' }>(
+        `SELECT id,name,'groups' AS kind FROM public.ring_groups WHERE node_id=$1 AND removed_at IS NULL AND (fallback_group_id=$2 OR fallback_extension_id=$2 OR id IN (SELECT group_id FROM public.ring_group_members WHERE extension_id=$2)) UNION ALL SELECT id,name,'inbound' AS kind FROM public.inbound_rules WHERE node_id=$1 AND removed_at IS NULL AND (destination_group_id=$2 OR destination_extension_id=$2) ORDER BY id LIMIT 10`,
         [nodeId, id],
       )
     ).rows;
@@ -95,7 +103,7 @@ export class RoutingRepository {
     nodeId: string,
     installationId: string,
     id: string,
-    v: GroupValues | ReservationValues,
+    v: GroupValues | ReservationValues | InboundValues,
   ) {
     if (
       (
@@ -106,6 +114,8 @@ export class RoutingRepository {
       ).rows.length
     )
       throw new RoutingRejected('name_conflict');
+    if ('destination' in v)
+      return validateInbound(s, this, nodeId, installationId, id, v);
     const p =
       'pattern' in v
         ? v.pattern
@@ -163,11 +173,23 @@ export class RoutingRepository {
     nodeId: string,
     installationId: string,
     id: string,
-    v: GroupValues | ReservationValues | null,
+    v: GroupValues | ReservationValues | InboundValues | null,
     old: RoutingDto | null,
     enabled: boolean,
     remove: boolean,
   ) {
+    if (k === 'inbound')
+      return saveInbound(
+        tx,
+        this,
+        nodeId,
+        installationId,
+        id,
+        v as InboundValues | null,
+        old,
+        enabled,
+        remove,
+      );
     const actor = tx.context.actor.reference;
     if (!old && v) {
       if ('memberIds' in v)
@@ -186,7 +208,7 @@ export class RoutingRepository {
             actor,
           ],
         );
-      else
+      else if ('pattern' in v)
         await tx.query(
           `INSERT INTO public.number_reservations(id,node_id,installation_id,name,purpose,pattern_kind,digits,min_length,max_length,created_by,updated_by) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$10)`,
           [

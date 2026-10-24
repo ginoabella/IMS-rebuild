@@ -82,7 +82,11 @@ export interface PeerErrorDto {
   message: string;
   reason?: PeerConflict;
   fieldErrors?: Record<string, string>;
-  blockers?: { id: string; name: string }[];
+  blockers?: {
+    id: string;
+    name: string;
+    kind?: 'gateways' | 'dids' | 'inbound';
+  }[];
 }
 export interface CreateTrunkDto extends TrunkValues {
   requestId: string;

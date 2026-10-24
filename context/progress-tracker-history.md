@@ -2567,3 +2567,47 @@ requires A-06; this feature remains in progress.
 - **Verification:** real OpenBao/PostgreSQL/A/B API/HTTPS browser suite passed, exit 0; affected a/b, inventory and credential-adoption regressions passed. Final full `./dev check` passed, exit 0, including builds, foundation, durability, storage, identity, platform/staff/browser, credentials, distributed limits, Redis response loss and PBX registry regressions.
 - **Development refresh/preservation:** additive migration applied; ordinary HTTPS console refreshed and ready. `./dev platform-https-check` passed; live/ready 200 with database/both Redis up. Existing identities/migration history/shared credentials, endpoint material and backups preserved; owned synthetic provider versions retained. No PBX apply, reload, registration or calls.
 - **Handoff:** [operator workflow](../docs/runbooks/did-inventory.md) and [resource/reference contract](../docs/architecture/trunks-and-gateways.md) for P3-U4 routing, P3-U5 apply and P4 allocation. Desired saves/enabled flags establish no live connectivity or voice readiness.
+
+## 2026-10-24 — P3-U4a completed checkpoint and P3-U4b implementation
+
+Historical checkpoints below are superseded by P3-U4b's final B-01–06 evidence
+and the current tracker at 2026-10-24 18:36 +08:00 (Asia/Manila).
+
+### P3-U4a final checkpoint
+
+- **Status:** completed within approved private development; 2026-10-24 13:14 +08:00 (Asia/Manila). A-01–06 passed; parent P3-U4 and b/c remain incomplete.
+- **Requirement/decision:** [groups/reservations A-01–06](feature-specs/p3-u4a-ring-groups-and-reserved-number-protection.md), under explicitly approved R-01/R-04/R-05; [final evidence](../docs/status/p3-u4a-evidence.md).
+- **Delivered:** actual group/member/fallback and reserved-number APIs/console, desired status, cycle/ownership checks, namespace constraints shared with individual/bulk stock, atomic audit/version/receipt handling, actionable blockers and soft removal with retained UUIDs. Inputs remain unbound/calling-ineligible; unsupported tenant/opaque bindings reject.
+- **Verification:** `./dev exec pnpm check:routing`, affected inventory API/browser, trunk/gateway/DID and full PBX checks, nine maintenance contract tests and final `./dev check` passed, exit 0. Real PostgreSQL/shared Redis/A/B HTTP/HTTPS browser covers four namespace/reference race classes, rollback, retry/stale/no-op/response loss, owner fencing, keyboard/reflow/axe and exact fixture cleanup.
+- **Development refresh/preservation:** additive migration applied/verified; normal backend and ordinary HTTPS console refreshed/ready. `./dev platform-https-check` passed; live/ready 200 with database/both Redis up. Existing identities/migration history, PBX configuration, stored endpoint/trunk material and backups preserved. Routine invalid test-issuer replacement used the existing native custodian/fixed role, actual 24-hour nonrenewable lease, zero policy changes and revoked human session; scoped helper/preflight correction and limits are recorded in evidence. No routing apply or calls.
+- **Handoff:** [operator workflow](../docs/runbooks/ring-groups.md) and [namespace/reference contract](../docs/architecture/ring-groups.md) for b/c, P3-U5 and P4. R-02/R-03 and actual allocation/apply/rollback dependencies remain with their owners; no tenant or live calling readiness.
+
+### P3-U4b prior implementation checkpoint
+
+**P3-U4b — inbound rules and trusted route identities: in progress**
+(2026-10-24, Asia/Manila, +08:00), following the user's implementation request.
+Requirement: [B-01–06](feature-specs/p3-u4b-inbound-rules-and-trusted-route-identities.md).
+Started repository/specification review and existing routing/dependency-contract
+inspection. P3-U4a's A-01–06 completion and evidence are recorded in the
+[final evidence](../docs/status/p3-u4a-evidence.md).
+R-02 explicitly approved by the user: recommended trusted gateway/exact DID or
+catch-all selectors, canonical distinctions, exact-first precedence, extension/
+group/hangup destinations and initially disabled rules. Recorded in the parent
+specification. Implementing against existing routing and dependency contracts;
+Backend build, console typecheck and focused implementation lint passed.
+Inbound persistence/APIs, internal identity/compatibility boundary, actual
+resource blockers, correct dependency navigation and console forms/preview are implemented.
+Focused real PostgreSQL/two-replica/inbound HTTPS browser acceptance and a
+group/reservation API/browser regressions passed in the serial run. Completion
+remains pending remaining regressions and the final normal graph.
+Inventory API/browser, trunk/gateway/DID API/browser and PBX registry regressions
+passed, as did PBX observation/browser regressions with exact baseline restoration.
+The final normal graph is running. Initial ordinary development migration passed.
+Final review found a historical composite FK that could pin DID ingress after route
+removal; prepared an additive current-association constraint fix and an API regression
+that preserves removed route history. Focused routing/resource reruns and follow-up
+migration/ordinary console refresh remain pending. [Current evidence](../docs/status/p3-u4b-evidence.md) and
+[operator/identity handoff](../docs/architecture/inbound-routing.md) record results
+and limits. Parent P3-U4 and c remain incomplete; R-03 remains unresolved.
+Prior implementation checkpoints are retained in
+[history](progress-tracker-history.md#2026-10-24--p3-u4a-implementation-checkpoints-and-previous-p3-u3c-checkpoint).

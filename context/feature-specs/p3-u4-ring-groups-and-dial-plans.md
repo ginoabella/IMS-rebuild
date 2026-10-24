@@ -1,8 +1,9 @@
 # P3-U4 — Manage ring groups and dial plans
 
-Status: in progress; P3-U4a completed October 24, 2026 13:14 +08:00
-(Asia/Manila) under explicitly approved R-01/R-04/R-05. R-02/R-03
-remain unresolved for b/c. Parent acceptance and live routing remain incomplete.
+Status: in progress; P3-U4a and P3-U4b completed October 24, 2026 within
+approved private development. B-01–06 completed at 2026-10-24 18:36 +08:00 (Asia/Manila).
+R-01/R-02/R-04/R-05 are approved below; R-03 remains unresolved for c.
+Parent acceptance and live routing remain incomplete.
 
 ## Goal and requirements
 
@@ -50,14 +51,14 @@ owners. Preserve existing runtime configuration, secrets and backup operations.
 ## Decisions required before dependent implementation
 
 The user owns these product-policy decisions. R-01/R-04/R-05 are explicitly
-approved in the record below; R-02/R-03 remain recommendations requiring answers
-before affected b/c implementation. Record decisions here and in the tracker. Splitting does not resolve a
+approved in the record below; R-02 is approved below; R-03 remains a recommendation requiring an answer
+before affected c implementation. Record decisions here and in the tracker. Splitting does not resolve a
 missing policy decision.
 
 | ID   | Recommended contract / question to resolve                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Affected work and resume condition                                                                                                                                                               |
 | ---- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | R-01 | Groups have an optional dialable number using the existing 1000–899999 extension convention, unique against extensions and other groups on the installation. Permit 1–32 distinct same-node inventory members, including disabled stock in desired definitions. Strategies: simultaneous or ordered sequential; timeout 5–120 seconds, default 20, per attempt (one attempt for simultaneous, one per member for sequential). Busy/unavailable/no-answer advances; exhaustion hangs up or uses one explicit extension/group fallback. Reject fallback cycles. | a and later destination consumers; confirm numbering, limits, disabled-stock behavior, strategy, timeout and fallback semantics.                                                                 |
-| R-02 | Inbound rules select one trusted gateway plus one exact DID associated with it, or an explicit gateway catch-all. Exact DID wins; one catch-all per gateway; unknown DID without a catch-all rejects. Preserve P3-U3's exact canonical number distinctions, including leading zeros and `+`; no implicit aliases. Destination: extension, ring group or hangup.                                                                                                                                                                                               | b; confirm selectors, normalization, precedence and fallback destinations.                                                                                                                       |
+| R-02 | Inbound rules select one trusted gateway plus one exact DID associated with it, or an explicit gateway catch-all. Exact DID wins; one catch-all per gateway; unknown DID without a catch-all rejects. Preserve P3-U3's exact canonical number distinctions, including leading zeros and `+`; no implicit aliases. Destination: extension, ring group or hangup.                                                                                                                                                                                               | b; approved October 24, 2026 below, including initially disabled rules.                                                                                                                       |
 | R-03 | Outbound rules use exact numbers or a literal digit prefix with explicit minimum/maximum total digit length (1–15); exclude raw Asterisk patterns, regex and arbitrary dial-plan text. Lower numeric priority wins within a scope; overlapping equal-priority rules reject. Destination: one outbound-capable trunk; optional explicit strip-count/add-prefix transformation, validated for nonempty bounded output. No match denies.                                                                                                                         | c; confirm pattern language, priority, overlap policy, number transformations and allowed call classes, including emergency/international/service numbers. No default broad outbound permission. |
 | R-04 | Maintain installation-scoped reserved exact numbers or bounded prefixes with a purpose. Block intersecting dialable groups, extension creation/bulk creation and outbound rules. Disabled definitions retain claims; removal releases a claim only when references allow it. Establish the actual bootstrap/unmanaged/service/emergency reservations by reviewing the controlled installation; do not import legacy examples as defaults.                                                                                                                     | a owns namespace protection; c adds outbound overlap. Confirm initial reservations, management authority and conflict policy before either consumer ships.                                       |
 | R-05 | Create unbound infrastructure definitions before tenants. An unbound group/rule cannot be applied as a tenant route or establish call ownership. A later tenant binding must validate all members, fallbacks, ingress ownership and outbound permission against canonical allocation facts. Shared outbound trunks are allowed only through explicit tenant permissions.                                                                                                                                                                                      | All children and P4-U2 handoff; confirm template-to-binding behavior and tenant compatibility contract. P4-U2 must implement real allocation checks before tenant/live use.                      |
@@ -75,11 +76,19 @@ only the bootstrap default `_X.` hangup rule. Legacy reference examples are not
 imported. No emergency/service policy or outbound permission is inferred.
 R-05: definitions remain unbound/calling-ineligible; reject tenant-binding inputs.
 Future binding must validate every reachable member/fallback against trusted
-canonical allocations. R-02/R-03 remain unresolved for b/c.
+canonical allocations. R-02 was subsequently approved for b below; R-03 remains unresolved for c.
 
 Routine choices such as file names, endpoint names and pagination implementation
 follow existing conventions without a separate approval gate. P3-U5's permitted
 commands, active-call policy and test destinations remain separate decisions.
+
+### Approved P3-U4b policy — October 24, 2026 (+08:00)
+
+The user explicitly approved recommended R-02 in the implementation conversation:
+trusted gateway plus associated exact DID or explicit gateway catch-all; exact DID
+wins; unmatched numbers reject without a catch-all. Preserve canonical leading
+zeros and `+`, without aliases or country inference. Destinations are extension,
+ring group or hangup. New rules start disabled. R-03 remains unresolved.
 
 ## Desired-state contract
 
@@ -191,9 +200,9 @@ against existing shared sessions; include two HTTP replicas for concurrency/acce
 claims. Scope external fixtures explicitly. Live call tests are not required for
 desired-state completion and cannot substitute for P3-U5's later live acceptance.
 
-At implementation, add a focused routing check through the existing Docker
-workspace command mechanism and record its actual command before running it.
-No routing check exists yet. Required existing checks are the affected
+The focused routing check established by a and extended by b is
+`./dev exec pnpm check:routing`, using isolated real services and the HTTPS browser.
+Required existing checks are the affected
 `check:extension-inventory`, `check:trunk-gateways` and `check:pbx-nodes` pnpm scripts
 inside that workspace, plus `./dev check`. Documentation-only preparation requires
 formatting, local-link and consistency review, without starting services or tests.
@@ -222,6 +231,9 @@ credential, backup, infrastructure or security-certification sub-unit is needed.
 All three child specs are created. P3-U4a is completed within approved private
 development under the explicit R-01/R-04/R-05 policy recorded above;
 [A-01–06 evidence](../../docs/status/p3-u4a-evidence.md) and the operator/dependency
-handoff are published. R-02/R-03 remain unresolved and b/c are planned. Parent
+handoff are published. P3-U4b B-01–06 are completed under approved R-02;
+[inbound evidence](../../docs/status/p3-u4b-evidence.md) and the shared
+[identity/dependency contract](../../docs/architecture/inbound-routing.md) hand off
+to c. R-03 remains unresolved and c is planned. Parent
 P3-U4 remains incomplete until every parent criterion passes. Routing-policy
 approval, implementation, live apply and production readiness are separate states.

@@ -23,7 +23,12 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
     confirm,
     setConfirm,
   } = m;
-  const label = kind === 'groups' ? 'group' : 'reservation';
+  const label =
+    kind === 'inbound'
+      ? 'inbound rule'
+      : kind === 'groups'
+        ? 'group'
+        : 'reservation';
   return (
     <div className="mx-auto w-full max-w-5xl space-y-4 p-4">
       <Link
@@ -41,7 +46,7 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
         live readiness. Disabled definitions retain number claims.
       </p>
       <div className="flex flex-wrap gap-3">
-        {(['groups', 'reservations'] as const).map((k) => (
+        {(['groups', 'inbound', 'reservations'] as const).map((k) => (
           <Button
             key={k}
             variant={k === kind ? 'primary' : 'secondary'}
@@ -52,7 +57,11 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
               m.setHistory([]);
             }}
           >
-            {k === 'groups' ? 'Ring groups' : 'Reserved numbers'}
+            {k === 'inbound'
+              ? 'Inbound rules'
+              : k === 'groups'
+                ? 'Ring groups'
+                : 'Reserved numbers'}
           </Button>
         ))}
         <Button
@@ -70,7 +79,7 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
       )}
       {!!blockers.length && (
         <Panel aria-label="Dependencies">
-          <h2>Conflicting claims or referencing groups</h2>
+          <h2>Conflicting claims or referencing definitions</h2>
           <ul>
             {blockers.map((b) => (
               <li key={b.id} className="break-all">
@@ -79,9 +88,10 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
                   <Button
                     variant="secondary"
                     disabled={pending}
-                    onClick={() => void m.inspect(b.id, 'groups')}
+                    onClick={() => void m.inspect(b.id, b.kind ?? 'groups')}
                   >
-                    Open group {b.name}
+                    Open {b.kind === 'inbound' ? 'inbound rule' : 'group'}{' '}
+                    {b.name}
                   </Button>
                 )}
               </li>
@@ -143,7 +153,11 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
       )}
       <Panel aria-label={`${kind} list`}>
         <h2 className="font-display text-xl">
-          {kind === 'groups' ? 'Ring groups' : 'Reserved numbers'}
+          {kind === 'inbound'
+            ? 'Inbound rules'
+            : kind === 'groups'
+              ? 'Ring groups'
+              : 'Reserved numbers'}
         </h2>
         {!page ? (
           <p>Loading definitions…</p>
@@ -157,9 +171,11 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
                 >
                   <span className="min-w-0 break-words">
                     {item.name} ·{' '}
-                    {'memberIds' in item
-                      ? `${item.number ?? 'No dialable number'} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired)`
-                      : `${item.pattern.kind} ${item.pattern.digits} · lengths ${item.pattern.minLength}–${item.pattern.maxLength}`}{' '}
+                    {'destination' in item
+                      ? `${item.didId ? 'Exact DID' : 'Gateway catch-all'} · ${item.destination.kind} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired) · unbound`
+                      : 'memberIds' in item
+                        ? `${item.number ?? 'No dialable number'} · ${item.enabled ? 'Enabled' : 'Disabled'} (desired)`
+                        : `${item.pattern.kind} ${item.pattern.digits} · lengths ${item.pattern.minLength}–${item.pattern.maxLength}`}{' '}
                     · v{item.version}
                   </span>
                   <Button
@@ -247,7 +263,7 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
                     })
                   }
                 >
-                  {r.enabled ? 'Disable' : 'Enable'} group
+                  {r.enabled ? 'Disable' : 'Enable'} {label}
                 </Button>
               )}
               <Button

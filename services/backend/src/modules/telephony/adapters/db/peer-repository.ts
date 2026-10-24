@@ -125,19 +125,36 @@ export class PeerRepository {
   ) {
     return kind === 'trunks'
       ? (
-          await s.query<{ id: string; name: string }>(
-            "SELECT id,name FROM public.sip_gateways WHERE trunk_id=$1 AND removed_at IS NULL AND (NOT $2::boolean OR kind='sip-provider') ORDER BY id LIMIT 10",
+          await s.query<{
+            id: string;
+            name: string;
+            kind: 'gateways' | 'dids' | 'inbound';
+          }>(
+            "SELECT id,name,'gateways' AS kind FROM public.sip_gateways WHERE trunk_id=$1 AND removed_at IS NULL AND (NOT $2::boolean OR kind='sip-provider') ORDER BY id LIMIT 10",
             [id, providerOnly],
           )
         ).rows
       : kind === 'gateways'
         ? (
-            await s.query<{ id: string; name: string }>(
-              'SELECT id,name FROM public.sip_dids WHERE gateway_id=$1 AND removed_at IS NULL ORDER BY id LIMIT 10',
+            await s.query<{
+              id: string;
+              name: string;
+              kind: 'gateways' | 'dids' | 'inbound';
+            }>(
+              `SELECT id,name,'dids' AS kind FROM public.sip_dids WHERE gateway_id=$1 AND removed_at IS NULL UNION ALL SELECT id,name,'inbound' AS kind FROM public.inbound_rules WHERE gateway_id=$1 AND removed_at IS NULL ORDER BY id LIMIT 10`,
               [id],
             )
           ).rows
-        : [];
+        : (
+            await s.query<{
+              id: string;
+              name: string;
+              kind: 'gateways' | 'dids' | 'inbound';
+            }>(
+              `SELECT id,name,'inbound' AS kind FROM public.inbound_rules WHERE did_id=$1 AND removed_at IS NULL ORDER BY id LIMIT 10`,
+              [id],
+            )
+          ).rows;
   }
   async validate(
     tx: Transaction,

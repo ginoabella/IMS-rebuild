@@ -10,6 +10,8 @@ import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 import { RoutingError, routingRequest } from './client';
 type FormValues = {
+  gatewayId: string;
+  didId: string;
   name: string;
   number: string;
   members: string;
@@ -39,6 +41,8 @@ export const empty = (): State => ({
   mode: 'list',
   selected: null,
   values: {
+    gatewayId: '',
+    didId: '',
     name: '',
     number: '',
     members: '',
@@ -59,25 +63,36 @@ export function form(r: RoutingDto): FormValues {
   return {
     ...empty().values,
     name: r.name,
-    ...('memberIds' in r
+    ...('destination' in r
       ? {
-          number: r.number ?? '',
-          members: r.memberIds.join('\n'),
-          strategy: r.strategy,
-          timeout: String(r.timeout),
-          fallbackKind: r.fallback.kind,
-          fallbackId: r.fallback.kind === 'hangup' ? '' : r.fallback.id,
+          gatewayId: r.gatewayId,
+          didId: r.didId ?? '',
+          fallbackKind: r.destination.kind,
+          fallbackId: r.destination.kind === 'hangup' ? '' : r.destination.id,
         }
-      : {
-          purpose: r.purpose,
-          patternKind: r.pattern.kind,
-          digits: r.pattern.digits,
-          minLength: String(r.pattern.minLength),
-          maxLength: String(r.pattern.maxLength),
-        }),
+      : 'memberIds' in r
+        ? {
+            number: r.number ?? '',
+            members: r.memberIds.join('\n'),
+            strategy: r.strategy,
+            timeout: String(r.timeout),
+            fallbackKind: r.fallback.kind,
+            fallbackId: r.fallback.kind === 'hangup' ? '' : r.fallback.id,
+          }
+        : {
+            purpose: r.purpose,
+            patternKind: r.pattern.kind,
+            digits: r.pattern.digits,
+            minLength: String(r.pattern.minLength),
+            maxLength: String(r.pattern.maxLength),
+          }),
   };
 }
 const messages: Record<string, string> = {
+  selector_conflict:
+    'This gateway/DID selector is already claimed, including by disabled rules.',
+  invalid_gateway: 'Select an existing gateway on this PBX.',
+  invalid_did: 'Select an existing DID associated with this gateway.',
   stale_version:
     'This definition changed. Reload canonical state, review and use the current version.',
   number_conflict:
@@ -86,7 +101,7 @@ const messages: Record<string, string> = {
   invalid_extension: 'Select existing extensions on this PBX.',
   invalid_group: 'Choose a nonremoved fallback group on this PBX.',
   referenced:
-    'Existing references block removal. Open the listed group and change its fallback first.',
+    'Existing references block removal. Change or remove the listed routing definition first.',
   request_conflict:
     'The request ID was used for different values. Reload before continuing.',
   intent_expired:
@@ -111,7 +126,9 @@ export function useRouting({ nodeId }: { nodeId: string }) {
     [history, setHistory] = useState<(string | null)[]>([]);
   const [message, setMessage] = useState(''),
     [errors, setErrors] = useState<Record<string, string>>({}),
-    [blockers, setBlockers] = useState<{ id: string; name: string }[]>([]);
+    [blockers, setBlockers] = useState<
+      { id: string; name: string; kind?: 'groups' | 'inbound' }[]
+    >([]);
   const [canonical, setCanonical] = useState<RoutingDto | null>(null),
     [pending, setPending] = useState(false),
     [confirm, setConfirm] = useState(false);
@@ -427,28 +444,38 @@ export function valuesForForm(
   kind: RoutingKind,
   v: FormValues,
 ): Record<string, unknown> {
-  return kind === 'groups'
+  return kind === 'inbound'
     ? {
         name: v.name,
-        number: v.number || null,
-        memberIds: v.members.split('\n').filter(Boolean),
-        strategy: v.strategy,
-        timeout: Number(v.timeout),
-        fallback:
+        gatewayId: v.gatewayId,
+        didId: v.didId || null,
+        destination:
           v.fallbackKind === 'hangup'
             ? { kind: 'hangup' }
             : { kind: v.fallbackKind, id: v.fallbackId },
       }
-    : {
-        name: v.name,
-        purpose: v.purpose,
-        pattern: {
-          kind: v.patternKind,
-          digits: v.digits,
-          minLength:
-            v.patternKind === 'exact' ? v.digits.length : Number(v.minLength),
-          maxLength:
-            v.patternKind === 'exact' ? v.digits.length : Number(v.maxLength),
-        },
-      };
+    : kind === 'groups'
+      ? {
+          name: v.name,
+          number: v.number || null,
+          memberIds: v.members.split('\n').filter(Boolean),
+          strategy: v.strategy,
+          timeout: Number(v.timeout),
+          fallback:
+            v.fallbackKind === 'hangup'
+              ? { kind: 'hangup' }
+              : { kind: v.fallbackKind, id: v.fallbackId },
+        }
+      : {
+          name: v.name,
+          purpose: v.purpose,
+          pattern: {
+            kind: v.patternKind,
+            digits: v.digits,
+            minLength:
+              v.patternKind === 'exact' ? v.digits.length : Number(v.minLength),
+            maxLength:
+              v.patternKind === 'exact' ? v.digits.length : Number(v.maxLength),
+          },
+        };
 }

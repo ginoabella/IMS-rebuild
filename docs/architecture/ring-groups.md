@@ -67,11 +67,11 @@ these changes do not remove or retarget inventory and disabled resources prevent
 future apply eligibility. There is no extension removal feature. Future allocation,
 apply/in-flight/rollback consumers must add actual blockers before using IDs and
 share this node coordination. Existing trunk/gateway/DID removal contracts remain
-owned by [resource dependencies](trunks-and-gateways.md); a adds no rule references.
+owned by [resource dependencies](trunks-and-gateways.md); b adds [actual inbound references](inbound-routing.md).
 
 ## Protected transport and browser
 
-Base: `/platform/pbx-nodes/:nodeId/routing/:kind`, kind `groups` or `reservations`.
+Base: `/platform/pbx-nodes/:nodeId/routing/:kind`, kind `groups`, `reservations` or [inbound](inbound-routing.md).
 GET base lists current definitions with UUID `after` cursor, limit 1–100/default 25,
 at most 64 KiB. GET `/:id` retains removed history. POST base uses `requestId` and
 value fields; PATCH `/:id` uses full values plus `expectedVersion`. Group-only
@@ -102,3 +102,6 @@ Mounted drafts do not survive refresh.
 allocation facts and inspecting every reachable member/fallback. Tests establish
 mixed-tenant rejection only. P4-U2 must supply actual canonical allocation/binding
 facts before tenant use; no HTTP binding or fixture allocation is delivered here.
+
+P3-U4b adds [inbound management/identities](inbound-routing.md), sharing node locks,
+receipts, group destination validation and actual group-removal blockers.

@@ -20,6 +20,7 @@ import {
   version,
 } from '../domain/routing';
 import { PeerRejected } from '../domain/peer';
+import { previewInbound } from '../adapters/db/inbound-repository';
 type Result = { status: number; value: Record<string, unknown> };
 export class Routing {
   constructor(
@@ -105,6 +106,37 @@ export class Routing {
       });
     });
   }
+  inboundPreview(nodeInput: unknown, input: unknown) {
+    return this.handle(async () => {
+      const nodeId = id(nodeInput, 'nodeId');
+      const data = object(input, ['gatewayId', 'dialled']);
+      const gatewayId = id(data.gatewayId, 'gatewayId');
+      if (
+        typeof data.dialled !== 'string' ||
+        !/^\+?[0-9]{1,15}$/.test(data.dialled)
+      )
+        invalid(
+          'dialled',
+          'Use the exact canonical number, including leading zeros and +.',
+        );
+      const dialled = data.dialled;
+      return this.database.read(async (s) => {
+        if (!(await this.store.node(s, nodeId))) throw new PeerRejected(404);
+        return {
+          status: 200,
+          value: {
+            ...(await previewInbound(
+              s,
+              this.store,
+              nodeId,
+              gatewayId,
+              dialled,
+            )),
+          },
+        };
+      });
+    });
+  }
   preview(nodeInput: unknown, input: unknown) {
     return this.handle(async () => {
       const nodeId = id(nodeInput, 'nodeId');
@@ -154,9 +186,11 @@ export class Routing {
         resourceId = op === 'create' ? randomUUID() : id(resourceInput);
       if (k === 'reservations' && op === 'status') throw new PeerRejected(404);
       const fields =
-        k === 'groups'
-          ? ['name', 'number', 'memberIds', 'strategy', 'timeout', 'fallback']
-          : ['name', 'purpose', 'pattern'];
+        k === 'inbound'
+          ? ['name', 'gatewayId', 'didId', 'destination']
+          : k === 'groups'
+            ? ['name', 'number', 'memberIds', 'strategy', 'timeout', 'fallback']
+            : ['name', 'purpose', 'pattern'];
       const data = object(
         input,
         op === 'create'
@@ -219,7 +253,11 @@ export class Routing {
               resourceId,
               v,
             );
-          if (op === 'status' && old && 'memberIds' in old)
+          if (
+            op === 'status' &&
+            old &&
+            ('memberIds' in old || 'destination' in old)
+          )
             await this.store.validate(
               tx,
               k,
@@ -280,7 +318,10 @@ export class Routing {
         fields: {
           resourceId: { kind: 'uuid' },
           nodeId: { kind: 'uuid' },
-          resourceKind: { kind: 'enum', values: ['groups', 'reservations'] },
+          resourceKind: {
+            kind: 'enum',
+            values: ['groups', 'reservations', 'inbound'],
+          },
           operation: {
             kind: 'enum',
             values: ['create', 'edit', 'status', 'remove'],
