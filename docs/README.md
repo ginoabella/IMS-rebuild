@@ -298,6 +298,15 @@ replacement children deliver a working API/browser increment each:
 
 Earlier security-heavy lifecycle/backup gates are superseded for this feature.
 
+P3-U4: [Ring groups and dial plans — feature spec and adopted split](../context/feature-specs/p3-u4-ring-groups-and-dial-plans.md).
+Implementation and all three sub-units remain planned:
+
+- [P3-U4a — Ring groups and reserved-number protection](../context/feature-specs/p3-u4a-ring-groups-and-reserved-number-protection.md)
+- [P3-U4b — Inbound rules and trusted route identities](../context/feature-specs/p3-u4b-inbound-rules-and-trusted-route-identities.md)
+- [P3-U4c — Outbound rules and integrated routing handoff](../context/feature-specs/p3-u4c-outbound-rules-and-integrated-routing-handoff.md)
+
+Routing-policy decisions R-01–05 remain unresolved; live apply belongs to P3-U5.
+
 - [Current trunk credential model](architecture/trunk-credentials.md)
 - [Trusted setup workflow and implementation limits](runbooks/trunk-credentials.md)
 - [Current backup operations and known pending failure](runbooks/p3-u3a-development-backup.md)

@@ -101,7 +101,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U4 routing and P3-U5 apply follow completed P3-U3/a/b/c. Resolve their owning routing/apply semantics and add real resource dependencies before live use. Backup administration remains separate; tenant readiness stays with Phase 4.
+1. P3-U4 routing and P3-U5 apply follow completed P3-U3/a/b/c. The [P3-U4 parent and adopted a/b/c split](feature-specs/p3-u4-ring-groups-and-dial-plans.md#review-and-adopted-implementation-split) and all three child specs are prepared; implementation remains planned. Start with a: groups/reservations, then b: inbound rules/identities and c: outbound rules/integration. Resolve R-01–05 before dependent implementation and add real resource dependencies before live use. Backup administration remains separate; tenant readiness stays with Phase 4.
 2. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
@@ -167,6 +167,7 @@ for their scope; creating a spec does not approve a proposal.
 
 | Area | Affected work and resume condition |
 | --- | --- |
+| P3-U4 routing policy | [R-01–05](feature-specs/p3-u4-ring-groups-and-dial-plans.md#decisions-required-before-dependent-implementation) propose group strategies/timeouts/fallbacks, inbound matching, outbound grammar/precedence, reservations and unbound-to-tenant behavior. User decisions are needed before the affected child implementation; the specs and adopted split do not approve these policies. |
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
 | Administrator/tenant lifecycle | General last-admin removal/disablement, platform-account recovery and tenant activation/suspension/retirement effects on routes/active work remain with owning P4/later units. Ordinary admission and scoped P2-U4 credential recovery are already approved. |
@@ -194,6 +195,10 @@ for their scope; creating a spec does not approve a proposal.
 - Previously recorded unrelated follow-up: the implementation plan has six source links using an incorrect relative `context/...` prefix. This cleanup preserves the plan; follow-up remains outstanding.
 
 ## Recent Session Notes
+
+- 2026-10-24 (Asia/Manila, +08:00) — User requested the three P3-U4 sub-unit specs. Created [a: groups/reservations](feature-specs/p3-u4a-ring-groups-and-reserved-number-protection.md), [b: inbound/identities](feature-specs/p3-u4b-inbound-rules-and-trusted-route-identities.md) and [c: outbound/integration](feature-specs/p3-u4c-outbound-rules-and-integrated-routing-handoff.md), each with dependencies, browser/backend scope, acceptance, checks and handoff. Linked the adopted split from parent/navigation; parent and children remain planned. R-01–05 remain unresolved. Formatting, local links/heading anchors, child acceptance coverage and diff whitespace checks passed. Documentation only; no application, service or data changes.
+
+- 2026-10-24 (Asia/Manila, +08:00) — Prepared and reviewed the [P3-U4 feature spec](feature-specs/p3-u4-ring-groups-and-dial-plans.md), including acceptance, unresolved routing policies and a proposed three-increment split with a browser workflow in each. Reviewed allocation boundaries, generated attribution, existing dependency blockers and extension/reservation races. Spec formatting, local-link/heading checks and diff whitespace checks passed. Documentation only; no feature implementation, service changes or new runtime verification. P3-U4 remains planned; standalone child specs remain to be written if the split is adopted.
 
 - 2026-10-24 00:09 +08:00 (Asia/Manila) — P3-U3c and parent P3-U3 completed: DID inventory/forms and real dependency blockers, C-01–05/DEV-01–07, integrated real-service/browser acceptance and full normal check passed. Fixed validation focus after disabled submissions; retained its browser assertion. Ordinary HTTPS refreshed and healthy; operator and downstream dependency handoffs published. Earlier a/b/start-c checkpoints are in [history](progress-tracker-history.md).
 
