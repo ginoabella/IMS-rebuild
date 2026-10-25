@@ -1,6 +1,7 @@
 # P3-U5 — Review, validate, apply, and recover configuration revisions
 
-Status: **planned**. Prepared and reviewed October 25, 2026 (Asia/Manila,
+Status: **in progress**; [P3-U5a](p3-u5a-revision-capture-diff-and-validation.md)
+is complete within its offline boundary; b/c remain planned. Prepared and reviewed October 25, 2026 (Asia/Manila,
 +08:00). This specification defines intended behavior; it grants no new live
 PBX, secret-access or calling authority. The three-child delivery split was adopted
 October 25, 2026 when the user requested the child specifications.
@@ -205,8 +206,9 @@ fault fixtures distinct from real integration results. Record baseline fingerpri
 temporary resources and exact cleanup; preserve existing data/material/configuration.
 
 Establish a focused `check:pbx-revisions` workspace script during implementation;
-the proposed invocation is `./dev exec pnpm check:pbx-revisions`. It does not yet
-exist and no pass is claimed. Run affected existing `check:routing`,
+the proposed invocation is `./dev exec pnpm check:pbx-revisions`. It is implemented for a’s offline boundary;
+[focused and affected/normal checks passed](../../docs/status/p3-u5a-evidence.md).
+B/c must extend it for their live acceptance; no parent/live pass is claimed. Run affected existing `check:routing`,
 `check:trunk-gateways`, `check:extension-inventory`, `check:pbx-nodes` and durable/auth
 checks inside the Docker workspace, followed by `./dev check`. Documentation-only
 preparation needs formatting, local-link and consistency review, with no service
@@ -227,7 +229,7 @@ live apply first and postpone its baseline, pins, fencing or recovery to a later
 
 The split follows the repository workflow rule: each unit has a verifiable result
 and carries its own required backend/browser/checks/docs. It is not a layer-by-layer
-split. All three child specifications are created and planned. Adopting this split
+split. A is completed within its offline boundary; b/c remain planned. Adopting this split
 does not resolve U5-01–05 or authorize live effects.
 
 Review findings incorporated above: database fencing alone cannot protect external

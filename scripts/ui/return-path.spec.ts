@@ -46,6 +46,7 @@ test('PBX returns allow only delivered literal paths', () => {
     '/pbx-nodes',
     '/pbx-nodes/register',
     '/pbx-nodes/12345678-1234-1234-1234-123456789abc',
+    '/pbx-nodes/12345678-1234-1234-1234-123456789abc/revisions',
   ])
     expect(consoleReturnPath(path)).toBe(path);
   for (const path of [
@@ -53,6 +54,8 @@ test('PBX returns allow only delivered literal paths', () => {
     '/pbx-nodes/register/../sign-in',
     '/pbx-nodes/%72egister',
     '/pbx-nodes/bad',
+    '/pbx-nodes/12345678-1234-1234-1234-123456789abc/revisions?command=reload',
+    '/pbx-nodes/12345678-1234-1234-1234-123456789abc/%72evisions',
   ])
     expect(consoleReturnPath(path)).toBe('/');
 });

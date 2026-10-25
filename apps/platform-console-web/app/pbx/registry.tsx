@@ -332,6 +332,9 @@ export function PbxDetail({ id }: { id: string }) {
             <h2 className="mb-3 font-display text-xl">Runtime observation</h2>
             <Observation node={node} received={state.received ?? Date.now()} />
           </Panel>
+          <Link href={`/pbx-nodes/${node.id}/revisions`} className={linkClass}>
+            Configuration revisions
+          </Link>
           <Link href={`/pbx-nodes/${node.id}/inventory`} className={linkClass}>
             Manage extension inventory
           </Link>

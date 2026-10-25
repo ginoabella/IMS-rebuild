@@ -2641,3 +2641,21 @@ graph, with scoped lint/format passing. All affected regressions, ordinary addit
 migration, backend/HTTPS refresh and health passed. Final completion: 2026-10-24 23:50 +08:00 (Asia/Manila).
 See [final evidence](../docs/status/p3-u4c-evidence.md) for actual acceptance,
 commands, fixture cleanup and limits. No routing apply or calls.
+
+
+## 2026-10-25 — Prior checkpoints retained at P3-U5a completion
+
+### Previous completed checkpoint — P3-U4c / parent P3-U4
+
+- **Status:** completed within approved private development; 2026-10-24 23:50 +08:00 (Asia/Manila). C-01–06 and parent AC-01–08 passed; retained A-01–06/B-01–06 boundaries remain explicit.
+- **Delivered:** desired outbound CRUD/status/removal and saved-rule preview, approved exact/bounded-prefix priorities, whole-domain strip/add validation, original/output reservation protection, internal identities and actual disabled-reference trunk blockers. Shared-trunk eligibility is fixture-only; bindings stay unsupported.
+- **Verification:** real PostgreSQL/shared Redis/two HTTP replicas/actual HTTPS routing browser and integrated group → inbound → outbound → reservation journey passed, including blocker navigation, ordered removal, recovery/access, keyboard/reflow/axe and final removed-trunk/max-length boundaries. All affected resource/inventory/PBX regressions and full `./dev check` passed, exit 0. [Final C/parent acceptance mapping](../docs/status/p3-u4c-evidence.md).
+- **Refresh/preservation:** additive migration applied; ordinary backend and HTTPS console refreshed/ready. HTTPS transport checks and live/ready 200 passed with PostgreSQL/both Redis up. Existing identities, migration history, stored material, observer credentials, PBX baseline and backups preserved; temporary fixtures/material/tokens cleaned. No routing apply or calls.
+- **Handoff:** [operator workflow](../docs/runbooks/outbound-routing.md) and [routing/reservation/identity/dependency contract](../docs/architecture/outbound-routing.md). P3-U5 owns compilation/apply/verification/rollback; P4-U2 real bindings/permissions; P5-U3 authenticated attribution. Completion establishes desired routing only and does not complete the Phase 3 gate.
+
+
+### P3-U5 preparation checkpoints
+
+- 2026-10-25 (Asia/Manila, +08:00) — User adopted the P3-U5 split by requesting all three child specs. Created [a: revision review/validation](feature-specs/p3-u5a-revision-capture-diff-and-validation.md), [b: fenced apply/verified recovery](feature-specs/p3-u5b-fenced-live-apply-and-verified-recovery.md) and [c: interruption/failover/integration](feature-specs/p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md), each with dependencies, scope, browser outcome, acceptance/checks and handoff. Linked parent/navigation and clarified deterministic versus live AC-02 ownership. Parent/children remain planned; U5-01–05 remain unresolved. Documentation only, without live effects or new runtime evidence.
+
+- 2026-10-25 (Asia/Manila, +08:00) — Prepared and reviewed the [P3-U5 feature spec](feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md). Defined immutable revisions, safe review/validation, external fencing, atomic apply, independent verification, known-good recovery, actual resource/credential pins and AC-01–10. Recommended three sequential sub-units; live apply includes minimum verified rollback rather than deferring it. U5-01–05 record unresolved live-policy/access/fixture decisions. Documentation only; P3-U5 and Phase 3 remain incomplete, with no new runtime verification or live authorization.

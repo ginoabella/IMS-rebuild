@@ -254,6 +254,14 @@ The shared routing console previews saved rules without PBX/credential access.
 Internal identities remain unbound; trusted tenant-permission fixtures do not
 establish allocation, live calling permission or operational attribution.
 
+P3-U5a adds [immutable PBX revision review](../docs/architecture/pbx-revisions.md):
+one bounded canonical SQL snapshot, atomic capture/audit/operator receipt,
+deterministic typed nonmaterialized compilation, redacted semantic comparison and
+separately attributed offline validation. The existing platform console and
+protected no-store proxy expose capture → review → validate with mounted recovery.
+Runtime comparison remains unknown until b supplies canonical verified evidence;
+materialization, live commands, actual pins and installation remain gated in b.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

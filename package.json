@@ -43,7 +43,8 @@
     "check:trunk-preparation": "pnpm build:backend && node --test scripts/openbao/trunk-preparation.test.mjs scripts/openbao/provisioning-preflight.test.mjs scripts/openbao/custodian-succession-plan.test.mjs scripts/openbao/recovery-checkpoint.test.mjs scripts/openbao/recovery-inventory.test.mjs scripts/openbao/verify-custodian-capabilities.test.mjs scripts/openbao/custodian-password.test.mjs",
     "check:extension-inventory": "pnpm build:backend && node scripts/check-extension-inventory-selection.mjs",
     "check:trunk-gateways": "pnpm build:backend && node scripts/check-peer-selection.mjs",
-    "check:routing": "pnpm build:backend && node scripts/check-routing-selection.mjs"
+    "check:routing": "pnpm build:backend && node scripts/check-routing-selection.mjs",
+    "check:pbx-revisions": "pnpm build:backend && node --test scripts/pbx-revisions.test.mjs && node scripts/check-pbx-revisions-selection.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

@@ -1,6 +1,7 @@
 # P3-U5a — Revision capture, diff and validation
 
-Status: **planned**. Split adopted October 25, 2026 (Asia/Manila, +08:00).
+Status: **complete within its offline boundary**; A-01–06 passed October 25, 2026
+at 07:50 +08:00 (Asia/Manila). [Final evidence](../../docs/status/p3-u5a-evidence.md). Split adopted October 25, 2026 (Asia/Manila, +08:00).
 Parent: [P3-U5 specification and acceptance](p3-u5-configuration-revisions-apply-and-recovery.md).
 
 ## Goal and starting state
@@ -85,9 +86,9 @@ after reauthentication using existing identity-bound mounted recovery.
 | A-06 | Focused checks, affected regressions and normal Docker checks pass; publish operator review guidance, compiler/snapshot contract, evidence limits and b handoff. No live apply or parent completion is claimed. |
 
 A owns parent AC-01 and deterministic portions of AC-02, plus review portions of
-AC-08–10. Live AC-02 evidence remains b/c work. Establish the proposed
-`./dev exec pnpm check:pbx-revisions` check for contracts, real PostgreSQL/shared
-Redis, two replicas and HTTPS browser; the script is not yet implemented.
+AC-08–10. Live AC-02 evidence remains b/c work. The implemented
+`./dev exec pnpm check:pbx-revisions` check covers contracts, real PostgreSQL/shared
+Redis, two replicas and the actual HTTPS browser; its a-boundary checks passed.
 Run affected existing routing/resource/inventory/PBX and audit/auth checks as
 defined in the parent, then `./dev check`. Documentation-only preparation uses
 formatting/link/consistency review without services or runtime tests.

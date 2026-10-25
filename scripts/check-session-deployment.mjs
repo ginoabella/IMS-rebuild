@@ -80,20 +80,25 @@ function fixture(content) {
 if (inventoryBrowser || observing)
   inventoryAcceptance = inventoryPbxAcceptance(pbxAccess);
 if (
-  ['--extension-inventory', '--peer-browser', '--routing-browser'].includes(
-    process.argv[2],
-  )
+  [
+    '--extension-inventory',
+    '--peer-browser',
+    '--routing-browser',
+    '--revisions-browser',
+  ].includes(process.argv[2])
 )
   console.log(
     JSON.stringify({
       check:
-        process.argv[2] === '--routing-browser'
-          ? 'routing'
+        process.argv[2] === '--revisions-browser'
+          ? 'pbx-revisions'
           : process.argv[2] === '--routing-browser'
             ? 'routing'
-            : process.argv[2] === '--peer-browser'
-              ? 'trunk-gateways'
-              : 'extension-inventory',
+            : process.argv[2] === '--routing-browser'
+              ? 'routing'
+              : process.argv[2] === '--peer-browser'
+                ? 'trunk-gateways'
+                : 'extension-inventory',
       redisFixture: name,
     }),
   );
@@ -271,18 +276,23 @@ try {
   if (created) docker(['rm', '-f', '-v', name]);
   rmSync(directory, { recursive: true, force: true });
   if (
-    ['--extension-inventory', '--peer-browser', '--routing-browser'].includes(
-      process.argv[2],
-    )
+    [
+      '--extension-inventory',
+      '--peer-browser',
+      '--routing-browser',
+      '--revisions-browser',
+    ].includes(process.argv[2])
   )
     console.log(
       JSON.stringify({
         check:
-          process.argv[2] === '--routing-browser'
-            ? 'routing'
-            : process.argv[2] === '--peer-browser'
-              ? 'trunk-gateways'
-              : 'extension-inventory',
+          process.argv[2] === '--revisions-browser'
+            ? 'pbx-revisions'
+            : process.argv[2] === '--routing-browser'
+              ? 'routing'
+              : process.argv[2] === '--peer-browser'
+                ? 'trunk-gateways'
+                : 'extension-inventory',
         redisFixture: name,
         cleanup: 'removed',
       }),

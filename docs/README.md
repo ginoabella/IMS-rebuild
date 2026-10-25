@@ -329,4 +329,5 @@ incomplete. See the [tracker](../context/progress-tracker.md) for the next worki
 
 - [Ring groups and reserved-number management](runbooks/ring-groups.md) — desired-only operator workflow and [namespace/dependency contract](architecture/ring-groups.md).
 
+- [PBX revision review workflow](runbooks/pbx-revisions.md) and [immutable snapshot/compiler contract](architecture/pbx-revisions.md) — P3-U5a completed offline boundary; live apply remains gated.
 - [Desired outbound operator workflow](runbooks/outbound-routing.md) and [routing/reservation/identity/dependency contract](architecture/outbound-routing.md).

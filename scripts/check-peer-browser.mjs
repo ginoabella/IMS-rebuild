@@ -1,3 +1,4 @@
+import { checkPbxRevisions } from './check-pbx-revisions.mjs';
 import { checkRouting } from './check-routing.mjs';
 // Real PostgreSQL + Redis + two production Nest replicas + HTTPS Next browser.
 // PBX targets are deliberately unreachable .invalid names; no telephony process is started.
@@ -10,6 +11,8 @@ import AxeBuilder from '@axe-core/playwright';
 const expect = baseExpect.configure({ timeout: 20000 });
 export async function checkPeerBrowser({
   routingOnly = false,
+  revisionsOnly = false,
+  expire,
   trunkAccess,
   holdResponse,
   page,
@@ -120,6 +123,29 @@ export async function checkPeerBrowser({
   }
   const path = (kind, id = '', suffix = '') =>
     `${base}/${kind}${id ? `/${id}` : ''}${suffix ? `/${suffix}` : ''}`;
+  if (revisionsOnly) {
+    await checkPbxRevisions({
+      request,
+      direct,
+      nodeId,
+      otherNode,
+      installation,
+      owner,
+      session,
+      page,
+      context,
+      config,
+      a,
+      b,
+      holdResponse,
+      issue,
+      staffFacts,
+      ingress,
+      expire,
+      login,
+    });
+    return;
+  }
   if (routingOnly) {
     await checkRouting({
       request,

@@ -19,7 +19,7 @@ export function consoleReturnPath(value: string | null | undefined): string {
     return value;
   if (
     value &&
-    /^\/pbx-nodes\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/peers$/i.test(
+    /^\/pbx-nodes\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(?:peers|revisions)$/i.test(
       value,
     )
   )

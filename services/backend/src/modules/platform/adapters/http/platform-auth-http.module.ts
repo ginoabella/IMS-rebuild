@@ -1,3 +1,5 @@
+import { RevisionsController } from '../../../telephony/adapters/http/revisions.controller';
+import { PbxRevisions } from '../../../telephony/application/pbx-revisions';
 import { RoutingController } from '../../../telephony/adapters/http/routing.controller';
 import { Routing } from '../../../telephony/application/routing';
 import { PeersController } from '../../../telephony/adapters/http/peers.controller';
@@ -41,12 +43,18 @@ export class PlatformAuthHttpModule {
         InventoryController,
         PeersController,
         RoutingController,
+        RevisionsController,
         EndpointCredentialsController,
         PlatformAuthController,
         PlatformTenantsController,
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: PbxRevisions,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.revisions,
+        },
         {
           provide: Routing,
           inject: [InventoryRuntime],

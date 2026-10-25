@@ -17,8 +17,10 @@ import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
+const revisionsBrowser = process.argv[2] === '--revisions-browser';
 const routingBrowser = process.argv[2] === '--routing-browser';
-const peerBrowser = routingBrowser || process.argv[2] === '--peer-browser';
+const peerBrowser =
+  revisionsBrowser || routingBrowser || process.argv[2] === '--peer-browser';
 if (peerBrowser) await import('./check-peer-catalog.mjs');
 const inventoryBrowser = process.argv[2] === '--inventory-browser';
 if (inventoryBrowser) await import('./check-inventory-composition.mjs');
@@ -32,9 +34,12 @@ const selection = process.argv
   .map((x) =>
     ['--endpoint-credentials', '--endpoint-credentials-api'].includes(x)
       ? '--extension-inventory'
-      : ['--inventory-browser', '--peer-browser', '--routing-browser'].includes(
-            x,
-          )
+      : [
+            '--inventory-browser',
+            '--peer-browser',
+            '--routing-browser',
+            '--revisions-browser',
+          ].includes(x)
         ? '--platform-browser'
         : x,
   );
@@ -409,7 +414,11 @@ try {
   if (peerBrowser)
     console.log(
       JSON.stringify({
-        check: routingBrowser ? 'routing' : 'trunk-gateways',
+        check: revisionsBrowser
+          ? 'pbx-revisions'
+          : routingBrowser
+            ? 'routing'
+            : 'trunk-gateways',
         databaseFixture: name,
       }),
     );
@@ -498,6 +507,7 @@ try {
       inventoryBrowser,
       peerBrowser,
       routingBrowser,
+      revisionsBrowser,
       trunkAccess,
       browserChecks: selection[0] !== '--platform-http',
       browserOnly: [
@@ -1385,11 +1395,13 @@ try {
       );
       console.log(
         JSON.stringify({
-          check: routingBrowser
-            ? 'routing'
-            : peerBrowser
-              ? 'trunk-gateways'
-              : 'extension-inventory',
+          check: revisionsBrowser
+            ? 'pbx-revisions'
+            : routingBrowser
+              ? 'routing'
+              : peerBrowser
+                ? 'trunk-gateways'
+                : 'extension-inventory',
           databaseFixture: name,
           cleanup: 'removed',
         }),
