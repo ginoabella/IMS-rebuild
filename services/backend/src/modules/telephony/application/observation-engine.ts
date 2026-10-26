@@ -8,6 +8,7 @@ import type {
   PbxObservationSession,
   PbxOwnershipToken,
   ObservationTarget,
+  PbxOwnedExecution,
 } from './observation-ports';
 
 /** Protocol- and database-independent engine. Adapter snapshots are the only live facts. */
@@ -24,6 +25,7 @@ export class ObservationEngine {
     private readonly catalog: ApprovedPbxCatalog,
     private readonly adapter: PbxObservationAdapter,
     private readonly settings: Readonly<ObservationSettings>,
+    private readonly execution?: PbxOwnedExecution,
   ) {}
   async start() {
     // Startup must actually reach authoritative database state.
@@ -119,6 +121,11 @@ export class ObservationEngine {
       }, this.settings.renewMs);
     };
     renew();
+    const execution = this.execution
+      ?.run(target, () => ({ ...token }), cancel.signal)
+      .catch(() => {
+        cancel.abort();
+      });
     let sequence = 0,
       attempts = 0,
       connectedAt = 0;
@@ -239,6 +246,7 @@ export class ObservationEngine {
       if (deadline) clearTimeout(deadline);
       if (rotation) clearTimeout(rotation);
       await heartbeat;
+      await execution;
       try {
         await this.store.release(token);
       } catch {

@@ -1,3 +1,7 @@
+import {
+  RuntimeDependencies,
+  RetainedRuntimeDependency,
+} from './runtime-dependencies';
 import { previewOutbound } from '../adapters/db/outbound-repository';
 import { createHash, randomUUID } from 'node:crypto';
 import type { RoutingKind, RoutingDto } from '@myims/contracts';
@@ -304,6 +308,30 @@ export class Routing {
               resourceId,
               old,
             );
+          if (
+            old &&
+            (op === 'remove' ||
+              (k === 'groups' &&
+                v &&
+                'number' in v &&
+                'number' in old &&
+                v.number !== old.number))
+          ) {
+            try {
+              await new RuntimeDependencies().assertUnreferenced(
+                tx,
+                nodeId,
+                k,
+                old.id,
+              );
+            } catch (e) {
+              if (e instanceof RetainedRuntimeDependency)
+                throw new RoutingRejected('referenced', [
+                  { id: old.id, name: 'Retained live or recovery revision' },
+                ]);
+              throw e;
+            }
+          }
           if (op === 'remove' && k === 'groups') {
             const blockers = await this.store.blockers(tx, nodeId, resourceId);
             if (blockers.length)

@@ -1,3 +1,5 @@
+import { LiveController } from '../../../telephony/adapters/http/live.controller';
+import { PbxLive } from '../../../telephony/application/pbx-live';
 import { RevisionsController } from '../../../telephony/adapters/http/revisions.controller';
 import { PbxRevisions } from '../../../telephony/application/pbx-revisions';
 import { RoutingController } from '../../../telephony/adapters/http/routing.controller';
@@ -39,6 +41,7 @@ export class PlatformAuthHttpModule {
       module: PlatformAuthHttpModule,
       imports: [IdentityHttpModule.register(config)],
       controllers: [
+        LiveController,
         PbxController,
         InventoryController,
         PeersController,
@@ -50,6 +53,11 @@ export class PlatformAuthHttpModule {
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: PbxLive,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.live,
+        },
         {
           provide: PbxRevisions,
           inject: [InventoryRuntime],

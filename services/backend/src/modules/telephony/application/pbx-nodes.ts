@@ -1,3 +1,7 @@
+import {
+  RuntimeDependencies,
+  RetainedRuntimeDependency,
+} from './runtime-dependencies';
 import { createHash, randomUUID } from 'node:crypto';
 import type { PbxConflict, PbxNodeDto } from '@myims/contracts';
 import type { Transaction } from '../../../infrastructure/database/transaction';
@@ -209,6 +213,23 @@ export class PbxNodes {
             parsed.value.credentialAlias,
           ]);
           const connectivityChanged = connectivity(old) !== nextConnectivity;
+          if (connectivityChanged) {
+            try {
+              await new RuntimeDependencies().assertUnreferenced(
+                tx,
+                old.id,
+                'node',
+                old.id,
+              );
+            } catch (e) {
+              if (e instanceof RetainedRuntimeDependency)
+                throw new Rejected({
+                  kind: 'conflict',
+                  reason: 'target_conflict',
+                });
+              throw e;
+            }
+          }
           if (
             !connectivityChanged &&
             old.displayName === parsed.value.displayName

@@ -217,9 +217,9 @@ export function compileRevision(s: RevisionSnapshot) {
       add('priority_conflict', r.id);
     add('unbound_route', r.id, 'blocker');
   }
-  add('U5-01', null, 'blocker');
-  add('U5-04', null, 'blocker');
-  add('U5-05', null, 'blocker');
+  add('live_validation_required', null, 'blocker');
+  add('exact_material_required', null, 'blocker');
+  add('calling_eligibility_unavailable', null, 'blocker');
   if (diagnostics.length === 511)
     diagnostics.push({
       code: 'diagnostics_truncated',

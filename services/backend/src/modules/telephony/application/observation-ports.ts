@@ -60,3 +60,12 @@ export interface ObservationStore extends PbxOwnership {
     failure: PbxObservationFailure,
   ): Promise<boolean>;
 }
+
+/** Optional protected live consumer shares this engine's renewed ownership. */
+export interface PbxOwnedExecution {
+  run(
+    target: ObservationTarget,
+    current: () => PbxOwnershipToken,
+    signal: AbortSignal,
+  ): Promise<void>;
+}

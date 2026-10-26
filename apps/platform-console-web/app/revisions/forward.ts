@@ -39,11 +39,13 @@ export async function forwardRevisions(
     keys.some(
       (k) =>
         !(
-          method === 'GET' && parts.length === 1
-            ? ['after', 'limit']
-            : method === 'GET' && parts.length === 2
-              ? ['baselineId']
-              : []
+          parts[1] === 'live'
+            ? []
+            : method === 'GET' && parts.length === 1
+              ? ['after', 'limit']
+              : method === 'GET' && parts.length === 2
+                ? ['baselineId']
+                : []
         ).includes(k),
     ) ||
     (url.searchParams.has('baselineId') &&
@@ -69,7 +71,11 @@ export async function forwardRevisions(
     method as 'GET' | 'POST',
     body,
   );
-  if (![200, 201, 400, 401, 403, 404, 409, 429, 503].includes(upstream.status))
+  if (
+    ![200, 201, 202, 400, 401, 403, 404, 409, 429, 503].includes(
+      upstream.status,
+    )
+  )
     return safeError(503);
   if (upstream.status >= 400) {
     let reason: unknown;
@@ -89,9 +95,17 @@ export async function forwardRevisions(
               ? 'Revision or receipt not found.'
               : 'Revision request unavailable.',
         ...(typeof reason === 'string' &&
-        ['snapshot_limit', 'request_conflict', 'intent_expired'].includes(
-          reason,
-        )
+        [
+          'snapshot_limit',
+          'request_conflict',
+          'intent_expired',
+          'verified_baseline_required',
+          'operation_unresolved',
+          'stale_baseline',
+          'reconciliation_target_required',
+          'stale_review',
+          'known_good_target_required',
+        ].includes(reason)
           ? { reason }
           : {}),
       },
@@ -116,7 +130,10 @@ export async function forwardRevisions(
     );
   }
   try {
-    const v = await boundedResponse(upstream, 32 * 1024 * 1024);
+    const v = await boundedResponse(
+      upstream,
+      parts[1] === 'live' ? 1048576 : 32 * 1024 * 1024,
+    );
     if (!output(parts, method, v)) return safeError(503);
     return Response.json(v, {
       status: upstream.status,

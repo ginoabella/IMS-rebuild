@@ -1,3 +1,5 @@
+import { checkLiveBrowser } from './check-pbx-live-browser.mjs';
+import { checkPbxLiveIntent } from './check-pbx-live-intent.mjs';
 /* global structuredClone, document, innerWidth */
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
@@ -485,6 +487,29 @@ export async function checkPbxRevisions({
       ).toBeVisible();
     }
     assert.equal((await direct(b, path)).status, 200);
+    const liveRevision = await capture();
+    await checkPbxLiveIntent({
+      request,
+      direct,
+      owner,
+      nodeId,
+      a,
+      b,
+      revision: liveRevision,
+      extensionId: extension.id,
+    });
+    await checkLiveBrowser({
+      request,
+      direct,
+      owner,
+      page,
+      config,
+      a,
+      b,
+      holdResponse,
+      expire,
+      login,
+    });
     console.log(
       'PASS revisions A-01–05: immutable atomic capture/receipt/audit rollback, real concurrent edit, cross-replica retry, exact references, redacted semantic diff, stale offline validation, authority/CSRF, history, actual HTTPS review and lost-response receipt recovery, axe/reflow/keyboard; no PBX/provider effects',
     );

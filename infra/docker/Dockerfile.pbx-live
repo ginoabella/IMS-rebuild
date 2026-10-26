@@ -1,0 +1,10 @@
+# Opt-in P3-U5b private native tooling; activation requires verified deployment gates.
+FROM andrius/asterisk:22.10.1_debian-trixie@sha256:212326bd3f973a597be9e4747be5d6653802e4950159e95aa7d728e394de2012
+COPY --from=node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c /usr/local/bin/node /usr/local/bin/node
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends nftables libstdc++6 \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --system --uid 1005 --gid asterisk --no-create-home myims-validator
+
+COPY infra/docker/start-pbx-live.sh /usr/local/lib/myims/start-pbx-live.sh
+COPY infra/docker/native-owner.sh /usr/local/lib/myims/native-owner.sh

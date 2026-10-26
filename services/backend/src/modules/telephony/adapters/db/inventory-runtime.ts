@@ -1,3 +1,4 @@
+import { PbxLive } from '../../application/pbx-live';
 import { PbxRevisions } from '../../application/pbx-revisions';
 import { Routing } from '../../application/routing';
 import { RoutingRepository } from './routing-repository';
@@ -16,6 +17,7 @@ export class InventoryRuntime {
   readonly peers: Peers;
   readonly routing: Routing;
   readonly revisions: PbxRevisions;
+  readonly live: PbxLive;
   private readonly pool: Pool;
   private readonly database: SnapshotDatabase;
   constructor(
@@ -35,6 +37,21 @@ export class InventoryRuntime {
     this.pool.on('connect', (client) => client.on('error', () => {}));
     this.pool.on('error', () => {});
     this.database = new SnapshotDatabase(url);
+    this.live = new PbxLive(
+      {
+        run: (context, action) =>
+          Transaction.run(
+            this.pool,
+            context,
+            'telephony.live-revision',
+            logger,
+            action,
+          ),
+      },
+      this.database,
+      authority,
+      new AuditRepository(),
+    );
     this.revisions = new PbxRevisions(
       {
         run: (context, action) =>

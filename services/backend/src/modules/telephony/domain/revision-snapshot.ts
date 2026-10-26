@@ -56,7 +56,7 @@ export interface RevisionSnapshot {
     OutboundValues & { enabled: boolean; identity: Record<string, string> })[];
   credentials: (Source & { available: boolean; purpose: string })[];
 }
-export const COMPILER_VERSION = 'review-1';
+export const COMPILER_VERSION = 'review-2';
 export const POLICY_VERSION = 'deny-unbound-1';
 export const SNAPSHOT_LIMIT = 2048;
 export type SourceEntry = {

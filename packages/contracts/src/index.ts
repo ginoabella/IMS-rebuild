@@ -84,3 +84,4 @@ export * from './endpoint-credentials';
 export * from './trunk-gateways';
 export * from './routing';
 export * from './pbx-revisions';
+export * from './pbx-live';

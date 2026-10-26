@@ -8,6 +8,8 @@ Decisions remain owned by their linked contracts/reviews; history is not approva
 
 ## Archive index
 
+- [2026-10-26 — P3-U5b implementation and verification checkpoints](#2026-10-26--p3-u5b-implementation-and-verification-checkpoints): implementation, policy/access maintenance and intermediate checks; final result remains in the current tracker.
+
 - [2026-10-20 — Named custodian capability checkpoint closed](#2026-10-20--named-custodian-capability-checkpoint-closed): intermediate handoff/session checkpoints; final bounded verification owner-accepted with cleanup confirmed.
 - [2026-10-15 — P3-U2a delivery and superseded checkpoints](#2026-10-15--p3-u2a-delivery-and-superseded-checkpoints): P3-U1 final checkpoint, a implementation checkpoints and prior planning notes.
 - [2026-10-14 — Original tracker snapshot](#2026-10-14--original-tracker-snapshot): full pre-compaction tracker, including foundation/identity delivery, early draft creation, staff acceptance and P3-U1 spec preparation.
@@ -2659,3 +2661,147 @@ commands, fixture cleanup and limits. No routing apply or calls.
 - 2026-10-25 (Asia/Manila, +08:00) — User adopted the P3-U5 split by requesting all three child specs. Created [a: revision review/validation](feature-specs/p3-u5a-revision-capture-diff-and-validation.md), [b: fenced apply/verified recovery](feature-specs/p3-u5b-fenced-live-apply-and-verified-recovery.md) and [c: interruption/failover/integration](feature-specs/p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md), each with dependencies, scope, browser outcome, acceptance/checks and handoff. Linked parent/navigation and clarified deterministic versus live AC-02 ownership. Parent/children remain planned; U5-01–05 remain unresolved. Documentation only, without live effects or new runtime evidence.
 
 - 2026-10-25 (Asia/Manila, +08:00) — Prepared and reviewed the [P3-U5 feature spec](feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md). Defined immutable revisions, safe review/validation, external fencing, atomic apply, independent verification, known-good recovery, actual resource/credential pins and AC-01–10. Recommended three sequential sub-units; live apply includes minimum verified rollback rather than deferring it. U5-01–05 record unresolved live-policy/access/fixture decisions. Documentation only; P3-U5 and Phase 3 remain incomplete, with no new runtime verification or live authorization.
+
+
+## 2026-10-26 — P3-U5b implementation and verification checkpoints
+
+Archived 2026-10-26 05:47 +08:00 (Asia/Manila). These preparation checkpoints are historical;
+the final B-01–08 result is in the current tracker and scoped evidence.
+
+**P3-U5b — fenced live apply and verified recovery: in progress**
+(2026-10-25, Asia/Manila, +08:00). Owner-approved U5-01–05 and scoped container
+NET_ADMIN/nftables are recorded in the [policy review](../docs/planning/p3-u5b-live-policy-review.md).
+Implemented immutable durable live intent/progress/artifacts, exact resource/material
+pins and actual removal blockers, ordinary-worker delivery, private native fencing,
+protected exact-version consumption/materialization, complete-set validation and
+selection, independent loaded runtime/profile/auth/dialplan proof, automatic/manual
+verified recovery, explicit uncertain-predecessor reconciliation, and exact-baseline
+console controls with retained operation/receipt recovery.
+[Scoped acceptance checkpoint](../docs/status/p3-u5b-evidence.md) and
+[operator runbook](../docs/runbooks/pbx-revisions.md) record observed proof and
+remaining gates without claiming completion.
+
+Observed checks: real PostgreSQL/two HTTP replicas passed atomic acceptance/audit/
+pin/outbox rollback, duplicates, stale review/baseline, actual blockers and runtime-role
+promotion/release denial. Actual isolated Asterisk passed bounded natural call drain,
+quiet-window failure retention, exact protected endpoint/outbound digest authentication,
+exact DID disabled-winner denial, catchall/sequential/simultaneous groups, outbound
+strip/add and ordinary unbound/reservation denial (nine sequential synthetic calls,
+no public destination). Integrated real SQL ownership/worker/private socket passed
+initial baseline, actual install/reload/verify, automatic and explicit recovery,
+failed-candidate versus successful-recovery phases, retained unknown pins/barrier and
+audited reconciliation. The combined actual lease-expiry/paused reload/helper-SIGKILL
+race passed: the canonical successor stayed physically excluded until real CLI
+completion, then rejected the old owner and reconciled partial runtime without replay.
+Actual HTTPS review → uncertain apply → same-operator reauthentication/receipt →
+verify → keyboard recovery, two-replica status, CSRF/raw-command/stale-baseline denial
+and axe/reflow passed; the full supported command passed after its idempotent cleanup fix.
+
+A permission-only check found the initial host staging token readable by workspace
+UID; staging was immediately protected root-only. The approved read-only consumer is
+now in a private Docker volume mounted only into telephony; actual/planned isolation
+checks pass. Replacement retained the approved ACL (`configurationUpdates: 0`) and
+verified the 24-hour explicit maximum. Trusted preparation now uses exact one-shot
+input/output mounts and no project mount. The additive primary migration and scoped
+executor login/configuration preparation passed. Retained profile activation later
+passed the mandatory proofs and complete zero-call/zero-resource preflight: the
+existing Asterisk and two telephony replicas now use the approved private profile.
+Initial baseline `add6bfc1-ee2f-42a7-a68a-5cdba67b95d7` was independently verified
+at 22:44 +08:00. Actual capability/custody checks and sub-second fenced executor/
+complete AMI observation freshness passed. No desired revision or call was applied.
+
+The current focused rerun also passed the real zero-check/admission race and actual
+verified-TLS AMI observation filter: login/PJSIP reads succeed; Reload, Command,
+Originate and Shutdown are denied. Updated the operator runbook for exact baseline
+review, durable receipt recovery, guarded recovery, protected custody and cleanup.
+The proposed two-version writer was rejected by automatic approval review and
+never executed. A safer alternative passed using existing canonical versions 1/2:
+private exact GETs, missing/foreign denial, actual owner/private-socket/native
+installation of both versions, independently verified loaded auth, retained old/new
+pins and explicit version-1 rollback without another provider read. No provider
+writes/access issuance/token in PBX/registration/calls occurred. Owned fixtures
+were removed, exit 0; unused writer/access scripts were removed.
+
+Integrated actual SQL/native acceptance also passed account disablement after
+admission/drain with zero selection, actual owner execution while the ordinary
+worker is stopped, and late delivery without repeat effects. The combined real
+SQL dispatch race passed again after correcting fixture authority and allowing
+bounded preparation time. Actual production native entrypoint/configuration,
+private socket/SQL owner handshake, retained verified baseline and helper shutdown
+passed in the disposable PBX; shutdown left Asterisk fully booted. Repository lint
+passed. The complete focused native/SQL/HTTPS command (all 16 contracts) and
+affected routing, trunk/gateway and PBX registry/observation/browser graphs passed,
+exit 0. The actual malformed complete-set/parser rejection also passed without
+selection or unmanaged changes. Remaining affected/normal checks are running
+sequentially.
+
+A final phase review corrected baseline-only crash reconciliation so it cannot
+report candidate verification passed, preserves failed/uncertain candidate install
+status after successful baseline recovery, and records successful atomic selection
+before reload. The backend compiled and targeted lint passed. Strengthened actual
+filesystem-install-failure, selected-file/runtime-drift, baseline-only attribution,
+provider-transport-loss and known-good removal/structural blockers await the final
+focused rerun after shared builds finish. Normal Docker checks have passed lint,
+formatting, type checking, production builds and all entrypoint/configuration gates;
+foundation/storage/session checks continue.
+
+October 26 (+08:00): the owner explicitly approved the existing synthetic inventory
+credential regression, including destruction of only its run-owned disposable
+records under existing roles. The separate new two-version writer was also approved
+but remains unused because retained-version proof already passed. The complete
+normal Docker graph and all independent affected checks passed, exit 0.
+
+The strengthened focused rerun passed, exit 0, including real provider/native
+replacement/rollback, actual filesystem installation failure and selected runtime
+drift, corrected phase attribution, transport loss and known-good blockers. A final
+loaded trunk profile/AOR proof was added and still needs its actual native rerun.
+The final trunk-proof focused command passed exit 0, including all 16 contracts.
+The newly authorized full inventory/credential regression is running again after
+the verified routine issuer replacement.
+
+The inventory API stage passed. Credential setup stopped before material work when
+the existing fixture issuer returned 403. Routine named-custodian replacement first
+stopped safely at exact preflight because U5b adds its approved read-only issuance
+rule; the helper now accepts that exact rule only with explicit
+`--live-installation UUID`. Fixed-role replacement then passed with an actual
+86,399-second nonrenewable lifetime, zero configuration updates, prior issuer still
+invalid and the temporary human session revoked. Final focused checks are running;
+full inventory/credential acceptance will resume after shared native fixtures finish.
+
+The final trunk-proof focused command passed, exit 0, including actual loaded
+profile/AOR checks and all 16 contracts. Ordinary backend recreation is healthy.
+The final native helper refresh changed PID 50583 to 53192 while preserving
+Asterisk PID 7, the matching verified baseline and no active operation. Executor
+and complete observation remained subsecond fresh. Final capability and actual
+custody isolation checks passed. Full credentials passed provider outage/restart,
+exact recovery, authority, exhaustion/requeue, cleanup interruptions and material
+exclusion. Exact teardown covered 26 owned generations (25 destroyed, one already
+absent), revoked/removed fixture access and removed its SQL database. The complete inventory/API/provider/browser
+command passed exit 0, including its two additional owned generation cleanup,
+fixture token revocation/removal and exact retained PBX baseline/running-state
+restoration with no fixtures and the exclusive lock released.
+
+The final complete `./dev check` passed, exit 0, on the final trunk-proof/helper
+source. Independent post-regression comparison matched the retained baseline’s
+unmanaged configuration hashes, exact loaded resource facts and default-deny
+dialplan. All known owned fixture databases and live fixture containers are gone.
+
+Remaining: ordinary HTTPS refresh (running), final transport/health/custody checks
+and completion documentation.
+P3-U5b remains incomplete; c, parent P3-U5 and the Phase 3 gate remain incomplete.
+
+
+## Latest Completed Checkpoint — P3-U5a
+
+- **Status:** completed within the offline boundary; 2026-10-25 07:50 +08:00 (Asia/Manila). A-01–06 passed; [final acceptance evidence](../docs/status/p3-u5a-evidence.md).
+- **Delivered:** bounded immutable primary snapshots, atomic actor audit/capture receipts, deterministic typed compilation, safe semantic before/after diff and exact credential references, separately attributed offline validation with stale-dependency feedback, and the protected capture → review → validate console journey.
+- **Verification:** five compiler contracts; real PostgreSQL/shared Redis/two HTTP replicas/actual HTTPS capture, ordered-membership races, rollback, uncertainty/reauthentication, pagination, cold-entry and late-dispatch fences, keyboard/reflow/axe. All affected routing/resource/inventory/PBX/durability/auth checks and full `./dev check` passed, exit 0.
+- **Refresh/preservation:** additive ordinary migration and backend/console refresh passed; live/ready 200 with PostgreSQL/both Redis up. Ordinary platform/staff HTTPS checks and protected new-route probes passed. Existing identities, credentials and migration history preserved; controlled PBX baselines/running states and owned fixture/material/token cleanup verified by affected regressions.
+- **Handoff:** [operator review guide](../docs/runbooks/pbx-revisions.md), [snapshot/compiler contract](../docs/architecture/pbx-revisions.md). U5-01/04/05 remain explicit live-validation/material/fixture blockers; b owns approved materialization, actual pins, acceptance revalidation, fencing, installation and verified recovery. No live apply, tenant calling readiness or parent completion is claimed.
+
+
+- 2026-10-25 (Asia/Manila, +08:00) — Owner explicitly approved all five recommended U5-01–05 policies and requested continuation. Recorded approval in the parent/review and resumed P3-U5b implementation; no further policy confirmation is required within this approved scope.
+
+- 2026-10-25 (Asia/Manila, +08:00) — Started P3-U5b at the user’s request, inspected the parent/a handoff and existing deployment/ownership/material boundaries, and prepared the [concrete policy review](../docs/planning/p3-u5b-live-policy-review.md). U5-01–05 remain owner decisions under the requested spec, so dependent implementation is blocked pending an answer. No live/provider/application changes or B acceptance claimed; P3-U5b is incomplete.
+
+- 2026-10-25 07:50 +08:00 (Asia/Manila) — P3-U5a completed: immutable capture/audit/receipts, typed safe compilation, redacted semantic diff, qualified offline validation and protected console recovery. A-01–06, all affected checks and full `./dev check` passed; ordinary migration/backend/HTTPS refresh and transport/health passed. [Final evidence](../docs/status/p3-u5a-evidence.md), [operator guide](../docs/runbooks/pbx-revisions.md), [b handoff](../docs/architecture/pbx-revisions.md). Live policy U5-01–05 remains unresolved for dependent work; parent/Phase 3 remain incomplete. Preparation and prior checkpoint details are retained in tracker history.

@@ -1,3 +1,4 @@
+import type { PbxOwnedExecution } from '../../application/observation-ports';
 import { readFileSync, statSync } from 'node:fs';
 import { FilePbxCatalog } from '../connectivity/catalog';
 import { SecretFileCredentials } from '../connectivity/secret-files';
@@ -9,7 +10,12 @@ import { AmiObservationAdapter } from './ami-adapter';
 export class TelephonyObservationRuntime {
   private readonly store: ObservationRepository;
   private readonly engine: ObservationEngine;
-  constructor(url: string, catalogFile: string, configurationFile: string) {
+  constructor(
+    url: string,
+    catalogFile: string,
+    configurationFile: string,
+    execution?: PbxOwnedExecution,
+  ) {
     const settings = observationSettings();
     let files: Map<string, string>, trust: string;
     try {
@@ -70,7 +76,13 @@ export class TelephonyObservationRuntime {
       settings,
     );
     this.store = new ObservationRepository(url, settings);
-    this.engine = new ObservationEngine(this.store, catalog, adapter, settings);
+    this.engine = new ObservationEngine(
+      this.store,
+      catalog,
+      adapter,
+      settings,
+      execution,
+    );
   }
   async start() {
     await this.engine.start();

@@ -1,0 +1,43 @@
+# Opt-in P3-U5b private development. Activate only after the mandatory gates pass.
+services:
+  asterisk:
+    image: myims-rebuild-dev-asterisk-live
+    build:
+      context: ../..
+      dockerfile: infra/docker/Dockerfile.pbx-live
+    entrypoint: ['/bin/sh', '/usr/local/lib/myims/start-pbx-live.sh']
+    command: []
+    stop_grace_period: 40s
+    environment:
+      PBX_LIVE_PROFILE: approved-local-development
+    cap_add: [NET_ADMIN]
+    volumes:
+      - pbx-live-data:/var/lib/myims-pbx
+      - pbx-live-control:/run/pbx-live
+      - ../../.local/pbx-live/native:/run/pbx-live-native:ro
+      - ../../.local/pbx-live/native/pjsip.conf:/etc/asterisk/pjsip.conf:ro
+      - ../../.local/pbx-live/native/extensions.conf:/etc/asterisk/extensions.conf:ro
+      - ../../.local/pbx-live/native/modules.conf:/etc/asterisk/modules.conf:ro
+      - ../../.local/pbx-live/native/manager.conf:/etc/asterisk/manager.conf:ro
+      - ../../services/backend:/workspace/services/backend:ro
+      - ../../packages/config:/workspace/packages/config:ro
+      - ../../packages/contracts:/workspace/packages/contracts:ro
+      - workspace-deps-0:/workspace/node_modules:ro
+      - workspace-deps-10:/workspace/services/backend/node_modules:ro
+      - workspace-deps-6:/workspace/packages/config/node_modules:ro
+      - workspace-deps-7:/workspace/packages/contracts/node_modules:ro
+  telephony:
+    environment:
+      PBX_LIVE_PROFILE: approved-local-development
+    volumes:
+      - pbx-live-control:/run/pbx-live:ro
+      - pbx-live-consumer:/run/pbx-live-consumer:ro
+    networks: [default, endpoint-credentials]
+networks:
+  endpoint-credentials:
+    external: true
+    name: myims-rebuild-dev_endpoint-credentials
+volumes:
+  pbx-live-data:
+  pbx-live-control:
+  pbx-live-consumer:

@@ -1,3 +1,7 @@
+import {
+  RuntimeDependencies,
+  RetainedRuntimeDependency,
+} from './runtime-dependencies';
 import { createHash, randomUUID } from 'node:crypto';
 import type { PeerDto, PeerResource } from '@myims/contracts';
 import type { SnapshotDatabase } from '../../../infrastructure/database/read-snapshot';
@@ -278,6 +282,28 @@ export class Peers {
                         prior.trunkId !== v.trunkId ||
                         JSON.stringify(prior.sourceAddresses) !==
                           JSON.stringify(v.sourceAddresses))));
+            if (
+              structural ||
+              (v &&
+                'direction' in v &&
+                'direction' in prior &&
+                v.direction !== prior.direction)
+            ) {
+              try {
+                await new RuntimeDependencies().assertUnreferenced(
+                  tx,
+                  nodeId,
+                  kind,
+                  old.id,
+                );
+              } catch (e) {
+                if (e instanceof RetainedRuntimeDependency)
+                  throw new PeerRejected(409, 'referenced', undefined, [
+                    { id: old.id, name: 'Retained live or recovery revision' },
+                  ]);
+                throw e;
+              }
+            }
             if (structural) {
               const providerOnly =
                 operation !== 'remove' &&

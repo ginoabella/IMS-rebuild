@@ -1,6 +1,8 @@
+import { liveRoute, liveInput, liveOutput } from './live-validation';
 import { uuid, obj } from '../routing/validation';
 export { uuid };
 export function route(parts: string[], method: string) {
+  if (parts[1] === 'live') return liveRoute(parts, method);
   return (
     parts[0] === 'revisions' &&
     (method === 'GET'
@@ -116,6 +118,7 @@ function validation(v: unknown): boolean {
   );
 }
 export function input(parts: string[], v: unknown) {
+  if (parts[1] === 'live') return liveInput(parts, v);
   if (parts.length === 3) return exact(v, []) && obj(v);
   return (
     exact(v, ['requestId', 'baselineId']) &&
@@ -125,6 +128,7 @@ export function input(parts: string[], v: unknown) {
   );
 }
 export function output(parts: string[], method: string, v: unknown): boolean {
+  if (parts[1] === 'live') return liveOutput(parts, method, v);
   if (!obj(v)) return false;
   if (method === 'POST')
     return parts.length === 1
@@ -150,6 +154,7 @@ export function output(parts: string[], method: string, v: unknown): boolean {
       'sourceCurrent',
       'validation',
       'diff',
+      'runtimeDiff',
     ]) &&
     summary(v.revision) &&
     typeof v.sourceCurrent === 'boolean' &&
@@ -183,16 +188,31 @@ export function output(parts: string[], method: string, v: unknown): boolean {
             ),
         ),
     ) &&
-    obj(v.diff) &&
-    exact(v.diff, ['baseline', 'runtime', 'changes']) &&
-    (v.diff.baseline === null || summary(v.diff.baseline)) &&
-    obj(v.diff.runtime) &&
-    exact(v.diff.runtime, ['kind', 'drift']) &&
-    v.diff.runtime.kind === 'no_verified_runtime' &&
-    v.diff.runtime.drift === 'unknown' &&
-    Array.isArray(v.diff.changes) &&
-    v.diff.changes.length <= 4096 &&
-    v.diff.changes.every(
+    diff(v.diff) &&
+    diff(v.runtimeDiff)
+  );
+}
+function runtime(v: unknown) {
+  return (
+    obj(v) &&
+    v.drift === 'unknown' &&
+    ((exact(v, ['kind', 'drift']) && v.kind === 'no_verified_runtime') ||
+      (exact(v, ['kind', 'drift', 'artifactId', 'revisionId', 'verifiedAt']) &&
+        v.kind === 'verified_runtime' &&
+        uuid(v.artifactId) &&
+        nullableId(v.revisionId) &&
+        text(v.verifiedAt)))
+  );
+}
+function diff(v: unknown): boolean {
+  return (
+    obj(v) &&
+    exact(v, ['baseline', 'runtime', 'changes']) &&
+    (v.baseline === null || summary(v.baseline)) &&
+    runtime(v.runtime) &&
+    Array.isArray(v.changes) &&
+    v.changes.length <= 4096 &&
+    v.changes.every(
       (c) =>
         obj(c) &&
         exact(c, [

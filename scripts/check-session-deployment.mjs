@@ -1,3 +1,4 @@
+import { LiveBrowserFixture } from './pbx-live-browser-fixture.mjs';
 import { inventoryPbxAcceptance } from './inventory-pbx-acceptance.mjs';
 import {
   endpointAccess,
@@ -113,6 +114,9 @@ if (observing)
 let created = false;
 let endpointCleanupError;
 let trunkFixtureFailed = false;
+const liveBrowser =
+  process.argv[2] === '--revisions-browser' ? new LiveBrowserFixture() : null;
+let liveFixtureFailed = false;
 try {
   if (credentials) provisionEndpointFixture();
   docker([
@@ -159,7 +163,20 @@ try {
       const line = output.slice(0, newline);
       output = output.slice(newline + 1);
       try {
-        if (trunkAccess && line.startsWith('SIMPLE_TRUNK_FIXTURE_REQUEST ')) {
+        if (liveBrowser && line.startsWith('PBX_LIVE_FIXTURE_REQUEST ')) {
+          void liveBrowser
+            .start(JSON.parse(line.slice('PBX_LIVE_FIXTURE_REQUEST '.length)))
+            .catch(() => {
+              liveFixtureFailed = true;
+              console.error('Owned live browser startup failed');
+              child.kill('SIGKILL');
+            });
+        } else if (liveBrowser && line === 'PBX_LIVE_FIXTURE_STOP') {
+          liveBrowser.stop();
+        } else if (
+          trunkAccess &&
+          line.startsWith('SIMPLE_TRUNK_FIXTURE_REQUEST ')
+        ) {
           const request = JSON.parse(
             line.slice('SIMPLE_TRUNK_FIXTURE_REQUEST '.length),
           );
@@ -262,9 +279,10 @@ try {
   const timer = setTimeout(() => child.kill('SIGKILL'), 1500000);
   const [code] = await once(child, 'exit');
   clearTimeout(timer);
-  if (code !== 0 || trunkFixtureFailed)
+  if (code !== 0 || trunkFixtureFailed || liveFixtureFailed)
     throw new Error('Session lifecycle checks failed');
 } finally {
+  liveBrowser?.stop();
   if (credentials) {
     try {
       await cleanupEndpointFixture();

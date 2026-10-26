@@ -306,7 +306,13 @@ export class PeerRepository {
           'UPDATE public.sip_gateway_sources SET removed_at=(SELECT removed_at FROM public.sip_gateways WHERE id=$1) WHERE gateway_id=$1 AND removed_at IS NULL',
           [old.id],
         );
-      else if (v && 'sourceAddresses' in v)
+      else if (
+        v &&
+        'sourceAddresses' in v &&
+        (!('sourceAddresses' in old) ||
+          JSON.stringify([...old.sourceAddresses].sort()) !==
+            JSON.stringify([...v.sourceAddresses].sort()))
+      )
         await this.sources(tx, old.id, old.installationId, v.sourceAddresses);
     }
     return (await this.detail(tx, kind, old.nodeId, old.id))!;

@@ -10,12 +10,16 @@ import { provisioningPlan } from './provisioning-plan.mjs';
 import { provisioningPreflight } from './provisioning-preflight.mjs';
 import { custodianSuccessionPlan } from './custodian-succession-plan.mjs';
 import { ProtectedBaoClient } from './protected-client.mjs';
+import { restrictedIssuanceRule } from './restricted-issuance-rule.mjs';
 process.umask(0o077);
 let stage = 'custody';
 try {
-  const [lifecycle, manifestFile] = process.argv.slice(2);
+  const [lifecycle, manifestFile, liveFlag, liveInstallation] =
+    process.argv.slice(2);
   if (
-    process.argv.length !== 4 ||
+    ![4, 6].includes(process.argv.length) ||
+    (process.argv.length === 6 &&
+      (lifecycle !== 'endpoint' || liveFlag !== '--live-installation')) ||
     !['endpoint', 'trunk'].includes(lifecycle) ||
     !manifestFile
   )
@@ -32,6 +36,21 @@ try {
   )
     throw new Error();
   const plan = provisioningPlan(JSON.parse(readFileSync(manifestFile, 'utf8')));
+  // The approved live consumer adds exactly one constrained issuance rule.
+  // Opt in explicitly; unrelated policy drift still fails the exact preflight.
+  if (liveInstallation !== undefined) {
+    if (!plan.installations.includes(liveInstallation)) throw new Error();
+    const name = `endpoint-live-read-${liveInstallation}`;
+    const request = {
+      policies: [name],
+      no_default_policy: true,
+      ttl: '24h',
+      explicit_max_ttl: '24h',
+      renewable: false,
+    };
+    plan.policies.find((p) => p.name === 'endpoint-restricted-issuer').policy +=
+      `\n${restrictedIssuanceRule({ name, request })}`;
+  }
   const provider = new ProtectedBaoClient(
     '/session/custodian.token',
     '/trust/ca.crt',

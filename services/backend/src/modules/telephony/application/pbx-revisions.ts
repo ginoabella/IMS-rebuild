@@ -1,5 +1,9 @@
 import { createHash, randomUUID } from 'node:crypto';
-import type { RevisionDetail, RevisionValidation } from '@myims/contracts';
+import type {
+  RevisionDetail,
+  RevisionValidation,
+  RevisionDiff,
+} from '@myims/contracts';
 import type {
   SnapshotDatabase,
   ReadSnapshot,
@@ -84,6 +88,28 @@ export class PbxRevisions {
       sourceCurrent = digest(current) === r.sourceDigest;
     const compiled = compileRevision(r.snapshot),
       validation = await this.store.validation(s, r.id);
+    const runtime = (
+      await s.query<{
+        id: string;
+        revisionId: string | null;
+        verifiedAt: Date;
+      }>(
+        `SELECT a.id,a.revision_id AS "revisionId",a.verified_at AS "verifiedAt" FROM public.pbx_live_runtime p JOIN public.pbx_live_artifacts a ON a.id=p.verified_id AND a.node_id=p.node_id WHERE p.node_id=$1 AND p.runtime_state='verified'`,
+        [r.nodeId],
+      )
+    ).rows[0];
+    const verified = runtime?.revisionId
+      ? await this.saved(s, r.nodeId, runtime.revisionId)
+      : null;
+    const runtimeFact: RevisionDiff['runtime'] = runtime
+      ? {
+          kind: 'verified_runtime',
+          artifactId: runtime.id,
+          revisionId: runtime.revisionId,
+          verifiedAt: runtime.verifiedAt.toISOString(),
+          drift: 'unknown',
+        }
+      : { kind: 'no_verified_runtime', drift: 'unknown' };
     return {
       revision: summary(r),
       resources: reviewResources(r.snapshot),
@@ -99,11 +125,18 @@ export class PbxRevisions {
               r.policyVersion === POLICY_VERSION,
           }
         : null,
-      diff: semanticDiff(
-        r.snapshot,
-        b?.snapshot ?? null,
-        b ? summary(b) : null,
-      ),
+      diff: {
+        ...semanticDiff(r.snapshot, b?.snapshot ?? null, b ? summary(b) : null),
+        runtime: runtimeFact,
+      },
+      runtimeDiff: {
+        ...semanticDiff(
+          r.snapshot,
+          verified?.snapshot ?? null,
+          verified ? summary(verified) : null,
+        ),
+        runtime: runtimeFact,
+      },
     };
   }
   read(p: Principal, nodeInput: unknown, revisionInput: unknown, q: unknown) {

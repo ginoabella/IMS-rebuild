@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { Button, Panel } from '@myims/ui-web';
 import { RevisionReview } from './review';
+import { LivePanel } from './live-panel';
 import { useRevisions } from './use-revisions';
 const linkClass = 'text-[var(--accent-primary)] underline';
 export function RevisionsBrowser({ nodeId }: { nodeId: string }) {
@@ -38,11 +39,6 @@ export function RevisionsBrowser({ nodeId }: { nodeId: string }) {
         validation. Unallocated inventory and unbound routes remain
         calling-ineligible.
       </p>
-      <p>
-        Verified runtime: unavailable. Drift: unknown. Live validation is
-        unavailable pending U5-01; material access and live fixtures await
-        U5-04/05.
-      </p>
       <p ref={error} tabIndex={-1} role="status">
         {pending ? 'Loading revisions…' : message}
       </p>
@@ -59,9 +55,6 @@ export function RevisionsBrowser({ nodeId }: { nodeId: string }) {
           onClick={() => void run(() => load())}
         >
           Reload revisions
-        </Button>
-        <Button disabled title="Live apply is delivered in P3-U5b">
-          Apply unavailable
         </Button>
       </div>
       {retained.attempt && (
@@ -171,6 +164,7 @@ export function RevisionsBrowser({ nodeId }: { nodeId: string }) {
           Compare baseline
         </Button>
       </Panel>
+      <LivePanel nodeId={nodeId} detail={detail} />
       {detail && (
         <RevisionReview
           detail={detail}

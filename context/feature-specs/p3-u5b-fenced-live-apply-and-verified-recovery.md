@@ -1,6 +1,8 @@
 # P3-U5b — Fenced live apply and verified recovery
 
-Status: **planned**. Split adopted October 25, 2026 (Asia/Manila, +08:00).
+Status: **completed** within approved private development; B-01–08 passed
+2026-10-26 05:47 +08:00 (Asia/Manila), under owner-approved U5-01–05.
+[Concrete policy review](../../docs/planning/p3-u5b-live-policy-review.md). Split adopted October 25, 2026 (Asia/Manila, +08:00).
 Parent: [P3-U5 specification and acceptance](p3-u5-configuration-revisions-apply-and-recovery.md).
 
 ## Goal, dependencies and decisions
@@ -120,8 +122,12 @@ live portions of AC-02 and relevant AC-10. Extend a's proposed
 `./dev exec pnpm check:pbx-revisions` with isolated real services, two HTTP replicas,
 actual HTTPS and approved live Asterisk. Run affected parent-listed routing,
 resource, inventory, PBX and durable/auth regressions, then `./dev check`.
-Record fixture privileges and actual runtime grants separately. The script and
-results do not yet exist; documentation preparation needs only document checks.
+Record fixture privileges and actual runtime grants separately. The supported command now includes disposable actual Asterisk/native fencing,
+real SQL ownership/recovery, exact real-provider replacement/rollback, custody
+isolation and HTTPS live browser checks.
+[Current evidence](../../docs/status/p3-u5b-evidence.md) records observed passes and
+final B-01–08 passes, retained refresh/preservation and exact owned cleanup. C,
+parent P3-U5 and the Phase 3 gate remain incomplete.
 
 ## Handoff
 

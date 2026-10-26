@@ -2,7 +2,13 @@ import { randomUUID } from 'node:crypto';
 import { Pool } from 'pg';
 import PgBoss from 'pg-boss';
 import { parseWorkerConfig } from '@myims/config';
-import { executionContext, safeData, reference } from '../execution/context';
+import {
+  executionContext,
+  safeData,
+  reference,
+  type DataContract,
+} from '../execution/context';
+import { liveWorkContract } from '../../modules/telephony/application/pbx-live';
 import { SafeLogger } from '../execution/logging';
 import { QUEUE } from './queue';
 import { credentialWorkContract } from '../../modules/telephony/application/endpoint-credentials';
@@ -32,7 +38,10 @@ export const sampleContract = {
   },
 };
 // Explicit code-owned registration; serialized work never names an arbitrary function.
-const registeredContracts = new Map([[sampleContract.type, sampleContract]]);
+const registeredContracts = new Map<string, DataContract>([
+  [sampleContract.type, sampleContract],
+  [liveWorkContract.type, liveWorkContract],
+]);
 interface Work {
   id: string;
   work_type: string;
@@ -332,7 +341,7 @@ export class DeliveryWorker {
     // Transport exhaustion from hard crashes/timeouts can happen without a live handler.
     await this.pool.query(
       `INSERT INTO public.work_results(work_id,handler,attempts,outcome,failure_code,first_attempt_at,last_attempt_at,finished_at)
-      SELECT DISTINCT ON (w.id) w.id,'sample.deliver',j.retry_count+1,'failed','queue_exhausted',j.started_on,j.started_on,clock_timestamp()
+      SELECT DISTINCT ON (w.id) w.id,CASE WHEN w.work_type='telephony.revision.apply' THEN 'telephony.revision.apply' ELSE 'sample.deliver' END,j.retry_count+1,'failed','queue_exhausted',j.started_on,j.started_on,clock_timestamp()
       FROM pgboss.job j JOIN public.outbox_work w ON w.id::text=j.data->>'workId'
       WHERE j.name=$1 AND j.state='failed' AND w.work_type NOT LIKE 'endpoint.credential.%' AND w.work_type NOT LIKE 'trunk.credential.%'
       AND NOT EXISTS (SELECT 1 FROM pgboss.job live WHERE live.name=$1 AND live.data->>'workId'=w.id::text AND live.state<'completed')
@@ -400,8 +409,13 @@ export class DeliveryWorker {
       ).rows[0];
       if (!work) throw new Error('invalid_job');
       await client.query(
-        `INSERT INTO public.work_results(work_id,handler) VALUES($1,'sample.deliver') ON CONFLICT DO NOTHING`,
-        [id],
+        `INSERT INTO public.work_results(work_id,handler) VALUES($1,$2) ON CONFLICT DO NOTHING`,
+        [
+          id,
+          work.work_type === liveWorkContract.type
+            ? liveWorkContract.type
+            : sampleContract.type,
+        ],
       );
       const prior = (
         await client.query<{ outcome: string; attempts: number }>(
@@ -421,6 +435,7 @@ export class DeliveryWorker {
       let failure:
         'invalid_work' | 'permanent_failure' | 'retry_exhausted' | undefined;
       let mode: unknown;
+      let liveOperationId: string | undefined;
       try {
         executionContext({
           actor: {
@@ -442,7 +457,18 @@ export class DeliveryWorker {
         const contract = registeredContracts.get(work.work_type);
         if (!contract || work.schema_version !== contract.version)
           throw new Error();
-        mode = safeData(contract, work.payload).mode;
+        const payload = safeData(contract, work.payload);
+        if (work.work_type === liveWorkContract.type) {
+          if (typeof payload.operationId !== 'string') throw new Error();
+          liveOperationId = payload.operationId;
+          if (
+            work.actor_kind !== 'platform_operator' ||
+            work.identity_plane !== 'platform' ||
+            work.tenant_id !== null ||
+            work.target_type !== 'pbx-live-operation'
+          )
+            throw new Error();
+        } else mode = payload.mode;
       } catch {
         failure = 'invalid_work';
       }
@@ -462,12 +488,23 @@ export class DeliveryWorker {
         );
       } else if (!retry) {
         await this.hooks.barrier?.('before_sink', id);
-        await this.acceptSink(work);
+        if (liveOperationId) {
+          const delivered = await client.query(
+            `UPDATE public.pbx_live_progress p SET delivered_at=COALESCE(delivered_at,clock_timestamp()) FROM public.pbx_live_operations o WHERE o.id=$1 AND p.operation_id=o.id AND o.operator_id::text=$2 AND o.node_id::text=$3 AND o.correlation_id=$4 RETURNING p.operation_id`,
+            [
+              liveOperationId,
+              work.actor_reference,
+              work.target_reference,
+              work.correlation_id,
+            ],
+          );
+          if (!delivered.rows[0]) throw new Error();
+        } else await this.acceptSink(work);
         await this.hooks.barrier?.('after_sink', id);
         // Receipt and local acknowledgement share the transaction; destination dedup handles its separate commit.
         await client.query(
-          `INSERT INTO public.work_receipts(work_id,handler) VALUES($1,'sample.deliver') ON CONFLICT DO NOTHING`,
-          [id],
+          `INSERT INTO public.work_receipts(work_id,handler) VALUES($1,$2) ON CONFLICT DO NOTHING`,
+          [id, liveOperationId ? liveWorkContract.type : sampleContract.type],
         );
         await client.query(
           `UPDATE public.work_results SET outcome='succeeded',finished_at=clock_timestamp() WHERE work_id=$1`,

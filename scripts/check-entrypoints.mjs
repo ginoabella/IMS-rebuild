@@ -8,7 +8,11 @@ const root = fileURLToPath(new URL('../', import.meta.url));
 async function check(entrypoint) {
   const args =
     entrypoint === 'http' ? [] : ['--import', `${root}scripts/deny-listen.mjs`];
-  args.push(`${root}services/backend/dist/entrypoints/${entrypoint}/main.js`);
+  args.push(
+    entrypoint === 'telephony-native'
+      ? `${root}services/backend/dist/entrypoints/telephony/native-main.js`
+      : `${root}services/backend/dist/entrypoints/${entrypoint}/main.js`,
+  );
   const child = spawn(process.execPath, args, {
     cwd: root,
     env: {
@@ -58,7 +62,7 @@ async function check(entrypoint) {
       );
     });
     assert.equal(message.entrypoint, entrypoint);
-    if (entrypoint === 'worker' || entrypoint === 'telephony') {
+    if (['worker', 'telephony', 'telephony-native'].includes(entrypoint)) {
       assert.equal(message.state, 'failed');
       const [code] = await exit;
       assert.equal(code, 1);
@@ -99,5 +103,11 @@ async function check(entrypoint) {
   }
 }
 
-for (const entrypoint of ['http', 'worker', 'telephony', 'deployment'])
+for (const entrypoint of [
+  'http',
+  'worker',
+  'telephony',
+  'telephony-native',
+  'deployment',
+])
   await check(entrypoint);

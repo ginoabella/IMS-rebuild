@@ -1,3 +1,7 @@
+import {
+  RuntimeDependencies,
+  RetainedRuntimeDependency,
+} from './runtime-dependencies';
 import { createHash, randomUUID } from 'node:crypto';
 import type {
   EndpointKind,
@@ -502,6 +506,23 @@ export class ExtensionInventory implements InventoryVersionPort {
             extensionId,
             expected,
           );
+          if (profile && profile.id !== old.profile.id) {
+            try {
+              await new RuntimeDependencies().assertUnreferenced(
+                tx,
+                nodeId,
+                'extensions',
+                old.id,
+              );
+            } catch (e) {
+              if (e instanceof RetainedRuntimeDependency)
+                throw new InventoryRejected({
+                  kind: 'conflict',
+                  reason: 'dependency_changed',
+                });
+              throw e;
+            }
+          }
           const status = statusOnly
             ? data.administrativeStatus === 'enabled'
               ? 'enabled'

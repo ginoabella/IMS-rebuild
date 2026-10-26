@@ -1,4 +1,4 @@
-# PBX revision capture and review
+# PBX revision capture, live execution and recovery
 
 P3-U5a owns the offline capture → review → validate boundary. The existing
 telephony module and primary PostgreSQL store own it; no new process, provider
@@ -36,7 +36,7 @@ only by both grants and triggers. Validation never rewrites captured content.
 
 ## Compiler and semantic review
 
-`review-1` produces a deterministic typed, nonmaterialized plan; `deny-unbound-1`
+`review-2` produces a deterministic typed, nonmaterialized plan; `deny-unbound-1`
 preserves deny defaults. It retains profile settings, exact credential references,
 generated identities, group strategy/member order/timeouts/fallbacks, exact-before-
 catch-all inbound ordering and explicit outbound priority/strip/add domains.
@@ -48,8 +48,8 @@ Structural validation checks profiles/capabilities, identities, references,
 patterns/transforms/reservations, group cycles, unavailable credentials and work
 bounds. It accepts no raw commands, application/context text or filesystem paths.
 Labels remain JSON data; configuration control-character injection rejects.
-Unsupported capability is an error. Eligibility and U5-01/04/05 are explicit
-blockers. Diagnostics are bounded to 512 entries with explicit truncation, while
+Unsupported capability is an error. Live validation, exact material and calling
+eligibility remain explicit diagnostics independent of local structural success. Diagnostics are bounded to 512 entries with explicit truncation, while
 failure state remains independent of diagnostic truncation.
 
 Browser DTOs contain source UUID/version/name, safe exact credential references,
@@ -57,9 +57,10 @@ finite diagnostics and field-level change names. Internal endpoint and route key
 stay server-side. Diff compares immutable source semantics against a selected
 same-node revision; additions/removals/edits and credential-reference changes are
 separate. A missing baseline is an empty _review comparison_, not an empty runtime.
-There is no verified runtime producer in a: runtime is explicitly
-`no_verified_runtime`, drift `unknown`. B must replace this with its canonical
-verified runtime evidence, never infer it from registration or capture history.
+Without a verified baseline, runtime is explicitly `no_verified_runtime`, drift
+`unknown`. Live detail compares against the actual verified artifact snapshot or
+the independently captured empty initial baseline, never registration or capture
+history. This comparison is independent of the optional historical baseline.
 
 ## Validation and b handoff
 
@@ -72,10 +73,11 @@ snapshot, and an older validation cannot claim current applicability. Local
 structural success is independent of unavailable live validation and eligibility
 blockers; neither implies readiness.
 
-B owns acceptance-time revalidation, protected materialization under U5-04, actual
-runtime/in-flight/recovery pins and mutation blockers, initial verified baseline,
-external fencing, installation, live validation/probes and verified recovery.
-A adds no Apply endpoint and its browser Apply control is unavailable.
+The live boundary performs acceptance-time revalidation, protected exact
+materialization, actual runtime/in-flight/recovery pins and mutation blockers,
+initial verified baseline, external fencing, installation, independent probes and
+verified recovery. Offline success alone leaves Apply unavailable until the native
+executor has a fresh heartbeat and independently established baseline.
 
 ## HTTP and browser boundary
 
@@ -92,3 +94,84 @@ existing canonical operator/epoch contract; the exact request and baseline survi
 same-owner reauthentication. Canonical results are reloaded and stale callbacks
 cannot attach another operator's result. Refresh persistence belongs to neither
 this workflow nor the existing mounted recovery contract.
+
+## P3-U5b implementation boundary
+
+The owner approved U5-01–05 and the scoped nftables/NET_ADMIN addendum in the
+[policy record](../planning/p3-u5b-live-policy-review.md). These approve controlled
+private development, not production acceptance. The approved private profile is
+active with an independently verified initial baseline. B-01–08, affected/normal
+checks and retained refresh/preservation passed; c and parent acceptance remain
+incomplete. See the [final evidence](../status/p3-u5b-evidence.md).
+
+Protected immutable staging and exact-version GET-only material consumption live
+in the telephony `adapters/live` boundary. Public HTTP/Next and ordinary workers
+receive no provider token/material; workers only mark committed intent delivered.
+The candidate renderer derives fixed Asterisk syntax from canonical typed snapshots
+and keeps every ordinary endpoint/trunk ingress context denied before onboarding.
+Unsupported live profiles or unrepresentable exact material fail before selection.
+
+A dedicated native helper inside the existing Asterisk container owns mutation.
+Its root-owned durable `pbx-live-data` filesystem volume mounts at
+`/var/lib/myims-pbx`: private control/journal/staging below `control`, restricted
+Asterisk-readable complete sets below `managed`, and temporary isolated validator
+work below `validators`. The parent is root owned and not writable by Asterisk.
+This avoids placing privileged helper paths under Asterisk's writable library
+directory. The existing PBX database/library/configuration volumes remain distinct.
+This required protected artifact volume is not a new database or service, and
+does not establish backup readiness.
+
+The physical epoch acknowledgment follows a serialized installation queue. Native
+startup holds the installation flock as FD 3; a fixed guardian inherits the same
+open-file description through actual synchronous Asterisk CLI completion. Mutating
+commands write to protected regular files, so helper death cannot break their
+stdout pipe and prematurely release the lock. Caller deadlines leave execution
+uncertain and never kill/replay a dispatched mutation. Successor acknowledgment
+waits for dispatched work to drain. The exact pinned
+[PJSIP reload](https://github.com/asterisk/asterisk/blob/22.10.1/res/res_pjsip.c) and
+[dialplan reload](https://github.com/asterisk/asterisk/blob/22.10.1/pbx/pbx_config.c)
+implementations are synchronous; the isolated actual timeout/helper-death race has passed. Integrated canonical
+PostgreSQL owner/dispatch-race proof has also passed; retained-installation
+startup/baseline proof has now also passed before private activation. A SQL lease by itself is not a
+physical takeover.
+
+Ordinary observation credentials must also lose their alternate control route:
+the native TLS observation gateway exposes only Login, Logoff, Ping,
+PJSIPShowEndpoints and PJSIPShowContacts, forwarding to loopback-only AMI. Raw
+Reload/Command/Shutdown and unknown actions are denied. The old observation
+profile's broad system permission is not an accepted live-control bypass.
+
+Actual native/PostgreSQL acceptance, protected exact-provider consumption, executor
+wiring, controlled route probes, verified recovery and the HTTPS browser journey
+passed the focused command. Final affected/normal checks and retained refresh
+also passed. These actual integrated results establish B-01–08 within the approved
+scope; helper tests alone do not.
+
+The opt-in native helper and protected telephony consumer communicate over one
+root-owned Unix socket volume, mounted only in those two containers. The native
+side independently loads delivered immutable SQL intent and checks canonical
+ownership; the consumer alone resolves exact retained provider identities. Socket
+messages accept only ownership/operation identity and a bounded protected material
+envelope. HTTP/Next/ordinary workers receive neither that mount nor provider access.
+The native helper has its own scoped SQL execution role, no provider token and no
+Docker socket. Its supervisor starts the lifetime-flock child separately; helper
+loss preserves PBX calls and fresh children remain excluded by surviving command
+guardians. The retained private profile and initial baseline have been verified;
+final unit results and scoped limits are recorded in the evidence.
+
+The live consumer's configuration and provider token must live in the dedicated
+`pbx-live-consumer` Docker volume, mounted read-only only by telephony. The shared
+workspace hosts Next with the host UID, so an owner-only file under its project
+bind is insufficient isolation. The new staging custody was protected root-only
+when that access check exposed the issue. Neither the consumer volume nor any
+provider token is mounted in workspace, HTTP, ordinary workers, or Asterisk.
+Trusted one-shot setup receives exact read-only inputs and separate native/config
+outputs; it never mounts the project directory or runs Next. Acceptance PBXs receive
+only the exact native executor SQL password, never the consumer volume.
+
+The fenced owner reconciles the committed primary `active_operation_id` directly;
+ordinary-worker outbox delivery is an idempotent notification/receipt, not an extra
+health or authority gate. A missing/exhausted transport notification cannot strand
+accepted intent indefinitely. Uncommitted/rolled-back intent is invisible, and
+physical admission still rechecks canonical actor, ownership, baseline and sources.
+Late notifications never repeat native effects; native attempts remain bounded.

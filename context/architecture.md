@@ -259,8 +259,19 @@ one bounded canonical SQL snapshot, atomic capture/audit/operator receipt,
 deterministic typed nonmaterialized compilation, redacted semantic comparison and
 separately attributed offline validation. The existing platform console and
 protected no-store proxy expose capture → review → validate with mounted recovery.
-Runtime comparison remains unknown until b supplies canonical verified evidence;
-materialization, live commands, actual pins and installation remain gated in b.
+Historical revision comparison is distinct from the verified-runtime comparison
+provided by b; offline validation never authorizes materialization or live commands.
+
+P3-U5b is complete within private development under the owner-approved U5-01–05 and scoped NET_ADMIN
+policies. Its [native execution boundary](../docs/architecture/pbx-revisions.md#p3-u5b-implementation-boundary)
+uses a root-owned protected PBX artifact/journal volume, fixed reload guardians,
+read-only observation gateway and a separate read-only exact-material consumer in
+the opt-in telephony owner. Ordinary workers deliver only immutable intent;
+HTTP/Next receive no provider access or material. The native Asterisk helper
+receives no provider token. Its independently verified retained baseline uses the
+existing node and two owner replicas; installed/verified/known-good identities and
+operation state are canonical in PostgreSQL. Parent/Phase 3 and tenant calling
+readiness require their later acceptance.
 
 ## Storage Model
 
@@ -288,12 +299,14 @@ materialization, live commands, actual pins and installation remain gated in b.
   are authoritative PostgreSQL desired state, managed through the platform UI.
 - **Secret store:** P3-U2b conditionally adopts private verified-TLS OpenBao KV v2
   with persistent single-node Raft for development endpoint material. PostgreSQL
-  owns safe operations/generations; only the dedicated credential worker resolves
-  material, with separate trusted cleanup access. HTTP, ordinary workers, observer,
-  Asterisk and clients receive no provider token. No delivery or live application
-  is authorized. See [endpoint credential contract](../docs/architecture/endpoint-credentials.md)
+  owns safe operations/generations; the dedicated credential worker prepares material,
+  with separate trusted cleanup access. P3-U5b adds the approved installation-scoped
+  GET-only exact-version consumer in the fenced telephony owner. HTTP, ordinary
+  workers, observer, Asterisk and clients receive no provider token. Phone delivery
+  remains excluded; live application is confined to b's approved private boundary.
+  See [endpoint credential contract](../docs/architecture/endpoint-credentials.md)
   and [runbook](../docs/runbooks/endpoint-credentials.md). Associated generations
-  are retained pending P3-U5 dependencies. Production HA, key custody, joint backup,
+  remain retained while actual revision/runtime dependencies exist. Production HA, key custody, joint backup,
   token/security controls, worker scope and retirement require separate review.
 
 
@@ -824,3 +837,13 @@ and exact passive inventory observation composition under conditional private
 G-03 approval. It reuses canonical APIs, current platform authority, shared session
 recovery and one node projection per primary inventory snapshot. No observer,
 credential delivery, live application or tenant calling capability is added.
+
+P3-U5b opt-in composition adds no deployment service: a native child inside the
+existing private Asterisk container owns a process-lifetime physical fence and a
+root-owned protected artifact volume. Only the existing telephony replicas receive
+the private Unix control mount and installation-scoped read-only provider consumer;
+HTTP/Next/ordinary workers receive neither. Asterisk receives no provider token.
+The normal observation profile remains provider-free. The approved private live
+profile was activated after its mechanism proofs and zero-call/resource preflight;
+the initial retained baseline and gateway observation were independently verified.
+Remaining unit checks and the production boundary are recorded in the tracker.

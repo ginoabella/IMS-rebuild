@@ -57,7 +57,15 @@ export interface RevisionValidation {
 }
 export interface RevisionDiff {
   baseline: RevisionSummary | null;
-  runtime: { kind: 'no_verified_runtime'; drift: 'unknown' };
+  runtime:
+    | { kind: 'no_verified_runtime'; drift: 'unknown' }
+    | {
+        kind: 'verified_runtime';
+        artifactId: string;
+        revisionId: string | null;
+        verifiedAt: string;
+        drift: 'unknown';
+      };
   changes: {
     kind: RevisionResourceKind;
     id: string;
@@ -75,6 +83,7 @@ export interface RevisionDetail {
   sourceCurrent: boolean;
   validation: RevisionValidation | null;
   diff: RevisionDiff;
+  runtimeDiff: RevisionDiff;
 }
 export interface RevisionList {
   items: RevisionSummary[];

@@ -1,7 +1,8 @@
 # P3-U5 — Review, validate, apply, and recover configuration revisions
 
 Status: **in progress**; [P3-U5a](p3-u5a-revision-capture-diff-and-validation.md)
-is complete within its offline boundary; b/c remain planned. Prepared and reviewed October 25, 2026 (Asia/Manila,
+is complete within its offline boundary; b is completed within approved private development under U5-01–05
+and c remains planned. Prepared and reviewed October 25, 2026 (Asia/Manila,
 +08:00). This specification defines intended behavior; it grants no new live
 PBX, secret-access or calling authority. The three-child delivery split was adopted
 October 25, 2026 when the user requested the child specifications.
@@ -49,7 +50,7 @@ revive the archived credential/attestation infrastructure.
 
 ## Decisions required before dependent implementation
 
-The owner decides product and access policy. These are proposals, not approvals;
+The owner decides product and access policy. The owner approved the five recommended policies in the linked concrete review;
 routine filenames, DTO names and compatible implementation choices need no gate.
 
 | ID | Decision and recommended direction | Affected work and resume condition |
@@ -59,6 +60,13 @@ routine filenames, DTO names and compatible implementation choices need no gate.
 | U5-03 | Approve isolated test endpoints, ingress/egress destinations, call budgets, observations and cleanup. Recommend controlled synthetic peers with no public/emergency destinations, tenant traffic or paid trunk calls. | Live verification; record exactly which checks are passive and which originate traffic. Test fixtures establish the declared boundary only. |
 | U5-04 | Approve exact endpoint-generation/trunk-version consumption, protected materialization identity/access and necessary PBX file protection. Keep HTTP, Next and ordinary workers outside material access; do not give Asterisk an OpenBao token. Separately decide phone delivery, retirement and retention. Recommend retaining every referenced version; no credential destruction in this unit. | Secret-dependent compilation/apply/rollback; review concrete least-privilege access and credential dependency/retirement rules. Existing endpoint worker rights and trusted trunk setup rights do not automatically extend to live consumers. |
 | U5-05 | Resolve the pre-onboarding verification boundary. Recommend deploying a deny-by-default infrastructure revision that leaves unallocated inventory and unbound routes calling-ineligible, with separately approved isolated fixtures proving actual compilation/routing. | Compiler eligibility and live acceptance; agree the fixture topology and evidence required for Phase 3 without introducing production tenant bindings ahead of P4-U2. |
+
+A concrete [P3-U5b private-development policy review](../../docs/planning/p3-u5b-live-policy-review.md)
+was explicitly approved in full by the owner in chat on October 25, 2026
+(Asia/Manila, +08:00): “yes I approve the five recommended policies, please continue”.
+That concrete profile resolves U5-01–05 for controlled private development, including
+its timing/budgets and read-only material consumer setup. The mandatory boundary,
+admission, baseline and recovery proof gates remain required before live enablement.
 
 Revision review and deterministic compiler work may proceed within established
 contracts without live effects. Splitting work does not resolve these decisions.
@@ -224,12 +232,13 @@ live apply first and postpone its baseline, pins, fencing or recovery to a later
 | Implementation unit | Starting state and focused result | Acceptance ownership |
 | --- | --- | --- |
 | [P3-U5a — Revision capture, diff and validation](p3-u5a-revision-capture-diff-and-validation.md) | Verified U1–U4/P1-U5. Deliver immutable snapshot/compiler, safe semantic diff, affected-resource/dependency review, deterministic validation and complete browser review workflow. Expose unresolved live-policy blockers. No live installation. Any PBX validator waits for U5-01. | AC-01; deterministic AC-02; review portions of AC-08/09/10. Live AC-02 evidence remains b/c. |
-| [P3-U5b — Fenced live apply and verified recovery](p3-u5b-fenced-live-apply-and-verified-recovery.md) | Verified a; U5-01–05 resolved for its scope. Deliver protected exact-version materialization, durable intent/pins, external fencing, atomic activation, approved reload/probes, active-call handling and minimum verified automatic/manual recovery with browser progress. Initial baseline and failed-recovery handling are mandatory here. | Live AC-02; AC-03–08/09 for the complete basic live/recovery journey; relevant AC-10 contracts/runbook. |
+| [P3-U5b — Fenced live apply and verified recovery](p3-u5b-fenced-live-apply-and-verified-recovery.md) | Completed B-01–08; [evidence](../../docs/status/p3-u5b-evidence.md). Verified a; U5-01–05 resolved for its scope. Deliver protected exact-version materialization, durable intent/pins, external fencing, atomic activation, approved reload/probes, active-call handling and minimum verified automatic/manual recovery with browser progress. Initial baseline and failed-recovery handling are mandatory here. | Live AC-02; AC-03–08/09 for the complete basic live/recovery journey; relevant AC-10 contracts/runbook. |
 | [P3-U5c — Interruption, failover and integrated Phase 3 handoff](p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md) | Verified b. Complete the adversarial interruption/uncertainty/failover/concurrency matrix, repair discovered gaps, finish browser reconciliation and operator evidence, regress U1–U4 and reconcile every parent acceptance criterion. | Full AC-04–10 fault coverage and final AC-01–10 reconciliation. |
 
 The split follows the repository workflow rule: each unit has a verifiable result
 and carries its own required backend/browser/checks/docs. It is not a layer-by-layer
-split. A is completed within its offline boundary; b/c remain planned. Adopting this split
+split. A is completed within its offline boundary; b is completed within approved private development under U5-01–05
+and c remains planned. Adopting this split
 does not resolve U5-01–05 or authorize live effects.
 
 Review findings incorporated above: database fencing alone cannot protect external

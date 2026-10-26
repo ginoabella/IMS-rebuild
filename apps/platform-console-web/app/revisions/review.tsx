@@ -50,7 +50,7 @@ export function RevisionReview({
         </Button>
         <p>
           Local validation: {detail.validation?.local ?? 'not run'}. Live
-          coverage: unavailable. Applicability:{' '}
+          coverage from this offline check: not evaluated. Applicability:{' '}
           {detail.validation
             ? detail.validation.applicable
               ? 'current dependencies'
@@ -67,7 +67,9 @@ export function RevisionReview({
       </Panel>
       <Panel title="Semantic changes">
         <p>
-          Runtime comparison unavailable; no verified runtime revision exists.
+          {detail.runtimeDiff.runtime.kind === 'verified_runtime'
+            ? `Runtime comparison uses verified artifact ${detail.runtimeDiff.runtime.artifactId}, verified ${detail.runtimeDiff.runtime.verifiedAt}.`
+            : 'Runtime comparison unavailable; no verified runtime revision exists.'}
         </p>
         {detail.diff.changes.length ? (
           <ul className="space-y-2">
@@ -93,6 +95,33 @@ export function RevisionReview({
           </ul>
         ) : (
           <p>No semantic changes against this captured baseline.</p>
+        )}
+      </Panel>
+      <Panel title="Changes against verified runtime">
+        {detail.runtimeDiff.runtime.kind === 'verified_runtime' ? (
+          detail.runtimeDiff.changes.length ? (
+            <ul className="space-y-2">
+              {detail.runtimeDiff.changes.map((change, index) => (
+                <li key={index}>
+                  {change.kind}: {change.name} · {change.change}
+                  <ul>
+                    {change.values.map((value) => (
+                      <li key={value.field}>
+                        {value.field}: {value.before ?? 'absent'} →{' '}
+                        {value.after ?? 'absent'}
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No semantic changes against verified runtime.</p>
+          )
+        ) : (
+          <p>
+            No independently verified runtime baseline is available for review.
+          </p>
         )}
       </Panel>
       <Panel title="Affected resources and exact references">
