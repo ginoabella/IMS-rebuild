@@ -2805,3 +2805,54 @@ P3-U5b remains incomplete; c, parent P3-U5 and the Phase 3 gate remain incomplet
 - 2026-10-25 (Asia/Manila, +08:00) — Started P3-U5b at the user’s request, inspected the parent/a handoff and existing deployment/ownership/material boundaries, and prepared the [concrete policy review](../docs/planning/p3-u5b-live-policy-review.md). U5-01–05 remain owner decisions under the requested spec, so dependent implementation is blocked pending an answer. No live/provider/application changes or B acceptance claimed; P3-U5b is incomplete.
 
 - 2026-10-25 07:50 +08:00 (Asia/Manila) — P3-U5a completed: immutable capture/audit/receipts, typed safe compilation, redacted semantic diff, qualified offline validation and protected console recovery. A-01–06, all affected checks and full `./dev check` passed; ordinary migration/backend/HTTPS refresh and transport/health passed. [Final evidence](../docs/status/p3-u5a-evidence.md), [operator guide](../docs/runbooks/pbx-revisions.md), [b handoff](../docs/architecture/pbx-revisions.md). Live policy U5-01–05 remains unresolved for dependent work; parent/Phase 3 remain incomplete. Preparation and prior checkpoint details are retained in tracker history.
+
+
+## 2026-10-26 — P3-U5c implementation and verification checkpoints
+
+Implementation checkpoint (2026-10-26, Asia/Manila, +08:00): added 24 actual
+abrupt-process apply/recovery interruption points with expired-lease successor
+reconciliation; expanded atomic SQL insertion faults, protected exact-read owner
+interruption and integrated desired-save/failure/recovery HTTPS checks. Initial 22-point native/provider and integrated HTTPS checks passed; surrounding
+auth response-loss synchronization is under verification. The final 24-point focused
+execution is running; final regressions/cleanup/handoffs remain. Passive retained verification found and independently matched the newer operator-applied
+revision `4b475c04-b573-4cc1-9d86-1c81b65f4060`; preserve it through regressions.
+Recovery review found and repaired a failed-reconciliation ancestry gap: resolve
+immutable predecessors oldest first, recheck canonical recovery authority after the
+quiet wait, and atomically audit all resolved unknown ancestors. Actual SQL/native
+revocation/retry, scoped connection-loss, safe pin release and competing recover/apply
+regressions passed. Durability passed; the first concurrent routing run stopped at
+an initial sign-in transport timeout before routing assertions and awaits serial
+retry. Full final-source acceptance remains required.
+No completion claim. [Current evidence and boundary matrix](../docs/status/p3-u5c-evidence.md).
+
+### Final predecessor checkpoints archived 2026-10-26 14:23 +08:00
+
+**P3-U5c — interruption, failover and integrated Phase 3 handoff: in progress**
+(started 2026-10-26, Asia/Manila, +08:00). Implement the required adversarial
+fault matrix, integrated HTTPS journey, affected/full regressions and parent
+AC-01–10/Phase 3 operator and architecture handoff. Completion requires C-01–06
+evidence against the approved real boundaries; no completion is claimed yet.
+Checkpoint 2026-10-26 14:23 +08:00 (Asia/Manila): the stable focused command,
+all affected routing/resource/PBX/auth/inventory/provider/browser regressions,
+durability and full `./dev check` passed, exit 0. All seven protected-boundary
+contracts passed. Ordinary platform/staff HTTPS transport, backend live/ready 200,
+helper-only refresh with unchanged Asterisk process and independent retained
+revision/unmanaged-runtime preservation passed. The final added concurrent resource
+acceptance/removal/edit test is rerunning after correcting its fixture pattern DTO;
+final evidence/cleanup reconciliation remains. Preserve retained revision
+`4b475c04-b573-4cc1-9d86-1c81b65f4060`. No completion claim yet.
+[Evidence](../docs/status/p3-u5c-evidence.md) and
+[earlier checkpoints](progress-tracker-history.md#2026-10-26--p3-u5c-implementation-and-verification-checkpoints).
+Operational follow-up below remains separate from this feature gate.
+
+
+## Latest Completed Checkpoint — P3-U5b
+
+- **Status:** completed within approved private development; 2026-10-26 05:47 +08:00 (Asia/Manila). B-01–08 passed; [final acceptance evidence](../docs/status/p3-u5b-evidence.md).
+- **Delivered:** exact-baseline immutable apply/recover/reconcile intent, canonical authority and actual dependency pins, same-owner execution, physical epoch/guardian fencing, protected exact-version consumption, atomic complete-set validation/selection, independent loaded runtime/probe proof and verified automatic/manual recovery. Unknown recovery retains denial and pins. The existing HTTPS console exposes durable progress and identity-bound receipt recovery.
+- **Verification:** final supported real native/SQL/provider/two-replica/HTTPS command and all 16 contracts passed; affected routing, resource, full inventory/provider/browser, PBX, auth/durability and final complete `./dev check` passed, exit 0.
+- **Refresh/preservation:** ordinary backend/HTTPS refresh, platform/staff transport and health checks passed. The existing private profile retains its independently verified initial baseline with no active operation. Post-regression unmanaged hashes, loaded default denial/resources and running state match; exact owned fixtures/access were cleaned. Native helper refresh preserves the Asterisk process.
+- **Handoff:** [operator guide](../docs/runbooks/pbx-revisions.md), [execution/material/dependency contract](../docs/architecture/pbx-revisions.md). C, parent P3-U5 and the Phase 3 gate remain incomplete; tenant binding/calling readiness remains Phase 4. No production HA or joint backup readiness is claimed.
+
+
+Final reconciliation 2026-10-26 14:23 +08:00: C-01–06, parent AC-01–10 and the Phase 3 development gate passed. Corrected concurrent resource acceptance races passed both serial outcomes; full graph/affected regressions, exact cleanup, helper refresh, retained revision preservation and ordinary HTTPS/health passed. [Final evidence](../docs/status/p3-u5c-evidence.md).

@@ -1,6 +1,6 @@
 # P3-U5c — Interruption, failover and integrated Phase 3 handoff
 
-Status: **planned**. Split adopted October 25, 2026 (Asia/Manila, +08:00).
+Status: **completed within approved private development** (October 26, 2026, Asia/Manila, +08:00). Split adopted October 25, 2026 (Asia/Manila, +08:00).
 Parent: [P3-U5 specification and acceptance](p3-u5-configuration-revisions-apply-and-recovery.md).
 
 ## Goal and starting state
@@ -74,9 +74,10 @@ from production rollback or backup readiness.
 | C-06 | Publish a parent AC-01–10 evidence matrix, explicitly reconcile the Phase 3 gate, and provide operator/architecture handoffs with commands, approvals, procedures, limitations and remaining P4/P5 responsibilities. No completion claim precedes all required evidence. |
 
 C completes full parent AC-04–10 fault/integration coverage and reconciles AC-01–10
-using retained a/b evidence plus fresh checks where needed. Extend the proposed
-`./dev exec pnpm check:pbx-revisions` to include this repeatable matrix and HTTPS
-journey; it is not yet implemented. Use isolated real PostgreSQL/shared Redis,
+using retained a/b evidence plus fresh checks where needed. The implemented
+`./dev exec pnpm check:pbx-revisions` now includes the repeatable interruption
+matrix and integrated HTTPS journey. C-01–06, parent AC-01–10 and the Phase 3 gate passed. Acceptance results and limits are
+recorded in the [c evidence](../../docs/status/p3-u5c-evidence.md). Use isolated real PostgreSQL/shared Redis,
 two HTTP replicas, competing telephony executors and approved live PBX fixtures.
 Run existing affected `check:routing`, `check:trunk-gateways`,
 `check:extension-inventory`, `check:pbx-nodes` and durable/auth scripts inside the

@@ -1,7 +1,12 @@
 // Acceptance-only owner in a disposable PBX. Provider access always rejects;
 // this browser journey applies disabled/unbound desired stock and needs no secret.
 import { createRequire } from 'node:module';
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  appendFileSync,
+} from 'node:fs';
 import { randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 const load = createRequire(
@@ -50,6 +55,20 @@ async function main() {
       artifacts,
       barrier,
     );
+  let target = null;
+  const select = driver.select.bind(driver);
+  driver.select = (identity) => {
+    select(identity);
+    if (
+      readFileSync('/input/fault', 'utf8') === 'candidate' &&
+      identity.revisionId === target
+    )
+      appendFileSync(
+        `/var/lib/myims-pbx/managed/${identity.revisionId}/extensions.conf`,
+        '\n[ims-owned-browser-drift]\nexten => s,1,Hangup()\n',
+      );
+  };
+  const independent = new NativeDenyProbes(artifacts);
   const application = new NativeLiveApplication(
     root,
     metadata.nodeId,
@@ -58,7 +77,13 @@ async function main() {
     artifacts,
     driver,
     barrier,
-    new NativeDenyProbes(artifacts),
+    {
+      verify: async (artifact, signal) => {
+        if (readFileSync('/input/fault', 'utf8') === 'all')
+          throw new Error('Owned browser probe outage');
+        await independent.verify(artifact, signal);
+      },
+    },
   );
   const server = new NativeOwnerServer(
       '/var/lib/myims-pbx/browser.sock',
@@ -96,6 +121,7 @@ async function main() {
       const operation = await store.next(metadata.nodeId);
       if (operation) {
         const row = await store.intent(metadata.nodeId, operation);
+        target = row.target_id;
         let preparation = null;
         if (
           row.kind === 'apply' &&

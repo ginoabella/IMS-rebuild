@@ -1,6 +1,7 @@
 # Review, apply and recover PBX revisions
 
-P3-U5b is complete within approved private development. The private live profile
+P3-U5 and the integrated Phase 3 gate are complete within approved private
+development; see the [acceptance evidence](../status/p3-u5c-evidence.md). The private live profile
 is active with an independently verified initial baseline; focused, affected and
 normal checks, refresh and owned cleanup passed. A new installation must pass
 the same mandatory gates before activation. This establishes no tenant calling readiness.
@@ -144,3 +145,74 @@ Run the affected routing, trunk/gateway, inventory, PBX, auth/durable suites and
 fixture results from retained-profile activation and production readiness. See the
 [dependency/compiler contract](../architecture/pbx-revisions.md) and
 [required B-01–08 results](../../context/feature-specs/p3-u5b-fenced-live-apply-and-verified-recovery.md).
+
+## Interrupted operation procedure and retained checks
+
+1. Reload **Configuration revisions** and **Reload live state**. Record the safe
+   operation ID, target revision, reviewed baseline and separate phase results.
+   After a full refresh or another browser, select the operation from canonical
+   history. Mounted request memory is not persistent browser storage.
+2. For a missing reply, choose **Recover operation receipt** before creating
+   another intent. **Retry exact live request** must preserve its request ID,
+   revision and baseline. A changed fingerprint is a new intent and must wait for
+   affirmative resolution and a fresh review. Session expiry alone does not
+   cancel committed execution; canonical operator revocation prevents new effects.
+3. If the executor is unavailable, restore its scoped connectivity/access and
+   observe the existing operation. It reconciles physical receipts before effects.
+   A native helper can restart while the Asterisk process continues; an in-flight
+   guardian must finish before takeover. Do not bypass that lock or send reloads
+   manually to make progress appear current.
+4. Unknown recovery keeps admission denied and all source/target pins. Once the
+   installation and backing services are available, use **Reconcile to known good**
+   for the exact unresolved predecessor. This is an explicit audited action. Read
+   independent verification and recovery results; an attempted restore is not a
+   verified restore. If still unknown, retain evidence/artifacts and escalate to
+   the installation owner without opening admission or deleting pins.
+5. After verification, review desired state again before applying any newer edits.
+   Recovery changes runtime, not desired inventory/routing or immutable history.
+
+`./dev pbx-live-check` performs protected, provider-free passive verification of
+this installation's **current** retained revision: SQL/journal agreement, exact
+selected/staged bytes, loaded resources/profile/auth/dialplan, unmanaged digest,
+zero active channels and ordinary PBX running state. It acquires no ownership,
+reloads nothing and sends no traffic. It reasserts existing directory permissions
+through the native verifier. Run it before and after maintenance/regressions and
+compare safe retained-revision/unmanaged facts. A newer operator-applied verified
+revision supersedes the earlier initial baseline for preservation; this command
+does not restore that earlier baseline. It fails when the retained state needs
+reconciliation and never repairs it automatically.
+
+`./dev exec pnpm check:pbx-revisions` includes abrupt-process apply/recovery cases
+before/after stage, validation, activation, reload, probes and SQL finish, plus
+loss while probes are dispatched. Each case lets the actual lease expire, admits
+a successor at the real physical fence, checks duplicate suppression and restores
+its disposable baseline. It also covers actual exact-version consumption with
+injected owner cancellation, concurrent dependency edits/removal, competing
+recover/apply, unknown recovery and the integrated HTTPS failure journey. Native
+probe traffic remains within U5-03; interruption/HTTPS fixtures originate no calls.
+The [evidence matrix](../status/p3-u5c-evidence.md) distinguishes injected faults
+from actual integration, retains exact outcomes and records outstanding acceptance.
+
+The existing inventory regression uses the retained controlled PBX, preserves its
+current configuration/resources, and removes only its exact owned fixtures. Run
+it serially with other live checks. Fixture restoration and `pbx-live-check` are
+acceptance cleanup; production rollback, joint-store backup/restore and RPO/RTO
+remain separately unverified.
+
+A failed reconciliation may itself appear as the active unresolved operation.
+Retry through a fresh explicit **Reconcile to known good** after restoring canonical
+authority/connectivity. The native owner follows the immutable predecessor chain
+to the actual physical pending operation, resolves it in order and audits all
+resolved ancestors. It does not repeat a candidate apply. Traversal is bounded to
+128 linked predecessors; invalid or over-bound chains retain denial/pins and require
+installation-owner investigation. `./dev exec pnpm check:pbx-revisions
+--native-integration` runs just the isolated real native/SQL recovery regressions;
+it is a diagnostic subset, not the full acceptance command.
+
+Observation regressions support an already-installed revision. Trusted preflight
+captures the actual retained inventory; complete AMI snapshots retain full endpoint
+identities because human CLI columns can truncate long names. Qualification rejects
+missing/extra/ambiguous identities, and removal must restore the exact starting
+inventory. The fixture lock, original configuration/routing checks and run-owned
+cleanup remain mandatory. Never delete a retained marker, trunk or endpoint to
+make an older empty-inventory test pass.

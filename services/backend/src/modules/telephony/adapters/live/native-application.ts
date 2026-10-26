@@ -205,25 +205,47 @@ export class NativeLiveApplication implements NativeOwnerPort {
   private async reconcile(token: PbxOwnershipToken, row: LiveIntentRow) {
     if (!row.predecessor_id || !(await this.store.authorized(row)))
       throw new Error('Reconciliation authority unavailable');
-    const predecessor = await this.store.intent(
-      this.nodeId,
-      row.predecessor_id,
-    );
-    if (
-      !predecessor ||
-      predecessor.expected_baseline_id !== row.expected_baseline_id ||
-      row.target_id !== row.expected_baseline_id
-    )
-      throw new Error('Reconciliation predecessor unavailable');
-    const baseline = this.plans.load(row.target_id);
+    // A failed reconciliation may itself become the canonical predecessor before
+    // the original physical pending intent was consumed. Resolve that immutable
+    // ancestry in order; inspecting an unrelated pending ID is not proof that the
+    // immediately preceding SQL operation reached the mutation boundary.
     const signal = AbortSignal.timeout(300000);
+    const predecessors: LiveIntentRow[] = [];
+    let predecessorId: string | null = row.predecessor_id;
+    let sequence = row.sequence;
+    while (predecessorId && predecessors.length < 128) {
+      if (signal.aborted) throw new Error('Reconciliation deadline exceeded');
+      const predecessor = await this.store.intent(this.nodeId, predecessorId);
+      if (
+        !predecessor ||
+        predecessor.installation_id !== row.installation_id ||
+        predecessor.expected_baseline_id !== row.expected_baseline_id ||
+        predecessor.sequence >= sequence ||
+        row.target_id !== row.expected_baseline_id
+      )
+        throw new Error('Reconciliation predecessor unavailable');
+      predecessors.push(predecessor);
+      predecessorId = predecessor.predecessor_id;
+      sequence = predecessor.sequence;
+    }
+    if (predecessorId) throw new Error('Reconciliation ancestry unavailable');
+    const predecessor = predecessors[0]!;
+    const baseline = this.plans.load(row.target_id);
     const establish = async (
       guard: () => Promise<void>,
     ): Promise<BoundaryResult> => {
+      const ownerGuard = guard;
+      guard = async () => {
+        if (signal.aborted) throw new Error('Reconciliation deadline exceeded');
+        await ownerGuard();
+        if (!(await this.store.authorized(row)))
+          throw new Error('Reconciliation authority unavailable');
+      };
       await this.driver.drain();
       await guard();
       await this.admission.close();
       await this.admission.quiet(Date.now() + 120000, signal, guard);
+      await guard();
       await this.store.phase(token, row, 'recovering', { recovery: 'pending' });
       const verify = async () => {
         await this.driver.verify(
@@ -255,38 +277,40 @@ export class NativeLiveApplication implements NativeOwnerPort {
         return { kind: 'unknown', installedId: null, verifiedId: null };
       }
     };
-    const prior = await this.boundary.inspect(token, predecessor.id);
-    if (prior.state === 'pending') {
+    for (const ancestor of [...predecessors].reverse()) {
+      if (signal.aborted) throw new Error('Reconciliation deadline exceeded');
+      const prior = await this.boundary.inspect(token, ancestor.id);
+      if (prior.state === 'complete') continue;
+      if (
+        prior.state === 'pending' &&
+        prior.pending?.operationId !== ancestor.id
+      )
+        throw new Error('Reconciliation pending identity unavailable');
       const result = await this.boundary.execute(
         token,
-        this.intent(predecessor),
-        async () => {
-          throw new Error('Predecessor not admitted');
-        },
+        this.intent(ancestor),
+        ancestor.kind === 'reconcile'
+          ? establish
+          : async () => ({
+              kind: 'validation_failed' as const,
+              installedId: null,
+              verifiedId: null,
+              failure: 'stale_dependencies' as const,
+            }),
         establish,
+        ancestor.predecessor_id ?? undefined,
       );
-      if (result.kind !== 'recovered' && result.kind !== 'verified') {
+      if (result.kind === 'unknown' || result.kind === 'failed') {
         await this.store.finish(token, row, result);
         return;
       }
-    }
-    if (prior.state === 'not_started') {
-      await this.boundary.execute(
-        token,
-        this.intent(predecessor),
-        async () => ({
-          kind: 'validation_failed',
-          installedId: null,
-          verifiedId: null,
-          failure: 'stale_dependencies',
-        }),
-        establish,
-      );
     }
     const complete = async (guard: () => Promise<void>) => {
       const result = await establish(guard);
       if (result.kind === 'recovered' || result.kind === 'verified') {
         await guard();
+        if (!(await this.store.authorized(row)))
+          throw new Error('Reconciliation authority unavailable');
         await this.admission.open();
       }
       return result;

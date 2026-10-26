@@ -299,8 +299,9 @@ replacement children deliver a working API/browser increment each:
 Earlier security-heavy lifecycle/backup gates are superseded for this feature.
 
 P3-U5: [Configuration revisions, apply and recovery — feature spec and adopted split](../context/feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md).
-Parent and all three children are planned. Live-policy decisions U5-01–05 remain
-unresolved; no live apply or Phase 3 completion is claimed.
+A/b/c, parent AC-01–10 and the Phase 3 gate are complete within approved private
+development under U5-01–05; [integrated evidence matrix](status/p3-u5c-evidence.md).
+Tenant binding/readiness, operational attribution and production gates remain later work.
 
 - [P3-U5a — Revision capture, diff and validation](../context/feature-specs/p3-u5a-revision-capture-diff-and-validation.md)
 - [P3-U5b — Fenced live apply and verified recovery](../context/feature-specs/p3-u5b-fenced-live-apply-and-verified-recovery.md)
@@ -324,10 +325,10 @@ Routing-policy decisions R-01–05 are approved for desired-state development; l
 - [Completed Windows archive verification](status/p3-u3a-owner-archive-verification.json)
 - [Exact failed-backup local inspection](status/p3-u3a-backup-operation-local-inspection.json)
 
-Feature APIs/browser, administrator migration and routine backup acceptance remain
-incomplete. See the [tracker](../context/progress-tracker.md) for the next working step.
+Feature APIs/browser and the scoped administrator migration are complete. Routine
+backup acceptance remains incomplete. See the [tracker](../context/progress-tracker.md) for the next working step.
 
 - [Ring groups and reserved-number management](runbooks/ring-groups.md) — desired-only operator workflow and [namespace/dependency contract](architecture/ring-groups.md).
 
-- [PBX revision review workflow](runbooks/pbx-revisions.md) and [immutable snapshot/compiler contract](architecture/pbx-revisions.md) — P3-U5a completed offline boundary; live apply remains gated.
+- [PBX revision review workflow](runbooks/pbx-revisions.md) and [immutable snapshot/compiler contract](architecture/pbx-revisions.md) — verified a/b boundaries and c interruption/operator handoff; parent completion is recorded in the evidence matrix.
 - [Desired outbound operator workflow](runbooks/outbound-routing.md) and [routing/reservation/identity/dependency contract](architecture/outbound-routing.md).

@@ -143,6 +143,7 @@ export async function checkPeerBrowser({
       ingress,
       expire,
       login,
+      select,
     });
     return;
   }

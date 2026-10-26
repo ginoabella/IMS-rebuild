@@ -53,7 +53,8 @@ const consumer = new ExactLiveMaterialConsumer({
   caFile: config.providerCaFile,
 });
 const resolver = new LiveMaterialResolver(store.pool, consumer);
-let resolutions = 0;
+let resolutions = 0,
+  interruption = null;
 const owner = new LiveOwnerExecutor(
   m.installationId,
   m.nodeId,
@@ -61,7 +62,17 @@ const owner = new LiveOwnerExecutor(
   {
     resolve: async (...args) => {
       resolutions++;
-      return resolver.resolve(...args);
+      if (interruption === 'before') {
+        interruption = null;
+        stop.abort();
+        throw new Error('Owned consumer interruption before exact read');
+      }
+      const material = await resolver.resolve(...args);
+      if (interruption === 'after') {
+        interruption = null;
+        stop.abort();
+      }
+      return material;
     },
   },
   new NativeOwnerClient('/run/pbx-live/native.sock'),
@@ -85,8 +96,8 @@ const timer = setInterval(async () => {
     renewing = false;
   }
 }, 1000);
-const stop = new globalThis.AbortController();
-const loop = owner.run(
+let stop = new globalThis.AbortController();
+let loop = owner.run(
   { id: m.nodeId, installationId: m.installationId },
   () => token,
   stop.signal,
@@ -167,6 +178,8 @@ try {
       JSON.stringify(validated),
     );
     const live = await runtimeState();
+    interruption = version === 1 ? 'before' : 'after';
+    const interruptedAt = interruption;
     const accepted = await http.live.accept(
       principal,
       m.nodeId,
@@ -179,6 +192,72 @@ try {
       randomUUID(),
     );
     assert.equal(accepted.status, 202, JSON.stringify(accepted));
+    const mutations = await Promise.all([
+      http.peers.write(
+        principal,
+        'trunks',
+        m.nodeId,
+        trunk.id,
+        'remove',
+        { expectedVersion: trunk.version },
+        randomUUID(),
+      ),
+      http.peers.write(
+        principal,
+        'trunks',
+        m.nodeId,
+        trunk.id,
+        'edit',
+        {
+          expectedVersion: trunk.version,
+          name: trunk.name,
+          direction: trunk.direction,
+          settings: { ...trunk.settings, host: '127.0.0.2' },
+        },
+        randomUUID(),
+      ),
+    ]);
+    assert.ok(mutations.every((result) => result.status === 409));
+
+    await until(
+      async () => stop.signal.aborted,
+      (value) => value,
+    );
+    await loop;
+    assert.equal((await runtimeState()).verified_id, live.verified_id);
+    assert.equal(
+      (await runtimeState()).active_operation_id,
+      accepted.value.operation.id,
+    );
+    assert.equal(
+      (await store.intent(m.nodeId, accepted.value.operation.id)).state,
+      'queued',
+    );
+    const previous = token;
+    await ownership.release(token);
+    token = await ownership.acquire(m.nodeId, randomUUID());
+    assert.ok(token);
+    assert.ok(BigInt(token.epoch) > BigInt(previous.epoch));
+    stop = new globalThis.AbortController();
+    loop = owner.run(
+      { id: m.nodeId, installationId: m.installationId },
+      () => token,
+      stop.signal,
+    );
+    console.log(
+      'PASS protected consumer interruption ' +
+        JSON.stringify({
+          boundary: interruptedAt,
+          version,
+          operationId: accepted.value.operation.id,
+          revisionId: revision.id,
+          previousEpoch: previous.epoch,
+          successorEpoch: token.epoch,
+          observed:
+            'accepted intent retained, no installation before successor',
+        }),
+    );
+
     await until(
       runtimeState,
       (row) =>

@@ -1,3 +1,4 @@
+import { observedBaselineEndpoints } from './pbx-observed-baseline.mjs';
 // Real secure console, platform credential sign-in, independent HTTP/telephony,
 // PostgreSQL/Redis and controlled Asterisk. Fault injection is labeled explicitly.
 import assert from 'node:assert/strict';
@@ -203,10 +204,21 @@ export async function checkPbxBrowser({
           .freshness === 'current',
       'live AMI observation',
     );
+    const baselineObservation = (await request(`/platform/pbx-nodes/${id}`))
+      .data.node.observation;
+    const baselineEndpoints = observedBaselineEndpoints(
+      baselineObservation.registrations,
+      fixture.access.baselineEndpoints,
+    );
+    const baselineRegistered = baselineObservation.registeredEndpoints;
+    assert.equal(typeof baselineRegistered, 'number');
     await expect(
-      page.getByText('0 — successful empty registration result', {
-        exact: true,
-      }),
+      page.getByText(
+        baselineEndpoints.length
+          ? `Observed endpoint facts (${baselineEndpoints.length})`
+          : '0 — successful empty registration result',
+        { exact: true },
+      ),
     ).toBeVisible();
     await review('detail');
     // Controlled no-call registration uses the already approved trusted fixture.
@@ -218,7 +230,8 @@ export async function checkPbxBrowser({
     await until(
       async () =>
         (await request(`/platform/pbx-nodes/${id}`)).data.node.observation
-          .registeredEndpoints === 1,
+          .registeredEndpoints ===
+        baselineRegistered + 1,
       'real SIP registration',
     );
     await expect(
@@ -230,9 +243,19 @@ export async function checkPbxBrowser({
     await until(
       async () =>
         (await request(`/platform/pbx-nodes/${id}`)).data.node.observation
-          .registeredEndpoints === 0,
+          .registeredEndpoints === baselineRegistered,
       'remove obsolete real registration',
     );
+    await until(async () => {
+      const observation = (await request(`/platform/pbx-nodes/${id}`)).data.node
+        .observation;
+      return (
+        observation.freshness === 'current' &&
+        JSON.stringify(
+          observation.registrations.map((fact) => fact.endpoint).sort(),
+        ) === JSON.stringify(baselineEndpoints)
+      );
+    }, 'removed fixture preserves exact retained endpoint inventory');
     console.log('PBX_FIXTURE_STOP');
     await until(
       async () =>
@@ -456,7 +479,7 @@ export async function checkPbxBrowser({
       'target edit reconciles original PBX',
     );
     console.log(
-      'PASS PBX C-02/03/05 live: real console create/replay/edit, real AMI/SIP empty/registered/removed, freshness expiry, owner recovery and safe secret failure; response losses injected',
+      'PASS PBX C-02/03/05 live: real console create/replay/edit, real AMI/SIP retained-baseline/registered/removed, freshness expiry, owner recovery and safe secret failure; response losses injected',
     );
     console.log('CHECK PBX browser: node isolation/mounted owner recovery');
     // Independent unavailable target remains a node failure; healthy live node stays inspectable.

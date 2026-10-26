@@ -53,48 +53,80 @@ export async function checkPbxLiveIntent({
       [nodeId],
     )
   ).rows[0].n;
-  await owner.query(
-    "CREATE FUNCTION public.reject_live_intent_check() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.event_type='telephony.revision.live' THEN RAISE EXCEPTION 'owned live acceptance fault'; END IF; RETURN NEW; END $$",
-  );
-  await owner.query(
-    'CREATE TRIGGER live_intent_check_fault BEFORE INSERT ON public.audit_events FOR EACH ROW EXECUTE FUNCTION public.reject_live_intent_check()',
-  );
-  const rolledBack = randomUUID();
-  try {
+  for (const table of [
+    'pbx_live_operations',
+    'pbx_live_pins',
+    'audit_events',
+    'outbox_work',
+  ]) {
+    const condition =
+      table === 'audit_events'
+        ? "NEW.event_type='telephony.revision.live'"
+        : 'true';
+    await owner.query(
+      `CREATE FUNCTION public.reject_live_intent_check() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF ${condition} THEN RAISE EXCEPTION 'owned live acceptance fault'; END IF; RETURN NEW; END $$`,
+    );
+    await owner.query(
+      `CREATE TRIGGER live_intent_check_fault BEFORE INSERT ON public.${table} FOR EACH ROW EXECUTE FUNCTION public.reject_live_intent_check()`,
+    );
+    const rolledBack = randomUUID();
+    try {
+      assert.equal(
+        (
+          await direct(a, path + '/apply', 'POST', {
+            ...body,
+            requestId: rolledBack,
+          })
+        ).status,
+        503,
+      );
+    } finally {
+      await owner.query(
+        `DROP TRIGGER live_intent_check_fault ON public.${table}`,
+      );
+      await owner.query('DROP FUNCTION public.reject_live_intent_check()');
+    }
     assert.equal(
       (
-        await direct(a, path + '/apply', 'POST', {
-          ...body,
-          requestId: rolledBack,
-        })
-      ).status,
-      503,
+        await owner.query(
+          'SELECT count(*)::int AS n FROM public.pbx_live_operations WHERE node_id=$1',
+          [nodeId],
+        )
+      ).rows[0].n,
+      before,
     );
-  } finally {
-    await owner.query(
-      'DROP TRIGGER live_intent_check_fault ON public.audit_events',
+    assert.equal(
+      (await direct(b, path + '/receipts/' + rolledBack)).status,
+      404,
     );
-    await owner.query('DROP FUNCTION public.reject_live_intent_check()');
+    assert.equal(
+      (
+        await owner.query(
+          'SELECT count(*)::int AS n FROM public.pbx_live_pins WHERE node_id=$1',
+          [nodeId],
+        )
+      ).rows[0].n,
+      0,
+    );
+    assert.equal(
+      (
+        await owner.query(
+          "SELECT count(*)::int AS n FROM public.audit_events WHERE event_type='telephony.revision.live' AND metadata->>'nodeId'=$1",
+          [nodeId],
+        )
+      ).rows[0].n,
+      0,
+    );
+    assert.equal(
+      (
+        await owner.query(
+          'SELECT active_operation_id FROM public.pbx_live_runtime WHERE node_id=$1',
+          [nodeId],
+        )
+      ).rows[0].active_operation_id,
+      null,
+    );
   }
-  assert.equal(
-    (
-      await owner.query(
-        'SELECT count(*)::int AS n FROM public.pbx_live_operations WHERE node_id=$1',
-        [nodeId],
-      )
-    ).rows[0].n,
-    before,
-  );
-  assert.equal((await direct(b, path + '/receipts/' + rolledBack)).status, 404);
-  assert.equal(
-    (
-      await owner.query(
-        'SELECT count(*)::int AS n FROM public.pbx_live_pins WHERE node_id=$1',
-        [nodeId],
-      )
-    ).rows[0].n,
-    0,
-  );
   const accepted = await Promise.all([
     direct(a, path + '/apply', 'POST', body),
     direct(b, path + '/apply', 'POST', body),

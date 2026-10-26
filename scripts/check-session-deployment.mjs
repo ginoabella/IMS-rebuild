@@ -78,8 +78,10 @@ function fixture(content) {
     throw new Error('Exclusive PBX acceptance guard required');
   return inventoryAcceptance.writeLegacy(content, fixtureName);
 }
-if (inventoryBrowser || observing)
+if (inventoryBrowser || observing) {
   inventoryAcceptance = inventoryPbxAcceptance(pbxAccess);
+  pbxAccess.baselineEndpoints = inventoryAcceptance.baselineEndpoints();
+}
 if (
   [
     '--extension-inventory',

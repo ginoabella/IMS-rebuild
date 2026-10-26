@@ -248,15 +248,22 @@ export class LiveExecutionStore {
         row.predecessor_id &&
         (result.kind === 'verified' || result.kind === 'recovered')
       ) {
-        await tx.query(
-          "UPDATE public.pbx_live_progress SET state='recovered',recovery='passed',failure=NULL,updated_at=clock_timestamp() WHERE operation_id=$1 AND node_id=$2",
+        // A failed reconciliation can itself be superseded. Affirmative native
+        // baseline proof resolves every unresolved canonical ancestor together.
+        const ancestors = await tx.query<{ operation_id: string }>(
+          `WITH RECURSIVE chain AS (
+             SELECT id,predecessor_id,1 AS depth FROM public.pbx_live_operations WHERE id=$1 AND node_id=$2
+             UNION ALL SELECT o.id,o.predecessor_id,c.depth+1 FROM public.pbx_live_operations o JOIN chain c ON o.id=c.predecessor_id WHERE o.node_id=$2 AND c.depth<128
+           ) UPDATE public.pbx_live_progress p SET state='recovered',recovery='passed',failure=NULL,updated_at=clock_timestamp()
+             FROM chain c WHERE p.operation_id=c.id AND p.node_id=$2 AND p.state IN ('unknown','failed') RETURNING p.operation_id`,
           [row.predecessor_id, row.node_id],
         );
-        await this.audit.append(tx, liveAuditContract, {
-          operationId: row.predecessor_id,
-          nodeId: row.node_id,
-          action: 'recovered',
-        });
+        for (const ancestor of ancestors.rows)
+          await this.audit.append(tx, liveAuditContract, {
+            operationId: ancestor.operation_id,
+            nodeId: row.node_id,
+            action: 'recovered',
+          });
       }
       await this.audit.append(tx, liveAuditContract, {
         operationId: row.id,

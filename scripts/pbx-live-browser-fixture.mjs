@@ -38,6 +38,7 @@ export class LiveBrowserFixture {
     this.directory = relative;
     mkdirSync(relative, { recursive: true, mode: 0o700 });
     this.name = 'myims-live-browser-' + metadata.nodeId.slice(0, 8);
+    writeFileSync(join(relative, 'fault'), 'none', { mode: 0o600 });
     writeFileSync(
       join(relative, 'integration.json'),
       JSON.stringify(metadata),
@@ -71,6 +72,7 @@ export class LiveBrowserFixture {
     for (const [source, target] of [
       [relative + '/config', '/etc/asterisk'],
       [relative + '/integration.json', '/input/integration.json'],
+      [relative + '/fault', '/input/fault'],
       ['scripts/pbx-live-browser-owner.mjs', '/fixture.mjs'],
       ['services/backend/dist', '/workspace/services/backend/dist'],
       [

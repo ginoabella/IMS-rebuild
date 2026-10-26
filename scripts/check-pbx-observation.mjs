@@ -1,3 +1,4 @@
+import { observedBaselineEndpoints } from './pbx-observed-baseline.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -475,7 +476,10 @@ export async function checkPbxObservation({
     // Runtime real authenticated AMI observation.
     const empty = await a.call('snapshot', profile.targetAlias);
     assert.equal(empty.kind, 'complete', JSON.stringify(empty));
-    assert.deepEqual(empty.registrations, []);
+    const baselineEndpoints = observedBaselineEndpoints(
+      empty.registrations,
+      pbxAccess.baselineEndpoints,
+    );
     assert.deepEqual(
       (await a.call('permissions', profile.targetAlias)).denied,
       ['Command', 'Originate', 'UpdateConfig'],
@@ -516,7 +520,7 @@ export async function checkPbxObservation({
     await until(async () => {
       const o = await projection(node);
       return o.freshness === 'current' && o;
-    }, 'real initial complete empty snapshot');
+    }, 'real initial complete retained-baseline snapshot');
     console.log('PBX_FIXTURE_INSTALL');
     const unregistered = await until(async () => {
       const r = await a.call('snapshot', profile.targetAlias);
@@ -552,7 +556,7 @@ export async function checkPbxObservation({
       0,
     );
     console.log(
-      'PASS B-02 real controlled Asterisk certificate-verified authentication, complete empty/unregistered/registered snapshots, safe invalid-auth/secret-missing states; desired registry and tenant inventory unchanged.',
+      'PASS B-02 real controlled Asterisk certificate-verified authentication, complete retained-baseline/unregistered/registered snapshots, safe invalid-auth/secret-missing states; desired registry and tenant inventory unchanged.',
     );
     const beforeRestart = (await projection(node)).epoch;
     console.log('PBX_FIXTURE_RESTART');
@@ -632,7 +636,11 @@ export async function checkPbxObservation({
     await until(async () => {
       const o = await projection(node);
       obsolete = o;
-      return o.freshness === 'current' && o.registrations.length === 0;
+      return (
+        o.freshness === 'current' &&
+        JSON.stringify(o.registrations.map((fact) => fact.endpoint).sort()) ===
+          JSON.stringify(baselineEndpoints)
+      );
     }, 'complete snapshot removes obsolete facts').catch((error) => {
       console.log(
         JSON.stringify({

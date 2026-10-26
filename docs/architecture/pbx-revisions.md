@@ -101,8 +101,9 @@ The owner approved U5-01–05 and the scoped nftables/NET_ADMIN addendum in the
 [policy record](../planning/p3-u5b-live-policy-review.md). These approve controlled
 private development, not production acceptance. The approved private profile is
 active with an independently verified initial baseline. B-01–08, affected/normal
-checks and retained refresh/preservation passed; c and parent acceptance remain
-incomplete. See the [final evidence](../status/p3-u5b-evidence.md).
+checks and retained refresh/preservation passed. C later completed parent/Phase 3
+acceptance under the same approved development scope; see [b evidence](../status/p3-u5b-evidence.md)
+and [integrated c evidence](../status/p3-u5c-evidence.md).
 
 Protected immutable staging and exact-version GET-only material consumption live
 in the telephony `adapters/live` boundary. Public HTTP/Next and ordinary workers
@@ -175,3 +176,70 @@ health or authority gate. A missing/exhausted transport notification cannot stra
 accepted intent indefinitely. Uncommitted/rolled-back intent is invisible, and
 physical admission still rechecks canonical actor, ownership, baseline and sources.
 Late notifications never repeat native effects; native attempts remain bounded.
+
+## Interruption reconciliation and downstream handoff
+
+The native journal records pending uncertainty before effects and records the exact
+verified outcome before the SQL result is acknowledged. These are separate durable
+boundaries. After a native receipt/SQL acknowledgement gap, the owner reads the
+physical receipt and finishes that same canonical operation. After a pending
+activation/reload/probe gap, it checks exact selected bytes, loaded resources and
+probes for the candidate and reviewed baseline; it does not repeat candidate
+selection or reload. Failure to prove either retains pending state and the barrier.
+Only explicit, audited predecessor reconciliation authorizes restoration. An older
+healthy baseline cannot promote the interrupted target. SQL acceptance and physical
+ordering must agree before a newer operation can run.
+
+The repeatable [interruption fixture](../../scripts/pbx-live-interruption-fixture.mjs)
+uses actual child-process exits around staging, parser validation, selection,
+reload, independent probes and SQL finish, including dispatch during probes.
+Successors wait for default lease expiry and the actual kernel fence. Protected
+consumer cancellation around actual exact-version reads is separately identified
+as injected owner loss, rather than an OS crash. Public fixture browsers receive
+no material/provider access. Private file controls exist only in the disposable
+native browser fixture; production entrypoints contain no fault controls.
+
+P4-U2 must consume immutable revision/resource UUIDs and versions, the verified
+artifact's exact provenance, canonical runtime state and actual dependency pins.
+Use `RuntimeDependencyPort.assertUnreferenced(tx,nodeId,kind,resourceId)` under the
+canonical node lock for future reallocation/removal/retirement. Endpoint generations
+and trunk `(credentialId, materialVersion)` pairs remain pinned while installed,
+in flight or retained as rollback targets. New desired references never release
+old runtime dependencies. Presently verified artifacts remain retained; there is
+no general artifact retirement/pruning operation. Only a never-installed rejected
+revision can release its pins after affirmative native rejection and a canonical
+finish. Unknown state and unavailable providers cannot establish safe release.
+
+P4-U2 also owns the future trusted allocation/binding eligibility port. It must
+provide canonical tenant ownership, explicit shared-trunk permission and all
+reachable destination ownership before a later compiler/policy version can enable
+tenant routing. Current snapshots explicitly mark allocations, bindings and shared
+trunk permissions unavailable. A synthetic topology or successful PBX probe is not
+that port. P4-U3 remains responsible for voice readiness and activation, considering
+verified provenance, pending/unknown work and tenant-owned route tests independently
+of the fact a tenant record exists.
+
+P5-U3 must preserve internal inbound `sourceKey`, generated context/route identities
+and immutable resource/revision versions, then authenticate actual ingress before
+mapping any event to a tenant. Caller number, editable label and client-supplied
+keys are never ownership evidence. The present default-deny/unbound context is
+not operational attribution. Production security/HA, capacity, operational launch
+and joint backup/restore remain with their later owners. The [c evidence matrix](../status/p3-u5c-evidence.md)
+records the parent and Phase 3 gate independently from a/b child completion.
+
+An explicit reconciliation can fail before the original pending physical intent is
+consumed. A later canonical recovery therefore traverses immutable predecessor
+links (at most 128, with strictly decreasing sequence, matching node/installation
+and reviewed baseline), resolves them oldest first and checks the actual pending
+operation ID. It never substitutes the newest SQL row for an older physical intent.
+The current explicitly authorized recovery establishes the baseline for failed
+reconciliation ancestors; no candidate apply is replayed. On affirmative final
+proof, one canonical transaction marks every still-unknown/failed ancestor recovered
+and appends each corresponding audit action. Pins remain retained. An unavailable,
+misordered or over-bound ancestry remains unresolved with no bypass.
+
+Reconciliation also checks the current originating operator authority after the
+quiet wait, before any restoration effect, after probes and before opening the
+barrier. Canonical revocation during the wait retains denial and uncertainty. A
+fresh authorized audited intent can resolve that predecessor chain. Mere session
+expiry remains independent of committed execution authority.

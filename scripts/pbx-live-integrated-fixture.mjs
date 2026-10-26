@@ -421,6 +421,33 @@ try {
   assert.equal(blocked.status, 409);
   assert.equal(blocked.value.reason, 'operation_unresolved');
   proofMode = 'pass';
+  const interruptedReconciliation = await accept('reconcile', {
+    targetId: baseline,
+    expectedBaselineId: baseline,
+  });
+  const quiet = barrier.quiet.bind(barrier);
+  let revokeDuringRecovery = true;
+  barrier.quiet = async (...args) => {
+    await quiet(...args);
+    if (revokeDuringRecovery) {
+      revokeDuringRecovery = false;
+      await http.pool.query(
+        "UPDATE public.platform_operators SET status='disabled',version=version+1,authentication_version=authentication_version+1 WHERE id=$1",
+        [metadata.operatorId],
+      );
+    }
+  };
+  await client.execute(token, interruptedReconciliation.id, null);
+  await finished(interruptedReconciliation.id, 'unknown');
+  barrier.quiet = quiet;
+  await barrier.assertClosed();
+  assert.equal(revokeDuringRecovery, false);
+  principal.authenticationVersion = (
+    await http.pool.query(
+      "UPDATE public.platform_operators SET status='active',version=version+1,authentication_version=authentication_version+1 WHERE id=$1 RETURNING authentication_version",
+      [metadata.operatorId],
+    )
+  ).rows[0].authentication_version;
   const reconcile = await accept('reconcile', {
     targetId: baseline,
     expectedBaselineId: baseline,
@@ -428,6 +455,7 @@ try {
   await delivered(reconcile.id);
   await client.execute(token, reconcile.id, null);
   await finished(reconcile.id, 'recovered');
+  await finished(interruptedReconciliation.id, 'recovered');
   assert.equal(
     (
       await store.pool.query(
@@ -447,7 +475,256 @@ try {
     'recovered',
   );
   console.log(
-    'PASS integrated recovery: real selected-file/runtime drift is detected after actual reload and restores the verified initial set with separate failed-candidate/passed-recovery phases; uncertain recovery retains actual barrier/pins, blocks conflicting intent and resolves through explicit audited predecessor reconciliation',
+    'PASS integrated recovery: authority revoked after recovery quiet check retains denial; fresh audited retry resolves original pending ancestor and failed reconciliation with recovered canonical history; real selected-file/runtime drift is detected after actual reload and restores the verified initial set with separate failed-candidate/passed-recovery phases; uncertain recovery retains actual barrier/pins, blocks conflicting intent and resolves through explicit audited predecessor reconciliation',
+  );
+  const sqlLossRevision = await capture();
+  const sqlLoss = await accept('apply', {
+    revisionId: sqlLossRevision.id,
+    expectedBaselineId: baseline,
+  });
+  const finish = store.finish.bind(store);
+  let disconnect = true;
+  store.finish = async (...args) => {
+    if (disconnect) {
+      disconnect = false;
+      // Actual loss of this scoped executor connection at the SQL result boundary.
+      // This is not a shared-server outage and affects only the owned fixture.
+      await store.pool.query('SELECT pg_terminate_backend(pg_backend_pid())');
+    }
+    return finish(...args);
+  };
+  try {
+    await client.execute(token, sqlLoss.id, {
+      material: { endpoints: new Map(), trunks: new Map() },
+    });
+    await finished(sqlLoss.id, 'unknown');
+    assert.equal(
+      disconnect,
+      false,
+      'actual result-commit connection fault must run',
+    );
+  } finally {
+    store.finish = finish;
+  }
+  assert.equal(await client.inspect(token, sqlLoss.id), 'complete');
+  const reloadBefore = driver.reload.bind(driver);
+  let replayed = 0;
+  driver.reload = async (...args) => {
+    replayed++;
+    return reloadBefore(...args);
+  };
+  await client.execute(token, sqlLoss.id, null);
+  await finished(sqlLoss.id, 'verified');
+  driver.reload = reloadBefore;
+  assert.equal(replayed, 0);
+  const sqlCleanup = await accept('recover', {
+    targetId: baseline,
+    expectedBaselineId: sqlLossRevision.id,
+  });
+  await client.execute(token, sqlCleanup.id, null);
+  await finished(sqlCleanup.id, 'recovered');
+  console.log(
+    'PASS integrated database connection loss: actual scoped executor disconnect before result commit retains physical verified receipt; exact same intent reconciles canonical verification without repeated reload; fixture baseline restored',
+  );
+  const rejectedRevision = await capture();
+  const rejectedMaterial = await accept('apply', {
+    revisionId: rejectedRevision.id,
+    expectedBaselineId: baseline,
+  });
+  await client.execute(token, rejectedMaterial.id, {
+    failure: 'material_unavailable',
+  });
+  await finished(rejectedMaterial.id, 'validation_failed');
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT count(*)::int AS n FROM public.pbx_live_pins WHERE revision_id=$1 AND released_at IS NULL',
+        [rejectedRevision.id],
+      )
+    ).rows[0].n,
+    0,
+  );
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT verified_id FROM public.pbx_live_runtime WHERE node_id=$1',
+        [metadata.nodeId],
+      )
+    ).rows[0].verified_id,
+    baseline,
+  );
+  console.log(
+    'PASS integrated safe pin release: affirmative never-installed material rejection releases only its revision pins, preserving all retained artifact dependencies and the verified baseline',
+  );
+  for (const action of ['remove', 'edit']) {
+    const created = await http.routing.write(
+      principal,
+      'reservations',
+      metadata.nodeId,
+      null,
+      'create',
+      {
+        requestId: randomUUID(),
+        name: `Acceptance ${action} protection`,
+        purpose: 'Owned native race',
+        pattern: {
+          kind: 'exact',
+          digits: action === 'remove' ? '68021' : '68022',
+          minLength: 5,
+          maxLength: 5,
+        },
+      },
+      randomUUID(),
+    );
+    assert.equal(created.status, 201, JSON.stringify(created));
+    const resource = created.value.resource;
+    const reviewed = await capture();
+    const applyRace = () =>
+      http.live.accept(
+        principal,
+        metadata.nodeId,
+        'apply',
+        {
+          requestId: randomUUID(),
+          revisionId: reviewed.id,
+          expectedBaselineId: baseline,
+        },
+        randomUUID(),
+      );
+    const mutationRace = () =>
+      http.routing.write(
+        principal,
+        'reservations',
+        metadata.nodeId,
+        resource.id,
+        action,
+        action === 'remove'
+          ? { expectedVersion: resource.version }
+          : {
+              expectedVersion: resource.version,
+              name: resource.name,
+              purpose: resource.purpose,
+              pattern: {
+                kind: 'exact',
+                digits: '68032',
+                minLength: 5,
+                maxLength: 5,
+              },
+            },
+        randomUUID(),
+      );
+    const [accepted, mutation] =
+      action === 'remove'
+        ? await Promise.all([applyRace(), mutationRace()])
+        : (await Promise.all([mutationRace(), applyRace()])).reverse();
+    if (accepted.status === 202) {
+      assert.equal(mutation.status, 409);
+      await client.execute(token, accepted.value.operation.id, {
+        material: { endpoints: new Map(), trunks: new Map() },
+      });
+      await finished(accepted.value.operation.id, 'verified');
+      assert.ok(
+        (
+          await store.pool.query(
+            "SELECT 1 FROM public.pbx_live_pins WHERE revision_id=$1 AND kind='reservations' AND resource_id=$2 AND released_at IS NULL",
+            [reviewed.id, resource.id],
+          )
+        ).rows.length,
+      );
+      const restore = await accept('recover', {
+        targetId: baseline,
+        expectedBaselineId: reviewed.id,
+      });
+      await client.execute(token, restore.id, null);
+      await finished(restore.id, 'recovered');
+    } else {
+      assert.equal(accepted.status, 409);
+      assert.equal(accepted.value.reason, 'stale_review');
+      assert.equal(mutation.status, 200);
+      assert.equal(
+        (
+          await store.pool.query(
+            'SELECT count(*)::int AS n FROM public.pbx_live_pins WHERE revision_id=$1 AND released_at IS NULL',
+            [reviewed.id],
+          )
+        ).rows[0].n,
+        0,
+      );
+    }
+    const retained = JSON.parse(
+      readFileSync(`${root}/plans/${baseline}.json`, 'utf8'),
+    );
+    await driver.verify(
+      retained.identity,
+      retained.snapshot,
+      retained.unmanaged,
+    );
+    console.log(
+      'PASS acceptance resource race ' +
+        JSON.stringify({
+          phase: 'acceptance',
+          action,
+          revisionId: reviewed.id,
+          resourceId: resource.id,
+          operationId: accepted.value.operation?.id ?? null,
+          epoch: token.epoch,
+          expected:
+            'one serialized result: accepted intent pins and blocks mutation, or prior mutation invalidates review without effects',
+          observed:
+            accepted.status === 202
+              ? 'verified intent and blocked mutation; verified baseline restored'
+              : 'mutation won, stale acceptance rejected, zero pins and unchanged verified baseline',
+          acceptanceStatus: accepted.status,
+          mutationStatus: mutation.status,
+        }),
+    );
+  }
+  const racingRevision = await capture();
+  const competing = await Promise.all([
+    http.live.accept(
+      principal,
+      metadata.nodeId,
+      'recover',
+      {
+        requestId: randomUUID(),
+        targetId: baseline,
+        expectedBaselineId: baseline,
+      },
+      randomUUID(),
+    ),
+    http.live.accept(
+      principal,
+      metadata.nodeId,
+      'apply',
+      {
+        requestId: randomUUID(),
+        revisionId: racingRevision.id,
+        expectedBaselineId: baseline,
+      },
+      randomUUID(),
+    ),
+  ]);
+  assert.deepEqual(competing.map((result) => result.status).sort(), [202, 409]);
+  const winner = competing.find((result) => result.status === 202).value
+    .operation;
+  await client.execute(
+    token,
+    winner.id,
+    winner.kind === 'apply'
+      ? { material: { endpoints: new Map(), trunks: new Map() } }
+      : null,
+  );
+  await finished(winner.id, winner.kind === 'apply' ? 'verified' : 'recovered');
+  if (winner.kind === 'apply') {
+    const cleanup = await accept('recover', {
+      targetId: baseline,
+      expectedBaselineId: racingRevision.id,
+    });
+    await client.execute(token, cleanup.id, null);
+    await finished(cleanup.id, 'recovered');
+  }
+  console.log(
+    'PASS integrated competing recovery/apply: actual concurrent canonical intents admit exactly one ordered operation; the loser conflicts, native winner verifies, baseline restored',
   );
   const previous = { ...token };
   clearInterval(timer);

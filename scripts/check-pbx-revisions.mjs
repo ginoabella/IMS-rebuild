@@ -30,6 +30,7 @@ export async function checkPbxRevisions({
   staffFacts,
   expire,
   login,
+  select,
 }) {
   try {
     const root = `/platform/pbx-nodes/${nodeId}`,
@@ -509,9 +510,12 @@ export async function checkPbxRevisions({
       holdResponse,
       expire,
       login,
+      issue,
+      staffFacts,
+      select,
     });
     console.log(
-      'PASS revisions A-01–05: immutable atomic capture/receipt/audit rollback, real concurrent edit, cross-replica retry, exact references, redacted semantic diff, stale offline validation, authority/CSRF, history, actual HTTPS review and lost-response receipt recovery, axe/reflow/keyboard; no PBX/provider effects',
+      'PASS revisions A-01–05: immutable atomic capture/receipt/audit rollback, real concurrent edit, cross-replica retry, exact references, redacted semantic diff, stale offline validation, authority/CSRF, history, actual HTTPS review and lost-response receipt recovery, axe/reflow/keyboard; offline saves have no effects, explicit live fixture application/recovery is reported separately above',
     );
   } catch (e) {
     console.error(

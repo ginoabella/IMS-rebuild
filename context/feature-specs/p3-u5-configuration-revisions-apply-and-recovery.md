@@ -1,8 +1,9 @@
 # P3-U5 — Review, validate, apply, and recover configuration revisions
 
-Status: **in progress**; [P3-U5a](p3-u5a-revision-capture-diff-and-validation.md)
+Status: **completed within approved private development**; [P3-U5a](p3-u5a-revision-capture-diff-and-validation.md)
 is complete within its offline boundary; b is completed within approved private development under U5-01–05
-and c remains planned. Prepared and reviewed October 25, 2026 (Asia/Manila,
+and c is complete with C-01–06, AC-01–10 and the Phase 3 gate reconciled in the
+[final evidence](../../docs/status/p3-u5c-evidence.md). Prepared and reviewed October 25, 2026 (Asia/Manila,
 +08:00). This specification defines intended behavior; it grants no new live
 PBX, secret-access or calling authority. The three-child delivery split was adopted
 October 25, 2026 when the user requested the child specifications.
@@ -233,12 +234,13 @@ live apply first and postpone its baseline, pins, fencing or recovery to a later
 | --- | --- | --- |
 | [P3-U5a — Revision capture, diff and validation](p3-u5a-revision-capture-diff-and-validation.md) | Verified U1–U4/P1-U5. Deliver immutable snapshot/compiler, safe semantic diff, affected-resource/dependency review, deterministic validation and complete browser review workflow. Expose unresolved live-policy blockers. No live installation. Any PBX validator waits for U5-01. | AC-01; deterministic AC-02; review portions of AC-08/09/10. Live AC-02 evidence remains b/c. |
 | [P3-U5b — Fenced live apply and verified recovery](p3-u5b-fenced-live-apply-and-verified-recovery.md) | Completed B-01–08; [evidence](../../docs/status/p3-u5b-evidence.md). Verified a; U5-01–05 resolved for its scope. Deliver protected exact-version materialization, durable intent/pins, external fencing, atomic activation, approved reload/probes, active-call handling and minimum verified automatic/manual recovery with browser progress. Initial baseline and failed-recovery handling are mandatory here. | Live AC-02; AC-03–08/09 for the complete basic live/recovery journey; relevant AC-10 contracts/runbook. |
-| [P3-U5c — Interruption, failover and integrated Phase 3 handoff](p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md) | Verified b. Complete the adversarial interruption/uncertainty/failover/concurrency matrix, repair discovered gaps, finish browser reconciliation and operator evidence, regress U1–U4 and reconcile every parent acceptance criterion. | Full AC-04–10 fault coverage and final AC-01–10 reconciliation. |
+| [P3-U5c — Interruption, failover and integrated Phase 3 handoff](p3-u5c-interruption-failover-and-integrated-phase-3-handoff.md) | Completed C-01–06; [evidence](../../docs/status/p3-u5c-evidence.md). Verified b. Complete the adversarial interruption/uncertainty/failover/concurrency matrix, repair discovered gaps, finish browser reconciliation and operator evidence, regress U1–U4 and reconcile every parent acceptance criterion. | Full AC-04–10 fault coverage and final AC-01–10 reconciliation. |
 
 The split follows the repository workflow rule: each unit has a verifiable result
 and carries its own required backend/browser/checks/docs. It is not a layer-by-layer
 split. A is completed within its offline boundary; b is completed within approved private development under U5-01–05
-and c remains planned. Adopting this split
+and c is complete with C-01–06, AC-01–10 and the Phase 3 gate reconciled in the
+[final evidence](../../docs/status/p3-u5c-evidence.md). Adopting this split
 does not resolve U5-01–05 or authorize live effects.
 
 Review findings incorporated above: database fencing alone cannot protect external
@@ -246,4 +248,4 @@ effects; atomic files do not imply verified runtime; rollback needs a verified
 initial baseline and its own activity policy; desired edits must not release live
 credential/resource pins; pre-onboarding fixtures must not grant unbound routes
 tenant traffic. Missing product/access decisions remain explicit implementation
-gates. P3-U5 and the Phase 3 gate remain incomplete.
+gates. P3-U5 and the Phase 3 gate passed within approved private development; tenant calling readiness remains P4-U2/U3.

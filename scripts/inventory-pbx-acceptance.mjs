@@ -286,6 +286,9 @@ export function inventoryPbxAcceptance(access) {
     }),
   );
   return {
+    baselineEndpoints() {
+      return [...manifest.baseline.objects.endpoints];
+    },
     recordFailure(operation) {
       manifest.failures ??= [];
       manifest.failures.push({

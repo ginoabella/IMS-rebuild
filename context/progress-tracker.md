@@ -23,19 +23,17 @@ reservations, inbound/outbound rules and integrated routing acceptance. Its desi
 state feeds b’s scoped live apply below; production and tenant calling readiness
 remain with later units.
 P3-U5a is complete within its offline revision capture/review/validation boundary;
-P3-U5b is complete within approved private development under U5-01–05; c, parent
-P3-U5 and the integrated Phase 3 gate remain to be delivered.
+P3-U5b/c, parent P3-U5 and the integrated Phase 3 gate are complete within
+approved private development under U5-01–05. Tenant readiness remains Phase 4.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
 their verified boundaries. Early draft tenant creation P4-U1a is complete under
 the approved delivery-order exception. P1-U1 remains deferred outside approved
-scoped handoffs. Integrated PBX administration acceptance, completed tenant onboarding, operational response and
-production readiness remain to be delivered.
+scoped handoffs. Integrated PBX administration acceptance is complete within its
+approved development boundary; completed tenant onboarding, operational response
+and production readiness remain to be delivered.
 
 ## In Progress
-
-No feature unit is currently in progress. P3-U5c is next; operational follow-up
-below remains separate from the completed feature gate.
 
 **Operational follow-up, outside the feature gate:** owner Windows archive
 verification passed. Existing failed backup `ec0b8e2d-49d9-45e3-930e-6b769b58f103`
@@ -57,13 +55,13 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P3-U5b
+## Latest Completed Checkpoint — P3-U5c / parent P3-U5 / Phase 3
 
-- **Status:** completed within approved private development; 2026-10-26 05:47 +08:00 (Asia/Manila). B-01–08 passed; [final acceptance evidence](../docs/status/p3-u5b-evidence.md).
-- **Delivered:** exact-baseline immutable apply/recover/reconcile intent, canonical authority and actual dependency pins, same-owner execution, physical epoch/guardian fencing, protected exact-version consumption, atomic complete-set validation/selection, independent loaded runtime/probe proof and verified automatic/manual recovery. Unknown recovery retains denial and pins. The existing HTTPS console exposes durable progress and identity-bound receipt recovery.
-- **Verification:** final supported real native/SQL/provider/two-replica/HTTPS command and all 16 contracts passed; affected routing, resource, full inventory/provider/browser, PBX, auth/durability and final complete `./dev check` passed, exit 0.
-- **Refresh/preservation:** ordinary backend/HTTPS refresh, platform/staff transport and health checks passed. The existing private profile retains its independently verified initial baseline with no active operation. Post-regression unmanaged hashes, loaded default denial/resources and running state match; exact owned fixtures/access were cleaned. Native helper refresh preserves the Asterisk process.
-- **Handoff:** [operator guide](../docs/runbooks/pbx-revisions.md), [execution/material/dependency contract](../docs/architecture/pbx-revisions.md). C, parent P3-U5 and the Phase 3 gate remain incomplete; tenant binding/calling readiness remains Phase 4. No production HA or joint backup readiness is claimed.
+- **Status:** completed within approved private development under U5-01–05; 2026-10-26 14:23 +08:00 (Asia/Manila). C-01–06, AC-01–10 and the Phase 3 gate passed; [final evidence](../docs/status/p3-u5c-evidence.md).
+- **Delivered:** complete interruption/race matrix, 24 actual abrupt native losses, protected-consumer interruptions, concurrent resource acceptance/removal/edit, actual HTTPS normal/failure/recovery and canonical cross-replica/browser reconciliation. Failed-reconciliation ancestry and late canonical-authority checks now preserve ordered recovery and audit every resolved ancestor.
+- **Verification:** focused real native/SQL/provider/HTTPS, affected routing/resource/PBX/auth/inventory/provider/browser and durability checks plus full `./dev check` passed, exit 0. Final native/SQL test-only additions and all seven protected-boundary contracts passed.
+- **Preservation:** retained current revision `4b475c04-b573-4cc1-9d86-1c81b65f4060`, protected/loaded facts and unmanaged digest unchanged; no active channels/operation. Helper refresh preserved Asterisk PID/start identity. Exact owned fixture/access cleanup, ordinary platform/staff HTTPS and backend live/ready 200 passed.
+- **Handoff:** [operator procedures](../docs/runbooks/pbx-revisions.md), [architecture/dependency ports](../docs/architecture/pbx-revisions.md), [machine records](../docs/status/p3-u5c-verification.json). P4-U2/U3 own tenant allocation/readiness/activation; P5-U3 owns authenticated ingress attribution. Production HA/security/backup and the separate pending backup operation remain outside this gate.
 
 ## Completed
 
@@ -73,6 +71,7 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| P3-U5c / parent P3-U5 / Phase 3 | C-01–06 and AC-01–10 passed: full declared interruption/race matrix and actual integrated HTTPS recovery, affected/full checks, exact cleanup and retained-runtime/ordinary service preservation. Approved private development only. | [Final evidence](../docs/status/p3-u5c-evidence.md) |
 | P3-U5b — fenced live apply and verified recovery | B-01–08 passed: exact durable intent/pins, real physical fencing, protected material/atomic installation, independent verification and guarded verified recovery with actual HTTPS. All affected/normal checks, refresh and owned cleanup passed. | [Final evidence](../docs/status/p3-u5b-evidence.md) |
 | P3-U5a — revision capture, diff and validation | A-01–06 passed within the offline boundary: immutable atomic snapshots/receipts, deterministic safe compiler/diff, qualified local validation and actual protected HTTPS recovery/review. Affected/full checks and ordinary refresh passed. | [Final evidence](../docs/status/p3-u5a-evidence.md) |
 | P3-U4c / parent P3-U4 | C-01–06 and AC-01–08 passed: outbound patterns/priorities/transforms, original/output reservation protection, actual trunk dependencies, generated identities and complete integrated HTTPS journey; affected/full checks and ordinary refresh passed. | [Final evidence](../docs/status/p3-u4c-evidence.md) |
@@ -110,8 +109,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P3-U5c — interruption, failover and integrated Phase 3 handoff follows completed a/b under the [adopted split](feature-specs/p3-u5-configuration-revisions-apply-and-recovery.md#review-and-adopted-implementation-split). Preserve b’s approved [U5-01–05 boundary](../docs/planning/p3-u5b-live-policy-review.md) and complete c’s broader matrix and parent acceptance. Actual tenant readiness stays with Phase 4; backup administration remains separate.
-2. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration.
+1. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration. Use the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff) for verified provenance/dependency and future eligibility ports. Backup administration remains separate.
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
 Draft credential setup preserves draft status and denies ordinary staff access;
@@ -121,7 +119,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | --- | --- | --- |
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
-| 3 | P3-U1/P3-U2, P3-U3/a/b/c and P3-U4/a/b/c complete within development scope; P3-U5a complete within its offline boundary and b complete within approved private development; c, parent P3-U5 and the Phase 3 gate remain incomplete. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
+| 3 | P3-U1–U5 and delivered children complete within declared development boundaries; C-01–06, parent AC-01–10 and integrated Phase 3 gate passed under U5-01–05. Tenant readiness remains Phase 4. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
 | 4 | P4-U1a/children complete; P4-U1b and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
@@ -180,7 +178,7 @@ for their scope; creating a spec does not approve a proposal.
 
 | Area | Affected work and resume condition |
 | --- | --- |
-| P3-U5 integrated gate | B is complete under approved U5-01–05 [concrete policies](../docs/planning/p3-u5b-live-policy-review.md), including actual mechanism and recovery proofs. C’s broader adversarial matrix and integrated parent/Phase 3 acceptance remain; no tenant calling readiness is approved. |
+| Downstream tenant calling readiness | P3-U5/Phase 3 completed under approved U5-01–05 [concrete policies](../docs/planning/p3-u5b-live-policy-review.md). P4-U2/U3 must supply trusted tenant allocation/binding, eligibility and verified activation; no tenant calling readiness is approved by development probes. |
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
 | Administrator/tenant lifecycle | General last-admin removal/disablement, platform-account recovery and tenant activation/suspension/retirement effects on routes/active work remain with owning P4/later units. Ordinary admission and scoped P2-U4 credential recovery are already approved. |
@@ -192,7 +190,9 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Verification and Limitations
 
-- P3-U5b B-01–08 passed 2026-10-26 05:47 +08:00: final actual native/SQL/provider/HTTPS acceptance, all affected regressions and full normal Docker graph passed, exit 0. Ordinary HTTPS/backend refresh, transport/health, independent retained baseline preservation and exact owned cleanup passed. [Evidence and limits](../docs/status/p3-u5b-evidence.md). C/parent/Phase 3 remain incomplete.
+- P3-U5c C-01–06, parent AC-01–10 and integrated Phase 3 gate passed within approved private development. Focused/affected/full Docker checks, final resource races, exact cleanup, retained current revision preservation, helper refresh and ordinary HTTPS/health passed. [Evidence and declared real/injected limits](../docs/status/p3-u5c-evidence.md). Tenant readiness/attribution and production gates remain later work.
+
+- P3-U5b B-01–08 passed 2026-10-26 05:47 +08:00: final actual native/SQL/provider/HTTPS acceptance, all affected regressions and full normal Docker graph passed, exit 0. Ordinary HTTPS/backend refresh, transport/health, independent retained baseline preservation and exact owned cleanup passed. [Evidence and limits](../docs/status/p3-u5b-evidence.md). C/parent/Phase 3 were subsequently completed at the checkpoint above.
 
 - P3-U5a A-01–06 passed 2026-10-25 07:50 +08:00: final focused real PostgreSQL/Redis/A/B API/HTTPS workflow, five compiler contracts, affected regressions and full normal graph all passed. Ordinary migration/refresh, platform/staff HTTPS preservation and backend live/ready 200 passed. [Evidence and limits](../docs/status/p3-u5a-evidence.md). Local validation alone establishes no live coverage/readiness; b’s later scoped materialization/apply/pin/recovery proof is recorded above. Tenant bindings remain P4-U2.
 
@@ -222,6 +222,8 @@ for their scope; creating a spec does not approve a proposal.
   this unit and does not affect authenticated routing navigation.
 
 ## Recent Session Notes
+
+- 2026-10-26 14:23 +08:00 (Asia/Manila) — P3-U5c, parent P3-U5 and scoped Phase 3 gate completed. All C-01–06/AC-01–10 criteria reconciled; focused/affected/full checks and final concurrent resource races passed. Exact cleanup, retained current revision, helper-only refresh and ordinary HTTPS/health verified. Removed c from in progress; next feature is Phase 4. [Evidence](../docs/status/p3-u5c-evidence.md); intermediate checkpoints retained in [history](progress-tracker-history.md#2026-10-26--p3-u5c-implementation-and-verification-checkpoints).
 
 - 2026-10-26 05:47 +08:00 (Asia/Manila) — P3-U5b completed under approved U5-01–05 and scoped capability/access authorizations. Final native/SQL/provider/HTTPS and all affected/normal checks passed; ordinary refresh, independent retained baseline preservation and exact fixture/access cleanup passed. Removed b from in progress; c/parent/Phase 3 remain incomplete. Detailed intermediate checkpoints moved to [history](progress-tracker-history.md#2026-10-26--p3-u5b-implementation-and-verification-checkpoints).
 

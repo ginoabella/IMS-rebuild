@@ -331,6 +331,58 @@ try {
   console.log(
     'PASS native: verification failure restores and independently verifies prior complete set; uncertain recovery retains gate/pending intent and reconciles actual facts without reload replay',
   );
+  // Run the actual execution algorithm as explicit recovery, with both a busy
+  // entry and a new call racing the final zero-check/barrier acquisition.
+  const ordinaryBegin = barrier.begin.bind(barrier);
+  const ordinaryClose = barrier.close.bind(barrier);
+  let recoveryRace = true,
+    recoveryWaited = false;
+  barrier.begin = async (...args) => {
+    await nativeCli(
+      'channel originate Local/s@ims-fixture-hold application Wait 2',
+    );
+    await new Promise((resolve) => setTimeout(resolve, 100));
+    const began = Date.now();
+    await ordinaryBegin(...args);
+    recoveryWaited = Date.now() - began >= 1000;
+  };
+  barrier.close = async () => {
+    if (recoveryRace) {
+      recoveryRace = false;
+      await nativeCli(
+        'channel originate Local/s@ims-fixture-hold application Wait 2',
+      );
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    await ordinaryClose();
+  };
+  const explicitDrain = await execution.run(
+    {
+      token: current,
+      intent: {
+        operationId: randomUUID(),
+        revisionId: revision,
+        sequence: 4,
+        expectedBaselineId: revision,
+        fingerprint: 'e'.repeat(64),
+      },
+      candidate: baselineArtifact,
+      baseline: baselineArtifact,
+      recovery: true,
+      signal: new globalThis.AbortController().signal,
+    },
+    proof,
+  );
+  barrier.begin = ordinaryBegin;
+  barrier.close = ordinaryClose;
+  assert.equal(explicitDrain.kind, 'recovered');
+  assert.ok(recoveryWaited && !recoveryRace);
+  assert.ok(
+    (await nativeCli('core show channels count')).includes('0 active channels'),
+  );
+  console.log(
+    'PASS native explicit recovery activity: real execution waits for natural call drain, a second call races zero-check/barrier acquisition and drains without hangup before exact known-good restoration/verification',
+  );
   await barrier.close();
   await nativeCli(
     'channel originate Local/s@ims-fixture-hold application Wait 2',
@@ -709,7 +761,7 @@ try {
     await firstPeer.register(0);
     await secondPeer.register(0);
     console.log(
-      'PASS native: synthetic exact-DID disabled-winner denial, catchall/sequential group order, simultaneous fork, actual outbound strip/add transform and exact digest challenge, reservation/default denial and ordinary unbound denial; nine total sequential bounded Local calls, at most two synthetic peer legs, no public destination',
+      'PASS native: synthetic exact-DID disabled-winner denial, catchall/sequential group order, simultaneous fork, actual outbound strip/add transform and exact digest challenge, reservation/default denial and ordinary unbound denial; eleven total sequential bounded Local calls, at most two synthetic peer legs, no public destination',
     );
   } finally {
     firstPeer.close();

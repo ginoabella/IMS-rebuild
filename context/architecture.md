@@ -270,8 +270,14 @@ the opt-in telephony owner. Ordinary workers deliver only immutable intent;
 HTTP/Next receive no provider access or material. The native Asterisk helper
 receives no provider token. Its independently verified retained baseline uses the
 existing node and two owner replicas; installed/verified/known-good identities and
-operation state are canonical in PostgreSQL. Parent/Phase 3 and tenant calling
-readiness require their later acceptance.
+operation state are canonical in PostgreSQL. P3-U5c completes parent AC-01–10 and
+the Phase 3 gate within approved private development: actual abrupt native losses,
+SQL/owner/material/resource races and integrated HTTPS failure/recovery passed.
+Explicit recovery validates bounded immutable predecessor ancestry oldest first,
+rechecks canonical authority after quiet waits and atomically audits all recovered
+unknown/failed ancestors. Candidate effects never blindly replay. The
+[integrated evidence](../docs/status/p3-u5c-evidence.md) records limits and cleanup;
+tenant binding/readiness and authenticated ingress attribution remain P4-U2/U3/P5-U3.
 
 ## Storage Model
 

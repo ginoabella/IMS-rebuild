@@ -968,6 +968,10 @@ export async function checkPlatformBrowser({
       page.getByRole('heading', { name: 'Platform console', exact: true }),
     ).toBeVisible();
     await token();
+    // The feature journey may open another browser page. Restore this page's
+    // focus and finish canonical focus/visibility revalidation before clicking.
+    await page.bringToFront();
+    await page.waitForLoadState('networkidle');
     ingress.drop('/platform/auth/logout');
     await page.getByRole('button', { name: 'Sign out', exact: true }).click();
     await expect(page.getByRole('status')).toContainText(

@@ -1,3 +1,4 @@
+import { observedBaselineEndpoints } from './pbx-observed-baseline.mjs';
 import assert from 'node:assert/strict';
 import { test, before, after } from 'node:test';
 import { createRequire } from 'node:module';
@@ -350,4 +351,36 @@ test('an actively streaming provider cannot extend the absolute five-second read
   );
   assert.ok(Date.now() - started >= 4900);
   assert.ok(Date.now() - started < 7000);
+});
+
+test('retained baseline uses full AMI identities after unique CLI qualification and rejects omissions, extras and ambiguous truncation', () => {
+  const long = 'ims-t-' + 'a'.repeat(32) + '-' + 'b'.repeat(32);
+  const short = long.slice(0, 51);
+  const facts = [{ endpoint: long }, { endpoint: 'marker' }];
+  assert.deepEqual(
+    observedBaselineEndpoints(facts, [short, 'marker']),
+    [long, 'marker'].sort(),
+  );
+  assert.deepEqual(observedBaselineEndpoints([], []), []);
+  assert.deepEqual(
+    observedBaselineEndpoints(
+      [{ endpoint: 'a' }, { endpoint: 'ab' }],
+      ['a', 'ab'],
+    ),
+    ['a', 'ab'],
+  );
+  assert.throws(() => observedBaselineEndpoints(facts, ['marker']));
+  assert.throws(() => observedBaselineEndpoints(facts, ['wrong', 'marker']));
+  assert.throws(() =>
+    observedBaselineEndpoints(
+      [{ endpoint: long }, { endpoint: long + 'c' }],
+      [short, short],
+    ),
+  );
+  assert.throws(() =>
+    observedBaselineEndpoints(
+      [{ endpoint: 'marker' }, { endpoint: 'marker' }],
+      ['marker', 'marker'],
+    ),
+  );
 });
