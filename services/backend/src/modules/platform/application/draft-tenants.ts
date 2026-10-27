@@ -1,6 +1,9 @@
+import { tenantEditInput } from './tenant-edit-input';
+import type { TenantEditReceipts } from './tenant-edit-ports';
 import { createHash, randomUUID } from 'node:crypto';
 import type {
   TenantDetailDto,
+  SavedTenantSectionDto,
   TenantListDto,
   TenantSummaryDto,
 } from '@myims/contracts';
@@ -37,7 +40,14 @@ export interface DraftTenantTransactions {
 export type DraftTenantFailure =
   | { kind: 'invalid'; fieldErrors: FieldErrors }
   | { kind: 'denied' | 'unavailable' | 'missing' }
-  | { kind: 'conflict'; reason: 'tenant_code_conflict' | 'request_conflict' };
+  | {
+      kind: 'conflict';
+      reason:
+        | 'tenant_code_conflict'
+        | 'request_conflict'
+        | 'version_conflict'
+        | 'eligibility_conflict';
+    };
 class RejectedCreation extends Error {
   constructor(readonly outcome: DraftTenantFailure) {
     super('Draft creation rejected');
@@ -59,6 +69,7 @@ export class DraftTenants {
     private readonly tenants: DraftTenantRegistry,
     private readonly administrators: FirstAdministrator,
     private readonly receipts: DraftCreationReceipts,
+    private readonly edits: TenantEditReceipts,
   ) {}
   async create(
     principal: Principal,
@@ -152,15 +163,121 @@ export class DraftTenants {
         : { kind: 'unavailable' };
     }
   }
+  async save(
+    principal: Principal,
+    id: unknown,
+    input: unknown,
+    correlationId: string,
+  ): Promise<
+    DraftTenantFailure | { kind: 'saved'; value: SavedTenantSectionDto }
+  > {
+    if (
+      principal.plane !== 'platform' ||
+      !principal.grants.includes('platform_operator')
+    )
+      return { kind: 'denied' };
+    if (!uuid(id)) return invalidReference('tenantId');
+    const tenantId = id.toLowerCase(),
+      parsed = tenantEditInput(input);
+    if (parsed.kind !== 'valid') return parsed;
+    const data = parsed.value;
+    // Fixed key order and explicit omission markers bind semantic input, never raw contact values.
+    const fingerprint = createHash('sha256')
+      .update(
+        JSON.stringify([
+          tenantId,
+          data.section,
+          data.expectedVersion,
+          data.expectedAuthorityVersion,
+          data.section === 'name'
+            ? data.values.displayName
+            : ['name', 'email', 'phone'].map((k) => [
+                k,
+                Object.hasOwn(data.values, k),
+                data.values[k as keyof typeof data.values],
+              ]),
+        ]),
+      )
+      .digest('hex');
+    try {
+      const committed = await this.transactions.run(
+        {
+          actor: principalActor(principal),
+          correlationId,
+          target: { type: 'tenant', reference: tenantId, tenantId: null },
+        },
+        async (tx) => {
+          if (!(await this.authority.validate(tx, principal)))
+            throw new RejectedCreation({ kind: 'denied' });
+          const prior = await this.edits.inspect(tx, data.requestId);
+          if (prior) {
+            if (
+              prior.operator_id !== principal.operatorId ||
+              prior.tenant_id !== tenantId ||
+              prior.fingerprint !== fingerprint
+            )
+              throw new RejectedCreation({
+                kind: 'conflict',
+                reason: 'request_conflict',
+              });
+            return { receipt: prior, replayed: true };
+          }
+          const result = await this.tenants.configure(tx, tenantId, data);
+          if (result.kind !== 'found')
+            throw new RejectedCreation(
+              result.kind === 'stale'
+                ? { kind: 'conflict', reason: 'version_conflict' }
+                : result.kind === 'ineligible'
+                  ? { kind: 'conflict', reason: 'eligibility_conflict' }
+                  : { kind: result.kind },
+            );
+          const receipt = {
+            request_id: data.requestId,
+            operator_id: principal.operatorId,
+            tenant_id: tenantId,
+            section: data.section,
+            fingerprint,
+            version: result.value.version,
+            authority_version: result.value.authority_version,
+          };
+          await this.edits.save(tx, receipt);
+          return { receipt, replayed: false };
+        },
+      );
+      const current = await this.database.read((snapshot) =>
+        this.readDetail(snapshot, tenantId),
+      );
+      if (!current) return { kind: 'unavailable' };
+      const r = committed.receipt;
+      return {
+        kind: 'saved',
+        value: {
+          outcome: {
+            requestId: r.request_id,
+            tenantId: r.tenant_id,
+            section: r.section,
+            version: r.version,
+            authorityVersion: r.authority_version,
+          },
+          replayed: committed.replayed,
+          current,
+        },
+      };
+    } catch (error) {
+      return error instanceof RejectedCreation
+        ? error.outcome
+        : { kind: 'unavailable' };
+    }
+  }
   async list(
     input: unknown,
   ): Promise<DraftTenantFailure | { kind: 'found'; value: TenantListDto }> {
     const parsed = tenantListInput(input);
     if (parsed.kind !== 'valid') return parsed;
     try {
-      const { limit, after } = parsed.value;
+      const { limit, after, search, status } = parsed.value;
       const rows = await this.database.read((snapshot) =>
-        this.tenants.list(snapshot, limit + 1, after),
+        this.tenants.list(snapshot, limit + 1, after, search, status),
       );
       const items = rows.slice(0, limit).map(summary);
       return {
@@ -202,6 +319,11 @@ export class DraftTenants {
     return {
       tenant: {
         ...summary(row),
+        contacts: {
+          name: row.contact_name ?? null,
+          email: row.contact_email ?? null,
+          phone: row.contact_phone ?? null,
+        },
         version: row.version,
         authorityVersion: row.authority_version,
         createdAt: row.created_at.toISOString(),

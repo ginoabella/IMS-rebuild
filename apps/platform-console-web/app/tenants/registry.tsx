@@ -1,4 +1,5 @@
 'use client';
+import { TenantEditor } from './editor';
 import { AdministratorCredentials } from './credential-issuer';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
@@ -9,6 +10,8 @@ import {
   Panel,
   PanelHeading,
   Table,
+  Field,
+  Input,
 } from '@myims/ui-web';
 import type { TenantDetailDto, TenantListDto } from '@myims/contracts';
 import { useOperatorWork } from '../auth/console-access';
@@ -16,10 +19,16 @@ import { listTenants, tenantDetail, TenantError } from './client';
 
 function useRegistry<T>(load: () => Promise<T>, resource: string) {
   const work = useOperatorWork();
-  const [state, setState] = useState<{ data?: T; error?: string }>({});
+  const [state, setState] = useState<{
+    data?: T;
+    error?: string;
+    resource?: string;
+  }>({});
   const [revision, setRevision] = useState(0);
   const latest = useRef(work);
   latest.current = work;
+  const selected = useRef(resource);
+  selected.current = resource;
   useEffect(() => {
     let live = true;
     setState({});
@@ -30,10 +39,13 @@ function useRegistry<T>(load: () => Promise<T>, resource: string) {
       if (!captured.current()) return;
       try {
         const data = await load();
-        if (live && captured.current()) setState({ data });
+        if (live && selected.current === resource && captured.current())
+          setState({ data, resource });
       } catch (error) {
-        if (!live || !captured.current()) return;
+        if (!live || selected.current !== resource || !captured.current())
+          return;
         setState({
+          resource,
           error:
             error instanceof TenantError
               ? error.status === 404
@@ -49,16 +61,22 @@ function useRegistry<T>(load: () => Promise<T>, resource: string) {
     };
     // Owner/resource/retry changes trigger reads; session restoration never replays a write.
   }, [work.operatorId, work.ready, resource, revision]);
-  return { ...state, retry: () => setRevision((n) => n + 1) };
+  return {
+    ...(state.resource === resource ? state : {}),
+    retry: () => setRevision((n) => n + 1),
+  };
 }
 const linkClass =
   'inline-flex min-h-11 items-center rounded-md border border-subtle px-4 text-primary hover:bg-muted';
 export function TenantRegistry() {
+  const [search, setSearch] = useState(''),
+    [status, setStatus] = useState('');
+  const [criteria, setCriteria] = useState({ search: '', status: '' });
   const [cursors, setCursors] = useState<(string | null)[]>([null]);
   const after = cursors[cursors.length - 1] ?? null;
   const state = useRegistry<TenantListDto>(
-    () => listTenants(after),
-    after ?? 'first',
+    () => listTenants(after, criteria.search, criteria.status),
+    JSON.stringify([after, criteria]),
   );
   return (
     <div className="space-y-5">
@@ -68,6 +86,43 @@ export function TenantRegistry() {
           Create tenant
         </Link>
       </div>
+      <form
+        className="flex flex-wrap items-end gap-3"
+        onSubmit={(e) => {
+          e.preventDefault();
+          setCursors([null]);
+          setCriteria({ search: search.trim(), status });
+        }}
+      >
+        <Field id="tenant-search" label="Search code or name" optional>
+          <Input
+            id="tenant-search"
+            maxLength={200}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </Field>
+        <Field id="tenant-status" label="Lifecycle filter" optional>
+          <select
+            id="tenant-status"
+            className="min-h-11 rounded-md border border-subtle bg-muted px-3"
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value);
+              setCursors([null]);
+              setCriteria({ search: search.trim(), status: e.target.value });
+            }}
+          >
+            <option value="">All statuses</option>
+            {['draft', 'active', 'suspended', 'retired'].map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Button type="submit">Search tenants</Button>
+      </form>
       {state.error ? (
         <ContentState
           kind="error"
@@ -238,6 +293,7 @@ export function TenantDetail({ id }: { id: string }) {
           </Button>
         </>
       )}
+      <TenantEditor key={id} id={id} detail={detail} reload={state.retry} />
       <AdministratorCredentials
         key={id}
         tenantId={id}

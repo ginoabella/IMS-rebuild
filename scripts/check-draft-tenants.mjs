@@ -1,3 +1,4 @@
+import { checkTenantEditing } from './check-tenant-editing.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createRequire } from 'node:module';
@@ -1045,6 +1046,23 @@ export async function checkDraftTenants({
     console.log(
       'PASS draft A-08: canonical admission denial, unset credentials, no staff session/outbox and tenant-qualified handoff',
     );
+    await checkTenantEditing({
+      owner,
+      runtime,
+      a: await replica(),
+      b: await replica(),
+      replica,
+      commitProxy,
+      unavailableRedis: down,
+      unavailableDatabase: pgDown,
+      expired,
+      staffSession,
+      request,
+      operator,
+      post,
+      data,
+      barrier,
+    });
   } finally {
     // Receipts are deliberately retained; the owning outer harness drops this
     // exact isolated database. Never disable receipt protection to clean runtime.

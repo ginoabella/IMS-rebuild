@@ -261,6 +261,35 @@ export async function checkCredentialActions({
     sessions.push(issuer);
     const t = await draft(),
       issued = await issueAction(t);
+    // Ordinary onboarding edits must preserve a pending credential action's tenant authority.
+    for (const [section, values] of [
+      ['name', { displayName: 'Renamed during setup' }],
+      ['contacts', { name: 'Informational desk', email: 'desk@example.org' }],
+    ]) {
+      const detail = await request(b, `/platform/tenants/${t.tenantId}`, {
+        session: issuer,
+      });
+      const saved = await request(
+        a,
+        `/platform/tenants/${t.tenantId}/configuration`,
+        {
+          method: 'POST',
+          session: issuer,
+          body: {
+            requestId: randomUUID(),
+            expectedVersion: detail.data.tenant.version,
+            expectedAuthorityVersion: detail.data.tenant.authorityVersion,
+            section,
+            values,
+          },
+        },
+      );
+      assert.equal(saved.status, 200);
+      assert.equal(
+        saved.data.current.tenant.authorityVersion,
+        detail.data.tenant.authorityVersion,
+      );
+    }
     assert.equal((await request(b, path(t), { session: issuer })).status, 200);
     assert.ok(
       !(await request(b, path(t), { session: issuer })).text.includes(

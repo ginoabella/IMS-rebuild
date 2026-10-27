@@ -180,11 +180,13 @@ activation and PBX readiness remain with their owning units.
 
 - [P4-U1a-2 browser/parent acceptance evidence](status/p4-u1a-2-evidence.md) — verified complete.
 
-[P4-U1b — Tenant onboarding configuration: feature spec and split review](../context/feature-specs/p4-u1b-tenant-onboarding-configuration.md) defines remaining registry editing, contacts, geography, explicit voice preference and reuse of the delivered administrator setup. Implementation is planned; the three vertical sub-units are adopted. Contact, geography and edit-eligibility policy gates remain unresolved.
+[P4-U1b — Tenant onboarding configuration: feature spec and split review](../context/feature-specs/p4-u1b-tenant-onboarding-configuration.md) covers registry editing, contacts, geography, explicit voice preference and reuse of the delivered administrator setup. The three vertical sub-units are adopted. Child 1 is complete within approved private development under ONB-01/03 contact and draft-only edit policy; geography policy ONB-02 remains unresolved.
 
-- [P4-U1b-1 — Resumable registry editing and contacts](../context/feature-specs/p4-u1b-1-resumable-registry-editing-and-contacts.md) — planned.
+- [P4-U1b-1 — Resumable registry editing and contacts](../context/feature-specs/p4-u1b-1-resumable-registry-editing-and-contacts.md) — complete within approved private development.
 - [P4-U1b-2 — Service area and default intake coordinates](../context/feature-specs/p4-u1b-2-service-area-and-default-intake-coordinates.md) — planned.
 - [P4-U1b-3 — Voice preference and integrated onboarding handoff](../context/feature-specs/p4-u1b-3-voice-preference-and-integrated-onboarding-handoff.md) — planned.
+- [Draft configuration operator procedure](runbooks/tenant-configuration.md)
+- [P4-U1b-1 acceptance evidence](status/p4-u1b-1-evidence.md)
 
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 P2-U4 and a/b/c are complete under the approved policy. Reported Android native

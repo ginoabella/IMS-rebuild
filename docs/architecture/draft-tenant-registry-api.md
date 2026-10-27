@@ -75,3 +75,54 @@ authority, audit, identity and recovery regressions. See
 The [browser contract](draft-tenant-browser.md) defines the delivered protected
 forwarding/screens and mounted owner-bound recovery. Final integrated verification
 is recorded in [child 2 evidence](../status/p4-u1a-2-evidence.md).
+
+## P4-U1b-1 extension contract
+
+`listTenants` additionally accepts `search` (at most 800 raw UTF-16 units,
+trimmed to at most 200; controls/unpaired surrogates rejected) and exact `status`
+(`draft|active|suspended|retired`). Blank search is unfiltered. Search is literal,
+case-insensitive substring matching over code/name with escaped SQL wildcards.
+UUID keysets and 25 default/100 maximum remain. Trigram name/code and status/UUID
+indexes support selection; existing 2-second statement timeout bounds execution.
+
+`saveTenantSection`: POST `/platform/tenants/:tenantId/configuration`, operational,
+platform-cookie/permission/source/Origin/CSRF/shared admission and no-store as above.
+Body is at most 4096 UTF-8 bytes, exactly `requestId` UUID, `expectedVersion`,
+`expectedAuthorityVersion` (integers 1–2147483646), `section` (`name|contacts`),
+and `values`. Name values accept exactly required `displayName` using creation
+validation. Contact values accept only `name`, `email`, `phone`, with at least one
+key; approved ONB-01/03 semantics are in the parent spec. Raw bounds before trim
+are 800/1016/200 units respectively. Email accepts an ASCII mailbox local part
+and DNS-style domain with at least one dot (no display names or whitespace).
+No lifecycle, code, administrator, credential, geography or voice fields accepted.
+
+Success 200 is `{outcome:{requestId,tenantId,section,version,authorityVersion},
+replayed:boolean,current:TenantDetailDto}`. Outcome contains only references,
+section and original committed versions; `current` is a separate fresh canonical
+read and can be newer. Detail adds `contacts:{name,email,phone}` with nullable
+strings. 400 has fixed field errors; 409 reasons add `version_conflict`,
+`eligibility_conflict`, `request_conflict`. Missing target is 404. Failure/unknown
+commit is 503; no automatic replay. An exact explicit original retry recovers its
+original outcome, including when later edits/status changes exist, under current
+operator authority. Changed input or foreign adoption conflicts.
+
+Lock order is operator SHARE, globally unique attempt advisory lock, tenant UPDATE.
+Tenancy owns contact writes; platform owns immutable separate edit receipts with
+request UUID primary key, operator/target/section, SHA-256 canonical-input digest,
+committed versions/correlation/time, and SELECT/INSERT-only runtime grants.
+Receipt, section update/version and required canonical-actor audit commit together.
+Ordinary edits preserve authority versions and unrelated fields. No outbox or job.
+Contact values never enter audit, receipt, or logs. Receipts have no cleanup policy.
+
+Owner ports: `DraftTenantRegistry.list(snapshot, limit, after, search?, status?)`
+and `byId(snapshot,id)` retain their original optional/unfiltered calls.
+`TenantConfigurationOwner.configure(tx,id,SaveTenantSectionDto)` supplies the
+exclusive target lock, draft eligibility, both expected-version checks and owner
+writes/audit; `TenantRepository.rename` remains compatible with existing callers.
+`TenantEditReceipts.inspect(tx,requestId)` serializes exact attempts and
+`save(tx,receipt)` writes the immutable safe outcome. `DraftTenants.save` coordinates
+these ports after `TransactionAuthority.validate` holds canonical operator authority.
+No-op section saves also advance the configuration version and audit once.
+
+P4-U1b-1 A-01–07 and the full normal graph passed within approved private
+development on 2026-10-27 (+08:00); [final evidence](../status/p4-u1b-1-evidence.md).

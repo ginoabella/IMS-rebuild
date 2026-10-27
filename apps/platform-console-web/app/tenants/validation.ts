@@ -2,7 +2,7 @@ import type { CreateDraftTenantDto, TenantApiErrorDto } from '@myims/contracts';
 export const tenantUuid = (value: unknown): value is string =>
   typeof value === 'string' &&
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
-function text(value: string, rawBound: number) {
+export function text(value: string, rawBound: number) {
   // eslint-disable-next-line no-control-regex -- same raw control rejection as the API.
   if (value.length > rawBound || /[\u0000-\u001f\u007f-\u009f]/u.test(value))
     return false;

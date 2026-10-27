@@ -1,7 +1,6 @@
 # P4-U1b — Complete tenant onboarding configuration
 
-**Status:** Planned; three-child split adopted 2026-10-26 (Asia/Manila, +08:00). No feature implementation
-or new runtime verification is established by this document.
+**Status:** Child 1 complete; children 2/3 planned; three-child split adopted 2026-10-26 (Asia/Manila, +08:00). Child 1 A-01–07 passed on 2026-10-27 (+08:00); parent acceptance remains incomplete.
 **Prepared:** 2026-10-26 (Asia/Manila, +08:00).
 **Parent:** P4-U1 — Deliver tenant registry and onboarding.
 
@@ -18,7 +17,7 @@ Sources: [project overview](../project-overview.md),
 [architecture](../architecture.md), [UI context](../ui-context.md),
 [code standards](../code-standards.md), [workflow rules](../ai-workflow-rules.md),
 and [current delivery state](../progress-tracker.md). This spec refines delivery;
-it does not approve the proposed product decisions below.
+user-approved ONB-01/03 policy is recorded below, while unresolved recommendations remain unapproved.
 
 ## Starting state and dependencies
 
@@ -40,8 +39,9 @@ it does not approve the proposed product decisions below.
   PostgreSQL/PostGIS and deployment-owned migrations already exist. Tenant records
   have row and authority versions; the tenancy repository has a versioned rename
   capability, but this does not establish an operator edit workflow.
-- Contact and geographic product contracts remain unresolved. Resolve only the
-  affected gates before their dependent implementation. Recheck prerequisite
+- ONB-01/03 are resolved for child 1 name/contact writes by explicit user approval
+  below; geography remains unresolved. Resolve affected gates before dependent
+  implementation. Recheck prerequisite
   evidence and actual interfaces at implementation start.
 
 ## Scope and ownership
@@ -73,9 +73,9 @@ policy in the authoritative context and link it from the tracker before coding.
 
 | Gate                                        | Decision needed and recommended starting point                                                                                                                                                                                                                                                                                                                                                                     | Dependent work / resume condition                                                                                                                                                                          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| ONB-01 — Contacts                           | Approve the contact fields, requiredness, bounds and intended use. Recommend one optional organizational contact with name, email and phone, without a directory, delivery or verification workflow. Specify validation and clearing semantics.                                                                                                                                                                    | Contact schema/form/DTO. Resume when the actual contact contract is recorded; search and name editing can proceed independently.                                                                           |
+| ONB-01 — Contacts                           | Approve the contact fields, requiredness, bounds and intended use. Recommend one optional organizational contact with name, email and phone, without a directory, delivery or verification workflow. Specify validation and clearing semantics.                                                                                                                                                                    | Contact schema/form/DTO. Resolved for child 1 by the approved ONB-01/03 policy below.                                                                           |
 | ONB-02 — Geographic contract                | Approve who configures defaults, service-area representation and authoring, whether each may remain unset, and treatment of defaults outside the area. Recommend operator-managed WGS84 defaults and an optional valid Polygon/MultiPolygon, with bounded complexity and no silent geometry repair. Decide whether outside-area defaults reject or require acknowledgment; do not import future incident behavior. | Geography schema/authoring/intake handoff. Resume with exact validity, geometry/size limits, requiredness and containment/boundary rules. A provider is needed only if the approved authoring UI uses one. |
-| ONB-03 — Edit eligibility and voice changes | This unit guarantees draft onboarding. Recommend permitting its configuration mutations only while draft; keep other statuses readable and defer their mutation policy. Confirm whether name/contacts must also be editable outside draft.                                                                                                                                                                         | Configuration writes/status-race checks. Resume with approved writable statuses and permitted changes; no implicit active-tenant voice toggling.                                                           |
+| ONB-03 — Edit eligibility and voice changes | This unit guarantees draft onboarding. Recommend permitting its configuration mutations only while draft; keep other statuses readable and defer their mutation policy. Confirm whether name/contacts must also be editable outside draft.                                                                                                                                                                         | Configuration writes/status-race checks. Name/contact writes resolved as draft-only below; no implicit active-tenant or voice mutation is approved.                                                           |
 
 Coordinate checks must at minimum reject non-finite or out-of-range values,
 incomplete pairs and silent axis swapping. The recommended WGS84 limits are
@@ -248,19 +248,35 @@ usable result and is not recommended.
 
 | Unit                                                                                                                            | Goal and implementation boundary                                                                                                                                                              | Dependencies and result                                                                                                                                                           | Parent coverage                                   |
 | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| [P4-U1b-1 — Resumable registry editing and contacts](p4-u1b-1-resumable-registry-editing-and-contacts.md)                       | Search/filter, detail/edit name and approved contacts; shared versioned save/retry/authority behavior. Preserve code and existing credential panel.                                           | Completed prerequisites; resolve ONB-01/03 for affected fields. Operator finds, edits and reloads one draft, including A/B conflict and lost-response recovery.                   | AC-01/02/05/06/09/10/11 for delivered fields.     |
+| [P4-U1b-1 — Resumable registry editing and contacts](p4-u1b-1-resumable-registry-editing-and-contacts.md)                       | Search/filter, detail/edit name and approved contacts; shared versioned save/retry/authority behavior. Preserve code and existing credential panel.                                           | Completed prerequisites; ONB-01/03 approved for name/contact fields below. Operator finds, edits and reloads one draft, including A/B conflict and lost-response recovery.                   | AC-01/02/05/06/09/10/11 for delivered fields.     |
 | [P4-U1b-2 — Service area and default intake coordinates](p4-u1b-2-service-area-and-default-intake-coordinates.md)               | Approved geography authoring, PostGIS storage/validation, versioned protected save and safe canonical intake configuration read port. Reuse child 1 edit/recovery conventions.                | Verified child 1 and resolved ONB-02. Operator saves/reloads geography; real PostGIS proves validity/containment/version outcomes and tenant-qualified handoff.                   | AC-03 plus AC-05/06/09/10/11 for geography.       |
 | [P4-U1b-3 — Voice preference and integrated onboarding handoff](p4-u1b-3-voice-preference-and-integrated-onboarding-handoff.md) | Explicit voice preference and complete detail composition; reuse/refresh administrator setup, verify recipient exchange and draft denial; combined P4-U1a/b acceptance and downstream guides. | Verified children 1/2, approved edit policy and existing P2-U4 lifecycle. Actual create → find → resume/edit → setup/exchange → reload journey passes while tenant remains draft. | AC-04/07/08 and final AC-01–11 across all fields. |
 
 The user adopted this split and requested the three standalone specs on
 2026-10-26 (Asia/Manila, +08:00). Execute children 1 → 2 → 3 sequentially,
 recording prerequisite evidence, resolved decisions and the active checkpoint
-before each implementation. All children and P4-U1b remain **planned**; parent
-P4-U1 and Phase 4 remain incomplete. Split approval does not resolve ONB-01–03
-or approve their recommended product policies.
+before each implementation. Child 1 is **complete within approved private development**; children 2/3 remain
+**planned**. P4-U1b, parent P4-U1 and Phase 4 remain incomplete. Split approval
+itself did not resolve ONB-01–03; the subsequent explicit ONB-01/03 policy below
+authorizes child 1 name/contact work.
 
 Review checked scope coverage against Phase 4, existing registry/credential code,
 module ownership, immutable provenance, geography policy status, concurrency and
 partial-failure behavior. It found no need for another credential system, PBX
-changes or activation in this unit. Contact schema, service-area semantics and
-non-draft editing remain explicitly unresolved; no policy approval is inferred.
+changes or activation in this unit. At that review, contact schema, service-area
+semantics and non-draft editing remained unresolved. The subsequent explicit policy
+below resolves the child 1 contact contract and denies non-draft edits; geography
+remains unresolved.
+
+## Approved ONB-01/03 policy — 2026-10-26 (+08:00)
+
+The user explicitly approved the proposed policy in this implementation session.
+ONB-01: one optional organizational contact with independently optional name,
+email and phone. Trim all values. Name is 1–200 UTF-16 units; email is a valid
+email address up to 254 units; phone is 1–50 units, uses digits, spaces, `+().-`
+and contains at least one digit. Omitted fields preserve their committed values;
+null or blank clears. Partial contacts are allowed and visibly incomplete.
+Contacts are informational only: no identity verification or delivery authority.
+ONB-03: name/contact configuration saves are draft-only. All other lifecycle
+statuses remain readable. No non-draft edit or lifecycle transition is approved.
+ONB-02 remains unresolved and belongs to child 2.

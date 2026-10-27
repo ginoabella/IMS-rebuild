@@ -1,8 +1,16 @@
 import { backendRequest, safeError } from '../auth/server';
-import { tenantUuid } from './validation';
-export async function forwardTenant(request: Request, tenantId?: string) {
+import { tenantUuid, text } from './validation';
+export async function forwardTenant(
+  request: Request,
+  tenantId?: string,
+  configuration = false,
+) {
   const url = new URL(request.url);
-  const expected = tenantId === undefined ? request.method : 'GET';
+  const expected = configuration
+    ? 'POST'
+    : tenantId === undefined
+      ? request.method
+      : 'GET';
   if (
     !['GET', 'POST'].includes(expected) ||
     request.method !== expected ||
@@ -12,14 +20,20 @@ export async function forwardTenant(request: Request, tenantId?: string) {
   const keys = [...url.searchParams.keys()];
   const limit = url.searchParams.get('limit');
   const after = url.searchParams.get('after');
+  const search = url.searchParams.get('search'),
+    status = url.searchParams.get('status');
   if (
     tenantId !== undefined || expected === 'POST'
       ? !!url.search
-      : keys.some((k) => !['limit', 'after'].includes(k)) ||
+      : keys.some((k) => !['limit', 'after', 'search', 'status'].includes(k)) ||
         new Set(keys).size !== keys.length ||
         (limit !== null &&
           (!/^[1-9][0-9]{0,2}$/.test(limit) || Number(limit) > 100)) ||
-        (after !== null && !tenantUuid(after))
+        (after !== null && !tenantUuid(after)) ||
+        (search !== null &&
+          (!text(search, 800) || search.trim().length > 200)) ||
+        (status !== null &&
+          !['draft', 'active', 'suspended', 'retired'].includes(status))
   )
     return safeError(400);
   let body: string | undefined;
@@ -73,10 +87,53 @@ export async function forwardTenant(request: Request, tenantId?: string) {
     )
       return safeError(400);
   }
+  if (configuration) {
+    try {
+      const v = JSON.parse(body ?? '') as Record<string, unknown>;
+      if (
+        !v ||
+        Array.isArray(v) ||
+        Object.keys(v).some(
+          (k) =>
+            ![
+              'requestId',
+              'expectedVersion',
+              'expectedAuthorityVersion',
+              'section',
+              'values',
+            ].includes(k),
+        ) ||
+        !tenantUuid(v.requestId) ||
+        !Number.isSafeInteger(v.expectedVersion) ||
+        Number(v.expectedVersion) < 1 ||
+        Number(v.expectedVersion) >= 2147483647 ||
+        !Number.isSafeInteger(v.expectedAuthorityVersion) ||
+        Number(v.expectedAuthorityVersion) < 1 ||
+        Number(v.expectedAuthorityVersion) >= 2147483647 ||
+        !v.values ||
+        typeof v.values !== 'object' ||
+        Array.isArray(v.values) ||
+        !['name', 'contacts'].includes(String(v.section)) ||
+        Object.keys(v.values).some(
+          (k) =>
+            !(
+              v.section === 'name'
+                ? ['displayName']
+                : ['name', 'email', 'phone']
+            ).includes(k),
+        )
+      )
+        return safeError(400);
+    } catch {
+      return safeError(400);
+    }
+  }
   const upstream = await backendRequest(
     tenantId === undefined
       ? { consumer: 'tenants', query: url.search }
-      : { consumer: 'tenant', id: tenantId.toLowerCase() },
+      : configuration
+        ? { consumer: 'tenant-configuration', id: tenantId.toLowerCase() }
+        : { consumer: 'tenant', id: tenantId.toLowerCase() },
     request.headers,
     expected as 'GET' | 'POST',
     body,

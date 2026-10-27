@@ -1,7 +1,10 @@
 # P4-U1b-1 — Resumable registry editing and contacts
 
-**Status:** Planned. Split adopted 2026-10-26 (Asia/Manila, +08:00);
-implementation and runtime acceptance have not started.
+**Status:** Complete within approved private development, 2026-10-27 09:23
+(Asia/Manila, +08:00). A-01–07 passed under approved ONB-01/03, including real
+A/B API/HTTPS browser, affected credential/session regressions, full `./dev check`
+(exit 0), ordinary HTTPS refresh and data preservation.
+[Final evidence](../../docs/status/p4-u1b-1-evidence.md).
 
 Parent: [P4-U1b — Tenant onboarding configuration](p4-u1b-tenant-onboarding-configuration.md).
 The parent owns shared behavior, ONB-01–03 and AC-01–11. This child owns registry
@@ -23,12 +26,13 @@ method alone does not establish this operator workflow.
 
 ## Decisions and dependencies
 
-Resolve parent ONB-01 before contact schema/forms: fields, requiredness, validation,
-limits, clearing and intended use remain unapproved. Resolve ONB-03 before affected
-configuration writes: writable statuses and field restrictions remain unapproved.
-Search/read work can proceed independently. Record decisions in authoritative
-context and link evidence from the tracker; approval of this split does not approve
-those recommendations. ONB-02 belongs to child 2.
+Parent ONB-01 and ONB-03 were explicitly resolved by the user for this child’s
+name/contact workflow on 2026-10-26 (+08:00). The
+[parent’s approved policy](p4-u1b-tenant-onboarding-configuration.md#approved-onb-0103-policy--2026-10-26-0800)
+owns the contact fields, limits, clearing and draft-only writes. Search/read work
+remains independent. ONB-02 belongs to child 2 and remains unresolved. Approval of
+the split alone did not approve the recommendations; the subsequent explicit user
+policy approval authorizes this implementation.
 
 ## Scope and expected result
 

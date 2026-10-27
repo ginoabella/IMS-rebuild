@@ -1,5 +1,7 @@
 import type {
   CreateDraftTenantDto,
+  SaveTenantSectionDto,
+  SavedTenantSectionDto,
   TenantApiErrorDto,
   TenantDetailDto,
   TenantListDto,
@@ -37,6 +39,11 @@ function detail(value: unknown): value is TenantDetailDto {
     !Number.isSafeInteger(v.tenant.authorityVersion) ||
     typeof v.tenant.createdAt !== 'string' ||
     typeof v.tenant.updatedAt !== 'string' ||
+    !v.tenant.contacts ||
+    !['name', 'email', 'phone'].every((k) => {
+      const value = v.tenant.contacts[k as keyof typeof v.tenant.contacts];
+      return value === null || typeof value === 'string';
+    }) ||
     !v.administrator
   )
     return false;
@@ -58,7 +65,7 @@ function detail(value: unknown): value is TenantDetailDto {
 }
 async function request(
   path: string,
-  body?: CreateDraftTenantDto,
+  body?: CreateDraftTenantDto | SaveTenantSectionDto,
   proof?: string,
   missingAllowed = false,
 ) {
@@ -89,13 +96,18 @@ async function request(
           'tenantCode',
           'displayName',
           'administratorUsername',
+          'name',
+          'email',
+          'phone',
         ] as const)
           if (typeof v.fieldErrors[field] === 'string')
             fields[field] =
-              `Invalid ${field === 'tenantCode' ? 'tenant code' : field === 'displayName' ? 'organization name' : 'administrator username'}.`;
+              `Invalid ${field === 'tenantCode' ? 'tenant code' : field === 'displayName' ? 'organization name' : field === 'administratorUsername' ? 'administrator username' : `contact ${field}`}.`;
       if (
         v.reason === 'tenant_code_conflict' ||
-        v.reason === 'request_conflict'
+        v.reason === 'request_conflict' ||
+        v.reason === 'version_conflict' ||
+        v.reason === 'eligibility_conflict'
       )
         reason = v.reason;
     }
@@ -136,9 +148,13 @@ export async function tenantDetail(id: string) {
     throw new AccessError(503);
   return value;
 }
-export async function listTenants(after: string | null) {
+export async function listTenants(
+  after: string | null,
+  search = '',
+  status = '',
+) {
   const value = await request(
-    `/platform/tenants?limit=25${after ? `&after=${encodeURIComponent(after)}` : ''}`,
+    `/platform/tenants?limit=25&search=${encodeURIComponent(search)}${status ? `&status=${encodeURIComponent(status)}` : ''}${after ? `&after=${encodeURIComponent(after)}` : ''}`,
   );
   if (!value || typeof value !== 'object') throw new AccessError(503);
   const v = value as TenantListDto;
@@ -147,6 +163,35 @@ export async function listTenants(after: string | null) {
     v.items.length > 25 ||
     !v.items.every(summary) ||
     !(v.nextCursor === null || tenantUuid(v.nextCursor))
+  )
+    throw new AccessError(503);
+  return v;
+}
+
+export async function saveTenantSection(
+  id: string,
+  body: SaveTenantSectionDto,
+  proof: string,
+): Promise<SavedTenantSectionDto> {
+  if (!tenantUuid(id)) throw new TenantError(400);
+  const value = await request(
+    `/platform/tenants/${id}/configuration`,
+    body,
+    proof,
+    true,
+  );
+  if (!value || typeof value !== 'object') throw new AccessError(503);
+  const v = value as SavedTenantSectionDto;
+  if (
+    !detail(v.current) ||
+    v.current.tenant.id !== id.toLowerCase() ||
+    typeof v.replayed !== 'boolean' ||
+    !v.outcome ||
+    v.outcome.requestId !== body.requestId.toLowerCase() ||
+    v.outcome.tenantId !== id.toLowerCase() ||
+    v.outcome.section !== body.section ||
+    !Number.isSafeInteger(v.outcome.version) ||
+    !Number.isSafeInteger(v.outcome.authorityVersion)
   )
     throw new AccessError(503);
   return v;

@@ -853,3 +853,18 @@ The normal observation profile remains provider-free. The approved private live
 profile was activated after its mechanism proofs and zero-call/resource preflight;
 the initial retained baseline and gateway observation were independently verified.
 Remaining unit checks and the production boundary are recorded in the tracker.
+
+### P4-U1b-1 draft configuration extension
+
+Tenancy owns nullable organizational contact columns and guarded draft section
+writes. Platform coordinates canonical operator/tenant locks, explicit version
+checks and immutable edit outcomes on the same transaction as required audit.
+Edit receipts are separate from creation provenance; no contact values are copied
+into receipts/audit/logs and no external effect or job is introduced. Ordinary
+configuration edits preserve authority versions. The
+[registry contract](../docs/architecture/draft-tenant-registry-api.md#p4-u1b-1-extension-contract)
+defines named search/save consumers, limits, locks and recovery; the
+[parent’s approved ONB-01/03 policy](feature-specs/p4-u1b-tenant-onboarding-configuration.md#approved-onb-0103-policy--2026-10-26-0800)
+defines contact and draft-only edit eligibility. A-01–07 and full normal checks
+passed within approved private development; [final evidence](../docs/status/p4-u1b-1-evidence.md).
+Geography/voice and lifecycle transitions remain later units.

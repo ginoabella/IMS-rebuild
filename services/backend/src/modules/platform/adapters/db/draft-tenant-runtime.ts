@@ -1,3 +1,4 @@
+import { TenantEditReceiptRepository } from './tenant-edit-receipts';
 import { Pool } from 'pg';
 import { SnapshotDatabase } from '../../../../infrastructure/database/read-snapshot';
 import { Transaction } from '../../../../infrastructure/database/transaction';
@@ -39,6 +40,7 @@ export class DraftTenantRuntime {
       new TenantRepository(),
       new FirstAdministratorRepository(),
       new DraftCreationReceiptRepository(),
+      new TenantEditReceiptRepository(),
     );
   }
   async onApplicationShutdown() {

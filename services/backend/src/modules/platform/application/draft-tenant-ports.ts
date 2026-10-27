@@ -4,7 +4,9 @@ import type { TenantRegistry } from './tenant-registry';
 import type { TenantRecord } from '../../tenancy/domain/tenant-record';
 import type { StorageResult } from '../../identity/domain/storage';
 import type { StaffRole } from '../../identity/domain/roles';
-export interface DraftTenantRegistry extends TenantRegistry {
+import type { TenantConfigurationOwner } from './tenant-edit-ports';
+export interface DraftTenantRegistry
+  extends TenantRegistry, TenantConfigurationOwner {
   createDraft(
     transaction: Transaction,
     input: { id: string; code: string; displayName: string },
@@ -14,6 +16,8 @@ export interface DraftTenantRegistry extends TenantRegistry {
     snapshot: ReadSnapshot,
     limit: number,
     after: string | null,
+    search?: string,
+    status?: string | null,
   ): Promise<TenantRecord[]>;
 }
 export interface InitialAdministrator {

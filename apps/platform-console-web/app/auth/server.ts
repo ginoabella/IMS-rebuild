@@ -78,6 +78,7 @@ export async function backendRequest(
     | { consumer: 'pbx-node'; id: string }
     | { consumer: 'tenants'; query: string }
     | { consumer: 'tenant'; id: string }
+    | { consumer: 'tenant-configuration'; id: string }
     | { consumer: 'credential-actions'; id: string; actionId?: string },
   headers: Headers,
   method: 'GET' | 'POST' | 'PATCH',
@@ -117,7 +118,7 @@ export async function backendRequest(
     return safeError(400);
   try {
     return await fetch(
-      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'inventory' || path.consumer === 'peers' || path.consumer === 'routing' || path.consumer === 'revisions' ? `/platform/pbx-nodes/${path.nodeId}/${path.parts.join('/')}${path.query}` : path.consumer === 'pbx-nodes' ? `/platform/pbx-nodes${path.query}` : path.consumer === 'pbx-node' ? `/platform/pbx-nodes/${path.id}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
+      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'inventory' || path.consumer === 'peers' || path.consumer === 'routing' || path.consumer === 'revisions' ? `/platform/pbx-nodes/${path.nodeId}/${path.parts.join('/')}${path.query}` : path.consumer === 'pbx-nodes' ? `/platform/pbx-nodes${path.query}` : path.consumer === 'pbx-node' ? `/platform/pbx-nodes/${path.id}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'tenant-configuration' ? `/platform/tenants/${path.id}/configuration` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
       {
         method,
         cache: 'no-store',

@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-10-26 (Asia/Manila, +08:00).
+Last reconciled: 2026-10-27 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -28,7 +28,9 @@ approved private development under U5-01–05. Tenant readiness remains Phase 4.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
 their verified boundaries. Early draft tenant creation P4-U1a is complete under
-the approved delivery-order exception. P1-U1 remains deferred outside approved
+the approved delivery-order exception. P4-U1b-1 registry editing/contacts are also
+complete within approved private development; geography and voice remain later
+children. P1-U1 remains deferred outside approved
 scoped handoffs. Integrated PBX administration acceptance is complete within its
 approved development boundary; completed tenant onboarding, operational response
 and production readiness remain to be delivered.
@@ -55,13 +57,13 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P3-U5c / parent P3-U5 / Phase 3
+## Latest Completed Checkpoint — P4-U1b-1
 
-- **Status:** completed within approved private development under U5-01–05; 2026-10-26 14:23 +08:00 (Asia/Manila). C-01–06, AC-01–10 and the Phase 3 gate passed; [final evidence](../docs/status/p3-u5c-evidence.md).
-- **Delivered:** complete interruption/race matrix, 24 actual abrupt native losses, protected-consumer interruptions, concurrent resource acceptance/removal/edit, actual HTTPS normal/failure/recovery and canonical cross-replica/browser reconciliation. Failed-reconciliation ancestry and late canonical-authority checks now preserve ordered recovery and audit every resolved ancestor.
-- **Verification:** focused real native/SQL/provider/HTTPS, affected routing/resource/PBX/auth/inventory/provider/browser and durability checks plus full `./dev check` passed, exit 0. Final native/SQL test-only additions and all seven protected-boundary contracts passed.
-- **Preservation:** retained current revision `4b475c04-b573-4cc1-9d86-1c81b65f4060`, protected/loaded facts and unmanaged digest unchanged; no active channels/operation. Helper refresh preserved Asterisk PID/start identity. Exact owned fixture/access cleanup, ordinary platform/staff HTTPS and backend live/ready 200 passed.
-- **Handoff:** [operator procedures](../docs/runbooks/pbx-revisions.md), [architecture/dependency ports](../docs/architecture/pbx-revisions.md), [machine records](../docs/status/p3-u5c-verification.json). P4-U2/U3 own tenant allocation/readiness/activation; P5-U3 owns authenticated ingress attribution. Production HA/security/backup and the separate pending backup operation remain outside this gate.
+- **Status:** complete within approved private development, 2026-10-27 09:23 +08:00 (Asia/Manila). A-01–07 passed under approved ONB-01/03; [final evidence](../docs/status/p4-u1b-1-evidence.md).
+- **Delivered:** literal search/lifecycle filtering, stable UUID pagination, draft-only name/contact section saves, atomic version/audit/edit receipts and explicit uncertain recovery. Immutable code/admin provenance and ordinary draft admission remain preserved.
+- **Verification:** real PostgreSQL/runtime grants/shared Redis/A/B API and production HTTPS browser passed, including combined filtered pagination, uppercase UUIDs, conflicts, replay versus later state, rollback, owner/target isolation, 320–1440px/axe/focus and affected credential/session regressions. Final serial `./dev check` passed with persistent shell exit 0.
+- **Preservation:** additive migration and original-field/staff/operator/creation-receipt hashes passed; exact fixture cleanup, ordinary platform HTTPS refresh, platform/staff transport/browser/data preservation and backend live/ready 200 passed. Earlier wrapper status 143 is superseded by the clean detached full run.
+- **Handoff:** [operator procedure](../docs/runbooks/tenant-configuration.md), [registry ports](../docs/architecture/draft-tenant-registry-api.md#p4-u1b-1-extension-contract) and [browser patterns](../docs/architecture/draft-tenant-browser.md). Child 2 requires ONB-02 geography policy; children 2/3, parent P4-U1b/P4-U1, activation and operational readiness remain incomplete.
 
 ## Completed
 
@@ -71,6 +73,7 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| P4-U1b-1 — Registry editing and contacts | A-01–07 passed: search/filter/pagination, versioned draft name/contact saves, atomic audit/retry outcomes, real API/HTTPS recovery, affected/full checks and ordinary preservation. | [Final evidence](../docs/status/p4-u1b-1-evidence.md) |
 | P3-U5c / parent P3-U5 / Phase 3 | C-01–06 and AC-01–10 passed: full declared interruption/race matrix and actual integrated HTTPS recovery, affected/full checks, exact cleanup and retained-runtime/ordinary service preservation. Approved private development only. | [Final evidence](../docs/status/p3-u5c-evidence.md) |
 | P3-U5b — fenced live apply and verified recovery | B-01–08 passed: exact durable intent/pins, real physical fencing, protected material/atomic installation, independent verification and guarded verified recovery with actual HTTPS. All affected/normal checks, refresh and owned cleanup passed. | [Final evidence](../docs/status/p3-u5b-evidence.md) |
 | P3-U5a — revision capture, diff and validation | A-01–06 passed within the offline boundary: immutable atomic snapshots/receipts, deterministic safe compiler/diff, qualified local validation and actual protected HTTPS recovery/review. Affected/full checks and ordinary refresh passed. | [Final evidence](../docs/status/p3-u5a-evidence.md) |
@@ -109,12 +112,11 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration. The [P4-U1b specification and split review](feature-specs/p4-u1b-tenant-onboarding-configuration.md) is prepared; implementation remains planned. The three-child split is adopted with standalone specs; execute P4-U1b-1 → P4-U1b-2 → P4-U1b-3 sequentially. All remain planned. Resolve ONB-01 contacts, ONB-02 geography and ONB-03 edit eligibility before dependent implementation. Use the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff) for verified provenance/dependency and future eligibility ports. Backup administration remains separate.
+1. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration. The [P4-U1b specification and split review](feature-specs/p4-u1b-tenant-onboarding-configuration.md) is prepared; child 1 is complete within approved private development. The three-child split is adopted with standalone specs; execute P4-U1b-1 → P4-U1b-2 → P4-U1b-3 sequentially. Child 1 is complete; children 2/3 remain planned. ONB-01/03 are approved for child 1 name/contact work; resolve ONB-02 before geography implementation. Use the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff) for verified provenance/dependency and future eligibility ports. Backup administration remains separate.
 
 
 | Planned unit | Requirement, scope and acceptance | Dependencies / required checks |
 | --- | --- | --- |
-| [P4-U1b-1 — Resumable registry editing and contacts](feature-specs/p4-u1b-1-resumable-registry-editing-and-contacts.md) — planned | A-01–07: find/resume, name/contacts, versioned atomic saves and retry recovery. | Completed prerequisites; resolve ONB-01/03 for affected work. Focused real DB/Redis/A/B API/HTTPS checks, registry/affected credential regressions and `./dev check`. |
 | [P4-U1b-2 — Service area and default intake coordinates](feature-specs/p4-u1b-2-service-area-and-default-intake-coordinates.md) — planned | B-01–07: geography authoring, real PostGIS validation and canonical intake configuration read. | Verified child 1 and ONB-02. Extend focused checks with real PostGIS, registry/credential regressions and `./dev check`. |
 | [P4-U1b-3 — Voice preference and integrated onboarding handoff](feature-specs/p4-u1b-3-voice-preference-and-integrated-onboarding-handoff.md) — planned | C-01–07: explicit voice preference, existing credential handoff and integrated parent AC-01–11. | Verified children 1/2 and approved edit policy. Combined API/HTTPS onboarding, registry/credential/authority regressions and `./dev check`. |
 
@@ -127,7 +129,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1–U5 and delivered children complete within declared development boundaries; C-01–06, parent AC-01–10 and integrated Phase 3 gate passed under U5-01–05. Tenant readiness remains Phase 4. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
-| 4 | P4-U1a/children complete; P4-U1b/children and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
+| 4 | P4-U1a/children complete; P4-U1b-1 complete; remaining P4-U1b children and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
 | 7 | P7-U1–U3 planned; integrated operational acceptance outstanding. | [First-release verification](implementation-plan.md#phase-7--verify-the-complete-first-release-journey) |
@@ -229,6 +231,8 @@ for their scope; creating a spec does not approve a proposal.
   this unit and does not affect authenticated routing navigation.
 
 ## Recent Session Notes
+
+- 2026-10-27 09:23 +08:00 (Asia/Manila) — P4-U1b-1 completed within approved private development under ONB-01/03. Closed filtered A/B pagination coverage and stale navigation/status gaps; all A-01–07, real API/HTTPS browser, affected credential/session and final full checks passed. Ordinary console refreshed; platform/staff preservation and backend live/ready 200 passed. [Final evidence](../docs/status/p4-u1b-1-evidence.md); [intermediate checkpoints](progress-tracker-history.md#2026-10-27--p4-u1b-1-implementation-and-verification-checkpoints). Children 2/3 and parent remain incomplete; resolve ONB-02 before geography.
 
 - 2026-10-26 (Asia/Manila, +08:00) — User adopted the P4-U1b split. Created the three [child specs](feature-specs/p4-u1b-tenant-onboarding-configuration.md#review-and-adopted-sub-unit-implementation) with goals, dependencies, browser/backend scope, acceptance, checks and handoff. Updated parent/navigation and planned tracker entries. Reviewed child-to-parent acceptance coverage and boundaries; formatting, 40 local links/heading anchors, sequential dependency/acceptance checks and diff whitespace passed. ONB-01–03 remain unresolved; all implementation remains planned. Documentation only, with no application/service/data changes or new runtime acceptance.
 

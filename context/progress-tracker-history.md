@@ -2856,3 +2856,31 @@ Operational follow-up below remains separate from this feature gate.
 
 
 Final reconciliation 2026-10-26 14:23 +08:00: C-01–06, parent AC-01–10 and the Phase 3 development gate passed. Corrected concurrent resource acceptance races passed both serial outcomes; full graph/affected regressions, exact cleanup, helper refresh, retained revision preservation and ordinary HTTPS/health passed. [Final evidence](../docs/status/p3-u5c-evidence.md).
+
+## 2026-10-27 — P4-U1b-1 implementation and verification checkpoints
+
+- Resumed the approved ONB-01/03 name/contact unit from implemented API/browser
+  code and pending acceptance. Reviewed owner ports, row/authority locks,
+  immutable receipts, protected forwarding and mounted operator/target fencing.
+- Added real A/B filtered search/status pagination coverage with matching draft
+  and active fixtures, exact UUID order/cursors and lifecycle exclusion. Focused
+  lint/format and local documentation targets passed. Repaired stale docs index
+  policy/status descriptions and linked the operator procedure/evidence.
+- The first serial `./dev check` reported PASS for every matrix, including current
+  onboarding API/browser, affected credential API/HTTPS, session recovery and PBX
+  registry. Docker recorded final verifier/launcher exit zero and owned fixture
+  removal, but the long-lived tool session reported outer status 143. This was
+  retained as an ambiguous command result, not a clean full-command pass.
+- A detached full rerun with an independent shell exit-status file was started.
+  Ordinary platform/staff HTTPS transport/browser/preservation checks passed,
+  preserving identities, credential actions, migrations and shared credentials;
+  backend live/ready returned 200. Final refresh and completion were still pending
+  at this intermediate checkpoint. The current evidence owns the final outcome.
+
+- Final checkpoint: 2026-10-27 09:23 +08:00 (Asia/Manila). The detached serial
+  `./dev check` completed with persistent shell exit 0. All feature/affected
+  API/HTTPS and session/PBX matrices passed again. Ordinary platform HTTPS was
+  refreshed and ready; final platform preservation and backend live/ready 200
+  passed. A-01–07 are complete within approved private development. The current
+  tracker and [final evidence](../docs/status/p4-u1b-1-evidence.md) supersede the
+  intermediate pending states above. Children 2/3 and parent remain incomplete.

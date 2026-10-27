@@ -27,6 +27,11 @@ export type {
   TenantListDto,
   TenantInputField,
   TenantApiErrorDto,
+  TenantContactsDto,
+  TenantSection,
+  SaveTenantSectionDto,
+  TenantEditOutcomeDto,
+  SavedTenantSectionDto,
 } from './platform-tenants';
 
 export { credentialActionDto } from './credential-actions';

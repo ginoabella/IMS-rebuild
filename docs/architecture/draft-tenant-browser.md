@@ -62,3 +62,36 @@ processes and sockets; production browser verification output is retained under
 ignored `.local`, separate from the normal shipping build. TLS/response-loss,
 Redis pause and delayed delivery controls establish this local boundary, not
 production hosting/HA or usable staff credentials.
+
+## P4-U1b-1 editing extension
+
+The named `saveTenantSection` client and POST
+`/platform/tenants/<UUID>/configuration` Next consumer extend the protected boundary.
+Next rejects queries, malformed/extra fields and oversized bodies before forwarding;
+backend owns canonical field validation, authority and transaction eligibility.
+Search/filter criteria reset UUID cursors; resource and canonical-owner captures
+fence old responses, including before effect cleanup. Search is explicitly submitted.
+
+Name and contacts each have an explicit save, captured row/authority versions and
+request UUID. Their nonsecret mounted state is keyed by tenant UUID inside the
+canonical-owner shell, surviving same-owner reauthentication while the component
+remains mounted. Navigation to another target discards that component and fences
+callbacks; owner replacement remounts the shell. Refresh restores committed data.
+Access loss hides/inerts work using existing ConsoleAccess and clears credential
+code disclosure using the existing issuer component. No browser storage is used.
+
+Validation/conflict preserves input. Original uncertain attempts block replacement
+submissions until an explicit original retry resolves them. Reads never replay a
+mutation. The response's original outcome versions are shown separately from fresh
+canonical detail, so replay does not restore historical contact values. Explicit
+reload preserves unsaved section input; a separate discard action adopts the
+loaded canonical version. Clean sections follow canonical refresh versions.
+Contacts remain informational and partially completed contacts are visibly incomplete.
+The immutable code, administrator linkage and issuer panel remain in detail.
+
+Focused selectors are `./dev exec pnpm check:draft-tenant --onboarding-api` and
+`./dev exec pnpm check:draft-tenant --onboarding-browser`; these extend the existing
+registry API/browser fixture and preserve `--api`, `--browser` and no-flag behavior.
+
+Current API/HTTPS browser, affected credential/session regressions, full normal
+graph and ordinary HTTPS preservation passed; [P4-U1b-1 evidence](../status/p4-u1b-1-evidence.md).

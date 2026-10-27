@@ -13,6 +13,7 @@ export interface TenantSummaryDto {
 }
 export interface TenantDetailDto {
   tenant: TenantSummaryDto & {
+    contacts: TenantContactsDto;
     version: number;
     authorityVersion: number;
     createdAt: string;
@@ -35,10 +36,52 @@ export interface TenantListDto {
   nextCursor: string | null;
 }
 export type TenantInputField =
-  keyof CreateDraftTenantDto | 'body' | 'limit' | 'after' | 'tenantId';
+  | keyof CreateDraftTenantDto
+  | 'body'
+  | 'limit'
+  | 'after'
+  | 'tenantId'
+  | 'search'
+  | 'status'
+  | 'name'
+  | 'email'
+  | 'phone'
+  | 'expectedVersion'
+  | 'expectedAuthorityVersion';
 export interface TenantApiErrorDto {
   statusCode: number;
   message: string;
   fieldErrors?: Partial<Record<TenantInputField, string>>;
-  reason?: 'tenant_code_conflict' | 'request_conflict';
+  reason?:
+    | 'tenant_code_conflict'
+    | 'request_conflict'
+    | 'version_conflict'
+    | 'eligibility_conflict';
+}
+
+export interface TenantContactsDto {
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+}
+export type TenantSection = 'name' | 'contacts';
+export type SaveTenantSectionDto = {
+  requestId: string;
+  expectedVersion: number;
+  expectedAuthorityVersion: number;
+} & (
+  | { section: 'name'; values: { displayName: string } }
+  | { section: 'contacts'; values: Partial<TenantContactsDto> }
+);
+export interface TenantEditOutcomeDto {
+  requestId: string;
+  tenantId: string;
+  section: TenantSection;
+  version: number;
+  authorityVersion: number;
+}
+export interface SavedTenantSectionDto {
+  outcome: TenantEditOutcomeDto;
+  replayed: boolean;
+  current: TenantDetailDto;
 }

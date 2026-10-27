@@ -5,5 +5,5 @@ export default async function DetailPage({
 }: {
   params: Promise<{ tenantId: string }>;
 }) {
-  return <TenantDetail id={(await params).tenantId} />;
+  return <TenantDetail id={(await params).tenantId.toLowerCase()} />;
 }

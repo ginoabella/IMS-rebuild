@@ -12,7 +12,7 @@ import {
 export type FieldErrors = NonNullable<TenantApiErrorDto['fieldErrors']>;
 export type Parsed<T> =
   { kind: 'valid'; value: T } | { kind: 'invalid'; fieldErrors: FieldErrors };
-function text(input: unknown, bound: number): input is string {
+export function text(input: unknown, bound: number): input is string {
   if (
     typeof input !== 'string' ||
     input.length > bound ||
@@ -77,14 +77,17 @@ export function draftTenantInput(input: unknown): Parsed<CreateDraftTenantDto> {
     },
   };
 }
-export function tenantListInput(
-  input: unknown,
-): Parsed<{ limit: number; after: string | null }> {
+export function tenantListInput(input: unknown): Parsed<{
+  limit: number;
+  after: string | null;
+  search: string;
+  status: string | null;
+}> {
   if (
     !input ||
     typeof input !== 'object' ||
     Array.isArray(input) ||
-    !onlyFields(input, ['limit', 'after'])
+    !onlyFields(input, ['limit', 'after', 'search', 'status'])
   )
     return { kind: 'invalid', fieldErrors: { body: 'Invalid query' } };
   const data = input as Record<string, unknown>;
@@ -98,9 +101,25 @@ export function tenantListInput(
     return { kind: 'invalid', fieldErrors: { limit: 'Invalid page limit' } };
   if (data.after !== undefined && !uuid(data.after))
     return { kind: 'invalid', fieldErrors: { after: 'Invalid cursor' } };
+  if (
+    data.search !== undefined &&
+    (!text(data.search, 800) || data.search.trim().length > 200)
+  )
+    return { kind: 'invalid', fieldErrors: { search: 'Invalid search' } };
+  if (
+    data.status !== undefined &&
+    (typeof data.status !== 'string' ||
+      !['draft', 'active', 'suspended', 'retired'].includes(data.status))
+  )
+    return {
+      kind: 'invalid',
+      fieldErrors: { status: 'Invalid lifecycle filter' },
+    };
   return {
     kind: 'valid',
     value: {
+      search: typeof data.search === 'string' ? data.search.trim() : '',
+      status: typeof data.status === 'string' ? data.status : null,
       limit,
       after: typeof data.after === 'string' ? data.after.toLowerCase() : null,
     },

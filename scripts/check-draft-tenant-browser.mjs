@@ -1,3 +1,4 @@
+import { checkTenantEditingBrowser } from './check-tenant-editing-browser.mjs';
 // Extends the real production Next/HTTPS/Nest fixture; no synthetic API success.
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
@@ -611,6 +612,22 @@ export async function checkDraftTenantBrowser({
       page.getByRole('link', { name: 'Create tenant', exact: true }).last(),
     ).toBeVisible();
 
+    await checkTenantEditingBrowser({
+      page,
+      config,
+      owner,
+      create,
+      request,
+      review,
+      select,
+      a,
+      b,
+      holdResponse,
+      expire,
+      login: () => login(page, `${username}.second`),
+      switchOwner: () => login(),
+      redis,
+    });
     await page.goto(`${config.origin}/tenants/create`);
     // Settle the mounted access checks before submitting or injecting an outage.
     await page.waitForLoadState('networkidle');

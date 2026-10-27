@@ -94,6 +94,37 @@ export class PlatformTenantsController {
     const result = await this.tenants.list(query);
     return result.kind === 'found' ? result.value : failure(result, response);
   }
+  @HttpAccess({
+    access: 'protected',
+    channel: 'platform-cookie',
+    plane: 'platform',
+    sourceFailureStatus: 403,
+    permissions: ['platform_operator'],
+    activity: 'operational',
+  })
+  @Post(':tenantId/configuration')
+  async save(
+    @Req() request: object,
+    @Param('tenantId') id: string,
+    @Query() query: Record<string, unknown>,
+    @Body() body: unknown,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    if (Object.keys(query).length)
+      return failure(
+        { kind: 'invalid', fieldErrors: { body: 'Invalid query' } },
+        response,
+      );
+    const result = await this.tenants.save(
+      requestPrincipal(request),
+      id,
+      body,
+      correlationId(),
+    );
+    if (result.kind !== 'saved') return failure(result, response);
+    response.statusCode = 200;
+    return result.value;
+  }
   @Get(':tenantId')
   async detail(
     @Param('tenantId') id: string,

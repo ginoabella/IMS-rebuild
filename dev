@@ -201,12 +201,12 @@ case "$action" in
         esac
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:draft-tenant ]; then
         shift 2
-        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --api ] && [ "$1" != --browser ]; }; then
-          echo 'Supported draft tenant selections: --api, --browser' >&2; exit 1
+        if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --api ] && [ "$1" != --browser ] && [ "$1" != --onboarding-api ] && [ "$1" != --onboarding-browser ]; }; then
+          echo 'Supported draft tenant selections: --api, --browser, --onboarding-api, --onboarding-browser' >&2; exit 1
         fi
         case "${1:-}" in
-          --api) draft_selection=--draft-tenant ;;
-          --browser) draft_selection=--draft-browser ;;
+          --api|--onboarding-api) draft_selection=--draft-tenant ;;
+          --browser|--onboarding-browser) draft_selection=--draft-browser ;;
           *) draft_selection=--draft-integrated ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$draft_selection"
