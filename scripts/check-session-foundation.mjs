@@ -10,7 +10,7 @@ import { checkHttpAuthority } from './check-session-authority.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { createRequire } from 'node:module';
-import { fork, spawn } from 'node:child_process';
+import { fork, spawn, spawnSync } from 'node:child_process';
 import { once } from 'node:events';
 import { createServer, connect } from 'node:net';
 import { readFileSync, mkdtempSync, writeFileSync, rmSync } from 'node:fs';
@@ -67,6 +67,19 @@ assert.ok(
       ].includes(selection[0])),
   'Supported selections: --lifecycle, --authority, --limits (default: all)',
 );
+if (
+  selection.length === 0 ||
+  ['--draft-tenant', '--draft-integrated', '--draft-browser'].includes(
+    selection[0],
+  )
+) {
+  const geography = spawnSync(
+    process.execPath,
+    ['--test', 'scripts/tenant-geography.test.mjs'],
+    { stdio: ['ignore', 'inherit', 'inherit'] },
+  );
+  assert.equal(geography.status, 0, 'Geography input contracts must pass');
+}
 if (selection.length === 0) await import('./check-staff-mobile.mjs');
 const backend = createRequire(
   new URL('../services/backend/package.json', import.meta.url),

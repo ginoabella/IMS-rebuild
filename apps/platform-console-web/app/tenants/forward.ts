@@ -1,3 +1,4 @@
+import { GEOGRAPHY_BODY_BYTES, geographyValues } from '@myims/contracts';
 import { backendRequest, safeError } from '../auth/server';
 import { tenantUuid, text } from './validation';
 export async function forwardTenant(
@@ -36,10 +37,14 @@ export async function forwardTenant(
           !['draft', 'active', 'suspended', 'retired'].includes(status))
   )
     return safeError(400);
+  const bodyLimit = configuration ? GEOGRAPHY_BODY_BYTES : 4096;
   let body: string | undefined;
   if (expected === 'POST') {
     const length = request.headers.get('content-length');
-    if (length !== null && (!/^\d+$/.test(length) || Number(length) > 4096))
+    if (
+      length !== null &&
+      (!/^\d+$/.test(length) || Number(length) > bodyLimit)
+    )
       return safeError(400);
     const declared = length === null ? null : Number(length);
     const reader = request.body?.getReader();
@@ -58,7 +63,7 @@ export async function forwardTenant(
           const part = await Promise.race([reader.read(), deadline]);
           if (part.done) break;
           size += part.value.length;
-          if (size > 4096 || (declared !== null && size > declared)) {
+          if (size > bodyLimit || (declared !== null && size > declared)) {
             void reader.cancel().catch(() => {});
             return safeError(400);
           }
@@ -101,6 +106,8 @@ export async function forwardTenant(
               'expectedAuthorityVersion',
               'section',
               'values',
+              'expectedGeographyVersion',
+              'ownershipConfirmed',
             ].includes(k),
         ) ||
         !tenantUuid(v.requestId) ||
@@ -113,15 +120,32 @@ export async function forwardTenant(
         !v.values ||
         typeof v.values !== 'object' ||
         Array.isArray(v.values) ||
-        !['name', 'contacts'].includes(String(v.section)) ||
+        !['name', 'contacts', 'geography'].includes(String(v.section)) ||
         Object.keys(v.values).some(
           (k) =>
             !(
-              v.section === 'name'
-                ? ['displayName']
-                : ['name', 'email', 'phone']
+              v.section === 'geography'
+                ? ['area', 'barangays', 'defaults']
+                : v.section === 'name'
+                  ? ['displayName']
+                  : ['name', 'email', 'phone']
             ).includes(k),
         )
+      )
+        return safeError(400);
+      if (v.section === 'geography') {
+        if (
+          !Number.isInteger(v.expectedGeographyVersion) ||
+          Number(v.expectedGeographyVersion) < 0 ||
+          Number(v.expectedGeographyVersion) >= 2147483646 ||
+          typeof v.ownershipConfirmed !== 'boolean'
+        )
+          return safeError(400);
+        geographyValues(v.values);
+      } else if (
+        new TextEncoder().encode(body).length > 4096 ||
+        Object.hasOwn(v, 'expectedGeographyVersion') ||
+        Object.hasOwn(v, 'ownershipConfirmed')
       )
         return safeError(400);
     } catch {

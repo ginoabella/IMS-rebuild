@@ -85,6 +85,19 @@ export class StaffAuthorityRepository implements StaffAuthorityRead {
       return { kind: 'unavailable' };
     }
   }
+  /** Canonical identity read within a caller-owned primary read snapshot. */
+  async inSnapshot(
+    snapshot: ReadSnapshot,
+    tenantId: string,
+    staffId: string,
+  ): Promise<AuthorityResult<StaffAuthority>> {
+    if (!uuid(tenantId) || !uuid(staffId)) return { kind: 'denied' };
+    const tenant = await this.tenants.byId(snapshot, tenantId);
+    return staffAuthority(
+      await this.staff(snapshot, tenantId, 'id', staffId),
+      tenant,
+    );
+  }
   async lockedById(
     transaction: Transaction,
     tenantId: string,

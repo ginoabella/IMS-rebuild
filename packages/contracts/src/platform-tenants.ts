@@ -1,3 +1,7 @@
+import type {
+  GeographyValuesDto,
+  TenantGeographyDto,
+} from './tenant-geography';
 /** Safe platform administration transport; no credential verifier material. */
 export interface CreateDraftTenantDto {
   requestId: string;
@@ -14,6 +18,7 @@ export interface TenantSummaryDto {
 export interface TenantDetailDto {
   tenant: TenantSummaryDto & {
     contacts: TenantContactsDto;
+    geography: TenantGeographyDto;
     version: number;
     authorityVersion: number;
     createdAt: string;
@@ -47,7 +52,8 @@ export type TenantInputField =
   | 'email'
   | 'phone'
   | 'expectedVersion'
-  | 'expectedAuthorityVersion';
+  | 'expectedAuthorityVersion'
+  | 'geography';
 export interface TenantApiErrorDto {
   statusCode: number;
   message: string;
@@ -64,7 +70,7 @@ export interface TenantContactsDto {
   email: string | null;
   phone: string | null;
 }
-export type TenantSection = 'name' | 'contacts';
+export type TenantSection = 'name' | 'contacts' | 'geography';
 export type SaveTenantSectionDto = {
   requestId: string;
   expectedVersion: number;
@@ -72,6 +78,12 @@ export type SaveTenantSectionDto = {
 } & (
   | { section: 'name'; values: { displayName: string } }
   | { section: 'contacts'; values: Partial<TenantContactsDto> }
+  | {
+      section: 'geography';
+      expectedGeographyVersion: number;
+      ownershipConfirmed: boolean;
+      values: GeographyValuesDto;
+    }
 );
 export interface TenantEditOutcomeDto {
   requestId: string;
@@ -79,6 +91,7 @@ export interface TenantEditOutcomeDto {
   section: TenantSection;
   version: number;
   authorityVersion: number;
+  geographyVersion?: number;
 }
 export interface SavedTenantSectionDto {
   outcome: TenantEditOutcomeDto;

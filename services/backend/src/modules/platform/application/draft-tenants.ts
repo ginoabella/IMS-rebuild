@@ -1,3 +1,4 @@
+import type { TenantGeographyOwner } from '../../locations/application/tenant-geography';
 import { tenantEditInput } from './tenant-edit-input';
 import type { TenantEditReceipts } from './tenant-edit-ports';
 import { createHash, randomUUID } from 'node:crypto';
@@ -70,6 +71,7 @@ export class DraftTenants {
     private readonly administrators: FirstAdministrator,
     private readonly receipts: DraftCreationReceipts,
     private readonly edits: TenantEditReceipts,
+    private readonly geography: TenantGeographyOwner,
   ) {}
   async create(
     principal: Principal,
@@ -189,13 +191,19 @@ export class DraftTenants {
           data.section,
           data.expectedVersion,
           data.expectedAuthorityVersion,
-          data.section === 'name'
-            ? data.values.displayName
-            : ['name', 'email', 'phone'].map((k) => [
-                k,
-                Object.hasOwn(data.values, k),
-                data.values[k as keyof typeof data.values],
-              ]),
+          data.section === 'geography'
+            ? [
+                data.expectedGeographyVersion,
+                data.ownershipConfirmed,
+                data.values,
+              ]
+            : data.section === 'name'
+              ? data.values.displayName
+              : ['name', 'email', 'phone'].map((k) => [
+                  k,
+                  Object.hasOwn(data.values, k),
+                  data.values[k as keyof typeof data.values],
+                ]),
         ]),
       )
       .digest('hex');
@@ -231,6 +239,32 @@ export class DraftTenants {
                   ? { kind: 'conflict', reason: 'eligibility_conflict' }
                   : { kind: result.kind },
             );
+          let geographyVersion: number | undefined;
+          if (data.section === 'geography') {
+            const geo = await this.geography.save(
+              tx,
+              tenantId,
+              data.expectedGeographyVersion,
+              data.values,
+              data.ownershipConfirmed,
+            );
+            if (geo.kind === 'stale')
+              throw new RejectedCreation({
+                kind: 'conflict',
+                reason: 'version_conflict',
+              });
+            if (geo.kind !== 'saved')
+              throw new RejectedCreation({
+                kind: 'invalid',
+                fieldErrors: {
+                  geography:
+                    geo.kind === 'confirmation_required'
+                      ? 'Confirm the uploaded boundaries belong to this tenant.'
+                      : geo.message,
+                },
+              });
+            geographyVersion = geo.version;
+          }
           const receipt = {
             request_id: data.requestId,
             operator_id: principal.operatorId,
@@ -239,6 +273,7 @@ export class DraftTenants {
             fingerprint,
             version: result.value.version,
             authority_version: result.value.authority_version,
+            geography_version: geographyVersion ?? null,
           };
           await this.edits.save(tx, receipt);
           return { receipt, replayed: false };
@@ -258,6 +293,9 @@ export class DraftTenants {
             section: r.section,
             version: r.version,
             authorityVersion: r.authority_version,
+            ...(r.geography_version !== null
+              ? { geographyVersion: r.geography_version }
+              : {}),
           },
           replayed: committed.replayed,
           current,
@@ -324,6 +362,7 @@ export class DraftTenants {
           email: row.contact_email ?? null,
           phone: row.contact_phone ?? null,
         },
+        geography: await this.geography.read(snapshot, id),
         version: row.version,
         authorityVersion: row.authority_version,
         createdAt: row.created_at.toISOString(),

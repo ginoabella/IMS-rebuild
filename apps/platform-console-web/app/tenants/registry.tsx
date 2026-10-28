@@ -1,4 +1,5 @@
 'use client';
+import { GeographyEditor } from './geography';
 import { TenantEditor } from './editor';
 import { AdministratorCredentials } from './credential-issuer';
 import { useEffect, useRef, useState } from 'react';
@@ -294,6 +295,12 @@ export function TenantDetail({ id }: { id: string }) {
         </>
       )}
       <TenantEditor key={id} id={id} detail={detail} reload={state.retry} />
+      <GeographyEditor
+        key={`geography-${id}`}
+        id={id}
+        detail={detail}
+        reload={state.retry}
+      />
       <AdministratorCredentials
         key={id}
         tenantId={id}

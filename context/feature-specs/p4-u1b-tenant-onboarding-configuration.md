@@ -1,6 +1,6 @@
 # P4-U1b — Complete tenant onboarding configuration
 
-**Status:** Child 1 complete; children 2/3 planned; three-child split adopted 2026-10-26 (Asia/Manila, +08:00). Child 1 A-01–07 passed on 2026-10-27 (+08:00); parent acceptance remains incomplete.
+**Status:** Children 1/2 complete within approved private development; child 3 planned; three-child split adopted 2026-10-26 (Asia/Manila, +08:00). Child 1 A-01–07 and child 2 B-01–07 passed on 2026-10-27/28 (+08:00); parent acceptance remains incomplete.
 **Prepared:** 2026-10-26 (Asia/Manila, +08:00).
 **Parent:** P4-U1 — Deliver tenant registry and onboarding.
 
@@ -40,8 +40,7 @@ user-approved ONB-01/03 policy is recorded below, while unresolved recommendatio
   have row and authority versions; the tenancy repository has a versioned rename
   capability, but this does not establish an operator edit workflow.
 - ONB-01/03 are resolved for child 1 name/contact writes by explicit user approval
-  below; geography remains unresolved. Resolve affected gates before dependent
-  implementation. Recheck prerequisite
+  below; ONB-02 geography is also approved in its dedicated section. Recheck prerequisite
   evidence and actual interfaces at implementation start.
 
 ## Scope and ownership
@@ -74,7 +73,7 @@ policy in the authoritative context and link it from the tracker before coding.
 | Gate                                        | Decision needed and recommended starting point                                                                                                                                                                                                                                                                                                                                                                     | Dependent work / resume condition                                                                                                                                                                          |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | ONB-01 — Contacts                           | Approve the contact fields, requiredness, bounds and intended use. Recommend one optional organizational contact with name, email and phone, without a directory, delivery or verification workflow. Specify validation and clearing semantics.                                                                                                                                                                    | Contact schema/form/DTO. Resolved for child 1 by the approved ONB-01/03 policy below.                                                                           |
-| ONB-02 — Geographic contract                | Approve who configures defaults, service-area representation and authoring, whether each may remain unset, and treatment of defaults outside the area. Recommend operator-managed WGS84 defaults and an optional valid Polygon/MultiPolygon, with bounded complexity and no silent geometry repair. Decide whether outside-area defaults reject or require acknowledgment; do not import future incident behavior. | Geography schema/authoring/intake handoff. Resume with exact validity, geometry/size limits, requiredness and containment/boundary rules. A provider is needed only if the approved authoring UI uses one. |
+| ONB-02 — Geographic contract | Resolved by user approval on 2026-10-28 (+08:00): prepared administrative/barangay GeoJSON uploads, operator ownership confirmation, optional WGS84 area/defaults, exact bounds and PostGIS containment rules under the [approved policy](../../docs/planning/p4-u1b-2-geography-policy-review.md). | Geography schema/authoring/intake handoff follows this exact contract; no external provider is used. |
 | ONB-03 — Edit eligibility and voice changes | This unit guarantees draft onboarding. Recommend permitting its configuration mutations only while draft; keep other statuses readable and defer their mutation policy. Confirm whether name/contacts must also be editable outside draft.                                                                                                                                                                         | Configuration writes/status-race checks. Name/contact writes resolved as draft-only below; no implicit active-tenant or voice mutation is approved.                                                           |
 
 Coordinate checks must at minimum reject non-finite or out-of-range values,
@@ -255,7 +254,7 @@ usable result and is not recommended.
 The user adopted this split and requested the three standalone specs on
 2026-10-26 (Asia/Manila, +08:00). Execute children 1 → 2 → 3 sequentially,
 recording prerequisite evidence, resolved decisions and the active checkpoint
-before each implementation. Child 1 is **complete within approved private development**; children 2/3 remain
+before each implementation. Children 1/2 are **complete within approved private development**; child 3 remains
 **planned**. P4-U1b, parent P4-U1 and Phase 4 remain incomplete. Split approval
 itself did not resolve ONB-01–03; the subsequent explicit ONB-01/03 policy below
 authorizes child 1 name/contact work.
@@ -279,4 +278,20 @@ null or blank clears. Partial contacts are allowed and visibly incomplete.
 Contacts are informational only: no identity verification or delivery authority.
 ONB-03: name/contact configuration saves are draft-only. All other lifecycle
 statuses remain readable. No non-draft edit or lifecycle transition is approved.
-ONB-02 remains unresolved and belongs to child 2.
+At the child 1 approval checkpoint, ONB-02 remained unresolved; the subsequent
+child 2 approval below resolves it.
+
+## Approved ONB-02 policy — 2026-10-28 (+08:00)
+
+The user explicitly approved the complete
+[geography policy](../../docs/planning/p4-u1b-2-geography-policy-review.md).
+Platform operators configure draft-only geography by uploading prepared
+administrative and optional barangay GeoJSON, reviewing tenant/upload comparison
+and explicitly confirming ownership on upload/replacement. Locations owns
+canonical SRID 4326 polygonal boundaries, allowlisted metadata and optional
+default point. The contract defines exact formats, 4,096 combined positions,
+byte/feature/ring/component bounds, PostGIS validity/containment/non-overlap,
+clearing, versioning, audit and recovery. It approves this bounded file-import
+exception for child 2; no provider, automatic simplification, incident behavior
+or tenant-code change is approved. Earlier unresolved ONB-02 references describe
+the state before this approval and are superseded by this section.

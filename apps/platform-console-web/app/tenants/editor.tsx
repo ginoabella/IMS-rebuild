@@ -17,6 +17,7 @@ import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 import { saveTenantSection, TenantError } from './client';
 
+type RegistrySection = Exclude<TenantSection, 'geography'>;
 type Values = {
   displayName: string;
   name: string;
@@ -66,7 +67,7 @@ export function TenantEditor({
   )
     canonicalDetail.current = detail;
   const [sections, setSections] = useState<Record<
-    TenantSection,
+    RegistrySection,
     SectionWork
   > | null>(null);
   const latest = useRef(sections);
@@ -108,14 +109,14 @@ export function TenantEditor({
       }
     }
   }, [sections, work.ready, detail]);
-  function patch(section: TenantSection, update: Partial<SectionWork>) {
+  function patch(section: RegistrySection, update: Partial<SectionWork>) {
     const current = latest.current;
     if (!current || !live.current) return;
     const next = { ...current, [section]: { ...current[section], ...update } };
     latest.current = next;
     setSections(next);
   }
-  async function save(section: TenantSection, retry = false) {
+  async function save(section: RegistrySection, retry = false) {
     const s = latest.current?.[section];
     if (!s || busy.current || !work.ready || (!retry && s.attempt)) return;
     busy.current = true;
@@ -351,9 +352,7 @@ export function TenantEditor({
           </Panel>
         );
       })}
-      <p className="text-muted-foreground">
-        Service area: not configured. Voice preference: not configured.
-      </p>
+      <p className="text-muted-foreground">Voice preference: not configured.</p>
     </div>
   );
 }

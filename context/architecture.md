@@ -867,4 +867,30 @@ defines named search/save consumers, limits, locks and recovery; the
 [parent’s approved ONB-01/03 policy](feature-specs/p4-u1b-tenant-onboarding-configuration.md#approved-onb-0103-policy--2026-10-26-0800)
 defines contact and draft-only edit eligibility. A-01–07 and full normal checks
 passed within approved private development; [final evidence](../docs/status/p4-u1b-1-evidence.md).
-Geography/voice and lifecycle transitions remain later units.
+Geography is delivered in child 2 below; voice and lifecycle transitions remain later units.
+
+### P4-U1b-2 approved geography implementation
+
+Under [approved ONB-02](../docs/planning/p4-u1b-2-geography-policy-review.md),
+locations owns `tenant_geography`: one restrictive tenant-qualified row with a
+version, SRID 4326 service-area geometry, optional default Point and an ordered
+GeometryCollection of barangay Polygon/MultiPolygon values. Parallel allowlisted
+metadata holds names/identifiers without a second coordinate source. Missing rows
+mean never configured (geography version zero); clearing produces an explicitly
+empty positive-version row. This additive schema does not backfill existing drafts.
+
+Platform composes detail/read and section saves through locations ports. Tenancy
+locks/versions the draft first, then locations locks/validates the geography row.
+Required owner writes, allowlisted audit and immutable edit receipt share the
+original transaction. Both tenant and geography versions fence stale work.
+Prepared GeoJSON upload parsing is bounded and geometry is never silently repaired.
+A local SVG boundary preview adds no external provider. The named configuration
+transport permits bounded geography payloads; other section/input bounds remain
+unchanged. The internal future-intake port uses trusted RequestAuthority principal
+context, identity/tenancy owner reads and canonical geography in one primary
+snapshot; it has no public/Next route or incident fallback behavior.
+
+B-01–07 and focused/combined/affected/full checks passed within approved private
+development; [final evidence](../docs/status/p4-u1b-2-evidence.md). The
+[consumer contract](../docs/architecture/tenant-geography.md) records bounds,
+canonical values, safe database diagnostics and the internal intake boundary.

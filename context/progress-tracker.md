@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-10-27 (Asia/Manila, +08:00).
+Last reconciled: 2026-10-28 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -28,9 +28,8 @@ approved private development under U5-01–05. Tenant readiness remains Phase 4.
 
 Phase 1 foundation units P1-U2–U6 and Phase 2 units P2-U1–U4 are complete within
 their verified boundaries. Early draft tenant creation P4-U1a is complete under
-the approved delivery-order exception. P4-U1b-1 registry editing/contacts are also
-complete within approved private development; geography and voice remain later
-children. P1-U1 remains deferred outside approved
+the approved delivery-order exception. P4-U1b-1 registry editing/contacts and P4-U1b-2 geography are also
+complete within approved private development; voice remains child 3. P1-U1 remains deferred outside approved
 scoped handoffs. Integrated PBX administration acceptance is complete within its
 approved development boundary; completed tenant onboarding, operational response
 and production readiness remain to be delivered.
@@ -57,13 +56,13 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P4-U1b-1
+## Latest Completed Checkpoint — P4-U1b-2
 
-- **Status:** complete within approved private development, 2026-10-27 09:23 +08:00 (Asia/Manila). A-01–07 passed under approved ONB-01/03; [final evidence](../docs/status/p4-u1b-1-evidence.md).
-- **Delivered:** literal search/lifecycle filtering, stable UUID pagination, draft-only name/contact section saves, atomic version/audit/edit receipts and explicit uncertain recovery. Immutable code/admin provenance and ordinary draft admission remain preserved.
-- **Verification:** real PostgreSQL/runtime grants/shared Redis/A/B API and production HTTPS browser passed, including combined filtered pagination, uppercase UUIDs, conflicts, replay versus later state, rollback, owner/target isolation, 320–1440px/axe/focus and affected credential/session regressions. Final serial `./dev check` passed with persistent shell exit 0.
-- **Preservation:** additive migration and original-field/staff/operator/creation-receipt hashes passed; exact fixture cleanup, ordinary platform HTTPS refresh, platform/staff transport/browser/data preservation and backend live/ready 200 passed. Earlier wrapper status 143 is superseded by the clean detached full run.
-- **Handoff:** [operator procedure](../docs/runbooks/tenant-configuration.md), [registry ports](../docs/architecture/draft-tenant-registry-api.md#p4-u1b-1-extension-contract) and [browser patterns](../docs/architecture/draft-tenant-browser.md). Child 2 requires ONB-02 geography policy; children 2/3, parent P4-U1b/P4-U1, activation and operational readiness remain incomplete.
+- **Status:** complete within approved private development, 2026-10-28 (Asia/Manila, +08:00). B-01–07 passed under [approved ONB-02](../docs/planning/p4-u1b-2-geography-policy-review.md); [final evidence](../docs/status/p4-u1b-2-evidence.md).
+- **Delivered:** prepared administrative/barangay GeoJSON upload, saved/proposed preview and tenant comparison, explicit ownership confirmation, optional WGS84 default coordinates, canonical PostGIS validation and qualified future-intake read. Tenant code is unchanged; the initial combined cap is 4,096 positions.
+- **Verification:** focused and combined real PostGIS/shared Redis/A/B API/production HTTPS checks, affected credential lifecycle and the complete `./dev check` passed with exit 0. Includes exact limits, precision, topology/containment, races/rollback, uncertainty, authority, outage and owner/target isolation.
+- **Preservation:** normal additive migration and platform/staff HTTPS refresh/transport checks passed; backend live/ready returned 200. Original canonical row digests and retained HTTPS material match, existing tenants remain unconfigured, original Naga files are unchanged and owned fixtures cleaned up.
+- **Handoff:** [operator workflow](../docs/runbooks/tenant-configuration.md#approved-geography-upload-workflow--p4-u1b-2) and [canonical consumer contract](../docs/architecture/tenant-geography.md). Child 3 remains planned; parent P4-U1b/P4-U1, activation, incident fallback and operational readiness remain incomplete.
 
 ## Completed
 
@@ -73,6 +72,7 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| P4-U1b-2 — Service area and default intake coordinates | B-01–07 passed: prepared uploads/confirmation/defaults, canonical PostGIS and qualified intake read, atomic versions/audit/recovery, real API/HTTPS, affected/full checks and ordinary preservation. | [Final evidence](../docs/status/p4-u1b-2-evidence.md) |
 | P4-U1b-1 — Registry editing and contacts | A-01–07 passed: search/filter/pagination, versioned draft name/contact saves, atomic audit/retry outcomes, real API/HTTPS recovery, affected/full checks and ordinary preservation. | [Final evidence](../docs/status/p4-u1b-1-evidence.md) |
 | P3-U5c / parent P3-U5 / Phase 3 | C-01–06 and AC-01–10 passed: full declared interruption/race matrix and actual integrated HTTPS recovery, affected/full checks, exact cleanup and retained-runtime/ordinary service preservation. Approved private development only. | [Final evidence](../docs/status/p3-u5c-evidence.md) |
 | P3-U5b — fenced live apply and verified recovery | B-01–08 passed: exact durable intent/pins, real physical fencing, protected material/atomic installation, independent verification and guarded verified recovery with actual HTTPS. All affected/normal checks, refresh and owned cleanup passed. | [Final evidence](../docs/status/p3-u5b-evidence.md) |
@@ -112,12 +112,11 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration. The [P4-U1b specification and split review](feature-specs/p4-u1b-tenant-onboarding-configuration.md) is prepared; child 1 is complete within approved private development. The three-child split is adopted with standalone specs; execute P4-U1b-1 → P4-U1b-2 → P4-U1b-3 sequentially. Child 1 is complete; children 2/3 remain planned. ONB-01/03 are approved for child 1 name/contact work; resolve ONB-02 before geography implementation. Use the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff) for verified provenance/dependency and future eligibility ports. Backup administration remains separate.
+1. P4-U1b and remaining Phase 4: complete onboarding, voice allocation/readiness, activation and tenant administration. The [P4-U1b specification and split review](feature-specs/p4-u1b-tenant-onboarding-configuration.md) is prepared; children 1/2 are complete within approved private development. The three-child split is adopted with standalone specs; execute P4-U1b-1 → P4-U1b-2 → P4-U1b-3 sequentially. Children 1/2 are complete under approved ONB-01–03; child 3 remains planned. ONB-01/03 and ONB-02 govern the delivered registry/contact and geography contracts. Use the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff) for verified provenance/dependency and future eligibility ports. Backup administration remains separate.
 
 
 | Planned unit | Requirement, scope and acceptance | Dependencies / required checks |
 | --- | --- | --- |
-| [P4-U1b-2 — Service area and default intake coordinates](feature-specs/p4-u1b-2-service-area-and-default-intake-coordinates.md) — planned | B-01–07: geography authoring, real PostGIS validation and canonical intake configuration read. | Verified child 1 and ONB-02. Extend focused checks with real PostGIS, registry/credential regressions and `./dev check`. |
 | [P4-U1b-3 — Voice preference and integrated onboarding handoff](feature-specs/p4-u1b-3-voice-preference-and-integrated-onboarding-handoff.md) — planned | C-01–07: explicit voice preference, existing credential handoff and integrated parent AC-01–11. | Verified children 1/2 and approved edit policy. Combined API/HTTPS onboarding, registry/credential/authority regressions and `./dev check`. |
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
@@ -129,7 +128,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1–U5 and delivered children complete within declared development boundaries; C-01–06, parent AC-01–10 and integrated Phase 3 gate passed under U5-01–05. Tenant readiness remains Phase 4. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
-| 4 | P4-U1a/children complete; P4-U1b-1 complete; remaining P4-U1b children and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
+| 4 | P4-U1a/children complete; P4-U1b-1/2 complete; P4-U1b-3 and P4-U2–U5 planned; parent P4-U1 incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
 | 7 | P7-U1–U3 planned; integrated operational acceptance outstanding. | [First-release verification](implementation-plan.md#phase-7--verify-the-complete-first-release-journey) |
@@ -152,6 +151,8 @@ The user owns product-policy approvals. Use the authoritative
 for their scope; creating a spec does not approve a proposal.
 
 ### Recorded approvals retained
+
+- October 28, 2026 (+08:00): user approved the complete [ONB-02 geography policy](../docs/planning/p4-u1b-2-geography-policy-review.md), including prepared uploads, explicit ownership confirmation, optional WGS84 area/defaults and the initial 4,096-position cap. Existing Tenant Code remains unchanged and display-only in this comparison.
 
 - October 24, 2026 (+08:00): user explicitly approved recommended R-03 and outbound R-04 treatment: exact/bounded ASCII digit prefixes, lower priority wins, equal-priority overlaps reject including disabled claims, whole-domain strip/add validation, reservations blocking original and transformed domains without emergency/service exceptions, initially disabled/unbound definitions and no inferred live calling permission. [Authoritative decision](feature-specs/p3-u4-ring-groups-and-dial-plans.md#approved-p3-u4c-policy--october-24-2026-0800).
 
@@ -191,7 +192,7 @@ for their scope; creating a spec does not approve a proposal.
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
 | Administrator/tenant lifecycle | General last-admin removal/disablement, platform-account recovery and tenant activation/suspension/retirement effects on routes/active work remain with owning P4/later units. Ordinary admission and scoped P2-U4 credential recovery are already approved. |
-| Geography/drafts/location | Default-coordinate/service-area policy, tiles/search, persistent draft recovery/conflicts, foreground sharing/retention and supported operational mobile targets must be established before owning units. |
+| Geography/drafts/location | ONB-02 configuration policy is approved and child 2 B-01–07 is complete within private development. Operational tiles/search, incident draft recovery/conflicts, foreground sharing/retention and supported operational mobile targets remain decisions for their owning units. |
 | Evidence/recordings/retention | Real evidence/recording authorization, permitted file limits, retention and production recovery require scoped approval; foundation storage access does not establish feature access policy. |
 | Public channels/later tools | Trusted entry mappings, create/enrich handoff, public feedback, SMS/public voice/browser calling, report/export definitions and recovery-action permissions remain pending. |
 | Backup operations/readiness | Separate operations workstream: retained installation checkpoint decrypted on Windows; first routine backup failed due to 300-second SecretID TTL and remains pending. Repair access/reconciliation and agree manual backup coverage under the simple model. Scheduling/retained joint restore/RPO/RTO remain incomplete. This does not block independent P3-U3 CRUD. |
@@ -231,6 +232,8 @@ for their scope; creating a spec does not approve a proposal.
   this unit and does not affect authenticated routing navigation.
 
 ## Recent Session Notes
+
+- 2026-10-28 (Asia/Manila, +08:00) — P4-U1b-2 completed under approved ONB-02. B-01–07, focused/combined/affected/full checks, ordinary migration/HTTPS refresh and preservation passed. Removed the feature from in progress; child 3 remains planned. Final acceptance recorded in [evidence](../docs/status/p4-u1b-2-evidence.md). Earlier proposal and intermediate checkpoints are in [history](progress-tracker-history.md#2026-10-28--p4-u1b-2-policy-and-implementation-checkpoints).
 
 - 2026-10-27 09:23 +08:00 (Asia/Manila) — P4-U1b-1 completed within approved private development under ONB-01/03. Closed filtered A/B pagination coverage and stale navigation/status gaps; all A-01–07, real API/HTTPS browser, affected credential/session and final full checks passed. Ordinary console refreshed; platform/staff preservation and backend live/ready 200 passed. [Final evidence](../docs/status/p4-u1b-1-evidence.md); [intermediate checkpoints](progress-tracker-history.md#2026-10-27--p4-u1b-1-implementation-and-verification-checkpoints). Children 2/3 and parent remain incomplete; resolve ONB-02 before geography.
 

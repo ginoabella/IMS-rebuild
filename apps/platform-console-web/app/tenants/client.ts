@@ -1,3 +1,4 @@
+import { geographyValues } from '@myims/contracts';
 import type {
   CreateDraftTenantDto,
   SaveTenantSectionDto,
@@ -47,6 +48,19 @@ function detail(value: unknown): value is TenantDetailDto {
     !v.administrator
   )
     return false;
+  try {
+    if (
+      !v.tenant.geography ||
+      v.tenant.geography.srid !== 4326 ||
+      !Number.isInteger(v.tenant.geography.version) ||
+      v.tenant.geography.version < 0
+    )
+      return false;
+    const { area, barangays, defaults } = v.tenant.geography;
+    geographyValues({ area, barangays, defaults });
+  } catch {
+    return false;
+  }
   const a = v.administrator;
   return (
     a.kind === 'unavailable' ||
@@ -99,10 +113,13 @@ async function request(
           'name',
           'email',
           'phone',
+          'geography',
         ] as const)
           if (typeof v.fieldErrors[field] === 'string')
             fields[field] =
-              `Invalid ${field === 'tenantCode' ? 'tenant code' : field === 'displayName' ? 'organization name' : field === 'administratorUsername' ? 'administrator username' : `contact ${field}`}.`;
+              field === 'geography'
+                ? v.fieldErrors[field].slice(0, 300)
+                : `Invalid ${field === 'tenantCode' ? 'tenant code' : field === 'displayName' ? 'organization name' : field === 'administratorUsername' ? 'administrator username' : `contact ${field}`}.`;
       if (
         v.reason === 'tenant_code_conflict' ||
         v.reason === 'request_conflict' ||
@@ -191,7 +208,10 @@ export async function saveTenantSection(
     v.outcome.tenantId !== id.toLowerCase() ||
     v.outcome.section !== body.section ||
     !Number.isSafeInteger(v.outcome.version) ||
-    !Number.isSafeInteger(v.outcome.authorityVersion)
+    !Number.isSafeInteger(v.outcome.authorityVersion) ||
+    (body.section === 'geography' &&
+      (!Number.isInteger(v.outcome.geographyVersion) ||
+        Number(v.outcome.geographyVersion) < 1))
   )
     throw new AccessError(503);
   return v;

@@ -104,6 +104,15 @@ export class TenantRepository implements DraftTenantRegistry {
       row.authority_version !== input.expectedAuthorityVersion
     )
       return { kind: 'stale' as const };
+    if (input.section === 'geography') {
+      const updated = await transaction.query<TenantRecord>(
+        `UPDATE public.tenants SET version=version+1,updated_at=clock_timestamp() WHERE id=$1 RETURNING ${columns}`,
+        [id],
+      );
+      const value = updated.rows[0];
+      if (!value) throw new Error('Missing locked tenant');
+      return { kind: 'found' as const, value };
+    }
     if (
       input.section === 'name' &&
       row.display_name === input.values.displayName

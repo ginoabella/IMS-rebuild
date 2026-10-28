@@ -1,3 +1,4 @@
+import { TenantGeographyRepository } from '../../../locations/adapters/db/tenant-geography';
 import { TenantEditReceiptRepository } from './tenant-edit-receipts';
 import { Pool } from 'pg';
 import { SnapshotDatabase } from '../../../../infrastructure/database/read-snapshot';
@@ -41,6 +42,7 @@ export class DraftTenantRuntime {
       new FirstAdministratorRepository(),
       new DraftCreationReceiptRepository(),
       new TenantEditReceiptRepository(),
+      new TenantGeographyRepository(),
     );
   }
   async onApplicationShutdown() {

@@ -1,3 +1,4 @@
+import { checkTenantGeography } from './check-tenant-geography.mjs';
 import { checkTenantEditing } from './check-tenant-editing.mjs';
 import assert from 'node:assert/strict';
 import { randomBytes, randomUUID } from 'node:crypto';
@@ -1046,11 +1047,37 @@ export async function checkDraftTenants({
     console.log(
       'PASS draft A-08: canonical admission denial, unset credentials, no staff session/outbox and tenant-qualified handoff',
     );
+    // Retire finished acceptance replicas before the next independent group;
+    // retained sessions remain in shared Redis, while pools release their budget.
+    for (const call of calls)
+      if (call !== down && call !== pgDown && call.child.connected)
+        await call('close');
+    const editingA = await replica(),
+      editingB = await replica();
     await checkTenantEditing({
       owner,
       runtime,
-      a: await replica(),
-      b: await replica(),
+      a: editingA,
+      b: editingB,
+      replica,
+      commitProxy,
+      unavailableRedis: down,
+      unavailableDatabase: pgDown,
+      expired,
+      staffSession,
+      request,
+      operator,
+      post,
+      data,
+      barrier,
+    });
+    await checkTenantGeography({
+      appUrl,
+      owner,
+      redis,
+      runtime,
+      a: editingA,
+      b: editingB,
       replica,
       commitProxy,
       unavailableRedis: down,

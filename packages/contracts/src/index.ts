@@ -90,3 +90,5 @@ export * from './trunk-gateways';
 export * from './routing';
 export * from './pbx-revisions';
 export * from './pbx-live';
+
+export * from './tenant-geography';

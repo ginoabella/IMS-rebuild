@@ -1,3 +1,8 @@
+import {
+  geographyValues,
+  GeographyInputError,
+  GEOGRAPHY_BODY_BYTES,
+} from '@myims/contracts';
 import type { SaveTenantSectionDto, TenantContactsDto } from '@myims/contracts';
 import {
   onlyFields,
@@ -20,10 +25,20 @@ export function tenantEditInput(input: unknown): Parsed<SaveTenantSectionDto> {
       'expectedAuthorityVersion',
       'section',
       'values',
+      'expectedGeographyVersion',
+      'ownershipConfirmed',
     ])
   )
     return invalid;
   const v = input as Record<string, unknown>;
+  let bytes: number;
+  try {
+    bytes = Buffer.byteLength(JSON.stringify(input));
+  } catch {
+    return invalid;
+  }
+  if (bytes > (v.section === 'geography' ? GEOGRAPHY_BODY_BYTES : 4096))
+    return invalid;
   if (
     !uuid(v.requestId) ||
     !positiveVersion(v.expectedVersion) ||
@@ -38,6 +53,42 @@ export function tenantEditInput(input: unknown): Parsed<SaveTenantSectionDto> {
     expectedVersion: v.expectedVersion,
     expectedAuthorityVersion: v.expectedAuthorityVersion,
   };
+  if (v.section === 'geography') {
+    if (
+      !Number.isInteger(v.expectedGeographyVersion) ||
+      Number(v.expectedGeographyVersion) < 0 ||
+      Number(v.expectedGeographyVersion) >= 2147483646 ||
+      typeof v.ownershipConfirmed !== 'boolean'
+    )
+      return invalid;
+    try {
+      return {
+        kind: 'valid',
+        value: {
+          ...base,
+          section: 'geography',
+          expectedGeographyVersion: Number(v.expectedGeographyVersion),
+          ownershipConfirmed: v.ownershipConfirmed,
+          values: geographyValues(v.values),
+        },
+      };
+    } catch (error) {
+      return {
+        kind: 'invalid',
+        fieldErrors: {
+          geography:
+            error instanceof GeographyInputError
+              ? error.message
+              : 'Invalid geography.',
+        },
+      };
+    }
+  }
+  if (
+    Object.hasOwn(v, 'expectedGeographyVersion') ||
+    Object.hasOwn(v, 'ownershipConfirmed')
+  )
+    return invalid;
   if (v.section === 'name') {
     if (!onlyFields(values, ['displayName'])) return invalid;
     if (

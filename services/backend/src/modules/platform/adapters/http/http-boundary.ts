@@ -1,3 +1,5 @@
+import { GEOGRAPHY_BODY_BYTES } from '@myims/contracts';
+import type { IncomingMessage } from 'node:http';
 import { randomUUID } from 'node:crypto';
 import {
   Catch,
@@ -66,6 +68,19 @@ class SafeHttpErrors implements ExceptionFilter {
   }
 }
 export function configureHttpBoundary(app: NestExpressApplication) {
+  app.useBodyParser('json', {
+    type: (request: IncomingMessage) =>
+      request.method === 'POST' &&
+      /^\/platform\/tenants\/[0-9a-f-]{36}\/configuration(?:\?|$)/i.test(
+        request.url ?? '',
+      ) &&
+      /^application\/json(?:;|$)/i.test(request.headers['content-type'] ?? ''),
+    limit: GEOGRAPHY_BODY_BYTES,
+    strict: true,
+    verify: (_request: unknown, _response: unknown, bytes: Buffer) => {
+      new TextDecoder('utf-8', { fatal: true }).decode(bytes);
+    },
+  });
   app.useBodyParser('json', {
     limit: 4096,
     strict: true,

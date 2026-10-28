@@ -1,7 +1,8 @@
 # P4-U1b-2 — Service area and default intake coordinates
 
-**Status:** Planned. Split adopted 2026-10-26 (Asia/Manila, +08:00);
-implementation and runtime acceptance have not started.
+**Status:** Complete within approved private development, 2026-10-28
+(Asia/Manila, +08:00). B-01–07 passed under user-approved ONB-02;
+[final evidence](../../docs/status/p4-u1b-2-evidence.md).
 
 Parent: [P4-U1b — Tenant onboarding configuration](p4-u1b-tenant-onboarding-configuration.md).
 The parent owns shared behavior, ONB-01–03 and AC-01–11. This child owns operator
@@ -24,18 +25,20 @@ owns geography, tenancy owns organization admission, platform orchestrates.
 
 ## Decisions and dependencies
 
-Resolve parent ONB-02 before dependent geography work. The
+Parent ONB-02 is resolved by the user-approved
+[geography policy](../../docs/planning/p4-u1b-2-geography-policy-review.md),
+2026-10-28 (+08:00). That exact contract governs dependent geography work. The
 [D-07 recommendations](../../docs/planning/p1-u1-product-contracts.md#7-d-07--intake-location-and-drafts)
 are not approval. Record configuration authority, representation, authoring UI,
 requiredness/unset behavior, WGS84 coordinate policy, exact geometry/size limits,
 containment and edge semantics, and outside-area handling. Preserve ONB-03's
 approved edit eligibility from child 1.
 
-The recommended Polygon/MultiPolygon representation and optional fields remain
-proposals. Choose authoring that satisfies the approved operator journey; do not
-add tiles/search or a major dependency as a routine incidental choice. If the
-chosen UI uses an external basemap/search, resolve that provider/access policy
-before dependent implementation. Splitting does not resolve this decision.
+The approved contract uses prepared administrative and optional barangay GeoJSON
+uploads, a local boundary preview and explicit default coordinate entry. Both
+service area/defaults are optional; barangays require an area. Validity,
+containment, clearing, confirmation, 4,096-position and byte/feature/ring/component
+bounds are specified exactly in ONB-02. No external tiles/search provider is used.
 
 ## Scope and expected result
 
@@ -71,7 +74,9 @@ before dependent implementation. Splitting does not resolve this decision.
 Reads stay passive/no-store and mutations retain platform-cookie/permission,
 source/Origin/CSRF/shared admission checks. Bound coordinate/geometry payloads,
 result sizes and validation work. Audit records allowlisted change identifiers,
-not raw geometry or contact data. No speculative events, jobs, file imports,
+not raw geometry or contact data. Prepared administrative/barangay GeoJSON
+uploads, canonical barangay persistence, side-by-side preview and payload-bound
+ownership confirmation are explicitly approved. No speculative events, jobs, other file imports,
 public map provider, incident drafts or coordinate application to existing work.
 
 ## Acceptance and required checks

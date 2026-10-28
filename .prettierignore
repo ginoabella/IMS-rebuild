@@ -39,3 +39,6 @@ docs/status/p3-u3a-reservation-and-worker-isolation.md
 docs/status/p3-u3a-restic-backup-evaluation.md
 docs/status/p3-u3a-seaweedfs-backup-evaluation.md
 infra/backup/bootstrap-request.json
+
+# Externally prepared GIS reference fixtures retain their original bytes.
+reference/map/*.json

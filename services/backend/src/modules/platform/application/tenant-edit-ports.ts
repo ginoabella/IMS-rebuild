@@ -9,6 +9,7 @@ export interface EditReceipt {
   fingerprint: string;
   version: number;
   authority_version: number;
+  geography_version: number | null;
 }
 export interface TenantEditReceipts {
   inspect(tx: Transaction, requestId: string): Promise<EditReceipt | null>;

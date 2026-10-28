@@ -1,3 +1,4 @@
+import { checkTenantGeographyBrowser } from './check-tenant-geography-browser.mjs';
 import { checkTenantEditingBrowser } from './check-tenant-editing-browser.mjs';
 // Extends the real production Next/HTTPS/Nest fixture; no synthetic API success.
 import assert from 'node:assert/strict';
@@ -558,7 +559,10 @@ export async function checkDraftTenantBrowser({
         page.getByRole('button', { name: 'Retry access', exact: true }),
       ).toBeVisible();
       await expect(
-        page.getByText('Unlinked organization', { exact: true }),
+        page.getByRole('heading', {
+          name: 'Unlinked organization',
+          exact: true,
+        }),
       ).not.toBeVisible();
     } finally {
       await owner.query(`GRANT SELECT ON public.tenants TO myims_runtime`);
@@ -568,7 +572,7 @@ export async function checkDraftTenantBrowser({
       .getByRole('button', { name: 'Retry access', exact: true })
       .click();
     await expect(
-      page.getByText('Unlinked organization', { exact: true }),
+      page.getByRole('heading', { name: 'Unlinked organization', exact: true }),
     ).toBeVisible();
     // Seed enough canonical rows for the actual 25-row browser pagination.
     const paginationIds = [];
@@ -626,6 +630,22 @@ export async function checkDraftTenantBrowser({
       expire,
       login: () => login(page, `${username}.second`),
       switchOwner: () => login(),
+      redis,
+    });
+    await checkTenantGeographyBrowser({
+      page,
+      config,
+      owner,
+      create,
+      request,
+      review,
+      select,
+      a,
+      b,
+      holdResponse,
+      expire,
+      login: () => login(),
+      switchOwner: () => login(page, `${username}.second`),
       redis,
     });
     await page.goto(`${config.origin}/tenants/create`);

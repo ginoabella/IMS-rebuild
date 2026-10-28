@@ -12,14 +12,14 @@ export class TenantEditReceiptRepository implements TenantEditReceipts {
       `tenant-edit:${requestId}`,
     ]);
     const result = await tx.query<EditReceipt>(
-      'SELECT request_id,operator_id,tenant_id,section,fingerprint,version,authority_version FROM public.tenant_edit_receipts WHERE request_id=$1',
+      'SELECT request_id,operator_id,tenant_id,section,fingerprint,version,authority_version,geography_version FROM public.tenant_edit_receipts WHERE request_id=$1',
       [requestId],
     );
     return result.rows[0] ?? null;
   }
   async save(tx: Transaction, r: EditReceipt) {
     await tx.query(
-      'INSERT INTO public.tenant_edit_receipts(request_id,operator_id,tenant_id,section,fingerprint,version,authority_version,correlation_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8)',
+      'INSERT INTO public.tenant_edit_receipts(request_id,operator_id,tenant_id,section,fingerprint,version,authority_version,correlation_id,geography_version) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)',
       [
         r.request_id,
         r.operator_id,
@@ -29,6 +29,7 @@ export class TenantEditReceiptRepository implements TenantEditReceipts {
         r.version,
         r.authority_version,
         tx.context.correlationId,
+        r.geography_version,
       ],
     );
   }

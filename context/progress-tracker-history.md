@@ -2884,3 +2884,31 @@ Final reconciliation 2026-10-26 14:23 +08:00: C-01–06, parent AC-01–10 and t
   passed. A-01–07 are complete within approved private development. The current
   tracker and [final evidence](../docs/status/p4-u1b-1-evidence.md) supersede the
   intermediate pending states above. Children 2/3 and parent remain incomplete.
+
+
+## 2026-10-28 — P4-U1b-2 policy and implementation checkpoints
+
+These are historical proposal/intermediate states; current delivery and final
+acceptance are recorded in the tracker and linked evidence.
+
+- 2026-10-28 (Asia/Manila, +08:00) — User approved the complete ONB-02 policy. Recorded approval and amended parent/child geography upload scope before implementation. Added locations-owned PostGIS geography/version/constraints and audit, shared prepared-file/DTO validation, atomic tenant-first section-save/receipt integration, trusted identity/tenancy-qualified intake read and operator upload/preview/default/confirmation/clear/recovery UI. Extending real API/PostGIS and production HTTPS browser checks; verification is in progress and completion is not claimed.
+
+- 2026-10-28 (Asia/Manila, +08:00) — User selected 4,096 positions total across service area and barangays as the initial cap, with later increases possible after representative dataset/performance verification and coordinated validation/constraint updates. Updated the proposal from 50,000; Naga uses 828. Oversized inputs reject without truncation or canonical changes. This resolves only the position-limit choice; remaining ONB-02 policy review and implementation remain pending.
+
+- 2026-10-28 (Asia/Manila, +08:00) — Clarified the user's correction: tenant code retains its existing design and appears only as tenant identity display. Removed tenant-code/GID_2 pairing from the proposal's comparison table; no code mapping or tenant-code behavior change is proposed. Documentation only; policy review remains pending.
+
+- 2026-10-28 (Asia/Manila, +08:00) — Validated and incorporated the user's tenant/upload comparison and confirmation recommendation in the ONB-02 proposal. Clarified absent administrative metadata, source labels, tenant-code/GADM identifier differences, confirmation invalidation and exact-attempt audit behavior. Confirmation records operator review, not geographical proof. Documentation only; overall policy review and implementation remain pending.
+
+- 2026-10-28 (Asia/Manila, +08:00) — At user request, revised the [ONB-02 proposal](../docs/planning/p4-u1b-2-geography-policy-review.md) around prepared administrative/barangay GeoJSON uploads instead of manual vertex authoring. Inspected Naga's one-member GeometryCollection and 27-feature barangay collection; documented extraction, metadata, exact limits, containment, replacement/clearing, owner-bound recovery and the required child-spec scope amendment. Proposal remains awaiting review; no schema/application changes or runtime acceptance.
+
+- 2026-10-28 (Asia/Manila, +08:00) — Started P4-U1b-2 at user request; required context and policy review confirmed ONB-02 remains unresolved. Prepared a concrete [policy proposal](../docs/planning/p4-u1b-2-geography-policy-review.md). Recorded the unit as blocked pending the user-owned geography decision; dependent implementation and B-01–07 have not started. Documentation only.
+
+
+
+### Previous latest completed checkpoint — P4-U1b-1
+
+- **Status:** complete within approved private development, 2026-10-27 09:23 +08:00 (Asia/Manila). A-01–07 passed under approved ONB-01/03; [final evidence](../docs/status/p4-u1b-1-evidence.md).
+- **Delivered:** literal search/lifecycle filtering, stable UUID pagination, draft-only name/contact section saves, atomic version/audit/edit receipts and explicit uncertain recovery. Immutable code/admin provenance and ordinary draft admission remain preserved.
+- **Verification:** real PostgreSQL/runtime grants/shared Redis/A/B API and production HTTPS browser passed, including combined filtered pagination, uppercase UUIDs, conflicts, replay versus later state, rollback, owner/target isolation, 320–1440px/axe/focus and affected credential/session regressions. Final serial `./dev check` passed with persistent shell exit 0.
+- **Preservation:** additive migration and original-field/staff/operator/creation-receipt hashes passed; exact fixture cleanup, ordinary platform HTTPS refresh, platform/staff transport/browser/data preservation and backend live/ready 200 passed. Earlier wrapper status 143 is superseded by the clean detached full run.
+- **Handoff:** [operator procedure](../docs/runbooks/tenant-configuration.md), [registry ports](../docs/architecture/draft-tenant-registry-api.md#p4-u1b-1-extension-contract) and [browser patterns](../docs/architecture/draft-tenant-browser.md). Child 2 requires ONB-02 geography policy; children 2/3, parent P4-U1b/P4-U1, activation and operational readiness remain incomplete.
