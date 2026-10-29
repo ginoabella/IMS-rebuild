@@ -189,6 +189,12 @@ activation and PBX readiness remain with their owning units.
 - [Draft configuration operator procedure](runbooks/tenant-configuration.md)
 - [P4-U1b-1 acceptance evidence](status/p4-u1b-1-evidence.md)
 
+P4-U2: [Allocate inventory and verify tenant routing — feature spec and split review](../context/feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md). Planned; covers exclusive inventory, canonical route/trunk permissions and exact live two-tenant verification. The three vertical sub-units are adopted and planned; ALLOC-01–06 remain policy gates. Activation stays with P4-U3.
+
+- [P4-U2a — Exclusive tenant inventory allocation](../context/feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md)
+- [P4-U2b — Tenant route bindings and permissions](../context/feature-specs/p4-u2b-tenant-route-bindings-and-permissions.md)
+- [P4-U2c — Verified tenant routing and integrated handoff](../context/feature-specs/p4-u2c-verified-tenant-routing-and-integrated-handoff.md)
+
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 P2-U4 and a/b/c are complete under the approved policy. Reported Android native
 acceptance, production browser acceptance and final full Docker regressions pass. The three-child split is adopted.

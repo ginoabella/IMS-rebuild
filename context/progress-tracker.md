@@ -118,7 +118,14 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 | Planned unit | Requirement, scope and acceptance | Dependencies / required checks |
 | --- | --- | --- |
-| [P4-U2 — Allocate inventory and verify tenant routing](implementation-plan.md#p4-u2--allocate-inventory-and-verify-tenant-routing) | Tenant allocation and routing within the implementation plan's declared scope. | Completed P4-U1 and Phase 3 handoffs; prepare the feature specification and required acceptance before implementation. |
+| [P4-U2 — Allocate inventory and verify tenant routing](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md) — planned | Exclusive inventory, trusted tenant route/trunk bindings and exact live verification; AC-01–12. Spec and a/b/c vertical split adopted; all child specs created and planned. | Completed P4-U1/P3-U5 handoffs; resolve ALLOC-01–06 before dependent implementation. Required focused real PostgreSQL/Redis/two-replica/API/browser checks, controlled live two-tenant calls, affected regressions and `./dev check`; no new runtime pass. |
+
+
+| Planned sub-unit | Scope and acceptance | Dependencies / required checks |
+| --- | --- | --- |
+| [P4-U2a — Exclusive tenant inventory allocation](feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md) | Complete operator allocation workflow, exclusive stock/ranges, dependency blockers and atomic audit/replay; A-01–07. | P4-U1/P3-U5; resolve ALLOC-01 and applicable ALLOC-06. Real PostgreSQL/Redis/two-replica/API/HTTPS races, affected checks and `./dev check`. |
+| [P4-U2b — Tenant route bindings and permissions](feature-specs/p4-u2b-tenant-route-bindings-and-permissions.md) | Inbound ownership, explicit outbound/trunk permissions, trusted canonical eligibility port and browser; B-01–08. | a; resolve ALLOC-02/03 and applicable ALLOC-06. Real API/browser/reference races, affected allocation/resource/routing checks and `./dev check`. |
+| [P4-U2c — Verified tenant routing and integrated handoff](feature-specs/p4-u2c-verified-tenant-routing-and-integrated-handoff.md) | Versioned compiler/apply, isolated draft tests, exact live two-tenant proof/readiness and safe reallocation; C-01–08 and integrated parent AC-01–12. | a/b; resolve ALLOC-04/05/06 and provide controlled real endpoints/destinations. Real native/live/API/HTTPS recovery, affected/full checks and ordinary runtime preservation. |
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
 Draft credential setup preserves draft status and denies ordinary staff access;
@@ -189,6 +196,7 @@ for their scope; creating a spec does not approve a proposal.
 
 | Area | Affected work and resume condition |
 | --- | --- |
+| Tenant allocation/routing policy | P4-U2 [ALLOC-01–06](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md#decisions-required-before-dependent-implementation) require owner decisions on reservation/node/range rules, inbound ownership/sharing, outbound selection/permissions, controlled test evidence, draft verification isolation and safe release under retained runtime pins. Resolve each before dependent implementation; recommendations are not approvals. |
 | Downstream tenant calling readiness | P3-U5/Phase 3 completed under approved U5-01–05 [concrete policies](../docs/planning/p3-u5b-live-policy-review.md). P4-U2/U3 must supply trusted tenant allocation/binding, eligibility and verified activation; no tenant calling readiness is approved by development probes. |
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
@@ -233,6 +241,10 @@ for their scope; creating a spec does not approve a proposal.
   this unit and does not affect authenticated routing navigation.
 
 ## Recent Session Notes
+
+- 2026-10-29 (Asia/Manila, +08:00) — User adopted the P4-U2 split. Created the three [child specifications](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md#review-and-adopted-sub-unit-implementation), each with goal, dependencies, backend/browser scope, acceptance, required verification and handoff. Updated parent, navigation and planned tracker entries. Docker Prettier, 27 spec-local links/anchors, 23 child acceptance IDs, parent coverage/handoff review and diff whitespace checks passed. ALLOC-01–06 remain unresolved; parent and children remain planned. Documentation only; no code, service/data changes or new runtime acceptance.
+
+- 2026-10-29 (Asia/Manila, +08:00) — Prepared and reviewed the [P4-U2 feature specification](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md): AC-01–12, ALLOC-01–06 policy gates, canonical ownership/binding ports, versioned tenant-aware compiler integration, exact live two-tenant proof and runtime-pin-safe reallocation. Recommended three sequential vertical sub-units (allocation; bindings/permissions; live verification/integrated handoff); no child specs created or split adopted. Spec/index Docker Prettier checks, 12 spec-local links/anchors, acceptance/decision/split coverage and diff whitespace checks passed; tracker retains its formatter-excluded style. Documentation only; P4-U2 remains planned, with no service/data changes or runtime acceptance.
 
 - 2026-10-29 (Asia/Manila, +08:00) — Added the requested [P4-U1b manual testing guide](../docs/guides/p4-u1b-manual-testing.md): desktop access, all three onboarding parts, expected results, credential exchange/draft denial, independent work, validation/conflict/clearing, reporting and optional automated checks. Documentation only; implementation completion is unchanged and no new manual runtime pass is claimed.
 
