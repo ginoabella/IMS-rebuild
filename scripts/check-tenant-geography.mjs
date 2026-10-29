@@ -437,6 +437,25 @@ export async function checkTenantGeography({
     maximumFeatures.data.current.tenant.geography.barangays.length,
     1000,
   );
+  // The optimized CHECK must still reject corrupted final-feature metadata directly,
+  // including a null/different municipality after earlier valid shared metadata.
+  for (const replacement of [
+    `jsonb_set(metadata,'{barangays,999,municipality}','null'::jsonb)`,
+    `jsonb_set(metadata,'{barangays,999,municipality}',(metadata#>'{barangays,999,municipality}')||'{"forged":true}'::jsonb)`,
+    `jsonb_set(metadata,'{barangays,999,municipality,municipalityName}','"Different municipality"'::jsonb)`,
+    `jsonb_set(metadata,'{barangays,999,id}',metadata#>'{barangays,0,id}')`,
+    `jsonb_set(metadata,'{barangays,999,name}',to_jsonb(E'invalid\\nlabel'::text))`,
+  ]) {
+    assert.equal(
+      (
+        await runtime.query(
+          `SELECT public.valid_tenant_geography(service_area,default_point,barangays,${replacement}) valid FROM public.tenant_geography WHERE tenant_id=$1`,
+          [id],
+        )
+      ).rows[0].valid,
+      false,
+    );
+  }
   // Supplied files are parsed without repair and checked against actual approved PostGIS rules.
   const nagaArea = serviceAreaUpload(
     JSON.parse(

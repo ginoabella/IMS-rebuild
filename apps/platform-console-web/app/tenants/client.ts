@@ -40,6 +40,9 @@ function detail(value: unknown): value is TenantDetailDto {
     !Number.isSafeInteger(v.tenant.authorityVersion) ||
     typeof v.tenant.createdAt !== 'string' ||
     typeof v.tenant.updatedAt !== 'string' ||
+    !['not_configured', 'enabled', 'disabled'].includes(
+      v.tenant.voicePreference,
+    ) ||
     !v.tenant.contacts ||
     !['name', 'email', 'phone'].every((k) => {
       const value = v.tenant.contacts[k as keyof typeof v.tenant.contacts];
@@ -114,6 +117,7 @@ async function request(
           'email',
           'phone',
           'geography',
+          'voicePreference',
         ] as const)
           if (typeof v.fieldErrors[field] === 'string')
             fields[field] =

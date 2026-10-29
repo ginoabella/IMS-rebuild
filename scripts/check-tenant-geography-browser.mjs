@@ -39,6 +39,12 @@ export async function checkTenantGeographyBrowser({
     page.getByRole('button', { name: 'Save geography', exact: true });
   const confirm = () => region.getByRole('checkbox');
   const upload = async () => {
+    // File injection does not wait for enabled controls; canonical reload may still be pending.
+    await expect(
+      page.getByLabel('Administrative boundary file (optional)', {
+        exact: true,
+      }),
+    ).toBeEnabled();
     await page
       .getByLabel('Administrative boundary file (optional)', { exact: true })
       .setInputFiles(

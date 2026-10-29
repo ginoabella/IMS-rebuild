@@ -498,10 +498,107 @@ export async function checkCredentialBrowser({
     ).toBeVisible();
     const tenantId = new URL(page.url()).pathname.split('/').at(-1),
       backendPath = `/platform/tenants/${tenantId}/administrator/credential-actions`;
+    phase = 'combined onboarding configuration';
+    const issuer = page.getByRole('region', {
+      name: 'Administrator credentials',
+      exact: true,
+    });
+    await page
+      .getByRole('link', { name: 'Back to tenants', exact: true })
+      .click();
+    await page
+      .getByLabel('Search code or name', { exact: false })
+      .fill('Credential browser organization');
+    await page
+      .getByRole('button', { name: 'Search tenants', exact: true })
+      .click();
+    await page
+      .getByLabel('Lifecycle filter (optional)', { exact: true })
+      .selectOption('draft');
+    await page
+      .getByRole('link', {
+        name: 'View Credential browser organization',
+        exact: true,
+      })
+      .click();
+    await page
+      .getByLabel('Contact name (optional)', { exact: true })
+      .fill('Verified organization desk');
+    await page
+      .getByLabel('Contact email (optional)', { exact: true })
+      .fill('desk@example.org');
+    await page
+      .getByRole('button', { name: 'Save contacts', exact: true })
+      .click();
+    await expect(
+      page
+        .getByRole('region', { name: 'Organizational contact', exact: true })
+        .getByText(/^Saved at version/),
+    ).toBeVisible();
+    await expect(
+      page.getByLabel('Administrative boundary file (optional)', {
+        exact: true,
+      }),
+    ).toBeEnabled();
+    await page
+      .getByLabel('Administrative boundary file (optional)', { exact: true })
+      .setInputFiles('reference/map/naga_admin_ADM_ADM_3.json');
+    const geographyRegion = page.getByRole('region', {
+      name: 'Service area and default intake coordinates',
+      exact: true,
+    });
+    await expect(geographyRegion.getByRole('checkbox')).toBeVisible();
+    await geographyRegion.getByRole('checkbox').check();
+    await page
+      .getByLabel('Default intake longitude (optional)', { exact: true })
+      .fill('123.19');
+    await page
+      .getByLabel('Default intake latitude (optional)', { exact: true })
+      .fill('13.62');
+    await page
+      .getByRole('button', { name: 'Save geography', exact: true })
+      .click();
+    await expect(page.getByText(/^Geography saved at version/)).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await page
+      .getByRole('region', { name: 'Voice preference', exact: true })
+      .getByLabel(/^Voice preference/)
+      .selectOption('disabled');
+    await page.getByRole('button', { name: 'Save voice', exact: true }).click();
+    await expect(
+      page
+        .getByRole('region', { name: 'Voice preference', exact: true })
+        .getByText(/^Saved at version/),
+    ).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await page
+      .getByRole('textbox', { name: /^Organization name/ })
+      .fill('Unrelated unsaved organization');
+    await page
+      .getByLabel('Default intake longitude (optional)', { exact: true })
+      .fill('123.20');
+    phase = 'unset draft ordinary sign-in denial after voice opt-out';
+    const unsetDraftCode = (
+      await owner.query(
+        'SELECT normalized_code FROM public.tenants WHERE id=$1',
+        [tenantId],
+      )
+    ).rows[0].normalized_code;
+    await form.goto(`${staff.origin}/sign-in`);
+    await form.getByLabel(/^Tenant code/).fill(unsetDraftCode);
+    await form.getByLabel(/^Username/).fill('browser.admin');
+    await form.getByLabel(/^Password/).fill(password);
+    await form.getByRole('button', { name: 'Sign in', exact: true }).click();
+    await expect(
+      form.getByRole('alert').filter({ hasText: 'Invalid credentials' }),
+    ).toBeVisible();
+    assert.ok(
+      !(await recipient.cookies()).some((c) => c.name === '__Host-myims-staff'),
+    );
     await page
       .getByLabel('Verification method', { exact: true })
       .selectOption('known_contact_call');
-    await page.getByRole('checkbox').check();
+    await issuer.getByRole('checkbox').check();
     await page
       .getByRole('button', { name: 'Issue setup code', exact: true })
       .focus();
@@ -517,6 +614,22 @@ export async function checkCredentialBrowser({
     }, backendPath);
     assert.equal(status.status, 200);
     assert.ok(!JSON.stringify(status.data).includes(capability));
+    // Configuration writes leave the already-issued qualified setup action usable.
+    await page.getByRole('button', { name: 'Hide code', exact: true }).click();
+    const voiceChoice = page
+      .getByRole('region', { name: 'Voice preference', exact: true })
+      .getByLabel(/^Voice preference/);
+    for (const preference of ['enabled', 'disabled']) {
+      await voiceChoice.selectOption(preference);
+      await page
+        .getByRole('button', { name: 'Save voice', exact: true })
+        .click();
+      await expect(
+        page
+          .getByRole('region', { name: 'Voice preference', exact: true })
+          .getByText(/^Saved at version/),
+      ).toBeVisible();
+    }
     phase = 'recipient exchange';
     selected = calls[1];
     await form.goto(`${exchange.origin}/credentials`);
@@ -553,13 +666,47 @@ export async function checkCredentialBrowser({
     assert.ok(
       !(await recipient.cookies()).some((c) => c.name === '__Host-myims-staff'),
     );
-    await page.getByRole('button', { name: 'Hide code', exact: true }).click();
     await page
       .getByRole('button', { name: 'Check credential status', exact: true })
       .click();
     await expect(
       page.getByRole('button', { name: 'Issue recovery code', exact: true }),
     ).toBeVisible();
+    phase = 'canonical credential refresh preserves configuration';
+    await page
+      .getByRole('button', { name: 'Reload detail', exact: true })
+      .click();
+    await expect(
+      page.getByText('Credentials ready', { exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('button', { name: 'Issue recovery code', exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole('textbox', { name: /^Organization name/ }),
+    ).toHaveValue('Unrelated unsaved organization');
+    await expect(
+      page.getByLabel('Default intake longitude (optional)', { exact: true }),
+    ).toHaveValue('123.20');
+    const savedConfiguration = (
+      await owner.query(
+        'SELECT display_name,contact_name,voice_preference,status FROM public.tenants WHERE id=$1',
+        [tenantId],
+      )
+    ).rows[0];
+    assert.deepEqual(savedConfiguration, {
+      display_name: 'Credential browser organization',
+      contact_name: 'Verified organization desk',
+      voice_preference: 'disabled',
+      status: 'draft',
+    });
+    const savedGeography = (
+      await owner.query(
+        'SELECT ST_X(default_point) lon,ST_Y(default_point) lat FROM public.tenant_geography WHERE tenant_id=$1',
+        [tenantId],
+      )
+    ).rows[0];
+    assert.deepEqual(savedGeography, { lon: 123.19, lat: 13.62 });
     phase = 'recipient accessibility';
     const recipientViolations = (await new AxeBuilder({ page: form }).analyze())
       .violations;
@@ -600,7 +747,7 @@ export async function checkCredentialBrowser({
       '',
     );
     phase = 'lost issuance response';
-    await page.getByRole('checkbox').check();
+    await issuer.getByRole('checkbox').check();
     dropPath = backendPath;
     await page
       .getByRole('button', { name: 'Issue recovery code', exact: true })
@@ -624,14 +771,14 @@ export async function checkCredentialBrowser({
         exact: true,
       }),
     ).toBeVisible();
-    await expect(page.getByText(/Outcome uncertain/)).toBeVisible();
+    await expect(page.getByText(/outcome uncertain/i)).toBeVisible();
     await page
       .getByRole('button', { name: 'Check credential status', exact: true })
       .click();
     await expect(
       page.getByText(/Canonical credential status loaded/),
     ).toBeVisible();
-    await page.getByRole('checkbox').check();
+    await issuer.getByRole('checkbox').check();
     await page
       .getByRole('button', { name: 'Reissue code', exact: true })
       .click();
@@ -662,7 +809,7 @@ export async function checkCredentialBrowser({
     phase = 'late disclosure fencing';
     // Late one-time disclosure is fenced after canonical-owner access loss.
     await page.getByRole('button', { name: 'Hide code', exact: true }).click();
-    await page.getByRole('checkbox').check();
+    await issuer.getByRole('checkbox').check();
     let arrived, release;
     const reached = new Promise((r) => {
         arrived = r;

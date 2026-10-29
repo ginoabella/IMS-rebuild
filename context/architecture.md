@@ -448,6 +448,16 @@ passive, uncached primary reads. P4-U1a-2 adds the [protected browser journey](.
 with named bounded Next forwarding, mounted canonical-owner draft/attempt memory,
 explicit uncertain retry and owner/epoch-fenced callbacks. Complete API/browser/parent acceptance and the full graph passed; see [integrated evidence](../docs/status/p4-u1a-2-evidence.md).
 
+P4-U1b extends the registry with tenancy-owned draft name/contact and explicit
+voice preference, locations-owned canonical PostGIS configuration and platform-owned
+immutable edit outcomes. Draft-only section writes share canonical versions,
+operator → attempt → tenant locking and atomic audit/receipt recovery. Voice starts
+`not_configured`; explicit `enabled`/`disabled` intent supplies no allocation,
+live apply, activation or readiness. The [configuration contract](../docs/architecture/draft-tenant-registry-api.md#p4-u1b-3-voice-preference-contract)
+and [geography boundary](../docs/architecture/tenant-geography.md) define downstream
+ports. Existing linked-administrator credential consumers retain independent
+recovery and refresh safe action state without replacing unsaved section work.
+
 P2-U4a implements the user-approved [qualified credential lifecycle](../docs/architecture/qualified-credential-lifecycle.md).
 Identity owns durable single-use actions and atomic credential/version/audit exchange;
 platform uses creation provenance and tenancy owns status/eligibility serialization.

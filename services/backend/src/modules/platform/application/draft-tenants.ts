@@ -199,11 +199,13 @@ export class DraftTenants {
               ]
             : data.section === 'name'
               ? data.values.displayName
-              : ['name', 'email', 'phone'].map((k) => [
-                  k,
-                  Object.hasOwn(data.values, k),
-                  data.values[k as keyof typeof data.values],
-                ]),
+              : data.section === 'voice'
+                ? data.values.voicePreference
+                : ['name', 'email', 'phone'].map((k) => [
+                    k,
+                    Object.hasOwn(data.values, k),
+                    data.values[k as keyof typeof data.values],
+                  ]),
         ]),
       )
       .digest('hex');
@@ -357,6 +359,7 @@ export class DraftTenants {
     return {
       tenant: {
         ...summary(row),
+        voicePreference: row.voice_preference,
         contacts: {
           name: row.contact_name ?? null,
           email: row.contact_email ?? null,

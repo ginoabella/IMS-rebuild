@@ -1,3 +1,4 @@
+import { checkTenantVoiceBrowser } from './check-tenant-voice-browser.mjs';
 import { checkTenantGeographyBrowser } from './check-tenant-geography-browser.mjs';
 import { checkTenantEditingBrowser } from './check-tenant-editing-browser.mjs';
 // Extends the real production Next/HTTPS/Nest fixture; no synthetic API success.
@@ -646,6 +647,22 @@ export async function checkDraftTenantBrowser({
       expire,
       login: () => login(),
       switchOwner: () => login(page, `${username}.second`),
+      redis,
+    });
+    await checkTenantVoiceBrowser({
+      page,
+      config,
+      owner,
+      create,
+      request,
+      review,
+      select,
+      a,
+      b,
+      holdResponse,
+      expire,
+      login: () => login(page, `${username}.second`),
+      switchOwner: () => login(),
       redis,
     });
     await page.goto(`${config.origin}/tenants/create`);

@@ -41,10 +41,26 @@ export async function checkTenantEditingBrowser({
       exact: true,
     }),
   ).toBeVisible();
-  await contact().fill('Operations desk');
-  await page
-    .getByLabel('Contact email (optional)', { exact: true })
-    .fill('bad email');
+  // Dispatch adjacent field edits in one task to exercise React's batched render boundary.
+  await expect(contact()).toBeEnabled();
+  await page.evaluate(() => {
+    const setter = Object.getOwnPropertyDescriptor(
+      globalThis.HTMLInputElement.prototype,
+      'value',
+    ).set;
+    for (const [id, value] of [
+      ['edit-contacts-name', 'Operations desk'],
+      ['edit-contacts-email', 'bad email'],
+    ]) {
+      const input = globalThis.document.getElementById(id);
+      setter.call(input, value);
+      input.dispatchEvent(new globalThis.Event('input', { bubbles: true }));
+    }
+  });
+  await expect(contact()).toHaveValue('Operations desk');
+  await expect(
+    page.getByLabel('Contact email (optional)', { exact: true }),
+  ).toHaveValue('bad email');
   await save('contacts').click();
   await expect(
     page.getByLabel('Contact email (optional)', { exact: true }),

@@ -120,7 +120,9 @@ export async function forwardTenant(
         !v.values ||
         typeof v.values !== 'object' ||
         Array.isArray(v.values) ||
-        !['name', 'contacts', 'geography'].includes(String(v.section)) ||
+        !['name', 'contacts', 'geography', 'voice'].includes(
+          String(v.section),
+        ) ||
         Object.keys(v.values).some(
           (k) =>
             !(
@@ -128,7 +130,9 @@ export async function forwardTenant(
                 ? ['area', 'barangays', 'defaults']
                 : v.section === 'name'
                   ? ['displayName']
-                  : ['name', 'email', 'phone']
+                  : v.section === 'voice'
+                    ? ['voicePreference']
+                    : ['name', 'email', 'phone']
             ).includes(k),
         )
       )

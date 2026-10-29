@@ -4,6 +4,7 @@ export interface TenantRecord {
   normalized_code: string;
   display_name: string;
   status: TenantStatus;
+  voice_preference: 'not_configured' | 'enabled' | 'disabled';
   contact_name?: string | null;
   contact_email?: string | null;
   contact_phone?: string | null;

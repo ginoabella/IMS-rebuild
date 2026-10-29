@@ -1,7 +1,7 @@
 # P4-U1b-3 — Voice preference and integrated onboarding handoff
 
-**Status:** Planned. Split adopted 2026-10-26 (Asia/Manila, +08:00);
-implementation and runtime acceptance have not started.
+**Status:** Complete within approved private development, 2026-10-29 (Asia/Manila, +08:00).
+C-01–07 and integrated parent AC-01–11 passed; see [final evidence](../../docs/status/p4-u1b-3-evidence.md).
 
 Parent: [P4-U1b — Tenant onboarding configuration](p4-u1b-tenant-onboarding-configuration.md).
 The parent owns shared behavior, ONB-01–03 and AC-01–11. This child owns explicit

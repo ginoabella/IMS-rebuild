@@ -1,6 +1,6 @@
 # P4-U1b — Complete tenant onboarding configuration
 
-**Status:** Children 1/2 complete within approved private development; child 3 planned; three-child split adopted 2026-10-26 (Asia/Manila, +08:00). Child 1 A-01–07 and child 2 B-01–07 passed on 2026-10-27/28 (+08:00); parent acceptance remains incomplete.
+**Status:** All three children, P4-U1b and parent P4-U1 complete within approved private development, 2026-10-29 (Asia/Manila, +08:00). A-01–07, B-01–07, C-01–07 and parent AC-01–11 passed; see [final integrated evidence](../../docs/status/p4-u1b-3-evidence.md).
 **Prepared:** 2026-10-26 (Asia/Manila, +08:00).
 **Parent:** P4-U1 — Deliver tenant registry and onboarding.
 

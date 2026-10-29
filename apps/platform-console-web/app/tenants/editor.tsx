@@ -23,6 +23,7 @@ type Values = {
   name: string;
   email: string;
   phone: string;
+  voicePreference: string;
 };
 type SectionWork = {
   version: number;
@@ -42,6 +43,7 @@ function initial(detail: TenantDetailDto): SectionWork {
       name: detail.tenant.contacts.name ?? '',
       email: detail.tenant.contacts.email ?? '',
       phone: detail.tenant.contacts.phone ?? '',
+      voicePreference: detail.tenant.voicePreference,
     },
     attempt: null,
     message: '',
@@ -70,8 +72,8 @@ export function TenantEditor({
     RegistrySection,
     SectionWork
   > | null>(null);
+  // Only initialization and patches advance work; a render can carry an older snapshot.
   const latest = useRef(sections);
-  latest.current = sections;
   const live = useRef(true),
     busy = useRef(false),
     focus = useRef<string | null>(null);
@@ -87,9 +89,9 @@ export function TenantEditor({
     const canonical = initial(detail);
     const next = current
       ? { ...current }
-      : { name: canonical, contacts: canonical };
+      : { name: canonical, contacts: canonical, voice: canonical };
     if (current)
-      for (const section of ['name', 'contacts'] as const) {
+      for (const section of ['name', 'contacts', 'voice'] as const) {
         if (
           current[section].state === 'saved' &&
           !current[section].attempt &&
@@ -139,14 +141,22 @@ export function TenantEditor({
                   section: 'name',
                   values: { displayName: s.values.displayName },
                 }
-              : {
-                  section: 'contacts',
-                  values: {
-                    name: s.values.name,
-                    email: s.values.email,
-                    phone: s.values.phone,
-                  },
-                }),
+              : section === 'voice'
+                ? {
+                    section: 'voice',
+                    values: {
+                      voicePreference: s.values.voicePreference as
+                        'enabled' | 'disabled',
+                    },
+                  }
+                : {
+                    section: 'contacts',
+                    values: {
+                      name: s.values.name,
+                      email: s.values.email,
+                      phone: s.values.phone,
+                    },
+                  }),
           };
       if (!attempt) return;
       patch(section, { attempt });
@@ -168,12 +178,13 @@ export function TenantEditor({
             : `Saved at version ${result.outcome.version}.`,
         });
         // A clean neighboring section can follow the new row version; unsaved work retains its original version.
-        const other = section === 'name' ? 'contacts' : 'name';
-        if (
-          latest.current?.[other].state === 'saved' &&
-          !latest.current[other].attempt
-        )
-          patch(other, canonical);
+        for (const other of ['name', 'contacts', 'voice'] as const)
+          if (
+            other !== section &&
+            latest.current?.[other].state === 'saved' &&
+            !latest.current[other].attempt
+          )
+            patch(other, canonical);
         reload();
       } catch (error) {
         if (!capture.current() || !live.current) return;
@@ -217,7 +228,7 @@ export function TenantEditor({
   if (!sections) return null;
   return (
     <div className="space-y-5">
-      {(['name', 'contacts'] as const).map((section) => {
+      {(['name', 'contacts', 'voice'] as const).map((section) => {
         const s = sections[section],
           pending = s.state === 'pending';
         const fields =
@@ -225,21 +236,25 @@ export function TenantEditor({
             ? ([
                 { key: 'displayName', label: 'Organization name', bound: 800 },
               ] as const)
-            : ([
-                { key: 'name', label: 'Contact name', bound: 800 },
-                {
-                  key: 'email',
-                  label: 'Contact email',
-                  bound: 1016,
-                },
-                { key: 'phone', label: 'Contact phone', bound: 200 },
-              ] as const);
+            : section === 'voice'
+              ? []
+              : ([
+                  { key: 'name', label: 'Contact name', bound: 800 },
+                  {
+                    key: 'email',
+                    label: 'Contact email',
+                    bound: 1016,
+                  },
+                  { key: 'phone', label: 'Contact phone', bound: 200 },
+                ] as const);
         return (
           <Panel key={section} aria-labelledby={`edit-${section}-heading`}>
             <PanelHeading id={`edit-${section}-heading`}>
               {section === 'name'
                 ? 'Organization name'
-                : 'Organizational contact'}
+                : section === 'voice'
+                  ? 'Voice preference'
+                  : 'Organizational contact'}
             </PanelHeading>
             {section === 'contacts' && (
               <p className="my-3 text-muted-foreground">
@@ -261,6 +276,51 @@ export function TenantEditor({
                 void save(section);
               }}
             >
+              {section === 'voice' && (
+                <Field
+                  id="edit-voice-voicePreference"
+                  label="Voice preference"
+                  error={s.errors.voicePreference}
+                >
+                  <select
+                    id="edit-voice-voicePreference"
+                    className="min-h-11 w-full rounded-md border border-subtle bg-muted px-3"
+                    value={s.values.voicePreference}
+                    disabled={
+                      pending ||
+                      !!s.attempt ||
+                      detail?.tenant.status !== 'draft'
+                    }
+                    aria-invalid={!!s.errors.voicePreference}
+                    aria-describedby={
+                      s.errors.voicePreference
+                        ? 'edit-voice-voicePreference-error'
+                        : undefined
+                    }
+                    onChange={(e) =>
+                      patch(section, {
+                        values: {
+                          ...(latest.current?.[section].values ?? s.values),
+                          voicePreference: e.target.value,
+                        },
+                        state: 'unsaved',
+                        errors: {},
+                        message: '',
+                      })
+                    }
+                  >
+                    <option value="not_configured" disabled>
+                      Not configured — choose explicitly
+                    </option>
+                    <option value="enabled">Voice enabled</option>
+                    <option value="disabled">Voice disabled</option>
+                  </select>
+                  <p>
+                    Preference only. Allocation, live routing and activation
+                    require separate verified steps.
+                  </p>
+                </Field>
+              )}
               {fields.map((f) => (
                 <Field
                   key={f.key}
@@ -288,7 +348,10 @@ export function TenantEditor({
                     }
                     onChange={(e) =>
                       patch(section, {
-                        values: { ...s.values, [f.key]: e.target.value },
+                        values: {
+                          ...(latest.current?.[section].values ?? s.values),
+                          [f.key]: e.target.value,
+                        },
                         state: 'unsaved',
                         errors: { ...s.errors, [f.key]: undefined },
                         message: '',
@@ -328,7 +391,7 @@ export function TenantEditor({
                     s.state === 'saved'
                   }
                 >
-                  Save {section === 'name' ? 'name' : 'contacts'}
+                  Save {section}
                 </Button>
                 {s.attempt && (
                   <Button
@@ -352,7 +415,6 @@ export function TenantEditor({
           </Panel>
         );
       })}
-      <p className="text-muted-foreground">Voice preference: not configured.</p>
     </div>
   );
 }

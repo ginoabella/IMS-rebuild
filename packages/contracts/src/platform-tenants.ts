@@ -15,8 +15,10 @@ export interface TenantSummaryDto {
   displayName: string;
   status: 'draft' | 'active' | 'suspended' | 'retired';
 }
+export type TenantVoicePreference = 'not_configured' | 'enabled' | 'disabled';
 export interface TenantDetailDto {
   tenant: TenantSummaryDto & {
+    voicePreference: TenantVoicePreference;
     contacts: TenantContactsDto;
     geography: TenantGeographyDto;
     version: number;
@@ -53,7 +55,8 @@ export type TenantInputField =
   | 'phone'
   | 'expectedVersion'
   | 'expectedAuthorityVersion'
-  | 'geography';
+  | 'geography'
+  | 'voicePreference';
 export interface TenantApiErrorDto {
   statusCode: number;
   message: string;
@@ -70,7 +73,7 @@ export interface TenantContactsDto {
   email: string | null;
   phone: string | null;
 }
-export type TenantSection = 'name' | 'contacts' | 'geography';
+export type TenantSection = 'name' | 'contacts' | 'geography' | 'voice';
 export type SaveTenantSectionDto = {
   requestId: string;
   expectedVersion: number;
@@ -78,6 +81,7 @@ export type SaveTenantSectionDto = {
 } & (
   | { section: 'name'; values: { displayName: string } }
   | { section: 'contacts'; values: Partial<TenantContactsDto> }
+  | { section: 'voice'; values: { voicePreference: 'enabled' | 'disabled' } }
   | {
       section: 'geography';
       expectedGeographyVersion: number;

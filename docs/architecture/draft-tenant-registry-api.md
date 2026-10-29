@@ -126,3 +126,34 @@ No-op section saves also advance the configuration version and audit once.
 
 P4-U1b-1 A-01–07 and the full normal graph passed within approved private
 development on 2026-10-27 (+08:00); [final evidence](../status/p4-u1b-1-evidence.md).
+
+## P4-U1b-3 voice preference contract
+
+Tenancy owns `tenants.voice_preference`: `not_configured|enabled|disabled`, with a
+non-null `not_configured` default for existing rows and new drafts. Missing choice
+never means opt-out. Detail exposes `tenant.voicePreference`; list remains a safe
+summary. Apply additive migration `20261029000000_tenant_voice_preference` through
+the trusted deployment path before starting updated replicas.
+
+The existing named configuration command accepts `section:'voice'` and exactly
+`values:{voicePreference:'enabled'|'disabled'}`. An explicit choice is required;
+`not_configured`, missing/unknown values and extra lifecycle/readiness/allocation/
+PBX fields reject. The 4096-byte bound, draft-only ONB-03 policy, operator → attempt
+→ tenant lock order, version and authority checks, shared admission, exact-origin/
+CSRF and atomic required audit/immutable receipt apply unchanged. Ordinary saves
+advance only configuration version, timestamp and voice preference. No-op choices
+also produce one version/audit/receipt. Explicit exact retry reconciles original
+outcome against fresh canonical detail; a different operator cannot adopt it.
+
+P4-U2/U3 must consume this canonical preference through tenancy-owned reads in their
+own qualified transactions. `not_configured` is incomplete; `enabled` requires
+their allocation, routing, live verification and lifecycle gates; `disabled` is
+explicit intent and supplies no authority to tear down routes or activate tenants.
+No voice save allocates PBX resources, performs live apply/calls, declares tenant
+readiness, changes admission or creates staff sessions. P5-U4/U5 retain the
+[qualified geography boundary](tenant-geography.md).
+
+The existing immutable receipt-qualified administrator issuer and recipient exchange
+remain authoritative. Explicit detail reload refreshes safe credential action status;
+mounted unsaved sections retain their original values/versions. Credential recovery
+never retries configuration, and edit receipts never contain handoff codes/passwords.

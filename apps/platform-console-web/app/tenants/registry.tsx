@@ -236,6 +236,33 @@ export function TenantDetail({ id }: { id: string }) {
               <dd>
                 <Badge>{detail.tenant.status}</Badge>
               </dd>
+              <dt className="text-muted-foreground">Voice preference</dt>
+              <dd>
+                {detail.tenant.voicePreference === 'not_configured'
+                  ? 'Not configured'
+                  : detail.tenant.voicePreference === 'enabled'
+                    ? 'Voice enabled'
+                    : 'Voice disabled'}
+              </dd>
+              <dt className="text-muted-foreground">
+                Geographic configuration
+              </dt>
+              <dd>
+                Service area:{' '}
+                {detail.tenant.geography.area ? 'configured' : 'not configured'}
+                ; default coordinates:{' '}
+                {detail.tenant.geography.defaults
+                  ? 'configured'
+                  : 'not configured'}
+                .
+              </dd>
+              <dt className="text-muted-foreground">Contact completeness</dt>
+              <dd>
+                {Object.values(detail.tenant.contacts).every(Boolean)
+                  ? 'Complete'
+                  : 'Incomplete'}{' '}
+                — informational; verification is required for each handoff.
+              </dd>
               <dt className="text-muted-foreground">Tenant ID</dt>
               <dd>{detail.tenant.id}</dd>
             </dl>
@@ -304,6 +331,7 @@ export function TenantDetail({ id }: { id: string }) {
       <AdministratorCredentials
         key={id}
         tenantId={id}
+        refresh={detail}
         credentialState={
           detail?.administrator.kind === 'available'
             ? detail.administrator.credentialState

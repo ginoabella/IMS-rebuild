@@ -105,3 +105,15 @@ port does not introduce incident classification or public geographical lookup.
 P5-U4/U5 still own copying defaults into incident drafts, unconfirmed state,
 confirmation and correction. Child 3 owns voice preference/integrated onboarding;
 this save neither activates a tenant nor establishes operational readiness.
+
+### Integrated onboarding validation cost correction
+
+Migration `20261029010000_tenant_geography_validation_cost` retains the same ONB-02
+CHECK predicates, 4,096-position/1,000-feature bounds and 2-second statement timeout.
+It extracts each original feature once for per-feature and pair validation, streams
+metadata once, and validates municipality structure/labels once before requiring
+all subsequent municipality objects to be exactly equal. This changes validation
+work only; it does not repair geometry, relax labels/ownership or persist a second
+representation. The maximum-feature API check and direct final-feature null/forged/
+different municipality, duplicate ID and invalid-label checks cover this boundary.
+Apply it through the normal migration path before running updated replicas.

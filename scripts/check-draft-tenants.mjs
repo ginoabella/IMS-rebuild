@@ -1,3 +1,4 @@
+import { checkTenantVoice } from './check-tenant-voice.mjs';
 import { checkTenantGeography } from './check-tenant-geography.mjs';
 import { checkTenantEditing } from './check-tenant-editing.mjs';
 import assert from 'node:assert/strict';
@@ -1072,6 +1073,25 @@ export async function checkDraftTenants({
       barrier,
     });
     await checkTenantGeography({
+      appUrl,
+      owner,
+      redis,
+      runtime,
+      a: editingA,
+      b: editingB,
+      replica,
+      commitProxy,
+      unavailableRedis: down,
+      unavailableDatabase: pgDown,
+      expired,
+      staffSession,
+      request,
+      operator,
+      post,
+      data,
+      barrier,
+    });
+    await checkTenantVoice({
       appUrl,
       owner,
       redis,

@@ -176,8 +176,8 @@ export function GeographyEditor({
   const work = useOperatorWork();
   const [state, setState] = useState<State | null>(null),
     [reading, setReading] = useState(false);
+  // Preserve synchronous staged work across renders of an older state snapshot.
   const latest = useRef(state);
-  latest.current = state;
   const canonical = useRef(detail);
   if (
     detail &&

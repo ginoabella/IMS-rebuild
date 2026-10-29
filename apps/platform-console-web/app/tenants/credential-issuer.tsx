@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button, Panel, PanelHeading } from '@myims/ui-web';
 import {
   credentialActionDto,
@@ -11,8 +11,10 @@ import { AccessError } from '../auth/client';
 export function AdministratorCredentials({
   tenantId,
   credentialState,
+  refresh,
 }: {
   tenantId: string;
+  refresh?: object;
   credentialState: 'unset' | 'ready' | undefined;
 }) {
   const work = useOperatorWork();
@@ -26,6 +28,13 @@ export function AdministratorCredentials({
   const busy = useRef(false),
     mounted = useRef(true),
     retryAt = useRef(0);
+  const generation = useRef(0);
+  useLayoutEffect(() => {
+    generation.current++;
+    setAction(null);
+    setToken('');
+    setVerified(false);
+  }, [refresh, work.ready, tenantId]);
   const path = `/platform/tenants/${tenantId}/administrator/credential-actions`;
   useEffect(() => {
     mounted.current = true;
@@ -48,7 +57,12 @@ export function AdministratorCredentials({
   }, [work.ready, credentialState]);
   useEffect(() => {
     if (credentialState !== undefined) setState(credentialState);
+    setToken('');
+    setVerified(false);
   }, [credentialState]);
+  useEffect(() => {
+    if (work.ready && credentialState !== undefined) void perform('status');
+  }, [refresh, work.ready, tenantId]);
   async function perform(operation: 'status' | 'issue' | 'reissue' | 'cancel') {
     if (
       busy.current ||
@@ -58,12 +72,14 @@ export function AdministratorCredentials({
       ((operation === 'issue' || operation === 'reissue') && !verified)
     )
       return;
+    const requestGeneration = generation.current;
     const captured = work.capture();
     if (!captured.current()) return;
     busy.current = true;
     setPending(true);
     setToken('');
-    setMessage('');
+    if (operation !== 'status') setMessage('');
+    if (operation === 'issue' || operation === 'reissue') setVerified(false);
     try {
       const response = await fetch(
         operation === 'cancel' ? `${path}/${action?.id}/cancel` : path,
@@ -91,7 +107,12 @@ export function AdministratorCredentials({
               }),
         },
       );
-      if (!mounted.current || !captured.current()) return;
+      if (
+        !mounted.current ||
+        !captured.current() ||
+        requestGeneration !== generation.current
+      )
+        return;
       if (!response.ok) {
         const retry = Number(response.headers.get('retry-after'));
         retryAt.current =
@@ -120,7 +141,12 @@ export function AdministratorCredentials({
         );
       }
       const value: unknown = await response.json();
-      if (!mounted.current || !captured.current()) return;
+      if (
+        !mounted.current ||
+        !captured.current() ||
+        requestGeneration !== generation.current
+      )
+        return;
       if (!value || typeof value !== 'object')
         throw new Error('Outcome uncertain. Check status before reissuing.');
       const v = value as Record<string, unknown>;
@@ -133,7 +159,8 @@ export function AdministratorCredentials({
         setState(v.credentialState as 'unset' | 'ready');
         setAction(v.action as CredentialActionDto | null);
         setMessage(
-          'Canonical credential status loaded. Codes cannot be redisclosed.',
+          (prior) =>
+            `${prior.includes('uncertain') ? 'Prior outcome uncertain. Use this safe status and explicitly reissue after verification if needed. ' : ''}Canonical credential status loaded. Codes cannot be redisclosed.`,
         );
       } else if (operation === 'cancel') {
         if (v.cancelled !== true)
@@ -155,7 +182,11 @@ export function AdministratorCredentials({
         );
       }
     } catch (error) {
-      if (mounted.current && captured.current()) {
+      if (
+        mounted.current &&
+        captured.current() &&
+        requestGeneration === generation.current
+      ) {
         setToken('');
         setMessage(
           error instanceof Error

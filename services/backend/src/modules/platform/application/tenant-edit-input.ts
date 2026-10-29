@@ -89,6 +89,27 @@ export function tenantEditInput(input: unknown): Parsed<SaveTenantSectionDto> {
     Object.hasOwn(v, 'ownershipConfirmed')
   )
     return invalid;
+  if (v.section === 'voice') {
+    if (
+      !onlyFields(values, ['voicePreference']) ||
+      (values.voicePreference !== 'enabled' &&
+        values.voicePreference !== 'disabled')
+    )
+      return {
+        kind: 'invalid',
+        fieldErrors: {
+          voicePreference: 'Choose voice enabled or voice disabled',
+        },
+      };
+    return {
+      kind: 'valid',
+      value: {
+        ...base,
+        section: 'voice',
+        values: { voicePreference: values.voicePreference },
+      },
+    };
+  }
   if (v.section === 'name') {
     if (!onlyFields(values, ['displayName'])) return invalid;
     if (

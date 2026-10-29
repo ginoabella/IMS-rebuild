@@ -8,6 +8,8 @@ Decisions remain owned by their linked contracts/reviews; history is not approva
 
 ## Archive index
 
+- [2026-10-29 — P4-U1b-3 implementation and verification checkpoints](#2026-10-29--p4-u1b-3-implementation-and-verification-checkpoints): superseded implementation/runtime updates and previous completed checkpoint; final acceptance is in the current tracker.
+
 - [2026-10-26 — P3-U5b implementation and verification checkpoints](#2026-10-26--p3-u5b-implementation-and-verification-checkpoints): implementation, policy/access maintenance and intermediate checks; final result remains in the current tracker.
 
 - [2026-10-20 — Named custodian capability checkpoint closed](#2026-10-20--named-custodian-capability-checkpoint-closed): intermediate handoff/session checkpoints; final bounded verification owner-accepted with cleanup confirmed.
@@ -2912,3 +2914,58 @@ acceptance are recorded in the tracker and linked evidence.
 - **Verification:** real PostgreSQL/runtime grants/shared Redis/A/B API and production HTTPS browser passed, including combined filtered pagination, uppercase UUIDs, conflicts, replay versus later state, rollback, owner/target isolation, 320–1440px/axe/focus and affected credential/session regressions. Final serial `./dev check` passed with persistent shell exit 0.
 - **Preservation:** additive migration and original-field/staff/operator/creation-receipt hashes passed; exact fixture cleanup, ordinary platform HTTPS refresh, platform/staff transport/browser/data preservation and backend live/ready 200 passed. Earlier wrapper status 143 is superseded by the clean detached full run.
 - **Handoff:** [operator procedure](../docs/runbooks/tenant-configuration.md), [registry ports](../docs/architecture/draft-tenant-registry-api.md#p4-u1b-1-extension-contract) and [browser patterns](../docs/architecture/draft-tenant-browser.md). Child 2 requires ONB-02 geography policy; children 2/3, parent P4-U1b/P4-U1, activation and operational readiness remain incomplete.
+
+
+## 2026-10-29 — P4-U1b-3 implementation and verification checkpoints
+
+Archived after final C-01–07 and parent AC-01–11 acceptance passed. These intermediate
+states are superseded by the [final evidence](../docs/status/p4-u1b-3-evidence.md).
+
+**P4-U1b-3 — Voice preference and integrated onboarding handoff:** in progress,
+2026-10-29 (Asia/Manila, +08:00). Implementing C-01–07 against the approved
+ONB-03 section-write policy and existing credential lifecycle. Children 1/2 remain
+verified prerequisites. Implemented additive tenancy-owned voice preference, strict draft section saves,
+independent mounted editor recovery, saved-detail completeness and safe credential
+status refresh. Added real A/B API and production HTTPS acceptance extensions and
+operator/downstream contracts. Runtime acceptance and required regressions are
+pending; this unit and its parents remain incomplete. Normal additive migration
+passed; six canonical-table digests and five retained HTTPS-file digests match,
+and all four normal tenants start not configured. Initial overlapping API run
+hit a fixture-init timeout after original A-01–05. Serial API matrices all passed,
+but the outer wrapper ended with signal 143, so final combined exit/cleanup is
+still required. Browser verification exposed and corrected a mounted-work render
+race that could discard adjacent contact edits; geography shares the fix. Added
+a batched-field regression; corrected editing and geography HTTPS matrices passed.
+The first combined run identified the missing Next voice allowlist entry; added
+that named consumer support and HTTPS invalid/forged voice checks. Detached serial
+combined/lifecycle/full checks are running. Final-source voice HTTPS acceptance
+passed, including keyboard/save/reload, forged input, independent unsaved work,
+conflict/discard, uncertainty, owner/target isolation and responsive/axe checks.
+Combined `./dev exec pnpm check:draft-tenant` passed with independently recorded
+exit 0 and owned fixture cleanup. Expanded `./dev exec pnpm check:staff-auth --lifecycle` also passed, exit 0,
+including actual integrated saved/unsaved configuration preservation and unset/ready
+draft ordinary sign-in denial. Final `./dev check`, normal runtime refresh,
+preservation and cleanup reconciliation remain pending. The first full run passed
+static/build/foundation/storage/identity/platform/staff and browser checks, then
+hit the existing 2-second geography CHECK timeout at 1,000 features. Added an
+equivalent additive validator optimization (cached features, streamed metadata,
+once-validated identical municipality) and direct corrupted-metadata regressions.
+No limits/timeouts/policy changed. Final migration and focused API passed, exit 0,
+including 1,000 features and direct corrupted-metadata rejection; all six normal
+canonical table digests still match. The final `./dev check` rerun passed, exit 0.
+Normal backend live/ready returned 200; six data digests, five retained HTTPS-file
+hashes and both Naga source hashes match. Ordinary staff HTTPS is refreshed/ready;
+platform transport passed before correcting a stop/start control-socket race.
+A clean platform restart and final normal transport/preservation checks are active;
+completion remains pending only that reconciliation.
+
+
+### Previous completed checkpoint
+
+### P4-U1b-2
+
+- **Status:** complete within approved private development, 2026-10-28 (Asia/Manila, +08:00). B-01–07 passed under [approved ONB-02](../docs/planning/p4-u1b-2-geography-policy-review.md); [final evidence](../docs/status/p4-u1b-2-evidence.md).
+- **Delivered:** prepared administrative/barangay GeoJSON upload, saved/proposed preview and tenant comparison, explicit ownership confirmation, optional WGS84 default coordinates, canonical PostGIS validation and qualified future-intake read. Tenant code is unchanged; the initial combined cap is 4,096 positions.
+- **Verification:** focused and combined real PostGIS/shared Redis/A/B API/production HTTPS checks, affected credential lifecycle and the complete `./dev check` passed with exit 0. Includes exact limits, precision, topology/containment, races/rollback, uncertainty, authority, outage and owner/target isolation.
+- **Preservation:** normal additive migration and platform/staff HTTPS refresh/transport checks passed; backend live/ready returned 200. Original canonical row digests and retained HTTPS material match, existing tenants remain unconfigured, original Naga files are unchanged and owned fixtures cleaned up.
+- **Handoff:** [operator workflow](../docs/runbooks/tenant-configuration.md#approved-geography-upload-workflow--p4-u1b-2) and [canonical consumer contract](../docs/architecture/tenant-geography.md). Child 3 is now in progress; parent P4-U1b/P4-U1, activation, incident fallback and operational readiness remain incomplete.

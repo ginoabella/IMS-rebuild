@@ -80,3 +80,36 @@ Verification uses `./dev exec pnpm check:draft-tenant` (including prepared-file
 contracts, real PostGIS/A/B API and production HTTPS browser),
 `./dev exec pnpm check:staff-auth --lifecycle`, and `./dev check`.
 Exact commands, results, cleanup and remaining limitations belong to the evidence.
+
+## Voice preference and administrator handoff — P4-U1b-3
+
+Create a draft, then use the registry's code/name search and lifecycle filter to
+resume its detail. Save organization, contacts and geography independently. In
+Voice preference, explicitly choose Voice enabled or Voice disabled and save.
+Not configured is incomplete, including for tenants created before this feature.
+Reload detail to see saved lifecycle, preference, geography/contact completeness
+and receipt-linked administrator state. Unsaved mounted sections remain editable;
+their original versions intentionally conflict if another save changed the row.
+Discard only the reviewed section to use loaded canonical values before a new save.
+
+For an uncertain configuration save, restore access as the same operator and use
+Retry original voice save. The recovered version is historical; current detail is
+canonical. Never submit replacement input until the original outcome is reconciled.
+
+Verify the actual administrator against established organization records for every
+issue/reissue and acknowledge the approved secure handoff. Contact edits neither
+verify identity nor send anything. The existing issuer chooses setup for eligible
+unset credentials and the approved linked reset path for ready-draft recovery.
+Hand the one-time code directly to the verified person and give the clean HTTPS
+credentials-page address separately. The recipient chooses their password; the
+operator never receives or selects it. Keep codes/passwords out of URLs, storage,
+reports and configuration. Check credential status or reload detail after exchange.
+Previously saved configuration and unrelated unsaved edits survive this refresh.
+
+Lost issuance requires safe status and an explicit newly verified reissue; it cannot
+redisclose a code. Lost exchange stays uncertain under the
+[credential recovery procedure](staff-credential-lifecycle.md). Never replay a code
+or password automatically. Failed credential operations leave configuration intact.
+Draft staff sign-in remains denied whether credentials are unset or ready. Preference,
+credential exchange and opt-out do not activate tenants or establish PBX readiness.
+P4-U2 allocation/routing and P4-U3 lifecycle supply their own gates.

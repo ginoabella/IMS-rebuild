@@ -13,7 +13,7 @@ import type { TenantRecord, TenantStatus } from '../../domain/tenant-record';
 import type { DraftTenantRegistry } from '../../../platform/application/draft-tenant-ports';
 import type { ReadSnapshot } from '../../../../infrastructure/database/read-snapshot';
 const columns =
-  'id,normalized_code,display_name,status,version,authority_version,created_at,updated_at,contact_name,contact_email,contact_phone';
+  'id,normalized_code,display_name,status,version,authority_version,created_at,updated_at,voice_preference,contact_name,contact_email,contact_phone';
 const event = {
   type: 'identity.storage.changed',
   version: 1,
@@ -136,6 +136,24 @@ export class TenantRepository implements DraftTenantRegistry {
         input.values.displayName,
       );
       return named.kind === 'found' ? named : { kind: 'unavailable' as const };
+    }
+    if (input.section === 'voice') {
+      const updated = await transaction.query<TenantRecord>(
+        `UPDATE public.tenants SET voice_preference=$2,version=version+1,updated_at=clock_timestamp() WHERE id=$1 RETURNING ${columns}`,
+        [id, input.values.voicePreference],
+      );
+      const value = updated.rows[0];
+      if (!value) throw new Error('Missing locked tenant');
+      await new AuditRepository().append(
+        transaction,
+        {
+          type: 'tenancy.configuration.changed',
+          version: 1,
+          fields: { section: { kind: 'enum', values: ['voice'] } },
+        },
+        { section: 'voice' },
+      );
+      return { kind: 'found' as const, value };
     }
     const contact = input.values;
     const updated = await transaction.query<TenantRecord>(
