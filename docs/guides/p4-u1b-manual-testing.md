@@ -104,6 +104,9 @@ another organization's jurisdiction. Keep the original files unchanged.
 1. Open **Service area and default intake coordinates**.
 2. Upload `naga_admin_ADM_ADM_3.json` through **Administrative boundary file**.
 3. Upload `naga_brgy_ADM_ADM_3.json` through **Barangay boundary file**.
+   Each accepted file shows its name beside the picker as **Staged administrative
+   file** or **Staged barangay file**. The picker resets so you can select the same
+   file again; use the staged filename and preview to confirm it was read.
 4. Review the proposed preview, **Municipality: Naga City**, the 27 uploaded
    barangays, and the selected tenant name/code. Saved geography should still be
    unconfigured until you save.

@@ -33,7 +33,7 @@ type State = {
   authorityVersion: number;
   geographyVersion: number;
   confirmed: boolean;
-  uploads: { area: boolean; barangays: boolean };
+  uploads: { area: string | null; barangays: string | null };
   state: 'saved' | 'unsaved' | 'pending' | 'conflict' | 'failed' | 'uncertain';
   attempt: Attempt | null;
   message: string;
@@ -48,7 +48,7 @@ function initial(detail: TenantDetailDto): State {
     authorityVersion: detail.tenant.authorityVersion,
     geographyVersion: g.version,
     confirmed: false,
-    uploads: { area: false, barangays: false },
+    uploads: { area: null, barangays: null },
     state: 'saved',
     attempt: null,
     message: '',
@@ -176,6 +176,11 @@ export function GeographyEditor({
   const work = useOperatorWork();
   const [state, setState] = useState<State | null>(null),
     [reading, setReading] = useState(false);
+  const [pendingUpload, setPendingUpload] = useState<{
+    layer: 'area' | 'barangays';
+    file: File;
+  } | null>(null);
+  const readingFile = useRef(false);
   // Preserve synchronous staged work across renders of an older state snapshot.
   const latest = useRef(state);
   const canonical = useRef(detail);
@@ -233,6 +238,7 @@ export function GeographyEditor({
   const locked =
     !work.ready ||
     reading ||
+    !!pendingUpload ||
     state?.state === 'pending' ||
     !!state?.attempt ||
     detail?.tenant.status !== 'draft';
@@ -240,8 +246,23 @@ export function GeographyEditor({
     epoch.current++;
     patch({ values, confirmed: false, state: 'unsaved', message: '' });
   }
-  async function upload(layer: 'area' | 'barangays', file: File | undefined) {
-    if (!file || locked) return;
+  // Native picker focus can revalidate access before its change event arrives.
+  // Keep the selection in this owner/tenant-mounted editor until access is ready.
+  useEffect(() => {
+    if (
+      pendingUpload &&
+      state &&
+      !reading &&
+      work.ready &&
+      state.state !== 'pending' &&
+      !state.attempt &&
+      detail?.tenant.status === 'draft'
+    )
+      void upload(pendingUpload.layer, pendingUpload.file);
+  }, [pendingUpload, reading, work.ready, state, detail?.tenant.status]);
+  async function upload(layer: 'area' | 'barangays', file: File) {
+    if (readingFile.current) return;
+    readingFile.current = true;
     const capture = work.capture(),
       token = ++epoch.current;
     setReading(true);
@@ -269,11 +290,13 @@ export function GeographyEditor({
           ? { ...s.values, area: serviceAreaUpload(raw) }
           : { ...s.values, barangays: barangayUpload(raw) };
       geographyValues({ ...values, defaults: null });
+      setPendingUpload(null);
       sizes.current[layer] = file.size;
       edit(values);
-      patch({ uploads: { ...s.uploads, [layer]: true } });
+      patch({ uploads: { ...s.uploads, [layer]: file.name } });
     } catch (error) {
       if (capture.current() && live.current && token === epoch.current) {
+        setPendingUpload(null);
         patch({
           confirmed: false,
           state: 'failed',
@@ -282,6 +305,7 @@ export function GeographyEditor({
         focus.current = true;
       }
     } finally {
+      readingFile.current = false;
       if (live.current) setReading(false);
     }
   }
@@ -438,9 +462,12 @@ export function GeographyEditor({
             onChange={(e) => {
               const f = e.target.files?.[0];
               e.target.value = '';
-              void upload('area', f);
+              if (f) setPendingUpload({ layer: 'area', file: f });
             }}
           />
+          {s.uploads.area && (
+            <p role="status">Staged administrative file: {s.uploads.area}</p>
+          )}
         </Field>
         <Field id="geography-barangays" label="Barangay boundary file" optional>
           <Input
@@ -451,9 +478,12 @@ export function GeographyEditor({
             onChange={(e) => {
               const f = e.target.files?.[0];
               e.target.value = '';
-              void upload('barangays', f);
+              if (f) setPendingUpload({ layer: 'barangays', file: f });
             }}
           />
+          {s.uploads.barangays && (
+            <p role="status">Staged barangay file: {s.uploads.barangays}</p>
+          )}
         </Field>
         <div className="grid gap-4 md:grid-cols-2">
           <div className="min-w-0 break-words">
@@ -646,7 +676,7 @@ export function GeographyEditor({
             onClick={() => {
               sizes.current.barangays = 0;
               edit({ ...s.values, barangays: [] });
-              patch({ uploads: { ...s.uploads, barangays: false } });
+              patch({ uploads: { ...s.uploads, barangays: null } });
             }}
           >
             Clear barangays
@@ -657,7 +687,7 @@ export function GeographyEditor({
             onClick={() => {
               sizes.current = { area: 0, barangays: 0 };
               edit({ ...s.values, area: null, barangays: [] });
-              patch({ uploads: { area: false, barangays: false } });
+              patch({ uploads: { area: null, barangays: null } });
             }}
           >
             Clear service area and barangays

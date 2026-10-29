@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import { readFileSync } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
 import { fileURLToPath } from 'node:url';
 import { expect as baseExpect } from '@playwright/test';
@@ -56,6 +57,17 @@ export async function checkTenantGeographyBrowser({
         ),
       );
     await expect(confirm()).toBeVisible();
+    await expect(
+      region.getByText(
+        'Staged administrative file: naga_admin_ADM_ADM_3.json',
+        {
+          exact: true,
+        },
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByLabel('Barangay boundary file (optional)', { exact: true }),
+    ).toBeEnabled();
     await page
       .getByLabel('Barangay boundary file (optional)', { exact: true })
       .setInputFiles(
@@ -66,6 +78,11 @@ export async function checkTenantGeographyBrowser({
     await expect(
       region.getByText('Barangays: 27 (uploaded)', { exact: true }),
     ).toBeVisible();
+    await expect(
+      region.getByText('Staged barangay file: naga_brgy_ADM_ADM_3.json', {
+        exact: true,
+      }),
+    ).toBeVisible();
   };
   await expect(longitude()).toHaveValue('');
   await expect(
@@ -73,9 +90,86 @@ export async function checkTenantGeographyBrowser({
       exact: true,
     }),
   ).toBeVisible();
+  // Native file pickers restore window focus before delivering the selection.
+  // Keep the actual access response pending while the change event arrives.
+  const pickerAccess = holdResponse('GET', '/platform/auth/session');
+  await page.evaluate(() =>
+    globalThis.dispatchEvent(new globalThis.Event('focus')),
+  );
+  assert.equal(await pickerAccess.reached, 200);
+  try {
+    await page
+      .getByLabel('Administrative boundary file (optional)', { exact: true })
+      .setInputFiles(
+        fileURLToPath(
+          new URL(
+            '../reference/map/naga_admin_ADM_ADM_3.json',
+            import.meta.url,
+          ),
+        ),
+      );
+  } finally {
+    pickerAccess.release();
+  }
+  await expect(confirm()).toBeVisible();
+  // Access can also change while the browser is reading the selected file.
+  // The original read must be fenced, then retried after the same owner returns.
+  const readingAccess = holdResponse('GET', '/platform/auth/session');
+  await page.evaluate(() => {
+    const original = globalThis.File.prototype.arrayBuffer;
+    globalThis.File.prototype.arrayBuffer = async function () {
+      globalThis.File.prototype.arrayBuffer = original;
+      const bytes = await original.call(this);
+      globalThis.dispatchEvent(new globalThis.Event('focus'));
+      return bytes;
+    };
+  });
+  await page
+    .getByLabel('Administrative boundary file (optional)', { exact: true })
+    .setInputFiles({
+      name: 'picker-read-admin.json',
+      mimeType: 'application/json',
+      buffer: readFileSync(
+        fileURLToPath(
+          new URL(
+            '../reference/map/naga_admin_ADM_ADM_3.json',
+            import.meta.url,
+          ),
+        ),
+      ),
+    });
+  try {
+    assert.equal(await readingAccess.reached, 200);
+  } finally {
+    readingAccess.release();
+  }
+  await expect(
+    region.getByText('Staged administrative file: picker-read-admin.json', {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    page.getByLabel('Administrative boundary file (optional)', { exact: true }),
+  ).toBeEnabled();
   await upload();
   await expect(
     region.getByText('Municipality: Naga City', { exact: true }),
+  ).toBeVisible();
+  await page
+    .getByLabel('Administrative boundary file (optional)', { exact: true })
+    .setInputFiles({
+      name: 'invalid-replacement.json',
+      mimeType: 'application/json',
+      buffer: Buffer.from('{}'),
+    });
+  await expect(region.getByText(/^Administrative file:/)).toBeVisible();
+  await expect(
+    region.getByText('Staged administrative file: naga_admin_ADM_ADM_3.json', {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(
+    region.getByText('Barangays: 27 (uploaded)', { exact: true }),
   ).toBeVisible();
   await expect(confirm()).not.toBeChecked();
   await save().click();
@@ -95,6 +189,9 @@ export async function checkTenantGeographyBrowser({
   await expect(confirm()).toBeChecked();
   await save().click();
   await expect(region.getByText(/^Geography saved at version/)).toBeVisible();
+  await expect(
+    region.getByText(/^Staged (administrative|barangay) file:/),
+  ).toHaveCount(0);
   let detail = (await request(`/platform/tenants/${id}`)).data;
   assert.equal(detail.tenant.geography.barangays.length, 27);
   assert.deepEqual(detail.tenant.geography.defaults, [123.19, 13.62]);
