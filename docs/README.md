@@ -185,6 +185,7 @@ activation and PBX readiness remain with their owning units.
 - [P4-U1b-1 — Resumable registry editing and contacts](../context/feature-specs/p4-u1b-1-resumable-registry-editing-and-contacts.md) — complete within approved private development.
 - [P4-U1b-2 — Service area and default intake coordinates](../context/feature-specs/p4-u1b-2-service-area-and-default-intake-coordinates.md) — complete within approved private development.
 - [P4-U1b-3 — Voice preference and integrated onboarding handoff](../context/feature-specs/p4-u1b-3-voice-preference-and-integrated-onboarding-handoff.md) — complete within approved private development.
+- [P4-U1b manual testing walkthrough](guides/p4-u1b-manual-testing.md)
 - [Draft configuration operator procedure](runbooks/tenant-configuration.md)
 - [P4-U1b-1 acceptance evidence](status/p4-u1b-1-evidence.md)
 

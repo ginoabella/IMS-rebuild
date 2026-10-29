@@ -234,6 +234,8 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Recent Session Notes
 
+- 2026-10-29 (Asia/Manila, +08:00) — Added the requested [P4-U1b manual testing guide](../docs/guides/p4-u1b-manual-testing.md): desktop access, all three onboarding parts, expected results, credential exchange/draft denial, independent work, validation/conflict/clearing, reporting and optional automated checks. Documentation only; implementation completion is unchanged and no new manual runtime pass is claimed.
+
 - 2026-10-29 (Asia/Manila, +08:00) — P4-U1b-3, P4-U1b and P4-U1 completed within approved private development. C-01–07 and parent AC-01–11, final focused/combined/credential/full checks and normal runtime preservation passed. Removed child 3 from in progress. [Final evidence](../docs/status/p4-u1b-3-evidence.md); [intermediate checkpoints](progress-tracker-history.md#2026-10-29--p4-u1b-3-implementation-and-verification-checkpoints). P4-U2–U5 and Phase 4 gate remain incomplete.
 
 - 2026-10-28 (Asia/Manila, +08:00) — P4-U1b-2 completed under approved ONB-02. B-01–07, focused/combined/affected/full checks, ordinary migration/HTTPS refresh and preservation passed. Removed the feature from in progress; child 3 remains planned. Final acceptance recorded in [evidence](../docs/status/p4-u1b-2-evidence.md). Earlier proposal and intermediate checkpoints are in [history](progress-tracker-history.md#2026-10-28--p4-u1b-2-policy-and-implementation-checkpoints).

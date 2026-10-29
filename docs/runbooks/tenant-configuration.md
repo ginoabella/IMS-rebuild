@@ -1,5 +1,8 @@
 # Draft tenant configuration
 
+For a step-by-step test with expected results, use the
+[P4-U1b manual testing guide](../guides/p4-u1b-manual-testing.md).
+
 In the platform console, open **Tenants**, search a saved organization's code or
 name, optionally select a lifecycle filter, and open **View**. Search treats `%`,
 `_` and backslashes literally; blank search lists all records. Pages have 25 rows.
@@ -10,7 +13,7 @@ and use that section's Save button. The permanent code and original administrato
 remain unchanged. Other lifecycle statuses are readable. Name is required, trimmed
 and bounded to 200 UTF-16 units. Contact name/email/phone are independently optional;
 blank clears. Partial contacts show incomplete. Contacts are informational and do
-not verify identity or authorize delivery. Geography/voice remain later work.
+not verify identity or authorize delivery. Geography and voice are covered below.
 
 A conflict preserves your input. Reload detail to see the current version, then
 explicitly discard the affected section to adopt it and make your changes again.
