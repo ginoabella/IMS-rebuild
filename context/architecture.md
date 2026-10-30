@@ -904,3 +904,16 @@ B-01–07 and focused/combined/affected/full checks passed within approved priva
 development; [final evidence](../docs/status/p4-u1b-2-evidence.md). The
 [consumer contract](../docs/architecture/tenant-geography.md) records bounds,
 canonical values, safe database diagnostics and the internal intake boundary.
+
+## P4-U2a allocation ownership
+
+The owner approved existing-stock reservation/allocation for draft and active
+tenants, including active expansion, on 2026-10-30 (Asia/Manila, +08:00).
+The [allocation contract](../docs/architecture/tenant-inventory-allocation.md)
+defines telephony-owned exclusive claims/history, canonical tenancy facts, node
+serialization, guarded inventory operations and atomic audit/replay. Disabled
+stock retains ownership; claims grant no calling readiness. Installed-resource
+release/transfer remains pending for c; desired-only release must prove all
+dependencies absent. P4-U2a A-01–07 acceptance is complete within approved private
+development; [final evidence](../docs/status/p4-u2a-evidence.md). Parent routing/
+readiness and installed-resource release/transfer remain with b/c.

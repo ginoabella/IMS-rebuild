@@ -162,6 +162,10 @@ case "$action" in
         provision_storage scripts/check-session-deployment.mjs --revisions-browser
         workspace_exec node --test scripts/pbx-revisions.test.mjs scripts/pbx-live-protection.test.mjs scripts/pbx-mutation-boundary.test.mjs
         fi
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:tenant-allocation ]; then
+        shift 2
+        [ "$#" -eq 0 ] || exit 1
+        provision_storage scripts/check-session-deployment.mjs --allocation-browser
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:routing ]; then
         shift 2
         [ "$#" -eq 0 ] || exit 1

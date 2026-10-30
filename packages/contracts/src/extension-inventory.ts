@@ -151,6 +151,7 @@ export type InventoryConflict =
   | 'dependency_changed'
   | 'profile_name_conflict'
   | 'inventory_ineligible'
+  | 'tenant_claimed'
   | 'intent_expired';
 export interface InventoryApiErrorDto {
   statusCode: number;

@@ -44,7 +44,11 @@ export async function inventoryRequest<T>(
     const v = obj(value) ? value : {};
     throw new InventoryError(
       response.status,
-      (typeof v.reason === 'string' ? v.reason : 'Review entered values') +
+      (v.reason === 'tenant_claimed'
+        ? 'This extension has a tenant claim. Review tenant allocation before changing its profile or credentials.'
+        : typeof v.reason === 'string'
+          ? v.reason
+          : 'Review entered values') +
         (obj(v.conflicts) && v.conflicts.truncated === true
           ? ` (${String(v.conflicts.total)} total conflicts; first 10 shown)`
           : ''),

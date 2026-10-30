@@ -85,6 +85,16 @@ function extensionDto(r: ExtensionRow): ExtensionDto {
 }
 const profileSelect = `SELECT p.id,p.head_version,v.* FROM public.endpoint_profiles p JOIN public.endpoint_profile_versions v ON v.profile_id=p.id`;
 export class InventoryRepository implements InventoryStore {
+  async hasCurrentClaim(s: ReadSnapshot, extensionId: string) {
+    return (
+      (
+        await s.query(
+          "SELECT id FROM public.tenant_inventory_claims WHERE extension_id=$1 AND state<>'released' LIMIT 1",
+          [extensionId],
+        )
+      ).rows.length > 0
+    );
+  }
   async node(s: ReadSnapshot, id: string, lock = false) {
     const r = await s.query<InventoryNode>(
       `SELECT id,installation_id AS "installationId",version FROM public.pbx_nodes WHERE id=$1${lock ? ' FOR SHARE' : ''}`,

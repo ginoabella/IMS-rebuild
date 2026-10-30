@@ -1,3 +1,5 @@
+import { AllocationController } from '../../../telephony/adapters/http/allocation.controller';
+import { TenantAllocation } from '../../../telephony/application/tenant-allocation';
 import { LiveController } from '../../../telephony/adapters/http/live.controller';
 import { PbxLive } from '../../../telephony/application/pbx-live';
 import { RevisionsController } from '../../../telephony/adapters/http/revisions.controller';
@@ -41,6 +43,7 @@ export class PlatformAuthHttpModule {
       module: PlatformAuthHttpModule,
       imports: [IdentityHttpModule.register(config)],
       controllers: [
+        AllocationController,
         LiveController,
         PbxController,
         InventoryController,
@@ -53,6 +56,11 @@ export class PlatformAuthHttpModule {
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: TenantAllocation,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.allocation,
+        },
         {
           provide: PbxLive,
           inject: [InventoryRuntime],

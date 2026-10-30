@@ -43,6 +43,8 @@ export async function checkPlatformBrowser({
   pbxUsername,
   inventoryBrowser = false,
   peerBrowser = false,
+  allocationBrowser = false,
+  allocationDependencies,
   routingBrowser = false,
   revisionsBrowser = false,
   trunkAccess,
@@ -564,6 +566,9 @@ export async function checkPlatformBrowser({
         ? 'PBX revisions browser/API'
         : 'IP-peer resources browser/API';
       await checkPeerBrowser({
+        allocationOnly: allocationBrowser,
+        allocationDependencies,
+        username,
         routingOnly: routingBrowser,
         revisionsOnly: revisionsBrowser,
         expire,

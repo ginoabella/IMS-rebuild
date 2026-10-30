@@ -22,6 +22,7 @@ export type EndpointCredentialConflict =
   | 'stale_version'
   | 'dependency_changed'
   | 'inventory_ineligible'
+  | 'tenant_claimed'
   | 'credential_state_conflict'
   | 'credential_operation_pending'
   | 'intent_expired';

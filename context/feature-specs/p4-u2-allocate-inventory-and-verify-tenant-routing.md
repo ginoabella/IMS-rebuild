@@ -1,6 +1,6 @@
 # P4-U2 — Allocate inventory and verify tenant routing
 
-**Status:** planned; three-sub-unit split adopted 2026-10-29 (Asia/Manila, +08:00). Parent and children have no implementation or live acceptance yet.
+**Status:** in progress; P4-U2a complete under approved allocation policy, 2026-10-30 (Asia/Manila, +08:00). P4-U2b/c remain planned; parent/live acceptance is incomplete.
 **Prepared:** 2026-10-29 (Asia/Manila, +08:00).
 **Requirement:** [Phase 4 / P4-U2](../implementation-plan.md#p4-u2--allocate-inventory-and-verify-tenant-routing).
 
@@ -199,12 +199,25 @@ Independent specification work can proceed. Splitting does not approve defaults.
 
 | ID       | Required decision and recommended starting proposal                                                                                                                                                                                                                                                                             | Affected work / resume condition                                                                                                                 |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| ALLOC-01 | Reservation lifecycle, expiry/release, disabled-stock selection, single/multiple node placement, range semantics and bounds. Recommend explicit existing-stock claims, no automatic future-stock capture or expiry, one node per allocation batch and atomic bounded selection.                                                 | Allocation schema/API/UI: approve exact ownership and reservation transitions, limits and node rules.                                            |
+| ALLOC-01 | **Approved 2026-10-30:** see the [exact policy](../../docs/planning/p4-u2a-allocation-policy-review.md), including active expansion. Original decision scope: reservation lifecycle, expiry/release, disabled-stock selection, single/multiple node placement, range semantics and bounds. Recommend explicit existing-stock claims, no automatic future-stock capture or expiry, one node per allocation batch and atomic bounded selection.                                                 | Allocation schema/API/UI gate resolved by the owner-approved policy; implement and verify A-01–07.                                            |
 | ALLOC-02 | Gateway/DID/group ownership, permitted sharing and catch-all behavior. Recommend exclusive gateway/DID/group ownership initially, with all reachable destinations owned by one tenant, matching the current trusted-facts helper.                                                                                               | Inbound bindings: approve topology and collision/default-denial rules, or explicitly revise the helper contract for shared gateways.             |
 | ALLOC-03 | Approved outbound permissions and route winner evaluation within a tenant context. Recommend filter to explicitly permitted rules, then apply existing priorities/transforms and deny disabled winners; explicitly review this change from node-wide preview semantics.                                                         | Outbound binding/compiler: approve selection order, trunk sharing and denied-route behavior.                                                     |
 | ALLOC-04 | Controlled ingress/endpoints, destination allowlist, allowed call actions, evidence success/freshness/invalidation and uncertain-test retry. Recommend operator-triggered bounded tests with exact artifact provenance, no automatic redial after uncertainty and invalidation on relevant semantic change.                     | Live tests/readiness: approve concrete environment, authority, success conditions and validity rules; test doubles cannot satisfy the live gate. |
 | ALLOC-05 | How draft tenants can prove routing before activation without ordinary calling access. Recommend a narrowly scoped verification mode limited to controlled endpoints/destinations; ordinary draft traffic and staff sign-in remain denied. Define disabled/not-configured behavior and leave lifecycle policy to U3.            | Tenant-aware live rendering: approve verification-mode admission/removal and its production boundary before enabling tenant paths.               |
-| ALLOC-06 | Release/reallocation with assignments, desired references, active/unknown calls and retained runtime pins. Recommend reject/defer until all blockers are explicitly cleared; no forced call termination. Decide whether a reviewed artifact-retirement capability is necessary or intentionally deferred with visible blockers. | Release/transfer and parent acceptance: approve achievable safe path and required runtime extension; existing pins cannot be bypassed.           |
+| ALLOC-06 | **Approved for a’s desired-only release/blockers; final installed-resource path remains pending for c.** Release/reallocation with assignments, desired references, active/unknown calls and retained runtime pins. Recommend reject/defer until all blockers are explicitly cleared; no forced call termination. Decide whether a reviewed artifact-retirement capability is necessary or intentionally deferred with visible blockers. | Release/transfer and parent acceptance: approve achievable safe path and required runtime extension; existing pins cannot be bypassed.           |
+
+### Approved allocation policy — 2026-10-30
+
+The owner approved [ALLOC-01 and scoped ALLOC-06](../../docs/planning/p4-u2a-allocation-policy-review.md)
+in chat after amending eligibility to include active-tenant expansion. ALLOC-01
+is resolved: exclusive existing-stock reserved/allocated claims, explicit promotion,
+no expiry or future capture, disabled stock permitted, one node per batch with
+multiple nodes per tenant, 1–50 UUIDs or inclusive canonical numbers per selection,
+atomic rejection of gaps/conflicts, and draft/active eligibility checked at commit.
+Scoped ALLOC-06 permits only provably unreferenced desired-only release, with
+actual reference/runtime checks and visible fail-closed blockers. Installed-resource
+release/transfer and artifact retirement remain pending for c. ALLOC-02–05 remain
+open; this approval enables a only and grants no live calling readiness.
 
 ## Acceptance criteria
 
@@ -281,6 +294,5 @@ relabels existing probes. If ALLOC-06 requires a substantial retirement mechanis
 refine that scope and acceptance explicitly before implementation.
 
 **Review outcome:** suitable for sub-unit implementation with the boundaries above.
-The three child specifications are created and the split is adopted. P4-U2 and
-a/b/c remain planned; ALLOC-01–06 remain open until explicitly resolved. No
+The three child specifications are created and the split is adopted. P4-U2/a are in progress and b/c remain planned; ALLOC-01 and a’s scoped ALLOC-06 are approved as recorded above; ALLOC-02–05 and c’s final ALLOC-06 remain open. No
 implementation, live acceptance or policy approval follows from creating the specs.

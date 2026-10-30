@@ -92,3 +92,5 @@ export * from './pbx-revisions';
 export * from './pbx-live';
 
 export * from './tenant-geography';
+
+export * from './tenant-inventory';

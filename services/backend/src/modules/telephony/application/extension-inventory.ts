@@ -448,6 +448,7 @@ export class ExtensionInventory implements InventoryVersionPort {
     nodeId: string,
     extensionId: string,
     expectedVersion: number,
+    allowClaimedStatus = false,
   ) {
     id(nodeId, 'nodeId');
     id(extensionId, 'extensionId');
@@ -456,8 +457,11 @@ export class ExtensionInventory implements InventoryVersionPort {
     const extension = await this.store.extension(tx, nodeId, extensionId, true);
     if (!extension) throw new InventoryRejected({ kind: 'missing' });
     if (extension.version !== expectedVersion) conflict('stale_version');
-    // This unit has no allocation owner; all persisted inventory is unallocated.
-    // Future allocation must add its owner check here under the same lock.
+    if (
+      !allowClaimedStatus &&
+      (await this.store.hasCurrentClaim(tx, extensionId))
+    )
+      conflict('tenant_claimed');
     if (extension.availability !== 'available')
       conflict('inventory_ineligible');
     return extension;
@@ -505,6 +509,7 @@ export class ExtensionInventory implements InventoryVersionPort {
             nodeId,
             extensionId,
             expected,
+            statusOnly,
           );
           if (profile && profile.id !== old.profile.id) {
             try {

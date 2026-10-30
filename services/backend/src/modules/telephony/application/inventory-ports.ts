@@ -20,6 +20,7 @@ export interface InventoryReceipt {
 export type InventoryOperation =
   'extension-create' | 'bulk-create' | 'profile-create' | 'profile-version';
 export interface InventoryStore {
+  hasCurrentClaim(s: ReadSnapshot, extensionId: string): Promise<boolean>;
   node(
     s: ReadSnapshot,
     id: string,

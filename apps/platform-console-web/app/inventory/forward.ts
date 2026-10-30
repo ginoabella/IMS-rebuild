@@ -70,6 +70,7 @@ export async function forwardInventory(
         'dependency_changed',
         'profile_name_conflict',
         'inventory_ineligible',
+        'tenant_claimed',
         'intent_expired',
         'credential_state_conflict',
         'credential_operation_pending',

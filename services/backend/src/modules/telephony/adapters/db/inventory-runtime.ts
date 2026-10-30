@@ -1,3 +1,6 @@
+import { TenantAllocation } from '../../application/tenant-allocation';
+import { AllocationRepository } from './allocation-repository';
+import { AllocationTenancyRepository } from '../../../tenancy/adapters/db/allocation-tenancy';
 import { PbxLive } from '../../application/pbx-live';
 import { PbxRevisions } from '../../application/pbx-revisions';
 import { Routing } from '../../application/routing';
@@ -14,6 +17,7 @@ import { Peers } from '../../application/peers';
 import { InventoryRepository } from './inventory-repository';
 export class InventoryRuntime {
   readonly service: ExtensionInventory;
+  readonly allocation: TenantAllocation;
   readonly peers: Peers;
   readonly routing: Routing;
   readonly revisions: PbxRevisions;
@@ -37,6 +41,23 @@ export class InventoryRuntime {
     this.pool.on('connect', (client) => client.on('error', () => {}));
     this.pool.on('error', () => {});
     this.database = new SnapshotDatabase(url);
+    this.allocation = new TenantAllocation(
+      {
+        run: (context, action) =>
+          Transaction.run(
+            this.pool,
+            context,
+            'telephony.allocation',
+            logger,
+            action,
+          ),
+      },
+      this.database,
+      authority,
+      new AllocationTenancyRepository(),
+      new AllocationRepository(),
+      new AuditRepository(),
+    );
     this.live = new PbxLive(
       {
         run: (context, action) =>

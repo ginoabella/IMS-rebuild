@@ -1,4 +1,5 @@
 'use client';
+import { TenantAllocations } from '../allocations/section';
 import { GeographyEditor } from './geography';
 import { TenantEditor } from './editor';
 import { AdministratorCredentials } from './credential-issuer';
@@ -337,6 +338,7 @@ export function TenantDetail({ id }: { id: string }) {
         detail={detail}
         reload={state.retry}
       />
+      <TenantAllocations tenantId={id} />
       <AdministratorCredentials
         key={id}
         tenantId={id}

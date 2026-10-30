@@ -1,6 +1,7 @@
 # P4-U2a — Exclusive tenant inventory allocation
 
-**Status:** planned. Split adopted 2026-10-29 (Asia/Manila, +08:00); implementation has not started.
+**Status:** complete within approved private development; A-01–07 passed, 2026-10-30 (Asia/Manila, +08:00). Owner approved ALLOC-01 and scoped ALLOC-06 in the [policy record](../../docs/planning/p4-u2a-allocation-policy-review.md), including active-tenant expansion.
+**Evidence:** [Final acceptance and preservation](../../docs/status/p4-u2a-evidence.md).
 **Parent:** [P4-U2 — Allocate inventory and verify tenant routing](p4-u2-allocate-inventory-and-verify-tenant-routing.md).
 
 The parent owns shared behavior, ALLOC-01–06 policy gates and AC-01–12. This child
@@ -96,8 +97,9 @@ scenario. No readiness or parent completion follows from a passing a.
 
 ## Required verification
 
-Define a focused allocation API/browser/race selector in the Docker workspace;
-no such selector exists yet. Run meaningful real database constraint/race, rollback,
+The focused allocation API/browser/race selector is
+`./dev exec pnpm check:tenant-allocation` in the Docker workspace. Run meaningful
+real database constraint/race, rollback,
 shared-session and actual private HTTPS browser checks for A-01–07. Include direct
 runtime-pin blocker proof against the existing dependency port; fixtures cannot
 establish active-call release safety. Run `./dev exec pnpm check:extension-inventory`,

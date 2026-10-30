@@ -8,6 +8,8 @@ Decisions remain owned by their linked contracts/reviews; history is not approva
 
 ## Archive index
 
+- [2026-10-30 — P4-U2a implementation and verification checkpoints](#2026-10-30--p4-u2a-implementation-and-verification-checkpoints): intermediate implementation, access restoration, failed checks and verified recovery; current status remains in the tracker.
+
 - [2026-10-29 — P4-U1b-3 implementation and verification checkpoints](#2026-10-29--p4-u1b-3-implementation-and-verification-checkpoints): superseded implementation/runtime updates and previous completed checkpoint; final acceptance is in the current tracker.
 
 - [2026-10-26 — P3-U5b implementation and verification checkpoints](#2026-10-26--p3-u5b-implementation-and-verification-checkpoints): implementation, policy/access maintenance and intermediate checks; final result remains in the current tracker.
@@ -2969,3 +2971,90 @@ completion remains pending only that reconciliation.
 - **Verification:** focused and combined real PostGIS/shared Redis/A/B API/production HTTPS checks, affected credential lifecycle and the complete `./dev check` passed with exit 0. Includes exact limits, precision, topology/containment, races/rollback, uncertainty, authority, outage and owner/target isolation.
 - **Preservation:** normal additive migration and platform/staff HTTPS refresh/transport checks passed; backend live/ready returned 200. Original canonical row digests and retained HTTPS material match, existing tenants remain unconfigured, original Naga files are unchanged and owned fixtures cleaned up.
 - **Handoff:** [operator workflow](../docs/runbooks/tenant-configuration.md#approved-geography-upload-workflow--p4-u1b-2) and [canonical consumer contract](../docs/architecture/tenant-geography.md). Child 3 is now in progress; parent P4-U1b/P4-U1, activation, incident fallback and operational readiness remain incomplete.
+
+## 2026-10-30 — P4-U2a implementation and verification checkpoints
+
+**P4-U2a — Exclusive tenant inventory allocation:** in progress,
+2026-10-30 (Asia/Manila, +08:00). Owner approved the amended
+[allocation policy](../docs/planning/p4-u2a-allocation-policy-review.md), including
+active-tenant expansion; parent ALLOC-01 and a's scoped ALLOC-06 are resolved.
+Published the [exact contract](../docs/architecture/tenant-inventory-allocation.md)
+and added the first implementation of exclusive claims/history/receipts,
+canonical tenant eligibility, protected mutations/Next forwarding, inventory guards
+and tenant-detail selection/recovery. Backend compilation and console type checks passed. Focused real-service
+acceptance is in progress, with actual constraint/held-writer races, atomic
+rollback, unknown-COMMIT reconciliation and HTTPS recovery/isolation coverage
+prepared. The first browser build picked up stale contract output and failed;
+rebuilt dependencies precede the current rerun. No feature acceptance is inferred. The focused selector is
+`./dev exec pnpm check:tenant-allocation`. A-01–07 and required regressions remain
+outstanding; source presence is not acceptance. Installed-resource
+release/transfer remains with c; no calling readiness or completion is claimed.
+Read-only ordinary-state digests and the retained native PBX baseline were captured;
+the retained artifact exactly matches loaded runtime, with no pending operation.
+[Current evidence](../docs/status/p4-u2a-evidence.md) records the complete focused
+API/HTTPS suite passing, exit 0, including recovery, desktop zoom, responsive
+states and owner/target isolation. Required inventory/tenant/routing/revision/
+authority regressions are running sequentially. Core inventory API regression passed;
+provider setup stopped because the existing restricted issuer returns verified-TLS
+403. After the owner explicitly approved restricted issuer replacement, the fixed-role
+procedure staged and installed the replacement with exact policy/lifetime/custody
+validation; the temporary human session was revoked and the prior issuer was
+confirmed expired. The full inventory/provider check is rerunning. A separate
+expired private GET-only PBX consumer was confirmed by read-only identity 403;
+the owner separately approved its replacement. Exact policy/role preflight and
+replacement passed with zero configuration changes, prior expiry confirmed and
+temporary human session revoked. Inventory core API regression passed. The provider retry reached its first
+credential-worker fixture but returned a safe failure; its access was revoked and
+files removed. A stage/SQLSTATE-only diagnostic rerun is isolating that failure;
+fixture and canonical database password bytes compare equal without disclosure.
+The diagnostic identified EAI_AGAIN before any provider work: PostgreSQL had lost
+its documented external endpoint-database attachment. Restored that existing
+internal-network attachment and alias without recreating PostgreSQL; credential
+rerun passed, exit 0, including real provider failures, complete material scans
+and owned cleanup (26 generations: 25 destroyed, 1 already absent; access revoked
+and token files removed). Exact combined inventory/native checks run sequentially.
+Final source focused allocation suite passed, exit 0, including the conservative
+initial-runtime-baseline blocker, actual races/rollback, complete HTTPS recovery
+and owner/target isolation; its database and Redis fixtures were removed.
+Tenant regression passed the earlier narrow-screen zoom point, then failed a
+mounted reauthentication transport (backend issuance 201, forwarded sign-in 503).
+A sequential unchanged-test rerun is queued after provider/native checks to remove
+concurrent build load; no pass is inferred from partial progress. Normal migration passed, exit 0; ordinary backend/platform refresh is underway.
+Full checks, remaining regressions and final preservation comparison remain
+outstanding.
+
+### Final regression and runtime checkpoint
+
+**P4-U2a — Exclusive tenant inventory allocation:** in progress,
+2026-10-30 (Asia/Manila, +08:00), under the owner-approved
+[allocation policy](../docs/planning/p4-u2a-allocation-policy-review.md), including
+active-tenant expansion. Canonical exclusive claims/history/receipts, bounded
+preview/save, inventory guards, safe release blockers and tenant-detail recovery
+are implemented. Final focused real PostgreSQL/Redis/two-replica/API/HTTPS suite
+passed, exit 0, with owned fixture cleanup. Exact combined inventory API/provider/HTTPS regression passed with durable exit 0
+and owned provider/PBX cleanup, after the complete credential/provider regression passed after separately owner-approved expired-token
+replacement and restoration of the documented isolated database-network attachment.
+Normal migration passed; eleven retained table digests and nine TLS/auth file
+digests match their pre-migration baseline. Ordinary backend refreshed and live/ready health returned 200. Platform
+HTTPS rebuilds hit the existing four-minute build limit under concurrent load;
+its consumer is stopped and a sequential retry follows the required test builds. Native/integrated/retained-provider revision proofs passed; the full wrapper
+stopped at missing ordinary consumer isolation. Restored one pre-existing approved
+consumer after exact baseline/no-pending-operation preflight; isolation passed.
+Revision HTTPS/live browser and pure suites passed with durable exit 0 and owned
+cleanup, completing the affected revision components with the native/provider
+proofs and restored isolation above. Exact combined tenant API/HTTPS regression passed with durable exit 0, including
+the unchanged narrow-screen and reauthentication checks. Exact routing API/HTTPS regression passed with durable exit 0 and cleanup.
+Authority regression passed with durable exit 0. `./dev check` passed with durable exit 0, including static/build/foundation/
+deployment and combined session/application regressions. Sequential ordinary
+platform/staff refresh, final access/health and preservation checks remain. The earlier forwarded sign-in 503 after backend issuance 201 is superseded by
+the completed sequential tenant run.
+[Evidence](../docs/status/p4-u2a-evidence.md) and
+[intermediate checkpoints](progress-tracker-history.md#2026-10-30--p4-u2a-implementation-and-verification-checkpoints).
+Installed-resource release/transfer remains c; parent/b/c and calling readiness
+remain incomplete.
+
+All final runtime checks subsequently passed: platform/staff readiness and transport,
+backend live/ready 200, eleven retained table digests, nine TLS/auth file digests and
+exact retained PBX baseline. P4-U2a A-01–07 complete within approved private
+development; parent/b/c remain incomplete. Final commands and revision-component
+qualification are in [the evidence](../docs/status/p4-u2a-evidence.md).

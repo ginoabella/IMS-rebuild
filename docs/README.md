@@ -189,9 +189,13 @@ activation and PBX readiness remain with their owning units.
 - [Draft configuration operator procedure](runbooks/tenant-configuration.md)
 - [P4-U1b-1 acceptance evidence](status/p4-u1b-1-evidence.md)
 
-P4-U2: [Allocate inventory and verify tenant routing — feature spec and split review](../context/feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md). Planned; covers exclusive inventory, canonical route/trunk permissions and exact live two-tenant verification. The three vertical sub-units are adopted and planned; ALLOC-01–06 remain policy gates. Activation stays with P4-U3.
+P4-U2: [Allocate inventory and verify tenant routing — feature spec and split review](../context/feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md). In progress through a under approved ALLOC-01 and scoped ALLOC-06, including active-tenant expansion. The parent covers exclusive inventory, canonical route/trunk permissions and exact live two-tenant verification; b/c and their remaining policy gates are pending. Activation stays with P4-U3.
 
-- [P4-U2a — Exclusive tenant inventory allocation](../context/feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md)
+- [P4-U2a — Exclusive tenant inventory allocation](../context/feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md) — complete within approved private development; parent/b/c remain incomplete.
+- [Allocation API, ownership, locks and replay contract](architecture/tenant-inventory-allocation.md)
+- [Reserve/allocate capacity operator workflow](runbooks/tenant-inventory-allocation.md)
+- [Approved allocation policy](planning/p4-u2a-allocation-policy-review.md)
+- [P4-U2a final acceptance evidence](status/p4-u2a-evidence.md)
 - [P4-U2b — Tenant route bindings and permissions](../context/feature-specs/p4-u2b-tenant-route-bindings-and-permissions.md)
 - [P4-U2c — Verified tenant routing and integrated handoff](../context/feature-specs/p4-u2c-verified-tenant-routing-and-integrated-handoff.md)
 

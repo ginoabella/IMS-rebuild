@@ -194,11 +194,17 @@ async function raw(path, body, method = body === undefined ? 'GET' : 'POST') {
   });
 }
 let result;
+let diagnosticStage = 'operation_lookup';
 try {
   const row = await new CredentialRepository().operation(
     pool,
     input.operationId,
   );
+  diagnosticStage = !row
+    ? 'operation_missing'
+    : row.installation_id !== settings.installationId
+      ? 'installation_mismatch'
+      : 'operation_ready';
   if (!row || row.installation_id !== settings.installationId)
     throw new Error('Invalid fixture operation');
   console.log(
@@ -442,11 +448,18 @@ try {
     };
   } else throw new Error('Invalid fixture action');
   console.log(JSON.stringify({ fixture: 'endpoint-credential', result }));
-} catch {
+} catch (error) {
   console.log(
     JSON.stringify({
       fixture: 'endpoint-credential',
-      result: { failed: true },
+      result: {
+        failed: true,
+        stage: diagnosticStage,
+        ...(typeof error.code === 'string' &&
+        /^[A-Z0-9_]{1,40}$/.test(error.code)
+          ? { code: error.code }
+          : {}),
+      },
     }),
   );
 } finally {
