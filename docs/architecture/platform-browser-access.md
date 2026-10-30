@@ -57,6 +57,13 @@ logout exposes explicit retry. Invalid/absent logout obtains fresh pre-auth CSRF
 The mounted client boundary hides and makes content inert on authority loss,
 pagehide, visibility loss, route transitions and invalidation signals. It validates
 on mount, pageshow, focus/visibility restoration and before fixture submission.
+During transient access checks, the invisible, inert workspace retains its layout
+height and a fixed checking status covers the viewport. Returning to the same page
+after focus/visibility or cached-page restoration therefore preserves its scroll
+position. The owner-bound tenant registry retains its same-resource snapshot
+while the fresh read completes; resource/owner changes and failed reads keep their
+existing clearing/error behavior. Denied access and sign-in/recovery screens keep
+their ordinary layout.
 An expiry deadline timer hides content without sending a heartbeat. Epoch guards
 reject delayed prior validation results. Concurrent restoration events share one
 in-flight read; invalidation during that read discards its result and requires a

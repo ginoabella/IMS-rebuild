@@ -104,6 +104,20 @@ Component conventions:
 - Avoid horizontal scrolling unless the content inherently requires it.
 - Ensure layouts remain usable across desktop, tablet, and mobile screen sizes.
 
+## Cards & Detail Summaries
+
+Use the compact tenant and initial-administrator summary cards as the default
+layout for information cards across the application.
+
+- Display each label on the left and its value immediately to the right in the same row.
+- Align labels and values in consistent columns within each card. Keep spacing compact and preserve readable text sizes.
+- Allow long labels and values, including identifiers, to wrap within their columns. Keep the full information visible without truncation or horizontal scrolling.
+- Place related cards side by side whenever their available container width can fit them comfortably. Stack cards only when that space becomes too narrow; account for navigation and side panels rather than relying on viewport width alone.
+- Use a responsive grid with a content-appropriate minimum card width. The tenant summaries use two columns when two 28rem cards plus the gap fit; this is a reference, and other cards should choose a minimum suited to their content.
+- Keep label/value pairs beside each other on narrow screens when readable, allowing multiline rows. Reflow a pair vertically only when necessary to preserve readability or accessibility at narrow widths or increased zoom.
+- Keep card headings, statuses, warnings, and primary actions visible. Use semantic label/value relationships, such as `dl`, `dt`, and `dd` for read-only details.
+- Reuse shared panel primitives and design tokens. Apply this convention when creating or polishing information cards; form controls follow the Forms & Inputs guidance below.
+
 ## Forms & Inputs
 
 - Keep forms easy to scan and group related fields together.

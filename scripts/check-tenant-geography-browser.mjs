@@ -90,6 +90,52 @@ export async function checkTenantGeographyBrowser({
       exact: true,
     }),
   ).toBeVisible();
+  // Returning to a long mounted form must keep its scroll position and edits,
+  // including while the real current-session response is still pending.
+  await longitude().fill('123.195');
+  for (const event of ['focus', 'pageshow', 'visibilitychange']) {
+    const position = await page.evaluate(() => ({
+      x: globalThis.scrollX,
+      y: globalThis.scrollY,
+    }));
+    assert.ok(position.y > 100, 'Exercise a form below the initial viewport');
+    const access = holdResponse('GET', '/platform/auth/session');
+    await page.evaluate((type) => {
+      if (type === 'visibilitychange') {
+        globalThis.dispatchEvent(new globalThis.Event('pagehide'));
+        globalThis.document.dispatchEvent(new globalThis.Event(type));
+      } else if (type === 'pageshow') {
+        globalThis.dispatchEvent(
+          new globalThis.PageTransitionEvent(type, { persisted: true }),
+        );
+      } else globalThis.dispatchEvent(new globalThis.Event(type));
+    }, event);
+    try {
+      assert.equal(await access.reached, 200);
+      await expect(
+        page.getByText('Checking platform access…', { exact: true }),
+      ).toBeVisible();
+      await expect(longitude()).not.toBeVisible();
+      assert.equal(
+        await page.evaluate(() => globalThis.scrollY),
+        position.y,
+        'Pending access checking retains document scroll',
+      );
+    } finally {
+      access.release();
+    }
+    await expect(longitude()).toBeEnabled();
+    await expect(longitude()).toHaveValue('123.195');
+    await expect
+      .poll(() =>
+        page.evaluate(() => ({
+          x: globalThis.scrollX,
+          y: globalThis.scrollY,
+        })),
+      )
+      .toEqual(position);
+  }
+  await longitude().fill('');
   // Native file pickers restore window focus before delivering the selection.
   // Keep the actual access response pending while the change event arrives.
   const pickerAccess = holdResponse('GET', '/platform/auth/session');

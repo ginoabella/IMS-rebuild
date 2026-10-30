@@ -32,10 +32,15 @@ function useRegistry<T>(load: () => Promise<T>, resource: string) {
   selected.current = resource;
   useEffect(() => {
     let live = true;
-    setState({});
     const active = latest.current;
     void (async () => {
       if (!active.ready || !live) return;
+      // The owner-bound shell conceals this snapshot while access is unknown.
+      // Keep the same resource mounted during its fresh read to avoid collapsing
+      // the page on tab return. A changed resource still starts without data.
+      setState((previous) =>
+        previous.resource === resource && previous.data ? previous : {},
+      );
       const captured = active.capture();
       if (!captured.current()) return;
       try {
@@ -225,91 +230,95 @@ export function TenantDetail({ id }: { id: string }) {
         <ContentState kind="loading" title="Loading tenant…" />
       ) : (
         <>
-          <Panel aria-labelledby="organization-heading">
-            <PanelHeading id="organization-heading" className="break-words">
-              {detail.tenant.displayName}
-            </PanelHeading>
-            <dl className="mt-4 space-y-2 break-all">
-              <dt className="text-muted-foreground">Tenant code</dt>
-              <dd>{detail.tenant.tenantCode}</dd>
-              <dt className="text-muted-foreground">Lifecycle status</dt>
-              <dd>
-                <Badge>{detail.tenant.status}</Badge>
-              </dd>
-              <dt className="text-muted-foreground">Voice preference</dt>
-              <dd>
-                {detail.tenant.voicePreference === 'not_configured'
-                  ? 'Not configured'
-                  : detail.tenant.voicePreference === 'enabled'
-                    ? 'Voice enabled'
-                    : 'Voice disabled'}
-              </dd>
-              <dt className="text-muted-foreground">
-                Geographic configuration
-              </dt>
-              <dd>
-                Service area:{' '}
-                {detail.tenant.geography.area ? 'configured' : 'not configured'}
-                ; default coordinates:{' '}
-                {detail.tenant.geography.defaults
-                  ? 'configured'
-                  : 'not configured'}
-                .
-              </dd>
-              <dt className="text-muted-foreground">Contact completeness</dt>
-              <dd>
-                {Object.values(detail.tenant.contacts).every(Boolean)
-                  ? 'Complete'
-                  : 'Incomplete'}{' '}
-                — informational; verification is required for each handoff.
-              </dd>
-              <dt className="text-muted-foreground">Tenant ID</dt>
-              <dd>{detail.tenant.id}</dd>
-            </dl>
-          </Panel>
-          <Panel aria-labelledby="administrator-heading">
-            <PanelHeading id="administrator-heading">
-              Initial administrator
-            </PanelHeading>
-            {detail.administrator.kind === 'unavailable' ? (
-              <ContentState
-                kind="error"
-                title="Initial administrator provenance unavailable"
-              >
-                This organization has no available linked creation record. An
-                administrator cannot be inferred.
-              </ContentState>
-            ) : (
-              <dl className="mt-4 space-y-2 break-all">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,28rem),1fr))] items-start gap-4">
+            <Panel aria-labelledby="organization-heading" className="min-w-0">
+              <PanelHeading id="organization-heading" className="break-words">
+                {detail.tenant.displayName}
+              </PanelHeading>
+              <dl className="mt-3 grid grid-cols-[min(40%,10rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2 [overflow-wrap:anywhere]">
+                <dt className="text-muted-foreground">Tenant code</dt>
+                <dd>{detail.tenant.tenantCode}</dd>
+                <dt className="text-muted-foreground">Lifecycle status</dt>
+                <dd>
+                  <Badge>{detail.tenant.status}</Badge>
+                </dd>
+                <dt className="text-muted-foreground">Voice preference</dt>
+                <dd>
+                  {detail.tenant.voicePreference === 'not_configured'
+                    ? 'Not configured'
+                    : detail.tenant.voicePreference === 'enabled'
+                      ? 'Voice enabled'
+                      : 'Voice disabled'}
+                </dd>
                 <dt className="text-muted-foreground">
-                  Administrator username
+                  Geographic configuration
                 </dt>
-                <dd>{detail.administrator.username}</dd>
-                <dt className="text-muted-foreground">Role</dt>
                 <dd>
-                  {detail.administrator.roles
-                    .map((r) =>
-                      r === 'tenant_admin'
-                        ? 'Tenant administrator'
-                        : r.replaceAll('_', ' '),
-                    )
-                    .join(', ')}
+                  Service area:{' '}
+                  {detail.tenant.geography.area
+                    ? 'configured'
+                    : 'not configured'}
+                  ; default coordinates:{' '}
+                  {detail.tenant.geography.defaults
+                    ? 'configured'
+                    : 'not configured'}
+                  .
                 </dd>
-                <dt className="text-muted-foreground">Account status</dt>
-                <dd>{detail.administrator.status}</dd>
-                <dt className="text-muted-foreground">Credential state</dt>
+                <dt className="text-muted-foreground">Contact completeness</dt>
                 <dd>
-                  <Badge tone="warning">
-                    {detail.administrator.credentialState === 'unset'
-                      ? 'Credentials not set'
-                      : 'Credentials ready'}
-                  </Badge>
+                  {Object.values(detail.tenant.contacts).every(Boolean)
+                    ? 'Complete'
+                    : 'Incomplete'}{' '}
+                  — informational; verification is required for each handoff.
                 </dd>
-                <dt className="text-muted-foreground">Administrator ID</dt>
-                <dd>{detail.administrator.id}</dd>
+                <dt className="text-muted-foreground">Tenant ID</dt>
+                <dd>{detail.tenant.id}</dd>
               </dl>
-            )}
-          </Panel>
+            </Panel>
+            <Panel aria-labelledby="administrator-heading" className="min-w-0">
+              <PanelHeading id="administrator-heading">
+                Initial administrator
+              </PanelHeading>
+              {detail.administrator.kind === 'unavailable' ? (
+                <ContentState
+                  kind="error"
+                  title="Initial administrator provenance unavailable"
+                >
+                  This organization has no available linked creation record. An
+                  administrator cannot be inferred.
+                </ContentState>
+              ) : (
+                <dl className="mt-3 grid grid-cols-[min(40%,10rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2 [overflow-wrap:anywhere]">
+                  <dt className="text-muted-foreground">
+                    Administrator username
+                  </dt>
+                  <dd>{detail.administrator.username}</dd>
+                  <dt className="text-muted-foreground">Role</dt>
+                  <dd>
+                    {detail.administrator.roles
+                      .map((r) =>
+                        r === 'tenant_admin'
+                          ? 'Tenant administrator'
+                          : r.replaceAll('_', ' '),
+                      )
+                      .join(', ')}
+                  </dd>
+                  <dt className="text-muted-foreground">Account status</dt>
+                  <dd>{detail.administrator.status}</dd>
+                  <dt className="text-muted-foreground">Credential state</dt>
+                  <dd>
+                    <Badge tone="warning">
+                      {detail.administrator.credentialState === 'unset'
+                        ? 'Credentials not set'
+                        : 'Credentials ready'}
+                    </Badge>
+                  </dd>
+                  <dt className="text-muted-foreground">Administrator ID</dt>
+                  <dd>{detail.administrator.id}</dd>
+                </dl>
+              )}
+            </Panel>
+          </div>
           {detail.tenant.status === 'draft' && (
             <p className="text-muted-foreground">
               This draft is unavailable for ordinary staff sign-in. Credential

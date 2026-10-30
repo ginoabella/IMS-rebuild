@@ -8,6 +8,10 @@ import { getPbx, listPbx, PbxError } from './client';
 import { PbxForm } from './form';
 const linkClass =
   'inline-flex max-w-full min-h-11 items-center break-all rounded-md border border-subtle px-4 text-primary hover:bg-muted';
+const cardGridClass =
+  'grid grid-cols-[repeat(auto-fit,minmax(min(100%,28rem),1fr))] items-start gap-4';
+const detailListClass =
+  'grid grid-cols-[min(40%,12rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2 [overflow-wrap:anywhere] [&>dt]:text-muted-foreground';
 function usePbxRead<T>(load: () => Promise<T>, resource: string) {
   const work = useOperatorWork(),
     latest = useRef(work);
@@ -124,7 +128,7 @@ function Observation({
         </Badge>
         <Badge tone={current ? 'success' : 'warning'}>{freshness}</Badge>
       </div>
-      <dl className="space-y-1">
+      <dl className={detailListClass}>
         <dt>Observed desired version</dt>
         <dd>
           {o.desiredVersion} (saved: {node.version})
@@ -226,20 +230,28 @@ export function PbxRegistry() {
           {state.data.items.length === 0 && (
             <ContentState kind="empty" title="No PBX nodes on this page" />
           )}
-          {state.data.items.map((n) => (
-            <Panel key={n.id} aria-label={n.displayName}>
-              <h2 className="font-display text-xl break-words">
-                {n.displayName}
-              </h2>
-              <p className="my-3 break-all">
-                Saved version {n.version} · {n.management.targetAlias}
-              </p>
-              <Observation node={n} received={state.received ?? Date.now()} />
-              <Link className={`${linkClass} mt-3`} href={`/pbx-nodes/${n.id}`}>
-                Inspect {n.displayName}
-              </Link>
-            </Panel>
-          ))}
+          <div className={cardGridClass}>
+            {state.data.items.map((n) => (
+              <Panel key={n.id} aria-label={n.displayName}>
+                <h2 className="font-display text-xl break-words">
+                  {n.displayName}
+                </h2>
+                <dl className={`${detailListClass} my-3`}>
+                  <dt>Saved desired version</dt>
+                  <dd>{n.version}</dd>
+                  <dt>Desired target</dt>
+                  <dd>{n.management.targetAlias}</dd>
+                </dl>
+                <Observation node={n} received={state.received ?? Date.now()} />
+                <Link
+                  className={`${linkClass} mt-3`}
+                  href={`/pbx-nodes/${n.id}`}
+                >
+                  Inspect {n.displayName}
+                </Link>
+              </Panel>
+            ))}
+          </div>
           {work.pbx.attempt && (
             <Panel>
               <p role="status">
@@ -300,50 +312,63 @@ export function PbxDetail({ id }: { id: string }) {
         <ContentState kind="loading" title="Loading PBX detail…" />
       ) : (
         <>
-          <Panel aria-label="Saved desired connection">
-            <h2 className="font-display text-xl break-words">
-              {node.displayName}
-            </h2>
-            <dl className="my-4 space-y-1 break-all">
-              <dt>Canonical node ID</dt>
-              <dd>{node.id}</dd>
-              <dt>Permanent installation ID</dt>
-              <dd>{node.installationId}</dd>
-              <dt>Saved desired version</dt>
-              <dd>{node.version}</dd>
-              <dt>Desired target / host / TLS name</dt>
-              <dd>
-                {node.management.targetAlias} / {node.management.host} /{' '}
-                {node.management.tlsServerName}
-              </dd>
-              <dt>Desired transport / port</dt>
-              <dd>
-                {node.management.transport} / {node.management.port}
-              </dd>
-              <dt>Opaque credential reference</dt>
-              <dd>{node.credentialAlias}</dd>
-            </dl>
-            <p>
-              No configuration revision or live apply is implied by this
-              registry save.
-            </p>
-          </Panel>
-          <Panel aria-label="Runtime observation">
-            <h2 className="mb-3 font-display text-xl">Runtime observation</h2>
-            <Observation node={node} received={state.received ?? Date.now()} />
-          </Panel>
-          <Link href={`/pbx-nodes/${node.id}/revisions`} className={linkClass}>
-            Configuration revisions
-          </Link>
-          <Link href={`/pbx-nodes/${node.id}/inventory`} className={linkClass}>
-            Manage extension inventory
-          </Link>
-          <Link href={`/pbx-nodes/${node.id}/routing`} className={linkClass}>
-            Routing: groups and rules
-          </Link>
-          <Link href={`/pbx-nodes/${node.id}/peers`} className={linkClass}>
-            Manage trunks, gateways and DIDs
-          </Link>
+          <div className={cardGridClass}>
+            <Panel aria-label="Saved desired connection">
+              <h2 className="font-display text-xl break-words">
+                {node.displayName}
+              </h2>
+              <dl className={`${detailListClass} my-3`}>
+                <dt>Canonical node ID</dt>
+                <dd>{node.id}</dd>
+                <dt>Permanent installation ID</dt>
+                <dd>{node.installationId}</dd>
+                <dt>Saved desired version</dt>
+                <dd>{node.version}</dd>
+                <dt>Desired target / host / TLS name</dt>
+                <dd>
+                  {node.management.targetAlias} / {node.management.host} /{' '}
+                  {node.management.tlsServerName}
+                </dd>
+                <dt>Desired transport / port</dt>
+                <dd>
+                  {node.management.transport} / {node.management.port}
+                </dd>
+                <dt>Opaque credential reference</dt>
+                <dd>{node.credentialAlias}</dd>
+              </dl>
+              <p>
+                No configuration revision or live apply is implied by this
+                registry save.
+              </p>
+            </Panel>
+            <Panel aria-label="Runtime observation">
+              <h2 className="mb-3 font-display text-xl">Runtime observation</h2>
+              <Observation
+                node={node}
+                received={state.received ?? Date.now()}
+              />
+            </Panel>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href={`/pbx-nodes/${node.id}/revisions`}
+              className={linkClass}
+            >
+              Configuration revisions
+            </Link>
+            <Link
+              href={`/pbx-nodes/${node.id}/inventory`}
+              className={linkClass}
+            >
+              Manage extension inventory
+            </Link>
+            <Link href={`/pbx-nodes/${node.id}/routing`} className={linkClass}>
+              Routing: groups and rules
+            </Link>
+            <Link href={`/pbx-nodes/${node.id}/peers`} className={linkClass}>
+              Manage trunks, gateways and DIDs
+            </Link>
+          </div>
           <PbxForm node={node} onSaved={state.replace} />
           <Button variant="secondary" onClick={state.retry}>
             Reload PBX detail

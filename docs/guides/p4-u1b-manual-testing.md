@@ -147,6 +147,10 @@ remain in their mounted forms. Saved geography still has longitude `123.19`.
 Because sections share a tenant version, saving older unsaved work can correctly
 produce a conflict; it must not silently overwrite newer configuration.
 
+While scrolled down to the coordinate fields, switch to another browser tab or
+window, then return. The access check should keep your position and unsaved fields
+when your session is still valid.
+
 Leave these unsaved edits mounted for the credential test. **Reload detail** reads
 current state while preserving unrelated mounted edits; a browser refresh,
 navigation or tab closure can discard unsaved work.

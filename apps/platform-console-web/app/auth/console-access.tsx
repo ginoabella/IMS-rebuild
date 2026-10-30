@@ -96,6 +96,12 @@ export function ConsoleAccess({
     retryAt = useRef(0);
   const presentation = useRef<HTMLDivElement>(null),
     retryFocus = useRef<HTMLButtonElement>(null);
+  useLayoutEffect(() => {
+    // Reveal only after the validated session and ready context have committed.
+    // A fast check can batch unknown/ready together, leaving hide()'s inline style.
+    if (mode === 'ready' && presentation.current)
+      presentation.current.style.visibility = '';
+  }, [mode, session]);
   const accept = useCallback((next: PlatformSessionDto) => {
     accessible.current = true;
     clearOnAbsent.current = false;
@@ -107,7 +113,6 @@ export function ConsoleAccess({
     setSession(next);
     setMode('ready');
     setMessage('');
-    if (presentation.current) presentation.current.style.visibility = '';
   }, []);
   const hide = useCallback(() => {
     accessible.current = false;
@@ -308,7 +313,9 @@ export function ConsoleAccess({
     <>
       <div
         ref={presentation}
-        hidden={mode !== 'ready'}
+        // Preserve the document height while focus/visibility checks are pending.
+        hidden={mode !== 'ready' && mode !== 'unknown'}
+        style={{ visibility: mode === 'unknown' ? 'hidden' : undefined }}
         inert={mode !== 'ready'}
       >
         <WorkContext.Provider
@@ -404,7 +411,13 @@ export function ConsoleAccess({
         </WorkContext.Provider>
       </div>
       {mode !== 'ready' && (
-        <main className="mx-auto max-w-md p-6 pt-16">
+        <main
+          className={
+            mode === 'unknown'
+              ? 'fixed inset-0 z-50 bg-background p-6 pt-16 text-center'
+              : 'mx-auto max-w-md p-6 pt-16'
+          }
+        >
           <p role="status" className="mb-4">
             {message || 'Checking platform access…'}
           </p>
