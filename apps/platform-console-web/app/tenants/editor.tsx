@@ -5,14 +5,8 @@ import type {
   TenantDetailDto,
   TenantSection,
 } from '@myims/contracts';
-import {
-  Button,
-  Feedback,
-  Field,
-  Input,
-  Panel,
-  PanelHeading,
-} from '@myims/ui-web';
+import { Button, Feedback, Field, Input } from '@myims/ui-web';
+import { TenantCard } from './cards';
 import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 import { saveTenantSection, TenantError } from './client';
@@ -248,14 +242,58 @@ export function TenantEditor({
                   { key: 'phone', label: 'Contact phone', bound: 200 },
                 ] as const);
         return (
-          <Panel key={section} aria-labelledby={`edit-${section}-heading`}>
-            <PanelHeading id={`edit-${section}-heading`}>
-              {section === 'name'
+          <TenantCard
+            key={section}
+            id={`edit-${section}`}
+            title={
+              section === 'name'
                 ? 'Organization name'
                 : section === 'voice'
                   ? 'Voice preference'
-                  : 'Organizational contact'}
-            </PanelHeading>
+                  : 'Organizational contact'
+            }
+            summary={
+              section === 'name'
+                ? s.values.displayName || 'No organization name'
+                : section === 'voice'
+                  ? s.values.voicePreference === 'enabled'
+                    ? 'Voice enabled'
+                    : s.values.voicePreference === 'disabled'
+                      ? 'Voice disabled'
+                      : 'Voice preference not configured'
+                  : s.values.name ||
+                    s.values.email ||
+                    s.values.phone ||
+                    'No contact configured'
+            }
+            notice={
+              s.state !== 'saved' || s.message ? (
+                <>
+                  {s.state !== 'saved' && (
+                    <p role="status">
+                      {pending
+                        ? 'Saving…'
+                        : s.attempt
+                          ? 'Uncertain: original save needs confirmation'
+                          : s.state === 'unsaved'
+                            ? 'Unsaved changes'
+                            : s.state === 'conflict'
+                              ? 'Conflict'
+                              : 'Save failed'}
+                    </p>
+                  )}
+                  {s.message && (
+                    <div id={`edit-${section}-feedback`} tabIndex={-1}>
+                      <Feedback
+                        tone={s.state === 'saved' ? 'success' : 'warning'}
+                        title={s.message}
+                      />
+                    </div>
+                  )}
+                </>
+              ) : undefined
+            }
+          >
             {section === 'contacts' && (
               <p className="my-3 text-muted-foreground">
                 Informational only. Blank fields clear saved values. Contact{' '}
@@ -360,27 +398,6 @@ export function TenantEditor({
                   />
                 </Field>
               ))}
-              <p role="status">
-                {pending
-                  ? 'Saving…'
-                  : s.attempt
-                    ? 'Uncertain: original save needs confirmation'
-                    : s.state === 'saved'
-                      ? 'Saved'
-                      : s.state === 'unsaved'
-                        ? 'Unsaved changes'
-                        : s.state === 'conflict'
-                          ? 'Conflict'
-                          : 'Save failed'}
-              </p>
-              {s.message && (
-                <div id={`edit-${section}-feedback`} tabIndex={-1}>
-                  <Feedback
-                    tone={s.state === 'saved' ? 'success' : 'warning'}
-                    title={s.message}
-                  />
-                </div>
-              )}
               <div className="flex flex-wrap gap-3">
                 <Button
                   type="submit"
@@ -412,7 +429,7 @@ export function TenantEditor({
                 </Button>
               </div>
             </form>
-          </Panel>
+          </TenantCard>
         );
       })}
     </div>

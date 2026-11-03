@@ -1,5 +1,8 @@
+import { checkTenantCardPresentation } from './check-tenant-card-presentation.mjs';
 import { checkPeerBrowser } from './check-peer-browser.mjs';
 import { checkInventoryBrowser } from './check-inventory-browser.mjs';
+import { checkInventoryPresentation } from './check-inventory-presentation.mjs';
+import { checkAllocationSelectorPresentation } from './check-allocation-selector-presentation.mjs';
 // Actual production Next app, HTTPS ingress, and independent real-service replicas.
 import assert from 'node:assert/strict';
 import { checkPbxBrowser } from './check-pbx-browser.mjs';
@@ -411,6 +414,22 @@ export async function checkPlatformBrowser({
     await page.keyboard.press('Enter');
     await expect(page.getByLabel('Unfinished notes')).toBeVisible();
     assert.equal(new URL(page.url()).pathname, '/ui-preview');
+    const signOut = page.getByRole('banner').getByRole('button', {
+      name: 'Sign out',
+      exact: true,
+    });
+    await expect(signOut).toBeVisible();
+    await expect(signOut.locator('svg')).toBeVisible();
+    await expect(signOut).toHaveText('');
+    await expect(
+      page.getByRole('main').getByRole('button', {
+        name: 'Sign out',
+        exact: true,
+      }),
+    ).toHaveCount(0);
+    await expect(
+      page.getByText('Foundation preview', { exact: true }),
+    ).toHaveCount(0);
     const accepted = (await context.cookies()).find(
       (c) => c.name === '__Host-myims-platform',
     );
@@ -507,6 +526,19 @@ export async function checkPlatformBrowser({
       await fetch('/platform/auth/session');
     });
     assert.equal(await redis.get(key(passiveToken)), before);
+    if (!inventoryBrowser && !peerBrowser) {
+      phase = 'compact inventory presentation';
+      await checkInventoryPresentation({ page, origin: config.origin });
+      phase = 'compact allocation selector presentation';
+      await checkAllocationSelectorPresentation({
+        page,
+        origin: config.origin,
+      });
+    }
+    if (!inventoryBrowser && !peerBrowser) {
+      phase = 'collapsed tenant card presentation';
+      await checkTenantCardPresentation({ page, origin: config.origin });
+    }
     phase = 'draft tenant browser';
     if (!inventoryBrowser && !peerBrowser)
       await checkDraftTenantBrowser({

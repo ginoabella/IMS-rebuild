@@ -44,6 +44,16 @@ facts at 30 seconds. Auth/AOR keys never serve as alternate observation lookup
 fields and no generated keys enter inventory DTOs. PBX-only failure leaves desired
 management available when canonical database/session dependencies are healthy.
 
+The inventory list follows ascending numeric extension order across pages. Rows
+start collapsed, showing the number, endpoint kind and key desired/credential
+statuses. Native keyboard-accessible triangle disclosures reveal the profile,
+version, passive observation facts and existing Inspect action independently for
+each extension. Expanded extension IDs belong to the existing operator/node-bound
+mounted inventory work, so focus/visibility/pageshow revalidation and inventory
+reloads retain both open and closed choices. Node or operator replacement and
+confirmed logout clear them with the rest of that work; full document reloads
+start collapsed. No browser persistence or authorization behavior changes.
+
 The browser uses shared token-based primitives, semantic labeled controls,
 announcements and responsive wrapping. Inventory reads are explicit; none renew
 sessions or issue AMI commands. The existing node page continues its passive

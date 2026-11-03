@@ -149,9 +149,12 @@ node/profile/version, desired version, count and exact sorted UUIDs as
 4096-byte metadata bound without extending the audit owner. The 50-row audit
 identifies the entire committed set, with no secrets or raw requests.
 
-JSON body ceiling 4096 bytes; output ceiling 64 KiB. Lists use UUID keyset order,
-default 25/max 100 and may shorten a page to fit the byte ceiling. `nextCursor`
-continues after the last included ID. Error detail is bounded; one fixed validation
+JSON body ceiling 4096 bytes; output ceiling 64 KiB. Lists default to 25/max 100
+and may shorten a page to fit the byte ceiling. Extensions sort by ascending
+numeric extension number across pages. The UUID `after`/`nextCursor` still names
+the last included extension; the node-scoped cursor lookup resumes after its
+immutable number. An absent or foreign-node cursor yields an empty page. Profile
+lists retain UUID keyset order. Error detail is bounded; one fixed validation
 field at a time. Receipts cap safe result at 16 KiB before commit and in SQL.
 Bulk receipts store operation ID, node/profile/version and exact `{id,number,version}`
 items; individual/profile receipts store their original safe detail response.

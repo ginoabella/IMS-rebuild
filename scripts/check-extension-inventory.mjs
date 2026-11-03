@@ -1465,6 +1465,30 @@ export async function checkExtensionInventory({
           (await get(b, pageSession, node, `${suffix}?${query}`)).status,
           400,
         );
+    // Mixed digit lengths and reverse creation order catch lexical/UUID sorting.
+    for (const number of ['10000', '9999']) {
+      const created = await post(a, pageSession, node, 'extensions', {
+        ...fresh(sip2, number),
+        expectedCapabilityRevision: 3,
+      });
+      assert.equal(created.status, 201);
+    }
+    const absentCursor = await get(
+      b,
+      pageSession,
+      node,
+      `extensions?after=${randomUUID()}`,
+    );
+    assert.equal(absentCursor.status, 200);
+    assert.deepEqual(absentCursor.data.items, []);
+    const foreignCursor = await get(
+      b,
+      pageSession,
+      nodes[1],
+      `extensions?after=${large.data.items[0].id}`,
+    );
+    assert.equal(foreignCursor.status, 200);
+    assert.deepEqual(foreignCursor.data.items, []);
     const seen = [];
     let cursor = null;
     do {
@@ -1483,10 +1507,96 @@ export async function checkExtensionInventory({
       seen,
       (
         await runtime.query(
-          'SELECT id FROM public.extensions WHERE node_id=$1 ORDER BY id',
+          'SELECT id FROM public.extensions WHERE node_id=$1 ORDER BY number::integer',
           [node.id],
         )
       ).rows.map((r) => r.id),
+    );
+    // Allocation selectors use their own read endpoint and must sort/filter before paging.
+    const selectorTenant = await request(a, '/platform/tenants', {
+      method: 'POST',
+      session: pageSession,
+      body: {
+        requestId: randomUUID(),
+        tenantCode: `selector-${randomUUID().slice(0, 8)}`,
+        displayName: 'Stock selector acceptance',
+        administratorUsername: 'admin',
+      },
+    });
+    assert.equal(selectorTenant.status, 201);
+    const allocationBase = `/platform/tenants/${selectorTenant.data.tenant.id}/allocations/${node.id}`;
+    const readStock = (suffix = '', replica = b) =>
+      request(replica, `${allocationBase}/stock${suffix}`, {
+        session: pageSession,
+      });
+    const beforeStockReads = await counts();
+    for (const prefix of [null, '20', '10000', '9999', '888888']) {
+      const selected = [],
+        numbers = [];
+      let after = null;
+      do {
+        const response = await readStock(
+          `?limit=7${after ? '&after=' + after : ''}${prefix ? '&numberPrefix=' + prefix : ''}`,
+          selected.length % 2 ? a : b,
+        );
+        assert.equal(response.status, 200, response.text);
+        assert.ok(response.data.items.length <= 7);
+        assert.ok(Buffer.byteLength(response.text) <= 65536);
+        selected.push(...response.data.items.map((item) => item.id));
+        numbers.push(...response.data.items.map((item) => Number(item.number)));
+        after = response.data.nextCursor;
+      } while (after);
+      assert.equal(new Set(selected).size, selected.length);
+      assert.deepEqual(
+        numbers,
+        [...numbers].sort((x, y) => x - y),
+      );
+      const expected = await runtime.query(
+        "SELECT id FROM public.extensions WHERE node_id=$1 AND ($2::text IS NULL OR number LIKE $2 || '%') ORDER BY number::integer",
+        [node.id, prefix],
+      );
+      assert.deepEqual(
+        selected,
+        expected.rows.map((row) => row.id),
+      );
+      if (prefix === '20') assert.equal(selected.length, 50);
+      if (!prefix) assert.ok(numbers.indexOf(9999) < numbers.indexOf(10000));
+    }
+    for (const prefix of ['', '01', '1234567', '%', '20_', "20' OR 1=1"]) {
+      assert.equal(
+        (await readStock('?numberPrefix=' + encodeURIComponent(prefix))).status,
+        400,
+      );
+    }
+    assert.equal(
+      (await readStock('?numberPrefix=20&numberPrefix=21')).status,
+      400,
+    );
+    assert.equal(
+      (
+        await request(b, allocationBase + '?numberPrefix=20', {
+          session: pageSession,
+        })
+      ).status,
+      400,
+    );
+    assert.deepEqual(
+      (await readStock('?after=' + randomUUID())).data.items,
+      [],
+    );
+    assert.deepEqual(
+      (
+        await request(
+          b,
+          `/platform/tenants/${selectorTenant.data.tenant.id}/allocations/${nodes[1].id}/stock?after=${large.data.items[0].id}`,
+          { session: pageSession },
+        )
+      ).data.items,
+      [],
+    );
+    assert.deepEqual(await counts(), beforeStockReads);
+    console.log(
+      'PASS allocation selector API: numeric/mixed-length order across pages and replicas, full-stock prefix search, exact/no match, cursor isolation, strict invalid/duplicate query rejection and passive reads',
     );
     const maxPage = await get(b, pageSession, node, 'extensions?limit=100');
     assert.equal(maxPage.status, 200);

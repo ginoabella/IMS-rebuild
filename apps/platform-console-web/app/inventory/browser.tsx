@@ -105,24 +105,40 @@ export function InventoryBrowser({ nodeId }: { nodeId: string }) {
               {model.page.items.length === 0 ? (
                 <ContentState kind="empty" title="No extensions on this page" />
               ) : (
-                <ul className="space-y-4">
+                <ul className="mt-2 divide-y divide-border">
                   {model.page.items.map((e) => (
-                    <li key={e.id} className="my-3 border-b border-subtle pb-3">
-                      <p>
-                        {e.number} · {e.kind} · desired {e.administrativeStatus}{' '}
-                        · available / unallocated · credentials{' '}
-                        {e.credentials.kind} · version {e.version}
-                      </p>
-                      <p className="break-all">
-                        Profile {e.profile.id} version {e.profile.version}
-                      </p>
-                      <Registration extension={e} />
-                      <Button
-                        disabled={model.pending || !!state.attempt}
-                        onClick={() => void model.select(e)}
+                    <li key={e.id}>
+                      <details
+                        open={state.expandedExtensionIds.includes(e.id)}
+                        onToggle={(event) =>
+                          model.setExpanded(e.id, event.currentTarget.open)
+                        }
                       >
-                        Inspect extension {e.number}
-                      </Button>
+                        <summary
+                          aria-label={`Extension ${e.number}`}
+                          className="min-h-11 cursor-pointer rounded-md py-3 pr-2 marker:text-muted-foreground hover:bg-muted"
+                        >
+                          <span className="font-mono font-semibold">
+                            {e.number}
+                          </span>{' '}
+                          · {e.kind} · desired {e.administrativeStatus} ·
+                          available / unallocated · credentials{' '}
+                          {e.credentials.kind}
+                        </summary>
+                        <div className="space-y-2 pb-3 pl-5">
+                          <p>Version {e.version}</p>
+                          <p className="break-all">
+                            Profile {e.profile.id} version {e.profile.version}
+                          </p>
+                          <Registration extension={e} />
+                          <Button
+                            disabled={model.pending || !!state.attempt}
+                            onClick={() => void model.select(e)}
+                          >
+                            Inspect extension {e.number}
+                          </Button>
+                        </div>
+                      </details>
                     </li>
                   ))}
                 </ul>

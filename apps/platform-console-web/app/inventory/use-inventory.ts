@@ -238,6 +238,18 @@ export function useInventory(nodeId: string) {
     state,
     matches,
     record,
+    setExpanded: (extensionId: string, expanded: boolean) => {
+      const current = latest.current;
+      if (!current.ready || current.inventory.nodeId !== nodeId) return;
+      const ids = current.inventory.expandedExtensionIds;
+      if (ids.includes(extensionId) === expanded) return;
+      current.recordInventory({
+        ...current.inventory,
+        expandedExtensionIds: expanded
+          ? [...ids, extensionId]
+          : ids.filter((id) => id !== extensionId),
+      });
+    },
     change,
     page,
     profiles,

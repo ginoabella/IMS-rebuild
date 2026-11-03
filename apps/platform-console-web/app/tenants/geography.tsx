@@ -12,14 +12,8 @@ import {
   type SaveTenantSectionDto,
   type TenantDetailDto,
 } from '@myims/contracts';
-import {
-  Button,
-  Field,
-  Input,
-  Panel,
-  PanelHeading,
-  Feedback,
-} from '@myims/ui-web';
+import { Button, Field, Input, Feedback } from '@myims/ui-web';
+import { TenantCard } from './cards';
 import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 import { saveTenantSection, TenantError } from './client';
@@ -429,10 +423,44 @@ export function GeographyEditor({
   const municipality =
     s.values.area?.municipality ?? s.values.barangays[0]?.municipality;
   return (
-    <Panel aria-labelledby="geography-heading">
-      <PanelHeading id="geography-heading">
-        Service area and default intake coordinates
-      </PanelHeading>
+    <TenantCard
+      id="geography"
+      title="Service area and default intake coordinates"
+      summary={`${municipality?.municipalityName ?? (s.values.area ? 'Service area configured' : 'Service area not configured')} · ${s.values.barangays.length} barangays · Default coordinates: ${s.longitude && s.latitude ? `${s.longitude}, ${s.latitude}` : 'not configured'}`}
+      notice={
+        reading || s.state !== 'saved' || s.message ? (
+          <>
+            {(reading || s.state !== 'saved' || s.message) && (
+              <>
+                <p role="status">
+                  {reading
+                    ? 'Reading geography file…'
+                    : s.state === 'saved'
+                      ? 'Saved'
+                      : s.state === 'pending'
+                        ? 'Saving geography…'
+                        : s.state === 'unsaved'
+                          ? 'Unsaved geography changes'
+                          : s.state === 'uncertain'
+                            ? 'Uncertain geography save'
+                            : s.state === 'conflict'
+                              ? 'Geography conflict'
+                              : 'Geography validation failed'}
+                </p>
+                <div id="geography-feedback" tabIndex={-1}>
+                  {s.message && (
+                    <Feedback
+                      tone={s.state === 'saved' ? 'success' : 'warning'}
+                      title={s.message}
+                    />
+                  )}
+                </div>
+              </>
+            )}
+          </>
+        ) : undefined
+      }
+    >
       <p className="my-3">
         Upload prepared administrative and optional barangay GeoJSON. Maximum
         4,096 combined positions. Coordinates use longitude then latitude in
@@ -618,29 +646,6 @@ export function GeographyEditor({
             </span>
           </label>
         )}
-        <p role="status">
-          {reading
-            ? 'Reading geography file…'
-            : s.state === 'saved'
-              ? 'Saved'
-              : s.state === 'pending'
-                ? 'Saving geography…'
-                : s.state === 'unsaved'
-                  ? 'Unsaved geography changes'
-                  : s.state === 'uncertain'
-                    ? 'Uncertain geography save'
-                    : s.state === 'conflict'
-                      ? 'Geography conflict'
-                      : 'Geography validation failed'}
-        </p>
-        <div id="geography-feedback" tabIndex={-1}>
-          {s.message && (
-            <Feedback
-              tone={s.state === 'saved' ? 'success' : 'warning'}
-              title={s.message}
-            />
-          )}
-        </div>
         <div className="flex flex-wrap gap-3">
           <Button
             type="submit"
@@ -708,6 +713,6 @@ export function GeographyEditor({
           </Button>
         </div>
       </form>
-    </Panel>
+    </TenantCard>
   );
 }

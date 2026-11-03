@@ -24,6 +24,9 @@ export function useNodeAllocation({
   const [saved, setSaved] = useState<AllocationList | null>(null),
     [stock, setStock] = useState<AllocationStock[]>([]),
     [stockCursor, setStockCursor] = useState<string | null>(null),
+    [stockSearch, setStockSearch] = useState(''),
+    [stockPrefix, setStockPrefix] = useState(''),
+    [stockLoading, setStockLoading] = useState(false),
     [stockAfter, setStockAfter] = useState<string | null>(null),
     [claimAfter, setClaimAfter] = useState<string | null>(null),
     [history, setHistory] = useState(false),
@@ -62,11 +65,21 @@ export function useNodeAllocation({
     attemptRef.current = a;
     setAttempt(a);
   }
-  async function reload(cAfter = claimAfter, sAfter = stockAfter, h = history) {
+  async function reload(
+    cAfter = claimAfter,
+    sAfter = stockAfter,
+    h = history,
+    prefix = stockPrefix,
+  ) {
     const access = latest.current,
       capture = access.capture(),
       epoch = ++readEpoch.current;
     if (!access.ready) return;
+    setStockLoading(true);
+    setStockPrefix(prefix);
+    setStock([]);
+    setStockCursor(null);
+    setStockAfter(sAfter);
     try {
       const [claims, inventory] = await Promise.all([
         allocationRequest<AllocationList>(
@@ -87,7 +100,7 @@ export function useNodeAllocation({
           ['stock'],
           undefined,
           undefined,
-          `?limit=25${sAfter ? '&after=' + sAfter : ''}`,
+          `?limit=25${sAfter ? '&after=' + sAfter : ''}${prefix ? '&numberPrefix=' + encodeURIComponent(prefix) : ''}`,
         ),
       ]);
       if (live.current && epoch === readEpoch.current && capture.current()) {
@@ -99,12 +112,14 @@ export function useNodeAllocation({
         setStockAfter(sAfter);
       }
     } catch (e) {
-      if (live.current && capture.current()) {
+      if (live.current && epoch === readEpoch.current && capture.current()) {
         note(
           'Saved allocation could not be loaded. Reload after access is restored.',
         );
         if (!(e instanceof AllocationError)) access.rejectAccess(e);
       }
+    } finally {
+      if (live.current && epoch === readEpoch.current) setStockLoading(false);
     }
   }
   useEffect(() => {
@@ -167,6 +182,7 @@ export function useNodeAllocation({
         return;
       const capture = work.capture();
       readEpoch.current++;
+      setStockLoading(false);
       retain(original);
       sent = true;
       const result = await allocationRequest<AllocationOutcome>(
@@ -239,13 +255,19 @@ export function useNodeAllocation({
       },
     });
   }
-  const disabled = !work.ready || pending || !!attempt;
+  const disabled = !work.ready || pending || !!attempt || stockLoading;
   return {
     work,
     saved,
     stock,
     stockCursor,
     stockAfter,
+    stockSearch,
+    setStockSearch,
+    stockPrefix,
+    stockLoading,
+    searchStock: (prefix: string) =>
+      void reload(claimAfter, null, history, prefix),
     claimAfter,
     history,
     setHistory,

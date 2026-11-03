@@ -1,3 +1,4 @@
+import { expandTenantCards } from './tenant-card-browser.mjs';
 import { createStaffIngress } from './staff-access-ingress.mjs';
 import { checkStaffBrowser } from './check-staff-browser.mjs';
 import assert from 'node:assert/strict';
@@ -493,6 +494,7 @@ export async function checkCredentialBrowser({
       throw new Error(
         `Credential browser draft creation status ${creation.status()}`,
       );
+    await expandTenantCards(page);
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();
@@ -521,6 +523,7 @@ export async function checkCredentialBrowser({
         exact: true,
       })
       .click();
+    await expandTenantCards(page);
     await page
       .getByLabel('Contact name (optional)', { exact: true })
       .fill('Verified organization desk');

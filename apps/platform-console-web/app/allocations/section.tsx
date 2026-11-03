@@ -1,8 +1,9 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Button, Panel, PanelHeading, Field } from '@myims/ui-web';
+import { Button, Field } from '@myims/ui-web';
 import { useOperatorWork } from '../auth/console-access';
 import { listPbx } from '../pbx/client';
+import { TenantCard } from '../tenants/cards';
 import { NodeAllocation } from './node';
 const selectClass =
   'min-h-11 max-w-full rounded-md border border-subtle bg-muted px-3';
@@ -22,6 +23,7 @@ function OwnedAllocation({ tenantId }: { tenantId: string }) {
     [cursor, setCursor] = useState<string | null>(null),
     [nodeId, setNodeId] = useState(''),
     [message, setMessage] = useState(''),
+    [allocationFeedback, setAllocationFeedback] = useState(''),
     [loading, setLoading] = useState(true);
   const live = useRef(true),
     revision = useRef(0);
@@ -59,11 +61,23 @@ function OwnedAllocation({ tenantId }: { tenantId: string }) {
       ); /* Same-owner restoration reloads saved facts only. */
   }, [work.ready]);
   return (
-    <Panel
+    <TenantCard
+      id="allocation"
+      title="Extension allocation"
       aria-label="Tenant extension allocation"
+      summary={
+        nodeId
+          ? `PBX: ${nodes.find((node) => node.id === nodeId)?.displayName ?? nodeId}`
+          : 'No PBX selected · choose a node to review reserved and allocated extensions'
+      }
+      closedNotice={
+        allocationFeedback ? (
+          <p role="status">{allocationFeedback}</p>
+        ) : undefined
+      }
+      notice={message ? <p role="status">{message}</p> : undefined}
       className="max-w-full [overflow-wrap:anywhere] [&_button]:max-w-full"
     >
-      <PanelHeading>Extension allocation</PanelHeading>
       <p className="text-muted-foreground">
         Reserve or allocate existing stock. Saved ownership, desired enablement
         and calling verification are separate.
@@ -75,7 +89,10 @@ function OwnedAllocation({ tenantId }: { tenantId: string }) {
             className={selectClass}
             value={nodeId}
             disabled={!work.ready || loading}
-            onChange={(e) => setNodeId(e.target.value)}
+            onChange={(e) => {
+              setAllocationFeedback('');
+              setNodeId(e.target.value);
+            }}
           >
             <option value="">Choose PBX node</option>
             {nodeId && !nodes.some((n) => n.id === nodeId) && (
@@ -103,9 +120,7 @@ function OwnedAllocation({ tenantId }: { tenantId: string }) {
           More nodes
         </Button>
       </div>
-      {message ? (
-        <p role="status">{message}</p>
-      ) : loading ? (
+      {loading ? (
         <p role="status">Loading PBX nodes…</p>
       ) : nodes.length === 0 ? (
         <p>
@@ -114,8 +129,13 @@ function OwnedAllocation({ tenantId }: { tenantId: string }) {
         </p>
       ) : null}
       {nodeId && (
-        <NodeAllocation key={nodeId} tenantId={tenantId} nodeId={nodeId} />
+        <NodeAllocation
+          key={nodeId}
+          tenantId={tenantId}
+          nodeId={nodeId}
+          onFeedback={setAllocationFeedback}
+        />
       )}
-    </Panel>
+    </TenantCard>
   );
 }

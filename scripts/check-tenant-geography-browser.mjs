@@ -1,3 +1,4 @@
+import { expandTenantCards } from './tenant-card-browser.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
@@ -243,6 +244,7 @@ export async function checkTenantGeographyBrowser({
   assert.deepEqual(detail.tenant.geography.defaults, [123.19, 13.62]);
   select(b);
   await page.reload();
+  await expandTenantCards(page);
   await expect(longitude()).toHaveValue('123.19');
   await expect(
     region.getByText('Saved barangays: 27', { exact: true }),
@@ -420,6 +422,7 @@ export async function checkTenantGeographyBrowser({
   await expect(region.getByText(/^Geography saved at version/)).toBeVisible();
   select(a);
   await page.reload();
+  await expandTenantCards(page);
   await expect(longitude()).toHaveValue('');
   await expect(
     region.getByText('Configured service area: not configured.', {
@@ -439,6 +442,7 @@ export async function checkTenantGeographyBrowser({
     page.getByRole('heading', { name: 'Platform console sign-in' }),
   ).toBeVisible();
   await switchOwner();
+  await expandTenantCards(page);
   await expect(confirm()).not.toBeVisible();
   await expect(
     region.getByText('Configured service area: not configured.', {
@@ -453,6 +457,7 @@ export async function checkTenantGeographyBrowser({
   await expect(longitude()).toHaveValue('');
   // Hold a real committed response across client navigation to another tenant.
   await page.goto(`${new URL(page.url()).origin}/tenants/${id}`);
+  await expandTenantCards(page);
   await expect(longitude()).toHaveValue('');
   await upload();
   await confirm().check();
@@ -469,6 +474,7 @@ export async function checkTenantGeographyBrowser({
     .getByRole('button', { name: 'Search tenants', exact: true })
     .click();
   await page.locator(`a[href="/tenants/${other}"]`).click();
+  await expandTenantCards(page);
   await expect(longitude()).toHaveValue('');
   delayedTarget.release();
   await delay(150);

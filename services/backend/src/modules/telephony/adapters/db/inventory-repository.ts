@@ -237,7 +237,7 @@ export class InventoryRepository implements InventoryStore {
   ) {
     const rows = (
       await s.query<ExtensionRow>(
-        'SELECT * FROM public.extensions WHERE node_id=$1 AND ($2::uuid IS NULL OR id>$2) ORDER BY id LIMIT $3',
+        'SELECT * FROM public.extensions WHERE node_id=$1 AND ($2::uuid IS NULL OR number::integer > (SELECT number::integer FROM public.extensions WHERE node_id=$1 AND id=$2)) ORDER BY number::integer LIMIT $3',
         [nodeId, after, limit],
       )
     ).rows;

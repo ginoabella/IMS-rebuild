@@ -18,3 +18,5 @@ export type { Tone } from './primitives.js';
 export { Overlay, OverlayScope, OverflowMenu, Tabs } from './overlays.js';
 export { UiPreview } from './preview.js';
 export { AppShell } from './shell.js';
+
+export { DisclosurePanel } from './disclosure-panel.js';

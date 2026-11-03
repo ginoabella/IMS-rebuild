@@ -64,6 +64,31 @@ export class AllocationRepository {
       verification: 'not_established',
     }));
   }
+  async stockPage(
+    s: ReadSnapshot,
+    nodeId: string,
+    after: string | null,
+    limit: number,
+    numberPrefix: string | null,
+  ): Promise<AllocationStock[]> {
+    // Browsing uses number order; mutation stock() keeps its UUID lock order.
+    const rows = (
+      await s.query<{ id: string }>(
+        `SELECT id FROM public.extensions WHERE node_id=$1 AND ($2::uuid IS NULL OR number::integer > (SELECT number::integer FROM public.extensions WHERE node_id=$1 AND id=$2)) AND ($4::text IS NULL OR number LIKE $4 || '%') ORDER BY number::integer LIMIT $3`,
+        [nodeId, after, limit, numberPrefix],
+      )
+    ).rows;
+    if (!rows.length) return [];
+    const stock = await this.stock(
+      s,
+      nodeId,
+      rows.map((row) => row.id),
+      null,
+      null,
+      limit,
+    );
+    return stock.sort((a, b) => Number(a.number) - Number(b.number));
+  }
   async list(
     s: ReadSnapshot,
     tenantId: string,

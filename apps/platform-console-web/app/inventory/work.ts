@@ -13,6 +13,7 @@ export type InventoryAttempt = {
 export type InventoryWork = {
   nodeId: string;
   workflowId: string;
+  expandedExtensionIds: string[];
   values: Record<
     | 'number'
     | 'numbers'
@@ -36,6 +37,7 @@ export type InventoryWork = {
 export const emptyInventory = (): InventoryWork => ({
   nodeId: '',
   workflowId: '',
+  expandedExtensionIds: [],
   values: {
     number: '',
     numbers: '',

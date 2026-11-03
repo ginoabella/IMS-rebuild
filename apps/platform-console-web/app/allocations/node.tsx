@@ -1,4 +1,5 @@
 'use client';
+import { useEffect } from 'react';
 import { Button, Field, Input } from '@myims/ui-web';
 import { useNodeAllocation } from './use-allocation';
 const selectClass =
@@ -6,9 +7,11 @@ const selectClass =
 export function NodeAllocation({
   tenantId,
   nodeId,
+  onFeedback,
 }: {
   tenantId: string;
   nodeId: string;
+  onFeedback?: (message: string) => void;
 }) {
   const {
     work,
@@ -16,6 +19,11 @@ export function NodeAllocation({
     stock,
     stockCursor,
     stockAfter,
+    stockSearch,
+    setStockSearch,
+    stockPrefix,
+    stockLoading,
+    searchStock,
     claimAfter,
     history,
     setHistory,
@@ -45,6 +53,9 @@ export function NodeAllocation({
     save,
     change,
   } = useNodeAllocation({ tenantId, nodeId });
+  useEffect(() => {
+    onFeedback?.(message);
+  }, [message, onFeedback]);
   return (
     <div className="space-y-5 pt-4">
       <p ref={feedback} tabIndex={-1} role="status" className="break-words">
@@ -52,7 +63,7 @@ export function NodeAllocation({
       </p>
       <Button
         variant="secondary"
-        disabled={!work.ready || pending}
+        disabled={!work.ready || pending || stockLoading}
         onClick={() => void reload()}
       >
         Reload saved ownership
@@ -64,7 +75,7 @@ export function NodeAllocation({
             blocked while its outcome is uncertain.
           </p>
           <Button
-            disabled={!work.ready || pending}
+            disabled={!work.ready || pending || stockLoading}
             onClick={() => void submit(attempt)}
           >
             Retry original allocation request
@@ -218,15 +229,60 @@ export function NodeAllocation({
           </div>
         ) : (
           <>
-            {stock.length === 0 && (
-              <p>
-                No inventory extensions on this page. Create stock in PBX
-                administration before allocating.
-              </p>
+            <form
+              role="search"
+              aria-label="Find stock extensions"
+              className="flex flex-wrap items-end gap-2 [&>div]:min-w-0"
+              onSubmit={(event) => {
+                event.preventDefault();
+                searchStock(stockSearch);
+              }}
+            >
+              <Field
+                id="allocation-number-search"
+                label="Extension number"
+                optional
+                hint="Enter a full number or its first digits. Searches all PBX stock."
+              >
+                <Input
+                  id="allocation-number-search"
+                  type="search"
+                  inputMode="numeric"
+                  pattern="[1-9][0-9]{0,5}"
+                  maxLength={6}
+                  value={stockSearch}
+                  onChange={(event) => setStockSearch(event.target.value)}
+                />
+              </Field>
+              <Button type="submit" variant="secondary">
+                Find extensions
+              </Button>
+              {stockPrefix && (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setStockSearch('');
+                    searchStock('');
+                  }}
+                >
+                  Show all extensions
+                </Button>
+              )}
+            </form>
+            {stockLoading ? (
+              <p role="status">Loading extensions…</p>
+            ) : (
+              stock.length === 0 && (
+                <p>
+                  {stockPrefix
+                    ? `No extensions match ${stockPrefix}.`
+                    : 'No inventory extensions on this page. Create stock in PBX administration before allocating.'}
+                </p>
+              )
             )}
             <p>
               {chosen.length} selected (maximum 50). Disabled stock can be
-              owned.
+              owned. Selections are kept across searches and pages.
             </p>
             <Button
               variant="secondary"
@@ -238,38 +294,58 @@ export function NodeAllocation({
             >
               Clear individual selection
             </Button>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {stock.map((e) => (
-                <label
-                  key={e.id}
-                  className="flex min-h-11 items-center gap-2 break-words"
-                >
-                  <input
-                    type="checkbox"
-                    checked={chosen.includes(e.id)}
-                    disabled={
-                      !!e.claim ||
-                      e.credentialPending ||
-                      (!chosen.includes(e.id) && chosen.length >= 50)
-                    }
-                    onChange={(ev) => {
-                      setChosen((current) =>
-                        ev.target.checked
-                          ? [...current, e.id]
-                          : current.filter((id) => id !== e.id),
-                      );
-                      edit();
-                    }}
-                  />
-                  Extension {e.number} · {e.administrativeStatus}
-                  {e.claim
-                    ? ' · ' + e.claim.state
-                    : e.credentialPending
-                      ? ' · credential setup pending'
-                      : ''}
-                </label>
-              ))}
+            <div
+              role="region"
+              aria-label="Extension choices"
+              tabIndex={0}
+              aria-busy={stockLoading || undefined}
+              className="max-h-72 overflow-y-auto overscroll-contain rounded-md border p-2"
+            >
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(min(100%,11rem),1fr))] gap-2">
+                {stock.map((e) => {
+                  const selected = chosen.includes(e.id);
+                  const blocked =
+                    !!e.claim ||
+                    e.credentialPending ||
+                    (!selected && chosen.length >= 50);
+                  const status = `${e.administrativeStatus}${e.claim ? ' · ' + e.claim.state : e.credentialPending ? ' · credential setup pending' : ''}`;
+                  return (
+                    <label
+                      key={e.id}
+                      className={`flex min-h-11 min-w-0 items-center gap-2 rounded-md border px-2 py-1 break-words ${selected ? 'border-primary bg-primary/10' : 'border-subtle'} ${blocked ? 'opacity-60' : 'cursor-pointer hover:bg-muted'}`}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selected}
+                        disabled={blocked}
+                        aria-label={`Extension ${e.number} · ${status}`}
+                        onChange={(ev) => {
+                          setChosen((current) =>
+                            ev.target.checked
+                              ? [...current, e.id]
+                              : current.filter((id) => id !== e.id),
+                          );
+                          edit();
+                        }}
+                      />
+                      <span className="min-w-0">
+                        <span className="font-mono font-semibold">
+                          {e.number}
+                        </span>
+                        <span className="block text-xs text-muted-foreground">
+                          {status}
+                        </span>
+                      </span>
+                    </label>
+                  );
+                })}
+              </div>
             </div>
+            <p className="text-xs text-muted-foreground">
+              Showing {stock.length} extensions on this page
+              {stockPrefix ? ` matching ${stockPrefix}` : ''}. Use pages to
+              browse more; preview shows every selected extension.
+            </p>
             <div className="flex flex-wrap gap-3 [&>div]:min-w-0 [&>div]:max-w-full">
               <Button
                 variant="secondary"

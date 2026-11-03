@@ -1,11 +1,12 @@
 'use client';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Button, Panel, PanelHeading } from '@myims/ui-web';
+import { Button } from '@myims/ui-web';
 import {
   credentialActionDto,
   type CredentialActionDto,
   type VerificationMethod,
 } from '@myims/contracts';
+import { TenantCard } from './cards';
 import { useOperatorWork } from '../auth/console-access';
 import { AccessError } from '../auth/client';
 export function AdministratorCredentials({
@@ -202,13 +203,21 @@ export function AdministratorCredentials({
     }
   }
   return (
-    <Panel
-      aria-labelledby="credential-heading"
+    <TenantCard
+      id="credential"
+      title="Administrator credentials"
       hidden={credentialState === undefined}
+      summary={`${state === 'unset' ? 'Setup required' : 'Credentials ready'}${action ? ` · ${action.state}` : ''}${token ? ' · Handoff code ready' : ''}`}
+      notice={
+        message &&
+        message !==
+          'Canonical credential status loaded. Codes cannot be redisclosed.' ? (
+          <p role="status" aria-live="polite">
+            {message}
+          </p>
+        ) : undefined
+      }
     >
-      <PanelHeading id="credential-heading">
-        Administrator credentials
-      </PanelHeading>
       <p className="mt-2 text-muted-foreground">
         Credentials do not activate a tenant. Verify the person against
         established organization records and use in-person or approved encrypted
@@ -295,10 +304,13 @@ export function AdministratorCredentials({
             </Button>
           </div>
         )}
-        <p role="status" aria-live="polite">
-          {message}
-        </p>
+        {message ===
+          'Canonical credential status loaded. Codes cannot be redisclosed.' && (
+          <p role="status" aria-live="polite">
+            {message}
+          </p>
+        )}
       </div>
-    </Panel>
+    </TenantCard>
   );
 }

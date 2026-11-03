@@ -1,3 +1,4 @@
+import { expandTenantCards } from './tenant-card-browser.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
@@ -80,6 +81,7 @@ export async function checkTenantEditingBrowser({
   ).toBeVisible();
   select(b);
   await page.goto(`${config.origin}/tenants/${id.toUpperCase()}`);
+  await expandTenantCards(page);
   await expect(contact()).toHaveValue('Operations desk');
   assert.equal(
     (await request(`/platform/tenants/${id}`)).data.tenant.contacts.email,
@@ -225,6 +227,7 @@ export async function checkTenantEditingBrowser({
   );
   await name().fill('Refresh discards unsent edits');
   await page.reload();
+  await expandTenantCards(page);
   await expect(name()).toHaveValue('Browser organization');
   // Real search/filter selection, literal matching, cursor reset and delayed old criteria.
   await page.goto(`${config.origin}/tenants`);
@@ -285,6 +288,7 @@ export async function checkTenantEditingBrowser({
   ])
     assert.equal((await request(`/platform/tenants?${query}`)).status, 400);
   await page.goto(`${config.origin}/tenants/${other}`);
+  await expandTenantCards(page);
   await expect(contact()).toHaveValue('');
   await contact().fill('Old owner pending');
   const oldOwner = holdResponse(
@@ -303,6 +307,7 @@ export async function checkTenantEditingBrowser({
     page.getByRole('heading', { name: 'Platform console sign-in' }),
   ).toBeVisible();
   await switchOwner();
+  await expandTenantCards(page);
   await expect(contact()).toHaveValue('Old owner pending');
   await expect(
     page.getByRole('button', {

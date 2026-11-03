@@ -28,6 +28,9 @@ export async function forwardAllocation(
           'limit',
           'after',
           ...(parts.length === 0 ? ['history'] : []),
+          ...(parts.length === 1 && parts[0] === 'stock'
+            ? ['numberPrefix']
+            : []),
         ].includes(k),
     ) ||
     ((method !== 'GET' || (parts.length === 1 && uuid(parts[0]))) &&
@@ -35,6 +38,8 @@ export async function forwardAllocation(
     (url.searchParams.has('limit') &&
       !/^(?:[1-9]|[1-9][0-9]|100)$/.test(url.searchParams.get('limit')!)) ||
     (url.searchParams.has('after') && !uuid(url.searchParams.get('after'))) ||
+    (url.searchParams.has('numberPrefix') &&
+      !/^[1-9][0-9]{0,5}$/.test(url.searchParams.get('numberPrefix')!)) ||
     (url.searchParams.has('history') &&
       url.searchParams.get('history') !== 'true')
   )

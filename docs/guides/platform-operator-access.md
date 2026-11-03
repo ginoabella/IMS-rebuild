@@ -26,8 +26,9 @@ platform operator access is required. Too many requests displays a retry interva
 wait before trying again. Service unavailable or response uncertain requires a
 new explicit attempt after recovery; the console never assumes sign-in succeeded.
 
-Choose Sign out in the console shell. The workspace hides while the backend
-confirms revocation across replicas. Confirmed success returns to sign-in and
+Choose the Sign out icon in the top-right bar on any console page. The workspace
+hides while the backend confirms revocation across replicas. Confirmed success
+returns to sign-in and
 clears this workspace's unfinished memory. Other device sessions remain separate.
 If sign-out is not confirmed, use Retry sign out. Hidden content is not evidence
 of confirmed shared logout; an uncertain response can already have revoked access.

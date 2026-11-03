@@ -21,7 +21,12 @@ uses exactly these routes; arbitrary backend paths are unavailable.
 - GET `:claimId`: no query; returns the same list envelope with exactly one
   tenant/node-qualified claim, current stock and release blockers (including released
   history). Foreign claims return 404.
-- GET `stock`: bounded `limit`/`after` inventory selectors on the exact node.
+- GET `stock`: bounded `limit`/`after` inventory selectors on the exact node,
+  sorted by ascending numeric extension number across pages. The UUID cursor
+  resolves to its immutable node-owned number; absent/foreign-node cursors return
+  no stock. Optional `numberPrefix` is 1–6 digits starting 1–9 and filters the full
+  node inventory before pagination. Claims and mutation stock locks retain UUID
+  ordering; browsing does not change save/preview/ownership rules.
 - POST `preview`: `{selection}` where selection is exactly `{extensionIds}`
   (1–50 distinct UUIDs) or `{range:{start,end}}` (canonical number strings,
   inclusive ascending step one, 1–50 numbers). Returns `{items,canSave,tenant}`;
@@ -92,3 +97,14 @@ safety. Missing verified runtime identities/times block release. Absent browser
 observations are irrelevant. Installed-resource
 release/transfer and pin retirement remain with c. Future staff assignments must
 add actual blockers before shipping their writer.
+
+## Compact individual stock selector
+
+The tenant detail selector shows at most 25 stock choices per page in a bounded,
+scrollable responsive grid. Each compact choice keeps number, desired status,
+claim/pending blockers and selection visible with a 44px minimum target. The
+number search applies to the entire PBX stock, not only the loaded page; changing
+search resets the stock cursor. Selected UUIDs remain across searches/pages up to
+the existing 50-item cap, with a persistent count and clear action. Explicit preview
+still reviews every selected extension before saving. Read loading disables edits,
+and existing owner/resource epochs reject late results.

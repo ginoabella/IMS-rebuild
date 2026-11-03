@@ -17,7 +17,11 @@ backend boundaries. Acceptance results are recorded in the feature evidence.
 3. Select existing extensions individually (across stock pages) or choose Number
    range and enter first/last numbers. Ranges are inclusive, ascending and bounded
    to 50 numbers. Individual selections contain at most 50 distinct UUIDs.
-   Canonical numbers are 1000–899999, without leading zeros.
+   Canonical numbers are 1000–899999, without leading zeros. Individual choices
+   are sorted numerically in a compact scroll area, 25 per page. Enter a full
+   number or its first digits and choose Find extensions to search all PBX stock.
+   Show all extensions clears the search. Selections survive paging and searches;
+   the count includes off-page choices and Preview selection lists them all.
 4. Choose Reserve capacity or Allocate capacity, then Preview selection. Review
    every entry, including desired-disabled stock, missing numbers and existing
    owners. Missing/conflicting stock rejects the entire batch; use the inventory

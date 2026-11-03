@@ -1,3 +1,4 @@
+import { expandTenantCards } from './tenant-card-browser.mjs';
 import { checkTenantVoiceBrowser } from './check-tenant-voice-browser.mjs';
 import { checkTenantGeographyBrowser } from './check-tenant-geography-browser.mjs';
 import { checkTenantEditingBrowser } from './check-tenant-editing-browser.mjs';
@@ -50,6 +51,7 @@ export async function checkDraftTenantBrowser({
     await page.waitForLoadState('networkidle');
     await fill(tenantCode);
     await createButton().click();
+    await expandTenantCards(page);
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();
@@ -159,6 +161,7 @@ export async function checkDraftTenantBrowser({
         ? firstPayload.message
         : 'safe result',
     );
+    await expandTenantCards(page);
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();
@@ -189,6 +192,7 @@ export async function checkDraftTenantBrowser({
     await review('detail');
     select(b);
     await page.reload();
+    await expandTenantCards(page);
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();
@@ -213,6 +217,7 @@ export async function checkDraftTenantBrowser({
     await fill(`${code}-maximum`.padEnd(64, 'x'), 'N'.repeat(200));
     await page.getByLabel(/^Administrator username/).fill('A'.repeat(128));
     await createButton().click();
+    await expandTenantCards(page);
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();
@@ -378,6 +383,7 @@ export async function checkDraftTenantBrowser({
     await page
       .getByRole('button', { name: 'Retry original submission' })
       .click();
+    await expandTenantCards(page);
     await expect(
       page.getByText('Credentials not set', { exact: true }),
     ).toBeVisible();
@@ -548,6 +554,7 @@ export async function checkDraftTenantBrowser({
       [unlinked, `${code}-unlinked`],
     );
     await page.goto(`${config.origin}/tenants/${unlinked}`);
+    await expandTenantCards(page);
     await expect(
       page.getByText('Initial administrator provenance unavailable', {
         exact: true,

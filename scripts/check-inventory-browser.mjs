@@ -271,6 +271,48 @@ export async function checkInventoryBrowser({
     'Profile versioning must not change existing selections',
   );
   const e = extensions.find((e) => e.number === '6101');
+  const inventoryList = page.getByRole('region', {
+    name: 'Canonical extension inventory',
+    exact: true,
+  });
+  const summaries = inventoryList.locator('summary');
+  const numbers = (await summaries.allTextContents()).map((text) =>
+    Number(text.trim().split(/\s/)[0]),
+  );
+  assert.deepEqual(
+    numbers,
+    [...numbers].sort((a, b) => a - b),
+  );
+  await expect(inventoryList.locator('details[open]')).toHaveCount(0);
+  const disclosure = inventoryList.locator(
+    'summary[aria-label="Extension 6101"]',
+  );
+  await expect(
+    page.getByRole('button', {
+      name: 'Inspect extension 6101',
+      exact: true,
+    }),
+  ).not.toBeVisible();
+  await disclosure.focus();
+  await page.keyboard.press('Enter');
+  await expect(
+    page.getByRole('button', {
+      name: 'Inspect extension 6101',
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.keyboard.press('Enter');
+  await expect(inventoryList.locator('details[open]')).toHaveCount(0);
+  async function expandExtension() {
+    const summary = inventoryList.locator(
+      'summary[aria-label="Extension 6101"]',
+    );
+    const expanded = await summary.evaluate(
+      (element) => element.parentElement.open,
+    );
+    if (!expanded) await summary.click();
+  }
+  await expandExtension();
   await page
     .getByRole('button', { name: 'Inspect extension 6101', exact: true })
     .click();
@@ -551,6 +593,7 @@ export async function checkInventoryBrowser({
     await page
       .getByRole('button', { name: 'Reload inventory', exact: true })
       .click();
+    await expandExtension();
     await expect(
       page.getByText('Registration: registered', { exact: true }),
     ).toBeVisible();
@@ -662,6 +705,7 @@ export async function checkInventoryBrowser({
     await page
       .getByRole('button', { name: 'Reload inventory', exact: true })
       .click();
+    await expandExtension();
     await page
       .getByRole('button', { name: 'Inspect extension 6101', exact: true })
       .click();

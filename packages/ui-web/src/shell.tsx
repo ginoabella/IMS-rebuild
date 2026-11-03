@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, type ReactNode } from 'react';
-import { Menu, Radio } from 'lucide-react';
+import { LogOut, Menu, Radio } from 'lucide-react';
 import { Overlay } from './overlays.js';
 import { Badge, Button } from './primitives.js';
 
@@ -9,11 +9,15 @@ export function AppShell({
   name,
   description,
   navigation,
+  onSignOut,
+  signOutPending,
   children,
 }: {
   name: string;
   description: string;
   navigation: ReactNode;
+  onSignOut?: () => void;
+  signOutPending?: boolean;
   children: ReactNode;
 }) {
   const [navigationOpen, setNavigationOpen] = useState(false);
@@ -67,7 +71,20 @@ export function AppShell({
             <p className="text-xs text-muted-foreground">{name}</p>
           </div>
         </div>
-        <Badge tone="warning">Foundation preview</Badge>
+        {onSignOut ? (
+          <Button
+            variant="ghost"
+            className="size-11 shrink-0 p-0"
+            aria-label="Sign out"
+            title="Sign out"
+            onClick={onSignOut}
+            pending={signOutPending}
+          >
+            <LogOut aria-hidden="true" />
+          </Button>
+        ) : (
+          <Badge tone="warning">Foundation preview</Badge>
+        )}
       </header>
       <div className="flex min-h-[calc(100dvh-4rem)]">
         <aside className="hidden w-56 shrink-0 border-r bg-elevated md:block">

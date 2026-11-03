@@ -111,7 +111,7 @@ export class TenantAllocation {
             ? []
             : kind === 'claims'
               ? ['limit', 'after', 'history']
-              : ['limit', 'after'],
+              : ['limit', 'after', 'numberPrefix'],
         );
       const limit = q.limit === undefined ? 25 : Number(q.limit);
       if (
@@ -122,6 +122,14 @@ export class TenantAllocation {
       )
         invalid('limit');
       const after = q.after === undefined ? null : id(q.after);
+      if (
+        q.numberPrefix !== undefined &&
+        (typeof q.numberPrefix !== 'string' ||
+          !/^[1-9][0-9]{0,5}$/.test(q.numberPrefix))
+      )
+        invalid('numberPrefix');
+      const numberPrefix =
+        typeof q.numberPrefix === 'string' ? q.numberPrefix : null;
       if (q.history !== undefined && q.history !== 'true') invalid('history');
       // A locked read provides canonical authority, consistent blockers and the same
       // dependency snapshot used by release, including the actual runtime port.
@@ -131,13 +139,12 @@ export class TenantAllocation {
           await this.authorized(tx, p);
           const { tenant } = await this.target(tx, tenantId, nodeId, true);
           if (kind === 'stock') {
-            const rows = await this.store.stock(
+            const rows = await this.store.stockPage(
               tx,
               nodeId,
-              null,
-              null,
               after,
               limit + 1,
+              numberPrefix,
             );
             const items = rows.slice(0, limit);
             while (

@@ -118,6 +118,18 @@ layout for information cards across the application.
 - Keep card headings, statuses, warnings, and primary actions visible. Use semantic label/value relationships, such as `dl`, `dt`, and `dd` for read-only details.
 - Reuse shared panel primitives and design tokens. Apply this convention when creating or polishing information cards; form controls follow the Forms & Inputs guidance below.
 
+### Tenant detail disclosure cards
+
+Tenant detail cards start collapsed, showing their title and the most useful
+current summary (organization name, administrator/credential state, primary
+contact, voice preference, geography setup or selected PBX). A keyboard-accessible
+arrow control expands/collapses each card and announces its state. Keep form
+contents mounted so collapsing does not discard edits. Preserve open/closed
+choices through same-operator tab-return revalidation; reset for another tenant,
+operator or full document load. Keep unsaved, pending, uncertain and error notices
+visible outside collapsed content. Do not display credential handoff codes in
+collapsed summaries.
+
 ## Forms & Inputs
 
 - Keep forms easy to scan and group related fields together.

@@ -395,16 +395,9 @@ export function ConsoleAccess({
               name="Platform console"
               description="Platform workspace"
               navigation={<AppNavigation />}
+              onSignOut={() => void logout()}
+              signOutPending={pending}
             >
-              <div className="mb-5 flex justify-end">
-                <Button
-                  variant="secondary"
-                  onClick={() => void logout()}
-                  pending={pending}
-                >
-                  Sign out
-                </Button>
-              </div>
               <div>{children}</div>
             </AppShell>
           </OverlayScope>

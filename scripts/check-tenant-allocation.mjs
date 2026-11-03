@@ -1,3 +1,4 @@
+import { expandTenantCards } from './tenant-card-browser.mjs';
 import { setTimeout as delay } from 'node:timers/promises';
 import { checkAllocationBounds } from './check-allocation-bounds.mjs';
 import { checkAllocationRaces } from './check-allocation-races.mjs';
@@ -656,6 +657,7 @@ async function runTenantAllocation({
   );
   select(a);
   await page.goto(`${config.origin}/tenants/${two.id}`);
+  await expandTenantCards(page);
   await page.waitForLoadState('networkidle');
   // Panel uses a section with an accessible name.
   await expect(page.getByLabel(/^PBX node/)).toBeVisible();
@@ -695,6 +697,7 @@ async function runTenantAllocation({
   ).toBeVisible();
   select(b);
   await page.reload();
+  await expandTenantCards(page);
   await page.waitForLoadState('networkidle');
   await page.getByLabel(/^PBX node/).selectOption(nodeId);
   await expect(
@@ -858,6 +861,7 @@ async function runTenantAllocation({
     page.getByRole('heading', { name: 'Platform console sign-in' }),
   ).toBeVisible();
   await login(page, `${username}.second`);
+  await expandTenantCards(page);
   await page.getByLabel(/^PBX node/).selectOption(nodeId);
   await page.getByLabel('Selection method').selectOption('range');
   ownerGate.release();
@@ -878,6 +882,7 @@ async function runTenantAllocation({
     page.getByRole('heading', { name: 'Platform console sign-in' }),
   ).toBeVisible();
   await login();
+  await expandTenantCards(page);
   await expect(page.getByLabel(/^PBX node/)).toBeVisible();
   await page.waitForLoadState('networkidle');
   const canonical = await request(path(two));

@@ -1,3 +1,4 @@
+import { expandTenantCards } from './tenant-card-browser.mjs';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { expect as baseExpect } from '@playwright/test';
@@ -56,6 +57,7 @@ export async function checkTenantVoiceBrowser({
   await expect(region.getByText(/^Saved at version/)).toBeVisible();
   select(b);
   await page.reload();
+  await expandTenantCards(page);
   await expect(choice).toHaveValue('enabled');
   await page
     .getByLabel('Contact name (optional)', { exact: true })
@@ -159,6 +161,7 @@ export async function checkTenantVoiceBrowser({
     page.getByRole('heading', { name: 'Platform console sign-in' }),
   ).toBeVisible();
   await switchOwner();
+  await expandTenantCards(page);
   await expect(choice).toHaveValue('enabled');
   const targetHeld = holdResponse('POST', path);
   await choice.selectOption('disabled');

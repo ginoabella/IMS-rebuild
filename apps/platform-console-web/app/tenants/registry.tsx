@@ -1,4 +1,5 @@
 'use client';
+import { TenantCard, TenantCardProvider } from './cards';
 import { TenantAllocations } from '../allocations/section';
 import { GeographyEditor } from './geography';
 import { TenantEditor } from './editor';
@@ -10,7 +11,6 @@ import {
   Button,
   ContentState,
   Panel,
-  PanelHeading,
   Table,
   Field,
   Input,
@@ -213,6 +213,14 @@ export function TenantRegistry() {
   );
 }
 export function TenantDetail({ id }: { id: string }) {
+  const work = useOperatorWork();
+  return (
+    <TenantCardProvider key={`${work.operatorId}:${id}`}>
+      <TenantDetailContent id={id} />
+    </TenantCardProvider>
+  );
+}
+function TenantDetailContent({ id }: { id: string }) {
   const state = useRegistry<TenantDetailDto>(() => tenantDetail(id), id);
   const detail = state.data;
   return (
@@ -232,10 +240,16 @@ export function TenantDetail({ id }: { id: string }) {
       ) : (
         <>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,28rem),1fr))] items-start gap-4">
-            <Panel aria-labelledby="organization-heading" className="min-w-0">
-              <PanelHeading id="organization-heading" className="break-words">
-                {detail.tenant.displayName}
-              </PanelHeading>
+            <TenantCard
+              id="organization"
+              title={detail.tenant.displayName}
+              summary={
+                <>
+                  {detail.tenant.tenantCode} · {detail.tenant.status}
+                </>
+              }
+              className="min-w-0"
+            >
               <dl className="mt-3 grid grid-cols-[min(40%,10rem)_minmax(0,1fr)] items-baseline gap-x-4 gap-y-2 [overflow-wrap:anywhere]">
                 <dt className="text-muted-foreground">Tenant code</dt>
                 <dd>{detail.tenant.tenantCode}</dd>
@@ -275,11 +289,17 @@ export function TenantDetail({ id }: { id: string }) {
                 <dt className="text-muted-foreground">Tenant ID</dt>
                 <dd>{detail.tenant.id}</dd>
               </dl>
-            </Panel>
-            <Panel aria-labelledby="administrator-heading" className="min-w-0">
-              <PanelHeading id="administrator-heading">
-                Initial administrator
-              </PanelHeading>
+            </TenantCard>
+            <TenantCard
+              id="administrator"
+              title="Initial administrator"
+              className="min-w-0"
+              summary={
+                detail.administrator.kind === 'available'
+                  ? `${detail.administrator.username} · ${detail.administrator.status} · ${detail.administrator.credentialState === 'unset' ? 'Credentials not set' : 'Credentials ready'}`
+                  : 'Unavailable — no linked administrator'
+              }
+            >
               {detail.administrator.kind === 'unavailable' ? (
                 <ContentState
                   kind="error"
@@ -318,7 +338,7 @@ export function TenantDetail({ id }: { id: string }) {
                   <dd>{detail.administrator.id}</dd>
                 </dl>
               )}
-            </Panel>
+            </TenantCard>
           </div>
           {detail.tenant.status === 'draft' && (
             <p className="text-muted-foreground">
