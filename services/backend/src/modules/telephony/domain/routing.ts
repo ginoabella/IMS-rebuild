@@ -15,7 +15,8 @@ export class RoutingRejected extends Error {
     readonly blockers?: {
       id: string;
       name: string;
-      kind?: 'groups' | 'inbound' | 'outbound';
+      kind?: 'groups' | 'inbound' | 'outbound' | 'binding';
+      tenantId?: string | null;
     }[],
   ) {
     super(reason);
@@ -193,6 +194,7 @@ export function tenantCompatible(
       return !!f && f.tenantId === tenantId && f.eligible;
     };
     return (
+      extension(g.id) &&
       g.memberIds.every(extension) &&
       (g.fallback.kind === 'hangup' ||
         (g.fallback.kind === 'extension'

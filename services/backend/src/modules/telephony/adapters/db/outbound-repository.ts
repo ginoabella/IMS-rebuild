@@ -190,7 +190,7 @@ export async function previewOutbound(
       available: r.enabled,
     })),
     warnings: [
-      'Unbound desired route: no tenant ownership or calling permission. Preview has no live effects.',
+      'Node-wide desired advisory: tenant permissions are not evaluated. No calling readiness or live effects.',
     ],
   };
   const rule = matches[0];

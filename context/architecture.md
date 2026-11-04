@@ -279,6 +279,15 @@ unknown/failed ancestors. Candidate effects never blindly replay. The
 [integrated evidence](../docs/status/p3-u5c-evidence.md) records limits and cleanup;
 tenant binding/readiness and authenticated ingress attribution remain P4-U2/U3/P5-U3.
 
+P4-U2b adds [canonical desired route authorizations](../docs/architecture/tenant-route-bindings.md)
+under owner-approved shared gateways, exclusive tenant exact DIDs/rules/groups,
+explicit outbound route/trunk permissions and platform-only catch-alls. Telephony
+owns retained authorization/history/receipt tables, primary consistent eligibility
+reads and dependency blockers in existing writers. Platform tenant detail owns the
+operator consumer through named no-store forwarding. Desired compatibility remains
+separate from installed readiness; c owns versioned tenant-aware capture/compiler,
+verified live enforcement and pin-safe installed release. Acceptance is in progress.
+
 ## Storage Model
 
 - **PostgreSQL:** Canonical tenants, identities, credentials metadata, incidents,

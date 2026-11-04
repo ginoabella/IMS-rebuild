@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type {
   RoutingDetailDto,
   RoutingDto,
@@ -132,7 +133,17 @@ export function useRouting({ nodeId }: { nodeId: string }) {
   const work = useOperatorWork(),
     latest = useRef(work);
   latest.current = work;
-  const [kind, setKind] = useState<RoutingKind>('groups');
+  const search = useSearchParams();
+  const linkedKind = search.get('kind'),
+    linkedResource = search.get('resource');
+  const [kind, setKind] = useState<RoutingKind>(() =>
+    (['groups', 'inbound', 'outbound', 'reservations'] as string[]).includes(
+      linkedKind ?? '',
+    )
+      ? (linkedKind as RoutingKind)
+      : 'groups',
+  );
+  const followed = useRef('');
   const stateKey = `routing:${nodeId}:${kind}`;
   const activeScope = useRef(stateKey);
   activeScope.current = stateKey;
@@ -147,7 +158,12 @@ export function useRouting({ nodeId }: { nodeId: string }) {
   const [message, setMessage] = useState(''),
     [errors, setErrors] = useState<Record<string, string>>({}),
     [blockers, setBlockers] = useState<
-      { id: string; name: string; kind?: 'groups' | 'inbound' | 'outbound' }[]
+      {
+        id: string;
+        name: string;
+        kind?: 'groups' | 'inbound' | 'outbound' | 'binding';
+        tenantId?: string | null;
+      }[]
     >([]);
   const [canonical, setCanonical] = useState<RoutingDto | null>(null),
     [pending, setPending] = useState(false),
@@ -208,6 +224,29 @@ export function useRouting({ nodeId }: { nodeId: string }) {
     setConfirm(false);
     if (work.ready) void reload();
   }, [kind, nodeId, after, work.ready, work.operatorId]);
+  useEffect(() => {
+    const link = `${work.operatorId}:${nodeId}:${linkedKind}:${linkedResource}`;
+    if (
+      work.ready &&
+      linkedResource &&
+      /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(linkedResource) &&
+      (['groups', 'inbound', 'outbound', 'reservations'] as string[]).includes(
+        linkedKind ?? '',
+      ) &&
+      followed.current !== link
+    ) {
+      followed.current = link;
+      const linkedWork = work.values[`routing:${nodeId}:${linkedKind}`];
+      if (linkedWork) {
+        const retained: State = JSON.parse(linkedWork);
+        if (retained.attempt || retained.review) {
+          setKind(linkedKind as RoutingKind);
+          return;
+        }
+      }
+      void inspect(linkedResource, linkedKind as RoutingKind);
+    }
+  }, [work.ready, work.operatorId, nodeId, linkedKind, linkedResource]);
   async function inspect(id: string, target: RoutingKind = kind) {
     if (busy.current) return;
     const targetDraft = work.values[`routing:${nodeId}:${target}`];

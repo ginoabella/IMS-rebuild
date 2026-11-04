@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import type {
   TrunkCredentialListDto,
   TrunkCredentialSelection,
@@ -119,7 +120,15 @@ export function usePeers({ nodeId }: { nodeId: string }) {
   const work = useOperatorWork(),
     latest = useRef(work);
   latest.current = work;
-  const [kind, setKind] = useState<PeerResource>('trunks');
+  const search = useSearchParams();
+  const linkedKind = search.get('kind'),
+    linkedResource = search.get('resource');
+  const [kind, setKind] = useState<PeerResource>(() =>
+    (['trunks', 'gateways', 'dids'] as string[]).includes(linkedKind ?? '')
+      ? (linkedKind as PeerResource)
+      : 'trunks',
+  );
+  const followed = useRef('');
   const stateKey = `peers:${nodeId}:${kind}`;
   const activeScope = useRef(stateKey);
   activeScope.current = stateKey;
@@ -176,7 +185,8 @@ export function usePeers({ nodeId }: { nodeId: string }) {
       {
         id: string;
         name: string;
-        kind?: 'gateways' | 'dids' | 'inbound' | 'outbound';
+        kind?: 'gateways' | 'dids' | 'inbound' | 'outbound' | 'binding';
+        tenantId?: string | null;
       }[]
     >([]);
   const [canonical, setCanonical] = useState<PeerDto | null>(null),
@@ -237,6 +247,27 @@ export function usePeers({ nodeId }: { nodeId: string }) {
     setConfirm(false);
     if (work.ready) void reload();
   }, [kind, nodeId, after, work.ready, work.operatorId]);
+  useEffect(() => {
+    const link = `${work.operatorId}:${nodeId}:${linkedKind}:${linkedResource}`;
+    if (
+      work.ready &&
+      linkedResource &&
+      /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(linkedResource) &&
+      (['trunks', 'gateways', 'dids'] as string[]).includes(linkedKind ?? '') &&
+      followed.current !== link
+    ) {
+      followed.current = link;
+      const linkedWork = work.values[`peers:${nodeId}:${linkedKind}`];
+      if (linkedWork) {
+        const retained: State = JSON.parse(linkedWork);
+        if (retained.attempt || retained.review) {
+          setKind(linkedKind as PeerResource);
+          return;
+        }
+      }
+      void inspect(linkedResource, linkedKind as PeerResource);
+    }
+  }, [work.ready, work.operatorId, nodeId, linkedKind, linkedResource]);
   async function inspect(id: string, target: PeerResource = kind) {
     if (busy.current) return;
     const targetDraft = work.values[`peers:${nodeId}:${target}`];

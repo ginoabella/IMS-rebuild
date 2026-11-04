@@ -84,7 +84,8 @@ export interface RoutingErrorDto {
   blockers?: {
     id: string;
     name: string;
-    kind?: 'groups' | 'inbound' | 'outbound';
+    kind?: 'groups' | 'inbound' | 'outbound' | 'binding';
+    tenantId?: string | null;
   }[];
 }
 export interface GroupPreviewDto {

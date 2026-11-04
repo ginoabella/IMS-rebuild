@@ -403,6 +403,11 @@ export async function checkTenantGeographyBrowser({
   await expect(
     region.getByText('Barangays: 27 (uploaded)', { exact: true }),
   ).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  // Start final clearing/reload/isolation after the completed outage journey.
+  // All mounted cards perform real protected reads in this fixture-owned Redis.
+  // Preserve production policy and the dedicated rate-limit assertions.
+  await redis.del(['myims:limiter:v1:platform.protected']);
   await page
     .getByRole('button', {
       name: 'Discard geography changes and use loaded detail',
@@ -418,7 +423,16 @@ export async function checkTenantGeographyBrowser({
   await page
     .getByRole('button', { name: 'Clear default coordinates', exact: true })
     .click();
-  await save().click();
+  const [cleared] = await Promise.all([
+    page.waitForResponse(
+      (response) =>
+        new URL(response.url()).pathname === path &&
+        response.request().method() === 'POST',
+    ),
+    save().click(),
+  ]);
+  console.log('CHECK geography final clear HTTP status', cleared.status());
+  assert.equal(cleared.status(), 200);
   await expect(region.getByText(/^Geography saved at version/)).toBeVisible();
   select(a);
   await page.reload();

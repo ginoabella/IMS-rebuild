@@ -1,3 +1,5 @@
+import { TenantRouteBindings } from '../../application/tenant-route-bindings';
+import { TenantRouteEligibility } from '../../application/tenant-route-eligibility';
 import { TenantAllocation } from '../../application/tenant-allocation';
 import { AllocationRepository } from './allocation-repository';
 import { AllocationTenancyRepository } from '../../../tenancy/adapters/db/allocation-tenancy';
@@ -18,6 +20,8 @@ import { InventoryRepository } from './inventory-repository';
 export class InventoryRuntime {
   readonly service: ExtensionInventory;
   readonly allocation: TenantAllocation;
+  readonly bindings: TenantRouteBindings;
+  readonly eligibility: TenantRouteEligibility;
   readonly peers: Peers;
   readonly routing: Routing;
   readonly revisions: PbxRevisions;
@@ -41,6 +45,26 @@ export class InventoryRuntime {
     this.pool.on('connect', (client) => client.on('error', () => {}));
     this.pool.on('error', () => {});
     this.database = new SnapshotDatabase(url);
+    this.eligibility = new TenantRouteEligibility(
+      this.database,
+      new AllocationTenancyRepository(),
+    );
+    this.bindings = new TenantRouteBindings(
+      {
+        run: (context, action) =>
+          Transaction.run(
+            this.pool,
+            context,
+            'telephony.tenant-route',
+            logger,
+            action,
+          ),
+      },
+      this.database,
+      authority,
+      new AllocationTenancyRepository(),
+      new AuditRepository(),
+    );
     this.allocation = new TenantAllocation(
       {
         run: (context, action) =>

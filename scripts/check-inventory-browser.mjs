@@ -526,6 +526,12 @@ export async function checkInventoryBrowser({
     ),
     0,
   );
+  // Same-owner restoration reloads canonical inventory asynchronously. Finish
+  // that read before expiring the replacement session for the next scenario.
+  await page.waitForLoadState('networkidle');
+  await expect(
+    page.getByRole('button', { name: 'Reload inventory', exact: true }),
+  ).toBeEnabled();
   await expire('absolute');
   await page
     .getByRole('button', { name: 'Reload inventory', exact: true })

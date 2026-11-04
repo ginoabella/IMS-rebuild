@@ -47,6 +47,7 @@ export async function checkPlatformBrowser({
   inventoryBrowser = false,
   peerBrowser = false,
   allocationBrowser = false,
+  bindingsBrowser = false,
   allocationDependencies,
   routingBrowser = false,
   revisionsBrowser = false,
@@ -599,6 +600,7 @@ export async function checkPlatformBrowser({
         : 'IP-peer resources browser/API';
       await checkPeerBrowser({
         allocationOnly: allocationBrowser,
+        bindingsOnly: bindingsBrowser,
         allocationDependencies,
         username,
         routingOnly: routingBrowser,
@@ -631,8 +633,15 @@ export async function checkPlatformBrowser({
       const notes = page.getByLabel('Unfinished notes');
       await notes.focus();
       await page.waitForLoadState('networkidle');
-      await notes.fill(`retained ${boundary} notes`);
-      await expect(notes).toHaveValue(`retained ${boundary} notes`);
+      // Network idle can precede React's ready commit after focus validation.
+      // Establish local setup only once the guarded change handler accepts it;
+      // all expiry/recovery assertions below still run without rewriting input.
+      await expect(async () => {
+        await notes.fill(`retained ${boundary} notes`);
+        await expect(notes).toHaveValue(`retained ${boundary} notes`, {
+          timeout: 500,
+        });
+      }).toPass({ timeout: 15000 });
       if (boundary === 'idle') {
         await page.getByRole('button', { name: 'Open confirmation' }).click();
         await expect(

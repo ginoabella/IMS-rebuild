@@ -111,7 +111,18 @@ export function PeerBrowser({ nodeId }: { nodeId: string }) {
           <ul>
             {blockers.map((b) => (
               <li key={b.id}>
-                {b.kind === 'inbound' || b.kind === 'outbound' ? (
+                {b.kind === 'binding' ? (
+                  <Link
+                    className="underline"
+                    href={
+                      b.tenantId
+                        ? `/tenants/${b.tenantId}#route-bindings-heading`
+                        : '/tenants'
+                    }
+                  >
+                    {b.name} · review route bindings
+                  </Link>
+                ) : b.kind === 'inbound' || b.kind === 'outbound' ? (
                   <Link
                     className="text-[var(--accent-primary)] underline"
                     href={`/pbx-nodes/${nodeId}/routing`}

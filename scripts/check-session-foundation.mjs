@@ -18,9 +18,11 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
 const revisionsBrowser = process.argv[2] === '--revisions-browser';
+const bindingsBrowser = process.argv[2] === '--bindings-browser';
 const allocationBrowser = process.argv[2] === '--allocation-browser';
 const routingBrowser = process.argv[2] === '--routing-browser';
 const peerBrowser =
+  bindingsBrowser ||
   allocationBrowser ||
   revisionsBrowser ||
   routingBrowser ||
@@ -43,6 +45,7 @@ const selection = process.argv
             '--peer-browser',
             '--routing-browser',
             '--allocation-browser',
+            '--bindings-browser',
             '--revisions-browser',
           ].includes(x)
         ? '--platform-browser'
@@ -432,13 +435,15 @@ try {
   if (peerBrowser)
     console.log(
       JSON.stringify({
-        check: allocationBrowser
-          ? 'tenant-allocation'
-          : revisionsBrowser
-            ? 'pbx-revisions'
-            : routingBrowser
-              ? 'routing'
-              : 'trunk-gateways',
+        check: bindingsBrowser
+          ? 'tenant-bindings'
+          : allocationBrowser
+            ? 'tenant-allocation'
+            : revisionsBrowser
+              ? 'pbx-revisions'
+              : routingBrowser
+                ? 'routing'
+                : 'trunk-gateways',
         databaseFixture: name,
       }),
     );
@@ -527,6 +532,7 @@ try {
       inventoryBrowser,
       peerBrowser,
       allocationBrowser,
+      bindingsBrowser,
       routingBrowser,
       revisionsBrowser,
       trunkAccess,
@@ -1416,15 +1422,17 @@ try {
       );
       console.log(
         JSON.stringify({
-          check: allocationBrowser
-            ? 'tenant-allocation'
-            : revisionsBrowser
-              ? 'pbx-revisions'
-              : routingBrowser
-                ? 'routing'
-                : peerBrowser
-                  ? 'trunk-gateways'
-                  : 'extension-inventory',
+          check: bindingsBrowser
+            ? 'tenant-bindings'
+            : allocationBrowser
+              ? 'tenant-allocation'
+              : revisionsBrowser
+                ? 'pbx-revisions'
+                : routingBrowser
+                  ? 'routing'
+                  : peerBrowser
+                    ? 'trunk-gateways'
+                    : 'extension-inventory',
           databaseFixture: name,
           cleanup: 'removed',
         }),

@@ -283,7 +283,13 @@ export class RoutingRepository {
         args,
       );
     }
-    if (v && 'memberIds' in v) {
+    if (
+      v &&
+      'memberIds' in v &&
+      (!old ||
+        !('memberIds' in old) ||
+        JSON.stringify(v.memberIds) !== JSON.stringify(old.memberIds))
+    ) {
       await tx.query(
         'DELETE FROM public.ring_group_members WHERE group_id=$1',
         [id],

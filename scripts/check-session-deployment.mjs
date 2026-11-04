@@ -88,21 +88,24 @@ if (
     '--peer-browser',
     '--routing-browser',
     '--allocation-browser',
+    '--bindings-browser',
     '--revisions-browser',
   ].includes(process.argv[2])
 )
   console.log(
     JSON.stringify({
       check:
-        process.argv[2] === '--allocation-browser'
-          ? 'tenant-allocation'
-          : process.argv[2] === '--revisions-browser'
-            ? 'pbx-revisions'
-            : process.argv[2] === '--routing-browser'
-              ? 'routing'
-              : process.argv[2] === '--peer-browser'
-                ? 'trunk-gateways'
-                : 'extension-inventory',
+        process.argv[2] === '--bindings-browser'
+          ? 'tenant-bindings'
+          : process.argv[2] === '--allocation-browser'
+            ? 'tenant-allocation'
+            : process.argv[2] === '--revisions-browser'
+              ? 'pbx-revisions'
+              : process.argv[2] === '--routing-browser'
+                ? 'routing'
+                : process.argv[2] === '--peer-browser'
+                  ? 'trunk-gateways'
+                  : 'extension-inventory',
       redisFixture: name,
     }),
   );
@@ -302,21 +305,24 @@ try {
       '--peer-browser',
       '--routing-browser',
       '--allocation-browser',
+      '--bindings-browser',
       '--revisions-browser',
     ].includes(process.argv[2])
   )
     console.log(
       JSON.stringify({
         check:
-          process.argv[2] === '--allocation-browser'
-            ? 'tenant-allocation'
-            : process.argv[2] === '--revisions-browser'
-              ? 'pbx-revisions'
-              : process.argv[2] === '--routing-browser'
-                ? 'routing'
-                : process.argv[2] === '--peer-browser'
-                  ? 'trunk-gateways'
-                  : 'extension-inventory',
+          process.argv[2] === '--bindings-browser'
+            ? 'tenant-bindings'
+            : process.argv[2] === '--allocation-browser'
+              ? 'tenant-allocation'
+              : process.argv[2] === '--revisions-browser'
+                ? 'pbx-revisions'
+                : process.argv[2] === '--routing-browser'
+                  ? 'routing'
+                  : process.argv[2] === '--peer-browser'
+                    ? 'trunk-gateways'
+                    : 'extension-inventory',
         redisFixture: name,
         cleanup: 'removed',
       }),

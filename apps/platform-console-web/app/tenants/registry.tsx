@@ -1,4 +1,5 @@
 'use client';
+import { TenantRouteBindings } from '../route-bindings/section';
 import { TenantCard, TenantCardProvider } from './cards';
 import { TenantAllocations } from '../allocations/section';
 import { GeographyEditor } from './geography';
@@ -359,6 +360,7 @@ function TenantDetailContent({ id }: { id: string }) {
         reload={state.retry}
       />
       <TenantAllocations tenantId={id} />
+      <TenantRouteBindings tenantId={id} />
       <AdministratorCredentials
         key={id}
         tenantId={id}

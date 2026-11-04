@@ -88,9 +88,10 @@ checks gateway, selected DID and every reachable extension/member/fallback again
 one tenant and eligibility. `resolveRouteTenant` requires exactly one matching
 installation/key binding with the evaluated version and compatible destinations.
 Unbound, unknown, stale, duplicate/conflicting, malformed or cyclic mapping facts
-resolve no tenant. No phone-number fallback exists. These deterministic fixtures
-prove the boundary only: no allocation tables, tenant-binding API, event ingestion,
-Asterisk compiler or live attribution is delivered.
+resolve no tenant. No phone-number fallback exists. The original P3-U4 fixtures proved the boundary only; they did not deliver canonical
+allocation/binding APIs, event ingestion, a compiler or live attribution. Canonical
+desired ownership is now supplied by the P4-U2b contract below, with acceptance
+verification in progress; live ingress/readiness remain later work.
 
 P4-U2 must provide canonical current binding/allocation facts; P3-U5 must preserve
 these mappings in verified configuration; P5-U3 must authenticate real ingress and
@@ -98,3 +99,19 @@ reconcile source/version facts before calling this internal boundary. The [outbo
 fixture-only outbound compatibility checks; real shared-trunk permissions remain
 P4-U2 work. Saving/enabling/previewing remains
 PBX-offline and has no external effects or calling-readiness implication.
+
+## Approved P4-U2b shared-gateway policy
+
+On 2026-11-03 (Asia/Manila, +08:00), the owner approved the
+[binding policy](../planning/p4-u2b-routing-policy-review.md) with shared gateways
+and exclusively tenant-owned DIDs, inbound rules and ring groups. Different tenants
+may bind their own DIDs on one existing gateway. Complete reachable destinations
+must satisfy canonical same-tenant allocation/ownership and same-node/installation
+eligibility. Shared status must be explicit canonical infrastructure data; absent
+ownership cannot establish permission. This revises the earlier exclusive gateway
+requirement in the fixture helper above; the helper now requires explicit shared gateway facts, an exact tenant-owned DID
+and owned reachable groups. The [canonical binding port](tenant-route-bindings.md)
+is implemented with acceptance verification in progress.
+Shared-gateway catch-alls remain platform-only; tenant bindings require exact owned DIDs. Exact-first
+selection, disabled-winner denial and global selector uniqueness remain required.
+No installed readiness or live ingress authority follows from this approval.

@@ -41,9 +41,10 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
       </Link>
       <h1 className="font-display text-2xl">Routing: groups and rules</h1>
       <p>
-        Unbound desired configuration. Saving, enabling and previewing do not
-        contact the PBX or establish tenant ownership, calling eligibility or
-        live readiness. Disabled definitions retain number claims.
+        Node-wide desired configuration. Tenant bindings are reviewed in tenant
+        detail. Saving, enabling and previewing here do not contact the PBX or
+        establish tenant ownership, calling eligibility or live readiness.
+        Disabled definitions retain number claims.
       </p>
       <div className="flex flex-wrap gap-3">
         {(['groups', 'inbound', 'outbound', 'reservations'] as const).map(
@@ -88,20 +89,40 @@ export function RoutingBrowser({ nodeId }: { nodeId: string }) {
             {blockers.map((b) => (
               <li key={b.id} className="break-all">
                 {b.name} · {b.id}
-                {message.startsWith('Existing references') && (
-                  <Button
-                    variant="secondary"
-                    disabled={pending}
-                    onClick={() => void m.inspect(b.id, b.kind ?? 'groups')}
+                {b.kind === 'binding' ? (
+                  <Link
+                    className="underline"
+                    href={
+                      b.tenantId
+                        ? `/tenants/${b.tenantId}#route-bindings-heading`
+                        : '/tenants'
+                    }
                   >
-                    Open{' '}
-                    {b.kind === 'outbound'
-                      ? 'outbound rule'
-                      : b.kind === 'inbound'
-                        ? 'inbound rule'
-                        : 'group'}{' '}
-                    {b.name}
-                  </Button>
+                    Review tenant route bindings
+                  </Link>
+                ) : (
+                  message.startsWith('Existing references') && (
+                    <Button
+                      variant="secondary"
+                      disabled={pending}
+                      onClick={() =>
+                        void m.inspect(
+                          b.id,
+                          b.kind === 'binding'
+                            ? 'groups'
+                            : (b.kind ?? 'groups'),
+                        )
+                      }
+                    >
+                      Open{' '}
+                      {b.kind === 'outbound'
+                        ? 'outbound rule'
+                        : b.kind === 'inbound'
+                          ? 'inbound rule'
+                          : 'group'}{' '}
+                      {b.name}
+                    </Button>
+                  )
                 )}
               </li>
             ))}

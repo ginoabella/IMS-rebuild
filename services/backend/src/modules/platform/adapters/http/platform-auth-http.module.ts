@@ -1,3 +1,5 @@
+import { RouteBindingsController } from '../../../telephony/adapters/http/route-bindings.controller';
+import { TenantRouteBindings } from '../../../telephony/application/tenant-route-bindings';
 import { AllocationController } from '../../../telephony/adapters/http/allocation.controller';
 import { TenantAllocation } from '../../../telephony/application/tenant-allocation';
 import { LiveController } from '../../../telephony/adapters/http/live.controller';
@@ -44,6 +46,7 @@ export class PlatformAuthHttpModule {
       imports: [IdentityHttpModule.register(config)],
       controllers: [
         AllocationController,
+        RouteBindingsController,
         LiveController,
         PbxController,
         InventoryController,
@@ -56,6 +59,11 @@ export class PlatformAuthHttpModule {
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: TenantRouteBindings,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.bindings,
+        },
         {
           provide: TenantAllocation,
           inject: [InventoryRuntime],

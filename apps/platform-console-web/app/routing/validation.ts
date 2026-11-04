@@ -51,7 +51,7 @@ const inbound = shape({
 });
 const nonnegative = (v: unknown) =>
   Number.isInteger(v) && Number(v) >= 0 && Number(v) <= 2147483647;
-const outbound = shape({
+export const outbound = shape({
   ...common,
   pattern,
   priority: nonnegative,

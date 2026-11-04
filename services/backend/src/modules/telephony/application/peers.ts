@@ -1,3 +1,4 @@
+import { bindingBlockers } from '../adapters/db/route-binding-repository';
 import {
   RuntimeDependencies,
   RetainedRuntimeDependency,
@@ -282,6 +283,17 @@ export class Peers {
                         prior.trunkId !== v.trunkId ||
                         JSON.stringify(prior.sourceAddresses) !==
                           JSON.stringify(v.sourceAddresses))));
+            if (
+              structural ||
+              (v &&
+                'direction' in v &&
+                'direction' in prior &&
+                v.direction !== prior.direction)
+            ) {
+              const blockers = await bindingBlockers(tx, nodeId, kind, old.id);
+              if (blockers.length)
+                throw new PeerRejected(409, 'referenced', undefined, blockers);
+            }
             if (
               structural ||
               (v &&

@@ -1,6 +1,6 @@
 # P4-U2b — Tenant route bindings and permissions
 
-**Status:** planned. Split adopted 2026-10-29 (Asia/Manila, +08:00); implementation has not started.
+**Status:** complete within approved private development, 2026-11-03 (Asia/Manila, +08:00). B-01–08, final focused/affected/full checks, ordinary refresh/HTTPS and retained preservation passed; [final evidence](../../docs/status/p4-u2b-evidence.md). Owner-approved shared gateways, tenant-owned exact DIDs/rules/groups and platform-only catch-alls are implemented. Tenant live routing/readiness remains with c.
 **Parent:** [P4-U2 — Allocate inventory and verify tenant routing](p4-u2-allocate-inventory-and-verify-tenant-routing.md).
 
 The parent owns shared contracts, ALLOC-01–06 policy gates and AC-01–12. This child
@@ -25,9 +25,11 @@ route identities and existing graph/reservation constraints.
 
 Resolve parent ALLOC-02 for gateway/DID/group ownership and sharing, ALLOC-03 for
 outbound permission/selection semantics, and applicable ALLOC-06 binding-release
-rules before dependent implementation. Existing helpers require gateway ownership
-and node-wide outbound previews have existing semantics: proposals do not silently
-change either contract. Live verification decisions remain for c.
+rules before dependent implementation. The owner approved shared gateways with
+tenant-owned DIDs/rules/groups, explicit outbound selection and binding-scoped
+release in the linked policy record; gateway catch-alls remain platform-only and tenants bind exact owned DIDs. Explicitly revise the gateway-ownership helper for canonical shared
+infrastructure and preserve ordinary node-wide outbound preview semantics. Live
+verification decisions remain for c.
 
 ## Scope
 

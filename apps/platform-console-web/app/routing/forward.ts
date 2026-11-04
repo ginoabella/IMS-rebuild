@@ -161,7 +161,13 @@ export async function forwardRouting(
               blockers: data.blockers.map((b) => ({
                 id: b.id,
                 name: b.name,
-                ...(['groups', 'inbound', 'outbound'].includes(b.kind)
+                ...(b.kind === 'binding' &&
+                (b.tenantId === null || uuid(b.tenantId))
+                  ? { tenantId: b.tenantId }
+                  : {}),
+                ...(['groups', 'inbound', 'outbound', 'binding'].includes(
+                  b.kind,
+                )
                   ? { kind: b.kind }
                   : {}),
               })),

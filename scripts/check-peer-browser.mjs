@@ -1,3 +1,4 @@
+import { checkTenantBindings } from './check-tenant-bindings.mjs';
 import { checkTenantAllocation } from './check-tenant-allocation.mjs';
 import { checkPbxRevisions } from './check-pbx-revisions.mjs';
 import { checkRouting } from './check-routing.mjs';
@@ -12,6 +13,7 @@ import AxeBuilder from '@axe-core/playwright';
 const expect = baseExpect.configure({ timeout: 20000 });
 export async function checkPeerBrowser({
   allocationOnly = false,
+  bindingsOnly = false,
   allocationDependencies,
   username,
   routingOnly = false,
@@ -135,6 +137,32 @@ export async function checkPeerBrowser({
   }
   const path = (kind, id = '', suffix = '') =>
     `${base}/${kind}${id ? `/${id}` : ''}${suffix ? `/${suffix}` : ''}`;
+  if (bindingsOnly) {
+    await checkTenantBindings({
+      username,
+      request,
+      direct,
+      nodeId,
+      otherNode,
+      installation,
+      owner,
+      session,
+      page,
+      context,
+      config,
+      a,
+      b,
+      holdResponse,
+      ingress,
+      expire,
+      login,
+      select,
+      issue,
+      staffFacts,
+      allocationDependencies,
+    });
+    return;
+  }
   if (allocationOnly) {
     await checkTenantAllocation({
       username,

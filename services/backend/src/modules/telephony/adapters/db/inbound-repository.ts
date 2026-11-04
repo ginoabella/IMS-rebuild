@@ -157,7 +157,7 @@ export async function previewInbound(
     precedence: null,
     resources: [],
     warnings: [
-      'Unbound desired route: no tenant attribution or calling eligibility. Preview has no live effects.',
+      'Node-wide desired advisory: tenant bindings and authenticated live ingress are not evaluated. No calling readiness or live effects.',
     ],
   };
   const peers = new PeerRepository();

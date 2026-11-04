@@ -1,3 +1,4 @@
+import { bindingRoute } from '../route-bindings/validation';
 import { allocationRoute } from '../allocations/validation';
 import { route as revisionsRoute } from '../revisions/validation';
 import { route as routingRoute } from '../routing/validation';
@@ -84,6 +85,13 @@ export async function backendRequest(
         parts: string[];
         query: string;
       }
+    | {
+        consumer: 'route-bindings';
+        tenantId: string;
+        nodeId: string;
+        parts: string[];
+        query: string;
+      }
     | { consumer: 'tenants'; query: string }
     | { consumer: 'tenant'; id: string }
     | { consumer: 'tenant-configuration'; id: string }
@@ -126,15 +134,18 @@ export async function backendRequest(
     return safeError(400);
   if (
     typeof path !== 'string' &&
-    path.consumer === 'allocations' &&
+    (path.consumer === 'allocations' || path.consumer === 'route-bindings') &&
     (!uuid(path.tenantId) ||
       !uuid(path.nodeId) ||
-      !allocationRoute(path.parts, method))
+      !(path.consumer === 'route-bindings' ? bindingRoute : allocationRoute)(
+        path.parts,
+        method,
+      ))
   )
     return safeError(400);
   try {
     return await fetch(
-      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'inventory' || path.consumer === 'peers' || path.consumer === 'routing' || path.consumer === 'revisions' ? `/platform/pbx-nodes/${path.nodeId}/${path.parts.join('/')}${path.query}` : path.consumer === 'allocations' ? `/platform/tenants/${path.tenantId}/allocations/${path.nodeId}${path.parts.length ? '/' + path.parts.join('/') : ''}${path.query}` : path.consumer === 'pbx-nodes' ? `/platform/pbx-nodes${path.query}` : path.consumer === 'pbx-node' ? `/platform/pbx-nodes/${path.id}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'tenant-configuration' ? `/platform/tenants/${path.id}/configuration` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
+      `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'inventory' || path.consumer === 'peers' || path.consumer === 'routing' || path.consumer === 'revisions' ? `/platform/pbx-nodes/${path.nodeId}/${path.parts.join('/')}${path.query}` : path.consumer === 'allocations' || path.consumer === 'route-bindings' ? `/platform/tenants/${path.tenantId}/${path.consumer}/${path.nodeId}${path.parts.length ? '/' + path.parts.join('/') : ''}${path.query}` : path.consumer === 'pbx-nodes' ? `/platform/pbx-nodes${path.query}` : path.consumer === 'pbx-node' ? `/platform/pbx-nodes/${path.id}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'tenant-configuration' ? `/platform/tenants/${path.id}/configuration` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
       {
         method,
         cache: 'no-store',

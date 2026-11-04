@@ -15,7 +15,8 @@ export class PeerRejected extends Error {
     readonly blockers?: {
       id: string;
       name: string;
-      kind?: 'gateways' | 'dids' | 'inbound' | 'outbound';
+      kind?: 'gateways' | 'dids' | 'inbound' | 'outbound' | 'binding';
+      tenantId?: string | null;
     }[],
   ) {
     super('Peer request rejected');

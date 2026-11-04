@@ -25,10 +25,12 @@ export interface TrustedRouteBinding {
   enabled: boolean;
 }
 export interface TrustedAllocation {
+  shared?: boolean;
+  installationId?: string;
   tenantId: string | null;
   eligible: boolean;
 }
-/** Fixture-tested compatibility boundary. P4 supplies canonical facts; no HTTP bindings. */
+/** Trusted compatibility boundary. Gateway sharing is explicit; catch-alls remain platform-only. */
 export function inboundTenantCompatible(
   binding: TrustedRouteBinding,
   groups: GroupDto[],
@@ -46,9 +48,15 @@ export function inboundTenantCompatible(
     const f = facts.get(key);
     return !!f && f.eligible && f.tenantId === binding.tenantId;
   };
+  const gateway = facts.get(binding.gatewayId);
   if (
-    !owns(binding.gatewayId) ||
-    (binding.didId !== null && !owns(binding.didId))
+    !gateway ||
+    !gateway.eligible ||
+    gateway.shared !== true ||
+    gateway.tenantId !== null ||
+    gateway.installationId !== binding.installationId ||
+    binding.didId === null ||
+    !owns(binding.didId)
   )
     return false;
   if (binding.destination.kind === 'hangup') return true;
@@ -94,7 +102,7 @@ export function resolveRouteTenant(
   }
 }
 
-/** Trusted facts from future P4 binding; explicit permission is required for shared trunks. */
+/** Trusted canonical projection only; shared trunks require explicit tenant permission. */
 export function outboundTenantCompatible(
   binding: {
     installationId: string;

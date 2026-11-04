@@ -73,7 +73,7 @@ export async function checkTenantCardPresentation({ page, origin }) {
   try {
     await page.goto(`${origin}/tenants/${id}`);
     const toggles = page.locator('[data-disclosure-toggle]:visible');
-    await expect(toggles).toHaveCount(8);
+    await expect(toggles).toHaveCount(9);
     await expect(
       page.locator('[data-disclosure-toggle][aria-expanded="true"]'),
     ).toHaveCount(0);
@@ -92,6 +92,9 @@ export async function checkTenantCardPresentation({ page, origin }) {
     ).toContainText('123.19, 13.62');
     await expect(overview('Tenant extension allocation')).toContainText(
       'No PBX selected',
+    );
+    await expect(overview('Tenant route bindings')).toContainText(
+      'pending live verification',
     );
     await expect(overview('Administrator credentials')).toContainText(
       'Setup required',
@@ -216,7 +219,7 @@ export async function checkTenantCardPresentation({ page, origin }) {
     ).toBeVisible();
     assert.deepEqual((await new AxeBuilder({ page }).analyze()).violations, []);
     await page.reload();
-    await expect(toggles).toHaveCount(8);
+    await expect(toggles).toHaveCount(9);
     await expect(
       page.locator('[data-disclosure-toggle][aria-expanded="true"]'),
     ).toHaveCount(0);
@@ -224,7 +227,7 @@ export async function checkTenantCardPresentation({ page, origin }) {
       detail.tenant.displayName,
     );
     console.log(
-      'PASS tenant cards: all eight collapsed on load with useful summaries, 44px arrow controls/keyboard, mounted input retention, open/closed choices and drafts across focus/pageshow/tab return, visible collapsed errors, document reset, 320–1440px reflow and axe (fixture reads/validation only)',
+      'PASS tenant cards: all nine collapsed on load with useful summaries, 44px arrow controls/keyboard, mounted input retention, open/closed choices and drafts across focus/pageshow/tab return, visible collapsed errors, document reset, 320–1440px reflow and axe (fixture reads/validation only)',
     );
   } finally {
     await page.unroute(path);

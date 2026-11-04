@@ -212,6 +212,8 @@ export async function checkRouting({
     removedAt: null,
   });
   const trusted = new Map([
+    ['a', { tenantId: 'one', eligible: true }],
+    ['b', { tenantId: 'one', eligible: true }],
     ['e1', { tenantId: 'one', eligible: true }],
     ['e2', { tenantId: 'two', eligible: true }],
   ]);

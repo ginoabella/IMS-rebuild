@@ -92,3 +92,17 @@ it owns diffs, compilation, fenced apply, verification, active-call policy and
 rollback dependencies. P5-U3 must authenticate event sources and reconcile actual
 mapping/version facts; no dialled-number attribution fallback is allowed.
 Desired-route completion alone grants no live tenant routing or voice readiness.
+
+## Approved P4-U2b tenant selection policy
+
+On 2026-11-03 (Asia/Manila, +08:00), the owner approved the
+[binding policy](../planning/p4-u2b-routing-policy-review.md). Tenant advisory
+selection filters to explicitly tenant-bound rules before selecting the lowest
+numeric matching priority, retaining disabled bound rules as denying winners.
+Then check the selected trunk's availability, explicit tenant permission and
+exclusive-owner or explicitly shared status; rejection cannot fall through.
+Foreign-owned trunks deny even when permission lists the tenant. Existing transforms,
+both reservation domains and global overlap constraints remain unchanged. Ordinary
+node-wide preview keeps its existing meaning. Canonical persistence, tenant preview and browser implementation are present;
+acceptance verification remains in progress.
+Revocation preserves history and all runtime pins; c owns actual live enforcement.

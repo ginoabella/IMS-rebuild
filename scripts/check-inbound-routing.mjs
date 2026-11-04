@@ -289,7 +289,15 @@ export async function checkInboundRouting({
   // Stable internally generated identity; trusted facts only, never HTTP allocation.
   const tenant = randomUUID(),
     facts = new Map([
-      [g1.id, { tenantId: tenant, eligible: true }],
+      [
+        g1.id,
+        {
+          tenantId: null,
+          eligible: true,
+          shared: true,
+          installationId: installation,
+        },
+      ],
       [d1.id, { tenantId: tenant, eligible: true }],
       [e1.id, { tenantId: tenant, eligible: true }],
     ]);
@@ -364,7 +372,12 @@ export async function checkInboundRouting({
   );
   facts.set(g1.id, { tenantId: randomUUID(), eligible: true });
   assert.ok(!inboundTenantCompatible(binding, [], facts));
-  facts.set(g1.id, { tenantId: tenant, eligible: true });
+  facts.set(g1.id, {
+    tenantId: null,
+    eligible: true,
+    shared: true,
+    installationId: installation,
+  });
   facts.set(d1.id, { tenantId: randomUUID(), eligible: true });
   assert.ok(!inboundTenantCompatible(binding, [], facts));
   facts.set(d1.id, { tenantId: tenant, eligible: true });
@@ -395,6 +408,8 @@ export async function checkInboundRouting({
   assert.equal((await preview('+00123')).data.rule.id, gr.id);
   assert.equal((await preview('00123')).data.rule.id, exact.id);
   const groupFixture = { ...group, enabled: true };
+  facts.set(group.id, { tenantId: tenant, eligible: true });
+  assert.ok(!inboundTenantCompatible({ ...binding, didId: null }, [], facts));
   assert.ok(
     inboundTenantCompatible(
       { ...binding, destination: { kind: 'group', id: group.id } },

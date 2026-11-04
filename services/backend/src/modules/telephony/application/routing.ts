@@ -1,3 +1,4 @@
+import { bindingBlockers } from '../adapters/db/route-binding-repository';
 import {
   RuntimeDependencies,
   RetainedRuntimeDependency,
@@ -286,6 +287,22 @@ export class Routing {
             throw new PeerRejected(404);
           if (old && old.version !== expected)
             throw new RoutingRejected('stale_version');
+          if (old && (op === 'remove' || v)) {
+            const prior = routingValues(
+              k,
+              old as unknown as Record<string, unknown>,
+            );
+            const structural =
+              op === 'remove' ||
+              (v &&
+                JSON.stringify({ ...prior, name: '' }) !==
+                  JSON.stringify({ ...v, name: '' }));
+            if (structural) {
+              const blockers = await bindingBlockers(tx, nodeId, k, old.id);
+              if (blockers.length)
+                throw new RoutingRejected('referenced', blockers);
+            }
+          }
           if (v)
             await this.store.validate(
               tx,
