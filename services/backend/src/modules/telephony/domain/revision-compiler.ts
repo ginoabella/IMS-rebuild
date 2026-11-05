@@ -1,3 +1,4 @@
+import { tenantRouting } from './tenant-routing';
 import { routeIdentity } from './route-identity';
 import { settings as profileSettings } from './inventory';
 import type {
@@ -32,11 +33,22 @@ export function compileRevision(s: RevisionSnapshot) {
       diagnostics.push({ code, resourceId, severity });
   };
   const sources = entries(s);
+  if (s.schemaVersion !== undefined && s.schemaVersion !== 'tenant-routing-1')
+    add('unsupported_snapshot_version');
   if (
     !s.eligibility ||
-    Object.values(s.eligibility).some((v) => v !== 'unavailable')
+    Object.values(s.eligibility).some(
+      (v) =>
+        v !==
+        (s.schemaVersion === 'tenant-routing-1' ? 'captured' : 'unavailable'),
+    ) ||
+    (s.schemaVersion === 'tenant-routing-1'
+      ? !s.tenantRouting
+      : s.tenantRouting !== undefined)
   )
     add('unsupported_eligibility');
+  if (s.schemaVersion === 'tenant-routing-1' && !tenantRouting(s).valid)
+    add('invalid_tenant_capture');
   const extensions = new Map(s.extensions.map((x) => [x.id, x]));
   const groups = new Map(s.groups.map((x) => [x.id, x]));
   const trunks = new Map(s.trunks.map((x) => [x.id, x]));

@@ -1037,6 +1037,14 @@ export async function checkPlatformBrowser({
     ).toBeVisible();
     // Exhaust a distinct real identity allowance, then verify the app honors Retry-After without loops.
     phase = 'bounded real rate-limit retry';
+    // Keep the real attempts in one Redis fixed window. A boundary between
+    // exhaustion and the UI submission legitimately restores its allowance.
+    const redisTime = await redis.sendCommand(['TIME']);
+    const remainingWindow = 900 - (Number(redisTime[0]) % 900);
+    if (remainingWindow < 60) {
+      console.log('CHECK platform browser: align real sign-in budget window');
+      await delay((remainingWindow + 1) * 1000);
+    }
     const limited = `${username}.limited`;
     for (let i = 0; i < 10; i++) {
       assert.equal(

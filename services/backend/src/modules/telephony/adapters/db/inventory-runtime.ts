@@ -1,3 +1,6 @@
+import { ArtifactRetirement } from '../../application/artifact-retirement';
+import { TenantVerification } from '../../application/tenant-verification';
+import { TenantRoutingEvidence } from '../../application/tenant-routing-evidence';
 import { TenantRouteBindings } from '../../application/tenant-route-bindings';
 import { TenantRouteEligibility } from '../../application/tenant-route-eligibility';
 import { TenantAllocation } from '../../application/tenant-allocation';
@@ -26,6 +29,9 @@ export class InventoryRuntime {
   readonly routing: Routing;
   readonly revisions: PbxRevisions;
   readonly live: PbxLive;
+  readonly verification: TenantVerification;
+  readonly evidence: TenantRoutingEvidence;
+  readonly retirement: ArtifactRetirement;
   private readonly pool: Pool;
   private readonly database: SnapshotDatabase;
   constructor(
@@ -82,6 +88,38 @@ export class InventoryRuntime {
       new AllocationRepository(),
       new AuditRepository(),
     );
+    this.retirement = new ArtifactRetirement(
+      {
+        run: (context, action) =>
+          Transaction.run(
+            this.pool,
+            context,
+            'telephony.artifact-retirement',
+            logger,
+            action,
+          ),
+      },
+      this.database,
+      authority,
+      new AuditRepository(),
+    );
+    this.verification = new TenantVerification(
+      {
+        run: (context, action) =>
+          Transaction.run(
+            this.pool,
+            context,
+            'telephony.tenant-verification',
+            logger,
+            action,
+          ),
+      },
+      this.database,
+      authority,
+      new AllocationTenancyRepository(),
+      new AuditRepository(),
+    );
+    this.evidence = new TenantRoutingEvidence(this.database, this.verification);
     this.live = new PbxLive(
       {
         run: (context, action) =>

@@ -1,3 +1,4 @@
+import { tenantRouting } from '../../domain/tenant-routing';
 import { isIP } from 'node:net';
 import { compileRevision } from '../../domain/revision-compiler';
 import type { RevisionSnapshot } from '../../domain/revision-snapshot';
@@ -27,6 +28,8 @@ export function runtimeNames(s: RevisionSnapshot, revisionId: string) {
     deny: `ims-deny-${node}`,
     outbound: `ims-out-${node}`,
     group: (id: string) => `ims-group-${compact(id)}`,
+    gateway: (id: string) => `ims-g-${compact(id)}`,
+    tenant: (id: string) => `ims-tenant-${compact(id)}`,
     inbound: (id: string) => `ims-in-${compact(id)}`,
     trunk: (id: string) => `ims-t-${node}-${compact(id)}`,
   };
@@ -42,6 +45,8 @@ export function materializeRevision(
 ): ManagedArtifacts {
   if (!uuid(revisionId) || compileRevision(s).local !== 'passed')
     throw new LiveCompilationFailure('configuration_invalid');
+  const tenantAware = s.schemaVersion === 'tenant-routing-1';
+  const routing = tenantRouting(s);
   const names = runtimeNames(s, revisionId),
     pjsip: string[] = [],
     dialplan: string[] = [];
@@ -91,7 +96,15 @@ export function materializeRevision(
     section(e.endpointKey, {
       type: 'endpoint',
       transport: 'transport-udp',
-      context: names.deny,
+      context:
+        tenantAware &&
+        s.tenantRouting?.tenants.find((t) => routing.extension(t.id, e.id))
+          ? names.tenant(
+              s.tenantRouting.tenants.find((t) =>
+                routing.extension(t.id, e.id),
+              )!.id,
+            )
+          : names.deny,
       auth: e.authKey,
       aors: e.aorKey,
       disallow: 'all',
@@ -156,6 +169,36 @@ export function materializeRevision(
     // Pre-onboarding denies registration/tenant egress. Desired registration is
     // retained in the exact snapshot; it cannot create an unbound REGISTER flow.
   }
+  if (tenantAware)
+    for (const g of s.gateways) {
+      if (!g.enabled || g.sourceAddresses.length === 0) continue;
+      section(names.gateway(g.id), {
+        type: 'endpoint',
+        transport: 'transport-udp',
+        context: names.inbound(g.id),
+        disallow: 'all',
+        allow: 'ulaw',
+        direct_media: 'no',
+        rtp_symmetric: 'yes',
+        force_rport: 'yes',
+      });
+      section(names.gateway(g.id) + '-identify', {
+        type: 'identify',
+        endpoint: names.gateway(g.id),
+        match: g.sourceAddresses.join(','),
+      });
+    }
+  const admission = (
+    tenantId: string,
+    direction: 'inbound' | 'outbound',
+    resourceId: string,
+  ) => [
+    'Set(MYIMS_PERMITTED=0)',
+    `AGI(/usr/local/lib/myims/tenant-routing-agi.mjs,${revisionId},${tenantId},${direction},${resourceId})`,
+    `GotoIf($["\${MYIMS_PERMITTED}" != "1"]?${names.deny},s,1)`,
+    `Set(__MYIMS_TENANT_ID=${tenantId})`,
+    `Set(__MYIMS_REVISION_ID=${revisionId})`,
+  ];
   const routeContext = (
     r:
       | RevisionSnapshot['inbound'][number]
@@ -181,7 +224,13 @@ export function materializeRevision(
   };
   for (const g of s.groups) {
     dialplan.push(`[${names.group(g.id)}]`);
-    if (!g.enabled) {
+    if (
+      !g.enabled ||
+      (tenantAware &&
+        !s.tenantRouting?.tenants.some((t) =>
+          routing.destination(t.id, { kind: 'group', id: g.id }),
+        ))
+    ) {
       dialplan.push('exten => s,1,Hangup()', '');
       continue;
     }
@@ -216,7 +265,12 @@ export function materializeRevision(
     for (const r of rules) {
       const did = r.didId ? s.dids.find((d) => d.id === r.didId) : null;
       const extension = did?.number ?? '_.';
-      dialplan.push(`exten => ${extension},1,Goto(${routeContext(r)},s,1)`);
+      dialplan.push(
+        `exten => ${extension},1,${tenantAware ? 'Set(MYIMS_ORIGINAL=${EXTEN})' : `Goto(${routeContext(r)},s,1)`}`,
+        ...(tenantAware
+          ? [`exten => ${extension},2,Goto(${routeContext(r)},s,1)`]
+          : []),
+      );
     }
     if (!rules.some((r) => r.didId === null))
       dialplan.push('exten => _.,1,Hangup()');
@@ -224,11 +278,18 @@ export function materializeRevision(
     for (const r of rules) {
       const did = r.didId ? s.dids.find((d) => d.id === r.didId) : null;
       dialplan.push(`[${routeContext(r)}]`);
+      const tenant = s.tenantRouting?.tenants.find((t) =>
+        routing.inbound(t.id, r.id),
+      );
+      const permitted =
+        gateway.enabled &&
+        r.enabled &&
+        (!did || did.enabled) &&
+        (!tenantAware || !!tenant);
       const steps = [
         ...attribution(r),
-        gateway.enabled && r.enabled && (!did || did.enabled)
-          ? target(r.destination)
-          : 'Hangup()',
+        ...(tenantAware && tenant ? admission(tenant.id, 'inbound', r.id) : []),
+        permitted ? target(r.destination) : 'Hangup()',
       ];
       steps.forEach((step, index) =>
         dialplan.push(`exten => s,${index + 1},${step}`),
@@ -241,19 +302,38 @@ export function materializeRevision(
       (r) =>
         `GotoIf($["\${REGEX("${pattern(r.pattern)}" ${digits})}" = "1"]?${names.deny},s,1)`,
     );
-  dialplan.push(`[${names.outbound}]`);
-  dialplan.push('exten => _.,1,Set(MYIMS_ORIGINAL=${EXTEN})');
-  let priority = 2;
-  for (const check of reserved('${EXTEN}'))
-    dialplan.push(`exten => _.,${priority++},${check}`);
   const ordered = [...s.outbound].sort(
     (a, b) => a.priority - b.priority || a.id.localeCompare(b.id),
   );
-  for (const r of ordered)
+  const outboundContext = (context: string, rules: typeof ordered) => {
+    dialplan.push(`[${context}]`, 'exten => _.,1,Set(MYIMS_ORIGINAL=${EXTEN})');
+    let priority = 2;
+    for (const check of reserved('${EXTEN}'))
+      dialplan.push(`exten => _.,${priority++},${check}`);
+    for (const r of rules)
+      dialplan.push(
+        `exten => _.,${priority++},GotoIf($["\${REGEX("${pattern(r.pattern)}" \${EXTEN})}" = "1"]?${routeContext(r)},s,1)`,
+      );
     dialplan.push(
-      `exten => _.,${priority++},GotoIf($["\${REGEX("${pattern(r.pattern)}" \${EXTEN})}" = "1"]?${routeContext(r)},s,1)`,
+      `exten => _.,${priority},Hangup()`,
+      'exten => deny,1,Hangup()',
     );
-  dialplan.push(`exten => _.,${priority},Hangup()`, 'exten => deny,1,Hangup()');
+  };
+  if (tenantAware) {
+    outboundContext(names.outbound, []);
+    for (const t of s.tenantRouting?.tenants ?? [])
+      outboundContext(
+        names.tenant(t.id),
+        ordered.filter((r) =>
+          s.tenantRouting!.authorizations.some(
+            (a) =>
+              a.kind === 'outbound' &&
+              a.resourceId === r.id &&
+              a.tenantId === t.id,
+          ),
+        ),
+      );
+  } else outboundContext(names.outbound, ordered);
   for (const r of ordered) {
     dialplan.push(`[${routeContext(r)}]`);
     const extension = 's',
@@ -261,11 +341,17 @@ export function materializeRevision(
     attribution(r).forEach((step, index) =>
       dialplan.push(`exten => s,${index + 1},${step}`),
     );
-    if (!r.enabled || !trunk?.enabled) {
+    const tenant = s.tenantRouting?.tenants.find((t) =>
+      routing.outbound(t.id, r.id),
+    );
+    if (!r.enabled || !trunk?.enabled || (tenantAware && !tenant)) {
       dialplan.push(`exten => ${extension},5,Hangup()`);
       continue;
     }
     let step = 5;
+    if (tenantAware && tenant)
+      for (const check of admission(tenant.id, 'outbound', r.id))
+        dialplan.push(`exten => s,${step++},${check}`);
     const transformed = `${r.addPrefix}\${MYIMS_ORIGINAL:${r.stripCount}}`;
     // Goto replaces EXTEN: retain the caller's original number before route dispatch.
     for (const check of reserved(transformed))

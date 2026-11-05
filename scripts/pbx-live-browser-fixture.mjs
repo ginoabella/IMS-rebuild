@@ -57,7 +57,7 @@ export class LiveBrowserFixture {
     );
     appendFileSync(
       join(relative, 'config/modules.conf'),
-      '\nload = res_pjsip_pubsub.so\nload = res_pjsip_outbound_authenticator_digest.so\nload = app_dial.so\nload = func_strings.so\n',
+      '\nload = res_pjsip_pubsub.so\nload = res_pjsip_outbound_authenticator_digest.so\nload = app_dial.so\nload = bridge_simple.so\nload = func_strings.so\nload = res_speech.so\nload = res_agi.so\nload = func_channel.so\nload = res_pjsip_header_funcs.so\nload = res_pjsip_endpoint_identifier_ip.so\n',
     );
     const args = [
       'run',
@@ -130,11 +130,20 @@ export class LiveBrowserFixture {
       this.name,
       '/bin/sh',
       '-c',
-      `umask 077; mkdir -p /var/lib/myims-pbx/control/${metadata.nodeId}; chmod 700 /var/lib/myims-pbx/control/${metadata.nodeId}; exec 3>/var/lib/myims-pbx/control/${metadata.nodeId}/boundary.lock; flock -n 3 || exit 1; exec node /fixture.mjs`,
+      `umask 077; mkdir -p /var/lib/myims-pbx/control/${metadata.nodeId}; chmod 700 /var/lib/myims-pbx/control/${metadata.nodeId}; exec 3>/var/lib/myims-pbx/control/${metadata.nodeId}/boundary.lock; flock -n 3 || exit 1; exec node /fixture.mjs >/var/lib/myims-pbx/browser-owner.log 2>&1`,
     ]);
   }
   stop() {
     if (this.name) {
+      const diagnostics = this.docker([
+        'exec',
+        this.name,
+        'node',
+        '--input-type=module',
+        '-e',
+        `import {readFileSync} from 'node:fs'; try { for(const line of readFileSync('/var/lib/myims-pbx/browser-owner.log','utf8').split('\\n')) { try { const e=JSON.parse(line); if(e.fixture==='live-browser-owner' && e.state==='failed') console.log(JSON.stringify(e)); } catch {} } } catch {}`,
+      ]);
+      if (diagnostics.trim()) console.error(diagnostics.trim());
       this.docker(['rm', '-f', '-v', this.name]);
       this.name = null;
     }

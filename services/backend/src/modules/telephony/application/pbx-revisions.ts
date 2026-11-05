@@ -23,6 +23,8 @@ import {
   POLICY_VERSION,
   canonical,
   entries,
+  supportedRevision,
+  revisionVersions,
 } from '../domain/revision-snapshot';
 import {
   compileRevision,
@@ -84,7 +86,7 @@ export class PbxRevisions {
   ): Promise<RevisionDetail> {
     const baseline = baselineId === undefined ? r.baselineId : baselineId;
     const b = baseline ? await this.saved(s, r.nodeId, baseline) : null;
-    const current = await captureSnapshot(s, r.nodeId),
+    const current = await captureSnapshot(s, r.nodeId, r.policyVersion),
       sourceCurrent = digest(current) === r.sourceDigest;
     const compiled = compileRevision(r.snapshot),
       validation = await this.store.validation(s, r.id);
@@ -120,9 +122,10 @@ export class PbxRevisions {
             ...validation,
             applicable:
               validation.applicable &&
+              validation.compilerVersion === r.compilerVersion &&
+              validation.policyVersion === r.policyVersion &&
               validation.evaluatedDigest === digest(current) &&
-              r.compilerVersion === COMPILER_VERSION &&
-              r.policyVersion === POLICY_VERSION,
+              supportedRevision(r.snapshot, r.compilerVersion, r.policyVersion),
           }
         : null,
       diff: {
@@ -293,18 +296,16 @@ export class PbxRevisions {
     });
   }
   private async validate(tx: Transaction, r: SavedRevision): Promise<Result> {
-    const current = await captureSnapshot(tx, r.nodeId),
+    const current = await captureSnapshot(tx, r.nodeId, r.policyVersion),
       evaluatedDigest = digest(current),
       compiled = compileRevision(r.snapshot);
     const applicable =
       evaluatedDigest === r.sourceDigest &&
-      r.compilerVersion === COMPILER_VERSION &&
-      r.policyVersion === POLICY_VERSION;
+      supportedRevision(r.snapshot, r.compilerVersion, r.policyVersion);
     const result: RevisionValidation = {
       id: randomUUID(),
       revisionId: r.id,
-      compilerVersion: COMPILER_VERSION,
-      policyVersion: POLICY_VERSION,
+      ...revisionVersions(r.snapshot),
       evaluatedDigest,
       evaluatedDependencies: entries(current).map((e) => ({
         kind: e.kind,
@@ -334,8 +335,8 @@ export class PbxRevisions {
       [
         result.id,
         r.id,
-        COMPILER_VERSION,
-        POLICY_VERSION,
+        result.compilerVersion,
+        result.policyVersion,
         evaluatedDigest,
         result,
         result.createdBy,

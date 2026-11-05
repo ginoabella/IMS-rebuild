@@ -1,12 +1,65 @@
 /* global document, innerWidth */
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { existsSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
 import { expect as baseExpect, chromium } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { checkTenantRoutingBrowser } from './check-tenant-routing-browser.mjs';
 const expect = baseExpect.configure({ timeout: 30000 });
-export async function checkLiveBrowser({
+export async function checkLiveBrowser(input) {
+  const denied = [];
+  const sent = [];
+  const observeRequest = (request) => {
+    const url = new URL(request.url());
+    if (
+      url.origin === input.config.origin &&
+      url.pathname.startsWith('/platform/')
+    )
+      sent.push({ path: url.pathname, method: request.method() });
+  };
+  const observe = (response) => {
+    if (response.status() >= 400) {
+      const url = new URL(response.url());
+      if (
+        url.origin === input.config.origin &&
+        url.pathname.startsWith('/platform/')
+      )
+        denied.push({ path: url.pathname, status: response.status() });
+    }
+  };
+  input.page.on('response', observe);
+  input.page.on('request', observeRequest);
+  try {
+    await runLiveBrowser(input);
+  } catch (error) {
+    mkdirSync('.local/verification/p4-u2c', { recursive: true, mode: 0o700 });
+    await input.page
+      .screenshot({
+        path: '.local/verification/p4-u2c/live-failure.png',
+        fullPage: true,
+      })
+      .catch(() => {});
+    console.error(
+      'Live browser failure',
+      JSON.stringify({
+        denied: denied.slice(-12),
+        sent: sent
+          .filter((r) => r.path.endsWith('/revisions') || r.method === 'POST')
+          .slice(-12),
+        location: error?.stack
+          ?.split('\n')
+          .find((line) => /check-pbx-live-browser\.mjs:\d+/.test(line))
+          ?.trim(),
+      }),
+    );
+    throw error;
+  } finally {
+    input.page.off('response', observe);
+    input.page.off('request', observeRequest);
+  }
+}
+async function runLiveBrowser({
   request,
   direct,
   owner,
@@ -131,6 +184,12 @@ export async function checkLiveBrowser({
       'desired saves must cause no external operation',
     );
     await page.goto(config.origin + `/pbx-nodes/${nodeId}/revisions`);
+    await expect(
+      page.getByText('No revisions captured. Capture desired state to begin.', {
+        exact: true,
+      }),
+    ).toBeVisible();
+    await page.waitForLoadState('networkidle');
     await page
       .getByRole('button', { name: 'Capture desired state', exact: true })
       .click();
@@ -188,7 +247,9 @@ export async function checkLiveBrowser({
     await page
       .getByRole('button', { name: 'Recover operation receipt', exact: true })
       .click();
-    await expect(page.getByText(/^Operation .*: verified\./)).toBeVisible();
+    await expect(page.getByText(/^Operation .*: verified\./)).toBeVisible({
+      timeout: 90000,
+    });
     const canonical = await direct(b, live);
     assert.equal(canonical.status, 200);
     assert.equal(canonical.data.runtime, 'verified');
@@ -260,19 +321,42 @@ export async function checkLiveBrowser({
       await observerBrowser.close();
       await page.bringToFront();
     }
-    const recoverGate = holdResponse('POST', live + '/recover');
     await page.getByLabel('Verified recovery target').selectOption(baseline);
-    await page
-      .getByRole('button', { name: 'Recover selected artifact', exact: true })
-      .focus();
-    await page.keyboard.press('Enter');
-    await recoverGate.reached;
+    const passiveGate = holdResponse('GET', live);
+    assert.equal(await passiveGate.reached, 200);
+    const recoverGate = holdResponse('POST', live + '/recover');
+    let recoverySubmitted = false;
+    void recoverGate.reached.then(() => {
+      recoverySubmitted = true;
+    });
+    try {
+      await page
+        .getByRole('button', { name: 'Recover selected artifact', exact: true })
+        .focus();
+      await page.keyboard.press('Enter');
+      await delay(100);
+      assert.equal(
+        recoverySubmitted,
+        false,
+        'explicit recovery waits for the held passive read',
+      );
+    } finally {
+      passiveGate.release();
+    }
+    await Promise.race([
+      recoverGate.reached,
+      delay(15000).then(() => {
+        throw new Error('Explicit recovery was discarded after passive read');
+      }),
+    ]);
     await expect(button('Recover operation receipt')).toBeEnabled({
       timeout: 15000,
     });
     recoverGate.release();
     await button('Recover operation receipt').click();
-    await expect(page.getByText(/^Operation .*: recovered\./)).toBeVisible();
+    await expect(page.getByText(/^Operation .*: recovered\./)).toBeVisible({
+      timeout: 90000,
+    });
     const restored = await direct(a, live);
     assert.equal(restored.data.verifiedId, baseline);
     assert.equal(restored.data.knownGoodId, baseline);
@@ -291,14 +375,18 @@ export async function checkLiveBrowser({
     }
     writeFileSync(fault, 'candidate');
     await applyFresh();
-    await expect(page.getByText(/^Operation .*: recovered\./)).toBeVisible();
+    await expect(page.getByText(/^Operation .*: recovered\./)).toBeVisible({
+      timeout: 90000,
+    });
     await expect(
       page.getByText(/Independent verification: failed\. Recovery: passed/),
     ).toBeVisible();
     assert.equal((await direct(b, live)).data.verifiedId, baseline);
     writeFileSync(fault, 'all');
     await applyFresh();
-    await expect(page.getByText(/^Operation .*: unknown\./)).toBeVisible();
+    await expect(page.getByText(/^Operation .*: unknown\./)).toBeVisible({
+      timeout: 90000,
+    });
     await expect(page.getByText(/Unknown execution retains/)).toBeVisible();
     await expect(button('Apply reviewed revision')).toBeDisabled();
     const unknown = (await direct(b, live)).data;
@@ -307,7 +395,9 @@ export async function checkLiveBrowser({
     writeFileSync(fault, 'none');
     await button('Reconcile to known good').focus();
     await page.keyboard.press('Enter');
-    await expect(page.getByText(/^Operation .*: recovered\./)).toBeVisible();
+    await expect(page.getByText(/^Operation .*: recovered\./)).toBeVisible({
+      timeout: 90000,
+    });
     const reconciled = (await direct(b, live)).data;
     assert.equal(reconciled.verifiedId, baseline);
     assert.equal(reconciled.activeOperationId, null);
@@ -329,6 +419,35 @@ export async function checkLiveBrowser({
     console.log(
       'PASS live HTTPS: inventory/resource/routing desired saves are passive; second browser canonical result; actual runtime drift automatic recovery, failed probe/recovery with unknown state and keyboard audited reconciliation, lost recovery reply; explicit exact-runtime review -> durable lost-response apply -> same-operator reauthentication/receipt -> actual native verification -> keyboard explicit recovery; two-replica canonical state, stale baseline/CSRF/raw-command denial, axe/reflow; isolated disabled/unbound desired stock, no provider token in PBX',
     );
+    await checkTenantRoutingBrowser({
+      page,
+      config,
+      owner,
+      direct,
+      request,
+      a,
+      b,
+      nodeId,
+      installationId,
+      baseline,
+      operatorId: session.operatorId,
+      staffCookie,
+      holdResponse,
+      expire,
+      login,
+    });
+  } catch (error) {
+    const state = await owner
+      .query(
+        `SELECT r.runtime_state,p.state,p.validation,p.installation,p.verification,p.recovery,p.failure,(r.executor_seen_at>clock_timestamp()-interval '15 seconds') AS executor_current,(o.expires_at>clock_timestamp()) AS owner_current FROM public.pbx_live_runtime r LEFT JOIN public.pbx_live_progress p ON p.operation_id=r.active_operation_id LEFT JOIN public.pbx_ownership o ON o.node_id=r.node_id WHERE r.node_id=$1`,
+        [nodeId],
+      )
+      .catch(() => null);
+    console.error(
+      'Native browser finite state',
+      JSON.stringify(state?.rows ?? []),
+    );
+    throw error;
   } finally {
     console.log('PBX_LIVE_FIXTURE_STOP');
     const path = `.local/pbx-live/acceptance/${nodeId}/stopped`,

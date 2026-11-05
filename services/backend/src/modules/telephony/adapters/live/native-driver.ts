@@ -1,3 +1,4 @@
+import { tenantRouting } from '../../domain/tenant-routing';
 import { createSocket } from 'node:dgram';
 import { execFile, spawn } from 'node:child_process';
 import { randomUUID, createHash } from 'node:crypto';
@@ -35,7 +36,20 @@ export class NativePbxFailure extends Error {
       | 'reload_failed'
       | 'verification_failed'
       | 'boundary_unavailable',
-    readonly reason?: 'startup' | 'runtime' | 'parser',
+    readonly reason?:
+      | 'startup'
+      | 'runtime'
+      | 'parser'
+      | 'endpoint_count'
+      | 'auth_count'
+      | 'aor_count'
+      | 'auth_parameters'
+      | 'dialplan'
+      | 'marker'
+      | 'endpoint_parameters'
+      | 'endpoint_identity'
+      | 'trunk_parameters'
+      | 'deny_context',
   ) {
     super('Controlled PBX operation failed');
   }
@@ -478,17 +492,28 @@ export class NativePbxDriver {
         throw new NativePbxFailure('verification_failed');
       return nativeCli(command, configuration);
     };
+    const runtimeTrunks = snapshot.trunks;
     const enabled = snapshot.extensions.filter(
       (endpoint) => endpoint.administrativeStatus === 'enabled',
     );
     for (const [type, count] of [
-      ['endpoints', 1 + enabled.length + snapshot.trunks.length],
+      [
+        'endpoints',
+        1 +
+          enabled.length +
+          runtimeTrunks.length +
+          (snapshot.schemaVersion === 'tenant-routing-1'
+            ? snapshot.gateways.filter(
+                (g) => g.enabled && g.sourceAddresses.length > 0,
+              ).length
+            : 0),
+      ],
       [
         'auths',
         enabled.length +
-          snapshot.trunks.filter((trunk) => trunk.settings.credential).length,
+          runtimeTrunks.filter((trunk) => trunk.settings.credential).length,
       ],
-      ['aors', enabled.length + snapshot.trunks.length],
+      ['aors', enabled.length + runtimeTrunks.length],
     ] as const) {
       const out = await query(`pjsip show ${type}`);
       const found = /Objects found: (\d+)/.exec(out);
@@ -497,7 +522,14 @@ export class NativePbxDriver {
           ? !out.includes('No objects found.')
           : !found || Number(found[1]) !== count
       )
-        throw new NativePbxFailure('verification_failed');
+        throw new NativePbxFailure(
+          'verification_failed',
+          type === 'endpoints'
+            ? 'endpoint_count'
+            : type === 'auths'
+              ? 'auth_count'
+              : 'aor_count',
+        );
     }
     const field = (out: string, name: string, expected: string) => {
       const values = out
@@ -541,7 +573,7 @@ export class NativePbxDriver {
           expected[name] !== undefined &&
           !field(actual, name, expected[name]!)
         )
-          throw new NativePbxFailure('verification_failed');
+          throw new NativePbxFailure('verification_failed', 'auth_parameters');
       authFacts.set(id, actual);
     }
     const contexts = new Map<string, Map<string, string>>();
@@ -578,7 +610,7 @@ export class NativePbxDriver {
           actual.set(`${extension}:${next[1]}`, next[2]!);
       }
       if (canonical([...actual].sort()) !== canonical([...expected].sort()))
-        throw new NativePbxFailure('verification_failed');
+        throw new NativePbxFailure('verification_failed', 'dialplan');
     }
     const names = runtimeNames(snapshot, identity.revisionId),
       marker = await query(`pjsip show endpoint ${names.marker}`),
@@ -588,7 +620,7 @@ export class NativePbxDriver {
       !marker.includes(names.deny) ||
       !dialplan.includes('Hangup()')
     )
-      throw new NativePbxFailure('verification_failed');
+      throw new NativePbxFailure('verification_failed', 'marker');
     for (const e of snapshot.extensions.filter(
       (e) => e.administrativeStatus === 'enabled',
     )) {
@@ -616,16 +648,30 @@ export class NativePbxDriver {
         !auth ||
         !field(auth, 'username', e.endpointKey)
       )
-        throw new NativePbxFailure('verification_failed');
+        throw new NativePbxFailure(
+          'verification_failed',
+          'endpoint_parameters',
+        );
       if (
         !out.includes(e.endpointKey) ||
         !out.includes(e.authKey) ||
         !out.includes(e.aorKey) ||
-        !out.includes(names.deny)
+        !out.includes(
+          snapshot.schemaVersion === 'tenant-routing-1' &&
+            snapshot.tenantRouting?.tenants.find((t) =>
+              tenantRouting(snapshot).extension(t.id, e.id),
+            )
+            ? names.tenant(
+                snapshot.tenantRouting.tenants.find((t) =>
+                  tenantRouting(snapshot).extension(t.id, e.id),
+                )!.id,
+              )
+            : names.deny,
+        )
       )
         throw new NativePbxFailure('verification_failed');
     }
-    for (const trunk of snapshot.trunks) {
+    for (const trunk of runtimeTrunks) {
       const key = names.trunk(trunk.id),
         out = await query(`pjsip show endpoint ${key}`),
         aor = await query(`pjsip show aor ${key}-aor`),

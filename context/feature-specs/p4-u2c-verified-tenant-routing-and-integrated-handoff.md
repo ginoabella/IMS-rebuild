@@ -1,6 +1,6 @@
 # P4-U2c — Verified tenant routing and integrated handoff
 
-**Status:** planned. Split adopted 2026-10-29 (Asia/Manila, +08:00); implementation has not started.
+**Status:** complete within approved private development, 2026-11-05 (Asia/Manila, +08:00). C-01–08 and integrated parent AC-01–12 passed; [final acceptance evidence](../../docs/status/p4-u2c-evidence.md). Owner-approved controlled-call/draft/retirement policy and scope limits remain in force.
 **Parent:** [P4-U2 — Allocate inventory and verify tenant routing](p4-u2-allocate-inventory-and-verify-tenant-routing.md).
 
 The parent owns shared behavior, ALLOC-01–06 and AC-01–12. This child integrates
@@ -86,6 +86,16 @@ calling, public voice intake, general event ingestion, production rollout or bac
 repair belongs to this child. Versioned tenant-routing support extends the current
 live boundary; it does not approve additional environments or control commands.
 
+## Approved narrow retirement extension
+
+Owner-approved 2026-11-04 in the linked policy record: retire only exact
+superseded-artifact recovery eligibility and pins, retaining bytes/history.
+C-06 additionally requires atomic audit and exact duplicate/lost-response recovery,
+actual native/SQL interruption and concurrent recovery/apply/release checks,
+rejection of retired recovery targets and preservation of installed/current/known-good,
+initial-baseline and required recovery-chain targets. No pin release before durable
+native/canonical agreement, general pruning, material destruction or forced hangup.
+
 ## Acceptance criteria
 
 | ID   | Required observable result                                                                                                                                                                                                                                                                                                                                          |
@@ -107,7 +117,9 @@ local validation or development fixtures alone do not substitute.
 ## Required verification
 
 Define a short integrated Docker allocation/routing command with explicit real
-API/browser/concurrency and live verification modes. No new command exists yet.
+API/browser/concurrency and live verification modes. The implementation provides
+`./dev exec pnpm check:tenant-routing` with `--api`, `--browser`, `--concurrency`
+and `--live` selections; default runs the integrated browser and live boundaries.
 Use actual PostgreSQL/PostGIS, shared Redis, two HTTP replicas, production Next/private
 HTTPS and controlled real Asterisk. Record exact mode, provenance and target facts,
 redacting secrets and unnecessary caller data.

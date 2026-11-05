@@ -4,6 +4,7 @@ import { Button, Field } from '@myims/ui-web';
 import { useOperatorWork } from '../auth/console-access';
 import { listPbx } from '../pbx/client';
 import { TenantCard } from '../tenants/cards';
+import { VerificationPanel } from '../telephony-verification/panel';
 import { BindingPanel } from './panel';
 const selectClass =
   'min-h-11 max-w-full rounded-md border border-subtle bg-muted px-3';
@@ -22,6 +23,7 @@ function OwnedBindings({ tenantId }: { tenantId: string }) {
     [message, setMessage] = useState(''),
     [inboundFeedback, setInboundFeedback] = useState(''),
     [outboundFeedback, setOutboundFeedback] = useState(''),
+    [verificationFeedback, setVerificationFeedback] = useState(''),
     [loading, setLoading] = useState(true);
   const live = useRef(true),
     revision = useRef(0);
@@ -69,9 +71,11 @@ function OwnedBindings({ tenantId }: { tenantId: string }) {
           : 'Choose a PBX node · desired routing, pending live verification'
       }
       closedNotice={
-        inboundFeedback || outboundFeedback ? (
+        inboundFeedback || outboundFeedback || verificationFeedback ? (
           <p role="status">
-            {[inboundFeedback, outboundFeedback].filter(Boolean).join(' · ')}
+            {[inboundFeedback, outboundFeedback, verificationFeedback]
+              .filter(Boolean)
+              .join(' · ')}
           </p>
         ) : undefined
       }
@@ -92,6 +96,7 @@ function OwnedBindings({ tenantId }: { tenantId: string }) {
             onChange={(e) => {
               setInboundFeedback('');
               setOutboundFeedback('');
+              setVerificationFeedback('');
               setNodeId(e.target.value);
             }}
           >
@@ -131,6 +136,11 @@ function OwnedBindings({ tenantId }: { tenantId: string }) {
       ) : null}
       {nodeId && (
         <div key={nodeId} className="space-y-6">
+          <VerificationPanel
+            tenantId={tenantId}
+            nodeId={nodeId}
+            onSummary={setVerificationFeedback}
+          />
           <BindingPanel
             tenantId={tenantId}
             nodeId={nodeId}

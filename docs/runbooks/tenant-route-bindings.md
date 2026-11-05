@@ -47,7 +47,7 @@ and removals reject while current authorizations refer to them. Explicitly unbin
 routes and remove affected desired references before releasing ownership; group
 members/fallbacks cannot be silently retargeted while owned. Ownership release also
 requires affirmative desired-only/runtime safety. Installed/in-flight/rollback pins
-remain blockers for c's later release workflow.
+remain blockers until c's reviewed retirement/release workflow proves safety.
 
 **Revoke** changes desired authorization only. Revoking a trunk permission may leave
 saved route bindings present but incompatible. It cannot silently select another
@@ -61,6 +61,7 @@ never automatically writes. Same-owner mounted recovery preserves input; changin
 operator, tenant or node discards that target's mounted work. A document reload
 returns saved configuration; unsaved work has no durable browser storage.
 
-The current live policy remains denied/unbound. Child c owns tenant-aware revision
-capture/compiler, verified apply and live tests; later units own activation and staff
-assignment. Saving these bindings establishes none of those outcomes.
+Saving these bindings alone does not change live policy. Completed child c supplies
+versioned tenant-aware capture/compiler, verified apply and controlled live tests;
+later units own activation and staff assignment. Use the
+[full P4-U2 manual guide](../guides/p4-u2-manual-testing.md) to review the complete flow.

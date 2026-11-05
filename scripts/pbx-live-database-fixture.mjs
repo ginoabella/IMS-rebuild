@@ -1,3 +1,5 @@
+import { addTenantRoutingFixtureCase } from './add-tenant-routing-fixture-case.mjs';
+import { prepareTenantRoutingFixture } from './prepare-tenant-routing-fixture.mjs';
 // Trusted workspace coordinator: owned isolated DB only, never retained PBX state.
 import { createRequire } from 'node:module';
 import { readFileSync } from 'node:fs';
@@ -9,9 +11,14 @@ const load = createRequire(
 const { Client } = load('pg');
 const [action, name, details] = process.argv.slice(2);
 if (
-  !['prepare', 'cleanup', 'bind-material', 'bind-existing-material'].includes(
-    action,
-  ) ||
+  ![
+    'prepare',
+    'prepare-tenant-routing',
+    'add-routing-case',
+    'cleanup',
+    'bind-material',
+    'bind-existing-material',
+  ].includes(action) ||
   !/^myims_session_[a-f0-9]{12}$/.test(name ?? '')
 )
   throw new Error('Owned native fixture database required');
@@ -30,6 +37,20 @@ try {
     );
     await owner.query(`DROP DATABASE IF EXISTS "${name}"`);
     console.log(JSON.stringify({ state: 'fixture_removed', database: name }));
+  } else if (action === 'add-routing-case') {
+    const fixtureUrl = new URL(url.href);
+    fixtureUrl.pathname = '/' + name;
+    const fixture = new Client({ connectionString: fixtureUrl.href });
+    await fixture.connect();
+    try {
+      console.log(
+        JSON.stringify(
+          await addTenantRoutingFixtureCase(fixture, JSON.parse(details)),
+        ),
+      );
+    } finally {
+      await fixture.end();
+    }
   } else if (
     action === 'bind-material' ||
     action === 'bind-existing-material'
@@ -247,6 +268,16 @@ try {
         'INSERT INTO public.pbx_ownership(node_id,desired_version) VALUES($1,1)',
         [metadata.nodeId],
       );
+      if (action === 'prepare-tenant-routing') {
+        metadata.activeSecondTenant = true;
+        const rt = new URL(process.env.DATABASE_URL);
+        rt.pathname = '/' + name;
+        rt.password = readFileSync(
+          process.env.DATABASE_PASSWORD_FILE,
+          'utf8',
+        ).trim();
+        await prepareTenantRoutingFixture(fixture, metadata, rt.href);
+      }
     } finally {
       await fixture.end();
     }

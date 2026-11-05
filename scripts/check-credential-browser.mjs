@@ -538,6 +538,9 @@ export async function checkCredentialBrowser({
         .getByRole('region', { name: 'Organizational contact', exact: true })
         .getByText(/^Saved at version/),
     ).toBeVisible();
+    // The contact save reloads the canonical tenant version used by geography.
+    // Finish that read before staging a boundary and confirming its ownership.
+    await page.waitForLoadState('networkidle');
     await expect(
       page.getByLabel('Administrative boundary file (optional)', {
         exact: true,
@@ -558,6 +561,7 @@ export async function checkCredentialBrowser({
     await page
       .getByLabel('Default intake latitude (optional)', { exact: true })
       .fill('13.62');
+    await expect(geographyRegion.getByRole('checkbox')).toBeChecked();
     await page
       .getByRole('button', { name: 'Save geography', exact: true })
       .click();

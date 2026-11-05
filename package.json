@@ -46,7 +46,8 @@
     "check:routing": "pnpm build:backend && node scripts/check-routing-selection.mjs",
     "check:pbx-revisions": "pnpm build:backend && node --test scripts/pbx-revisions.test.mjs scripts/pbx-live-protection.test.mjs scripts/pbx-mutation-boundary.test.mjs && node scripts/check-pbx-revisions-selection.mjs",
     "check:tenant-allocation": "pnpm build:backend && node scripts/check-tenant-allocation-selection.mjs",
-    "check:tenant-bindings": "pnpm build:backend && node scripts/check-tenant-bindings-selection.mjs"
+    "check:tenant-bindings": "pnpm build:backend && node scripts/check-tenant-bindings-selection.mjs",
+    "check:tenant-routing": "pnpm build:backend && node --test scripts/tenant-routing.test.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

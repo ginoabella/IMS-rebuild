@@ -64,6 +64,14 @@ export class NativeLiveApplication implements NativeOwnerPort {
     );
     this.plans = new RetainedLivePlans(root, nodeId, installationId);
   }
+  private maintenanceToken: PbxOwnershipToken | null = null;
+  maintain<T>(
+    verifiedId: string,
+    action: (guard: () => Promise<void>) => Promise<T>,
+  ): Promise<T> {
+    if (!this.maintenanceToken) throw new Error('Native ownership unavailable');
+    return this.boundary.maintain(this.maintenanceToken, verifiedId, action);
+  }
   private initialId(): string {
     const path = join(this.root, 'initial-baseline');
     let fd: number;
@@ -188,6 +196,7 @@ export class NativeLiveApplication implements NativeOwnerPort {
       return baselineId;
     });
     await this.boundary.takeover(token);
+    this.maintenanceToken = token;
     await this.store.recordBaseline(token, this.installationId, baselineId);
   }
   async inspect(token: PbxOwnershipToken, operationId: string) {

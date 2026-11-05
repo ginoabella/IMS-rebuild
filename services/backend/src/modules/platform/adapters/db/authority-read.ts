@@ -1,4 +1,5 @@
 import type { Transaction } from '../../../../infrastructure/database/transaction';
+import type { ReadSnapshot } from '../../../../infrastructure/database/read-snapshot';
 import { SnapshotDatabase } from '../../../../infrastructure/database/read-snapshot';
 import type { PlatformAuthorityRead } from '../../application/authority-read';
 import {
@@ -44,6 +45,18 @@ export class PlatformAuthorityRepository implements PlatformAuthorityRead {
     if (!uuid(operatorId)) return { kind: 'denied' };
     const result = await transaction.query(
       `SELECT id,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent,'platform_operator' AS authority FROM public.platform_operators WHERE id=$1 FOR SHARE`,
+      [operatorId],
+    );
+    return platformAuthority(result.rows[0]);
+  }
+  /** Owner-provided passive authority read inside a caller's consistent primary snapshot. */
+  async readIn(
+    snapshot: ReadSnapshot,
+    operatorId: string,
+  ): Promise<AuthorityResult<PlatformAuthority>> {
+    if (!uuid(operatorId)) return { kind: 'denied' };
+    const result = await snapshot.query(
+      `SELECT id,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent,'platform_operator' AS authority FROM public.platform_operators WHERE id=$1`,
       [operatorId],
     );
     return platformAuthority(result.rows[0]);

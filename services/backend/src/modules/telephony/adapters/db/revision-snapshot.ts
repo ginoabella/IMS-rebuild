@@ -4,6 +4,8 @@ import {
   SNAPSHOT_LIMIT,
   entries,
   canonical,
+  POLICY_VERSION,
+  LEGACY_POLICY_VERSION,
 } from '../../domain/revision-snapshot';
 import { RoutingRejected } from '../../domain/routing';
 // Each collection is bounded before aggregation. All subqueries share ONE statement
@@ -19,11 +21,26 @@ const current = `WHERE node_id=$1 AND removed_at IS NULL ORDER BY id`;
 export async function captureSnapshot(
   s: ReadSnapshot,
   nodeId: string,
+  policyVersion = POLICY_VERSION,
 ): Promise<RevisionSnapshot> {
+  if (![POLICY_VERSION, LEGACY_POLICY_VERSION].includes(policyVersion))
+    throw new RoutingRejected('unsupported_policy');
+  const tenantAware = policyVersion === POLICY_VERSION;
+  const routing = tenantAware
+    ? `,
+ 'schemaVersion','tenant-routing-1',
+ 'tenantRouting',jsonb_build_object(
+  'tenants',public.tenant_routing_capture(ARRAY(
+    SELECT tenant_id FROM public.tenant_inventory_claims WHERE node_id=$1 AND state<>'released'
+    UNION SELECT tenant_id FROM public.tenant_route_authorizations WHERE node_id=$1 AND state='active' AND tenant_id IS NOT NULL ORDER BY tenant_id LIMIT ${SNAPSHOT_LIMIT + 1})),
+  'allocations',${collection(`SELECT id,version,tenant_id AS "tenantId",node_id AS "nodeId",installation_id AS "installationId",extension_id AS "extensionId",state FROM public.tenant_inventory_claims WHERE node_id=$1 AND state<>'released' ORDER BY id`)},
+  'authorizations',${collection(`SELECT id,version,tenant_id AS "tenantId",node_id AS "nodeId",installation_id AS "installationId",kind,resource_id AS "resourceId",scope,evaluated FROM public.tenant_route_authorizations WHERE node_id=$1 AND state='active' ORDER BY id`)}
+ )`
+    : '';
   const row = (
     await s.query<{ snapshot: RevisionSnapshot }>(
       `SELECT jsonb_build_object(
- 'eligibility',jsonb_build_object('allocations','unavailable','bindings','unavailable','sharedTrunkPermissions','unavailable'),
+ 'eligibility',jsonb_build_object('allocations','${tenantAware ? 'captured' : 'unavailable'}','bindings','${tenantAware ? 'captured' : 'unavailable'}','sharedTrunkPermissions','${tenantAware ? 'captured' : 'unavailable'}'),
  'node',(SELECT jsonb_build_object('id',id,'version',version,'installationId',installation_id) FROM public.pbx_nodes WHERE id=$1),
  'capability',(SELECT jsonb_build_object('id',c.installation_id,'version',c.revision,'kinds',c.kinds,'signaling',c.signaling,'codecs',c.codecs,'media',c.media) FROM public.endpoint_capabilities c JOIN public.pbx_nodes n ON n.installation_id=c.installation_id WHERE n.id=$1),
  'profiles',${collection(`SELECT p.profile_id AS id,p.version,p.name,p.kind,p.settings,p.capability_revision AS "capabilityRevision" FROM public.endpoint_profile_versions p JOIN public.endpoint_profiles h ON h.id=p.profile_id WHERE p.node_id=$1 AND (p.version=h.head_version OR EXISTS(SELECT 1 FROM public.extensions e WHERE e.profile_id=p.profile_id AND e.profile_version=p.version)) ORDER BY p.profile_id,p.version`)},
@@ -36,7 +53,7 @@ export async function captureSnapshot(
  'inbound',${collection(`SELECT ${common},gateway_id AS "gatewayId",did_id AS "didId",${destination('destination')} AS destination,${identity} FROM public.inbound_rules ${current}`)},
  'outbound',${collection(`SELECT ${common},${pattern},priority,trunk_id AS "trunkId",strip_count AS "stripCount",add_prefix AS "addPrefix",${identity} FROM public.outbound_rules ${current}`)},
  'credentials',${collection(`SELECT o.generation_id AS id,o.ordinal AS version,(o.state='associated' AND o.material_health='verified') AS available,'endpoint'::text AS purpose FROM public.endpoint_credential_operations o JOIN public.extensions e ON e.credential_generation_id=o.generation_id WHERE e.node_id=$1 UNION ALL SELECT c.id,v.material_version AS version,(c.available AND v.available) AS available,c.purpose FROM public.sip_credentials c JOIN public.sip_credential_versions v ON v.credential_id=c.id WHERE EXISTS(SELECT 1 FROM public.sip_trunks t WHERE t.node_id=$1 AND t.removed_at IS NULL AND t.settings->'credential'->>'id'=c.id::text AND (t.settings->'credential'->>'version')::integer=v.material_version) ORDER BY id,version`)}
- ) AS snapshot`,
+ ${routing}) AS snapshot`,
       [nodeId],
     )
   ).rows[0]?.snapshot;

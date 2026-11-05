@@ -11,7 +11,10 @@ export type RevisionResourceKind =
   | 'reservations'
   | 'inbound'
   | 'outbound'
-  | 'credentials';
+  | 'credentials'
+  | 'tenants'
+  | 'allocations'
+  | 'authorizations';
 export interface RevisionResource {
   kind: RevisionResourceKind;
   id: string;

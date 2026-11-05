@@ -1,11 +1,7 @@
 import { Pool } from 'pg';
 import { randomUUID, createHash } from 'node:crypto';
 import { captureSnapshot } from '../db/revision-snapshot';
-import {
-  canonical,
-  COMPILER_VERSION,
-  POLICY_VERSION,
-} from '../../domain/revision-snapshot';
+import { canonical, supportedRevision } from '../../domain/revision-snapshot';
 import type { PbxOwnershipToken } from '../../application/observation-ports';
 import { ObservationRepository } from '../db/observation-repository';
 import { observationSettings } from '../../domain/observation-settings';
@@ -94,8 +90,9 @@ export class LiveExecutionStore {
     if (
       !row.snapshot ||
       !row.source_digest ||
-      row.compiler_version !== COMPILER_VERSION ||
-      row.policy_version !== POLICY_VERSION
+      !row.compiler_version ||
+      !row.policy_version ||
+      !supportedRevision(row.snapshot, row.compiler_version, row.policy_version)
     )
       return false;
     const result = await this.ownership.fenced(token, async (tx) => {
@@ -104,7 +101,11 @@ export class LiveExecutionStore {
         [row.node_id, row.id],
       );
       if (!active.rows[0]) return false;
-      const current = await captureSnapshot(tx, row.node_id);
+      const current = await captureSnapshot(
+        tx,
+        row.node_id,
+        row.policy_version!,
+      );
       return (
         createHash('sha256').update(canonical(current)).digest('hex') ===
         row.source_digest

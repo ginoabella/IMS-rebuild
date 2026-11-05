@@ -1,0 +1,1467 @@
+{
+  "feature": "P4-U2c",
+  "state": "completed",
+  "command": "./dev exec pnpm check:tenant-routing --live",
+  "run": "expanded-admission-and-uncertain-outcome",
+  "materialMode": "synthetic-fixture-endpoints",
+  "actualSipRtp": true,
+  "externalCalls": false,
+  "cases": [
+    {
+      "check": "tenant-routing manifest",
+      "facts": {
+        "mode": "actual-private-sip-rtp",
+        "nodeId": "28736943-4c4e-4c87-a98d-901230d72429",
+        "installationId": "dcef5f7b-39dd-4221-b942-70f74e837489",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "tenants": [
+          "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+          "75d34de9-73c6-4151-82c3-f9e76d64804c"
+        ],
+        "cases": [
+          {
+            "id": "37203c47-988b-4ffe-a7cc-6b8c29ceacb4",
+            "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+            "direction": "inbound",
+            "expected": "permitted"
+          },
+          {
+            "id": "237032db-352f-4606-8272-f5d56e32225f",
+            "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+            "direction": "outbound",
+            "expected": "permitted"
+          },
+          {
+            "id": "d9bf0924-a92b-44c4-bc8b-01bfd51bb47c",
+            "tenantId": "75d34de9-73c6-4151-82c3-f9e76d64804c",
+            "direction": "inbound",
+            "expected": "permitted"
+          },
+          {
+            "id": "978ce629-1ee5-4d0a-889c-23ea3dfb7f13",
+            "tenantId": "75d34de9-73c6-4151-82c3-f9e76d64804c",
+            "direction": "outbound",
+            "expected": "permitted"
+          },
+          {
+            "id": "d8350ab5-b95b-49b6-aa89-d2a3eef91922",
+            "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+            "direction": "outbound",
+            "kind": "cross-tenant",
+            "expected": "denied"
+          },
+          {
+            "id": "a7d5b814-7056-45ce-81c1-71a3f874a954",
+            "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+            "direction": "outbound",
+            "kind": "unallocated",
+            "expected": "denied"
+          },
+          {
+            "id": "99c394c7-50b8-496d-9948-ec80ef8f04e3",
+            "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+            "direction": "outbound",
+            "kind": "unknown",
+            "expected": "denied"
+          }
+        ],
+        "materialMode": "synthetic-fixture-endpoints",
+        "externalCalls": false
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "37203c47-988b-4ffe-a7cc-6b8c29ceacb4",
+        "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+        "direction": "inbound",
+        "kind": "positive",
+        "intentId": "2389c003-2037-4dd4-917d-7f86cf46d6a7",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "permitted",
+        "destinationId": "2aa7cf9f-2c34-4298-b066-e001534b96b6",
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "237032db-352f-4606-8272-f5d56e32225f",
+        "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+        "direction": "outbound",
+        "kind": "positive",
+        "intentId": "554b7262-5877-48b2-a94c-1d34993546ed",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "permitted",
+        "destinationId": "d276b821-53bc-4894-8163-529468e2a802",
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "d9bf0924-a92b-44c4-bc8b-01bfd51bb47c",
+        "tenantId": "75d34de9-73c6-4151-82c3-f9e76d64804c",
+        "direction": "inbound",
+        "kind": "positive",
+        "intentId": "fb26c155-6e7b-42d2-95df-899fc32542bb",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "permitted",
+        "destinationId": "69d08c98-9bf3-4441-9d43-2daa65675bfd",
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "978ce629-1ee5-4d0a-889c-23ea3dfb7f13",
+        "tenantId": "75d34de9-73c6-4151-82c3-f9e76d64804c",
+        "direction": "outbound",
+        "kind": "positive",
+        "intentId": "aa192206-187e-4fe8-acc4-dd15b857cc07",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "permitted",
+        "destinationId": "d276b821-53bc-4894-8163-529468e2a802",
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "d8350ab5-b95b-49b6-aa89-d2a3eef91922",
+        "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+        "direction": "outbound",
+        "kind": "cross-tenant",
+        "intentId": "be5ec190-8706-436a-bb36-9d8324a8a1ba",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "denied",
+        "destinationId": null,
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "a7d5b814-7056-45ce-81c1-71a3f874a954",
+        "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+        "direction": "outbound",
+        "kind": "unallocated",
+        "intentId": "3139992c-b24d-45c1-bf29-9e5878b04a47",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "denied",
+        "destinationId": null,
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP/RTP case",
+      "facts": {
+        "caseId": "99c394c7-50b8-496d-9948-ec80ef8f04e3",
+        "tenantId": "bb4f4ea2-4d7d-4456-80d0-cb4200141d27",
+        "direction": "outbound",
+        "kind": "unknown",
+        "intentId": "959e8287-dde1-4b6c-b50a-6be7e69477b0",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "revisionId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8",
+        "outcome": "denied",
+        "destinationId": null,
+        "epoch": "1"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP denial",
+      "facts": {
+        "kind": "ordinary-draft",
+        "caseId": "8860ebca-313b-4100-a4f3-327eb47f7d7e",
+        "intentId": "6f0cbdd3-f646-428a-bb29-28dfa9370d52",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP denial",
+      "facts": {
+        "kind": "ambiguous-source",
+        "caseId": "5ea45fcb-a808-4a71-ab61-fa952ae456de",
+        "intentId": "54dd1df6-dd8d-4786-a22a-3e174cdb46f7",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8"
+      }
+    },
+    {
+      "check": "tenant-routing actual SIP denial",
+      "facts": {
+        "kind": "expiry",
+        "caseId": "c9f78871-7bbf-4695-8bfa-54dbe85db802",
+        "intentId": "6e452edd-4b6b-42d7-84bd-80d220514f78",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8"
+      }
+    },
+    {
+      "check": "tenant-routing injected outcome-loss after actual successful SIP/RTP: unknown blocks readiness and new calls, exact replay never redials, explicit native idle reconciliation records failure",
+      "facts": {
+        "intentId": "f58ad870-186c-4169-a5b5-4a11a5728334",
+        "reconciliationId": "6428858d-2160-46b6-9171-9a5396739153",
+        "artifactId": "f4b1bda4-ac21-4830-9815-8ce4406ad9a8"
+      }
+    }
+  ],
+  "baselineRecovered": true,
+  "ownedFixtureCleanup": true,
+  "limits": [
+    "This run does not establish real-provider material custody.",
+    "Retirement/transfer and integrated HTTPS checks are recorded separately after verification.",
+    "C-01\u201308 and parent completion remain open."
+  ],
+  "retirementTransferRun": {
+    "command": "./dev exec pnpm check:tenant-routing --live",
+    "run": "native-retirement-transfer-and-lease-loss",
+    "checks": [
+      {
+        "check": "tenant-routing manifest",
+        "facts": {
+          "mode": "actual-private-sip-rtp",
+          "nodeId": "4b404e42-95e7-4c07-b502-880078f6e3ca",
+          "installationId": "ddbc1933-1733-427a-ba11-7f194951c9d0",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "tenants": [
+            "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+            "60bda965-6df6-454a-a7b1-da096d010c02"
+          ],
+          "cases": [
+            {
+              "id": "0884ecd2-bc87-4f09-a16a-21f150c28c98",
+              "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+              "direction": "inbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "c550ddbd-1ad2-4d9d-b260-e198d131bc1b",
+              "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+              "direction": "outbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "bb5fd0f7-e6ab-4479-b5f7-9edea45f18eb",
+              "tenantId": "60bda965-6df6-454a-a7b1-da096d010c02",
+              "direction": "inbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "42755afe-af4a-4e5d-93d7-91762a1152c0",
+              "tenantId": "60bda965-6df6-454a-a7b1-da096d010c02",
+              "direction": "outbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "762de88b-f0ff-43ea-8da7-78b1b918b444",
+              "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+              "direction": "outbound",
+              "kind": "cross-tenant",
+              "expected": "denied"
+            },
+            {
+              "id": "173b3c6b-a6e9-4c70-9a91-92f93d12c835",
+              "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+              "direction": "outbound",
+              "kind": "unallocated",
+              "expected": "denied"
+            },
+            {
+              "id": "7daa6154-047a-4869-8ce4-3bacb55c741c",
+              "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+              "direction": "outbound",
+              "kind": "unknown",
+              "expected": "denied"
+            }
+          ],
+          "materialMode": "synthetic-fixture-endpoints",
+          "sourceExtensionIds": [
+            "44073006-6419-441e-a67d-6f9e6dcfb94c",
+            "f3083de4-bd3a-4bc0-a7c6-05e062d41af9",
+            "3df804b0-1e98-4974-9055-bb1e8b316092"
+          ],
+          "ingressGatewayId": "b917dd34-06ee-4672-80a7-dc4fad386859",
+          "destinationTrunkId": "b5f1a0b7-67e2-44c7-9b4b-ad1a0a4400f8",
+          "destinationOwner": "run-owned-local-sip-fixtures",
+          "externalCalls": false
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "0884ecd2-bc87-4f09-a16a-21f150c28c98",
+          "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+          "direction": "inbound",
+          "kind": "positive",
+          "intentId": "54badd30-a561-410f-8999-ad2205ed92b7",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "permitted",
+          "destinationId": "44073006-6419-441e-a67d-6f9e6dcfb94c",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "c550ddbd-1ad2-4d9d-b260-e198d131bc1b",
+          "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+          "direction": "outbound",
+          "kind": "positive",
+          "intentId": "188ad2cb-c851-49a4-80f0-789664e2726e",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "permitted",
+          "destinationId": "b5f1a0b7-67e2-44c7-9b4b-ad1a0a4400f8",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "bb5fd0f7-e6ab-4479-b5f7-9edea45f18eb",
+          "tenantId": "60bda965-6df6-454a-a7b1-da096d010c02",
+          "direction": "inbound",
+          "kind": "positive",
+          "intentId": "7e644fd2-3f56-4534-9cff-e88ca21e13b5",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "permitted",
+          "destinationId": "f3083de4-bd3a-4bc0-a7c6-05e062d41af9",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "42755afe-af4a-4e5d-93d7-91762a1152c0",
+          "tenantId": "60bda965-6df6-454a-a7b1-da096d010c02",
+          "direction": "outbound",
+          "kind": "positive",
+          "intentId": "eb70f691-aab3-4c42-89b7-f98069999f0d",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "permitted",
+          "destinationId": "b5f1a0b7-67e2-44c7-9b4b-ad1a0a4400f8",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "762de88b-f0ff-43ea-8da7-78b1b918b444",
+          "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+          "direction": "outbound",
+          "kind": "cross-tenant",
+          "intentId": "79d7fb27-6c7f-4789-ba68-3c5a9049152d",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "173b3c6b-a6e9-4c70-9a91-92f93d12c835",
+          "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+          "direction": "outbound",
+          "kind": "unallocated",
+          "intentId": "5ced3d8c-f5af-4884-92a9-729eb298f40d",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "7daa6154-047a-4869-8ce4-3bacb55c741c",
+          "tenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+          "direction": "outbound",
+          "kind": "unknown",
+          "intentId": "4f777863-6e23-4c58-b42d-f87463fcfa01",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "revisionId": "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "ordinary-draft",
+          "caseId": "d3b2aa42-11de-435f-82f8-3d0526df62bc",
+          "intentId": "1bbc48dd-234c-43c4-8dc8-03a64aa6a983",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "ambiguous-source",
+          "caseId": "ad5aadf8-76a8-4a79-a35a-90eaf9a934b9",
+          "intentId": "47d1c403-6668-44b3-bed4-22b7d9a6ce0b",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "expiry",
+          "caseId": "75c56215-3f52-4d4f-a50b-ddb4fb3ef506",
+          "intentId": "2725a0be-50af-4af0-be7f-6395d2e88e88",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c"
+        }
+      },
+      {
+        "check": "tenant-routing injected outcome-loss after actual successful SIP/RTP: unknown blocks readiness and new calls, exact replay never redials, explicit native idle reconciliation records failure",
+        "facts": {
+          "intentId": "e83e2cbf-5faa-4789-8d81-38c6c4228b42",
+          "reconciliationId": "a8e674c9-03bf-46b2-ab97-44e0ba0991cf",
+          "artifactId": "6845dfa9-dafe-4222-b79a-8fdedac7393c"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP unpermitted source denied",
+        "facts": {
+          "caseId": "369e0f0f-2a47-4247-be6e-485956cf6f5c",
+          "artifactId": "add9d286-fad4-4420-9f7b-0753792d02f7"
+        }
+      },
+      {
+        "check": "tenant-routing actual native retirement: active/unknown deferral, retained bytes, native tombstone/final SQL interruption with pins held, exact replay and explicit reconciliation, retired recovery denial, desired blockers, canonical release/new claim, new-owner inbound/outbound SIP/RTP and stale old-owner denial",
+        "facts": {
+          "retiredArtifactIds": [
+            "6845dfa9-dafe-4222-b79a-8fdedac7393c",
+            "add9d286-fad4-4420-9f7b-0753792d02f7"
+          ],
+          "replacementId": "5360b750-fe4c-40b0-8ace-0492e734b7b3",
+          "artifactId": "b97e1567-2b9b-437f-8954-6a728558ffca",
+          "oldClaimId": "019a38b7-1fca-4d45-b1c6-0113afa1b24a",
+          "newClaimId": "ea5d6d4c-fbe6-48b5-a6aa-139991e6c3f1",
+          "extensionId": "44073006-6419-441e-a67d-6f9e6dcfb94c",
+          "oldTenantId": "3cf12358-38f5-4e47-abbe-b55888cdd6f7",
+          "newTenantId": "60bda965-6df6-454a-a7b1-da096d010c02"
+        }
+      },
+      {
+        "check": "tenant-routing actual lease loss denies native maintenance and readiness; fresh owner epoch/generation invalidates prior grants and successful call evidence",
+        "facts": {
+          "artifactId": "b97e1567-2b9b-437f-8954-6a728558ffca",
+          "oldEpoch": "1",
+          "newEpoch": "2"
+        }
+      }
+    ],
+    "baselineRecovered": true,
+    "ownedFixtureCleanup": true,
+    "limits": [
+      "Later admission/result fencing changes are being verified in a final rerun.",
+      "Lease loss in this run occurred after completed calls; in-call ownership loss is verified separately."
+    ]
+  },
+  "ordinaryPreservation": {
+    "normalMigrations": "completed",
+    "canonicalTablesMatched": 17,
+    "retainedProtectedAndLoadedRuntimeMatched": true,
+    "unmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01"
+  },
+  "fencedCompletionRun": {
+    "command": "./dev exec pnpm check:tenant-routing --live",
+    "run": "atomic-admission-and-active-call-lease-loss",
+    "checks": [
+      {
+        "check": "tenant-routing manifest",
+        "facts": {
+          "mode": "actual-private-sip-rtp",
+          "nodeId": "56ca2229-dafb-40c6-84fe-4f919c2a7235",
+          "installationId": "3fd5cef8-5b27-4896-9f53-e2fbda85b703",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "tenants": [
+            "e808c843-9ddf-4164-99db-8cedca182379",
+            "34fed742-4dfb-4976-b001-45f31a8e4025"
+          ],
+          "cases": [
+            {
+              "id": "127ea160-5e4c-4728-b9db-5b123730f0f4",
+              "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+              "direction": "inbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "2a92699a-1759-42a2-bde7-4e21f6b28422",
+              "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+              "direction": "outbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "6cdad5d3-8875-4a06-9036-1b2e1a109f15",
+              "tenantId": "34fed742-4dfb-4976-b001-45f31a8e4025",
+              "direction": "inbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "65af9908-e4e0-450b-9cc1-e25594673c01",
+              "tenantId": "34fed742-4dfb-4976-b001-45f31a8e4025",
+              "direction": "outbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "83d6297d-ce1a-46a7-b3e5-1ea857d9775d",
+              "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+              "direction": "outbound",
+              "kind": "cross-tenant",
+              "expected": "denied"
+            },
+            {
+              "id": "fa77236f-e95b-497f-921d-ed4dc6b9e3ef",
+              "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+              "direction": "outbound",
+              "kind": "unallocated",
+              "expected": "denied"
+            },
+            {
+              "id": "51545ee9-e8ff-4fae-89b3-99e4061b9aed",
+              "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+              "direction": "outbound",
+              "kind": "unknown",
+              "expected": "denied"
+            }
+          ],
+          "materialMode": "synthetic-fixture-endpoints",
+          "sourceExtensionIds": [
+            "711064dd-0daf-4940-91aa-71e5efc6482a",
+            "9dd41d92-a83d-4f37-8cd6-e93299955ea9",
+            "244066c2-bd85-47bb-9b27-5f975b08bf39"
+          ],
+          "ingressGatewayId": "220a1526-2bbf-45b9-9976-bd6207ff97e4",
+          "destinationTrunkId": "57489f47-457f-42cb-8744-9b8d23875a05",
+          "destinationOwner": "run-owned-local-sip-fixtures",
+          "externalCalls": false
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "127ea160-5e4c-4728-b9db-5b123730f0f4",
+          "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+          "direction": "inbound",
+          "kind": "positive",
+          "intentId": "570d80ee-e2af-45a2-b6da-9ffe0ae2a82b",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "permitted",
+          "destinationId": "711064dd-0daf-4940-91aa-71e5efc6482a",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "2a92699a-1759-42a2-bde7-4e21f6b28422",
+          "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+          "direction": "outbound",
+          "kind": "positive",
+          "intentId": "4c9de83c-54b2-42a3-91da-2cfe4aeeb815",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "permitted",
+          "destinationId": "57489f47-457f-42cb-8744-9b8d23875a05",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "6cdad5d3-8875-4a06-9036-1b2e1a109f15",
+          "tenantId": "34fed742-4dfb-4976-b001-45f31a8e4025",
+          "direction": "inbound",
+          "kind": "positive",
+          "intentId": "3a602b15-ec41-41fe-baa1-b47659c3e8ad",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "permitted",
+          "destinationId": "9dd41d92-a83d-4f37-8cd6-e93299955ea9",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "65af9908-e4e0-450b-9cc1-e25594673c01",
+          "tenantId": "34fed742-4dfb-4976-b001-45f31a8e4025",
+          "direction": "outbound",
+          "kind": "positive",
+          "intentId": "0e3ed2bc-7a18-46cf-b696-e67953d34f60",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "permitted",
+          "destinationId": "57489f47-457f-42cb-8744-9b8d23875a05",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "83d6297d-ce1a-46a7-b3e5-1ea857d9775d",
+          "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+          "direction": "outbound",
+          "kind": "cross-tenant",
+          "intentId": "4f56b841-634f-4c5f-b892-eeb592ccdcde",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "fa77236f-e95b-497f-921d-ed4dc6b9e3ef",
+          "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+          "direction": "outbound",
+          "kind": "unallocated",
+          "intentId": "296f67f2-ae7b-4b7a-8741-22264a298607",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "51545ee9-e8ff-4fae-89b3-99e4061b9aed",
+          "tenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+          "direction": "outbound",
+          "kind": "unknown",
+          "intentId": "c3ef2c8a-c64c-4ee0-a692-f262d0c17392",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "revisionId": "abc28234-60ea-47c0-8206-4d9965e5e420",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "ordinary-draft",
+          "caseId": "4c720e32-5a2f-490b-9694-4282135c577b",
+          "intentId": "36c4cf87-bc06-4acb-b48b-b9996dba2246",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "ambiguous-source",
+          "caseId": "f0e038aa-01db-41c6-af6c-f52fb3055243",
+          "intentId": "fb47f838-1003-4526-88b5-0ba8af769e4b",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "expiry",
+          "caseId": "e90c678e-7c8e-48e8-b459-97b701379f92",
+          "intentId": "8d7c4c0a-4738-42bc-9619-2d32d3d21ce8",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420"
+        }
+      },
+      {
+        "check": "tenant-routing injected outcome-loss after actual successful SIP/RTP: unknown blocks readiness and new calls, exact replay never redials, explicit native idle reconciliation records failure",
+        "facts": {
+          "intentId": "fb0e2462-1374-4e44-8e4b-fa5a7585356a",
+          "reconciliationId": "5a3c993f-874f-4a1e-9fef-ded7d0769131",
+          "artifactId": "abc28234-60ea-47c0-8206-4d9965e5e420"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP unpermitted source denied",
+        "facts": {
+          "caseId": "1b0f8993-d3b4-4384-97a6-48265a991701",
+          "artifactId": "db7a656a-2f95-4b4f-8daa-0707df085747"
+        }
+      },
+      {
+        "check": "tenant-routing actual native retirement: active/unknown deferral, retained bytes, native tombstone/final SQL interruption with pins held, exact replay and explicit reconciliation, retired recovery denial, desired blockers, canonical release/new claim, new-owner inbound/outbound SIP/RTP and stale old-owner denial",
+        "facts": {
+          "retiredArtifactIds": [
+            "abc28234-60ea-47c0-8206-4d9965e5e420",
+            "db7a656a-2f95-4b4f-8daa-0707df085747"
+          ],
+          "replacementId": "ef6f3812-e8ee-4c3e-9eaf-d3564e657a1a",
+          "artifactId": "3050da76-25f5-4183-b023-3e34dabf4a2f",
+          "oldClaimId": "6cab7e93-d20c-4ae8-bf99-08be6095553e",
+          "newClaimId": "66d54e26-7554-4abc-8e77-41e20e8718e0",
+          "extensionId": "711064dd-0daf-4940-91aa-71e5efc6482a",
+          "oldTenantId": "e808c843-9ddf-4164-99db-8cedca182379",
+          "newTenantId": "34fed742-4dfb-4976-b001-45f31a8e4025"
+        }
+      },
+      {
+        "check": "tenant-routing actual lease loss during successful SIP/RTP fences old completion and denies readiness; fresh owner converts retained old-epoch receipt to unknown without redial; explicit idle reconciliation and fresh generation invalidate prior grants/evidence",
+        "facts": {
+          "artifactId": "3050da76-25f5-4183-b023-3e34dabf4a2f",
+          "oldEpoch": "1",
+          "newEpoch": "2",
+          "intentId": "cd513840-bcd2-4adc-b31f-016216c2a760"
+        }
+      }
+    ],
+    "baselineRecovered": true,
+    "ownedFixtureCleanup": true,
+    "limits": [
+      "Final negative-ingress graph bound and cross-tenant ingress case have a separate final rerun.",
+      "Synthetic endpoint material is not real-provider custody evidence."
+    ]
+  },
+  "finalNativeRun": {
+    "command": "./dev exec pnpm check:tenant-routing --live",
+    "exitCode": 0,
+    "run": "draft-and-active-real-sip-native-exit-and-lease-loss",
+    "cases": [
+      {
+        "check": "tenant-routing manifest",
+        "facts": {
+          "mode": "actual-private-sip-rtp",
+          "nodeId": "95cd00a6-dcbb-490d-bb7d-99ab28df7b62",
+          "installationId": "1a18c5d3-fc92-4a9b-a38a-2a6a4e0bdbf1",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "tenants": [
+            "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+            "ca12c1f2-7a13-4674-acd7-c821abbe0f4a"
+          ],
+          "tenantStates": [
+            {
+              "id": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+              "status": "draft",
+              "fixtureSeed": false
+            },
+            {
+              "id": "ca12c1f2-7a13-4674-acd7-c821abbe0f4a",
+              "status": "active",
+              "fixtureSeed": true
+            }
+          ],
+          "cases": [
+            {
+              "id": "bee34174-a77b-48c9-bbf8-8607c93c8ef5",
+              "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+              "direction": "inbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "44d30aba-2c1f-45a5-8dca-5dba1843f665",
+              "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+              "direction": "outbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "ff534535-345a-4431-9386-b15efaf8dd25",
+              "tenantId": "ca12c1f2-7a13-4674-acd7-c821abbe0f4a",
+              "direction": "inbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "8003c464-730b-49fa-be33-11df03ee27e2",
+              "tenantId": "ca12c1f2-7a13-4674-acd7-c821abbe0f4a",
+              "direction": "outbound",
+              "expected": "permitted"
+            },
+            {
+              "id": "0dc196f3-1794-4948-b63d-068ebac2846b",
+              "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+              "direction": "outbound",
+              "kind": "cross-tenant",
+              "expected": "denied"
+            },
+            {
+              "id": "d299d20f-d8d9-4a7e-b968-60cc773be7c8",
+              "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+              "direction": "outbound",
+              "kind": "unallocated",
+              "expected": "denied"
+            },
+            {
+              "id": "d047df6b-68d8-4b79-bcb6-1315ab5a7e20",
+              "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+              "direction": "outbound",
+              "kind": "unknown",
+              "expected": "denied"
+            }
+          ],
+          "materialMode": "synthetic-fixture-endpoints",
+          "sourceExtensionIds": [
+            "86349ed8-9b54-449b-86b1-52c47011fce8",
+            "6a1d0e17-3105-437a-acfb-757598eb556a",
+            "8c198e14-7ba5-4434-9769-35050e5dc642"
+          ],
+          "ingressGatewayId": "3410fef6-42bb-4623-8897-7873c5cfcd00",
+          "destinationTrunkId": "4399a493-6d61-4e9e-8f50-8259610837d5",
+          "destinationOwner": "run-owned-local-sip-fixtures",
+          "externalCalls": false
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "bee34174-a77b-48c9-bbf8-8607c93c8ef5",
+          "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+          "direction": "inbound",
+          "kind": "positive",
+          "intentId": "92dbdeb3-0c28-4681-8760-88c4816c0658",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "permitted",
+          "destinationId": "86349ed8-9b54-449b-86b1-52c47011fce8",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "44d30aba-2c1f-45a5-8dca-5dba1843f665",
+          "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+          "direction": "outbound",
+          "kind": "positive",
+          "intentId": "dc31e651-5093-46b0-a625-198fdf4960bb",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "permitted",
+          "destinationId": "4399a493-6d61-4e9e-8f50-8259610837d5",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "ff534535-345a-4431-9386-b15efaf8dd25",
+          "tenantId": "ca12c1f2-7a13-4674-acd7-c821abbe0f4a",
+          "direction": "inbound",
+          "kind": "positive",
+          "intentId": "b753a474-8958-4419-8622-5b255db953bb",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "permitted",
+          "destinationId": "6a1d0e17-3105-437a-acfb-757598eb556a",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "8003c464-730b-49fa-be33-11df03ee27e2",
+          "tenantId": "ca12c1f2-7a13-4674-acd7-c821abbe0f4a",
+          "direction": "outbound",
+          "kind": "positive",
+          "intentId": "3559a85f-680d-4255-9cba-002defe929b9",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "permitted",
+          "destinationId": "4399a493-6d61-4e9e-8f50-8259610837d5",
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "0dc196f3-1794-4948-b63d-068ebac2846b",
+          "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+          "direction": "outbound",
+          "kind": "cross-tenant",
+          "intentId": "8d2f635c-b145-4f97-8514-bccbf86368c4",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "d299d20f-d8d9-4a7e-b968-60cc773be7c8",
+          "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+          "direction": "outbound",
+          "kind": "unallocated",
+          "intentId": "0bef1561-a70d-49a3-8f99-49b653e291a8",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP/RTP case",
+        "facts": {
+          "caseId": "d047df6b-68d8-4b79-bcb6-1315ab5a7e20",
+          "tenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+          "direction": "outbound",
+          "kind": "unknown",
+          "intentId": "fed9b77b-0a8c-47c3-97a5-80a38ca84443",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "revisionId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+          "outcome": "denied",
+          "destinationId": null,
+          "epoch": "1"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "ordinary-draft",
+          "caseId": "74ae4a37-ab94-49b5-a399-4de84de12a98",
+          "intentId": "e6ba0b0b-20a1-4bad-ba16-fe2b406653ee",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "ambiguous-source",
+          "caseId": "b2fc36c6-53bf-42b7-b718-031cf3e7f041",
+          "intentId": "a4cd9686-342e-4de6-ab52-33edf15c8aed",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP denial",
+        "facts": {
+          "kind": "expiry",
+          "caseId": "f30b031e-2779-4bfe-bc88-974da45b128c",
+          "intentId": "1c83205a-f5a9-4003-a5ea-ea9ccc75c659",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e"
+        }
+      },
+      {
+        "check": "tenant-routing actual cross-tenant ingress denied",
+        "facts": {
+          "caseId": "a050c256-8cbf-402b-a454-a60c3df935a6",
+          "intentId": "951328df-b9e6-4823-8e9b-d8277d14d6de",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e"
+        }
+      },
+      {
+        "check": "tenant-routing real permitted SIP/RTP with deliberately mismatched negative expectation records failure and actual destination; grant revocation cannot clear the same-runtime isolation blocker",
+        "facts": {
+          "caseId": "443f80ff-9d38-4ced-ba43-298b7e83f6c4",
+          "intentId": "5aac0ace-8c91-4108-be6f-26fd844e7eea",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e"
+        }
+      },
+      {
+        "check": "tenant-routing injected outcome-loss after actual successful SIP/RTP: unknown blocks readiness and new calls, exact replay never redials, explicit native idle reconciliation records failure",
+        "facts": {
+          "intentId": "2125a983-4889-40b9-b001-1b7d1186ff8d",
+          "reconciliationId": "b2e2e3d6-039d-46af-9474-a9feb75450f1",
+          "artifactId": "0b377277-ca22-4874-ab96-1f9c4dcd2b1e"
+        }
+      },
+      {
+        "check": "tenant-routing actual SIP unpermitted source denied",
+        "facts": {
+          "caseId": "c5ac4dea-b1cb-4b2f-8538-48bd43477bd8",
+          "artifactId": "02614b48-e29e-4f4c-87d0-629d9801c9cc"
+        }
+      },
+      {
+        "check": "tenant-routing actual native retirement executor exit after durable tombstone: dispatched intent becomes unknown, pins remain, concurrent apply/recovery/release defer, exact retry never redispatches and explicit reconciliation completes",
+        "facts": {
+          "intentId": "30cd62e2-2e36-43f8-b1c2-369915f9dc7b",
+          "reconciliationId": "27659c8a-ab0f-4dae-aa70-5e67cab5e8f8",
+          "artifactId": "02614b48-e29e-4f4c-87d0-629d9801c9cc",
+          "replacementId": "39a2dcca-2b30-4445-a0b6-d3ac72cdcb56"
+        }
+      },
+      {
+        "check": "tenant-routing actual native retirement: active/unknown deferral, retained bytes, native tombstone/final SQL interruption with pins held, exact replay and explicit reconciliation, retired recovery denial, desired blockers, canonical release/new claim, new-owner inbound/outbound SIP/RTP and stale old-owner denial",
+        "facts": {
+          "retiredArtifactIds": [
+            "0b377277-ca22-4874-ab96-1f9c4dcd2b1e",
+            "02614b48-e29e-4f4c-87d0-629d9801c9cc"
+          ],
+          "replacementId": "39a2dcca-2b30-4445-a0b6-d3ac72cdcb56",
+          "artifactId": "e9a63231-3b4e-46ba-8edd-606daac28984",
+          "oldClaimId": "94157602-45fc-45fe-830a-bddfe9f21767",
+          "newClaimId": "4e4f8498-1bdc-459f-8054-0852214dd1d7",
+          "extensionId": "86349ed8-9b54-449b-86b1-52c47011fce8",
+          "oldTenantId": "ff3c51f5-8706-4448-aca0-0ffb48d3ed81",
+          "newTenantId": "ca12c1f2-7a13-4674-acd7-c821abbe0f4a",
+          "verifiedExtensions": [
+            {
+              "extensionId": "86349ed8-9b54-449b-86b1-52c47011fce8",
+              "extensionVersion": 5,
+              "allocationId": "4e4f8498-1bdc-459f-8054-0852214dd1d7",
+              "allocationVersion": 1,
+              "inboundTestId": "e4318958-e28f-4dc8-b71e-b73fca2eedb3",
+              "outboundTestId": "81d8e484-e980-4a20-b507-f3b56827addf",
+              "permissions": [
+                {
+                  "id": "290e8f55-b679-4ac6-af1c-7a49a3cf9efe",
+                  "version": 1,
+                  "trunkId": "4399a493-6d61-4e9e-8f50-8259610837d5"
+                }
+              ]
+            },
+            {
+              "extensionId": "6a1d0e17-3105-437a-acfb-757598eb556a",
+              "extensionVersion": 3,
+              "allocationId": "821abfcf-2753-44f0-bdfa-0db740f32937",
+              "allocationVersion": 1,
+              "inboundTestId": "d8b1ad7e-c43f-4e6f-b50b-f916a991e233",
+              "outboundTestId": "52f7077b-0f31-429e-b3ff-6fc59a41435b",
+              "permissions": [
+                {
+                  "id": "290e8f55-b679-4ac6-af1c-7a49a3cf9efe",
+                  "version": 1,
+                  "trunkId": "4399a493-6d61-4e9e-8f50-8259610837d5"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "check": "tenant-routing actual lease loss during successful SIP/RTP fences old completion and denies readiness; fresh owner converts retained old-epoch receipt to unknown without redial; explicit idle reconciliation and fresh generation invalidate prior grants/evidence",
+        "facts": {
+          "artifactId": "e9a63231-3b4e-46ba-8edd-606daac28984",
+          "oldEpoch": "1",
+          "newEpoch": "2",
+          "intentId": "ee118728-801b-49c0-8bab-f2c9aa8f3c1c"
+        }
+      }
+    ],
+    "baselineRecovered": true,
+    "ownedFixtureCleanup": true,
+    "limits": [
+      "Endpoint material is explicitly synthetic; real-provider custody is covered separately by the required existing revision regression.",
+      "The existing active tenant is seeded only in the isolated trusted fixture; no product lifecycle or activation action is implemented.",
+      "Result-loss and final-SQL faults are injected; retirement executor exit and lease loss occur in actual native processes."
+    ]
+  },
+  "ordinaryNativeRefresh": {
+    "before": {
+      "check": "retained-baseline",
+      "state": "passed",
+      "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+      "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+      "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+      "retainedRevisionId": "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+      "unmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01",
+      "exactProtectedAndLoadedRuntimeMatch": true,
+      "activeChannels": 0,
+      "pendingOperation": false
+    },
+    "after": {
+      "check": "retained-baseline",
+      "state": "passed",
+      "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+      "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+      "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+      "retainedRevisionId": "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+      "unmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01",
+      "exactProtectedAndLoadedRuntimeMatch": true,
+      "activeChannels": 0,
+      "pendingOperation": false
+    },
+    "asteriskPidBefore": 7,
+    "asteriskPidAfter": 7,
+    "nativeHelperPidBefore": 8,
+    "nativeHelperPidAfter": 177986,
+    "backendHealth": [
+      {
+        "endpoint": "live",
+        "httpStatus": 200,
+        "status": "alive"
+      },
+      {
+        "endpoint": "ready",
+        "httpStatus": 200,
+        "status": "ready",
+        "checks": {
+          "database": "up",
+          "sessionRedis": "up",
+          "realtimeRedis": "up"
+        }
+      }
+    ]
+  },
+  "finalFocusedBrowser": {
+    "exitCode": 0,
+    "check": "tenant-routing actual HTTPS: reviewed tenant-aware capture/validation/apply; two draft tenants, explicit grants and actual inbound/outbound plus forbidden SIP calls through mounted UI; exact provenance/readiness/revocation, wrong plane/CSRF/opaque-input rejection, axe/reflow and reviewed initial-baseline recovery; synthetic endpoint material only",
+    "facts": {
+      "nodeId": "932622f4-215e-4ade-a609-f17c94d0cc4d",
+      "installationId": "e2e21e47-e677-4e18-b33b-0c628f050755",
+      "artifactId": "65aea873-8ffd-4ba1-bbef-7a38c4c9ce89",
+      "tenants": [
+        "6f83bc5a-c3a2-44c6-8123-ecd96078781f",
+        "a796d92f-9e25-425e-a11c-dfbf580421c8"
+      ]
+    },
+    "actualRetirement": true,
+    "exactLostResponseRecovery": true,
+    "baselineRecovered": true,
+    "databaseAndRedisCleanup": true,
+    "responsiveWidths": [320, 768, 1440],
+    "visualReviewWidths": [320, 1440]
+  },
+  "finalIntegratedBrowser": {
+    "command": "./dev exec pnpm check:tenant-routing --browser",
+    "exitCode": 0,
+    "log": "/tmp/p4-u2c-regression-tenant-browser.log",
+    "bindingAllocationRevisionNativeTenantAndAuthorityChecks": true,
+    "baselineRecovered": true,
+    "ownedDatabaseAndRedisCleanup": true
+  },
+  "verificationAccessMaintenance": {
+    "restrictedIssuerPriorLookupStatus": 403,
+    "issuerReplacement": "existing named custodian and fixed endpoint issuance roles",
+    "maximumSeconds": 86400,
+    "configurationUpdates": 0,
+    "storedMaterialChanged": false,
+    "humanSessionRevoked": true,
+    "ownedStagingRemoved": true,
+    "liveConsumerReplacement": {
+      "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+      "actualTtlSeconds": 86400,
+      "explicitMaxTtlSeconds": 86400,
+      "configurationUpdates": 0
+    }
+  },
+  "completedDate": "2026-11-05",
+  "verificationCommands": [
+    {
+      "check": "tenant-browser",
+      "command": ["./dev", "exec", "pnpm", "check:tenant-routing", "--browser"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-tenant-browser.log"
+    },
+    {
+      "check": "draft-tenant",
+      "command": ["./dev", "exec", "pnpm", "check:draft-tenant"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-draft-tenant.log"
+    },
+    {
+      "check": "extension-inventory",
+      "command": ["./dev", "exec", "pnpm", "check:extension-inventory"],
+      "exitCode": 1,
+      "log": "/tmp/p4-u2c-regression-extension-inventory-failed-deployment.log"
+    },
+    {
+      "check": "extension-inventory",
+      "command": ["./dev", "exec", "pnpm", "check:extension-inventory"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-extension-inventory.log"
+    },
+    {
+      "check": "trunk-gateways",
+      "command": ["./dev", "exec", "pnpm", "check:trunk-gateways"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-trunk-gateways.log"
+    },
+    {
+      "check": "routing",
+      "command": ["./dev", "exec", "pnpm", "check:routing"],
+      "exitCode": 1,
+      "log": "/tmp/p4-u2c-regression-routing-failed-window.log"
+    },
+    {
+      "check": "routing",
+      "command": ["./dev", "exec", "pnpm", "check:routing"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-routing.log"
+    },
+    {
+      "check": "pbx-revisions",
+      "command": ["./dev", "exec", "pnpm", "check:pbx-revisions"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-pbx-revisions.log"
+    },
+    {
+      "check": "platform-http",
+      "command": ["./dev", "exec", "pnpm", "check:platform-auth", "--http"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-platform-http.log"
+    },
+    {
+      "check": "staff-auth",
+      "command": ["./dev", "exec", "pnpm", "check:staff-auth"],
+      "exitCode": 1,
+      "log": "/tmp/p4-u2c-regression-staff-auth-failed-geography.log"
+    },
+    {
+      "check": "staff-auth",
+      "command": ["./dev", "exec", "pnpm", "check:staff-auth"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-staff-auth.log"
+    },
+    {
+      "check": "full-check",
+      "command": ["./dev", "check"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-regression-full-check.log"
+    }
+  ],
+  "ordinaryConsumerRefresh": [
+    {
+      "check": "pre-refresh-retained-baseline",
+      "command": ["./dev", "pbx-live-check"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-pre-refresh-retained-baseline.log"
+    },
+    {
+      "check": "telephony-refresh",
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "-p",
+        "myims-rebuild-dev",
+        "-f",
+        "infra/docker/compose.yaml",
+        "-f",
+        "infra/docker/compose.observation.yaml",
+        "-f",
+        "infra/docker/compose.pbx-live.yaml",
+        "--profile",
+        "telephony",
+        "up",
+        "-d",
+        "--force-recreate",
+        "--no-deps",
+        "--wait",
+        "--wait-timeout",
+        "120",
+        "telephony"
+      ],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-telephony-refresh.log"
+    },
+    {
+      "check": "platform-stop",
+      "command": ["./dev", "platform-https-stop"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-platform-stop.log"
+    },
+    {
+      "check": "platform-start",
+      "command": [
+        "docker",
+        "compose",
+        "--env-file",
+        ".env",
+        "-p",
+        "myims-rebuild-dev",
+        "-f",
+        "infra/docker/compose.yaml",
+        "-f",
+        "infra/docker/compose.observation.yaml",
+        "-f",
+        "infra/docker/compose.pbx-live.yaml",
+        "exec",
+        "-d",
+        "--user",
+        "node",
+        "workspace",
+        "sh",
+        "-c",
+        "umask 077; exec node scripts/platform-https.mjs start > .local/p4-u2c/ordinary-platform-refresh.log 2>&1"
+      ],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-platform-start.log"
+    },
+    {
+      "check": "platform-check",
+      "command": ["./dev", "platform-https-check"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-platform-check.log"
+    },
+    {
+      "check": "staff-stop",
+      "command": ["./dev", "staff-https-stop"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-staff-stop.log"
+    },
+    {
+      "check": "staff-start",
+      "command": ["./dev", "staff-https-start"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-staff-start.log"
+    },
+    {
+      "check": "staff-check",
+      "command": ["./dev", "staff-https-check"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-staff-check.log"
+    },
+    {
+      "check": "health",
+      "command": ["./dev", "health"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-health.log"
+    },
+    {
+      "check": "retained-baseline",
+      "command": ["./dev", "pbx-live-check"],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-retained-baseline.log"
+    },
+    {
+      "check": "preservation",
+      "command": [
+        "./dev",
+        "exec",
+        "node",
+        "scripts/check-tenant-routing-preservation.mjs",
+        "after"
+      ],
+      "exitCode": 0,
+      "log": "/tmp/p4-u2c-ordinary-preservation.log"
+    }
+  ],
+  "ordinaryTelephonyRefresh": {
+    "check": "ordinary-telephony-refresh",
+    "ready": true,
+    "preservedServiceIdentity": "1002:1002",
+    "asteriskServiceRecreated": false
+  },
+  "finalOrdinaryPreservation": {
+    "check": "tenant-routing-ordinary-preservation",
+    "mode": "after",
+    "state": "passed",
+    "tables": {
+      "tenants": {
+        "count": 5,
+        "sha256": "5a375ec843ec0def5b7bf3feb043e5af57eacb72cc4eeacecd8b80933bc6940e"
+      },
+      "staff_users": {
+        "count": 11,
+        "sha256": "40118ce9209e8c289b5ff91a3867d6d31edb43f37cc064d1c82842bbd49be272"
+      },
+      "platform_operators": {
+        "count": 1,
+        "sha256": "37485b6f68c800b79614a4c1c83747dc0b0335bfe9fbcc558036deb62801d50f"
+      },
+      "extensions": {
+        "count": 21,
+        "sha256": "e9a0ae8b7d541b7108511f96df1645fe6d969321ad00c72a0e05194153db1f2c"
+      },
+      "endpoint_profiles": {
+        "count": 1,
+        "sha256": "cf2dc9fa615b3833dfa1b38339cf509438250305ce5dd80e751a35f26fa66a01"
+      },
+      "endpoint_profile_versions": {
+        "count": 1,
+        "sha256": "0db521397d1a1beba8530d43bac2d2cb5f4cd285a1ac921c6491866a56782ef0"
+      },
+      "sip_trunks": {
+        "count": 1,
+        "sha256": "a3e6d2287e7bdaf3b4689a6c0fedc6e890278a8bc8aeae14b8d242db8deac3f0"
+      },
+      "sip_gateways": {
+        "count": 1,
+        "sha256": "8bfb7c538d4eb0c512bf5f82ecc4a9a8eca47c0ff4e2ed47f74452aea8c0a32c"
+      },
+      "sip_dids": {
+        "count": 1,
+        "sha256": "f72e55ede1434878503166739622388d3cd8d7320fe34336820e9727021ca0ae"
+      },
+      "ring_groups": {
+        "count": 1,
+        "sha256": "c9e7e808df41603ecf94219a0eced458a846966633e51b7594fe17ced016e409"
+      },
+      "inbound_rules": {
+        "count": 2,
+        "sha256": "28f9114e7976e03b54f61c8e828efbc5210faf6a1e3f7de9ffe291c501f2bf5a"
+      },
+      "outbound_rules": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_inventory_claims": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_authorizations": {
+        "count": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "pbx_revisions": {
+        "count": 3,
+        "sha256": "d63a876122a6e8b8e405f802baadb47b40889aa761a792a4b7f8992982368385"
+      },
+      "pbx_live_artifacts": {
+        "count": 2,
+        "sha256": "8521baf370ef89493e5dc7a8528bf36cb74ca507f1f7e96ac502e1ff99bb9c91"
+      },
+      "pbx_live_pins": {
+        "count": 20,
+        "sha256": "c784df475943451be72706ff817e686bb89fd06c1e1697167138c57da33ac473"
+      }
+    }
+  },
+  "finalRetainedBaseline": {
+    "check": "retained-baseline",
+    "state": "passed",
+    "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+    "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+    "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+    "retainedRevisionId": "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+    "unmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01",
+    "exactProtectedAndLoadedRuntimeMatch": true,
+    "activeChannels": 0,
+    "pendingOperation": false
+  },
+  "ownedCleanup": {
+    "check": "p4-u2c-owned-cleanup",
+    "state": "passed",
+    "remainingOwnedDisposableDatabases": 0,
+    "preexistingUnclaimedDatabasePreserved": "myims_session_426486cb1209",
+    "preexistingOwnershipEvidence": "docs/status/p3-u1a-evidence.md and docs/status/p4-u1b-3-evidence.md",
+    "remainingDisposableContainers": 0,
+    "remainingSessionFixtureProcesses": 0,
+    "retainedAsteriskPid": 7,
+    "providerFixtureAccess": "owned tokens revoked and files removed by inventory wrapper; immutable policy metadata retained",
+    "nativeFixtures": "each exact owned container/database/directory cleanup and baseline restoration recorded in required wrappers"
+  },
+  "finalCredentialBrowser": {
+    "command": "./dev exec pnpm check:staff-auth --browser",
+    "exitCode": 0,
+    "log": "/tmp/p4-u2c-credential-browser-focused1.log",
+    "fullStaffRerunExitCode": 0
+  },
+  "regressionFixtureCorrections": [
+    "Real Redis fixed-window alignment before budget exhaustion; production policy unchanged.",
+    "Wait for canonical contact-save reload before staging geography; assert ownership confirmation before save."
+  ],
+  "documentationChecks": {
+    "formatted": true,
+    "scopedLocalLinksChecked": 608,
+    "brokenScopedLinks": 0,
+    "childCriteriaReconciled": 8,
+    "parentCriteriaReconciled": 12,
+    "diffWhitespacePassed": true
+  }
+}

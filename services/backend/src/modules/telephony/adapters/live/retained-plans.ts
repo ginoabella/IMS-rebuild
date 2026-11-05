@@ -50,6 +50,13 @@ export class RetainedLivePlans {
   }
   load(id: string): RetainedLiveArtifact {
     if (!uuid(id)) throw new NativePbxFailure('boundary_unavailable');
+    try {
+      lstatSync(join(this.directory, '..', 'retired', id + '.json'));
+      throw new NativePbxFailure('boundary_unavailable');
+    } catch (e) {
+      if (!(e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT'))
+        throw e;
+    }
     const fd = openSync(
       join(this.directory, id + '.json'),
       constants.O_RDONLY | constants.O_NOFOLLOW | constants.O_NONBLOCK,

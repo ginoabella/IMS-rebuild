@@ -1,6 +1,6 @@
 # P4-U2 — Allocate inventory and verify tenant routing
 
-**Status:** in progress; P4-U2a/b complete under approved allocation/shared-gateway/exact-DID policy, 2026-11-03 (Asia/Manila, +08:00). Gateway catch-alls remain platform-only. c remains planned; parent/live acceptance is incomplete.
+**Status:** complete within approved private development, 2026-11-05 (Asia/Manila, +08:00). P4-U2a/b/c and AC-01–12 passed; [integrated acceptance evidence](../../docs/status/p4-u2c-evidence.md). Gateway catch-alls remain platform-only. Activation, assignment, operational ingestion and production rollout remain separate units.
 **Prepared:** 2026-10-29 (Asia/Manila, +08:00).
 **Requirement:** [Phase 4 / P4-U2](../implementation-plan.md#p4-u2--allocate-inventory-and-verify-tenant-routing).
 
@@ -202,9 +202,9 @@ Independent specification work can proceed. Splitting does not approve defaults.
 | ALLOC-01 | **Approved 2026-10-30:** see the [exact policy](../../docs/planning/p4-u2a-allocation-policy-review.md), including active expansion. Original decision scope: reservation lifecycle, expiry/release, disabled-stock selection, single/multiple node placement, range semantics and bounds. Recommend explicit existing-stock claims, no automatic future-stock capture or expiry, one node per allocation batch and atomic bounded selection.                                                 | Allocation schema/API/UI gate resolved by the owner-approved policy; implement and verify A-01–07.                                            |
 | ALLOC-02 | **Approved 2026-11-03 with amendment:** gateways are shared; DIDs, inbound rules and ring groups are tenant-owned. See the [policy record](../../docs/planning/p4-u2b-routing-policy-review.md). Catch-alls remain platform-only; tenant bindings require exact owned DIDs.                                                                                               | Inbound bindings: explicitly revise the helper for canonical shared gateways; require exact owned DIDs and keep catch-alls platform-only.             |
 | ALLOC-03 | **Approved 2026-11-03:** explicit tenant route/trunk permissions; filter to tenant-bound routes before priority selection, retain disabled-winner denial, then validate the selected trunk without fallback. Ordinary node-wide preview stays unchanged. See the [policy record](../../docs/planning/p4-u2b-routing-policy-review.md).                                                         | Outbound desired binding/preview policy resolved; c owns versioned compiler and live enforcement.                                                     |
-| ALLOC-04 | Controlled ingress/endpoints, destination allowlist, allowed call actions, evidence success/freshness/invalidation and uncertain-test retry. Recommend operator-triggered bounded tests with exact artifact provenance, no automatic redial after uncertainty and invalidation on relevant semantic change.                     | Live tests/readiness: approve concrete environment, authority, success conditions and validity rules; test doubles cannot satisfy the live gate. |
-| ALLOC-05 | How draft tenants can prove routing before activation without ordinary calling access. Recommend a narrowly scoped verification mode limited to controlled endpoints/destinations; ordinary draft traffic and staff sign-in remain denied. Define disabled/not-configured behavior and leave lifecycle policy to U3.            | Tenant-aware live rendering: approve verification-mode admission/removal and its production boundary before enabling tenant paths.               |
-| ALLOC-06 | **Approved for a’s desired-only release/blockers and b’s binding-scoped revocation without clearing pins; final installed-resource path remains pending for c.** Release/reallocation with assignments, desired references, active/unknown calls and retained runtime pins. Recommend reject/defer until all blockers are explicitly cleared; no forced call termination. Decide whether a reviewed artifact-retirement capability is necessary or intentionally deferred with visible blockers. | Release/transfer and parent acceptance: approve achievable safe path and required runtime extension; existing pins cannot be bypassed.           |
+| ALLOC-04 | **Approved 2026-11-04:** [c policy](../../docs/planning/p4-u2c-live-policy-review.md), bounded isolated calls and 24-hour evidence. Original scope: controlled ingress/endpoints, destination allowlist, allowed call actions, evidence success/freshness/invalidation and uncertain-test retry. Recommend operator-triggered bounded tests with exact artifact provenance, no automatic redial after uncertainty and invalidation on relevant semantic change.                     | Live tests/readiness: approve concrete environment, authority, success conditions and validity rules; test doubles cannot satisfy the live gate. |
+| ALLOC-05 | **Approved 2026-11-04:** [c policy](../../docs/planning/p4-u2c-live-policy-review.md), explicit nonrenewing 30-minute grant. Original scope: how draft tenants can prove routing before activation without ordinary calling access. Recommend a narrowly scoped verification mode limited to controlled endpoints/destinations; ordinary draft traffic and staff sign-in remain denied. Define disabled/not-configured behavior and leave lifecycle policy to U3.            | Tenant-aware live rendering: approve verification-mode admission/removal and its production boundary before enabling tenant paths.               |
+| ALLOC-06 | **Approved for a’s desired-only release/blockers and b’s binding-scoped revocation without clearing pins; final installed-resource path approved 2026-11-04 under [c’s narrow retirement policy](../../docs/planning/p4-u2c-live-policy-review.md).** Release/reallocation with assignments, desired references, active/unknown calls and retained runtime pins. Recommend reject/defer until all blockers are explicitly cleared; no forced call termination. Decide whether a reviewed artifact-retirement capability is necessary or intentionally deferred with visible blockers. | Release/transfer and parent acceptance: approve achievable safe path and required runtime extension; existing pins cannot be bypassed.           |
 
 ### Approved allocation policy — 2026-10-30
 
@@ -216,7 +216,7 @@ multiple nodes per tenant, 1–50 UUIDs or inclusive canonical numbers per selec
 atomic rejection of gaps/conflicts, and draft/active eligibility checked at commit.
 Scoped ALLOC-06 permits only provably unreferenced desired-only release, with
 actual reference/runtime checks and visible fail-closed blockers. Installed-resource
-release/transfer and artifact retirement remain pending for c. ALLOC-04/05 remain open. On 2026-11-03 the owner approved
+release/transfer and narrow artifact retirement were subsequently completed and verified in c. ALLOC-04/05/final ALLOC-06 were approved 2026-11-04 in [c’s policy](../../docs/planning/p4-u2c-live-policy-review.md); actual live acceptance is now complete within approved private development; see the [integrated evidence](../../docs/status/p4-u2c-evidence.md). On 2026-11-03 the owner approved
 [b’s routing policy](../../docs/planning/p4-u2b-routing-policy-review.md): ALLOC-02
 with shared gateways and tenant-owned DIDs/rules/groups, ALLOC-03 as proposed, and
 binding-scoped ALLOC-06 as proposed. Shared-gateway catch-alls are platform-only; tenant bindings require exact owned DIDs. This grants no live calling readiness.
@@ -245,7 +245,9 @@ coverage, local links, formatting and whitespace. No runtime pass is claimed.
 
 For implementation, define a short focused allocation/routing check command in the
 Docker workspace, with API, browser, concurrency, provenance and controlled live
-modes. It does not exist yet. Retain exact commands, environment, fixture ownership,
+modes. The implemented command is `./dev exec pnpm check:tenant-routing`; see the
+[manual guide](../../docs/guides/p4-u2-manual-testing.md) for modes and review steps.
+Retain exact commands, environment, fixture ownership,
 results and injected-versus-real boundaries in `docs/status`.
 
 1. Run domain/constraint checks for ownership/range intersections, complete reachable
@@ -296,5 +298,5 @@ relabels existing probes. If ALLOC-06 requires a substantial retirement mechanis
 refine that scope and acceptance explicitly before implementation.
 
 **Review outcome:** suitable for sub-unit implementation with the boundaries above.
-The three child specifications are created and the split is adopted. P4-U2a is complete; b is in progress under the approved shared-gateway amendment with platform-only catch-alls approved in the [policy review](../../docs/planning/p4-u2b-routing-policy-review.md), and c remains planned; ALLOC-01 and a’s scoped ALLOC-06 are approved as recorded above; ALLOC-04/05 and c’s final ALLOC-06 remain open; ALLOC-03 and b’s scoped ALLOC-06 are approved. No
+The three child specifications are created and the split is adopted. P4-U2a is complete; b is complete under the approved shared-gateway amendment with platform-only catch-alls approved in the [policy review](../../docs/planning/p4-u2b-routing-policy-review.md), and c is complete within approved private development; ALLOC-01 and a’s scoped ALLOC-06 are approved as recorded above; ALLOC-04/05 and c’s final ALLOC-06 were approved 2026-11-04 in c’s linked policy record; ALLOC-03 and b’s scoped ALLOC-06 are approved. No
 implementation, live acceptance or policy approval follows from creating the specs.

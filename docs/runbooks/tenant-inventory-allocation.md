@@ -50,9 +50,9 @@ verified runtime baseline also blocks release until installed-resource review ca
 prove its exact initial dependencies. Unavailable dependencies
 also deny it. Review the displayed dependency instead of deleting records or pins.
 
-Installed/in-flight/rollback stock cannot be released or transferred through this
-unit. Artifact retirement and the final safe-transfer/live-call scenario remain
-with P4-U2c. Release ends current ownership and retains its identity/version/actor
+The allocation-only workflow cannot bypass installed/in-flight/rollback pins.
+Completed P4-U2c supplies the narrow reviewed retirement and final transfer path;
+follow the [full manual guide](../guides/p4-u2-manual-testing.md) for the integrated test. Release ends current ownership and retains its identity/version/actor
 history; it does not delete an extension or rewrite old associations.
 
 ## Access and uncertain results

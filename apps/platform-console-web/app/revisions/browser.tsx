@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { Button, Panel } from '@myims/ui-web';
 import { RevisionReview } from './review';
+import { RetirementPanel } from '../telephony-verification/retirement-panel';
 import { LivePanel } from './live-panel';
 import { useRevisions } from './use-revisions';
 const linkClass = 'text-[var(--accent-primary)] underline';
@@ -165,6 +166,7 @@ export function RevisionsBrowser({ nodeId }: { nodeId: string }) {
         </Button>
       </Panel>
       <LivePanel nodeId={nodeId} detail={detail} />
+      <RetirementPanel nodeId={nodeId} />
       {detail && (
         <RevisionReview
           detail={detail}

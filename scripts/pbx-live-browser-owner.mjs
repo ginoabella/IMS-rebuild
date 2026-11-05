@@ -7,7 +7,7 @@ import {
   mkdirSync,
   appendFileSync,
 } from 'node:fs';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, randomBytes, createHmac } from 'node:crypto';
 import { setTimeout as delay } from 'node:timers/promises';
 const load = createRequire(
   '/workspace/services/backend/dist/modules/telephony/adapters/live/native-application.js',
@@ -19,6 +19,10 @@ const { ProtectedArtifactStore } = load('./artifact-store.js'),
   { NativeLiveApplication } = load('./native-application.js'),
   { LiveExecutionStore } = load('./execution-store.js'),
   { NativeOwnerServer, NativeOwnerClient } = load('./native-transport.js');
+const { TenantCallAdmission, TenantAdmissionServer } = load(
+  './tenant-admission.js',
+);
+const { TenantRuntimeMonitor } = load('./tenant-runtime.js');
 const { ObservationRepository } = load('../db/observation-repository.js'),
   { observationSettings } = load('../../domain/observation-settings.js'),
   { DeliveryWorker } = load('../../../../infrastructure/worker/delivery.js'),
@@ -90,6 +94,27 @@ async function main() {
       application,
     ),
     client = new NativeOwnerClient('/var/lib/myims-pbx/browser.sock');
+  const group = Number(
+    readFileSync('/etc/group', 'utf8')
+      .split('\n')
+      .find((l) => l.startsWith('asterisk:'))
+      ?.split(':')[2],
+  );
+  const admission = new TenantAdmissionServer(
+    new TenantCallAdmission(store, metadata.nodeId),
+    group,
+  );
+  const monitor = new TenantRuntimeMonitor(
+    root,
+    metadata.nodeId,
+    metadata.installationId,
+    store,
+    driver,
+    barrier,
+    artifacts,
+    (id, action) => application.maintain(id, action),
+  );
+  const syntheticKey = randomBytes(32);
   let token = await ownership.acquire(metadata.nodeId, randomUUID());
   if (!token) throw new Error('Owned browser lease unavailable');
   let stopped = false,
@@ -99,9 +124,27 @@ async function main() {
     renewing = true;
     try {
       const next = await ownership.renew(token);
-      if (!next) stopped = true;
-      else token = next;
-    } catch {
+      if (!next) {
+        console.error(
+          JSON.stringify({
+            fixture: 'live-browser-owner',
+            state: 'failed',
+            failureCode: 'renewal_lost',
+          }),
+        );
+        stopped = true;
+      } else token = next;
+    } catch (error) {
+      console.error(
+        JSON.stringify({
+          fixture: 'live-browser-owner',
+          state: 'failed',
+          failureCode: 'renewal_failed',
+          code: /^[a-zA-Z0-9_]{1,40}$/.test(error?.code ?? '')
+            ? error.code
+            : undefined,
+        }),
+      );
       stopped = true;
     } finally {
       renewing = false;
@@ -114,9 +157,13 @@ async function main() {
     await server.start();
     await client.connect(token);
     await worker.start();
+    await admission.start();
+    monitor.start();
     writeFileSync('/ready', 'ready');
     while (!stopped) {
-      await client.connect(token);
+      // This isolated executor retains the same fenced owner for its lifetime.
+      // Reconnecting would queue takeover behind native execution and turn the
+      // short control acknowledgment deadline into an artificial owner failure.
       await store.heartbeat(token);
       const operation = await store.next(metadata.nodeId);
       if (operation) {
@@ -128,10 +175,38 @@ async function main() {
           (await client.inspect(token, operation)) === 'not_started'
         ) {
           if (
+            row.snapshot.schemaVersion === 'tenant-routing-1' &&
+            row.snapshot.tenantRouting?.tenants.length > 0 &&
+            !row.snapshot.trunks.some((t) => t.settings.credential)
+          ) {
+            const endpoints = new Map();
+            for (const e of row.snapshot.extensions.filter(
+              (e) => e.administrativeStatus === 'enabled',
+            )) {
+              if (
+                !e.generationId ||
+                !row.snapshot.credentials.some(
+                  (c) =>
+                    c.id === e.generationId &&
+                    c.purpose === 'endpoint' &&
+                    c.available,
+                )
+              )
+                throw new Error(
+                  'Owned synthetic endpoint metadata unavailable',
+                );
+              endpoints.set(e.generationId, {
+                password: createHmac('sha256', syntheticKey)
+                  .update(e.generationId)
+                  .digest('hex'),
+              });
+            }
+            preparation = { material: { endpoints, trunks: new Map() } };
+          } else if (
             row.snapshot.extensions.some(
-              (entry) => entry.administrativeStatus === 'enabled',
+              (e) => e.administrativeStatus === 'enabled',
             ) ||
-            row.snapshot.trunks.some((entry) => entry.settings.credential)
+            row.snapshot.trunks.some((t) => t.settings.credential)
           )
             preparation = { failure: 'material_denied' };
           else
@@ -145,6 +220,8 @@ async function main() {
     }
   } finally {
     clearInterval(timer);
+    await monitor.close();
+    await admission.close();
     await driver.drain();
     await server.close();
     await worker.stop();
@@ -153,12 +230,19 @@ async function main() {
     await store.close();
   }
 }
-void main().catch(() => {
+void main().catch((error) => {
   console.error(
     JSON.stringify({
       fixture: 'live-browser-owner',
       state: 'failed',
       failureCode: 'fixture_failed',
+      location: error?.stack?.match(/\/fixture\.mjs:\d+:\d+/)?.[0],
+      code: /^[a-zA-Z0-9_]{1,40}$/.test(error?.code ?? '')
+        ? error.code
+        : undefined,
+      reason: /^[a-z_]{1,40}$/.test(error?.reason ?? '')
+        ? error.reason
+        : undefined,
     }),
   );
   process.exit(1);

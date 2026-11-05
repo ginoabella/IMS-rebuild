@@ -10,6 +10,7 @@ export async function checkPbxLiveIntent({
   b,
   revision,
   extensionId,
+  disabledExtensionId,
 }) {
   const root = `/platform/pbx-nodes/${nodeId}`;
   const path = root + '/revisions/live';
@@ -178,6 +179,14 @@ export async function checkPbxLiveIntent({
     pins.some(
       (pin) => pin.kind === 'extensions' && pin.resource_id === extensionId,
     ),
+  );
+  assert.equal(
+    pins.some(
+      (pin) =>
+        pin.kind === 'extensions' && pin.resource_id === disabledExtensionId,
+    ),
+    false,
+    'disabled stock omitted by the tenant-aware runtime has no endpoint pin',
   );
   await assert.rejects(
     owner.query('DELETE FROM public.extensions WHERE id=$1', [extensionId]),

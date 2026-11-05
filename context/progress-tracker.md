@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-11-03 (Asia/Manila, +08:00).
+Last reconciled: 2026-11-05 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -20,8 +20,8 @@ P3-U3 and a/b/c are complete within approved private development, including the
 integrated trunk/gateway/DID console and final DEV-01–07 acceptance.
 P3-U4 and a/b/c are complete within approved private development: desired groups,
 reservations, inbound/outbound rules and integrated routing acceptance. Its desired
-state feeds b’s scoped live apply below; production and tenant calling readiness
-remain with later units.
+state feeds scoped live apply; production remains separate and verified tenant
+calling readiness is delivered by P4-U2 below.
 P3-U5a is complete within its offline revision capture/review/validation boundary;
 P3-U5b/c, parent P3-U5 and the integrated Phase 3 gate are complete within
 approved private development under U5-01–05. Tenant readiness remains Phase 4.
@@ -32,11 +32,11 @@ the approved delivery-order exception. P4-U1b and all three children are complet
 including integrated configuration/credential handoff and parent P4-U1 acceptance.
 P1-U1 remains deferred outside approved scoped handoffs. Integrated PBX administration
 and tenant onboarding acceptance are complete within their development boundaries.
-Exclusive desired allocation and canonical desired route bindings/permissions are complete in P4-U2a/b. Tenant-aware live routing/readiness, activation, operational response and production readiness remain to be delivered.
+Exclusive desired allocation and canonical desired route bindings/permissions are complete in P4-U2a/b. Tenant-aware live routing/readiness and pin-safe reallocation are complete within P4-U2; activation, operational response and production readiness remain separate.
 
 ## In Progress
 
-No active implementation unit. P4-U2b completed on 2026-11-03 (Asia/Manila, +08:00); P4-U2c is next, subject to its live-policy gates.
+No feature implementation is currently in progress. P4-U2c and parent P4-U2 are complete within approved private development; next is P4-U3.
 
 **Operational follow-up, outside the feature gate:** owner Windows archive
 verification passed. Existing failed backup `ec0b8e2d-49d9-45e3-930e-6b769b58f103`
@@ -58,13 +58,13 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P4-U2b
+## Latest Completed Checkpoint — P4-U2c / parent P4-U2
 
-- **Status:** complete within approved private development, 2026-11-03 (Asia/Manila, +08:00). B-01–08 passed; [final evidence](../docs/status/p4-u2b-evidence.md).
-- **Delivered:** canonical versioned inbound ownership/bindings, explicit outbound trunk classification/permissions, backend-only consistent eligibility, dependency-safe mutation/release and actual tenant-detail recovery. Gateways are shared; tenant DIDs/rules/groups are owned. Catch-alls remain platform-only; tenant bindings require exact DIDs.
-- **Verification:** final focused PostgreSQL/Redis/two-replica/API/HTTPS suite, all affected routing/allocation/resource/registry/authority/tenant/revision checks and complete `./dev check` passed, exit 0. Earlier failures, fixture synchronization corrections and exact retries are retained in the evidence; production authority/rate policy is unchanged.
-- **Preservation:** ordinary additive migration/backend/platform/staff refresh and HTTPS checks passed. Twelve retained table and five platform access-file digests match. Independent protected/loaded PBX baseline is exact, with zero channels and no pending operation. Owned fixtures/access cleaned. Existing provider access replacements were separately owner-approved, with zero configuration updates and no stored material changes.
-- **Handoff:** [eligibility/API/dependency contract](../docs/architecture/tenant-route-bindings.md) and [operator workflow](../docs/runbooks/tenant-route-bindings.md). c owns new capture/compiler versions, tenant live enforcement, verified apply/tests/readiness and final reallocation proof. Parent P4-U2, c, activation/assignment and the Phase 4 gate remain incomplete.
+- **Status:** complete within approved private development, 2026-11-05 (Asia/Manila, +08:00). C-01–08 and parent AC-01–12 passed; [final evidence](../docs/status/p4-u2c-evidence.md).
+- **Delivered:** versioned tenant-aware capture/apply/admission, bounded draft verification, exact live evidence/readiness, durable audited artifact retirement, safe release/reallocation and protected responsive operator recovery.
+- **Verification:** actual two-tenant shared-PBX SIP/RTP and denied sources, native exit/lease loss and reconciliation, complete API/HTTPS/affected/native/provider/authentication regressions and final `./dev check` all passed. Real versus injected boundaries and all exact references are in the evidence ledger.
+- **Preservation:** normal migrations and affected consumer refresh passed; 17 ordinary table fingerprints and exact retained PBX runtime/recovery/unmanaged facts match. Platform/staff HTTPS and health passed; owned fixtures/access cleaned. Asterisk and retained static configuration/RTP stayed intact.
+- **Handoff:** [operator runbook](../docs/runbooks/tenant-routing-verification.md), [readiness/verified-extension/dependency contract](../docs/architecture/tenant-routing-verification.md). U3 lifecycle, U5 assignment, P5-U3 ingestion, production rollout and the Phase 4 gate remain separate. [Intermediate checkpoints](progress-tracker-history.md#2026-11-05--p4-u2c-implementation-and-verification-checkpoints).
 
 ## Completed
 
@@ -74,6 +74,7 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| P4-U2c / parent P4-U2 — Verified tenant routing | C-01–08 and AC-01–12 passed: exact tenant-aware runtime, bounded actual tests/readiness, audited retirement/reallocation, integrated regressions and ordinary preservation. | [Final evidence](../docs/status/p4-u2c-evidence.md) |
 | P4-U2b — Tenant route bindings and permissions | B-01–08 passed: shared gateways/exact owned DIDs, complete inbound graph ownership, explicit outbound permissions, consistent canonical eligibility, atomic audit/recovery, mutation races, actual API/HTTPS, affected/full checks and ordinary preservation. | [Final evidence](../docs/status/p4-u2b-evidence.md) |
 | P4-U2a — Exclusive tenant inventory allocation | A-01–07 passed: exclusive existing stock for draft/active expansion, atomic audit/replay, guarded boundaries, safe release blockers, real API/HTTPS, affected/full checks and ordinary preservation. | [Final evidence](../docs/status/p4-u2a-evidence.md) |
 | P4-U1b-3 / P4-U1b / P4-U1 | C-01–07 and parent AC-01–11 passed: explicit voice preference, integrated protected configuration/credential handoff, actual API/HTTPS, affected/full checks and ordinary runtime preservation. Approved private development. | [Final evidence](../docs/status/p4-u1b-3-evidence.md) |
@@ -117,18 +118,18 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. P4-U2c verified routing, following completed P4-U2a/b allocation and desired route bindings, then P4-U3 readiness/activation and P4-U4/U5 tenant administration. Consume the [completed onboarding handoff](../docs/status/p4-u1b-3-evidence.md), explicit voice preference and canonical geography contracts, and the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff). Backup administration remains separate.
+1. After the owner’s manual P4-U2 review, P4-U3 readiness/activation, consuming completed P4-U2a/b/c allocation, bindings and verified-routing evidence, then P4-U4/U5 tenant administration. Consume the [completed onboarding handoff](../docs/status/p4-u1b-3-evidence.md), explicit voice preference and canonical geography contracts, and the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff). Backup administration remains separate.
 
 | Unit / state | Requirement, scope and acceptance | Dependencies / required checks |
 | --- | --- | --- |
-| [P4-U2 — Allocate inventory and verify tenant routing](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md) — in progress | Exclusive inventory, trusted tenant route/trunk bindings and exact live verification; AC-01–12. Spec and a/b/c vertical split adopted; a/b are complete under approved allocation/routing policy; c remains planned. | Completed P4-U1/P3-U5 handoffs; resolve ALLOC-01–06 before dependent implementation. Required focused real PostgreSQL/Redis/two-replica/API/browser checks, controlled live two-tenant calls, affected regressions and `./dev check`; parent live two-tenant acceptance remains open. |
+| [P4-U2 — Allocate inventory and verify tenant routing](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md) — complete | a/b/c and integrated AC-01–12 passed within approved private development. | [Final evidence](../docs/status/p4-u2c-evidence.md); activation remains P4-U3. |
 
 
 | Sub-unit / state | Scope and acceptance | Dependencies / required checks |
 | --- | --- | --- |
 | [P4-U2a — Exclusive tenant inventory allocation](feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md) — complete | Complete operator allocation workflow, exclusive stock/ranges, dependency blockers and atomic audit/replay; A-01–07. | P4-U1/P3-U5; ALLOC-01 and scoped ALLOC-06 approved. Real PostgreSQL/Redis/two-replica/API/HTTPS races, affected checks and `./dev check`. |
 | [P4-U2b — Tenant route bindings and permissions](feature-specs/p4-u2b-tenant-route-bindings-and-permissions.md) — complete | Inbound ownership, explicit outbound/trunk permissions, trusted canonical eligibility port and browser; B-01–08. | a; ALLOC-02/03 and binding-scoped ALLOC-06 approved, including shared gateways and platform-only catch-alls. Real API/browser/reference races, affected allocation/resource/routing checks and `./dev check`. |
-| [P4-U2c — Verified tenant routing and integrated handoff](feature-specs/p4-u2c-verified-tenant-routing-and-integrated-handoff.md) | Versioned compiler/apply, isolated draft tests, exact live two-tenant proof/readiness and safe reallocation; C-01–08 and integrated parent AC-01–12. | a/b; resolve ALLOC-04/05/06 and provide controlled real endpoints/destinations. Real native/live/API/HTTPS recovery, affected/full checks and ordinary runtime preservation. |
+| [P4-U2c — Verified tenant routing and integrated handoff](feature-specs/p4-u2c-verified-tenant-routing-and-integrated-handoff.md) — complete | C-01–08 and parent AC-01–12 passed. | Actual native/SIP/RTP/API/HTTPS, affected/full checks and ordinary preservation passed; [evidence](../docs/status/p4-u2c-evidence.md). |
 
 This follows the [approved 2026-10-07 delivery-order exception](implementation-plan.md#approved-delivery-order-exception--draft-tenant-creation-first).
 Draft credential setup preserves draft status and denies ordinary staff access;
@@ -139,7 +140,7 @@ credential setup and controlled active fixtures do not establish tenant activati
 | 1 | P1-U1 deferred; P1-U2–U6 complete, including delivered children. | [Foundation](implementation-plan.md#phase-1--establish-the-runnable-foundation) |
 | 2 | P2-U1–U4 and all children complete within verified boundaries. | [Identities/access](implementation-plan.md#phase-2--establish-identities-shared-sessions-and-access-boundaries) |
 | 3 | P3-U1–U5 and delivered children complete within declared development boundaries; C-01–06, parent AC-01–10 and integrated Phase 3 gate passed under U5-01–05. Tenant readiness remains Phase 4. | [Asterisk administration](implementation-plan.md#phase-3--deliver-asterisk-administration-before-tenant-onboarding) |
-| 4 | P4-U1a/b, all children and parent P4-U1 complete within approved private development; P4-U2a/b complete; parent P4-U2 in progress; c and P4-U3–U5 planned; Phase 4 gate incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
+| 4 | P4-U1 and P4-U2 with all children complete within approved private development; P4-U3–U5 planned; Phase 4 gate incomplete. | [Tenant administration](implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration) |
 | 5 | P5-U1–U7 planned. | [Staff intake/dispatch](implementation-plan.md#phase-5--deliver-staff-intake-incident-management-and-dispatch) |
 | 6 | P6-U1–U4 planned. | [Responder/monitoring](implementation-plan.md#phase-6--complete-responder-mobile-work-and-synchronized-monitoring) |
 | 7 | P7-U1–U3 planned; integrated operational acceptance outstanding. | [First-release verification](implementation-plan.md#phase-7--verify-the-complete-first-release-journey) |
@@ -199,7 +200,7 @@ for their scope; creating a spec does not approve a proposal.
 
 | Area | Affected work and resume condition |
 | --- | --- |
-| Tenant allocation/routing policy | P4-U2 [ALLOC-01–06](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md#decisions-required-before-dependent-implementation) now have owner approval for ALLOC-01 and a's scoped ALLOC-06, including draft/active expansion ([policy](../docs/planning/p4-u2a-allocation-policy-review.md)). On 2026-11-03 the owner approved [b’s routing policy](../docs/planning/p4-u2b-routing-policy-review.md) with shared gateways and tenant-owned DIDs/rules/groups, plus outbound selection and binding-scoped release as proposed. All b policy gates are resolved; controlled tests, draft verification and c’s installed-resource release remain pending. |
+| Tenant allocation/routing policy | P4-U2 [ALLOC-01–06](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md#decisions-required-before-dependent-implementation) now have owner approval for ALLOC-01 and a's scoped ALLOC-06, including draft/active expansion ([policy](../docs/planning/p4-u2a-allocation-policy-review.md)). On 2026-11-03 the owner approved [b’s routing policy](../docs/planning/p4-u2b-routing-policy-review.md) with shared gateways and tenant-owned DIDs/rules/groups, plus outbound selection and binding-scoped release as proposed. All b gates are resolved. The owner approved controlled tests, draft verification and c’s narrow installed-resource retirement on 2026-11-04, followed by isolated Docker SIP fixtures; see the [approved c policy](../docs/planning/p4-u2c-live-policy-review.md). |
 | Downstream tenant calling readiness | P3-U5/Phase 3 completed under approved U5-01–05 [concrete policies](../docs/planning/p3-u5b-live-policy-review.md). P4-U2/U3 must supply trusted tenant allocation/binding, eligibility and verified activation; no tenant calling readiness is approved by development probes. |
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |
 | Operational permissions and lifecycle details | Remaining incident/assignment transitions, closure safeguards, responder eligibility/concurrency and category/priority contracts must be approved before dependent P4/P5/P6 implementation. Creator closure remains subject to those safeguards. |
@@ -211,6 +212,8 @@ for their scope; creating a spec does not approve a proposal.
 | Production acceptance | Scheduler/HA/secrets/joint-store recovery, measured capacity/latency/accessibility/security/RPO/RTO and required Phase 8 launch scope must be established and verified in Phase 9. |
 
 ## Verification and Limitations
+
+- P4-U2c C-01–08 and parent AC-01–12 passed, with exact real/injected boundaries and future U3/U5/P5/production limitations in the [final evidence](../docs/status/p4-u2c-evidence.md).
 
 - P3-U5c C-01–06, parent AC-01–10 and integrated Phase 3 gate passed within approved private development. Focused/affected/full Docker checks, final resource races, exact cleanup, retained current revision preservation, helper refresh and ordinary HTTPS/health passed. [Evidence and declared real/injected limits](../docs/status/p3-u5c-evidence.md). Tenant readiness/attribution and production gates remain later work.
 
@@ -246,6 +249,10 @@ for their scope; creating a spec does not approve a proposal.
   this unit and does not affect authenticated routing navigation.
 
 ## Recent Session Notes
+
+- 2026-11-05 (Asia/Manila, +08:00) — Added the [complete P4-U2 manual test guide](../docs/guides/p4-u2-manual-testing.md), with M01–M20, AC-01–12 mapping, exact UI actions, prerequisites, two-tenant/live/recovery/retirement/cleanup checks and an owner sign-off template. Current acceptance fixtures auto-clean and provide no persistent manual live session; the guide explicitly leaves unprepared live cases blocked. Owner manual review remains pending before P4-U3. Guide formatting, 45 scoped local links, M01–M20/AC-01–12 coverage and diff whitespace passed. Documentation only; no new runtime checks or live calls are claimed.
+
+- 2026-11-05 (Asia/Manila, +08:00) — P4-U2c and parent P4-U2 completed within approved private development. Required real two-tenant/live/API/browser/native/provider/authentication and final full checks passed; ordinary consumer refresh, exact preservation and owned cleanup passed. Removed c from in progress; next feature is P4-U3. [Evidence](../docs/status/p4-u2c-evidence.md).
 
 - 2026-11-03 (Asia/Manila, +08:00) — `UI-TENANT-COLLAPSED-CARDS` complete, per user request. All eight Tenant details cards start collapsed with useful summaries and accessible arrow controls. Operator/tenant-bound page state retains open/closed choices through same-owner tab-return checks; form contents stay mounted. Pending/dirty/error feedback stays visible when collapsed; credential summaries never disclose handoff codes. New tenants/operators and document reload start collapsed. Added shared disclosure primitive, page provider, UI guidance and production-browser presentation coverage. Focused Docker format/lint, shared UI build, console TypeScript and isolated/ordinary production builds passed. Actual-page checks passed eight initial summaries, 44px/keyboard controls, mounted drafts, focus/pageshow/tab-return retention, collapsed validation feedback, document reset and 320–1440px/axe; desktop/phone screenshots reviewed. Presentation uses fixture reads/validation. Full platform browser/session suite, separate real credential/staff browser acceptance and allocation API/HTTPS workflow passed, exit 0 with fixture cleanup; platform/allocation launcher exits independently confirmed with docker wait. Updated existing workflow tests to open cards after navigation/operator replacement. Earlier credential runs timed out at save/denial confirmations; temporary sanitized tracing confirmed successful saves and retained cards, and isolated rerun passed; tracing removed. Normal console rebuilt/refreshed, final HTTPS checks passed, backend live/ready 200 and staff HTTPS ready. Diff whitespace passed. No backend/schema, authentication policy or live PBX changes.
 

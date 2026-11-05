@@ -45,6 +45,7 @@ export function LivePanel({
   const [target, setTarget] = useState('');
   const mounted = useRef(true),
     busy = useRef(false),
+    passiveRead = useRef<Promise<void> | null>(null),
     error = useRef<HTMLParagraphElement>(null);
   const save = (value: Retained) =>
     latest.current.record({
@@ -117,8 +118,19 @@ export function LivePanel({
     operational = false,
     passive = false,
   ) {
+    if (!latest.current.ready) return;
+    if (busy.current && !passive && passiveRead.current) {
+      const waiting = latest.current.capture();
+      await passiveRead.current;
+      if (!mounted.current || !waiting.current()) return;
+    }
     if (busy.current || !latest.current.ready) return;
     busy.current = true;
+    let finishPassive: (() => void) | undefined;
+    if (passive)
+      passiveRead.current = new Promise<void>((resolve) => {
+        finishPassive = resolve;
+      });
     if (!passive) {
       setPending(true);
       setMessage('');
@@ -146,6 +158,10 @@ export function LivePanel({
       }
     } finally {
       busy.current = false;
+      if (passive) {
+        passiveRead.current = null;
+        finishPassive?.();
+      }
       if (mounted.current) setPending(false);
     }
   }
@@ -154,6 +170,8 @@ export function LivePanel({
     setOperation(undefined);
     setReviewed('');
     setTarget('');
+  }, [nodeId, work.operatorId]);
+  useEffect(() => {
     if (!work.ready) return;
     void run(refresh, false, true);
     const timer = setInterval(() => void run(refresh, false, true), 2000);

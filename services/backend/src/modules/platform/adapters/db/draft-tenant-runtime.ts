@@ -13,7 +13,11 @@ export class DraftTenantRuntime {
   readonly service: DraftTenants;
   private readonly pool: Pool;
   private readonly database: SnapshotDatabase;
-  constructor(url: string, authority: TransactionAuthority) {
+  constructor(
+    url: string,
+    authority: TransactionAuthority,
+    logger = new SafeLogger('http'),
+  ) {
     this.pool = new Pool({
       connectionString: url,
       max: 4,
@@ -32,7 +36,7 @@ export class DraftTenantRuntime {
             this.pool,
             context,
             'platform.draft-tenant',
-            new SafeLogger('http'),
+            logger,
             action,
           ),
       },

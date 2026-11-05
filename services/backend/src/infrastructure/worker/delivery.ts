@@ -1,3 +1,4 @@
+import { tenantWorkContract } from '../../modules/telephony/application/tenant-verification';
 import { randomUUID } from 'node:crypto';
 import { Pool } from 'pg';
 import PgBoss from 'pg-boss';
@@ -41,6 +42,7 @@ export const sampleContract = {
 const registeredContracts = new Map<string, DataContract>([
   [sampleContract.type, sampleContract],
   [liveWorkContract.type, liveWorkContract],
+  [tenantWorkContract.type, tenantWorkContract],
 ]);
 interface Work {
   id: string;
@@ -412,8 +414,10 @@ export class DeliveryWorker {
         `INSERT INTO public.work_results(work_id,handler) VALUES($1,$2) ON CONFLICT DO NOTHING`,
         [
           id,
-          work.work_type === liveWorkContract.type
-            ? liveWorkContract.type
+          [liveWorkContract.type, tenantWorkContract.type].includes(
+            work.work_type,
+          )
+            ? work.work_type
             : sampleContract.type,
         ],
       );
@@ -436,6 +440,7 @@ export class DeliveryWorker {
         'invalid_work' | 'permanent_failure' | 'retry_exhausted' | undefined;
       let mode: unknown;
       let liveOperationId: string | undefined;
+      let tenantIntentId: string | undefined;
       try {
         executionContext({
           actor: {
@@ -468,6 +473,16 @@ export class DeliveryWorker {
             work.target_type !== 'pbx-live-operation'
           )
             throw new Error();
+        } else if (work.work_type === tenantWorkContract.type) {
+          if (
+            typeof payload.operationId !== 'string' ||
+            work.actor_kind !== 'platform_operator' ||
+            work.identity_plane !== 'platform' ||
+            work.tenant_id !== null ||
+            work.target_type !== 'tenant-route-verification'
+          )
+            throw new Error();
+          tenantIntentId = payload.operationId;
         } else mode = payload.mode;
       } catch {
         failure = 'invalid_work';
@@ -499,12 +514,27 @@ export class DeliveryWorker {
             ],
           );
           if (!delivered.rows[0]) throw new Error();
+        } else if (tenantIntentId) {
+          const accepted = await client.query(
+            'SELECT id FROM public.tenant_route_test_intents WHERE id=$1 AND operator_id::text=$2 AND node_id::text=$3',
+            [tenantIntentId, work.actor_reference, work.target_reference],
+          );
+          if (!accepted.rows.length) throw new Error();
+          // Receipt only. The fenced native owner consumes committed intent directly;
+          // ordinary workers have no call/control/material transport.
         } else await this.acceptSink(work);
         await this.hooks.barrier?.('after_sink', id);
         // Receipt and local acknowledgement share the transaction; destination dedup handles its separate commit.
         await client.query(
           `INSERT INTO public.work_receipts(work_id,handler) VALUES($1,$2) ON CONFLICT DO NOTHING`,
-          [id, liveOperationId ? liveWorkContract.type : sampleContract.type],
+          [
+            id,
+            liveOperationId
+              ? liveWorkContract.type
+              : tenantIntentId
+                ? tenantWorkContract.type
+                : sampleContract.type,
+          ],
         );
         await client.query(
           `UPDATE public.work_results SET outcome='succeeded',finished_at=clock_timestamp() WHERE work_id=$1`,

@@ -330,3 +330,62 @@ test('corrupt durable intent/receipt schemas fail closed; pre-install rejection 
     'pending',
   );
 });
+
+test('tenant metadata/test maintenance shares physical ordering and rejects pending, foreign-baseline and lost-owner work', async (t) => {
+  const s = setup(t);
+  await s.boundary.initialize(async () => s.baseline);
+  await s.boundary.takeover(s.token);
+  let release, entered;
+  const hold = new Promise((r) => {
+      release = r;
+    }),
+    start = new Promise((r) => {
+      entered = r;
+    });
+  const events = [];
+  const maintenance = s.boundary.maintain(
+    s.token,
+    s.baseline,
+    async (guard) => {
+      await guard();
+      events.push('maintenance');
+      entered();
+      await hold;
+      await guard();
+      events.push('finished');
+    },
+  );
+  await start;
+  let applied = false;
+  const effect = s.boundary.execute(
+    s.token,
+    s.intent,
+    async (guard) => {
+      await guard();
+      applied = true;
+      return {
+        kind: 'verified',
+        installedId: s.intent.revisionId,
+        verifiedId: s.intent.revisionId,
+      };
+    },
+    async () => {
+      throw new Error('Unexpected reconciliation');
+    },
+  );
+  await Promise.resolve();
+  assert.equal(applied, false);
+  release();
+  await maintenance;
+  await effect;
+  assert.deepEqual(events, ['maintenance', 'finished']);
+  await assert.rejects(
+    s.boundary.maintain(s.token, s.baseline, async () => {}),
+    code('reconciliation_required'),
+  );
+  s.setCurrent({ ...s.token, epoch: '2', incarnation: randomUUID() });
+  await assert.rejects(
+    s.boundary.maintain(s.token, s.intent.revisionId, async () => {}),
+    code('stale_owner'),
+  );
+});

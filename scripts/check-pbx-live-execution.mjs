@@ -1,3 +1,4 @@
+import { runTenantRoutingFixture } from './tenant-routing-case-exchange.mjs';
 // Trusted host launcher: owned isolated PostgreSQL DB and disposable private PBX.
 import { spawnSync } from 'node:child_process';
 import { randomUUID, randomBytes } from 'node:crypto';
@@ -12,7 +13,9 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 import { setTimeout as delay } from 'node:timers/promises';
-const integrationOnly = process.argv[2] === '--integrated-only';
+const tenantRouting = process.argv[2] === '--tenant-routing';
+const integrationOnly =
+  process.argv[2] === '--integrated-only' || tenantRouting;
 if (process.argv.length > (integrationOnly ? 3 : 2))
   throw new Error('Unsupported native check selection');
 const project = process.env.STORAGE_HOST_PROJECT_ROOT ?? process.cwd();
@@ -45,7 +48,7 @@ try {
         'myims-rebuild-dev-workspace-1',
         'node',
         '/workspace/scripts/pbx-live-database-fixture.mjs',
-        'prepare',
+        tenantRouting ? 'prepare-tenant-routing' : 'prepare',
         database,
       ],
       90000,
@@ -73,7 +76,7 @@ try {
   );
   appendFileSync(
     join(directory, 'config/modules.conf'),
-    '\nload = res_pjsip_pubsub.so\nload = res_pjsip_outbound_authenticator_digest.so\nload = app_dial.so\nload = func_strings.so\n',
+    '\nload = res_pjsip_pubsub.so\nload = res_pjsip_outbound_authenticator_digest.so\nload = app_dial.so\nload = bridge_simple.so\nload = func_strings.so\nload = res_speech.so\nload = res_agi.so\nload = func_channel.so\nload = res_pjsip_header_funcs.so\nload = res_pjsip_endpoint_identifier_ip.so\n',
   );
   const args = [
     'run',
@@ -88,8 +91,22 @@ try {
   for (const [source, target] of [
     [hostDirectory + '/config', '/etc/asterisk'],
     [hostDirectory + '/integration.json', '/input/integration.json'],
-    [project + '/scripts/pbx-live-integrated-fixture.mjs', '/fixture.mjs'],
+    [
+      project +
+        (tenantRouting
+          ? '/scripts/tenant-routing-native-fixture.mjs'
+          : '/scripts/pbx-live-integrated-fixture.mjs'),
+      '/fixture.mjs',
+    ],
     [project + '/scripts/pbx-live-race-fixture.mjs', '/race-fixture.mjs'],
+    [
+      project + '/scripts/tenant-routing-transfer-fixture.mjs',
+      '/transfer-fixture.mjs',
+    ],
+    [
+      project + '/scripts/tenant-routing-retirement-interruption-fixture.mjs',
+      '/retirement-interruption.mjs',
+    ],
     [
       project + '/scripts/pbx-live-interruption-fixture.mjs',
       '/interruption-fixture.mjs',
@@ -144,19 +161,13 @@ try {
     await delay(100);
   }
   if (!ready) throw new Error('Owned integrated PBX startup unavailable');
-  const output = docker(
-    [
-      'exec',
-      name,
-      '/bin/sh',
-      '-c',
-      `umask 077; mkdir -p /var/lib/myims-pbx/control/${metadata.nodeId}; chmod 700 /var/lib/myims-pbx/control/${metadata.nodeId}; exec 3>/var/lib/myims-pbx/control/${metadata.nodeId}/boundary.lock; flock -n 3 || exit 1; exec node /fixture.mjs`,
-    ],
-    90000,
-  );
+  const command = `umask 077; mkdir -p /var/lib/myims-pbx/control/${metadata.nodeId}; chmod 700 /var/lib/myims-pbx/control/${metadata.nodeId}; exec 3>/var/lib/myims-pbx/control/${metadata.nodeId}/boundary.lock; flock -n 3 || exit 1; exec node /fixture.mjs`;
+  const output = tenantRouting
+    ? await runTenantRoutingFixture({ name, database, docker, command })
+    : docker(['exec', name, '/bin/sh', '-c', command], 90000);
   for (const line of output
     .split('\n')
-    .filter((line) => line.startsWith('PASS ')))
+    .filter((line) => !tenantRouting && line.startsWith('PASS ')))
     console.log(line);
   if (!integrationOnly) {
     const lock = `/var/lib/myims-pbx/control/${metadata.nodeId}/boundary.lock`;

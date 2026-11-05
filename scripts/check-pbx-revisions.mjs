@@ -488,6 +488,22 @@ export async function checkPbxRevisions({
       ).toBeVisible();
     }
     assert.equal((await direct(b, path)).status, 200);
+    // New tenant-aware artifacts omit disabled stock. Keep the acceptance-only
+    // pin/removal probe meaningful by enabling one endpoint through its real API.
+    // This node has no native executor and establishes no calling readiness.
+    const currentExtension = await request(
+      root + '/extensions/' + extension.id,
+    );
+    assert.equal(currentExtension.status, 200);
+    const enabledForPins = await request(
+      root + '/extensions/' + extension.id + '/status',
+      'PATCH',
+      {
+        expectedVersion: currentExtension.data.extension.version,
+        administrativeStatus: 'enabled',
+      },
+    );
+    assert.equal(enabledForPins.status, 200, JSON.stringify(enabledForPins));
     const liveRevision = await capture();
     await checkPbxLiveIntent({
       request,
@@ -498,6 +514,7 @@ export async function checkPbxRevisions({
       b,
       revision: liveRevision,
       extensionId: extension.id,
+      disabledExtensionId: secondExtension.id,
     });
     await checkLiveBrowser({
       request,

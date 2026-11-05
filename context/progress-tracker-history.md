@@ -8,6 +8,8 @@ Decisions remain owned by their linked contracts/reviews; history is not approva
 
 ## Archive index
 
+- [2026-11-05 — P4-U2c implementation and verification checkpoints](#2026-11-05--p4-u2c-implementation-and-verification-checkpoints): intermediate implementation, failures, fixture/access maintenance and actual acceptance; final state is in the tracker.
+
 - [2026-10-30 — P4-U2a implementation and verification checkpoints](#2026-10-30--p4-u2a-implementation-and-verification-checkpoints): intermediate implementation, access restoration, failed checks and verified recovery; current status remains in the tracker.
 
 - [2026-10-29 — P4-U1b-3 implementation and verification checkpoints](#2026-10-29--p4-u1b-3-implementation-and-verification-checkpoints): superseded implementation/runtime updates and previous completed checkpoint; final acceptance is in the current tracker.
@@ -3058,3 +3060,124 @@ backend live/ready 200, eleven retained table digests, nine TLS/auth file digest
 exact retained PBX baseline. P4-U2a A-01–07 complete within approved private
 development; parent/b/c remain incomplete. Final commands and revision-component
 qualification are in [the evidence](../docs/status/p4-u2a-evidence.md).
+
+## 2026-11-05 — P4-U2c implementation and verification checkpoints
+
+
+2026-11-05 (Asia/Manila, +08:00): final `./dev check` exited 0; every required affected/live/API/HTTPS/native/provider/authentication command now has a passing final result. Exact ordinary retained-baseline precheck passed, telephony consumer refresh completed and platform HTTPS refresh is building. Staff refresh, access/health/preservation, exact cleanup and final completion reconciliation remain open.
+
+Final regression checkpoint: full revision command exited 0, including all 24 actual native interruption cases, exact real-provider custody, isolation and actual tenant-routing HTTPS flow. Platform HTTP auth exited 0. Full staff run passed authority/credentials/limits/onboarding APIs, then stopped in combined credential browser geography confirmation after an adjacent contact save. The fixture now waits for the canonical tenant reload before staging/confirming geography and asserts confirmation before save. The focused actual credential/staff browser rerun exited 0, including combined onboarding, issue/exchange, mounted identity recovery, uncertainty, accessibility and secret exclusion. The full staff authentication rerun exited 0, including the corrected combined browser, shared-session fault checks and PBX authority regressions. Final `./dev check`, ordinary consumer refresh/preservation and completion reconciliation remain open.
+
+Routing verification checkpoint: full trunk/gateway check exited 0. Routing feature API/browser passed, but shared browser rate-limit acceptance crossed the real 09:15 UTC fixed window and correctly received a fresh 401 instead of expected 429. Aligned only that fixture to the actual Redis clock before exhaustion; production rate policy is unchanged. Failed-run cleanup passed. The full routing rerun exited 0, including actual 429/Retry-After/no-loop browser assertions and exact fixture cleanup. Complete revision/native/provider, authentication and final checks remain.
+
+Verification checkpoint (2026-11-04, UTC): final named `check:tenant-routing --browser` and `check:draft-tenant` exited 0. Inventory API acceptance passed; the credential submode stopped before startup because the existing restricted issuer had expired (verified-TLS lookup 403). Under the already approved access-replacement proposal, replaced the endpoint fixture issuer and installation-scoped read-only consumer through existing fixed roles: zero policy changes, protected custody preserved, temporary human session revoked and owned staging removed. Full extension-inventory rerun exited 0, including real-provider custody, HTTPS browser, session checks, exact credential cleanup and retained PBX restoration. Trunk/gateway and remaining sequential regressions are running; completion remains open.
+
+Latest verification checkpoint (2026-11-04): final isolated native run passed
+draft/active two-tenant actual SIP/RTP, required source denials, durable retirement
+executor exit and explicit reconciliation, safe reallocation and individual
+extension proof, plus lease-loss fencing. Reviewed baseline recovery and exact
+owned cleanup passed. Sequential HTTPS/regression/final checks and ordinary
+consumer refresh remain in progress; C-01–08 and parent completion remain open.
+Exact references are in the [evidence ledger](../docs/status/p4-u2c-live-evidence.json).
+Binding/allocation real API/race/HTTPS checks passed in the sequential browser
+attempt. An older revision fixture expected a disabled endpoint pin; corrected
+the fixture to enable the endpoint through the canonical API and retain actual
+structural-removal protection, while asserting disabled stock is omitted. The
+integrated browser and remaining checks are being rerun.
+The focused browser reproduction exposed live-panel polling discarding explicit
+recovery clicks while a passive read held the busy flag. Explicit actions now
+wait for that bounded read and recheck the captured operator context; an actual
+held-read/keyboard-recovery browser regression verifies this boundary. Final
+browser/full verification remains pending.
+Further HTTPS diagnostics found revision capture could race its initial read and
+routine access revalidation cleared review state. Revision capture now waits for
+its passive read with context checks; revision/live display resets occur on actual
+node/operator changes, preserving same-owner mounted review. Actual browser
+reruns and final regressions remain required.
+The capture reproduction also showed SSR-enabled controls could receive a click
+before hydration attached handlers. Revision controls now stay pending until
+hydrated and current access is ready. Browser acceptance remains open while this
+final interaction guard is verified.
+Final focused revision/tenant HTTPS run (`focused16`) exited 0: actual tenant-aware
+apply, both tenants' controlled positive/forbidden calls, same-owner lost-grant
+response/reauthentication, readiness/revocation, actual retirement with lost-reply
+recovery, retired-target denial and reviewed initial-baseline restoration passed.
+Shared authentication checks and exact database/Redis cleanup passed. Responsive
+320/1440 visual review completed. Full integrated/affected regression and normal
+console refresh remain open.
+
+**P4-U2c — Verified tenant routing and integrated handoff: in progress**, started
+2026-11-04 (Asia/Manila, +08:00). Scope: C-01–08 and integrated parent AC-01–12.
+Owner approved [ALLOC-04/05/final ALLOC-06 policy](../docs/planning/p4-u2c-live-policy-review.md)
+in chat on 2026-11-04 and supplied the working reference RTP configuration.
+Versioned capture/runtime implementation is active. Each isolated live run records
+its exact controlled-call manifest before dispatch. C-01–08, required
+API/browser/live/regression/full checks and parent acceptance remain open.
+The initial policy-preparation Docker formatting, 10 local targets and diff
+whitespace checks passed; those establish no runtime acceptance.
+
+2026-11-04 (Asia/Manila, +08:00) implementation checkpoint: versioned atomic
+tenant capture/review/digest and new pin kinds implemented; historical policy
+comparisons retained. The actual two-tenant SQL/API capture, immutable-history
+and permission-invalidation checks passed inside `check:tenant-bindings`; the
+whole suite subsequently failed in shared platform-auth browser sign-in with 503,
+so no final suite pass is claimed. Native admission/rendering, immutable test
+intent/grant persistence and readiness rules are being implemented; no live tenant
+path or completed c criterion is claimed. Owner approved isolated Docker SIP
+fixtures in chat. Automatic review rejected proposed executor UPDATE(id) grants
+on tenant/operator tables; those grants were not applied, and the replacement
+uses read-only owner-provided authority reads.
+
+2026-11-04 09:16 +08:00 (Asia/Manila) checkpoint: protected tenant rendering,
+local native admission, temporary grants, durable call intent/results, readiness
+and narrow retirement/reconciliation are implemented and undergoing verification.
+New operator panels and named strict no-store forwarding are present. The focused
+domain/revision/custody/fence run passed 22 tests; final-source reruns remain.
+Live attempts have reached capture/validation after corrected fixture setup; a
+42501 apply rejection was traced to an unnecessary native-only pin-column upsert
+and corrected without broader grants. No tenant call or reallocation pass yet.
+[Detailed current evidence](../docs/status/p4-u2c-evidence.md); [operator contract](../docs/architecture/tenant-routing-verification.md).
+
+2026-11-04 10:05 +08:00 (Asia/Manila) checkpoint: the first actual private SIP/RTP
+matrix passed inbound/outbound for both tenants, bidirectional media, cross-tenant,
+unallocated and unknown denial, duplicate receipts, grant revocation and exact
+initial-baseline recovery/owned cleanup. Endpoint material is explicitly synthetic;
+required real-provider checks remain separate. An expanded real-call attempt found
+duplicate SIP identity headers were accepted. Added explicit duplicate-header denial
+at the fixed AGI/native admission boundary; expiry and uncertain-outcome/reconciliation
+checks are being rerun. Added a consistent backend evidence port exposing only exact
+extensions with current inbound/outbound proof for U5, and a real HTTPS tenant-aware
+apply/test journey. Retirement/reallocation, final browser/regression/full checks and
+ordinary migration/refresh/preservation remain open; this unit is not complete.
+
+2026-11-04 (Asia/Manila, +08:00) verification checkpoint: expanded actual SIP/RTP
+admission checks passed expiry, ordinary draft traffic, ambiguous headers and explicit
+unknown-call reconciliation without redial. Normal migrations completed. Read-only
+before/after hashes match for all 17 ordinary canonical/resource/history tables;
+the ordinary retained PBX's exact protected/loaded baseline and unmanaged digest
+also passed. Focused tests passed 22/22 and console types passed. Native transfer
+verification exposed safe active/unknown deferral and a fixture call-duration race;
+the fixture now preserves natural completion. Final admission atomically rechecks
+grant lifetime/removal and runtime/tenant facts under the canonical node lock, and
+result finalization requires the exact owner epoch. Actual in-call owner-loss,
+retirement/transfer, full HTTPS and required full/regression gates remain running.
+
+2026-11-04 (Asia/Manila, +08:00) continuation checkpoint: actual retirement,
+reallocation, stale-owner denial and in-call native lease-loss fencing passed,
+including retained bytes/pins through injected final-SQL loss and explicit
+reconciliation. The first full `./dev check` passed. Final review added persistent
+same-runtime isolation-failure blocking, actual-destination reporting and exact
+test-nonce admission for existing active tenants. Real native coverage now includes
+a draft and a deployment-seeded existing active fixture; no lifecycle feature is
+implemented. Browser/resource/native/provider/authority regressions run sequentially;
+final ordinary refresh, preservation and acceptance reconciliation remain open.
+
+
+### Prior latest completed checkpoint — P4-U2b
+
+
+- **Status:** complete within approved private development, 2026-11-03 (Asia/Manila, +08:00). B-01–08 passed; [final evidence](../docs/status/p4-u2b-evidence.md).
+- **Delivered:** canonical versioned inbound ownership/bindings, explicit outbound trunk classification/permissions, backend-only consistent eligibility, dependency-safe mutation/release and actual tenant-detail recovery. Gateways are shared; tenant DIDs/rules/groups are owned. Catch-alls remain platform-only; tenant bindings require exact DIDs.
+- **Verification:** final focused PostgreSQL/Redis/two-replica/API/HTTPS suite, all affected routing/allocation/resource/registry/authority/tenant/revision checks and complete `./dev check` passed, exit 0. Earlier failures, fixture synchronization corrections and exact retries are retained in the evidence; production authority/rate policy is unchanged.
+- **Preservation:** ordinary additive migration/backend/platform/staff refresh and HTTPS checks passed. Twelve retained table and five platform access-file digests match. Independent protected/loaded PBX baseline is exact, with zero channels and no pending operation. Owned fixtures/access cleaned. Existing provider access replacements were separately owner-approved, with zero configuration updates and no stored material changes.
+- **Handoff:** [eligibility/API/dependency contract](../docs/architecture/tenant-route-bindings.md) and [operator workflow](../docs/runbooks/tenant-route-bindings.md). c owns new capture/compiler versions, tenant live enforcement, verified apply/tests/readiness and final reallocation proof. Parent P4-U2, c, activation/assignment and the Phase 4 gate remain incomplete.

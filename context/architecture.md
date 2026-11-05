@@ -286,7 +286,9 @@ owns retained authorization/history/receipt tables, primary consistent eligibili
 reads and dependency blockers in existing writers. Platform tenant detail owns the
 operator consumer through named no-store forwarding. Desired compatibility remains
 separate from installed readiness; c owns versioned tenant-aware capture/compiler,
-verified live enforcement and pin-safe installed release. Acceptance is in progress.
+verified live enforcement and pin-safe installed release. P4-U2a/b/c and integrated
+parent acceptance are complete within approved private development; see the
+[final evidence](../docs/status/p4-u2c-evidence.md).
 
 ## Storage Model
 
@@ -926,3 +928,28 @@ release/transfer remains pending for c; desired-only release must prove all
 dependencies absent. P4-U2a A-01–07 acceptance is complete within approved private
 development; [final evidence](../docs/status/p4-u2a-evidence.md). Parent routing/
 readiness and installed-resource release/transfer remain with b/c.
+
+## P4-U2c tenant-aware native verification
+
+The [approved controlled-call and retirement policy](../docs/planning/p4-u2c-live-policy-review.md)
+extends the existing private native boundary. Versioned immutable capture includes
+canonical allocation, binding, permission and tenancy-owned facts; historical
+`deny-unbound-1` artifacts retain their original interpretation. A fixed
+unprivileged AGI client requests bounded admission from a local native-owned socket.
+It receives no database/provider material or control commands. The native helper
+serializes apply/recovery, runtime proof, one-shot controlled calls and narrow
+superseded-artifact retirement under the existing physical fence. HTTP, Next and
+ordinary workers retain their existing authority boundary.
+
+Readiness requires exact current runtime provenance and fresh actual call evidence;
+draft verification additionally requires explicit temporary grants. Existing active
+tenants consume the same exact nonce for controlled tests. Unknown dispatch never
+redials. Retiring recovery eligibility keeps immutable bytes/history and releases
+pins only after durable native/canonical agreement and actual quiet proof. A durable
+retirement dispatch marker makes interrupted execution require reviewed reconciliation.
+The backend-only evidence port exposes only individually verified owned extensions
+with claim/permission versions and test references. The
+[consumer contract](../docs/architecture/tenant-routing-verification.md) defines
+admission, readiness invalidation, role/lock ordering and U3/U5/P5 handoffs.
+Lifecycle, assignments and operational ingestion remain separate. Implementation
+acceptance is tracked in [current evidence](../docs/status/p4-u2c-evidence.md).

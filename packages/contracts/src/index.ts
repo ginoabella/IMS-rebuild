@@ -96,3 +96,5 @@ export * from './tenant-geography';
 export * from './tenant-inventory';
 
 export * from './tenant-route-bindings';
+
+export * from './tenant-verification';

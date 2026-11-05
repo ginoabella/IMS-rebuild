@@ -34,13 +34,16 @@ export function useRevisions(nodeId: string) {
     [history, setHistory] = useState<(string | null)[]>([]),
     [baselineChoices, setBaselineChoices] = useState<RevisionSummary[]>([]),
     [baselineAfter, setBaselineAfter] = useState<string | null>(null);
-  const [pending, setPending] = useState(false),
+  const [hydrated, setHydrated] = useState(false),
+    [pending, setPending] = useState(false),
     [message, setMessage] = useState('');
   const busy = useRef(false),
+    passiveRead = useRef<Promise<void> | null>(null),
     mounted = useRef(true),
     generation = useRef(0),
     error = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
+    setHydrated(true);
     mounted.current = true;
     return () => {
       mounted.current = false;
@@ -125,9 +128,24 @@ export function useRevisions(nodeId: string) {
       }
     }
   }
-  async function run(action: () => Promise<void>, operational = false) {
+  async function run(
+    action: () => Promise<void>,
+    operational = false,
+    passive = false,
+  ) {
+    if (!latest.current.ready) return;
+    if (busy.current && !passive && passiveRead.current) {
+      const waiting = latest.current.capture();
+      await passiveRead.current;
+      if (!mounted.current || !waiting.current()) return;
+    }
     if (busy.current || !latest.current.ready) return;
     busy.current = true;
+    let finishPassive: (() => void) | undefined;
+    if (passive)
+      passiveRead.current = new Promise<void>((resolve) => {
+        finishPassive = resolve;
+      });
     setPending(true);
     setMessage('');
     let capture = latest.current.capture();
@@ -152,6 +170,10 @@ export function useRevisions(nodeId: string) {
       }
     } finally {
       busy.current = false;
+      if (passive) {
+        passiveRead.current = null;
+        finishPassive?.();
+      }
       if (mounted.current) setPending(false);
     }
   }
@@ -160,7 +182,9 @@ export function useRevisions(nodeId: string) {
     setList(undefined);
     setBaselineChoices([]);
     setBaselineAfter(null);
-    if (work.ready) void run(() => load());
+  }, [nodeId, after, work.operatorId]);
+  useEffect(() => {
+    if (work.ready) void run(() => load(), false, true);
   }, [nodeId, after, work.ready, work.operatorId]);
   async function capture(retry = false) {
     if (state.current.attempt && !retry) return;
@@ -229,7 +253,7 @@ export function useRevisions(nodeId: string) {
   }
   return {
     retained,
-    pending,
+    pending: pending || !hydrated || !work.ready,
     message,
     error,
     list,

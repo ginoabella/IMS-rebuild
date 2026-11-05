@@ -1,3 +1,7 @@
+import { ArtifactRetirement } from '../../../telephony/application/artifact-retirement';
+import { ArtifactRetirementController } from '../../../telephony/adapters/http/artifact-retirement.controller';
+import { TenantVerification } from '../../../telephony/application/tenant-verification';
+import { TenantVerificationController } from '../../../telephony/adapters/http/tenant-verification.controller';
 import { RouteBindingsController } from '../../../telephony/adapters/http/route-bindings.controller';
 import { TenantRouteBindings } from '../../../telephony/application/tenant-route-bindings';
 import { AllocationController } from '../../../telephony/adapters/http/allocation.controller';
@@ -47,6 +51,8 @@ export class PlatformAuthHttpModule {
       controllers: [
         AllocationController,
         RouteBindingsController,
+        TenantVerificationController,
+        ArtifactRetirementController,
         LiveController,
         PbxController,
         InventoryController,
@@ -59,6 +65,16 @@ export class PlatformAuthHttpModule {
         PlatformCredentialActionsController,
       ],
       providers: [
+        {
+          provide: ArtifactRetirement,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.retirement,
+        },
+        {
+          provide: TenantVerification,
+          inject: [InventoryRuntime],
+          useFactory: (runtime: InventoryRuntime) => runtime.verification,
+        },
         {
           provide: TenantRouteBindings,
           inject: [InventoryRuntime],

@@ -189,9 +189,9 @@ activation and PBX readiness remain with their owning units.
 - [Draft configuration operator procedure](runbooks/tenant-configuration.md)
 - [P4-U1b-1 acceptance evidence](status/p4-u1b-1-evidence.md)
 
-P4-U2: [Allocate inventory and verify tenant routing — feature spec and split review](../context/feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md). P4-U2a is complete, including active-tenant expansion. P4-U2b is complete under approved shared-gateway/exact-DID and outbound permission policy. The parent covers exclusive inventory, canonical route/trunk permissions and exact live two-tenant verification; c/live policy gates and parent live acceptance remain incomplete. Activation stays with P4-U3.
+P4-U2: [Allocate inventory and verify tenant routing — feature spec and split review](../context/feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md). P4-U2a is complete, including active-tenant expansion. P4-U2b is complete under approved shared-gateway/exact-DID and outbound permission policy. The parent covers exclusive inventory, canonical route/trunk permissions and exact live two-tenant verification; a/b/c and integrated parent acceptance are complete within approved private development. Activation stays with P4-U3.
 
-- [P4-U2a — Exclusive tenant inventory allocation](../context/feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md) — complete within approved private development; a/b are complete and parent/c remain incomplete.
+- [P4-U2a — Exclusive tenant inventory allocation](../context/feature-specs/p4-u2a-exclusive-tenant-inventory-allocation.md) — complete within approved private development; a/b/c and the parent are complete.
 - [Allocation API, ownership, locks and replay contract](architecture/tenant-inventory-allocation.md)
 - [Reserve/allocate capacity operator workflow](runbooks/tenant-inventory-allocation.md)
 - [Approved allocation policy](planning/p4-u2a-allocation-policy-review.md)
@@ -202,6 +202,10 @@ P4-U2: [Allocate inventory and verify tenant routing — feature spec and split 
 - [Approved shared-gateway and permission policy](planning/p4-u2b-routing-policy-review.md)
 - [P4-U2b final acceptance evidence](status/p4-u2b-evidence.md)
 - [P4-U2c — Verified tenant routing and integrated handoff](../context/feature-specs/p4-u2c-verified-tenant-routing-and-integrated-handoff.md)
+- [Tenant verified-routing contract](architecture/tenant-routing-verification.md)
+- [Verified-routing operator workflow](runbooks/tenant-routing-verification.md)
+- [P4-U2c final acceptance evidence](status/p4-u2c-evidence.md)
+- [P4-U2 complete manual test guide and review checklist](guides/p4-u2-manual-testing.md)
 
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 P2-U4 and a/b/c are complete under the approved policy. Reported Android native

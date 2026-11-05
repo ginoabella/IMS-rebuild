@@ -168,7 +168,7 @@ try {
     ],
     [
       'modules.conf',
-      '\nload = res_pjsip_pubsub.so\nload = res_pjsip_outbound_authenticator_digest.so\nload = app_dial.so\nload = func_strings.so\n',
+      '\nload = res_pjsip_pubsub.so\nload = res_pjsip_outbound_authenticator_digest.so\nload = app_dial.so\nload = bridge_simple.so\nload = func_strings.so\nload = res_speech.so\nload = res_agi.so\nload = func_channel.so\nload = res_pjsip_header_funcs.so\nload = res_pjsip_endpoint_identifier_ip.so\n',
     ],
   ])
     write(

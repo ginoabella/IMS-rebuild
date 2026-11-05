@@ -162,6 +162,24 @@ case "$action" in
         provision_storage scripts/check-session-deployment.mjs --revisions-browser
         workspace_exec node --test scripts/pbx-revisions.test.mjs scripts/pbx-live-protection.test.mjs scripts/pbx-mutation-boundary.test.mjs
         fi
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:tenant-routing ]; then
+        shift 2
+        tenant_routing_mode=${1:---all}
+        [ "$#" -le 1 ] || exit 1
+        case "$tenant_routing_mode" in --all|--api|--browser|--concurrency|--live) ;; *) exit 1 ;; esac
+        workspace_exec pnpm build:backend
+        if [ "$tenant_routing_mode" != --live ]; then
+          provision_storage scripts/check-session-deployment.mjs --bindings-browser
+          provision_storage scripts/check-session-deployment.mjs --allocation-browser
+        fi
+        if [ "$tenant_routing_mode" = --all ] || [ "$tenant_routing_mode" = --browser ]; then
+          docker build -f infra/docker/Dockerfile.pbx-live -t myims-rebuild-dev-asterisk-live .
+          provision_storage scripts/check-session-deployment.mjs --revisions-browser
+        fi
+        if [ "$tenant_routing_mode" = --all ] || [ "$tenant_routing_mode" = --live ]; then
+          docker build -f infra/docker/Dockerfile.pbx-live -t myims-rebuild-dev-asterisk-live .
+          provision_storage scripts/check-pbx-live-execution.mjs --tenant-routing
+        fi
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:tenant-bindings ]; then
         shift 2
         [ "$#" -eq 0 ] || exit 1

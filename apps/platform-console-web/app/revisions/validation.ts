@@ -33,6 +33,9 @@ const kinds = [
   'inbound',
   'outbound',
   'credentials',
+  'tenants',
+  'allocations',
+  'authorizations',
 ];
 export function summary(v: unknown): boolean {
   return (

@@ -290,6 +290,23 @@ export class PhysicalMutationBoundary {
       throw new MutationBoundaryFailure('boundary_unavailable');
     }
   }
+  /** Native-only metadata/test maintenance shares the exact physical dispatch queue. */
+  maintain<T>(
+    token: PbxOwnershipToken,
+    verifiedId: string,
+    action: (guard: () => Promise<void>) => Promise<T>,
+  ): Promise<T> {
+    return this.serial(async () => {
+      const guard = async () => {
+        const state = this.load();
+        await this.current(state, token);
+        if (state.pending || state.verifiedId !== verifiedId)
+          throw new MutationBoundaryFailure('reconciliation_required');
+      };
+      await guard();
+      return action(guard);
+    });
+  }
   /** Deployment bootstrap alone supplies an independently verified original baseline. */
   initialize(verifyBaseline: () => Promise<string>): Promise<void> {
     return this.serial(async () => {

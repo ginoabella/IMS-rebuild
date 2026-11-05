@@ -1,3 +1,4 @@
+import { runtimePins } from '../domain/runtime-pins';
 import { createHash, randomUUID } from 'node:crypto';
 import type { PbxTransactions } from './pbx-nodes';
 import type { SnapshotDatabase } from '../../../infrastructure/database/read-snapshot';
@@ -12,12 +13,7 @@ import { OutboxRepository } from '../../../infrastructure/outbox/outbox-reposito
 import { PeerRepository } from '../adapters/db/peer-repository';
 import { RevisionRepository } from '../adapters/db/revision-repository';
 import { captureSnapshot } from '../adapters/db/revision-snapshot';
-import {
-  canonical,
-  entries,
-  COMPILER_VERSION,
-  POLICY_VERSION,
-} from '../domain/revision-snapshot';
+import { canonical, supportedRevision } from '../domain/revision-snapshot';
 import { compileRevision } from '../domain/revision-compiler';
 import { id, object, PeerRejected } from '../domain/peer';
 export const liveWorkContract = {
@@ -238,6 +234,15 @@ export class PbxLive {
           }
           const n = await this.nodes.node(tx, node, true);
           if (!n) throw new PeerRejected(404);
+          if (
+            (
+              await tx.query(
+                'SELECT 1 FROM public.pbx_live_runtime WHERE node_id=$1 AND active_retirement_id IS NOT NULL',
+                [node],
+              )
+            ).rows.length
+          )
+            throw new LiveRejected('operation_unresolved');
           const runtime = (
             await tx.query<{
               verified_id: string;
@@ -284,11 +289,29 @@ export class PbxLive {
           if (kind === 'apply') {
             revision = await this.revisions.detail(tx, node, target);
             if (!revision) throw new PeerRejected(404);
-            const current = await captureSnapshot(tx, node),
+            if (
+              (
+                await tx.query(
+                  'SELECT 1 FROM public.pbx_artifact_retirements WHERE artifact_id=$1',
+                  [target],
+                )
+              ).rows.length
+            )
+              throw new LiveRejected('retired_target');
+            const current = await captureSnapshot(
+                tx,
+                node,
+                revision.policyVersion,
+              ),
               validation = await this.revisions.validation(tx, target);
             if (
-              revision.compilerVersion !== COMPILER_VERSION ||
-              revision.policyVersion !== POLICY_VERSION ||
+              !supportedRevision(
+                revision.snapshot,
+                revision.compilerVersion,
+                revision.policyVersion,
+              ) ||
+              validation?.compilerVersion !== revision.compilerVersion ||
+              validation?.policyVersion !== revision.policyVersion ||
               digest(current) !== revision.sourceDigest ||
               !validation ||
               !validation.applicable ||
@@ -299,7 +322,7 @@ export class PbxLive {
               throw new LiveRejected('stale_review');
           } else {
             const approved = await tx.query(
-              'SELECT 1 FROM public.pbx_live_artifacts WHERE id=$1 AND node_id=$2',
+              'SELECT 1 FROM public.pbx_live_artifacts a WHERE id=$1 AND node_id=$2 AND NOT EXISTS(SELECT 1 FROM public.pbx_artifact_retirements x WHERE x.artifact_id=a.id)',
               [target, node],
             );
             if (!approved.rows.length)
@@ -336,7 +359,7 @@ export class PbxLive {
             [operationId, node],
           );
           if (revision)
-            for (const entry of entries(revision.snapshot))
+            for (const entry of runtimePins(revision.snapshot))
               await tx.query(
                 'INSERT INTO public.pbx_live_pins(revision_id,node_id,kind,resource_id,version,material_kind,material_version) VALUES($1,$2,$3,$4,$5,$6,$7) ON CONFLICT(revision_id,kind,resource_id,version) DO UPDATE SET released_at=NULL,release_operation_id=NULL',
                 [

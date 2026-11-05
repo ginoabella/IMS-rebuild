@@ -243,3 +243,39 @@ quiet wait, before any restoration effect, after probes and before opening the
 barrier. Canonical revocation during the wait retains denial and uncertainty. A
 fresh authorized audited intent can resolve that predecessor chain. Mere session
 expiry remains independent of committed execution authority.
+
+## P4-U2c approved tenant capture and admission extension
+
+Completed within approved private development, 2026-11-05 (Asia/Manila, +08:00), under the
+[approved c policy](../planning/p4-u2c-live-policy-review.md); see [final acceptance](../status/p4-u2c-evidence.md). New capture uses explicit `tenant-routing-1` snapshot/policy and
+`tenant-review-1` compiler versions. One SQL statement captures infrastructure,
+current allocation claims, current authorizations with evaluated versions and
+safe canonical tenant version/authority/status/voice facts. The tenancy-owned
+`tenant_routing_capture(uuid[])` invoker-rights SQL port composes these facts in
+that same statement snapshot; it exposes no identity credentials or contacts.
+Capture and pin source limits include all three new collections. Historical
+snapshots continue to capture/validate/compare using their original
+`review-2`/`deny-unbound-1` semantics; headers must match the snapshot version.
+Neither old probes nor validations establish tenant verification.
+
+The next runtime increment uses a fixed local AGI client and a separate bounded
+native admission socket inside the existing Asterisk container. It grants neither
+PBX control nor material access to HTTP/Next/ordinary workers or the AGI client.
+Before permitting each tenant path the native owner must recheck exact installed
+provenance, fresh canonical source digest, ownership/permissions and call admission;
+draft admission additionally requires an unexpired exact-artifact operator grant
+and a single committed manifest-limited test intent. No cached grant or existence
+of a draft can enable calls. The approved isolated Docker fixtures will establish
+exact endpoints/ingress/destinations before calls; none are selected implicitly.
+
+The fixed AGI transport follows the pinned-version [AGI application](https://docs.asterisk.org/Asterisk_22_Documentation/API_Documentation/Dialplan_Applications/AGI/)
+and [AGI commands](https://docs.asterisk.org/Certified-Asterisk_22.8_Documentation/API_Documentation/AGI_Commands/).
+Actual source identity must come from authenticated PJSIP channel state, never
+caller ID or a client-selected tenant header. Required live checks remain open.
+
+Current evidence also binds to a canonical monotonic `routing_generation` on the
+existing runtime row. Apply/recovery acceptance and completion, owner-epoch changes
+and retirement transitions invalidate earlier grants, native proofs and call
+results even when recovery selects the same artifact. Heartbeat-only refreshes do
+not advance the generation. Historical call results remain immutable; their age
+and current applicability are distinct from reconciliation time.

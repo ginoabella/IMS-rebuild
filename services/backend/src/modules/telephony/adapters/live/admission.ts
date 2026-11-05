@@ -179,7 +179,8 @@ export class NativeAdmissionBarrier {
     if (canonical(strip(actual)) !== canonical(expected))
       throw new AdmissionFailure('activity_unknown');
   }
-  private async idle(): Promise<boolean> {
+  /** Exact bounded native activity snapshot; unknown answers throw. */
+  async idle(): Promise<boolean> {
     const started = performance.now();
     let output: string;
     try {

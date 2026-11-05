@@ -8,16 +8,43 @@ import type {
   GatewayValues,
   DidValues,
   RevisionResourceKind,
+  EvaluatedRouteFact,
+  RouteAuthorizationKind,
 } from '@myims/contracts';
 interface Source {
   id: string;
   version: number;
 }
+export interface CapturedTenantRouting {
+  tenants: (Source & {
+    authorityVersion: number;
+    status: string;
+    voicePreference: 'not_configured' | 'enabled' | 'disabled';
+  })[];
+  allocations: (Source & {
+    tenantId: string;
+    nodeId: string;
+    installationId: string;
+    extensionId: string;
+    state: 'reserved' | 'allocated';
+  })[];
+  authorizations: (Source & {
+    tenantId: string | null;
+    nodeId: string;
+    installationId: string;
+    kind: RouteAuthorizationKind;
+    resourceId: string;
+    scope: 'owned' | 'shared';
+    evaluated: EvaluatedRouteFact[];
+  })[];
+}
 export interface RevisionSnapshot {
+  schemaVersion?: 'tenant-routing-1';
+  tenantRouting?: CapturedTenantRouting;
   eligibility: {
-    allocations: 'unavailable';
-    bindings: 'unavailable';
-    sharedTrunkPermissions: 'unavailable';
+    allocations: 'unavailable' | 'captured';
+    bindings: 'unavailable' | 'captured';
+    sharedTrunkPermissions: 'unavailable' | 'captured';
   };
   node: Source & { installationId: string };
   capability:
@@ -56,8 +83,28 @@ export interface RevisionSnapshot {
     OutboundValues & { enabled: boolean; identity: Record<string, string> })[];
   credentials: (Source & { available: boolean; purpose: string })[];
 }
-export const COMPILER_VERSION = 'review-2';
-export const POLICY_VERSION = 'deny-unbound-1';
+export const COMPILER_VERSION = 'tenant-review-1';
+export const POLICY_VERSION = 'tenant-routing-1';
+export const LEGACY_COMPILER_VERSION = 'review-2';
+export const LEGACY_POLICY_VERSION = 'deny-unbound-1';
+export function revisionVersions(s: RevisionSnapshot) {
+  return s.schemaVersion === 'tenant-routing-1'
+    ? { compilerVersion: COMPILER_VERSION, policyVersion: POLICY_VERSION }
+    : {
+        compilerVersion: LEGACY_COMPILER_VERSION,
+        policyVersion: LEGACY_POLICY_VERSION,
+      };
+}
+export function supportedRevision(
+  s: RevisionSnapshot,
+  compiler: string,
+  policy: string,
+) {
+  const expected = revisionVersions(s);
+  return (
+    compiler === expected.compilerVersion && policy === expected.policyVersion
+  );
+}
 export const SNAPSHOT_LIMIT = 2048;
 export type SourceEntry = {
   kind: RevisionResourceKind;
@@ -93,6 +140,10 @@ export function entries(s: RevisionSnapshot): SourceEntry[] {
             : value.id,
         value,
       });
+  if (s.tenantRouting)
+    for (const kind of ['tenants', 'allocations', 'authorizations'] as const)
+      for (const value of s.tenantRouting[kind])
+        list.push({ kind, key: value.id, value });
   return list.sort((a, b) =>
     `${a.kind}:${a.key}`.localeCompare(`${b.kind}:${b.key}`, 'en'),
   );

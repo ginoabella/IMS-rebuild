@@ -1,3 +1,4 @@
+import { checkTenantRevisionCapture } from './check-tenant-revision-capture.mjs';
 import { checkBindingLifecycle } from './check-binding-lifecycle.mjs';
 import { checkBindingSelection } from './check-binding-selection.mjs';
 import { checkBindingRecovery } from './check-binding-recovery.mjs';
@@ -263,6 +264,19 @@ async function runTenantBindings({
       'no_match',
     );
   }
+  await checkTenantRevisionCapture({
+    request,
+    owner,
+    root,
+    one,
+    two,
+    extensions,
+    inbound,
+    outbound,
+    permissions,
+    path,
+    tv,
+  });
   await checkBindingLifecycle({
     request,
     root,
@@ -506,7 +520,7 @@ async function runTenantBindings({
   );
   await save(one, 'permission', trunks[0].id);
   const ob = (await request(path(one))).data.items.find(
-    (r) => r.kind === 'outbound',
+    (r) => r.kind === 'outbound' && r.resourceId === outbound[0].id,
   );
   await save(one, 'outbound', outbound[0].id, 'owned', ob.version);
   const disable = await request(

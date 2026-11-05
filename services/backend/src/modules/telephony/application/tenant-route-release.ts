@@ -61,7 +61,12 @@ export async function releaseRouteOwnership(
     trunks: 'sip_trunks',
   }[old.kind];
   const retained = await tx.query(
-    `SELECT 1 FROM public.pbx_live_operations o JOIN public.pbx_revisions r ON r.id=o.target_id WHERE o.node_id=$1 AND EXISTS(SELECT 1 FROM jsonb_array_elements(r.snapshot->$2) e WHERE e->>'id'=$3::text) UNION ALL SELECT 1 FROM public.pbx_live_runtime r JOIN public.${table} e ON e.node_id=r.node_id AND e.id=$3::uuid WHERE r.node_id=$1 AND (r.runtime_state<>'verified' OR r.active_operation_id IS NOT NULL OR r.installed_id IS NULL OR r.verified_id IS NULL OR r.known_good_id IS NULL OR r.baseline_verified_at IS NULL OR e.created_at<=r.baseline_verified_at) LIMIT 1`,
+    `SELECT 1 FROM public.pbx_live_operations o JOIN public.pbx_revisions r ON r.id=o.target_id JOIN public.pbx_live_progress p ON p.operation_id=o.id WHERE o.node_id=$1
+     AND EXISTS(SELECT 1 FROM jsonb_array_elements(r.snapshot->$2) e WHERE e->>'id'=$3::text)
+     AND (r.policy_version<>'tenant-routing-1' OR EXISTS(SELECT 1 FROM public.pbx_live_pins pin WHERE pin.revision_id=r.id AND pin.kind=$2 AND pin.resource_id=$3::uuid))
+     AND NOT (p.state IN ('validation_failed','revoked') AND NOT EXISTS(SELECT 1 FROM public.pbx_live_artifacts a WHERE a.operation_id=o.id))
+     AND NOT EXISTS(SELECT 1 FROM public.pbx_live_artifacts a JOIN public.pbx_artifact_retirements x ON x.artifact_id=a.id WHERE a.operation_id=o.id)
+     UNION ALL SELECT 1 FROM public.pbx_live_runtime r JOIN public.${table} e ON e.node_id=r.node_id AND e.id=$3::uuid WHERE r.node_id=$1 AND (r.runtime_state<>'verified' OR r.active_operation_id IS NOT NULL OR r.installed_id IS NULL OR r.verified_id IS NULL OR r.known_good_id IS NULL OR r.baseline_verified_at IS NULL OR (e.created_at<=r.baseline_verified_at AND NOT EXISTS(SELECT 1 FROM public.pbx_artifact_retirements x JOIN public.pbx_artifact_retirement_intents i ON i.id=x.intent_id WHERE i.node_id=$1))) LIMIT 1`,
     [old.nodeId, old.kind, old.resourceId],
   );
   if (retained.rows.length)

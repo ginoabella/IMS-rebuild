@@ -141,7 +141,10 @@ export class AllocationRepository {
     // A committed live intent is conservative affirmative history: do not claim
     // never-installed safety after pins have been released or an operation failed.
     const history = await tx.query(
-      `SELECT 1 FROM public.pbx_live_operations o JOIN public.pbx_revisions r ON r.id=o.target_id WHERE o.node_id=$1 AND EXISTS(SELECT 1 FROM jsonb_array_elements(r.snapshot->'extensions') e WHERE e->>'id'=$2) LIMIT 1`,
+      `SELECT 1 FROM public.pbx_live_operations o JOIN public.pbx_revisions r ON r.id=o.target_id JOIN public.pbx_live_progress p ON p.operation_id=o.id WHERE o.node_id=$1
+       AND EXISTS(SELECT 1 FROM jsonb_array_elements(r.snapshot->'extensions') e WHERE e->>'id'=$2 AND (r.policy_version<>'tenant-routing-1' OR e->>'administrativeStatus'='enabled'))
+       AND NOT (p.state IN ('validation_failed','revoked') AND NOT EXISTS(SELECT 1 FROM public.pbx_live_artifacts a WHERE a.operation_id=o.id))
+       AND NOT EXISTS(SELECT 1 FROM public.pbx_live_artifacts a JOIN public.pbx_artifact_retirements x ON x.artifact_id=a.id WHERE a.operation_id=o.id) LIMIT 1`,
       [nodeId, extensionId],
     );
     if (history.rows.length)
@@ -161,7 +164,8 @@ export class AllocationRepository {
     // The initial native baseline has no revision snapshot. Stock that already
     // existed then cannot be proved absent from it using later intent history.
     const initial = await tx.query(
-      `SELECT 1 FROM public.pbx_live_runtime r JOIN public.extensions e ON e.node_id=r.node_id AND e.id=$2 WHERE r.node_id=$1 AND e.created_at<=r.baseline_verified_at LIMIT 1`,
+      `SELECT 1 FROM public.pbx_live_runtime r JOIN public.extensions e ON e.node_id=r.node_id AND e.id=$2 WHERE r.node_id=$1 AND e.created_at<=r.baseline_verified_at
+       AND NOT EXISTS(SELECT 1 FROM public.pbx_artifact_retirements x JOIN public.pbx_artifact_retirement_intents i ON i.id=x.intent_id WHERE i.node_id=$1 AND i.resource_id=$2) LIMIT 1`,
       [nodeId, extensionId],
     );
     if (initial.rows.length)

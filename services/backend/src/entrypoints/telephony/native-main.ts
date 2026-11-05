@@ -1,4 +1,9 @@
-import { mkdirSync, chmodSync, chownSync } from 'node:fs';
+import {
+  TenantCallAdmission,
+  TenantAdmissionServer,
+} from '../../modules/telephony/adapters/live/tenant-admission';
+import { TenantRuntimeMonitor } from '../../modules/telephony/adapters/live/tenant-runtime';
+import { mkdirSync, chmodSync, chownSync, readFileSync } from 'node:fs';
 import { liveConfiguration } from '../../modules/telephony/adapters/live/configuration';
 import { ProtectedArtifactStore } from '../../modules/telephony/adapters/live/artifact-store';
 import { NativeAdmissionBarrier } from '../../modules/telephony/adapters/live/admission';
@@ -57,14 +62,40 @@ async function main() {
     '/run/pbx-server/server.pem',
     '/run/pbx-server/server.key',
   );
+  const asteriskGroup = Number(
+    readFileSync('/etc/group', 'utf8')
+      .split('\n')
+      .find((line) => line.startsWith('asterisk:'))
+      ?.split(':')[2],
+  );
+  if (!Number.isSafeInteger(asteriskGroup) || asteriskGroup < 1)
+    throw new Error('Admission group unavailable');
+  const tenantAdmission = new TenantAdmissionServer(
+    new TenantCallAdmission(store, configuration.nodeId),
+    asteriskGroup,
+  );
+  const tenantRuntime = new TenantRuntimeMonitor(
+    root,
+    configuration.nodeId,
+    configuration.installationId,
+    store,
+    driver,
+    admission,
+    artifacts,
+    (artifactId, action) => application.maintain(artifactId, action),
+  );
+  await tenantAdmission.start();
+  tenantRuntime.start();
   await observation.start();
   await server.start();
   let closing = false;
   const stop = () => {
     if (closing) return;
     closing = true;
-    void server
+    void tenantRuntime
       .close()
+      .then(() => tenantAdmission.close())
+      .then(() => server.close())
       .then(() => driver.drain())
       .then(() => observation.close())
       .then(() => store.close())

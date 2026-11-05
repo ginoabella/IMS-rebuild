@@ -28,6 +28,11 @@ export class RuntimeDependencies implements RuntimeDependencyPort {
       "SELECT 1 FROM public.pbx_live_pins WHERE node_id=$1 AND kind=$2 AND resource_id=$3 AND released_at IS NULL UNION ALL SELECT 1 FROM public.pbx_live_runtime WHERE node_id=$1 AND $2='node' AND baseline_verified_at IS NOT NULL LIMIT 1",
       [nodeId, kind, resourceId],
     );
-    if (pins.rows.length) throw new RetainedRuntimeDependency();
+    const uncertain = await tx.query(
+      `SELECT 1 FROM public.pbx_live_runtime WHERE node_id=$1 AND (active_operation_id IS NOT NULL OR active_retirement_id IS NOT NULL OR runtime_state IN ('unknown','failed')) UNION ALL SELECT 1 FROM public.tenant_route_test_progress WHERE node_id=$1 AND state IN ('queued','dispatching','admitted','unknown') LIMIT 1`,
+      [nodeId],
+    );
+    if (pins.rows.length || uncertain.rows.length)
+      throw new RetainedRuntimeDependency();
   }
 }
