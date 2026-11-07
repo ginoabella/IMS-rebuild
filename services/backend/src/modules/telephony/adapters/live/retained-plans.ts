@@ -24,9 +24,10 @@ export class RetainedLivePlans {
     root: string,
     private readonly nodeId: string,
     private readonly installationId: string,
+    private readonly readOnly = false,
   ) {
     this.directory = join(root, 'plans');
-    mkdirSync(this.directory, { recursive: true, mode: 0o700 });
+    if (!readOnly) mkdirSync(this.directory, { recursive: true, mode: 0o700 });
     const stat = lstatSync(this.directory);
     if (
       !stat.isDirectory() ||
@@ -81,6 +82,7 @@ export class RetainedLivePlans {
     }
   }
   save(value: RetainedLiveArtifact) {
+    if (this.readOnly) throw new NativePbxFailure('boundary_unavailable');
     const id = value.identity.revisionId;
     this.check(value, id);
     try {

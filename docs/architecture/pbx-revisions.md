@@ -279,3 +279,63 @@ and retirement transitions invalidate earlier grants, native proofs and call
 results even when recovery selects the same artifact. Heartbeat-only refreshes do
 not advance the generation. Historical call results remain immutable; their age
 and current applicability are distinct from reconciliation time.
+
+## P4-U2-DEV-a retained profile compatibility and transitions
+
+Completed within approved private development, 2026-11-07 (Asia/Manila, +08:00). Trusted Docker profile status and
+exact-expectation preflight inspect canonical/runtime identity, immutable retained
+plans/artifacts and ancestry, unreleased pins, native epoch, actual loaded modules,
+protected/loaded runtime and quiet/pending state. The SQL snapshot is read-only;
+a final canonical/native comparison detects intervening changes. This observation
+never authorizes effects or acquires a native owner. Provider custody unavailable
+to the native role is reported as unverified, not inferred from staged bytes.
+
+`NativePbxDriver` and `RetainedLivePlans` accept an internal inspection-only mode.
+It skips constructor setup, needs no inherited mutation descriptor, and rejects
+baseline capture, validation, selection, reload or plan save before effects.
+`pbx-live-check` now uses that mode without opening a mutation descriptor. Ordinary
+native composition retains its existing fenced mutable behavior.
+
+The isolated compatibility copy proves actual module loads, a separately rendered
+new artifact/new static pair and exact old-pair restoration, with no network or
+retained writes. It proves neither durable canonical transition/recovery nor
+profile-interruption handling. Existing artifact unmanaged-digest checks remain
+exact. See the [approved transition review](../planning/p4-u2-dev-a-profile-transition-review.md)
+and [status](../status/p4-u2-dev-a-evidence.md). The durable implementation now adds native profile selection/restart, a canonical
+transition ledger and explicit trusted deployment commands; 23 distinct isolated interruption/race scenarios and the approved retained
+deployment passed. Exact old recovery custody remains preserved. A general profile
+editor is excluded.
+
+The SQL extension owns immutable static digests and artifact/profile associations,
+immutable deployment intent and separately mutable progress. Candidate bindings
+record a staged artifact's exact static profile without claiming it is verified.
+A profile artifact can have a new ID while retaining its original immutable
+revision ID, compiler/policy, snapshot digest and pins; it is never a second initial
+baseline. Historical apply reuses its original protected plan/profile instead of
+rewriting that plan with the currently selected profile. Retirement releases shared
+revision pins only after every retained sibling artifact is affirmatively retired.
+
+Canonical profile intent blocks apply/recovery, retirement and tenant admission
+under the existing node/owner/runtime locks. Native profile work shares the actual
+physical queue and does not consume a revision-operation sequence. Exact static
+and managed selection runs while the canonical owner/runtime locks are held. The
+profile journal records uncertainty before effects; successors inspect exact
+protected and loaded pairs, without repeating selection or restart. A native
+verified-ID rebind is separate from final canonical acknowledgement. Explicit
+rollback follows bounded same-node predecessor links and acknowledges each still
+unresolved ancestor only after a compatible pair is independently proved.
+
+The supervisor reads a protected complete static directory. A derived launcher
+changes only the lookup directory; bytes hashed as an old static profile stay
+intact. A guarded one-shot restart request is consumed once, while command guardians
+retain the native fence through actual CLI completion. Process startup invalidates
+old runtime proof and opens no upgrade command or calling grant. Recorded profile
+custody with a missing established selector fails closed; established SQL baseline
+history with missing original custody cannot trigger implicit baseline capture.
+Custody registration before the first selection does not establish a new boot
+mode. A protected monotonic `selectionRequired` journal distinguishes that initial
+state. Cold startup can read the exact already-selected legacy pair behind admission
+denial when that journal explicitly records no selection; it changes neither pointer
+nor profile and promotes no proof. Native inspection must resolve the exact pending
+operation or freshly verify that boot. Once any static selection occurs, later
+operations and completion retain the requirement for its protected selector.

@@ -1,0 +1,95 @@
+{
+  "passiveBefore": {
+    "check": "actual-passive-profile-preflight",
+    "passed": true,
+    "rejectedExpectations": 7,
+    "protectedBytesModesOwnershipAndMtimePreserved": true,
+    "callsPlaced": 0
+  },
+  "passiveAfter": {
+    "check": "actual-passive-profile-preflight",
+    "passed": true,
+    "rejectedExpectations": 7,
+    "protectedBytesModesOwnershipAndMtimePreserved": true,
+    "callsPlaced": 0
+  },
+  "readOnlyAfter": {
+    "check": "native-profile-read-only",
+    "passed": true,
+    "protectedContentModesOwnershipAndMtimePreserved": true,
+    "mutationMethodsRejected": 5
+  },
+  "preservation": {
+    "preservation": "after",
+    "passed": true,
+    "unrelatedTables": 69,
+    "originalArtifacts": 2
+  },
+  "composition": {
+    "retainedMountsPreserved": true,
+    "publicationsPreserved": true
+  },
+  "baseline": {
+    "check": "retained-baseline",
+    "state": "passed",
+    "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+    "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+    "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+    "retainedRevisionId": "e6ee0b86-da28-4ba9-bf42-a6c6e985c341",
+    "unmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+    "exactProtectedAndLoadedRuntimeMatch": true,
+    "activeChannels": 0,
+    "pendingOperation": false
+  },
+  "check": "retained-profile-final-verification",
+  "passed": true,
+  "requiredRegressions": [
+    {
+      "command": "./dev exec pnpm check:pbx-revisions",
+      "passed": true
+    },
+    {
+      "command": "./dev exec pnpm check:tenant-routing --live",
+      "passed": true
+    },
+    {
+      "command": "./dev exec pnpm check:platform-auth --http",
+      "passed": true
+    },
+    {
+      "command": "./dev exec pnpm check:staff-auth --http",
+      "passed": true
+    },
+    {
+      "command": "./dev check",
+      "passed": true
+    }
+  ],
+  "isolatedUniqueCases": 23,
+  "focusedTestsPassed": 6,
+  "health": [
+    {
+      "endpoint": "live",
+      "httpStatus": 200,
+      "status": "alive"
+    },
+    {
+      "endpoint": "ready",
+      "httpStatus": 200,
+      "status": "ready",
+      "checks": {
+        "database": "up",
+        "sessionRedis": "up",
+        "realtimeRedis": "up"
+      }
+    }
+  ],
+  "platformHttpsPassed": true,
+  "staffHttpsPassed": true,
+  "ordinaryCallsPlaced": 0,
+  "ordinaryFaultsInjected": 0,
+  "profileMaintenanceRestarts": 1,
+  "retainedNetworkIdentityPreserved": true,
+  "ownerEpoch": "13",
+  "loadedRequiredCapabilities": 10
+}

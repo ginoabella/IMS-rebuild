@@ -8,5 +8,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends nftables libstd
 
 COPY infra/docker/start-pbx-live.sh /usr/local/lib/myims/start-pbx-live.sh
 COPY infra/docker/native-owner.sh /usr/local/lib/myims/native-owner.sh
+COPY scripts/pbx-profile-launch.mjs /usr/local/lib/myims/pbx-profile-launch.mjs
 
 COPY --chmod=0555 scripts/tenant-routing-agi.mjs /usr/local/lib/myims/tenant-routing-agi.mjs

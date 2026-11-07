@@ -291,7 +291,7 @@ export async function retireArtifact(
             [intent.artifact_id, intent.id, intent.replacement_id, epoch],
           );
           await tx.query(
-            `UPDATE public.pbx_live_pins SET released_at=clock_timestamp(),release_operation_id=NULL,release_retirement_id=$2 WHERE revision_id=(SELECT revision_id FROM public.pbx_live_artifacts WHERE id=$1) AND released_at IS NULL`,
+            `UPDATE public.pbx_live_pins SET released_at=clock_timestamp(),release_operation_id=NULL,release_retirement_id=$2 WHERE revision_id=(SELECT revision_id FROM public.pbx_live_artifacts WHERE id=$1) AND released_at IS NULL AND NOT EXISTS(SELECT 1 FROM public.pbx_live_artifacts sibling WHERE sibling.node_id=public.pbx_live_pins.node_id AND sibling.revision_id=public.pbx_live_pins.revision_id AND NOT EXISTS(SELECT 1 FROM public.pbx_artifact_retirements retired WHERE retired.artifact_id=sibling.id))`,
             [intent.artifact_id, intent.id],
           );
           await tx.query(

@@ -12,6 +12,7 @@ const { ProtectedArtifactStore } = load('./artifact-store.js'),
   { NativePbxDriver } = load('./native-driver.js'),
   { NativeDenyProbes } = load('./native-probes.js'),
   { NativeLiveApplication } = load('./native-application.js'),
+  { NativeCommandRunner } = load('./command-runner.js'),
   { LiveExecutionStore } = load('./execution-store.js');
 const { ObservationRepository } = load('../db/observation-repository.js'),
   { observationSettings } = load('../../domain/observation-settings.js'),
@@ -177,8 +178,10 @@ if (mode === 'acquire') {
         { mode: 0o600 },
       );
       await delivered(operation.id);
-      const reload = driver.reload.bind(driver);
-      driver.reload = async (guard) => {
+      // Pause at actual mutating dispatch, after independent read-only reload
+      // preparation. The guardian must still outlive timeout and helper death.
+      const dispatch = NativeCommandRunner.prototype.run;
+      NativeCommandRunner.prototype.run = async function (command) {
         clearInterval(timer);
         writeFileSync('/race-ready', 'ready');
         const deadline = Date.now() + 5000;
@@ -186,7 +189,7 @@ if (mode === 'acquire') {
           await delay(25);
         assert.ok(existsSync('/race-paused'));
         try {
-          return await reload(guard);
+          return await dispatch.call(this, command);
         } catch (error) {
           writeFileSync('/race-timeout', 'timeout');
           throw error;

@@ -47,6 +47,14 @@ export class NativeCommandRunner {
   run(
     command: 'module reload res_pjsip.so' | 'dialplan reload',
   ): Promise<string> {
+    return this.dispatch(command);
+  }
+  restart(): Promise<string> {
+    return this.dispatch('core stop now');
+  }
+  private dispatch(
+    command: 'module reload res_pjsip.so' | 'dialplan reload' | 'core stop now',
+  ): Promise<string> {
     const path = join(this.root, `command-${randomUUID()}.out`);
     const output = openSync(
       path,

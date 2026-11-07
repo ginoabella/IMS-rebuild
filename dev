@@ -66,11 +66,15 @@ prepare() {
 provision_storage() {
   [ "$#" -gt 0 ] || set -- scripts/provision-storage.mjs
   storage_docker_binary=$(command -v docker)
+  storage_compose_binary=$(docker info --format '{{range .ClientInfo.Plugins}}{{if eq .Name "compose"}}{{.Path}}{{end}}{{end}}')
+  [ -x "$storage_compose_binary" ] || { echo 'The trusted deployment helper requires the existing Docker Compose plugin.' >&2; exit 1; }
   docker run --rm --user "$(id -u):$(id -g)" --group-add "$(stat -c %g /var/run/docker.sock)" \
     -e "STORAGE_HOST_PROJECT_ROOT=$(pwd)" \
     -e MYIMS_TRUNK_INSTALLATION_ID \
     --mount "type=bind,src=$(pwd),dst=/workspace" \
+    --mount "type=bind,src=$(pwd),dst=$(pwd),readonly" \
     --mount "type=bind,src=$storage_docker_binary,dst=/usr/bin/docker,readonly" \
+    --mount "type=bind,src=$storage_compose_binary,dst=/usr/libexec/docker/cli-plugins/docker-compose,readonly" \
     --mount type=bind,src=/var/run/docker.sock,dst=/var/run/docker.sock -w /workspace \
     node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c \
     node "$@"
@@ -88,7 +92,31 @@ case "$action" in
   telephony-up) workspace_exec pnpm build:backend; workspace_exec pnpm db:migrate
       MYIMS_PBX_UID=$(id -u) MYIMS_PBX_GID=$(id -g) compose --profile telephony up -d --scale "telephony=${1:-1}" telephony ;;
   telephony-down) compose --profile telephony stop telephony ;;
+  pbx-profile) if [ "${1:-}" = rehearse ]; then
+        shift
+        workspace_exec pnpm build:backend
+        docker build -f infra/docker/Dockerfile.pbx-live -t myims-rebuild-dev-asterisk-live .
+        provision_storage scripts/pbx-profile-rehearsal.mjs "$@"
+      elif [ "${1:-}" = preservation ]; then
+        shift
+        provision_storage scripts/pbx-profile-preservation.mjs "$@"
+      elif [ "${1:-}" = composition-check ]; then
+        [ "$#" -eq 1 ] || exit 1
+        provision_storage scripts/pbx-profile-compose-check.mjs
+      elif [ "${1:-}" = refresh-executor ]; then
+        shift
+        [ "$#" -eq 1 ] || exit 1
+        provision_storage scripts/pbx-profile-refresh.mjs "$1"
+      elif [ "${1:-}" = rehearse-compatibility ]; then
+        shift
+        [ "$#" -eq 1 ] || exit 1
+        provision_storage scripts/pbx-profile-compatibility.mjs "$1"
+      elif [ "${1:-}" = upgrade ] || [ "${1:-}" = rollback ] || [ "${1:-}" = operation-status ] || [ "${1:-}" = reconcile ]; then
+        provision_storage scripts/pbx-profile-deploy.mjs "$@"
+      else provision_storage scripts/pbx-profile.mjs "$@"; fi ;;
   pbx-live-check) provision_storage scripts/check-pbx-retained-baseline.mjs --host ;;
+  pbx-live-access) [ "$#" -eq 1 ] || exit 1
+      provision_storage scripts/pbx-live-access-launcher.mjs "$1" --replace-only ;;
   pbx-live-prepare) [ "$#" -eq 1 ] || { echo 'Usage: ./dev pbx-live-prepare INSTALLATION_UUID' >&2; exit 1; }
       provision_storage scripts/pbx-live-access-launcher.mjs "$1"
       provision_storage scripts/pbx-live-prepare-launcher.mjs ;;
@@ -147,6 +175,11 @@ case "$action" in
           *) platform_selection=--platform-auth ;;
         esac
         provision_storage scripts/check-session-deployment.mjs "$platform_selection"
+      elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-profile ]; then
+        shift 2
+        [ "$#" -eq 0 ] || exit 1
+        workspace_exec pnpm check:pbx-profile
+        provision_storage scripts/check-pbx-profile-read-only.mjs
       elif [ "$1" = pnpm ] && [ "${2:-}" = check:pbx-revisions ]; then
         shift 2
         if [ "$#" -gt 1 ] || { [ "$#" -eq 1 ] && [ "$1" != --native-integration ]; }; then exit 1; fi
@@ -258,6 +291,6 @@ case "$action" in
       else workspace_exec "$@"; fi ;;
   status) compose --profile workspace ps ;;
   down) compose --profile workspace --profile workers down ;;
-  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|trunk-setup-access|trunk-credentials|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|pbx-observation-prepare|pbx-live-prepare|pbx-live-check|telephony-up|telephony-down|storage-provision|storage-deployment-check|endpoint-isolation-check|pbx-catalog-prepare}'
+  *) echo 'Usage: ./dev {up|shell|command|platform|platform-https|platform-https-prepare|platform-https-stop|platform-https-status|platform-https-check|staff-https|staff-https-start|staff-https-stop|staff-https-status|staff-https-check|public|backend|responder|public-mobile|check|exec|status|down|prepare|migrate|trunk-setup-access|trunk-credentials|bootstrap-operator|health|foundation-check|worker-up|worker-down|worker-logs|pbx-observation-prepare|pbx-live-prepare|pbx-live-access|pbx-live-check|pbx-profile|telephony-up|telephony-down|storage-provision|storage-deployment-check|endpoint-isolation-check|pbx-catalog-prepare}'
      [ "$action" = help ] || exit 1 ;;
 esac

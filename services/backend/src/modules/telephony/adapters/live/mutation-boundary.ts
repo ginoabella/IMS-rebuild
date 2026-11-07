@@ -307,6 +307,45 @@ export class PhysicalMutationBoundary {
       return action(guard);
     });
   }
+  /** A deployment profile operation shares this physical queue without consuming a revision sequence. */
+  profile<T>(
+    token: PbxOwnershipToken,
+    sourceId: string,
+    targetId: string,
+    action: (
+      guard: () => Promise<void>,
+      acknowledge: (verifiedId: string) => Promise<void>,
+    ) => Promise<T>,
+    predecessorIds: string[] = [],
+  ): Promise<T> {
+    return this.serial(async () => {
+      if (
+        !uuid(sourceId) ||
+        !uuid(targetId) ||
+        predecessorIds.length > 128 ||
+        predecessorIds.some((id) => !uuid(id))
+      )
+        throw new MutationBoundaryFailure('request_conflict');
+      const guard = async () => {
+        const state = this.load();
+        await this.current(state, token);
+        if (
+          state.pending ||
+          ![sourceId, targetId, ...predecessorIds].includes(
+            state.verifiedId ?? '',
+          )
+        )
+          throw new MutationBoundaryFailure('reconciliation_required');
+      };
+      await guard();
+      return action(guard, async (verifiedId) => {
+        if (![sourceId, targetId].includes(verifiedId))
+          throw new MutationBoundaryFailure('request_conflict');
+        await guard();
+        this.save({ ...this.load(), verifiedId });
+      });
+    });
+  }
   /** Deployment bootstrap alone supplies an independently verified original baseline. */
   initialize(verifyBaseline: () => Promise<string>): Promise<void> {
     return this.serial(async () => {

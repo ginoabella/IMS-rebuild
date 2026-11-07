@@ -3,8 +3,10 @@ import { spawnSync } from 'node:child_process';
 import { constants, mkdirSync, writeFileSync } from 'node:fs';
 const project = process.env.STORAGE_HOST_PROJECT_ROOT ?? process.cwd();
 const installation = process.argv[2];
+const replaceOnly = process.argv[3] === '--replace-only';
 if (
-  process.argv.length !== 3 ||
+  ![3, 4].includes(process.argv.length) ||
+  (process.argv[3] !== undefined && !replaceOnly) ||
   !/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(installation ?? '')
 )
   throw new Error('Provide one installation UUID');
@@ -114,6 +116,7 @@ docker(
     'node',
     '/scripts/live-read-access.mjs',
     installation,
+    ...(replaceOnly ? ['--replace-only'] : []),
   ],
   true,
 );

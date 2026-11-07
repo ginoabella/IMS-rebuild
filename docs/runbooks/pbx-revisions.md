@@ -102,9 +102,14 @@ volumes or credentials. Recheck capabilities, custody, the independently verifie
 initial baseline and complete observation before accepting apply. This activation
 step affects the whole PBX and requires the approved zero-call maintenance window.
 
-Routine read-only provider access replacement uses the same installation-scoped
-`./dev pbx-live-prepare INSTALLATION_UUID` path and existing custodian. Check its
-24-hour nonrenewable lifetime and zero policy updates; verify custody afterward.
+Routine read-only provider access replacement uses the installation-scoped
+`./dev pbx-live-access INSTALLATION_UUID` path and existing custodian. This access-only
+command requires existing policy custody and changes no static configuration or
+policy. Check its 24-hour nonrenewable lifetime and zero policy updates; verify
+custody afterward. Do not rerun initial `pbx-live-prepare` against a retained
+profile: it also writes bootstrap configuration. Use the explicit versioned
+[profile transition/recovery procedure](development-container.md#retained-pbx-profile-transition-and-recovery)
+for static changes.
 When replacing the separate endpoint fixture issuer, pass
 `--live-installation INSTALLATION_UUID` to `issue-lifecycle-issuer.mjs endpoint
 /manifest.json` so its exact preflight includes this approved issuance rule. It

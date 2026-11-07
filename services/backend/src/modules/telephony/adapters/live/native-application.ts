@@ -1,3 +1,8 @@
+import {
+  selectedStaticProfile,
+  ProtectedStaticProfiles,
+} from './static-profiles';
+import { protectedLiveBytes } from './configuration';
 import { createHash, randomUUID } from 'node:crypto';
 import {
   constants,
@@ -7,6 +12,7 @@ import {
   writeFileSync,
   fsyncSync,
   closeSync,
+  lstatSync,
 } from 'node:fs';
 import { join } from 'node:path';
 import type { PbxOwnershipToken } from '../../application/observation-ports';
@@ -71,6 +77,64 @@ export class NativeLiveApplication implements NativeOwnerPort {
   ): Promise<T> {
     if (!this.maintenanceToken) throw new Error('Native ownership unavailable');
     return this.boundary.maintain(this.maintenanceToken, verifiedId, action);
+  }
+  profile<T>(
+    sourceId: string,
+    targetId: string,
+    action: (
+      guard: () => Promise<void>,
+      acknowledge: (verifiedId: string) => Promise<void>,
+    ) => Promise<T>,
+    predecessorIds: string[] = [],
+  ): Promise<T> {
+    if (!this.maintenanceToken) throw new Error('Native ownership unavailable');
+    return this.boundary.profile(
+      this.maintenanceToken,
+      sourceId,
+      targetId,
+      action,
+      predecessorIds,
+    );
+  }
+  profileOwner() {
+    return this.maintenanceToken;
+  }
+  async originalCustody() {
+    const initial = protectedLiveBytes(
+      join(this.root, 'initial-baseline'),
+      64,
+    ).toString('utf8');
+    if (!uuid(initial)) throw new Error('Original baseline unavailable');
+    const plan = this.plans.load(initial);
+    this.artifacts.load(plan.identity);
+    const facts = JSON.parse(
+      protectedLiveBytes(join(this.root, 'baseline-facts.json'), 4096).toString(
+        'utf8',
+      ),
+    ) as { unmanaged: string };
+    if (
+      facts.unmanaged !== plan.unmanaged ||
+      plan.identity.compilerVersion !== 'baseline-1' ||
+      !(
+        await this.store.pool.query(
+          'SELECT 1 FROM public.pbx_live_artifacts WHERE id=$1 AND node_id=$2 AND initial_baseline',
+          [initial, this.nodeId],
+        )
+      ).rows.length
+    )
+      throw new Error('Original baseline provenance unavailable');
+    if (selectedStaticProfile(this.root)) {
+      const gid = Number(
+        readFileSync('/etc/group', 'utf8')
+          .split('\n')
+          .find((l) => l.startsWith('asterisk:'))
+          ?.split(':')[2],
+      );
+      new ProtectedStaticProfiles(this.root, gid).verifyProjection(
+        plan.unmanaged,
+      );
+    } else if (this.driver.unmanaged() !== plan.unmanaged)
+      throw new Error('Original static profile unavailable');
   }
   private initialId(): string {
     const path = join(this.root, 'initial-baseline');
@@ -138,6 +202,21 @@ export class NativeLiveApplication implements NativeOwnerPort {
       !(await this.store.ownership.verify(token))
     )
       throw new Error('Native ownership unavailable');
+    const retained = (
+      await this.store.pool.query<{ baseline_verified_at: Date | null }>(
+        'SELECT baseline_verified_at FROM public.pbx_live_runtime WHERE node_id=$1',
+        [this.nodeId],
+      )
+    ).rows[0];
+    if (retained?.baseline_verified_at) {
+      // Lost original custody cannot authorize an implicit second baseline.
+      for (const name of [
+        'initial-baseline',
+        'baseline-facts.json',
+        'boundary.json',
+      ])
+        lstatSync(join(this.root, name));
+    }
     const baselineId = this.initialId();
     await this.boundary.initialize(async () => {
       const node = (
@@ -350,13 +429,21 @@ export class NativeLiveApplication implements NativeOwnerPort {
       if (!row || row.installation_id !== this.installationId)
         throw new Error('Native intent unavailable');
       const active = (
-        await this.store.pool.query<{ active_operation_id: string }>(
-          'SELECT active_operation_id FROM public.pbx_live_runtime WHERE node_id=$1',
+        await this.store.pool.query<{
+          active_operation_id: string;
+          active_profile_operation_id: string | null;
+        }>(
+          'SELECT active_operation_id,active_profile_operation_id FROM public.pbx_live_runtime WHERE node_id=$1',
           [this.nodeId],
         )
       ).rows[0];
-      if (active?.active_operation_id !== row.id) return;
+      if (
+        active?.active_operation_id !== row.id ||
+        active.active_profile_operation_id
+      )
+        return;
       accepted = row;
+      await this.originalCustody();
       const intent = this.intent(row);
       const inspection = await this.boundary.inspect(token, operationId);
       if (inspection.state === 'complete' && inspection.result) {
@@ -432,19 +519,82 @@ export class NativeLiveApplication implements NativeOwnerPort {
             compilerVersion: row.compiler_version,
             policyVersion: row.policy_version,
           };
-          this.artifacts.stage(
-            identity,
-            materializeRevision(
+          let retained: RetainedLiveArtifact | null = null;
+          try {
+            retained = this.plans.load(row.target_id);
+          } catch (e) {
+            if (!(
+              e &&
+              typeof e === 'object' &&
+              'code' in e &&
+              e.code === 'ENOENT'
+            ))
+              throw e;
+          }
+          if (retained) {
+            if (
+              canonical(retained.identity) !== canonical(identity) ||
+              canonical(retained.snapshot) !== canonical(row.snapshot)
+            )
+              throw new Error('Historical artifact conflict');
+            const old = this.artifacts.load(identity);
+            const supplied = materializeRevision(
               row.snapshot,
               row.target_id,
               preparation.material,
-            ),
+            );
+            if (
+              !old.pjsip.equals(supplied.pjsip) ||
+              !old.dialplan.equals(supplied.dialplan)
+            )
+              throw new Error('Historical material conflict');
+          } else {
+            const historical = await this.store.pool.query(
+              'SELECT 1 FROM public.pbx_live_artifacts WHERE id=$1 AND node_id=$2',
+              [row.target_id, this.nodeId],
+            );
+            if (historical.rows.length)
+              throw new Error('Historical custody unavailable');
+            this.artifacts.stage(
+              identity,
+              materializeRevision(
+                row.snapshot,
+                row.target_id,
+                preparation.material,
+              ),
+            );
+            this.plans.save({
+              identity,
+              snapshot: row.snapshot,
+              unmanaged: this.driver.unmanaged(),
+            });
+          }
+          const plan = this.plans.load(row.target_id);
+          const binding = await this.store.ownership.fenced(
+            token,
+            async (tx) => {
+              const active = await tx.query(
+                'SELECT 1 FROM public.pbx_live_runtime WHERE node_id=$1 AND active_operation_id=$2 FOR UPDATE',
+                [this.nodeId, row.id],
+              );
+              if (!active.rows.length)
+                throw new Error('Live operation changed');
+              await tx.query(
+                'INSERT INTO public.pbx_profile_artifact_bindings(artifact_id,node_id,digest) SELECT $1,$2,digest FROM public.pbx_static_profiles WHERE node_id=$2 AND digest=$3 ON CONFLICT DO NOTHING',
+                [row.target_id, this.nodeId, plan.unmanaged],
+              );
+              const found = await tx.query(
+                'SELECT digest FROM public.pbx_profile_artifact_bindings WHERE artifact_id=$1 AND node_id=$2',
+                [row.target_id, this.nodeId],
+              );
+              if (
+                (found.rows[0] && found.rows[0].digest !== plan.unmanaged) ||
+                (!found.rows.length && selectedStaticProfile(this.root))
+              )
+                throw new Error('Static compatibility unavailable');
+            },
           );
-          this.plans.save({
-            identity,
-            snapshot: row.snapshot,
-            unmanaged: this.driver.unmanaged(),
-          });
+          if (!binding.accepted) throw new Error('Live owner expired');
         }
       }
       const candidate = this.plans.load(row.target_id),

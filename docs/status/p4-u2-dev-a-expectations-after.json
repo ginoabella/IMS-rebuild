@@ -1,0 +1,11 @@
+{
+  "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+  "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+  "unmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+  "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+  "artifactId": "e6ee0b86-da28-4ba9-bf42-a6c6e985c341",
+  "compilerVersion": "review-2",
+  "policyVersion": "deny-unbound-1",
+  "nodeVersion": 1,
+  "proposedUnmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8"
+}

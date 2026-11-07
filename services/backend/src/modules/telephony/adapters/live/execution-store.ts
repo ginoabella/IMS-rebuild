@@ -195,6 +195,10 @@ export class LiveExecutionStore {
           ],
         );
         await tx.query(
+          'INSERT INTO public.pbx_artifact_profiles(artifact_id,node_id,digest) SELECT $1,$2,digest FROM public.pbx_profile_artifact_bindings WHERE artifact_id=$1 AND node_id=$2 ON CONFLICT DO NOTHING',
+          [result.verifiedId, row.node_id],
+        );
+        await tx.query(
           `UPDATE public.pbx_live_progress SET state=$2,installation=CASE WHEN $5='install_failed' THEN 'failed' WHEN $5 IS NOT NULL THEN installation ELSE 'installed' END,verification=$4,recovery=$3,failure=$5,updated_at=clock_timestamp() WHERE operation_id=$1`,
           [
             row.id,

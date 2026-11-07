@@ -57,8 +57,13 @@ function call(path, body, token) {
 let human;
 let configurationUpdates = 0;
 try {
-  const [installation] = process.argv.slice(2);
-  if (process.argv.length !== 3 || !uuid.test(installation ?? ''))
+  const [installation, selection] = process.argv.slice(2);
+  const replaceOnly = selection === '--replace-only';
+  if (
+    ![3, 4].includes(process.argv.length) ||
+    (selection !== undefined && !replaceOnly) ||
+    !uuid.test(installation ?? '')
+  )
     throw new Error('Provide one installation UUID.');
   const output = lstatSync('/output');
   if (!output.isDirectory() || output.isSymbolicLink() || output.mode & 0o077)
@@ -133,6 +138,10 @@ try {
           JSON.stringify(current[key]) === JSON.stringify(value),
       );
     if (same) continue;
+    if (replaceOnly)
+      throw new Error(
+        'Installed live access policy/role differs; replacement refused without configuration changes.',
+      );
     const r = await call(path, body, human);
     if (![200, 204].includes(r.status))
       throw new Error(
@@ -168,6 +177,10 @@ try {
       flag: 'wx',
     });
   if (!oldPolicy.includes(addition)) {
+    if (replaceOnly)
+      throw new Error(
+        'Installed live issuer rule differs; replacement refused without configuration changes.',
+      );
     const changed = await call(
       'sys/policies/acl/endpoint-restricted-issuer',
       { policy: `${oldPolicy}\n${addition}` },

@@ -1,0 +1,515 @@
+{
+  "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+  "sql": {
+    "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+    "artifactIds": [
+      "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+      "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7"
+    ],
+    "hashes": {
+      "credential_actions": {
+        "rows": "10",
+        "sha256": "651b45df4075cb6b1b379c3e5af31ed9b7e08d9f03de99b11fac5fd7bcd11bb9"
+      },
+      "draft_tenant_receipts": {
+        "rows": "2",
+        "sha256": "d1e485c14c8cc52f4f45baaf40529dd0a4a3fcc7f75f95144fef6402b285df4b"
+      },
+      "endpoint_capabilities": {
+        "rows": "1",
+        "sha256": "5e92bdad60d911832093e56cf7b8c8e71b56866bbbab9aecc17c64eb76fa14d6"
+      },
+      "endpoint_credential_operations": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "endpoint_profile_versions": {
+        "rows": "1",
+        "sha256": "34ebe076abf79cf99e32043638faa486c30bd47484853221bfd1c0f8cf2453cf"
+      },
+      "endpoint_profiles": {
+        "rows": "1",
+        "sha256": "cbea4faf340ad38e977a21e63f600e61e48f8c8943f242c6ca82162f19227085"
+      },
+      "extensions": {
+        "rows": "21",
+        "sha256": "7d8fe42a7cf30cbcc2af46c4ea7e1cf43af65013f4d6cc389770035eb5064ba1"
+      },
+      "inbound_rules": {
+        "rows": "2",
+        "sha256": "18ce76278e107f4f10790e99353936a98c7bc1a66454a9fbca15b5552051606c"
+      },
+      "inventory_receipts": {
+        "rows": "3",
+        "sha256": "f6cd70f27edd2541fa10ee80f8091eabc663759dd73b6e8226ed23e365c03ff1"
+      },
+      "number_reservations": {
+        "rows": "1",
+        "sha256": "0c6417889f86ce3e1d370ba4921a0fe70de90d30e09d969ba79085df6f68068e"
+      },
+      "operator_bootstrap_provenance": {
+        "rows": "1",
+        "sha256": "be5202173e78f0c6769979fa2080c104844c1e8c198f639176611de42f08a04b"
+      },
+      "outbound_number_domains": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "outbound_rules": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "pbx_artifact_retirement_intents": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "pbx_artifact_retirement_progress": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "pbx_artifact_retirements": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "pbx_create_receipts": {
+        "rows": "1",
+        "sha256": "1914f4ea2bfd2d9296ddebbb39160a46e80807b70b4d77bd1a9b19d8ccbd9430"
+      },
+      "pbx_live_artifacts": {
+        "rows": "2",
+        "sha256": "4e009ba7ba55ccd4d62763ebf420a392ebc658992291708ca1a5af54b3b34774"
+      },
+      "pbx_live_operations": {
+        "rows": "1",
+        "sha256": "02cefceb01949ba52da49e1f820f60e79117704dee6d8b4c205234b0ca6084e4"
+      },
+      "pbx_live_pins": {
+        "rows": "20",
+        "sha256": "c180612f2b37e5e0c3a19602927fb8ac363904981fc524b2b95b7d0360ac1e8c"
+      },
+      "pbx_live_progress": {
+        "rows": "1",
+        "sha256": "6de1e2706bdf3b06f50856ea7eba8c6b40682ba423225550587e62f356474655"
+      },
+      "pbx_nodes": {
+        "rows": "1",
+        "sha256": "6fe749e6cc2c0709291287b07b7105aacb1511d15ace40f65e4530a7439e84fc"
+      },
+      "pbx_revision_receipts": {
+        "rows": "3",
+        "sha256": "f34457056d09661414727fbb7c67e18bfb1e96b1b8081da9164af69117f4ac91"
+      },
+      "pbx_revision_validations": {
+        "rows": "3",
+        "sha256": "e615f62c4379b924f3e6095a68ef0fafa1bf4e6f0c87aafc080f949b862772fb"
+      },
+      "pbx_revisions": {
+        "rows": "3",
+        "sha256": "8664c630943211c1cc53320dffe5672d01112867bb9b5b7158099d52e9654c5b"
+      },
+      "platform_operators": {
+        "rows": "1",
+        "sha256": "baba3ece44b4777dc838542830dd59dc641219cb43c40bd3e8208917d81ff864"
+      },
+      "ring_group_members": {
+        "rows": "3",
+        "sha256": "3883b3d752c1746271623afa849ab1550b2af5c1853a3213b9bfffd120fd1590"
+      },
+      "ring_groups": {
+        "rows": "1",
+        "sha256": "ae035771670edd8707ad272963a2483ad1f273197c3f766f6cf4343575aa638d"
+      },
+      "routing_receipts": {
+        "rows": "4",
+        "sha256": "fa05b35256e5fef1438514b9c54c770fc7cb9fa9b3bd9c8d3603b4a1c102b998"
+      },
+      "sample_delivery_sink": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "session_fences": {
+        "rows": "78",
+        "sha256": "b8c788d9211101df54b0c2adf8db4fd0d980f086a5d3c1c137b64199c2078420"
+      },
+      "sip_credential_imports": {
+        "rows": "5",
+        "sha256": "caeb66fed2ad4c961925f8dda1ee5fd5435173090111ec544eaedd7cb7f3a986"
+      },
+      "sip_credential_versions": {
+        "rows": "5",
+        "sha256": "0be218d58ca3f8fc42602245fdcc7069340e1c59b33088323dabb8cc5bebd3ab"
+      },
+      "sip_credentials": {
+        "rows": "3",
+        "sha256": "82b6ee3b70cb1d2d29c206665f7c100757d68712f93c33f2beb9b78b9d87e766"
+      },
+      "sip_dids": {
+        "rows": "1",
+        "sha256": "5a73488e2ffd75b9bedc5c3a57245d82f6cda38388496dc8346d5684f4ff4675"
+      },
+      "sip_gateway_sources": {
+        "rows": "1",
+        "sha256": "69f8a84e65a4d9eadba8e05215c414d517e2370210559613bb0fbe144ee1b692"
+      },
+      "sip_gateways": {
+        "rows": "1",
+        "sha256": "cdb49c088509628fea955decae52ddaa5d56d3dbd8feb68c04aebf87b46aac54"
+      },
+      "sip_peer_receipts": {
+        "rows": "3",
+        "sha256": "4893ff2776eca6c2063a10c5d706d54b95e79b25c9c7dc5846220abbd3b8013c"
+      },
+      "sip_trunks": {
+        "rows": "1",
+        "sha256": "35587cbd0d9eb8d2ec4aeffce9e5f8f9931d6d364982044fa4ef8cd45e28242d"
+      },
+      "spatial_ref_sys": {
+        "rows": "8500",
+        "sha256": "d98ac5b69267bd620b56fab77ea205f470e3827ce6c653140bdf1b1263333999"
+      },
+      "staff_users": {
+        "rows": "11",
+        "sha256": "176f4933937a7df877a2bb34607ef5bec4bcaa28e81419bac6d7f37df262ea08"
+      },
+      "telephony_number_claims": {
+        "rows": "22",
+        "sha256": "2f9555a4748a843381e61624c0303a0a1d9500fb480e0b54544aeb9e41fd54f5"
+      },
+      "tenant_edit_receipts": {
+        "rows": "10",
+        "sha256": "b975b1174cd27b9f2086143d76c0f0eba40435a035e5a06370410e94370b251c"
+      },
+      "tenant_geography": {
+        "rows": "1",
+        "sha256": "acb3d79ec45e0cb845a6e4274fdfb99bab35d68a16ef1ba81de9adb81d2c1330"
+      },
+      "tenant_inventory_claims": {
+        "rows": "4",
+        "sha256": "0709d3672c4494a2fc0ae6da794a3ad4de6949f2999ada1f962e77af6e6d2933"
+      },
+      "tenant_inventory_history": {
+        "rows": "4",
+        "sha256": "f6bae08f9d50de6ba373832eb86f5bd5ec79791e3fe207fc729a0f5af7225e62"
+      },
+      "tenant_inventory_receipts": {
+        "rows": "2",
+        "sha256": "547e6a0427e9218e50b59e5c953d8411e5e42e4c28f989c21f8adce7fda2bae2"
+      },
+      "tenant_route_authorizations": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_history": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_receipts": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_test_cases": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_test_intents": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_test_progress": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_test_reconciliation_intents": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_test_reconciliation_results": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_route_test_results": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_verification_grant_cases": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_verification_grants": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_verification_receipts": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenant_verification_revocations": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "tenants": {
+        "rows": "5",
+        "sha256": "f1a6acfc845317a1a4eb3de685314c64ce9248118d3e313c4d4ee3c7c8b494d1"
+      },
+      "trunk_credential_audit_transactions": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "trunk_credential_bindings": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "trunk_credential_generations": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "trunk_credential_peer_scopes": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "trunk_credential_reservation_history": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "trunk_credential_reservations": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "work_receipts": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "work_results": {
+        "rows": "0",
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "excludedVolatileOrTransitionTables": [
+      "_prisma_migrations",
+      "audit_events",
+      "outbox_work",
+      "pbx_observations",
+      "pbx_ownership",
+      "pbx_live_runtime",
+      "tenant_runtime_proofs",
+      "pbx_static_profiles",
+      "pbx_profile_operations",
+      "pbx_profile_progress",
+      "pbx_artifact_profiles",
+      "pbx_profile_artifact_bindings"
+    ]
+  },
+  "native": {
+    "files": [
+      {
+        "path": "/etc/asterisk",
+        "uid": 1002,
+        "gid": 1002,
+        "mode": 16893,
+        "nlink": 2,
+        "sha256": null
+      },
+      {
+        "path": "/etc/asterisk/asterisk.conf",
+        "uid": 1002,
+        "gid": 1002,
+        "mode": 33204,
+        "nlink": 1,
+        "sha256": "70cd0d1b3e009c668ba0d69d5cfc8695adf04fb14035208c2d2764a5e8375072"
+      },
+      {
+        "path": "/etc/asterisk/extensions.conf",
+        "uid": 1000,
+        "gid": 999,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "46999f23c37a194c78a3cb7d982dd3a87e0b8e96f9f899e8a04f06eda6089ef9"
+      },
+      {
+        "path": "/etc/asterisk/http.conf",
+        "uid": 1002,
+        "gid": 1002,
+        "mode": 33204,
+        "nlink": 1,
+        "sha256": "10c5d4baf1c6fd947a382df2777382a0af5f0212ebf2d88e69ca4d3ca01cc657"
+      },
+      {
+        "path": "/etc/asterisk/logger.conf",
+        "uid": 1002,
+        "gid": 1002,
+        "mode": 33204,
+        "nlink": 1,
+        "sha256": "0d8691b649305fe8480ef76cda514b102e6d1dda7f62e9e313f7eff60fbbca86"
+      },
+      {
+        "path": "/etc/asterisk/manager.conf",
+        "uid": 1000,
+        "gid": 999,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "50efb8eb91dc236c1442194322d9784267123c5ac9ae0a1addba3179d0017194"
+      },
+      {
+        "path": "/etc/asterisk/modules.conf",
+        "uid": 1000,
+        "gid": 999,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "b50ffb6a56622918e856cf10d9eef220cca7e2a2b715736f609f4a0d32e86d1d"
+      },
+      {
+        "path": "/etc/asterisk/pjsip.conf",
+        "uid": 1000,
+        "gid": 999,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "ca40f9f6a02f488b9b7eb09f65c280613fb7ab041ec37f2afa28faa9a00eac87"
+      },
+      {
+        "path": "/etc/asterisk/rtp.conf",
+        "uid": 1002,
+        "gid": 1002,
+        "mode": 33204,
+        "nlink": 1,
+        "sha256": "9c256e2435736775f850541f066ede8e84063a41213e42d20c73ab24a04c5f88"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/initial-baseline",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "062e5e3bcf388380b4c7e6fe549e4a628f30f327e4fa3fbecca8eca95ef0956d"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/baseline-facts.json",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "4b157c9f3790c4054738f0ac31d8e702a2015cb0b5011ca228d07a0ec9db846f"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/plans/4b475c04-b573-4cc1-9d86-1c81b65f4060.json",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "2aabecada07ffbbcb26a030383ffa25f9917946a71e39be3097f21c12bcd3796"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/4b475c04-b573-4cc1-9d86-1c81b65f4060",
+        "uid": 0,
+        "gid": 0,
+        "mode": 16832,
+        "nlink": 2,
+        "sha256": null
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/4b475c04-b573-4cc1-9d86-1c81b65f4060/extensions.conf",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "efef14bee3ace8ee24e65ad1535471496c320c01da184f134e295c5a4079e31a"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/4b475c04-b573-4cc1-9d86-1c81b65f4060/pjsip.conf",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "6d1d4c9910765e685f2ab6486879706983e6c405d8855a73f16cfeae3c08c623"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/4b475c04-b573-4cc1-9d86-1c81b65f4060/provenance.json",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "3f6afa82728e900dfe753e21e802b932399fd14a0c8e93d5ad315ea871dc0f2a"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/plans/add6bfc1-ee2f-42a7-a68a-5cdba67b95d7.json",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "363ac80da4b7d129fd22276d638439418fccc748ce0ccece2eb9c11606d7f80b"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+        "uid": 0,
+        "gid": 0,
+        "mode": 16832,
+        "nlink": 2,
+        "sha256": null
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/add6bfc1-ee2f-42a7-a68a-5cdba67b95d7/extensions.conf",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/add6bfc1-ee2f-42a7-a68a-5cdba67b95d7/pjsip.conf",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "/var/lib/myims-pbx/control/bcb9d21c-96cd-4975-bd68-314b588a23a9/staging/add6bfc1-ee2f-42a7-a68a-5cdba67b95d7/provenance.json",
+        "uid": 0,
+        "gid": 0,
+        "mode": 33152,
+        "nlink": 1,
+        "sha256": "978aec4d913462a9cad7dbca85b9cb9513cbcf0ae2bfd3755e0b7920d527cda0"
+      }
+    ],
+    "sequence": 1,
+    "receiptsSha256": "fe370f3808beb91faff8a752055cdcf3e09b0b730f261a6d7fff752abfe18888"
+  },
+  "reference": [
+    {
+      "name": "asterisk.conf",
+      "sha256": "64b6f91112058e49420e2cffdaf058c738778c5938e044e8e425221ada96a9dc"
+    },
+    {
+      "name": "extensions.conf",
+      "sha256": "24c4fb95fc756ed194a05dd54c7fea627b6a3c7ac34b522b831f8a9bfcdb6a00"
+    },
+    {
+      "name": "http.conf",
+      "sha256": "262c9ef383e7fa54a0e4314996131eb5d1598ddb764d1b2eb42692ba5c1b9893"
+    },
+    {
+      "name": "logger.conf",
+      "sha256": "8c9c7ad2e50342ee445a28ded23f928ee5faeb6198968d610d06c08f8f7a6e7b"
+    },
+    {
+      "name": "manager.conf",
+      "sha256": "4463ab19a5d993dc7afb03f878617242696f218184141fba486462dd998be7df"
+    },
+    {
+      "name": "modules.conf",
+      "sha256": "46e795053d48ba45a2755340bddb3f8c3e2635425aa6888eacf2abf18d7a9802"
+    },
+    {
+      "name": "pjsip.conf",
+      "sha256": "8c892e16346f7ac32b80c0c9694462b439b3dc0ac0d4970b530621cfbbb5813d"
+    },
+    {
+      "name": "rtp.conf",
+      "sha256": "22ecdf0381623ce0e83ea0ef1e2e924d3f23095183253f129653b88a17c0c21a"
+    },
+    {
+      "name": "voicemail.conf",
+      "sha256": "70ca6545877693a364d5a19bfa23e9b752b08e2720fa943a5cd80befda7f3ea7"
+    }
+  ],
+  "preservationVerified": false
+}

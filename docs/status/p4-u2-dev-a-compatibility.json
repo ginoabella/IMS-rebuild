@@ -1,0 +1,30 @@
+{
+  "check": "isolated-profile-pair-compatibility",
+  "passed": true,
+  "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+  "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+  "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+  "oldArtifactId": "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+  "oldUnmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01",
+  "newUnmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+  "newIsolatedArtifactId": "75666488-2ffd-454b-8c35-6be08b68dcb7",
+  "actualLoadedModules": [
+    "bridge_simple",
+    "res_speech",
+    "res_agi",
+    "func_channel",
+    "res_pjsip_header_funcs",
+    "res_pjsip_endpoint_identifier_ip"
+  ],
+  "actualAsteriskStarts": 4,
+  "oldArtifactRejectedWithNewProfile": true,
+  "newPairVerified": true,
+  "exactOldPairRestored": true,
+  "immutableHistoryPreserved": true,
+  "network": "none",
+  "callsPlaced": 0,
+  "sqlTransitionTested": false,
+  "interruptionRecoveryTested": false,
+  "retainedMutation": false,
+  "isolatedContainerRemoved": true
+}

@@ -70,7 +70,7 @@ export class TenantRuntimeMonitor {
     return (
       (
         await this.store.pool.query<Runtime>(
-          `SELECT a.id AS artifact_id,r.id AS revision_id,r.source_digest,p.routing_generation AS runtime_generation,o.epoch::text AS epoch FROM public.pbx_live_runtime p JOIN public.pbx_live_artifacts a ON a.id=p.installed_id AND a.id=p.verified_id JOIN public.pbx_revisions r ON r.id=a.revision_id JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.runtime_state='verified' AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND o.expires_at>clock_timestamp() AND o.epoch=p.boundary_epoch AND r.policy_version='tenant-routing-1' AND r.compiler_version='tenant-review-1'`,
+          `SELECT a.id AS artifact_id,r.id AS revision_id,r.source_digest,p.routing_generation AS runtime_generation,o.epoch::text AS epoch FROM public.pbx_live_runtime p JOIN public.pbx_live_artifacts a ON a.id=p.installed_id AND a.id=p.verified_id JOIN public.pbx_revisions r ON r.id=a.revision_id JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.runtime_state='verified' AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND p.active_profile_operation_id IS NULL AND o.expires_at>clock_timestamp() AND o.epoch=p.boundary_epoch AND r.policy_version='tenant-routing-1' AND r.compiler_version='tenant-review-1'`,
           [this.nodeId],
         )
       ).rows[0] ?? null
@@ -94,7 +94,7 @@ export class TenantRuntimeMonitor {
       if (!runtime) {
         const retained = (
           await this.store.pool.query<{ id: string }>(
-            `SELECT a.id FROM public.pbx_live_runtime p JOIN public.pbx_live_artifacts a ON a.id=p.verified_id AND a.id=p.installed_id JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.runtime_state='verified' AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND o.expires_at>clock_timestamp() AND o.epoch=p.boundary_epoch`,
+            `SELECT a.id FROM public.pbx_live_runtime p JOIN public.pbx_live_artifacts a ON a.id=p.verified_id AND a.id=p.installed_id JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.runtime_state='verified' AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND p.active_profile_operation_id IS NULL AND o.expires_at>clock_timestamp() AND o.epoch=p.boundary_epoch`,
             [this.nodeId],
           )
         ).rows[0];
@@ -132,7 +132,7 @@ export class TenantRuntimeMonitor {
           /* Drift stays incomplete. */
         }
         await this.store.pool.query(
-          `INSERT INTO public.tenant_runtime_proofs(node_id,artifact_id,owner_epoch,source_digest,valid,runtime_generation) SELECT $1,$2,$3,$4,$5,$6 WHERE EXISTS(SELECT 1 FROM public.pbx_live_runtime p JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.verified_id=$2 AND p.installed_id=$2 AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND p.routing_generation=$6 AND o.epoch=$3 AND o.expires_at>clock_timestamp()) ON CONFLICT(node_id) DO UPDATE SET artifact_id=excluded.artifact_id,owner_epoch=excluded.owner_epoch,source_digest=excluded.source_digest,valid=excluded.valid,runtime_generation=excluded.runtime_generation,checked_at=clock_timestamp()`,
+          `INSERT INTO public.tenant_runtime_proofs(node_id,artifact_id,owner_epoch,source_digest,valid,runtime_generation) SELECT $1,$2,$3,$4,$5,$6 WHERE EXISTS(SELECT 1 FROM public.pbx_live_runtime p JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.verified_id=$2 AND p.installed_id=$2 AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND p.active_profile_operation_id IS NULL AND p.routing_generation=$6 AND o.epoch=$3 AND o.expires_at>clock_timestamp()) ON CONFLICT(node_id) DO UPDATE SET artifact_id=excluded.artifact_id,owner_epoch=excluded.owner_epoch,source_digest=excluded.source_digest,valid=excluded.valid,runtime_generation=excluded.runtime_generation,checked_at=clock_timestamp()`,
           [
             this.nodeId,
             runtime.artifact_id,
@@ -274,7 +274,7 @@ export class TenantRuntimeMonitor {
     if (!(await this.barrier.idle())) return;
     const nonce = randomBytes(32).toString('hex');
     const dispatched = await this.store.pool.query(
-      `UPDATE public.tenant_route_test_progress p SET state='dispatching',nonce_hash=$2,owner_epoch=$3,deadline=clock_timestamp()+interval '30 seconds',updated_at=clock_timestamp() WHERE p.intent_id=$1 AND p.state='queued' AND EXISTS(SELECT 1 FROM public.pbx_live_runtime r JOIN public.pbx_ownership o ON o.node_id=r.node_id WHERE r.node_id=p.node_id AND r.verified_id=$4 AND r.active_operation_id IS NULL AND r.active_retirement_id IS NULL AND o.epoch=$3 AND o.expires_at>clock_timestamp()) RETURNING intent_id`,
+      `UPDATE public.tenant_route_test_progress p SET state='dispatching',nonce_hash=$2,owner_epoch=$3,deadline=clock_timestamp()+interval '30 seconds',updated_at=clock_timestamp() WHERE p.intent_id=$1 AND p.state='queued' AND EXISTS(SELECT 1 FROM public.pbx_live_runtime r JOIN public.pbx_ownership o ON o.node_id=r.node_id WHERE r.node_id=p.node_id AND r.verified_id=$4 AND r.active_operation_id IS NULL AND r.active_retirement_id IS NULL AND r.active_profile_operation_id IS NULL AND o.epoch=$3 AND o.expires_at>clock_timestamp()) RETURNING intent_id`,
       [row.id, hash(nonce), runtime.epoch, runtime.artifact_id],
     );
     if (!dispatched.rows.length) return;
@@ -485,7 +485,7 @@ export class TenantRuntimeMonitor {
         const owner =
           (
             await tx.query(
-              `SELECT 1 FROM public.pbx_live_runtime p JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND p.boundary_epoch=o.epoch AND o.epoch=$2 AND o.expires_at>clock_timestamp()`,
+              `SELECT 1 FROM public.pbx_live_runtime p JOIN public.pbx_ownership o ON o.node_id=p.node_id WHERE p.node_id=$1 AND p.active_operation_id IS NULL AND p.active_retirement_id IS NULL AND p.active_profile_operation_id IS NULL AND p.boundary_epoch=o.epoch AND o.epoch=$2 AND o.expires_at>clock_timestamp()`,
               [this.nodeId, result.epoch],
             )
           ).rows.length > 0;

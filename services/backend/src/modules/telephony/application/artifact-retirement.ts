@@ -38,7 +38,7 @@ export async function retirementEligible(
   return (
     (
       await s.query(
-        `SELECT a.id FROM public.pbx_live_artifacts a JOIN public.pbx_live_runtime r ON r.node_id=a.node_id WHERE a.id=$2 AND a.node_id=$1 AND NOT a.initial_baseline AND a.id<>$3 AND r.installed_id=$3 AND r.verified_id=$3 AND r.known_good_id=$3 AND r.runtime_state='verified' AND r.active_operation_id IS NULL AND NOT EXISTS(SELECT 1 FROM public.pbx_artifact_retirements x WHERE x.artifact_id=a.id)
+        `SELECT a.id FROM public.pbx_live_artifacts a JOIN public.pbx_live_runtime r ON r.node_id=a.node_id WHERE a.id=$2 AND a.node_id=$1 AND NOT a.initial_baseline AND a.id<>$3 AND r.installed_id=$3 AND r.verified_id=$3 AND r.known_good_id=$3 AND r.runtime_state='verified' AND r.active_operation_id IS NULL AND r.active_profile_operation_id IS NULL AND NOT EXISTS(SELECT 1 FROM public.pbx_artifact_retirements x WHERE x.artifact_id=a.id)
      AND EXISTS(SELECT 1 FROM public.pbx_live_pins p WHERE p.revision_id=a.revision_id AND p.kind='extensions' AND p.resource_id=$4 AND p.released_at IS NULL)
      AND NOT EXISTS(SELECT 1 FROM public.pbx_live_artifacts b JOIN public.pbx_live_pins p ON p.revision_id=b.revision_id WHERE b.id=$3 AND p.kind='extensions' AND p.resource_id=$4 AND p.released_at IS NULL)
      AND NOT EXISTS(SELECT 1 FROM public.pbx_live_operations o JOIN public.pbx_live_progress p ON p.operation_id=o.id WHERE o.node_id=$1 AND (o.target_id=a.id OR o.expected_baseline_id=a.id) AND p.state NOT IN ('verified','recovered','validation_failed','revoked') AND p.recovery<>'passed')

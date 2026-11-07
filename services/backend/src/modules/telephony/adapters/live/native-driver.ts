@@ -1,3 +1,9 @@
+import {
+  ProtectedStaticProfiles,
+  selectedStaticProfile,
+  durableJson,
+} from './static-profiles';
+import { protectedLiveBytes } from './configuration';
 import { tenantRouting } from '../../domain/tenant-routing';
 import { createSocket } from 'node:dgram';
 import { execFile, spawn } from 'node:child_process';
@@ -55,6 +61,16 @@ export class NativePbxFailure extends Error {
   }
 }
 const hash = (data: Buffer) => createHash('sha256').update(data).digest('hex');
+export function moduleIsRunning(output: string, name: string): boolean {
+  if (!/^[a-z0-9_]{1,64}$/.test(name)) return false;
+  return output
+    .split('\n')
+    .some(
+      (line) =>
+        new RegExp('^' + name + '\\.so\\s').test(line) &&
+        /\s\d+\s+Running\s+\S+\s*$/.test(line),
+    );
+}
 export function nativeCli(
   command: string,
   configuration?: string,
@@ -65,7 +81,14 @@ export function nativeCli(
     execFile(
       '/usr/sbin/asterisk',
       [...(configuration ? ['-C', configuration] : []), '-rx', command],
-      { timeout: 3000, maxBuffer: 1048576, encoding: 'utf8' },
+      // This child only inspects the live PBX. A stopped server can leave its
+      // CLI ignoring TERM; bound that child without signaling Asterisk itself.
+      {
+        timeout: 3000,
+        killSignal: 'SIGKILL',
+        maxBuffer: 1048576,
+        encoding: 'utf8',
+      },
       (error, stdout) =>
         error
           ? reject(new NativePbxFailure('boundary_unavailable'))
@@ -77,12 +100,13 @@ export function nativeCli(
 export class NativePbxDriver {
   private readonly readerGid: number;
   private readonly validatorUid: number;
-  private readonly commands: NativeCommandRunner;
+  private readonly commands: NativeCommandRunner | null;
   constructor(
     private readonly privateRoot: string,
     private readonly runtimeRoot: string,
     private readonly store: ProtectedArtifactStore,
     private readonly barrier: NativeAdmissionBarrier,
+    private readonly readOnly = false,
   ) {
     if (
       process.getuid?.() !== 0 ||
@@ -93,8 +117,8 @@ export class NativePbxDriver {
     const parent = lstatSync('/var/lib/myims-pbx');
     if (!parent.isDirectory() || parent.isSymbolicLink() || parent.uid !== 0)
       throw new NativePbxFailure('boundary_unavailable');
-    chmodSync('/var/lib/myims-pbx', 0o751);
-    this.commands = new NativeCommandRunner(privateRoot);
+    if (!readOnly) chmodSync('/var/lib/myims-pbx', 0o751);
+    this.commands = readOnly ? null : new NativeCommandRunner(privateRoot);
     const group = readFileSync('/etc/group', 'utf8')
       .split('\n')
       .find((line) => line.startsWith('asterisk:'));
@@ -110,6 +134,7 @@ export class NativePbxDriver {
       this.validatorUid < 1
     )
       throw new NativePbxFailure('boundary_unavailable');
+    if (readOnly) return;
     mkdirSync('/var/lib/myims-pbx/validators', {
       recursive: true,
       mode: 0o750,
@@ -120,12 +145,25 @@ export class NativePbxDriver {
     chownSync(runtimeRoot, 0, this.readerGid);
     chmodSync(runtimeRoot, 0o750);
   }
+  private assertMutable() {
+    if (this.readOnly) throw new NativePbxFailure('boundary_unavailable');
+  }
+  staticDirectory(): string {
+    const selected = selectedStaticProfile(this.privateRoot);
+    if (!selected) return '/etc/asterisk';
+    new ProtectedStaticProfiles(
+      this.privateRoot,
+      this.readerGid,
+    ).verifyProjection(selected.digest);
+    return '/var/lib/myims-pbx/profiles/' + selected.digest + '/conf';
+  }
   unmanaged(): string {
-    const files = readdirSync('/etc/asterisk')
+    const directory = this.staticDirectory();
+    const files = readdirSync(directory)
       .filter((n) => n.endsWith('.conf'))
       .sort();
     const fingerprints = files.map((name) => {
-      const path = join('/etc/asterisk', name),
+      const path = join(directory, name),
         s = lstatSync(path);
       if (!s.isFile() || s.isSymbolicLink() || s.size > 1048576)
         throw new NativePbxFailure('boundary_unavailable');
@@ -148,6 +186,7 @@ export class NativePbxDriver {
     return values;
   }
   async captureBaseline() {
+    this.assertMutable();
     const path = join(this.privateRoot, 'baseline-facts.json');
     try {
       lstatSync(path);
@@ -227,6 +266,22 @@ export class NativePbxDriver {
     identity: ArtifactIdentity,
     snapshot: RevisionSnapshot,
   ): Promise<void> {
+    this.assertMutable();
+    let staticDirectory = this.staticDirectory();
+    if (selectedStaticProfile(this.privateRoot)) {
+      const plan = JSON.parse(
+        protectedLiveBytes(
+          join(this.privateRoot, 'plans', identity.revisionId + '.json'),
+          5 * 1024 * 1024,
+        ).toString('utf8'),
+      ) as { unmanaged: string };
+      new ProtectedStaticProfiles(
+        this.privateRoot,
+        this.readerGid,
+      ).verifyProjection(plan.unmanaged);
+      staticDirectory =
+        '/var/lib/myims-pbx/profiles/' + plan.unmanaged + '/conf';
+    }
     const files = this.store.load(identity),
       work = join('/var/lib/myims-pbx/validators', `validate-${randomUUID()}`),
       configuration = join(work, 'asterisk.conf');
@@ -247,7 +302,7 @@ export class NativePbxDriver {
     const config = `[directories]\nastetcdir => ${work}\nastmoddir => /usr/lib/asterisk/modules\nastvarlibdir => ${work}/data\nastdbdir => ${work}/data\nastdatadir => /var/lib/asterisk\nastspooldir => ${work}/spool\nastrundir => ${work}/run\nastlogdir => ${work}/log\n[options]\nverbose = 0\nnocolor = yes\n`;
     const inputs: Record<string, Buffer> = {
       'asterisk.conf': Buffer.from(config),
-      'modules.conf': readFileSync('/etc/asterisk/modules.conf'),
+      'modules.conf': readFileSync(join(staticDirectory, 'modules.conf')),
       'pjsip.conf': Buffer.concat([
         Buffer.from(
           `[transport-udp]\ntype=transport\nprotocol=udp\nbind=127.0.0.1:${port}\n`,
@@ -256,7 +311,10 @@ export class NativePbxDriver {
       ]),
       'extensions.conf': Buffer.concat([
         Buffer.from(
-          readFileSync('/etc/asterisk/extensions.conf', 'utf8').replace(
+          readFileSync(
+            join(staticDirectory, 'extensions.conf'),
+            'utf8',
+          ).replace(
             /^#tryinclude \/var\/lib\/myims-pbx\/managed\/current\/extensions\.conf[^\S\r\n]*$/gm,
             '',
           ),
@@ -405,8 +463,26 @@ export class NativePbxDriver {
     }
   }
   select(identity: ArtifactIdentity): void {
+    this.assertMutable();
     try {
       if (!uuid(identity.revisionId)) throw new Error();
+      const selection = selectedStaticProfile(this.privateRoot);
+      if (selection) {
+        const plan = JSON.parse(
+          protectedLiveBytes(
+            join(this.privateRoot, 'plans', identity.revisionId + '.json'),
+            5 * 1024 * 1024,
+          ).toString('utf8'),
+        ) as { unmanaged: string };
+        if (
+          selection.digest !== plan.unmanaged ||
+          selection.artifactId !== identity.revisionId
+        )
+          new ProtectedStaticProfiles(this.privateRoot, this.readerGid).select(
+            plan.unmanaged,
+            identity.revisionId,
+          );
+      }
       const files = this.store.load(identity),
         target = join(this.runtimeRoot, identity.revisionId),
         temporary = join(this.runtimeRoot, `.install-${randomUUID()}`);
@@ -449,9 +525,45 @@ export class NativePbxDriver {
     }
   }
   async drain() {
-    await this.commands.drain();
+    await this.commands?.drain();
   }
   async reload(guard: () => Promise<void>): Promise<void> {
+    this.assertMutable();
+    if (!this.commands) throw new NativePbxFailure('boundary_unavailable');
+    const directory = this.staticDirectory();
+    const settings = await nativeCli('core show settings');
+    const loaded = /^ {2}Configuration directory:\s+(\S+)\s*$/m.exec(
+      settings,
+    )?.[1];
+    if (!loaded) throw new NativePbxFailure('boundary_unavailable');
+    if (loaded !== directory) {
+      await guard();
+      await this.barrier.assertClosed();
+      if (!(await this.barrier.idle()))
+        throw new NativePbxFailure('boundary_unavailable');
+      durableJson(join(this.privateRoot, 'restart-request.json'), {
+        version: 1,
+        selection: selectedStaticProfile(this.privateRoot),
+      });
+      await this.commands.restart();
+      const deadline = Date.now() + 15000;
+      while (Date.now() < deadline) {
+        await guard();
+        try {
+          const current = await nativeCli('core show settings');
+          if (
+            /^ {2}Configuration directory:\s+(\S+)\s*$/m.exec(current)?.[1] ===
+              directory &&
+            (await nativeCli('core waitfullybooted')).includes('fully booted')
+          )
+            return;
+        } catch {
+          /* A dispatched restart is never repeated on uncertain startup. */
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+      throw new NativePbxFailure('boundary_unavailable');
+    }
     for (const command of [
       'module reload res_pjsip.so',
       'dialplan reload',
@@ -702,8 +814,19 @@ export class NativePbxDriver {
     unmanaged: string,
   ): Promise<void> {
     if (
+      !/\bAsterisk 22\.10\.1\b/.test(await nativeCli('core show version')) ||
+      !(await nativeCli('core waitfullybooted')).includes('fully booted')
+    )
+      throw new NativePbxFailure('verification_failed');
+    if (
       readlinkSync(join(this.runtimeRoot, 'current')) !== identity.revisionId ||
       this.unmanaged() !== unmanaged
+    )
+      throw new NativePbxFailure('verification_failed');
+    const settings = await nativeCli('core show settings');
+    if (
+      /^ {2}Configuration directory:\s+(\S+)\s*$/m.exec(settings)?.[1] !==
+      this.staticDirectory()
     )
       throw new NativePbxFailure('verification_failed');
     const expected = this.store.load(identity);

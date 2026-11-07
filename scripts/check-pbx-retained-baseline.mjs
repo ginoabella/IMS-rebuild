@@ -5,11 +5,15 @@ import { createRequire } from 'node:module';
 import { readFileSync, lstatSync } from 'node:fs';
 import { execFileSync, spawnSync } from 'node:child_process';
 if (process.argv[2] === '--host') {
-  const descriptor =
-    'import os,json,uuid; c=json.load(open("/run/pbx-live-native/configuration.json")); n=str(uuid.UUID(c["nodeId"])); fd=os.open("/var/lib/myims-pbx/control/"+n+"/boundary.lock",os.O_RDONLY); os.dup2(fd,3); os.set_inheritable(3,True); os.execvp("node",["node","--input-type=module"])';
   const result = spawnSync(
     'docker',
-    ['exec', '-i', 'myims-rebuild-dev-asterisk-1', 'python3', '-c', descriptor],
+    [
+      'exec',
+      '-i',
+      'myims-rebuild-dev-asterisk-1',
+      'node',
+      '--input-type=module',
+    ],
     {
       input: readFileSync(new URL(import.meta.url)),
       encoding: 'utf8',
@@ -33,6 +37,9 @@ const { ProtectedArtifactStore } = load('./artifact-store.js');
 const { NativePbxDriver } = load('./native-driver.js');
 const { NativeAdmissionBarrier } = load('./admission.js');
 const { RetainedLivePlans } = load('./retained-plans.js');
+const { ProtectedStaticProfiles, selectedStaticProfile } = load(
+  './static-profiles.js',
+);
 const config = liveConfiguration(
   '/run/pbx-live-native/configuration.json',
   false,
@@ -52,6 +59,7 @@ const cli = (command) =>
   execFileSync('asterisk', ['-rx', command], {
     encoding: 'utf8',
     timeout: 5000,
+    killSignal: 'SIGKILL',
     maxBuffer: 1048576,
   });
 try {
@@ -66,6 +74,8 @@ try {
   assert.equal(row.installation_id, config.installationId);
   assert.equal(row.runtime_state, 'verified');
   assert.equal(row.active_operation_id, null);
+  assert.equal(row.active_retirement_id, null);
+  assert.equal(row.active_profile_operation_id ?? null, null);
   assert.equal(row.installed_id, row.verified_id);
   assert.equal(row.known_good_id, row.verified_id);
   const journal = JSON.parse(readFileSync(root + '/boundary.json', 'utf8'));
@@ -75,6 +85,7 @@ try {
     root,
     config.nodeId,
     config.installationId,
+    true,
   ).load(row.verified_id);
   const artifacts = new ProtectedArtifactStore(
     root + '/staging',
@@ -86,15 +97,48 @@ try {
     '/var/lib/myims-pbx/managed',
     artifacts,
     new NativeAdmissionBarrier(['127.0.0.1']),
+    true,
   );
-  // Constructor reasserts the already-established directory modes. Only passive
-  // verification methods run; no baseline capture or canonical promotion occurs.
+  const original = new RetainedLivePlans(
+    root,
+    config.nodeId,
+    config.installationId,
+    true,
+  ).load(initial);
+  artifacts.load(original.identity);
+  assert.equal(original.identity.compilerVersion, 'baseline-1');
+  assert.equal(
+    JSON.parse(readFileSync(root + '/baseline-facts.json', 'utf8')).unmanaged,
+    original.unmanaged,
+  );
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT 1 FROM public.pbx_live_artifacts WHERE id=$1 AND node_id=$2 AND initial_baseline',
+        [initial, config.nodeId],
+      )
+    ).rows.length,
+    1,
+  );
+  if (selectedStaticProfile(root)) {
+    const gid = Number(
+      readFileSync('/etc/group', 'utf8')
+        .split('\n')
+        .find((l) => l.startsWith('asterisk:'))
+        ?.split(':')[2],
+    );
+    new ProtectedStaticProfiles(root, gid).verifyProjection(original.unmanaged);
+  } else assert.equal(original.unmanaged, driver.unmanaged());
+  // Inspection-only construction never creates paths, changes modes, captures
+  // a baseline or promotes canonical state. Mutating methods reject in this mode.
   await driver.verify(artifact.identity, artifact.snapshot, artifact.unmanaged);
   assert.ok(cli('core show channels count').includes('0 active channels'));
   assert.ok(cli('core waitfullybooted').includes('fully booted'));
   const after = await state();
   assert.equal(after.verified_id, row.verified_id);
   assert.equal(after.active_operation_id, null);
+  assert.equal(after.active_retirement_id, null);
+  assert.equal(after.active_profile_operation_id ?? null, null);
   console.log(
     JSON.stringify({
       check: 'retained-baseline',

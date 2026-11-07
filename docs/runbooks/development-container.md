@@ -220,3 +220,131 @@ approval, separate telephony process mounts, lifecycle and verification commands
 P3-U2b conditionally approves a dedicated private persistent verified-TLS OpenBao
 service for controlled development only. See the [endpoint credential runbook](endpoint-credentials.md)
 for process isolation, manual unseal, token custody and deferred production review.
+
+## Retained PBX profile transition and recovery
+
+Build the affected native dependencies through `./dev exec pnpm build:backend`.
+The following Docker entry points are implemented:
+
+```sh
+./dev pbx-profile status NODE_UUID INSTALLATION_UUID
+./dev pbx-profile preflight docs/status/p4-u2-dev-a-expectations.json
+./dev exec pnpm check:pbx-profile
+./dev pbx-profile composition-check
+./dev pbx-profile preservation before NODE_UUID BEFORE.json
+./dev pbx-profile rehearse-compatibility docs/status/p4-u2-dev-a-expectations.json
+./dev pbx-profile rehearse docs/status/p4-u2-dev-a-expectations.json
+```
+
+Status is passive and prints sanitized facts/blockers. Preflight compares the exact
+reviewed node/installation, initial/current artifact IDs, compiler/policy and
+unmanaged digest, returning exit `2` if blocked. Never refresh the expectation file
+to conceal drift. The checked-in expectations are dated evidence for the observed
+retained installation, not a reusable default for a different installation.
+Neither command changes ownership, configuration, credentials, SQL state or calls.
+The host separately checks the existing installation-scoped consumer's bounded
+GET-only access. Required nonzero material references remain blocked until an exact
+provider-material proof exists; availability alone does not prove material values.
+The native role has no provider token. Status remains informational even when it
+reports blockers; preflight exits `2` when blocked.
+
+The focused check runs behavioral tests and an actual inspection-only native
+regression: five mutation methods reject and protected bytes, ownership, modes and
+mtime remain identical. Run this when no separate administrative mutation is in
+progress; concurrent real mutation can invalidate the preservation comparison.
+
+`rehearse-compatibility` creates a disposable actual-Asterisk copy with network
+`none`, no ports, no provider/database mounts and no writable retained mounts. It
+requires an already built `myims-rebuild-dev-asterisk-live` image and material-free
+retained snapshot. It verifies the old pair, six additional module loads, rejection
+of old-artifact/new-profile mismatch, a new rendered compatible pair and exact old
+pair restoration. The fixture copies protected bytes only in memory and its private
+container layer/volumes, then removes that container and its anonymous volumes.
+It emits no raw configuration or protocol data. Do not interpret this result as a
+SQL transition or interruption-recovery rehearsal, or as tenant calling readiness.
+
+`rehearse` builds the backend and pinned supervisor image, then creates owned
+PostgreSQL/Asterisk copies. It exercises actual helper/PBX process loss, separately
+labelled SQL faults, exact original-baseline restore, active/unknown activity,
+owner loss, node-version drift at dispatch, whole-container loss before the first
+selector and between static/managed selection, competing console intents,
+protected custody attacks and normal console recovery across profiles. It
+publishes no ports and places only bounded
+Local calls inside its disposable PBX. Its copies have no provider token. Cleanup
+removes only its exact database, containers and labelled volumes. `--smoke` selects
+only the normal transition/restore case; `--safety` selects the additional safety
+scenarios. Neither subset substitutes for the complete matrix.
+
+The [DEV-01 review](../planning/p4-u2-dev-a-profile-transition-review.md) records
+the approved preservation strategy and conditional quiet maintenance effects.
+Check the [evidence ledger](../status/p4-u2-dev-a-evidence.md) before relying on
+acceptance. Finish the actual isolated matrix and required sequential regressions
+before retained effects. Preserve a before-state inventory of canonical history,
+pins, protected artifacts, original static/reference bytes and unrelated data.
+Apply the additive migration with `./dev migrate`, build the affected backend,
+and refresh the existing backend/telephony consumers so their operation barriers
+use the current build (`docker restart myims-rebuild-dev-backend-1 myims-rebuild-dev-telephony-1`).
+Refresh ordinary private HTTPS with `./dev platform-https-stop` then
+`./dev platform-https`, and `./dev staff-https-stop` then `./dev staff-https`;
+each start retains its existing protected material and runs its normal build.
+Check the exact old-profile preflight. A legacy helper requires the explicit
+helper-only refresh below; its preflight permits only the missing new-executor
+marker, and verifies the exact old loaded pair, process and inherited lock. It
+terminates only that helper and verifies the Asterisk process survives.
+
+```sh
+./dev pbx-profile refresh-executor BEFORE_EXPECTATIONS.json
+./dev pbx-profile preflight BEFORE_EXPECTATIONS.json
+./dev pbx-profile composition-check
+./dev pbx-profile upgrade BEFORE_EXPECTATIONS.json OPERATION_UUID
+./dev pbx-profile operation-status BEFORE_EXPECTATIONS.json OPERATION_UUID
+./dev pbx-profile reconcile BEFORE_EXPECTATIONS.json OPERATION_UUID
+```
+
+Choose a new UUID once and retain it with the immutable request. Upgrade creates
+that distinct compatible artifact without changing its captured revision or pins.
+It accepts one canonical intent, waits for native quiet preparation, durably records
+restart uncertainty, rechecks the current owner/epoch, exact selected pair and
+quiet admission barrier, and recreates only Asterisk with the same mounts/ports.
+The host retains canonical locks through dispatch and releases them before waiting
+for startup proof. A lost response never authorizes another restart. Operation
+status is read-only; reconcile waits for independent native inspection of the
+same durable operation and sends no selection/restart. `prepared` requires the
+original explicit dispatch; `unknown` requires inspection and a reviewed compatible
+rollback. Do not retry an uncertain effect with a different upgrade UUID.
+
+For explicit rollback, use expectations for the currently acknowledged source
+(even if its actual loaded pair is uncertain), a fresh rollback UUID, and an exact
+retained compatible target/digest. Supply the unresolved predecessor UUID only
+when replacing that active profile operation; omit it for an ordinary completed
+profile restoration:
+
+```sh
+./dev pbx-profile rollback SOURCE_EXPECTATIONS.json ROLLBACK_UUID TARGET_ARTIFACT_UUID TARGET_UNMANAGED_DIGEST [UNRESOLVED_PREDECESSOR_UUID]
+./dev pbx-profile reconcile SOURCE_EXPECTATIONS.json ROLLBACK_UUID
+./dev pbx-live-check
+./dev pbx-profile preservation after BEFORE.json AFTER.json
+```
+
+Rollback restores both static and managed selections, followed by the required
+quiet restart and independent proof. Existing console recovery also selects the
+artifact's own static profile and uses the fixed native restart when needed.
+An original baseline with missing custody cannot be recaptured; preserve uncertainty
+and repair custody or review a separate migration decision. Unknown activity or an
+expired owner defers effects. Never force hangup, release pins, edit the selector,
+copy reference credentials, or change expectations to hide drift. Ordinary startup
+only reads the selected directory and invalidates stale runtime proof; it cannot
+accept an upgrade or replay a selector/restart request.
+An interrupted first preparation may boot the exact already-selected legacy pair
+only when the protected journal proves no selector was established. Admission
+stays closed until fresh native verification. After selection is established,
+a missing selector blocks startup; do not recreate it from SQL or recapture a
+baseline.
+
+Run exact post-transition preflight/status and `pbx-live-check`, health and both
+HTTPS checks. Preserve the dated old expectations; write a separate after-state
+file for the newly verified artifact/digest. Routine provider-access expiry uses
+`./dev pbx-live-access INSTALLATION_UUID`, which replaces only the scoped read
+consumer with zero policy/static changes. Do not rerun `pbx-live-prepare` or
+manually load modules on a retained installation. This procedure grants no tenant
+routes, persistent call participants or ordinary SIP/RTP readiness.

@@ -18,7 +18,13 @@ function fixed(
     const child = execFile(
       executable,
       args,
-      { timeout: 3000, maxBuffer: 262144, encoding: 'utf8' },
+      {
+        timeout: 3000,
+        // The only Asterisk command here is the read-only channel count.
+        killSignal: executable === '/usr/sbin/asterisk' ? 'SIGKILL' : 'SIGTERM',
+        maxBuffer: 262144,
+        encoding: 'utf8',
+      },
       (error, stdout) =>
         error
           ? reject(new AdmissionFailure('boundary_unavailable'))

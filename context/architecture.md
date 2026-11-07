@@ -953,3 +953,20 @@ with claim/permission versions and test references. The
 admission, readiness invalidation, role/lock ordering and U3/U5/P5 handoffs.
 Lifecycle, assignments and operational ingestion remain separate. Implementation
 acceptance is tracked in [current evidence](../docs/status/p4-u2c-evidence.md).
+
+## Retained static-profile compatibility
+
+P4-U2-DEV-a extends the same native owner and physical queue with trusted deployment
+intents for exact static-profile/artifact pairs. Protected immutable static bytes
+and separate PBX-readable projections are addressed by unmanaged digest. A new
+profile artifact has a distinct identity while retaining its captured revision,
+compiler/policy and dependency pins; the original baseline is never replaced.
+Canonical profile intent excludes apply/recovery, retirement and controlled-call
+admission. Selection holds the existing node/owner/runtime locks and rechecks
+quiet state, custody, provenance and pins. A fixed supervisor reads the selected
+pair and invalidates old runtime proof; independent native inspection must prove
+the loaded pair before acknowledgement. Interrupted work is inspected without
+repeating selection/restart; explicit rollback restores both compatible components.
+Historical console recovery also restores its original profile. HTTP/Next receive
+no profile control or provider transport. See the [revision contract](../docs/architecture/pbx-revisions.md)
+and [implementation evidence](../docs/status/p4-u2-dev-a-evidence.md) for acceptance.

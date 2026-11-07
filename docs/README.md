@@ -206,6 +206,10 @@ P4-U2: [Allocate inventory and verify tenant routing — feature spec and split 
 - [Verified-routing operator workflow](runbooks/tenant-routing-verification.md)
 - [P4-U2c final acceptance evidence](status/p4-u2c-evidence.md)
 - [P4-U2 complete manual test guide and review checklist](guides/p4-u2-manual-testing.md)
+- [P4-U2-DEV — Persistent tenant calling in the development environment](../context/feature-specs/p4-u2-dev-persistent-tenant-calling.md) — deployment follow-up; child a complete, b/c planned. DEV-02/03 remain open.
+- [P4-U2-DEV-a — Retained PBX profile upgrade and recovery](../context/feature-specs/p4-u2-dev-a-retained-pbx-profile-upgrade-and-recovery.md) — complete; [final evidence](status/p4-u2-dev-a-evidence.md).
+- [P4-U2-DEV-b — Persistent controlled-call preparation](../context/feature-specs/p4-u2-dev-b-persistent-controlled-call-preparation.md) — planned.
+- [P4-U2-DEV-c — Ordinary-console calling and integrated acceptance](../context/feature-specs/p4-u2-dev-c-ordinary-console-calling-and-integrated-acceptance.md) — planned.
 
 Staff access: [P2-U4 feature spec and sub-unit review](../context/feature-specs/p2-u4-tenant-staff-sign-in-and-credential-lifecycle.md).
 P2-U4 and a/b/c are complete under the approved policy. Reported Android native

@@ -124,7 +124,7 @@ export class PbxLive {
         }
         const runtime = (
           await s.query(
-            `SELECT node_id AS "nodeId",runtime_state AS runtime,installed_id AS "installedId",verified_id AS "verifiedId",known_good_id AS "knownGoodId",active_operation_id AS "activeOperationId",baseline_verified_at AS "baselineVerifiedAt",(executor_seen_at>clock_timestamp()-interval '15 seconds') AS "executorAvailable",updated_at AS "updatedAt" FROM public.pbx_live_runtime WHERE node_id=$1`,
+            `SELECT node_id AS "nodeId",runtime_state AS runtime,installed_id AS "installedId",verified_id AS "verifiedId",known_good_id AS "knownGoodId",active_operation_id AS "activeOperationId",baseline_verified_at AS "baselineVerifiedAt",(executor_seen_at>clock_timestamp()-interval '15 seconds' AND active_profile_operation_id IS NULL) AS "executorAvailable",updated_at AS "updatedAt" FROM public.pbx_live_runtime WHERE node_id=$1`,
             [node],
           )
         ).rows[0];
@@ -237,7 +237,7 @@ export class PbxLive {
           if (
             (
               await tx.query(
-                'SELECT 1 FROM public.pbx_live_runtime WHERE node_id=$1 AND active_retirement_id IS NOT NULL',
+                'SELECT 1 FROM public.pbx_live_runtime WHERE node_id=$1 AND (active_retirement_id IS NOT NULL OR active_profile_operation_id IS NOT NULL)',
                 [node],
               )
             ).rows.length

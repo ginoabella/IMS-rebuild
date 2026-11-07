@@ -1,0 +1,267 @@
+{
+  "mode": "preflight",
+  "observedAt": "2026-11-07T15:29:58.624Z",
+  "effectAuthorization": false,
+  "blockers": [],
+  "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+  "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+  "profileSchemaAvailable": true,
+  "nodeVersion": 1,
+  "runtime": {
+    "state": "verified",
+    "artifactId": "e6ee0b86-da28-4ba9-bf42-a6c6e985c341",
+    "knownGoodId": "e6ee0b86-da28-4ba9-bf42-a6c6e985c341",
+    "initialBaselineId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+    "nativeEpoch": "13",
+    "canonicalEpoch": "13",
+    "runtimeEpoch": "13",
+    "routingGeneration": 7,
+    "ownerCurrent": true,
+    "executorFresh": true,
+    "pendingOperation": false,
+    "pendingRetirement": false,
+    "pendingProfileTransition": false
+  },
+  "nativeProfileExecutorAvailable": true,
+  "work": {
+    "unresolvedRevisions": 0,
+    "unresolvedTests": 0
+  },
+  "unmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+  "artifacts": [
+    {
+      "artifactId": "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+      "initialBaseline": true,
+      "compilerVersion": "baseline-1",
+      "policyVersion": "deny-unbound-1",
+      "unmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01",
+      "protectedBytesAvailable": true,
+      "currentProfileCompatible": false,
+      "ancestryDepth": 0,
+      "recoveryStaticCustodyAvailable": true
+    },
+    {
+      "artifactId": "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+      "initialBaseline": false,
+      "compilerVersion": "review-2",
+      "policyVersion": "deny-unbound-1",
+      "unmanagedDigest": "ab5af92b12e47751c9e48e3540e0029ae72d93e337d1db1bef6cec5810abce01",
+      "protectedBytesAvailable": true,
+      "currentProfileCompatible": false,
+      "ancestryDepth": 1,
+      "recoveryStaticCustodyAvailable": true
+    },
+    {
+      "artifactId": "e6ee0b86-da28-4ba9-bf42-a6c6e985c341",
+      "initialBaseline": false,
+      "compilerVersion": "review-2",
+      "policyVersion": "deny-unbound-1",
+      "unmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+      "protectedBytesAvailable": true,
+      "currentProfileCompatible": true,
+      "ancestryDepth": 0
+    }
+  ],
+  "exactProtectedAndLoadedRuntimeMatch": true,
+  "pins": {
+    "retained": 20,
+    "materialReferences": []
+  },
+  "activeChannels": 0,
+  "expectedAsteriskVersion": true,
+  "capabilities": [
+    {
+      "name": "res_pjsip_pubsub",
+      "loaded": true
+    },
+    {
+      "name": "res_pjsip_outbound_authenticator_digest",
+      "loaded": true
+    },
+    {
+      "name": "app_dial",
+      "loaded": true
+    },
+    {
+      "name": "bridge_simple",
+      "loaded": true
+    },
+    {
+      "name": "func_strings",
+      "loaded": true
+    },
+    {
+      "name": "res_speech",
+      "loaded": true
+    },
+    {
+      "name": "res_agi",
+      "loaded": true
+    },
+    {
+      "name": "func_channel",
+      "loaded": true
+    },
+    {
+      "name": "res_pjsip_header_funcs",
+      "loaded": true
+    },
+    {
+      "name": "res_pjsip_endpoint_identifier_ip",
+      "loaded": true
+    }
+  ],
+  "profileUpgradeRequired": false,
+  "currentProfile": {
+    "autoload": ["no"],
+    "explicitLoads": [
+      "app_dial",
+      "bridge_simple",
+      "chan_pjsip",
+      "codec_alaw",
+      "codec_ulaw",
+      "func_channel",
+      "func_strings",
+      "pbx_config",
+      "res_agi",
+      "res_pjproject",
+      "res_pjsip",
+      "res_pjsip_authenticator_digest",
+      "res_pjsip_endpoint_identifier_ip",
+      "res_pjsip_endpoint_identifier_user",
+      "res_pjsip_header_funcs",
+      "res_pjsip_outbound_authenticator_digest",
+      "res_pjsip_pubsub",
+      "res_pjsip_registrar",
+      "res_pjsip_sdp_rtp",
+      "res_pjsip_session",
+      "res_rtp_asterisk",
+      "res_sorcery_astdb",
+      "res_sorcery_config",
+      "res_sorcery_memory",
+      "res_speech"
+    ],
+    "explicitExclusions": [],
+    "rtpStart": [10020],
+    "rtpEnd": [10039],
+    "strictRtp": [],
+    "transports": ["udp"],
+    "directMedia": [],
+    "symmetricRtp": [],
+    "forceRport": [],
+    "rewriteContact": [],
+    "externalAddressConfigured": [false, false]
+  },
+  "staticProfileCustody": "versioned_exact",
+  "proposedUnmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+  "profileFileCount": 8,
+  "providerCustody": "scoped_access_available",
+  "referenceProfile": {
+    "autoload": ["yes"],
+    "explicitLoads": [],
+    "explicitExclusions": [
+      "bridge_native_rtp",
+      "cdr_pgsql",
+      "cdr_sqlite3_custom",
+      "cel_pgsql",
+      "cel_sqlite3_custom",
+      "chan_console",
+      "format_ogg_vorbis",
+      "pbx_ael",
+      "res_config_ldap",
+      "res_config_pgsql",
+      "res_hep",
+      "res_hep_pjsip",
+      "res_hep_rtcp"
+    ],
+    "rtpStart": [10000],
+    "rtpEnd": [10100],
+    "strictRtp": ["no"],
+    "transports": ["udp", "ws"],
+    "directMedia": ["no", "no", "no", "no", "no", "no", "no", "no", "no"],
+    "symmetricRtp": [
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+    ],
+    "forceRport": [
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes"
+    ],
+    "rewriteContact": [
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "yes",
+      "no"
+    ],
+    "externalAddressConfigured": [true, true]
+  },
+  "referenceManifest": [
+    {
+      "name": "asterisk.conf",
+      "sha256": "64b6f91112058e49420e2cffdaf058c738778c5938e044e8e425221ada96a9dc"
+    },
+    {
+      "name": "extensions.conf",
+      "sha256": "24c4fb95fc756ed194a05dd54c7fea627b6a3c7ac34b522b831f8a9bfcdb6a00"
+    },
+    {
+      "name": "http.conf",
+      "sha256": "262c9ef383e7fa54a0e4314996131eb5d1598ddb764d1b2eb42692ba5c1b9893"
+    },
+    {
+      "name": "logger.conf",
+      "sha256": "8c9c7ad2e50342ee445a28ded23f928ee5faeb6198968d610d06c08f8f7a6e7b"
+    },
+    {
+      "name": "manager.conf",
+      "sha256": "4463ab19a5d993dc7afb03f878617242696f218184141fba486462dd998be7df"
+    },
+    {
+      "name": "modules.conf",
+      "sha256": "46e795053d48ba45a2755340bddb3f8c3e2635425aa6888eacf2abf18d7a9802"
+    },
+    {
+      "name": "pjsip.conf",
+      "sha256": "8c892e16346f7ac32b80c0c9694462b439b3dc0ac0d4970b530621cfbbb5813d"
+    },
+    {
+      "name": "rtp.conf",
+      "sha256": "22ecdf0381623ce0e83ea0ef1e2e924d3f23095183253f129653b88a17c0c21a"
+    },
+    {
+      "name": "voicemail.conf",
+      "sha256": "70ca6545877693a364d5a19bfa23e9b752b08e2720fa943a5cd80befda7f3ea7"
+    }
+  ],
+  "proposedProfile": {
+    "baseUnmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+    "addExplicitLoads": [],
+    "autoload": "no",
+    "nativeRtpBridge": "excluded_by_explicit_allowlist",
+    "media": "anchored",
+    "rtp": [10020, 10039],
+    "strictRtp": "preserve_current",
+    "transportsAndNat": "preserve_current_no_external_address_or_WebRTC_addition",
+    "proposedUnmanagedDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+    "status": "reviewed_transition_requires_rehearsal_and_exact_preconditions"
+  }
+}

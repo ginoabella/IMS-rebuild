@@ -1,3 +1,4 @@
+import { NativeProfileTransitions } from '../../modules/telephony/adapters/live/profile-transition';
 import {
   TenantCallAdmission,
   TenantAdmissionServer,
@@ -84,6 +85,19 @@ async function main() {
     artifacts,
     (artifactId, action) => application.maintain(artifactId, action),
   );
+  const profileTransitions = new NativeProfileTransitions(
+    root,
+    configuration.nodeId,
+    configuration.installationId,
+    store,
+    driver,
+    admission,
+    artifacts,
+    application,
+  );
+  const profileTimer = setInterval(() => {
+    void profileTransitions.tick().catch(() => {});
+  }, 500);
   await tenantAdmission.start();
   tenantRuntime.start();
   await observation.start();
@@ -92,6 +106,7 @@ async function main() {
   const stop = () => {
     if (closing) return;
     closing = true;
+    clearInterval(profileTimer);
     void tenantRuntime
       .close()
       .then(() => tenantAdmission.close())
