@@ -100,6 +100,10 @@ try {
     ],
     [project + '/scripts/pbx-live-race-fixture.mjs', '/race-fixture.mjs'],
     [
+      project + '/scripts/tenant-call-preparation-observe.mjs',
+      '/preparation-observe.mjs',
+    ],
+    [
       project + '/scripts/tenant-routing-transfer-fixture.mjs',
       '/transfer-fixture.mjs',
     ],

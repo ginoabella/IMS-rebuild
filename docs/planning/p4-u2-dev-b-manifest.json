@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "requestId": "86e0cc54-7843-4f30-9aef-41eb7f3c1b1c",
+  "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+  "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+  "operatorId": "0d22ae3e-6760-4a6e-9a4c-ffc3c08c0ce2",
+  "authenticationVersion": 1,
+  "expectedNodeVersion": 1,
+  "expectedCapabilityRevision": 2,
+  "expectedArtifactId": "e6ee0b86-da28-4ba9-bf42-a6c6e985c341",
+  "expectedProfileDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8",
+  "tenants": [
+    {
+      "tenantCode": "p4-dev-a",
+      "displayName": "P4 controlled development A",
+      "extensionNumber": "7701",
+      "inboundNumber": "5557701",
+      "outboundNumber": "5558701"
+    },
+    {
+      "tenantCode": "p4-dev-b",
+      "displayName": "P4 controlled development B",
+      "extensionNumber": "7702",
+      "inboundNumber": "5557702",
+      "outboundNumber": "5558702"
+    }
+  ],
+  "unallocatedNumber": "7703"
+}

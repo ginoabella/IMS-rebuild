@@ -1,4 +1,5 @@
 import { addTenantRoutingFixtureCase } from './add-tenant-routing-fixture-case.mjs';
+import { controlledLifecycleFixture } from './tenant-call-preparation-native-fixture.mjs';
 import { prepareTenantRoutingFixture } from './prepare-tenant-routing-fixture.mjs';
 // Trusted workspace coordinator: owned isolated DB only, never retained PBX state.
 import { createRequire } from 'node:module';
@@ -15,6 +16,7 @@ if (
     'prepare',
     'prepare-tenant-routing',
     'add-routing-case',
+    'controlled-lifecycle',
     'cleanup',
     'bind-material',
     'bind-existing-material',
@@ -37,7 +39,10 @@ try {
     );
     await owner.query(`DROP DATABASE IF EXISTS "${name}"`);
     console.log(JSON.stringify({ state: 'fixture_removed', database: name }));
-  } else if (action === 'add-routing-case') {
+  } else if (
+    action === 'add-routing-case' ||
+    action === 'controlled-lifecycle'
+  ) {
     const fixtureUrl = new URL(url.href);
     fixtureUrl.pathname = '/' + name;
     const fixture = new Client({ connectionString: fixtureUrl.href });
@@ -45,7 +50,11 @@ try {
     try {
       console.log(
         JSON.stringify(
-          await addTenantRoutingFixtureCase(fixture, JSON.parse(details)),
+          await (
+            action === 'controlled-lifecycle'
+              ? controlledLifecycleFixture
+              : addTenantRoutingFixtureCase
+          )(fixture, JSON.parse(details)),
         ),
       );
     } finally {

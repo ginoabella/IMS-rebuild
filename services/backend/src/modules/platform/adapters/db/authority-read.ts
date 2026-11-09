@@ -10,6 +10,19 @@ import {
 import { normalizeUsername, uuid } from '../../../identity/domain/storage';
 import { onlyFields } from '../../../identity/domain/storage';
 const credentialCoherence = `(credential_state='ready' AND password_hash IS NOT NULL AND octet_length(password_hash) BETWEEN 1 AND 4096 AND credential_changed_at IS NOT NULL AND isfinite(credential_changed_at))`;
+/** Canonical read port for trusted deployment and existing platform transactions. */
+export async function platformAuthorityIn(
+  snapshot: ReadSnapshot,
+  operatorId: string,
+  lock = false,
+): Promise<AuthorityResult<PlatformAuthority>> {
+  if (!uuid(operatorId)) return { kind: 'denied' };
+  const result = await snapshot.query(
+    `SELECT id,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent,'platform_operator' AS authority FROM public.platform_operators WHERE id=$1${lock ? ' FOR SHARE' : ''}`,
+    [operatorId],
+  );
+  return platformAuthority(result.rows[0]);
+}
 export class PlatformAuthorityRepository implements PlatformAuthorityRead {
   constructor(private readonly database: SnapshotDatabase) {}
   async candidate(input: {
@@ -42,24 +55,14 @@ export class PlatformAuthorityRepository implements PlatformAuthorityRead {
     transaction: Transaction,
     operatorId: string,
   ): Promise<AuthorityResult<PlatformAuthority>> {
-    if (!uuid(operatorId)) return { kind: 'denied' };
-    const result = await transaction.query(
-      `SELECT id,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent,'platform_operator' AS authority FROM public.platform_operators WHERE id=$1 FOR SHARE`,
-      [operatorId],
-    );
-    return platformAuthority(result.rows[0]);
+    return platformAuthorityIn(transaction, operatorId, true);
   }
   /** Owner-provided passive authority read inside a caller's consistent primary snapshot. */
   async readIn(
     snapshot: ReadSnapshot,
     operatorId: string,
   ): Promise<AuthorityResult<PlatformAuthority>> {
-    if (!uuid(operatorId)) return { kind: 'denied' };
-    const result = await snapshot.query(
-      `SELECT id,status,credential_state,version,authentication_version,${credentialCoherence} AS credential_coherent,'platform_operator' AS authority FROM public.platform_operators WHERE id=$1`,
-      [operatorId],
-    );
-    return platformAuthority(result.rows[0]);
+    return platformAuthorityIn(snapshot, operatorId);
   }
   private async read(
     column: 'id' | 'normalized_username',

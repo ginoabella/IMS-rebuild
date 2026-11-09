@@ -117,6 +117,13 @@ function OwnedVerification({
             Each test makes one bounded controlled call. Unknown outcomes
             require reconciliation before another test.
           </p>
+          {view.cases.some((c) => c.available === false) ? (
+            <p role="status">
+              Some controlled cases are unavailable: preparation is stopped or
+              stale, ownership changed, or protected custody is unavailable.
+              Inspect preparation status before starting another test.
+            </p>
+          ) : null}
           <div className="flex flex-wrap items-end gap-3 [&>div]:min-w-0 [&>div]:max-w-full">
             <Field id={`test-case-${nodeId}`} label="Controlled call case">
               <select
@@ -128,8 +135,13 @@ function OwnedVerification({
               >
                 <option value="">Choose controlled case</option>
                 {view.cases.map((c) => (
-                  <option key={c.id} value={c.id}>
+                  <option
+                    key={c.id}
+                    value={c.id}
+                    disabled={c.available === false}
+                  >
                     {c.direction} · {c.dialled} · expected {c.expectedOutcome}
+                    {c.available === false ? ' · preparation unavailable' : ''}
                   </option>
                 ))}
               </select>
@@ -169,11 +181,18 @@ function OwnedVerification({
               </select>
             </Field>
             <Button
-              disabled={disabled || !view.artifactId || view.cases.length > 16}
+              disabled={
+                disabled ||
+                !view.artifactId ||
+                view.cases.length > 16 ||
+                !view.cases.some((c) => c.available !== false)
+              }
               onClick={() =>
                 void submit('grant', {
                   artifactId: view.artifactId,
-                  caseIds: view.cases.map((c) => c.id),
+                  caseIds: view.cases
+                    .filter((c) => c.available !== false)
+                    .map((c) => c.id),
                   lifetimeSeconds,
                 })
               }
@@ -181,7 +200,14 @@ function OwnedVerification({
               Grant verification
             </Button>
             <Button
-              disabled={disabled || !caseId || !view.artifactId}
+              disabled={
+                disabled ||
+                !caseId ||
+                !view.artifactId ||
+                !view.cases.some(
+                  (c) => c.id === caseId && c.available !== false,
+                )
+              }
               onClick={() =>
                 void submit('test', {
                   artifactId: view.artifactId,

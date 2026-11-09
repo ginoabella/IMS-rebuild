@@ -110,6 +110,7 @@ export function verificationOutput(
           'expectedDestinationId',
           'readinessRequired',
           'kind',
+          'available',
         ]) &&
         ['id', 'routeId', 'sourceId'].every((k) => uuid(c[k])) &&
         ['inbound', 'outbound'].includes(String(c.direction)) &&
@@ -118,6 +119,7 @@ export function verificationOutput(
         ['permitted', 'denied'].includes(String(c.expectedOutcome)) &&
         nullableId(c.expectedDestinationId) &&
         typeof c.readinessRequired === 'boolean' &&
+        (c.available === undefined || typeof c.available === 'boolean') &&
         [
           'routing',
           'ambiguous-source',

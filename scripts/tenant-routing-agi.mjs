@@ -30,6 +30,7 @@ try {
   const duplicateFrom = await variable('${PJSIP_HEADER(read,From,2)}');
   const duplicateTo = await variable('${PJSIP_HEADER(read,To,2)}');
   const duplicateNonce = await variable('${PJSIP_HEADER(read,X-MyIMS-Test,2)}');
+  const nonce = await variable('${PJSIP_HEADER(read,X-MyIMS-Test)}');
   const payload = JSON.stringify({
     revisionId,
     tenantId,
@@ -38,7 +39,7 @@ try {
     endpoint: await variable('${CHANNEL(endpoint)}'),
     number: await variable('${MYIMS_ORIGINAL}'),
     uniqueId: await variable('${UNIQUEID}'),
-    nonce: await variable('${PJSIP_HEADER(read,X-MyIMS-Test)}'),
+    nonce,
     unambiguous: !!from && !duplicateFrom && !duplicateTo && !duplicateNonce,
   });
   const result = await new Promise((resolve, reject) => {
@@ -69,6 +70,12 @@ try {
     req.on('error', reject);
     req.end(payload);
   });
+  if (result && /^[a-f0-9]{64}$/.test(nonce)) {
+    // Bound an already-authorized controlled leg even if its participant dies.
+    // This fixed AGI command uses existing res_agi; no module/profile expansion.
+    process.stdout.write('SET AUTOHANGUP 30\n');
+    if (!/^200 result=0$/.test(await line())) throw new Error('Unavailable');
+  }
   process.stdout.write(`SET VARIABLE MYIMS_PERMITTED ${result ? '1' : '0'}\n`);
   await line();
 } catch {

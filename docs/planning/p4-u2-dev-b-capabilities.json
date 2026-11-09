@@ -1,0 +1,12 @@
+[
+  {
+    "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+    "revision": 2,
+    "kinds": ["sip", "webrtc"],
+    "signaling": ["udp", "wss"],
+    "codecs": ["opus", "ulaw", "alaw"],
+    "media": ["none", "dtls-srtp"],
+    "credentialAuthMax": 71,
+    "credentialHexMax": 64
+  }
+]

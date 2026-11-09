@@ -282,9 +282,23 @@ try {
       ...(credentials ? { endpointAccess } : {}),
     }),
   );
-  const timer = setTimeout(() => child.kill('SIGKILL'), 1500000);
+  // The default graph includes both production frontend builds and all legacy
+  // API/browser suites before the lifecycle faults. Keep selected suites bounded
+  // at 25 minutes; allow the complete sequential graph 45 minutes.
+  let timedOut = false;
+  const timer = setTimeout(
+    () => {
+      timedOut = true;
+      child.kill('SIGKILL');
+    },
+    process.argv[2] ? 1500000 : 2700000,
+  );
   const [code] = await once(child, 'exit');
   clearTimeout(timer);
+  if (timedOut)
+    throw new Error(
+      'Session lifecycle checks exceeded the bounded suite deadline',
+    );
   if (code !== 0 || trunkFixtureFailed || liveFixtureFailed)
     throw new Error('Session lifecycle checks failed');
 } finally {

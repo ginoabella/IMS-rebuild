@@ -11,6 +11,42 @@ export class LiveMaterialResolver {
     private readonly pool: Pool,
     private readonly consumer: ExactLiveMaterialConsumer,
   ) {}
+  async preparationCustody(
+    nodeId: string,
+    signal: AbortSignal,
+  ): Promise<string[]> {
+    const deadline = performance.now() + 60000;
+    await this.consumer.access();
+    const preparations = (
+      await this.pool.query<{ id: string }>(
+        `SELECT p.id FROM public.tenant_call_preparations p LEFT JOIN LATERAL (SELECT action FROM public.tenant_call_preparation_events e WHERE e.preparation_id=p.id ORDER BY version DESC LIMIT 1) e ON true WHERE p.node_id=$1 AND e.action IS DISTINCT FROM 'disable' AND EXISTS(SELECT 1 FROM public.tenant_call_preparation_steps s WHERE s.preparation_id=p.id AND s.step='cases' AND s.phase='outcome') ORDER BY p.id LIMIT 17`,
+        [nodeId],
+      )
+    ).rows;
+    if (preparations.length > 16)
+      throw new LiveMaterialFailure('material_unavailable');
+    for (const preparation of preparations) {
+      const operations = (
+        await this.pool.query<{
+          installationId: string;
+          extensionId: string;
+          operationId: string;
+          generationId: string;
+        }>(
+          `SELECT o.installation_id AS "installationId",o.extension_id AS "extensionId",o.id AS "operationId",o.generation_id AS "generationId" FROM public.tenant_call_preparation_steps s JOIN public.endpoint_credential_operations o ON o.id=(s.result->>'operationId')::uuid JOIN public.extensions e ON e.id=o.extension_id AND e.credential_generation_id=o.generation_id WHERE s.preparation_id=$1 AND s.step IN ('credential-0','credential-1','credential-2') AND s.phase='outcome' AND o.node_id=$2 AND o.state='associated' AND o.material_health='verified' ORDER BY o.id`,
+          [preparation.id, nodeId],
+        )
+      ).rows;
+      if (operations.length !== 3)
+        throw new LiveMaterialFailure('material_missing');
+      for (const operation of operations) {
+        if (signal.aborted || performance.now() > deadline)
+          throw new LiveMaterialFailure('material_unavailable');
+        await this.consumer.endpoint(operation);
+      }
+    }
+    return preparations.map((p) => p.id);
+  }
   async resolve(
     snapshot: RevisionSnapshot,
     signal?: AbortSignal,

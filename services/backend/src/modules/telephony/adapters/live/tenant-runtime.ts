@@ -4,7 +4,7 @@ import { SafeLogger } from '../../../../infrastructure/execution/logging';
 import { AuditRepository } from '../../../audit/adapters/db/audit-repository';
 import { tenantVerificationAudit } from '../../application/tenant-verification';
 import { retireArtifact } from './artifact-retirement';
-import { createHash, randomBytes } from 'node:crypto';
+import { createHash, randomBytes, randomUUID } from 'node:crypto';
 import {
   mkdirSync,
   readFileSync,
@@ -36,6 +36,8 @@ interface Runtime {
 }
 /** Existing physically fenced native owner only. No ordinary-worker dispatch path. */
 export class TenantRuntimeMonitor {
+  private readonly participantInstance = randomUUID();
+  private participantInitialized = false;
   private busy = false;
   private timer: ReturnType<typeof setInterval> | undefined;
   private stopped = false;
@@ -80,6 +82,13 @@ export class TenantRuntimeMonitor {
     if (this.busy || this.stopped) return;
     this.busy = true;
     try {
+      if (!this.participantInitialized) {
+        await this.store.pool.query(
+          `INSERT INTO public.tenant_call_participant_instances(node_id,instance_id) VALUES($1,$2) ON CONFLICT(node_id) DO UPDATE SET instance_id=excluded.instance_id,started_at=clock_timestamp()`,
+          [this.nodeId, this.participantInstance],
+        );
+        this.participantInitialized = true;
+      }
       await retireArtifact(
         this.root,
         this.nodeId,
@@ -221,7 +230,7 @@ export class TenantRuntimeMonitor {
         test_kind: string;
         allowed: boolean;
       }>(
-        `SELECT i.*,p.state,p.deadline<=clock_timestamp() AS expired,(c.enabled AND (i.grant_id IS NULL OR EXISTS(SELECT 1 FROM public.tenant_verification_grants g JOIN public.tenant_verification_grant_cases gc ON gc.grant_id=g.id WHERE g.id=i.grant_id AND gc.case_id=i.case_id AND g.artifact_id=i.artifact_id AND g.source_digest=i.source_digest AND g.expires_at>clock_timestamp() AND NOT EXISTS(SELECT 1 FROM public.tenant_verification_revocations v WHERE v.grant_id=g.id)))) AS allowed,c.direction,c.route_id,c.source_id,c.dialled,c.expected_destination_id,c.expected_outcome,c.test_kind FROM public.tenant_route_test_intents i JOIN public.tenant_route_test_progress p ON p.intent_id=i.id JOIN public.tenant_route_test_cases c ON c.id=i.case_id WHERE i.node_id=$1 AND p.state IN ('queued','dispatching','admitted') ORDER BY i.created_at LIMIT 1`,
+        `SELECT i.*,p.state,p.deadline<=clock_timestamp() AS expired,(c.enabled AND public.tenant_case_preparation_available(c.id) AND (i.grant_id IS NULL OR EXISTS(SELECT 1 FROM public.tenant_verification_grants g JOIN public.tenant_verification_grant_cases gc ON gc.grant_id=g.id WHERE g.id=i.grant_id AND gc.case_id=i.case_id AND g.artifact_id=i.artifact_id AND g.source_digest=i.source_digest AND g.expires_at>clock_timestamp() AND NOT EXISTS(SELECT 1 FROM public.tenant_verification_revocations v WHERE v.grant_id=g.id)))) AS allowed,c.direction,c.route_id,c.source_id,c.dialled,c.expected_destination_id,c.expected_outcome,c.test_kind FROM public.tenant_route_test_intents i JOIN public.tenant_route_test_progress p ON p.intent_id=i.id JOIN public.tenant_route_test_cases c ON c.id=i.case_id WHERE i.node_id=$1 AND p.state IN ('queued','dispatching','admitted') ORDER BY i.created_at LIMIT 1`,
         [this.nodeId],
       )
     ).rows[0];
@@ -273,11 +282,32 @@ export class TenantRuntimeMonitor {
     }
     if (!(await this.barrier.idle())) return;
     const nonce = randomBytes(32).toString('hex');
-    const dispatched = await this.store.pool.query(
-      `UPDATE public.tenant_route_test_progress p SET state='dispatching',nonce_hash=$2,owner_epoch=$3,deadline=clock_timestamp()+interval '30 seconds',updated_at=clock_timestamp() WHERE p.intent_id=$1 AND p.state='queued' AND EXISTS(SELECT 1 FROM public.pbx_live_runtime r JOIN public.pbx_ownership o ON o.node_id=r.node_id WHERE r.node_id=p.node_id AND r.verified_id=$4 AND r.active_operation_id IS NULL AND r.active_retirement_id IS NULL AND r.active_profile_operation_id IS NULL AND o.epoch=$3 AND o.expires_at>clock_timestamp()) RETURNING intent_id`,
-      [row.id, hash(nonce), runtime.epoch, runtime.artifact_id],
-    );
-    if (!dispatched.rows.length) return;
+    const dispatch = await this.store.pool.connect();
+    let dispatched: boolean;
+    let discard = false;
+    try {
+      await dispatch.query('BEGIN');
+      await dispatch.query(
+        'SELECT id FROM public.pbx_nodes WHERE id=$1 FOR SHARE',
+        [this.nodeId],
+      );
+      const result = await dispatch.query(
+        `UPDATE public.tenant_route_test_progress p SET state='dispatching',nonce_hash=$2,owner_epoch=$3,deadline=clock_timestamp()+interval '30 seconds',updated_at=clock_timestamp() WHERE p.intent_id=$1 AND p.state='queued' AND EXISTS(SELECT 1 FROM public.tenant_route_test_intents i JOIN public.tenant_route_test_cases c ON c.id=i.case_id WHERE i.id=p.intent_id AND c.enabled AND public.tenant_case_preparation_available(c.id)) AND EXISTS(SELECT 1 FROM public.pbx_live_runtime r JOIN public.pbx_ownership o ON o.node_id=r.node_id WHERE r.node_id=p.node_id AND r.verified_id=$4 AND r.active_operation_id IS NULL AND r.active_retirement_id IS NULL AND r.active_profile_operation_id IS NULL AND o.epoch=$3 AND o.expires_at>clock_timestamp()) RETURNING intent_id`,
+        [row.id, hash(nonce), runtime.epoch, runtime.artifact_id],
+      );
+      dispatched = result.rows.length === 1;
+      await dispatch.query('COMMIT');
+    } catch (error) {
+      try {
+        await dispatch.query('ROLLBACK');
+      } catch {
+        discard = true;
+      }
+      throw error;
+    } finally {
+      dispatch.release(discard);
+    }
+    if (!dispatched) return;
     let outcome: 'permitted' | 'denied' | 'failed' | 'unknown';
     let destinationId: string | null = null;
     try {

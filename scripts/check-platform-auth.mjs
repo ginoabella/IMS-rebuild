@@ -1234,7 +1234,10 @@ export async function checkPlatformAuth({
     );
     const short = await replica({
       config: backend('@myims/config').parseSessionConfig({
-        SESSION_TIMEOUT_MS: '100',
+        // This fixture tests retained idle/absolute expiry, not transport loss.
+        // Allow real SQL/Redis scheduling while retaining TTL after the store's
+        // full command-timeout transit reserve within the two-second idle cap.
+        SESSION_TIMEOUT_MS: '500',
         SESSION_WEB_IDLE_SECONDS: '2',
         SESSION_WEB_ABSOLUTE_SECONDS: '4',
       }),

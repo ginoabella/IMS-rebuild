@@ -14,6 +14,7 @@ export interface TenantVerificationView {
     expectedOutcome: 'permitted' | 'denied';
     expectedDestinationId: string | null;
     readinessRequired: boolean;
+    available?: boolean;
     kind:
       | 'routing'
       | 'ambiguous-source'

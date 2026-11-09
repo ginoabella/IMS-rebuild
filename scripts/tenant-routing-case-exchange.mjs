@@ -35,7 +35,7 @@ export async function runTenantRoutingFixture({
   child.on('error', () => {
     done = true;
   });
-  const deadline = Date.now() + 420000;
+  const deadline = Date.now() + 480000;
   let lastRequest = '';
   while (!done && Date.now() < deadline) {
     const exists = spawnSync(
@@ -65,7 +65,9 @@ export async function runTenantRoutingFixture({
               'myims-rebuild-dev-workspace-1',
               'node',
               '/workspace/scripts/pbx-live-database-fixture.mjs',
-              'add-routing-case',
+              value.fixturePreparation
+                ? 'controlled-lifecycle'
+                : 'add-routing-case',
               database,
               JSON.stringify(value),
             ],

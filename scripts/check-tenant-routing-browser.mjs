@@ -223,6 +223,131 @@ async function runTenantRoutingBrowser({
     await expect(page.getByText('Incomplete', { exact: true })).toBeVisible();
     assert.equal((await direct(b, path)).data.readiness.state, 'incomplete');
   }
+  // Test-only stopped preparation in the exact disposable browser database.
+  assert.match(database, /^myims_session_[a-f0-9]{12}$/);
+  const unavailableCase = metadata.cases
+    .filter((c) => c.tenantId === metadata.tenants[1].id)
+    .at(-1);
+  const preparationId = randomUUID();
+  await owner.query(
+    'INSERT INTO public.tenant_call_preparations(id,node_id,installation_id,operator_id,authentication_version,fingerprint,definition) SELECT $1,$2,$3,id,authentication_version,$4,$5 FROM public.platform_operators WHERE id=$6',
+    [
+      preparationId,
+      nodeId,
+      installationId,
+      '0'.repeat(64),
+      { fixture: 'stopped-browser-preparation' },
+      operatorId,
+    ],
+  );
+  await owner.query(
+    'INSERT INTO public.tenant_call_preparation_cases(preparation_id,case_id) VALUES($1,$2)',
+    [preparationId, unavailableCase.id],
+  );
+  const grantTimes = (
+    await owner.query(
+      'SELECT id,created_at,expires_at FROM public.tenant_verification_grants WHERE node_id=$1 ORDER BY id',
+      [nodeId],
+    )
+  ).rows;
+  await button('Reload evidence').click();
+  await expect(
+    page.getByText(/Some controlled cases are unavailable:/),
+  ).toBeVisible();
+  const casesControl = page.getByLabel(/^Controlled call case/);
+  await expect(casesControl).toHaveValue(unavailableCase.id);
+  await expect(
+    casesControl.locator(`option[value="${unavailableCase.id}"]`),
+  ).toBeDisabled();
+  await expect(button('Reload evidence')).toBeEnabled();
+  await expect(button('Run controlled call test')).toBeDisabled();
+  const unavailablePath = `/platform/tenants/${metadata.tenants[1].id}/telephony/${nodeId}`;
+  const unavailableView = await direct(b, unavailablePath);
+  assert.equal(unavailableView.status, 200);
+  assert.equal(
+    unavailableView.data.cases.find((c) => c.id === unavailableCase.id)
+      .available,
+    false,
+  );
+  assert.equal(
+    (
+      await direct(a, unavailablePath + '/grant', 'POST', {
+        requestId: randomUUID(),
+        artifactId: applied,
+        caseIds: [unavailableCase.id],
+      })
+    ).status,
+    409,
+  );
+  await casesControl.focus();
+  await page.keyboard.press('Home');
+  await page.keyboard.press('ArrowDown');
+  await expect(casesControl).toBeFocused();
+  assert.notEqual(await casesControl.inputValue(), unavailableCase.id);
+  for (const width of [320, 768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    assert.ok(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= innerWidth + 1,
+      ),
+    );
+    if (width !== 768)
+      await page
+        .getByRole('region', { name: 'Verified tenant routing', exact: true })
+        .screenshot({
+          path: `${screenshots}/preparation-unavailable-${width}.png`,
+        });
+  }
+  assert.deepEqual((await new AxeBuilder({ page }).analyze()).violations, []);
+  assert.deepEqual(
+    (
+      await owner.query(
+        'SELECT id,created_at,expires_at FROM public.tenant_verification_grants WHERE node_id=$1 ORDER BY id',
+        [nodeId],
+      )
+    ).rows,
+    grantTimes,
+  );
+  console.log(
+    'PASS persistent preparation actual HTTPS: unavailable case remains visible with truthful blocker, selected intent survives read, disabled option/action, backend grant denial, keyboard, axe and 320/768/1440 reflow; reads renew no grants',
+  );
+  const disabledCaseId = await casesControl.inputValue();
+  assert.ok(disabledCaseId && disabledCaseId !== unavailableCase.id);
+  await owner.query(
+    'INSERT INTO public.tenant_call_preparation_cases(preparation_id,case_id) VALUES($1,$2)',
+    [preparationId, disabledCaseId],
+  );
+  await owner.query(
+    'INSERT INTO public.tenant_route_case_disables(case_id,request_id,preparation_id) VALUES($1,$2,$3)',
+    [disabledCaseId, randomUUID(), preparationId],
+  );
+  await button('Reload evidence').click();
+  await expect(
+    casesControl.locator(`option[value="${disabledCaseId}"]`),
+  ).toHaveCount(0);
+  await expect(button('Reload evidence')).toBeEnabled();
+  await expect(casesControl).toBeVisible();
+  await expect(
+    casesControl.locator(`option[value="${unavailableCase.id}"]`),
+  ).toHaveCount(1);
+  await expect(button('Run controlled call test')).toBeDisabled();
+  assert.ok(
+    !(await direct(b, unavailablePath)).data.cases.some(
+      (c) => c.id === disabledCaseId,
+    ),
+  );
+  assert.deepEqual(
+    (
+      await owner.query(
+        'SELECT id,created_at,expires_at FROM public.tenant_verification_grants WHERE node_id=$1 ORDER BY id',
+        [nodeId],
+      )
+    ).rows,
+    grantTimes,
+  );
+  console.log(
+    'PASS terminal case disable HTTPS: selected case disappears, retained selection cannot enable another call and reads renew no grant',
+  );
   const disabled = await direct(
     a,
     `/platform/pbx-nodes/${nodeId}/extensions/${metadata.extensions[0].id}/status`,
@@ -234,6 +359,10 @@ async function runTenantRoutingBrowser({
   );
   assert.equal(disabled.status, 200, JSON.stringify(disabled));
   await page.goto(config.origin + `/pbx-nodes/${nodeId}/revisions`);
+  await expect(page.getByText('Loading history…', { exact: true })).toHaveCount(
+    0,
+  );
+  await page.waitForLoadState('networkidle');
   await button('Capture desired state').click();
   await expect(button('Validate offline')).toBeEnabled();
   await button('Validate offline').click();

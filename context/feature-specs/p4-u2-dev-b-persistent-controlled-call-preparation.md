@@ -1,12 +1,19 @@
 # P4-U2-DEV-b — Persistent controlled-call preparation
 
-**Status:** planned; implementation not started.
+**Status:** complete, 2026-11-09 (Asia/Manila, +08:00); B-01–07 passed, including
+approved ordinary provisioning, restart persistence and independent console reads.
+[Final evidence and exact c handoff](../../docs/status/p4-u2-dev-b-evidence.md).
 **Prepared:** 2026-11-07 (Asia/Manila, +08:00).
 **Parent:** [P4-U2-DEV — Persistent tenant calling](p4-u2-dev-persistent-tenant-calling.md).
-**Split:** adopted by the user on 2026-11-07; dependent environment decisions remain open.
+**Split:** adopted by the user on 2026-11-07; DEV-02/03 dedicated setup subsequently approved as recorded below.
 
 The parent owns common policy, AC-01–12 and final completion. This child owns
 persistent manifest/participant preparation and its restart/cleanup lifecycle.
+
+DEV-02/03 dedicated resources and existing native-helper placement were approved
+by the user on 2026-11-08 (+08:00); see the
+[exact decision and definitions](../../docs/planning/p4-u2-dev-b-preparation-review.md).
+That decision authorizes the declared setup, not a runtime acceptance result.
 
 ## Goal and expected result
 
@@ -85,8 +92,8 @@ This child does not claim readiness from provisioning alone.
 
 ## Required verification
 
-Define actual Docker preparation/preview/status/start/stop/reconcile commands during
-implementation; these commands do not exist yet. Keep read-only inspection explicit
+The [runbook](../../docs/runbooks/persistent-controlled-calls.md) defines the actual
+Docker preparation/preview/status/start/stop/reconcile commands. Keep read-only inspection explicit
 and independent of mutating setup. Use real PostgreSQL, protected provider access,
 shared Redis and normal private HTTPS consumers. Rehearse partial/concurrent setup
 and restart faults in isolated fixtures before touching approved ordinary resources.

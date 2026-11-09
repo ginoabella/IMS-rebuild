@@ -173,3 +173,70 @@ same exact node/artifact/generation. Grant removal, a later inconclusive retest 
 pagination of recent results cannot erase that failure. A reviewed runtime change
 requires fresh evidence. Test state reflects comparison with the manifest while
 the immutable result retains the actual permitted/denied outcome and destination.
+
+## Persistent preparation extension
+
+P4-U2-DEV-b adds trusted deployment preparation on the existing installation under
+the [approved dedicated-resource decision](../planning/p4-u2-dev-b-preparation-review.md).
+B-01–07 and approved ordinary deployment passed on 2026-11-09 (+08:00); see
+[final evidence](../status/p4-u2-dev-b-evidence.md). Child c owns actual ordinary
+calls and integrated cleanup; historical P4-U2 acceptance above is unchanged.
+The [runbook](../runbooks/persistent-controlled-calls.md) records current commands
+and the distinction between SQL rehearsal, provider proof and actual native calls.
+
+`tenant_call_preparations` retains exact immutable request/owner/target definition
+and fingerprint. Canonical create/credential services still own resources and their
+receipts. Immutable step intent precedes each supported effect; its separate
+outcome retains the original result. A session advisory lock serializes exact
+repeats across effects without holding a SQL transaction during provider work.
+Canonical node/owner locks, version checks and append-only audit protect each
+transaction. Changed payloads conflict; incomplete exact requests reconcile their
+original identities without replacing resources. Status uses READ ONLY snapshots.
+No routing truth is maintained in a second database or editable runtime file.
+
+Immutable case membership/resource-version facts and append-only start/stop/disable
+events preserve provenance. `enabled` is never rewritten. Explicit disablement
+appends `tenant_route_case_disables`; protected reads omit disabled cases while
+historical intents/results retain their original case. Current selection, native
+dispatch and final one-shot nonce admission all check preparation availability.
+Existing isolated cases without persistent membership keep their original contract.
+
+The same physically fenced native monitor publishes a new participant instance on
+construction. Start binds that instance and canonical owner epoch. Native restart
+invalidates an old start even when its lease survives; explicit new start/restart
+and current proof are required before dispatch. Stop uses the canonical node lock
+to prevent new admission without interrupting existing calls. Unknown work stays
+blocked; lifecycle operations never create a test intent or renew grant/result age.
+
+Only the existing protected telephony consumer resolves exact current-artifact
+and published-preparation provider generations. Its bounded five-second GET loop publishes a safe proof
+binding owner epoch and source digest, with a 15-second freshness ceiling. Native
+and HTTP receive no provider token or material. Missing/expired/denied custody,
+owner changes, stale resource facts and stopped/restarted participants deny
+availability. Independent tenant runtime proof, applicable current validation,
+authority, source/permission checks and explicit nonrenewing grants still gate
+dispatch separately. Preparation on `review-2` cannot establish tenant readiness.
+Successful setup availability is not a positive call result.
+
+Publication invalidates previous custody under the exclusive node lock. The
+consumer verifies material outside transactions, then takes a shared node lock
+and a fresh statement snapshot before comparing the exact published preparation
+set it checked and committing proof. An older in-flight check cannot restore
+proof for a catalog published after its reads.
+
+After successful one-shot controlled admission, the fixed unprivileged AGI client
+sets a 30-second natural channel deadline using the existing
+[SET AUTOHANGUP command](https://docs.asterisk.org/Latest_API/API_Documentation/AGI_Commands/set_autohangup/).
+It sets that deadline before publishing permission to the dialplan and fails closed
+if acknowledgement is unavailable. Ordinary active calls without a controlled nonce
+retain their existing behavior. This bounds participant-process loss without a
+new module, general command transport or stop-time forced hangup.
+
+Only the eleven initial bounded cases described in the approved review are
+published. Conditional expiry/revocation/stale-source/ingress isolation acceptance
+remains c's responsibility; no unconditional permitted route is falsely labelled
+as a denial scenario. c also owns completed route authorizations/application and
+actual removal proof. Disable/stop/revocation preserves desired resources, audit,
+credentials and pins; removing loaded paths still requires reviewed apply and
+independent loaded dialplan/PJSIP absence proof under the existing retirement and
+release contracts. No volume pruning or whole-tenant deletion is introduced.

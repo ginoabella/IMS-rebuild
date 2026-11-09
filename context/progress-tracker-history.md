@@ -3212,3 +3212,22 @@ Archived at completed retained deployment. Intermediate pending states below are
 - **Approved deployment started:** full required revision, tenant-live, platform/staff authority and complete `./dev check` passed sequentially. The additive ordinary migration completed through the already-built deployment entry point (`./dev exec pnpm db:migrate`); existing backend/telephony consumers were restarted with unchanged configuration. Ordinary HTTPS refresh is running. No ordinary profile selection or PBX restart has occurred; final helper refresh, exact passive checks and quiet transition remain required.
 
 - **Specification checks, 2026-11-07 (Asia/Manila, +08:00):** Docker Prettier passed for parent/children/index; 61 scoped local links/anchors and 12 parent/21 child acceptance IDs passed. Reviewed sequential dependency and acceptance coverage, confirmed tested reference files unchanged and diff whitespace passed. No application/runtime checks were needed for this documentation-only step.
+
+## 2026-11-09 — P4-U2-DEV-b completion and prior handoff
+
+- **Status:** [a: retained profile upgrade/recovery](feature-specs/p4-u2-dev-a-retained-pbx-profile-upgrade-and-recovery.md) complete, 2026-11-07 (Asia/Manila, +08:00), with A-01–06 passed. [Final evidence](../docs/status/p4-u2-dev-a-evidence.md). Child b also completed B-01–07 on 2026-11-09 (+08:00), including actual ordinary preparation and restart/console proof. Parent/c remain incomplete; historical P4-U2 acceptance stays unchanged.
+- **Delivered:** trusted passive preflight, protected exact static/artifact compatibility, durable native/canonical transition and recovery, shared operation fencing, guarded quiet restart and existing console recovery across profiles.
+- **Retained result:** same node/installation and original baseline; new verified artifact `e6ee0b86-da28-4ba9-bf42-a6c6e985c341`, unmanaged digest `f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8`, compiler/policy `review-2` / `deny-unbound-1`, fresh native epoch 13. All ten required capabilities loaded, zero channels and no pending work.
+- **Verification:** 23 distinct actual PostgreSQL/Asterisk interruption/race/safety scenarios, six focused tests, full revision/provider/isolation/browser, live tenant-routing, platform/staff authority and complete `./dev check` passed. Approved additive migration, consumer/HTTPS/helper refresh and one quiet retained profile restart completed; exact preflight/baseline, health and both HTTPS checks passed.
+- **Preservation:** 69 tracked SQL tables, both original artifacts/plans/static profiles, original baseline/facts, 20 pins, native sequence/receipts and nine reference-file hashes unchanged. Actual passive before/after negative checks preserved protected bytes/modes/ownership/mtime. Exact owned fixtures cleaned; no ordinary calls, deliberate ordinary faults, pin clearing or rebaseline.
+- **Decision/handoff:** DEV-01 strategy and conditional maintenance effects approved and fulfilled ([decision](../docs/planning/p4-u2-dev-a-profile-transition-review.md#recorded-dev-01-decision)). b receives the exact profile and old recovery targets; DEV-02/03 dedicated setup is now approved in the linked b review. c owns ordinary-console SIP/RTP and integrated parent acceptance. No tenant readiness or production pass is claimed. [Operational commands](../docs/runbooks/development-container.md#retained-pbx-profile-transition-and-recovery).
+- **History:** [implementation and verification checkpoints](progress-tracker-history.md#2026-11-07--p4-u2-dev-a-implementation-and-verification-checkpoints).
+
+
+The preceding a facts describe its original checkpoint. Child b subsequently
+completed approved ordinary preparation with epoch 14/routing generation 12,
+three real generations, eleven cases, helper restart/console proof, zero passive
+traffic and exact preservation across 76 tracked tables. All required suites and
+complete `./dev check` passed. Full intermediate failures and final receipts are
+in the [b evidence](../docs/status/p4-u2-dev-b-evidence.md#historical-implementation-checkpoints).
+Parent/c acceptance remains incomplete.

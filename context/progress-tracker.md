@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-11-07 (Asia/Manila, +08:00).
+Last reconciled: 2026-11-09 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -36,17 +36,14 @@ Exclusive desired allocation and canonical desired route bindings/permissions ar
 
 ## In Progress
 
-None. P4-U2-DEV-a is complete; b/c remain planned and parent acceptance remains incomplete.
+None. P4-U2-DEV-b is complete; P4-U2-DEV-c remains planned.
 
 ## Development Follow-up — P4-U2-DEV
 
-- **Status:** [a: retained profile upgrade/recovery](feature-specs/p4-u2-dev-a-retained-pbx-profile-upgrade-and-recovery.md) complete, 2026-11-07 (Asia/Manila, +08:00), with A-01–06 passed. [Final evidence](../docs/status/p4-u2-dev-a-evidence.md). Parent/b/c remain incomplete; historical P4-U2 acceptance stays unchanged.
-- **Delivered:** trusted passive preflight, protected exact static/artifact compatibility, durable native/canonical transition and recovery, shared operation fencing, guarded quiet restart and existing console recovery across profiles.
-- **Retained result:** same node/installation and original baseline; new verified artifact `e6ee0b86-da28-4ba9-bf42-a6c6e985c341`, unmanaged digest `f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8`, compiler/policy `review-2` / `deny-unbound-1`, fresh native epoch 13. All ten required capabilities loaded, zero channels and no pending work.
-- **Verification:** 23 distinct actual PostgreSQL/Asterisk interruption/race/safety scenarios, six focused tests, full revision/provider/isolation/browser, live tenant-routing, platform/staff authority and complete `./dev check` passed. Approved additive migration, consumer/HTTPS/helper refresh and one quiet retained profile restart completed; exact preflight/baseline, health and both HTTPS checks passed.
-- **Preservation:** 69 tracked SQL tables, both original artifacts/plans/static profiles, original baseline/facts, 20 pins, native sequence/receipts and nine reference-file hashes unchanged. Actual passive before/after negative checks preserved protected bytes/modes/ownership/mtime. Exact owned fixtures cleaned; no ordinary calls, deliberate ordinary faults, pin clearing or rebaseline.
-- **Decision/handoff:** DEV-01 strategy and conditional maintenance effects approved and fulfilled ([decision](../docs/planning/p4-u2-dev-a-profile-transition-review.md#recorded-dev-01-decision)). b receives the exact profile and old recovery targets; DEV-02 persistent participant placement/exact manifest and DEV-03 resource ownership remain unresolved. c owns ordinary-console SIP/RTP and integrated parent acceptance. No tenant readiness or production pass is claimed. [Operational commands](../docs/runbooks/development-container.md#retained-pbx-profile-transition-and-recovery).
-- **History:** [implementation and verification checkpoints](progress-tracker-history.md#2026-11-07--p4-u2-dev-a-implementation-and-verification-checkpoints).
+- **Completed:** a's retained profile upgrade/recovery (A-01–06) and b's persistent controlled-call preparation (B-01–07), with approved DEV-01–03 effects fulfilled. [a evidence](../docs/status/p4-u2-dev-a-evidence.md), [b evidence](../docs/status/p4-u2-dev-b-evidence.md).
+- **Retained state:** same node/installation and original baseline; artifact `e6ee0b86-da28-4ba9-bf42-a6c6e985c341`, digest `f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8`, compiler/policy `review-2` / `deny-unbound-1`; current epoch 14, routing generation 12, 20 pins and all ten required capabilities. Approved preparation remains started at lifecycle v4 with eleven available cases at final observation.
+- **Next boundary:** c owns the complete tenant-owned route graph/application, ordinary-console SIP/RTP/grant verification and actual loaded-path cleanup/parent acceptance. Tenant readiness remains incomplete. Historical P4-U2 acceptance and separate activation/production gates are unchanged.
+- **History:** [prior handoff and completion checkpoints](progress-tracker-history.md#2026-11-09--p4-u2-dev-b-completion-and-prior-handoff). [Supported commands](../docs/runbooks/persistent-controlled-calls.md).
 
 ## Separate Operational Follow-up
 
@@ -70,13 +67,21 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P4-U2-DEV-a
+## Latest Completed Checkpoint — P4-U2-DEV-b
 
-A-01–06 passed with the approved retained profile deployment and exact historical
-recovery preserved. All required regressions, ordinary health/HTTPS and passive
-preservation checks passed. [Final evidence](../docs/status/p4-u2-dev-a-evidence.md)
-and [history](progress-tracker-history.md#2026-11-07--p4-u2-dev-a-implementation-and-verification-checkpoints).
-Parent/b/c and DEV-02/03 remain incomplete; P4-U3 remains separate.
+B-01–07 passed, 2026-11-09 (Asia/Manila, +08:00). Approved dedicated drafts,
+three real provider-backed endpoint generations and eleven immutable cases are
+retained on the original installation. Exact/concurrent retries, stop/start,
+actual helper restart with explicit fresh-instance start, and independent normal
+console reads passed. Preparation/read/restart observed zero INVITE/REGISTER/RTP;
+no ordinary grant, test, result or authorization was created. Original canonical
+rows, retained artifacts/baseline, 20 pins and reference/profile bytes are preserved.
+All required focused/live/browser/provider/affected checks, complete `./dev check`,
+and final ordinary health/PBX/private HTTPS checks passed. Exact isolated fixtures
+and the passive observer were cleaned; the approved preparation remains started.
+[Final evidence and exact resource/case/cleanup handoff](../docs/status/p4-u2-dev-b-evidence.md).
+Child c owns full route application, ordinary calls, loaded-path removal and parent
+acceptance; setup availability is separate from tenant readiness.
 
 ## Completed
 
@@ -86,6 +91,7 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| P4-U2-DEV-b — Persistent controlled-call preparation | B-01–07 passed: immutable canonical setup, real scoped credentials, exact retry/reconciliation, bounded participant lifecycle, restart/console persistence, zero passive traffic and exact ordinary preservation. | [Final evidence](../docs/status/p4-u2-dev-b-evidence.md) |
 | P4-U2-DEV-a — Retained profile upgrade/recovery | A-01–06 passed: passive exact preflight, durable fenced profile transition/compatible recovery, 23 isolated scenarios, approved retained deployment, full checks and preserved original baseline/history. | [Final evidence](../docs/status/p4-u2-dev-a-evidence.md) |
 | P4-U2c / parent P4-U2 — Verified tenant routing | C-01–08 and AC-01–12 passed: exact tenant-aware runtime, bounded actual tests/readiness, audited retirement/reallocation, integrated regressions and ordinary preservation. | [Final evidence](../docs/status/p4-u2c-evidence.md) |
 | P4-U2b — Tenant route bindings and permissions | B-01–08 passed: shared gateways/exact owned DIDs, complete inbound graph ownership, explicit outbound permissions, consistent canonical eligibility, atomic audit/recovery, mutation races, actual API/HTTPS, affected/full checks and ordinary preservation. | [Final evidence](../docs/status/p4-u2b-evidence.md) |
@@ -131,7 +137,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. Implement the planned [P4-U2-DEV adopted sequence](feature-specs/p4-u2-dev-persistent-tenant-calling.md#split-assessment-and-adopted-implementation-order), continuing with b's persistent controlled-call preparation after a's completed profile transition/recovery, and resolving DEV-02/03 before dependent effects. The user-tested [Asterisk configuration reference](../reference/asterisk_config/) must inform profile/media compatibility without copying secrets or bypassing canonical tenant admission.
+1. Implement the planned [P4-U2-DEV adopted sequence](feature-specs/p4-u2-dev-persistent-tenant-calling.md#split-assessment-and-adopted-implementation-order), continuing with c's ordinary-console two-tenant calling and integrated acceptance after completed a/b. DEV-02/03 are approved and b's exact resource/case handoff is published. The user-tested [Asterisk configuration reference](../reference/asterisk_config/) must inform profile/media compatibility without copying secrets or bypassing canonical tenant admission.
 2. After ordinary-environment P4-U2 manual review, P4-U3 readiness/activation, consuming completed P4-U2a/b/c allocation, bindings and verified-routing evidence, then P4-U4/U5 tenant administration. Consume the [completed onboarding handoff](../docs/status/p4-u1b-3-evidence.md), explicit voice preference and canonical geography contracts, and the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff). Backup administration remains separate.
 
 | Unit / state | Requirement, scope and acceptance | Dependencies / required checks |
@@ -214,7 +220,7 @@ for their scope; creating a spec does not approve a proposal.
 
 | Area | Affected work and resume condition |
 | --- | --- |
-| Persistent development tenant calling | P4-U2-DEV [DEV-01–03](feature-specs/p4-u2-dev-persistent-tenant-calling.md#decisions-before-dependent-implementation): DEV-01 profile/recovery strategy is approved and a completed its retained deployment. Resolve DEV-02 exact persistent controlled environment and DEV-03 intended tenant/resource changes before b/c effects. Parent calling acceptance remains incomplete; no ordinary calls were placed by a. |
+| Persistent development tenant calling | P4-U2-DEV [DEV-01–03](feature-specs/p4-u2-dev-persistent-tenant-calling.md#decisions-before-dependent-implementation): DEV-01 is approved and a completed its retained deployment. DEV-02/03 dedicated resources, private participants in the existing helper and scoped provider access were approved on 2026-11-08 (+08:00); [exact definitions](../docs/planning/p4-u2-dev-b-preparation-review.md). b completed B-01–07 and approved ordinary preparation on 2026-11-09 (+08:00); parent/c remain incomplete. |
 | Tenant allocation/routing policy | P4-U2 [ALLOC-01–06](feature-specs/p4-u2-allocate-inventory-and-verify-tenant-routing.md#decisions-required-before-dependent-implementation) now have owner approval for ALLOC-01 and a's scoped ALLOC-06, including draft/active expansion ([policy](../docs/planning/p4-u2a-allocation-policy-review.md)). On 2026-11-03 the owner approved [b’s routing policy](../docs/planning/p4-u2b-routing-policy-review.md) with shared gateways and tenant-owned DIDs/rules/groups, plus outbound selection and binding-scoped release as proposed. All b gates are resolved. The owner approved controlled tests, draft verification and c’s narrow installed-resource retirement on 2026-11-04, followed by isolated Docker SIP fixtures; see the [approved c policy](../docs/planning/p4-u2c-live-policy-review.md). |
 | Downstream tenant calling readiness | P3-U5/Phase 3 completed under approved U5-01–05 [concrete policies](../docs/planning/p3-u5b-live-policy-review.md). P4-U2/U3 must supply trusted tenant allocation/binding, eligibility and verified activation; no tenant calling readiness is approved by development probes. |
 | PBX environment/secret/observation policy | P3-U1a has [scoped connectivity approval](../docs/planning/p3-u1a-connectivity-contract-review.md); b has conditional development observation approval under G-01–03 above. P3-U2a's [inventory/profile review](../docs/planning/p3-u2a-inventory-contract-review.md) Sections 2–4 are conditionally approved for controlled development; a’s A-01–07 implementation/verification is complete. G-02 is conditionally approved for development; b's private provider/lifecycle B-01–07 acceptance is complete; c's live mapping is conditionally approved under the [G-03 review](../docs/planning/p3-u2c-observation-mapping-contract-review.md). Production enforcement/HA/secrets and later routing semantics, permitted validation/reload, active-call changes and controlled test destinations must be resolved before their owning P3/P4/P5 units. |

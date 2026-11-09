@@ -287,6 +287,14 @@ use the current build (`docker restart myims-rebuild-dev-backend-1 myims-rebuild
 Refresh ordinary private HTTPS with `./dev platform-https-stop` then
 `./dev platform-https`, and `./dev staff-https-stop` then `./dev staff-https`;
 each start retains its existing protected material and runs its normal build.
+Persistent controlled-call preparation uses the same native helper, protected
+consumer and backing stores. See the [dedicated setup/lifecycle runbook](persistent-controlled-calls.md)
+for `./dev tenant-calls inspect`, `preview`, `rehearse`, `prepare`, `credentials`,
+`status`, `start`, `stop`, `restart`, `reconcile` and `disable`. Preparation and
+reads never place calls or grant readiness. b implementation and ordinary
+preparation acceptance are complete; its [evidence](../status/p4-u2-dev-b-evidence.md)
+records exact resources and the remaining c application/calling/cleanup boundary.
+
 Check the exact old-profile preflight. A legacy helper requires the explicit
 helper-only refresh below; its preflight permits only the missing new-executor
 marker, and verifies the exact old loaded pair, process and inherited lock. It

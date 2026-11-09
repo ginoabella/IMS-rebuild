@@ -174,7 +174,7 @@ export class TenantVerification {
     }
     const tests = (
       await s.query<TestRow>(
-        `SELECT i.id,i.case_id AS "caseId",i.artifact_id AS "artifactId",i.revision_id AS "revisionId",i.operator_id AS "createdBy",i.authentication_version AS "actorVersion",i.created_at AS "createdAt",p.state,c.direction,c.expected_outcome AS "expectedOutcome",r.outcome,r.destination_id AS "destinationId",r.created_at AS "finishedAt",(i.source_digest=$3 AND i.artifact_id=$4 AND i.runtime_generation=$5 AND c.enabled AND (i.grant_id IS NULL OR EXISTS(SELECT 1 FROM public.tenant_verification_grants g WHERE g.id=i.grant_id AND g.expires_at>clock_timestamp() AND g.runtime_generation=i.runtime_generation AND NOT EXISTS(SELECT 1 FROM public.tenant_verification_revocations x WHERE x.grant_id=g.id)))) AS current FROM public.tenant_route_test_intents i JOIN public.tenant_route_test_progress p ON p.intent_id=i.id JOIN public.tenant_route_test_cases c ON c.id=i.case_id LEFT JOIN public.tenant_route_test_results r ON r.intent_id=i.id WHERE i.tenant_id=$1 AND i.node_id=$2 ORDER BY i.created_at DESC LIMIT 25`,
+        `SELECT i.id,i.case_id AS "caseId",i.artifact_id AS "artifactId",i.revision_id AS "revisionId",i.operator_id AS "createdBy",i.authentication_version AS "actorVersion",i.created_at AS "createdAt",p.state,c.direction,c.expected_outcome AS "expectedOutcome",r.outcome,r.destination_id AS "destinationId",r.created_at AS "finishedAt",(i.source_digest=$3 AND i.artifact_id=$4 AND i.runtime_generation=$5 AND c.enabled AND public.tenant_case_preparation_available(c.id) AND (i.grant_id IS NULL OR EXISTS(SELECT 1 FROM public.tenant_verification_grants g WHERE g.id=i.grant_id AND g.expires_at>clock_timestamp() AND g.runtime_generation=i.runtime_generation AND NOT EXISTS(SELECT 1 FROM public.tenant_verification_revocations x WHERE x.grant_id=g.id)))) AS current FROM public.tenant_route_test_intents i JOIN public.tenant_route_test_progress p ON p.intent_id=i.id JOIN public.tenant_route_test_cases c ON c.id=i.case_id LEFT JOIN public.tenant_route_test_results r ON r.intent_id=i.id WHERE i.tenant_id=$1 AND i.node_id=$2 ORDER BY i.created_at DESC LIMIT 25`,
         [
           tenantId,
           nodeId,
@@ -230,7 +230,7 @@ export class TenantVerification {
       }));
     const cases = (
       await s.query<TenantVerificationView['cases'][number]>(
-        `SELECT id,direction,route_id AS "routeId",source_id AS "sourceId",dialled,expected_outcome AS "expectedOutcome",expected_destination_id AS "expectedDestinationId",readiness_required AS "readinessRequired",test_kind AS kind FROM public.tenant_route_test_cases WHERE tenant_id=$1 AND node_id=$2 AND enabled ORDER BY id LIMIT 17`,
+        `SELECT id,direction,route_id AS "routeId",source_id AS "sourceId",dialled,expected_outcome AS "expectedOutcome",expected_destination_id AS "expectedDestinationId",readiness_required AS "readinessRequired",test_kind AS kind,public.tenant_case_preparation_available(id) AS available FROM public.tenant_route_test_cases WHERE tenant_id=$1 AND node_id=$2 AND enabled AND NOT EXISTS(SELECT 1 FROM public.tenant_route_case_disables d WHERE d.case_id=tenant_route_test_cases.id) ORDER BY id LIMIT 17`,
         [tenantId, nodeId],
       )
     ).rows;
@@ -439,7 +439,7 @@ export class TenantVerification {
               throw new RoutingRejected('runtime_not_current');
             const cases = (
               await tx.query(
-                'SELECT id FROM public.tenant_route_test_cases WHERE id=ANY($1::uuid[]) AND node_id=$2 AND tenant_id=$3 AND enabled',
+                'SELECT id FROM public.tenant_route_test_cases WHERE id=ANY($1::uuid[]) AND node_id=$2 AND tenant_id=$3 AND enabled AND public.tenant_case_preparation_available(id)',
                 [caseIds, nodeId, tenantId],
               )
             ).rows;

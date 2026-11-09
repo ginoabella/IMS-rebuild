@@ -47,7 +47,9 @@ export async function checkCredentialBrowser({
     output = [];
   let fixtureBackend;
   const authStatuses = [],
-    detailStatuses = [];
+    detailStatuses = [],
+    configurationStatuses = [],
+    staffAuthStatuses = [];
   let lastSessionExpiry = null,
     droppedStatus = null;
   let browser,
@@ -436,6 +438,10 @@ export async function checkCredentialBrowser({
         detailStatuses.push(response.status());
         if (detailStatuses.length > 8) detailStatuses.shift();
       }
+      if (/^\/platform\/tenants\/[a-f0-9-]{36}\/configuration$/.test(path)) {
+        configurationStatuses.push(response.status());
+        if (configurationStatuses.length > 8) configurationStatuses.shift();
+      }
       if (!['/platform/auth/session', '/platform/auth/sign-in'].includes(path))
         return;
       authStatuses.push(response.status());
@@ -457,6 +463,12 @@ export async function checkCredentialBrowser({
       }
     });
     const form = await recipient.newPage();
+    form.on('response', (response) => {
+      if (new URL(response.url()).pathname.endsWith('/auth/sign-in')) {
+        staffAuthStatuses.push(response.status());
+        if (staffAuthStatuses.length > 8) staffAuthStatuses.shift();
+      }
+    });
     for (const p of [page, form]) p.on('request', (r) => urls.push(r.url()));
     async function login() {
       await page.getByLabel(/^Username/).fill(username);
@@ -538,9 +550,18 @@ export async function checkCredentialBrowser({
         .getByRole('region', { name: 'Organizational contact', exact: true })
         .getByText(/^Saved at version/),
     ).toBeVisible();
-    // The contact save reloads the canonical tenant version used by geography.
-    // Finish that read before staging a boundary and confirming its ownership.
+    // Each independent section uses the canonical row version. A save schedules
+    // a detail refresh; explicitly reopen its persisted result before staging
+    // the next section rather than racing that refresh's React state update.
+    await page.reload();
+    await expect(
+      page.getByText('Loading tenant…', { exact: true }),
+    ).toHaveCount(0);
     await page.waitForLoadState('networkidle');
+    await expandTenantCards(page);
+    await expect(
+      page.getByLabel('Contact name (optional)', { exact: true }),
+    ).toHaveValue('Verified organization desk');
     await expect(
       page.getByLabel('Administrative boundary file (optional)', {
         exact: true,
@@ -566,7 +587,15 @@ export async function checkCredentialBrowser({
       .getByRole('button', { name: 'Save geography', exact: true })
       .click();
     await expect(page.getByText(/^Geography saved at version/)).toBeVisible();
+    await page.reload();
+    await expect(
+      page.getByText('Loading tenant…', { exact: true }),
+    ).toHaveCount(0);
     await page.waitForLoadState('networkidle');
+    await expandTenantCards(page);
+    await expect(
+      page.getByLabel('Default intake longitude (optional)', { exact: true }),
+    ).toHaveValue('123.19');
     await page
       .getByRole('region', { name: 'Voice preference', exact: true })
       .getByLabel(/^Voice preference/)
@@ -592,6 +621,7 @@ export async function checkCredentialBrowser({
       )
     ).rows[0].normalized_code;
     await form.goto(`${staff.origin}/sign-in`);
+    await form.waitForLoadState('networkidle');
     await form.getByLabel(/^Tenant code/).fill(unsetDraftCode);
     await form.getByLabel(/^Username/).fill('browser.admin');
     await form.getByLabel(/^Password/).fill(password);
@@ -861,6 +891,7 @@ export async function checkCredentialBrowser({
       )
     ).rows[0].normalized_code;
     await form.goto(`${staff.origin}/sign-in`);
+    await form.waitForLoadState('networkidle');
     await form.getByLabel(/^Tenant code/).fill(draftCode);
     await form.getByLabel(/^Username/).fill('browser.admin');
     await form.getByLabel(/^Password/).fill(password);
@@ -980,9 +1011,24 @@ export async function checkCredentialBrowser({
       'PASS credential A-07: late disclosure fencing and same/foreign-owner staff issuer isolation; real qualified staff login and protected command-center recovery',
     );
   } catch (error) {
+    if (phase === 'combined onboarding configuration' && page) {
+      mkdirSync('.local/verification/p4-u2-dev-b', {
+        recursive: true,
+        mode: 0o700,
+      });
+      // This phase precedes any credential issuance or capability disclosure.
+      await page
+        .screenshot({
+          path: '.local/verification/p4-u2-dev-b/onboarding-failure.png',
+          fullPage: true,
+        })
+        .catch(() => {});
+    }
     const safeSession = {
       authStatuses,
       detailStatuses,
+      configurationStatuses,
+      staffAuthStatuses,
       droppedStatus,
       idleRemainingMs: lastSessionExpiry
         ? lastSessionExpiry.idle - Date.now()

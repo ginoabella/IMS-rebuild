@@ -970,3 +970,27 @@ repeating selection/restart; explicit rollback restores both compatible componen
 Historical console recovery also restores its original profile. HTTP/Next receive
 no profile control or provider transport. See the [revision contract](../docs/architecture/pbx-revisions.md)
 and [implementation evidence](../docs/status/p4-u2-dev-a-evidence.md) for acceptance.
+
+## Persistent controlled-call preparation
+
+Case publication invalidates prior custody under the exclusive node lock. The
+protected consumer commits proof only for the exact published preparation set it
+verified, under a shared node lock and a fresh statement snapshot after acquiring
+that lock. Provider transport runs outside the transaction; an in-flight check
+from before publication cannot restore the previous proof.
+
+P4-U2-DEV-b extends the existing trusted deployment and native-helper boundaries
+with immutable canonical preparation/step/case provenance, versioned lifecycle
+events and safe case availability. A fresh native instance invalidates earlier
+start admission even if its lease survives. The existing protected telephony
+consumer alone verifies exact current-artifact provider custody; native/HTTP see
+only bounded safe availability proof. Current runtime/grant/nonce/readiness rules
+remain separate. Canonical resource services own provisioning; fixtures with
+synthetic material remain isolated and test-only. There is no new service,
+listener, route catalog or ordinary-worker call dispatch. The
+[contract extension](../docs/architecture/tenant-routing-verification.md#persistent-preparation-extension)
+and [runbook](../docs/runbooks/persistent-controlled-calls.md) record behavior and
+cleanup ownership. B-01–07 and approved ordinary deployment passed on 2026-11-09
+(+08:00); [final evidence](../docs/status/p4-u2-dev-b-evidence.md) records the exact
+resources, provider custody and restart proof. Child c retains route application,
+actual ordinary calls and integrated cleanup/parent acceptance.

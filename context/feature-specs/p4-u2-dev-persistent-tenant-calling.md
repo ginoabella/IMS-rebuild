@@ -1,13 +1,17 @@
 # P4-U2-DEV — Persistent tenant calling in the development environment
 
-**Status:** partially implemented; child a is complete with approved retained deployment, b/c remain planned and parent acceptance is incomplete.
+**Status:** partially implemented; children a/b are complete with approved retained deployment and dedicated setup, c remains planned and parent acceptance is incomplete.
 **Prepared:** 2026-11-07 (Asia/Manila, +08:00).
 **Requirement:** development deployment follow-up to [P4-U2](p4-u2-allocate-inventory-and-verify-tenant-routing.md), supporting the [Phase 4 journey](../implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration).
 **Authorization:** the user requested the feature specification, then adopted the
 three-sub-unit split and requested the child specifications on 2026-11-07
 (Asia/Manila, +08:00). The user subsequently requested a's implementation and
 approved its preserved-profile strategy and conditional quiet maintenance effects.
-DEV-02/03 and new ordinary call destinations remain unresolved; see the
+DEV-02/03 dedicated setup was subsequently approved on 2026-11-08 (+08:00), with
+the exact resource/destination and existing-helper placement in the
+[b review](../../docs/planning/p4-u2-dev-b-preparation-review.md). Child b completed B-01–07 on 2026-11-09 (+08:00);
+[actual preparation evidence](../../docs/status/p4-u2-dev-b-evidence.md). Parent
+acceptance and child c remain incomplete. See also the
 [recorded DEV-01 decision](../../docs/planning/p4-u2-dev-a-profile-transition-review.md#recorded-dev-01-decision).
 
 ## Goal and expected result
@@ -247,8 +251,8 @@ recovery contract and maintenance effects; persistent participants have a separa
 provisioning/restart lifecycle; final ordinary-console proof depends on both.
 One large unit would hide which boundary is safe or still incomplete. Each
 unit below has its own observable outcome. Their completion does not substitute
-for the parent's live acceptance. Child a is complete with its approved retained
-deployment; b/c remain planned.
+for the parent's live acceptance. Children a/b are complete with approved retained deployment
+and DEV-02/03 preparation; c remains planned.
 
 | Unit        | Goal and scope                                                                                                                                                                                                                               | Dependencies and decisions                                                                                          | Acceptance and handoff                                                                                                                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -277,8 +281,10 @@ split coverage, source/contract consistency and whitespace checks only.
 
 Implementation must introduce a short documented Docker verification entry point
 with separate read-only preflight, isolated rehearsal and explicit approved retained
-deployment/acceptance modes. These commands do not exist yet; this spec does not
-present proposed names as runnable. Keep passive checks separate from mutations.
+deployment/acceptance modes. The delivered commands are documented in the
+[profile runbook](../../docs/runbooks/development-container.md#retained-pbx-profile-transition-and-recovery)
+and [preparation runbook](../../docs/runbooks/persistent-controlled-calls.md).
+Child c still owns ordinary-call and integrated acceptance. Keep passive checks separate from mutations.
 Use the Docker workspace and existing shared PostgreSQL/Redis/HTTPS services.
 
 Before ordinary effects, retain the sanitized reference/current/proposed profile
@@ -324,5 +330,7 @@ baseline, exact old/new static custody and artifact-compatible recovery. Quiet
 maintenance effects are authorized only after remaining durable-transition and
 recovery rehearsals pass. Those conditions were fulfilled: child a completed
 A-01–06 and its verified retained deployment; see the
-[final evidence](../../docs/status/p4-u2-dev-a-evidence.md). DEV-02/03 and b/c remain
-separate and incomplete. Approval alone does not substitute for that runtime proof.
+[final evidence](../../docs/status/p4-u2-dev-a-evidence.md). DEV-02/03 were subsequently approved and child b completed its
+[actual ordinary preparation acceptance](../../docs/status/p4-u2-dev-b-evidence.md).
+Child c and integrated parent acceptance remain incomplete. Approval alone does
+not substitute for runtime proof.

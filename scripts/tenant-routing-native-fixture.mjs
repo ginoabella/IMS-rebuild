@@ -2,6 +2,7 @@
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
 import { randomUUID, randomBytes } from 'node:crypto';
+import { spawn } from 'node:child_process';
 import {
   readFileSync,
   writeFileSync,
@@ -11,6 +12,7 @@ import {
 } from 'node:fs';
 import { setTimeout as delay } from 'node:timers/promises';
 import { checkTenantRoutingTransfer } from './transfer-fixture.mjs';
+import { observeControlledPackets } from './preparation-observe.mjs';
 const load = createRequire(
   '/workspace/services/backend/dist/modules/telephony/adapters/live/native-application.js',
 );
@@ -28,12 +30,78 @@ let callDelay = 0,
   suppressOutcome = false,
   lastCall = null,
   admissionFacts = null,
-  callCount = 0;
+  callCount = 0,
+  loseParticipant = false;
+let passiveObservationId;
+async function participantLoss(input) {
+  const child = spawn(
+    process.execPath,
+    [
+      '-e',
+      `
+    const dgram=require('node:dgram'),create=dgram.createSocket;
+    let destination=false,reported=false;
+    dgram.createSocket=(...args)=>{const socket=create(...args);socket.on('message',bytes=>{
+      const value=bytes.toString('utf8');
+      if(value.startsWith('INVITE '))destination=true;
+      if(destination&&!reported&&value.startsWith('SIP/2.0 200 ')&&/^cseq:.* INVITE$/im.test(value)) {reported=true;process.stdout.write('ANSWERED\\n');}
+    });return socket;};
+    const schedule=global.setTimeout;
+    global.setTimeout=(fn,ms,...args)=>schedule(fn,[1200,4000].includes(ms)?60000:ms,...args);
+    const {ControlledSipCall}=require('/workspace/services/backend/dist/modules/telephony/adapters/live/controlled-sip.js');
+    new ControlledSipCall().run(JSON.parse(require('node:fs').readFileSync(0,'utf8'))).then(()=>process.exit(0),()=>process.exit(2));
+  `,
+    ],
+    { stdio: ['pipe', 'pipe', 'ignore'] },
+  );
+  try {
+    const answered = new Promise((resolve, reject) => {
+      const timer = setTimeout(
+        () => reject(new Error('Participant answer unavailable')),
+        10000,
+      );
+      let text = '';
+      child.stdout.on('data', (bytes) => {
+        text += bytes;
+        if (text === 'ANSWERED\n') {
+          clearTimeout(timer);
+          resolve();
+        } else if (text.length > 64) {
+          clearTimeout(timer);
+          reject(new Error('Unexpected participant output'));
+        }
+      });
+      child.once('error', () => {
+        clearTimeout(timer);
+        reject(new Error('Participant unavailable'));
+      });
+      child.once('exit', () => {
+        clearTimeout(timer);
+        reject(new Error('Participant exited before controlled loss'));
+      });
+    });
+    child.stdin.end(JSON.stringify(input));
+    await answered;
+    const exited = new Promise((resolve) => child.once('exit', resolve));
+    assert.equal(child.kill('SIGKILL'), true);
+    await exited;
+    return {
+      outcome: 'unknown',
+      destinationObserved: true,
+      mediaObserved: false,
+      sipStatus: 200,
+    };
+  } finally {
+    if (child.exitCode === null) child.kill('SIGKILL');
+  }
+}
 const controlledRun = ControlledSipCall.prototype.run;
 ControlledSipCall.prototype.run = async function (input) {
   callCount++;
   if (callDelay) await delay(callDelay);
-  const result = await controlledRun.call(this, input);
+  const result = loseParticipant
+    ? await participantLoss(input)
+    : await controlledRun.call(this, input);
   lastCall = result;
   return suppressOutcome ? { ...result, outcome: 'unknown' } : result;
 };
@@ -159,7 +227,7 @@ admissionService.admit = async (input) => {
   return result;
 };
 const admission = new TenantAdmissionServer(admissionService, gid);
-const monitor = new TenantRuntimeMonitor(
+let monitor = new TenantRuntimeMonitor(
   root,
   metadata.nodeId,
   metadata.installationId,
@@ -190,16 +258,13 @@ const expect = (r, status) => {
   assert.equal(r.status, status, JSON.stringify(r));
   return r.value;
 };
-async function addCase(values) {
+async function exchangeFixture(values) {
   const requestId = randomUUID();
   writeFileSync(
     '/tmp/myims-routing-case-request.pending',
     JSON.stringify({
       requestId,
       nodeId: metadata.nodeId,
-      readinessRequired: false,
-      expectedDestinationId: null,
-      expectedOutcome: 'denied',
       ...values,
     }),
     { mode: 0o600 },
@@ -221,6 +286,14 @@ async function addCase(values) {
     await delay(100);
   }
   throw new Error('Owned case coordinator deadline');
+}
+async function addCase(values) {
+  return exchangeFixture({
+    readinessRequired: false,
+    expectedDestinationId: null,
+    expectedOutcome: 'denied',
+    ...values,
+  });
 }
 async function finished(operationId, expected) {
   const deadline = Date.now() + 45000;
@@ -985,6 +1058,397 @@ try {
         intentId: ownerTest.id,
       }),
   );
+  const persistentPreparation = randomUUID();
+  const lifecycle = (action) =>
+    exchangeFixture({
+      fixturePreparation: {
+        action,
+        caseId: ownerCase.id,
+        preparationId: persistentPreparation,
+      },
+    });
+  const grantsBeforeLifecycle = (
+    await store.pool.query(
+      'SELECT id,created_at,expires_at FROM public.tenant_verification_grants WHERE node_id=$1 ORDER BY id',
+      [metadata.nodeId],
+    )
+  ).rows;
+  let lifecycleCallCount = callCount;
+  passiveObservationId = randomUUID();
+  const initialObservation = observeControlledPackets(
+    'start',
+    passiveObservationId,
+  );
+  assert.deepEqual(initialObservation.counts, {
+    sip_invites: 0,
+    sip_registers: 0,
+    rtp_packets: 0,
+  });
+  await lifecycle('create');
+  assert.equal(callCount, lifecycleCallCount);
+  let persistentView = expect(
+    await http.verification.read(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      {},
+    ),
+    200,
+  );
+  assert.equal(
+    persistentView.cases.find((c) => c.id === ownerCase.id).available,
+    true,
+  );
+  assert.deepEqual(
+    observeControlledPackets('status', passiveObservationId).counts,
+    initialObservation.counts,
+  );
+  const inboundWitness = metadata.cases.find(
+    (c) => c.tenantId === metadata.tenants[1].id && c.direction === 'inbound',
+  );
+  const witness = expect(
+    await http.verification.write(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      'test',
+      {
+        requestId: randomUUID(),
+        artifactId: applied,
+        caseId: inboundWitness.id,
+        grantId: null,
+      },
+      randomUUID(),
+    ),
+    202,
+  );
+  await monitor.tick();
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+        [witness.id],
+      )
+    ).rows[0].state,
+    'passed',
+  );
+  const witnessCounts = observeControlledPackets(
+    'status',
+    passiveObservationId,
+  ).counts;
+  assert.ok(
+    witnessCounts.sip_invites > 0 &&
+      witnessCounts.sip_registers > 0 &&
+      witnessCounts.rtp_packets > 0,
+    'Passive counters must observe actual SIP registration/call and media, not just report constant zeros',
+  );
+  lifecycleCallCount = callCount;
+  const stoppingTest = expect(
+    await http.verification.write(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      'test',
+      {
+        requestId: randomUUID(),
+        artifactId: applied,
+        caseId: ownerCase.id,
+        grantId: null,
+      },
+      randomUUID(),
+    ),
+    202,
+  );
+  const originalSchedule = globalThis.setTimeout;
+  globalThis.setTimeout = (callback, milliseconds, ...args) =>
+    originalSchedule(
+      callback,
+      milliseconds === 1200
+        ? 5000
+        : milliseconds === 4000
+          ? 8000
+          : milliseconds,
+      ...args,
+    );
+  const activeDuringStop = monitor.tick();
+  activeDuringStop.catch(() => {});
+  try {
+    const admittedUntil = Date.now() + 10000;
+    let admitted = false;
+    while (Date.now() < admittedUntil) {
+      admitted =
+        (
+          await store.pool.query(
+            'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+            [stoppingTest.id],
+          )
+        ).rows[0].state === 'admitted';
+      if (admitted && !(await barrier.idle())) break;
+      await delay(50);
+    }
+    assert.equal(admitted, true);
+    await lifecycle('stop');
+    assert.equal(
+      await barrier.idle(),
+      false,
+      'Stop must preserve the active controlled call',
+    );
+    expect(
+      await http.verification.write(
+        p,
+        metadata.tenants[1].id,
+        metadata.nodeId,
+        'test',
+        {
+          requestId: randomUUID(),
+          artifactId: applied,
+          caseId: ownerCase.id,
+          grantId: null,
+        },
+        randomUUID(),
+      ),
+      409,
+    );
+    await activeDuringStop;
+  } finally {
+    globalThis.setTimeout = originalSchedule;
+  }
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+        [stoppingTest.id],
+      )
+    ).rows[0].state,
+    'passed',
+  );
+  assert.equal(callCount, lifecycleCallCount + 1);
+  persistentView = expect(
+    await http.verification.read(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      {},
+    ),
+    200,
+  );
+  assert.equal(
+    persistentView.cases.find((c) => c.id === ownerCase.id).available,
+    false,
+  );
+  assert.equal(
+    persistentView.tests.find((t) => t.id === stoppingTest.id).current,
+    false,
+  );
+  await lifecycle('start');
+  await delay(200);
+  const beforeRestartObservation = observeControlledPackets(
+    'status',
+    passiveObservationId,
+  ).counts;
+  const finishedAtBeforeRestart = (
+    await store.pool.query(
+      'SELECT created_at FROM public.tenant_route_test_results WHERE intent_id=$1',
+      [stoppingTest.id],
+    )
+  ).rows[0].created_at.toISOString();
+  await monitor.close();
+  monitor = new TenantRuntimeMonitor(
+    root,
+    metadata.nodeId,
+    metadata.installationId,
+    store,
+    driver,
+    barrier,
+    artifacts,
+    (id, action) => native.maintain(id, action),
+  );
+  await monitor.tick();
+  persistentView = expect(
+    await http.verification.read(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      {},
+    ),
+    200,
+  );
+  assert.equal(
+    persistentView.cases.find((c) => c.id === ownerCase.id).available,
+    false,
+  );
+  assert.equal(callCount, lifecycleCallCount + 1);
+  assert.deepEqual(
+    observeControlledPackets('status', passiveObservationId).counts,
+    beforeRestartObservation,
+  );
+  assert.deepEqual(
+    (
+      await store.pool.query(
+        'SELECT id,created_at,expires_at FROM public.tenant_verification_grants WHERE node_id=$1 ORDER BY id',
+        [metadata.nodeId],
+      )
+    ).rows,
+    grantsBeforeLifecycle,
+  );
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT created_at FROM public.tenant_route_test_results WHERE intent_id=$1',
+        [stoppingTest.id],
+      )
+    ).rows[0].created_at.toISOString(),
+    finishedAtBeforeRestart,
+  );
+  await lifecycle('start');
+  persistentView = expect(
+    await http.verification.read(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      {},
+    ),
+    200,
+  );
+  assert.equal(
+    persistentView.cases.find((c) => c.id === ownerCase.id).available,
+    true,
+  );
+  assert.equal(callCount, lifecycleCallCount + 1);
+  console.log(
+    'PASS persistent preparation actual SIP/RTP: stop preserves an admitted call and blocks new selection; explicit restart/read and same-process native monitor reconstruction place zero calls, preserve grants/result age and invalidate prior instance admission (fixture custody is synthetic)',
+  );
+  const lossRequest = {
+    requestId: randomUUID(),
+    artifactId: applied,
+    caseId: ownerCase.id,
+    grantId: null,
+  };
+  const lossTest = expect(
+    await http.verification.write(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      'test',
+      lossRequest,
+      randomUUID(),
+    ),
+    202,
+  );
+  const beforeLoss = callCount;
+  loseParticipant = true;
+  try {
+    await monitor.tick();
+  } finally {
+    loseParticipant = false;
+  }
+  assert.equal(callCount, beforeLoss + 1);
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+        [lossTest.id],
+      )
+    ).rows[0].state,
+    'unknown',
+  );
+  const lossFinishedAt = (
+    await store.pool.query(
+      'SELECT created_at FROM public.tenant_route_test_results WHERE intent_id=$1',
+      [lossTest.id],
+    )
+  ).rows[0].created_at.toISOString();
+  expect(
+    await http.verification.write(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      'test',
+      { ...lossRequest, requestId: randomUUID() },
+      randomUUID(),
+    ),
+    409,
+  );
+  expect(
+    await http.verification.write(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      'test',
+      lossRequest,
+      randomUUID(),
+    ),
+    200,
+  );
+  const drainDeadline = Date.now() + 35000;
+  while (Date.now() < drainDeadline && !(await barrier.idle()))
+    await delay(100);
+  assert.equal(
+    await barrier.idle(),
+    true,
+    'Controlled participant loss must drain through its initial natural deadline',
+  );
+  expect(
+    await http.verification.write(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      'reconcile',
+      { requestId: randomUUID(), testId: lossTest.id },
+      randomUUID(),
+    ),
+    202,
+  );
+  await monitor.tick();
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+        [lossTest.id],
+      )
+    ).rows[0].state,
+    'failed',
+  );
+  assert.equal(
+    (
+      await store.pool.query(
+        'SELECT created_at FROM public.tenant_route_test_results WHERE intent_id=$1',
+        [lossTest.id],
+      )
+    ).rows[0].created_at.toISOString(),
+    lossFinishedAt,
+  );
+  assert.equal(callCount, beforeLoss + 1);
+  console.log(
+    'PASS tenant-routing actual participant SIGKILL after SIP answer: initial fixed autohangup drains naturally, unknown blocks another test, exact retry and idle reconciliation never redial or refresh result age',
+  );
+  await lifecycle('disable');
+  const disabledView = expect(
+    await http.verification.read(
+      p,
+      metadata.tenants[1].id,
+      metadata.nodeId,
+      {},
+    ),
+    200,
+  );
+  assert.equal(
+    disabledView.cases.some((c) => c.id === ownerCase.id),
+    false,
+  );
+  assert.equal(callCount, beforeLoss + 1);
+  console.log(
+    'PASS persistent preparation disable retains canonical case/results and omits selection; loaded-path removal is not claimed before the reviewed recovery/apply proof',
+  );
+  const finalObservation = observeControlledPackets(
+    'stop',
+    passiveObservationId,
+  );
+  passiveObservationId = null;
+  console.log(
+    'PASS passive controlled-packet observation: actual SIP/RTP witness increments counters; preparation/start/read/native reconstruction preserve exact counts; only the owned counter-only table was removed ' +
+      JSON.stringify(finalObservation),
+  );
   const recover = expect(
     await http.live.accept(
       p,
@@ -1006,6 +1470,8 @@ try {
     'PASS tenant-routing native fixture: exact reviewed tenant-aware apply, actual positive/forbidden SIP paths, bidirectional RTP, immutable provenance and required baseline recovery; synthetic endpoint material is explicitly distinguished from real-provider regression',
   );
 } finally {
+  if (passiveObservationId)
+    observeControlledPackets('stop', passiveObservationId);
   clearInterval(timer);
   await monitor.close();
   await driver.drain();

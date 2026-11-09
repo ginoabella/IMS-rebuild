@@ -159,6 +159,22 @@ export class ExactLiveMaterialConsumer {
       req.end();
     });
   }
+  /** Passive exact-scope check also works before any material is installed. */
+  async access(): Promise<void> {
+    const data = record(record(await this.get('auth/token/lookup-self')).data);
+    if (
+      !Array.isArray(data.policies) ||
+      data.policies.length !== 1 ||
+      data.policies[0] !== `endpoint-live-read-${this.#installation}` ||
+      typeof data.ttl !== 'number' ||
+      !Number.isSafeInteger(data.ttl) ||
+      data.ttl <= 0 ||
+      data.ttl > 86400 ||
+      data.explicit_max_ttl !== 86400 ||
+      data.renewable !== false
+    )
+      throw new LiveMaterialFailure('material_denied');
+  }
   async endpoint(binding: CredentialBinding): Promise<{ password: string }> {
     const exact = { ...binding };
     identifiers(exact, [
