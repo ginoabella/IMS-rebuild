@@ -994,3 +994,12 @@ cleanup ownership. B-01–07 and approved ordinary deployment passed on 2026-11-
 (+08:00); [final evidence](../docs/status/p4-u2-dev-b-evidence.md) records the exact
 resources, provider custody and restart proof. Child c retains route application,
 actual ordinary calls and integrated cleanup/parent acceptance.
+
+Child c adds append-only successor fact sets for approved transferred stock, retaining
+original facts/cases/results and exact provider generations. Trusted publication
+requires stopped preparation, quiet verified runtime and fresh independent proof;
+HTTP/runtime/executor roles cannot publish it. The custody publication fence now
+compares preparation IDs **and their fact-set generations** after the node lock,
+so an in-flight pre-supersession GET cannot restore old proof. Disabled historical
+cases do not prevent an explicit start of valid successor cases. See
+[successor contract](../docs/architecture/tenant-routing-verification.md#retained-preparation-successor-cases).

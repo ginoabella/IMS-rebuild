@@ -1,0 +1,466 @@
+{
+  "state": "ordinary_loaded_cleanup_proved",
+  "effectAuthorization": false,
+  "nodeId": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+  "installationId": "58adb785-5384-41ce-9c72-ccda6ea554db",
+  "artifactId": "a6152e67-1a7f-4a87-bb47-b1fda3f22bdd",
+  "revisionId": "a6152e67-1a7f-4a87-bb47-b1fda3f22bdd",
+  "epoch": "22",
+  "generation": 64,
+  "sourceDigest": "b156fda50cda3e5d8a05c9645a414d09f4cb1992cdf25b3e91022259437818ee",
+  "extensionIds": [
+    "5c91cc6b-414e-4b34-b237-4c53e8f1447e",
+    "0f6a12d6-d11c-481b-a27d-b7a2c611ce66",
+    "3f2691ab-5bbd-478c-860a-87cc111fd07f"
+  ],
+  "gatewayId": "ef4ca480-4a0c-453b-9c0b-f2e210ce05bc",
+  "trunkId": "ae5b4537-47c2-4b54-86c4-a51391a59014",
+  "routeIds": [
+    "666a2cab-2637-4690-b032-86fe64788e01",
+    "719df50c-c2fe-483e-ad17-df820eaff5f1",
+    "95ec29a3-df4c-460d-9d89-31d50a47cf16",
+    "e3cf3eed-986a-4472-919a-583ed4e2f46b",
+    "fe6da3ae-5f64-4d73-8729-8099b3b79d14"
+  ],
+  "retainedPins": [
+    {
+      "kind": "allocations",
+      "resource_id": "140d7986-d43a-47ec-87b4-6bb89b01f67d",
+      "version": 1,
+      "references": 2
+    },
+    {
+      "kind": "allocations",
+      "resource_id": "c19f5b62-0f84-41df-a769-5432697217bc",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "117fb2ad-abb2-4bdf-b46c-2ee9843bbc45",
+      "version": 1,
+      "references": 3
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "14a83a4e-27d1-41d2-bd95-bb3bd45de67c",
+      "version": 1,
+      "references": 3
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "22125966-21f1-47e5-bd95-45cfe35e3af0",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "223214ee-7786-42e9-8640-2f684b9db8d9",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "2fd89934-ff9d-45d6-9773-60540a78fd21",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "2fd89934-ff9d-45d6-9773-60540a78fd21",
+      "version": 2,
+      "references": 2
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "40de20d5-e853-413a-b31c-d381ac4c822a",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "82f91319-914f-478e-91de-0a83f430bb39",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "8661e2a5-3e5b-4239-a2a0-90252d80385d",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "8661e2a5-3e5b-4239-a2a0-90252d80385d",
+      "version": 2,
+      "references": 2
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "8808ea86-1b0f-4884-bb3f-a887174b6d42",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "8808ea86-1b0f-4884-bb3f-a887174b6d42",
+      "version": 2,
+      "references": 2
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "974bf47e-5c5b-4bf6-b31d-d499d20c71bb",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "a41a4425-f0c7-40c3-a4a0-e59c3e3472d9",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "ab5cf771-5e84-41e8-b876-3da5f55e7da7",
+      "version": 1,
+      "references": 3
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "bd5530a1-35e5-4887-bff3-c1956a2017dc",
+      "version": 1,
+      "references": 3
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "d1a476c4-681c-4991-a60e-287b68c5463f",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "d9751c85-a81d-48bc-9f69-5cc5bd80fc1a",
+      "version": 1,
+      "references": 2
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "e8e48361-a4c7-42c9-8aae-438e46bae9e9",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "authorizations",
+      "resource_id": "ea16ac52-469c-48d6-9d37-d5612684a547",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "capability",
+      "resource_id": "58adb785-5384-41ce-9c72-ccda6ea554db",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "capability",
+      "resource_id": "58adb785-5384-41ce-9c72-ccda6ea554db",
+      "version": 2,
+      "references": 6
+    },
+    {
+      "kind": "credentials",
+      "resource_id": "404780b0-ce0d-4a8a-bfeb-5f398561fcac",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "credentials",
+      "resource_id": "55538fe0-3f5f-4da6-bb9d-d2dd02f1202b",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "credentials",
+      "resource_id": "9a1724c3-4e60-4691-821f-333797f82827",
+      "version": 1,
+      "references": 2
+    },
+    {
+      "kind": "dids",
+      "resource_id": "0c869e2f-4b1e-42f7-b0b5-948e9b785e5e",
+      "version": 2,
+      "references": 6
+    },
+    {
+      "kind": "dids",
+      "resource_id": "5b32b89f-343b-4e48-abc6-9915e8325e8a",
+      "version": 2,
+      "references": 6
+    },
+    {
+      "kind": "dids",
+      "resource_id": "6adef639-92ab-41b5-9629-d8ddf5e91865",
+      "version": 2,
+      "references": 7
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "0f6a12d6-d11c-481b-a27d-b7a2c611ce66",
+      "version": 3,
+      "references": 3
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "0f6a12d6-d11c-481b-a27d-b7a2c611ce66",
+      "version": 5,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "1fc0f843-543a-4a13-b973-a8f808d599eb",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "266fe8b7-cb8a-41d4-b825-4c808db86cff",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "3c896e98-3a46-4da1-a785-dccd00efe6b7",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "3e9ec2a0-85bf-45a6-ab0f-41ddb1e063db",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "3f2691ab-5bbd-478c-860a-87cc111fd07f",
+      "version": 3,
+      "references": 3
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "3f2691ab-5bbd-478c-860a-87cc111fd07f",
+      "version": 5,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "4042605d-5323-4be5-9b4a-3b80c47c9eda",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "544cfb72-84c7-46af-a43c-d3662811e42e",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "5c91cc6b-414e-4b34-b237-4c53e8f1447e",
+      "version": 7,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "5c91cc6b-414e-4b34-b237-4c53e8f1447e",
+      "version": 9,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "a894aacd-dee5-4e35-86ff-727707f9853a",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "af91cf1b-d8f6-4f00-b5d4-0088fde658ae",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "cd5e4376-88a2-4dd6-9cd7-b5e961bcd26a",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "cf8a0436-b73e-4759-9f12-03443d579780",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "extensions",
+      "resource_id": "d21c5a0a-1d18-44a5-8755-f2382cd10c92",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "gateways",
+      "resource_id": "bf99326e-b47b-4e1c-94d5-6adbcfa056dd",
+      "version": 4,
+      "references": 7
+    },
+    {
+      "kind": "gateways",
+      "resource_id": "ef4ca480-4a0c-453b-9c0b-f2e210ce05bc",
+      "version": 2,
+      "references": 3
+    },
+    {
+      "kind": "gateways",
+      "resource_id": "ef4ca480-4a0c-453b-9c0b-f2e210ce05bc",
+      "version": 3,
+      "references": 1
+    },
+    {
+      "kind": "gateways",
+      "resource_id": "ef4ca480-4a0c-453b-9c0b-f2e210ce05bc",
+      "version": 4,
+      "references": 1
+    },
+    {
+      "kind": "gateways",
+      "resource_id": "ef4ca480-4a0c-453b-9c0b-f2e210ce05bc",
+      "version": 5,
+      "references": 1
+    },
+    {
+      "kind": "groups",
+      "resource_id": "fe94faa5-e9ee-4cd8-8bd2-b2912dbae2e2",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "inbound",
+      "resource_id": "95ec29a3-df4c-460d-9d89-31d50a47cf16",
+      "version": 2,
+      "references": 1
+    },
+    {
+      "kind": "inbound",
+      "resource_id": "95ec29a3-df4c-460d-9d89-31d50a47cf16",
+      "version": 4,
+      "references": 3
+    },
+    {
+      "kind": "inbound",
+      "resource_id": "98a141a6-fac4-4a2d-9a54-36cd15d41f0a",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "inbound",
+      "resource_id": "b60da286-568e-4845-ab02-7b24d3817751",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "inbound",
+      "resource_id": "e3cf3eed-986a-4472-919a-583ed4e2f46b",
+      "version": 2,
+      "references": 2
+    },
+    {
+      "kind": "node",
+      "resource_id": "bcb9d21c-96cd-4975-bd68-314b588a23a9",
+      "version": 1,
+      "references": 7
+    },
+    {
+      "kind": "outbound",
+      "resource_id": "666a2cab-2637-4690-b032-86fe64788e01",
+      "version": 2,
+      "references": 4
+    },
+    {
+      "kind": "outbound",
+      "resource_id": "fe6da3ae-5f64-4d73-8729-8099b3b79d14",
+      "version": 2,
+      "references": 4
+    },
+    {
+      "kind": "profiles",
+      "resource_id": "1f75b82a-787f-4b34-b4e5-49ff72d51638",
+      "version": 1,
+      "references": 1
+    },
+    {
+      "kind": "profiles",
+      "resource_id": "adbbcb75-fe04-4034-8569-4f072a83ebe4",
+      "version": 1,
+      "references": 4
+    },
+    {
+      "kind": "tenants",
+      "resource_id": "0e1d45a7-6afb-4621-afd3-68b45c5d450a",
+      "version": 2,
+      "references": 6
+    },
+    {
+      "kind": "tenants",
+      "resource_id": "225d21bd-516e-4bbb-a3c0-c0673b92eec0",
+      "version": 3,
+      "references": 6
+    },
+    {
+      "kind": "tenants",
+      "resource_id": "cfb6a7fe-80ef-4ec5-95bb-fbbb97f2d9d0",
+      "version": 2,
+      "references": 6
+    },
+    {
+      "kind": "tenants",
+      "resource_id": "f802894b-f9e6-47a1-9edb-0e3b5772c025",
+      "version": 9,
+      "references": 6
+    },
+    {
+      "kind": "trunks",
+      "resource_id": "7f3e81b9-804c-452c-a9e6-d5427997f6eb",
+      "version": 4,
+      "references": 7
+    },
+    {
+      "kind": "trunks",
+      "resource_id": "ae5b4537-47c2-4b54-86c4-a51391a59014",
+      "version": 2,
+      "references": 3
+    },
+    {
+      "kind": "trunks",
+      "resource_id": "ae5b4537-47c2-4b54-86c4-a51391a59014",
+      "version": 3,
+      "references": 1
+    },
+    {
+      "kind": "trunks",
+      "resource_id": "ae5b4537-47c2-4b54-86c4-a51391a59014",
+      "version": 4,
+      "references": 1
+    },
+    {
+      "kind": "trunks",
+      "resource_id": "ae5b4537-47c2-4b54-86c4-a51391a59014",
+      "version": 5,
+      "references": 1
+    }
+  ],
+  "materialCustodyCurrent": true,
+  "nativeEndpointsAuthsAorsAbsent": 3,
+  "nativeControlledGatewayAndIdentifyAbsent": true,
+  "controlledRouteDialAndAdmissionAbsent": 5,
+  "activeChannels": 0,
+  "retainedTrunkStub": true,
+  "profileDigest": "f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8"
+}

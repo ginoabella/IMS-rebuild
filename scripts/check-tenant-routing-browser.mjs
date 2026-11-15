@@ -135,6 +135,21 @@ async function runTenantRoutingBrowser({
     await expect(toggle).toBeVisible();
     await toggle.click();
     await page.getByLabel(/^Routing PBX node/).selectOption(nodeId);
+    await expect(button('Grant verification')).toBeDisabled();
+    const grantCases = page.getByRole('group', {
+      name: 'Cases permitted by the new grant',
+      exact: true,
+    });
+    const selections = grantCases.getByRole('checkbox');
+    assert.equal(
+      await selections.count(),
+      metadata.cases.filter((c) => c.tenantId === tenant.id).length,
+    );
+    await selections.first().check();
+    await expect(button('Grant verification')).toBeEnabled();
+    await button('Clear grant selection').click();
+    await expect(button('Grant verification')).toBeDisabled();
+    await selections.first().check();
     await expect(button('Grant verification')).toBeEnabled();
     console.log('CHECK tenant routing HTTPS: grant and exact mounted recovery');
     if (tenant.id === metadata.tenants[0].id) {
@@ -174,9 +189,39 @@ async function runTenantRoutingBrowser({
     ).toBeVisible();
     let view = (await direct(a, path)).data;
     assert.ok(view.grants[0]?.active);
+    const subset = (
+      await owner.query(
+        'SELECT case_id FROM public.tenant_verification_grant_cases WHERE grant_id=$1',
+        [view.grants[0].id],
+      )
+    ).rows;
+    assert.equal(subset.length, 1);
+    assert.equal(subset[0].case_id, view.cases[0].id);
     await page
       .getByLabel(/^Draft verification grant/)
       .selectOption(view.grants[0].id);
+    await button('Revoke selected grant').click();
+    await expect(
+      page.getByText('Intent recorded. Reload for the current outcome.', {
+        exact: true,
+      }),
+    ).toBeVisible();
+    // Recovery may remount the panel; select the full second grant explicitly.
+    if (await button('Clear grant selection').isEnabled())
+      await button('Clear grant selection').click();
+    for (const selection of await selections.all()) await selection.check();
+    await button('Grant verification').click();
+    await expect(
+      page.getByText('Intent recorded. Reload for the current outcome.', {
+        exact: true,
+      }),
+    ).toBeVisible();
+    view = (await direct(a, path)).data;
+    const activeGrant = view.grants.find((g) => g.active);
+    assert.ok(activeGrant);
+    await page
+      .getByLabel(/^Draft verification grant/)
+      .selectOption(activeGrant.id);
     for (const c of metadata.cases.filter((c) => c.tenantId === tenant.id)) {
       await page.getByLabel(/^Controlled call case/).selectOption(c.id);
       await button('Run controlled call test').click();

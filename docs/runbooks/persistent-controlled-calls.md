@@ -6,9 +6,8 @@ Delivered and accepted, 2026-11-09 (Asia/Manila, +08:00); B-01–07 passed. See
 [exact request definition](../planning/p4-u2-dev-b-manifest.json). Revision 2 in
 that definition is applied: the supported
 [capability declaration](../planning/p4-u2-dev-b-capabilities.json) preserved all
-existing arrays and set the identity/material limits to 71/64. The retained setup
-is started at lifecycle version 4; a subsequent lifecycle mutation must use expected
-version 4 and a new request UUID. The next actual helper restart requires another
+existing arrays and set the identity/material limits to 71/64. The lifecycle version recorded in b is historical. Read the latest lifecycle event
+from `status`; a subsequent mutation must use that exact version and a new request UUID. The next actual helper restart requires another
 explicit start against its new instance. Setup availability does not establish readiness.
 
 The provisioning worker token had a measured 3,599-second TTL and has naturally
@@ -233,3 +232,110 @@ or recovery ancestry prevents removal. Use existing reviewed artifact retirement
 dependency checks and versioned release only after actual absence proof; never
 delete whole tenants, prune volumes, force hangup or clear pins. Parent AC-09 is
 not passed by preparation or disablement.
+
+## Explicit ordinary acceptance stages (c completed)
+
+This effectful command uses the normal retained private HTTPS console and approved
+manifest. It never launches a disposable PBX, seeds route/test metadata or falls
+back to fixture credentials. `inspect` remains read-only; `rehearse` remains
+isolated. C-01–08 and parent AC-01–12 passed with all twelve full required
+commands and exact final ordinary preservation; see the
+[final c ledger](../status/p4-u2-dev-c-evidence.md). The retained setup is stopped
+with all grants revoked and verification paths disabled. Reuse requires the
+explicit reviewed restoration/publication/start/grant sequence below; prior proof
+does not establish current readiness. User manual sign-off remains separate.
+
+```sh
+./dev tenant-calls accept docs/planning/p4-u2-dev-b-manifest.json configure RUN_UUID
+./dev tenant-calls accept docs/planning/p4-u2-dev-b-manifest.json apply RUN_UUID
+./dev tenant-calls accept docs/planning/p4-u2-dev-b-manifest.json calls RUN_UUID
+./dev tenant-calls accept docs/planning/p4-u2-dev-b-manifest.json cleanup RUN_UUID
+```
+
+Use a fresh UUID for an explicitly reviewed run. `configure` previews/saves the
+approved two-tenant DID/direct-extension and outbound permission graphs, then
+captures/validates/applies. `apply` verifies the exact already-saved graph before
+capturing another revision; use it after inspecting a failed validation, without
+recreating authorizations. `calls` requires the current tenant-aware artifact and
+available approved cases, explicitly selects separate positive/negative subsets,
+verifies exact canonical grant membership and runs one test at a time. It revokes
+each owned batch grant, including on a reported test failure. `cleanup` requires
+no active grants, revokes only the dedicated inbound/outbound bindings and trunk permissions, then
+applies a reviewed replacement. DID ownership and shared-trunk classification stay
+with the approved reusable desired stock.
+`cleanup` also disables the three dedicated endpoints and their gateway/trunk
+through normal console controls before the reviewed apply. Independently prove
+actual loaded absence using `verify-cleanup MANIFEST EXACT_ARTIFACT_UUID`; this
+checks native endpoint/auth/AOR/identify objects, controlled dialplan admission,
+quiet channels, current profile/custody and enumerates retained pins.
+
+For changed canonical resource versions or approved ownership, stop preparation
+first and retain the original manifest. Export and inspect a bounded plan, then
+explicitly publish it:
+
+```sh
+./dev tenant-calls plan-successor docs/planning/p4-u2-dev-b-manifest.json PRIVATE_PLAN.json
+./dev tenant-calls supersede docs/planning/p4-u2-dev-b-manifest.json PRIVATE_PLAN.json
+```
+
+Publication appends immutable successor facts/cases, disables prior case selection
+and invalidates custody proof. It creates no resource, grant or call. Canonical
+source closure, exact original provider generations, stopped lifecycle, current
+reviewed artifact, owner and generation are rechecked under node locks. Wait for
+fresh independent custody and explicitly `start` for the current native instance.
+The plan file is bounded input, never an alternate route database.
+
+Additional ordinary acceptance stages use the same `accept MANIFEST STAGE RUN_UUID`
+syntax. `read` checks safe discovery, keyboard, axe and reflow without telephony
+effects. `conditions` explicitly grants the approved expiry case for ten seconds
+and exercises real expiry/revocation SIP denials. `restart-grant` issues one
+15-minute subset grant without calling; explicitly stop preparation and restart
+quiet services, then start against the new native instance before `restart-check`.
+That check rejects the stale-generation grant without creating an intent, verifies
+unchanged evidence/grant timestamps and revokes its owned grant.
+
+The dedicated 7701 transfer stages are `transfer-remove`, `transfer-retire`,
+`transfer-allocate`, `transfer-route`, in that order with one run UUID. Preparation
+must be stopped and grants revoked. They disable the endpoint/apply a replacement,
+retire only the exact superseded artifact, remove the old desired inbound blocker,
+release/allocate canonically and update the approved B route before reviewed apply.
+Publish fresh successor cases and explicitly start before new-owner/stale-owner
+calls. The corresponding `return-remove`, `return-retire`, `return-allocate`,
+`return-route` stages restore the same endpoint to A through the same guards; B's
+original destination is restored and A gets a new canonical inbound rule on its
+original DID. Removed rows and old claim/artifact history remain retained.
+
+`restore` requires stopped preparation, enables the same dedicated stock/peers,
+refreshes the canonical bindings and applies a reviewed revision. Publish current
+successors and explicitly start/select/grant for a later controlled session.
+Restoration or read access cannot establish readiness or place a call. Revoke
+grants, stop and perform reviewed cleanup again when the session ends.
+
+If a call stage stops, inspect its exact canonical intents before continuing.
+`revoke-grants` revokes only active grants issued by the manifest operator whose
+entire membership belongs to this preparation. It places no calls.
+`calls-remaining` reads the same run's failed `calls` journal, requires every
+submitted request to have exact resolved evidence on the current artifact and
+generation, and runs only cases that were never submitted. Missing/unknown or
+mismatched provenance blocks continuation. Prior result/grant timestamps remain
+unchanged; revocation is not undone. `recover-apply` reads the same run's single failed stage with one accepted apply,
+requires its exact revision already verified, recovers the original owner-bound
+HTTPS receipt and reloads live state without submitting any mutation.
+`recover-apply-read` permits a separately journaled read-only continuation after
+an observation failure. Routing's narrow `transfer-route-resume` accepts only a
+failed stage with zero writes; `transfer-route-rebind` additionally requires the
+recorded 409 and unchanged original destination/version before revoking the old
+binding and editing. These are explicit continuations, never automatic retries.
+Reviewed applies are paced to a fresh ordinary minute budget; normal limits stay
+unchanged.
+Neither command substitutes for explicit
+unknown-work reconciliation or permits a replacement intent for an uncertain call.
+
+Each stage creates an exclusive private journal in
+`.local/verification/p4-u2-dev-c/RUN_UUID/`, retaining bounded exact routing intents,
+provenance and observed outcomes. Repeating the same stage refuses without opening
+a session. On interruption, inspect the journal and canonical receipt/progress;
+recover the original mounted intent or reconcile unknown work through the console.
+Never choose a new run UUID merely to replace an uncertain call. No stage pass
+closes C-01–08 or renews readiness. The temporary canonical operator session is
+revoked at exit; this automation supplies no manual password sign-in/sign-off.

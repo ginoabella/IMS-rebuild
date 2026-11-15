@@ -90,13 +90,31 @@ export function compileRevision(s: RevisionSnapshot) {
     const c = s.capability;
     if (
       !c ||
-      p.capabilityRevision !== c.version ||
       !c.kinds.includes(p.kind) ||
       !c.signaling.includes(p.settings.signaling) ||
       !c.media.includes(p.settings.mediaEncryption) ||
       p.settings.codecs.some((x) => !c.codecs.includes(x))
     )
       add('unsupported_profile', p.id);
+    if (c && p.capabilityRevision !== c.version) {
+      const inactiveOlderProfile =
+        s.schemaVersion === 'tenant-routing-1' &&
+        p.capabilityRevision > 0 &&
+        p.capabilityRevision < c.version &&
+        !s.extensions.some(
+          (e) =>
+            e.profileId === p.id &&
+            e.profileVersion === p.version &&
+            e.administrativeStatus === 'enabled',
+        );
+      add(
+        inactiveOlderProfile
+          ? 'inactive_profile_capability_stale'
+          : 'unsupported_profile',
+        p.id,
+        inactiveOlderProfile ? 'blocker' : 'error',
+      );
+    }
   }
   for (const e of s.extensions) {
     const prefix =

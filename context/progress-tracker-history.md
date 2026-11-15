@@ -3231,3 +3231,97 @@ traffic and exact preservation across 76 tracked tables. All required suites and
 complete `./dev check` passed. Full intermediate failures and final receipts are
 in the [b evidence](../docs/status/p4-u2-dev-b-evidence.md#historical-implementation-checkpoints).
 Parent/c acceptance remains incomplete.
+
+## 2026-11-15 — P4-U2-DEV-c ordinary acceptance checkpoint
+
+Historical implementation checkpoints; the current tracker and final evidence supersede intermediate pending states.
+
+
+**P4-U2-DEV-c — Ordinary-console calling and integrated acceptance** resumed
+2026-11-14 (Asia/Manila, +08:00), following the completed Node 22.23.5 rollout.
+Recheck retained target, custody and quiet state; explicitly start preparation for
+the current native instance before ordinary routing/apply/call work. Implement
+explicit case-subset grants and the ordinary acceptance command, then execute
+C-01–08 and required regressions. Parent acceptance remains incomplete.
+Explicit bounded case selection and staged ordinary HTTPS acceptance are implemented.
+The inactive-profile compatibility fix passed ten focused tests. Normal quiet
+restart and preparation v6 passed; ordinary reviewed tenant-aware apply produced
+artifact `391331e6-dfab-4b35-b968-652261a82fba` at epoch 17/generation 24. All eleven
+ordinary persistent SIP cases passed (four exact-destination/RTP positives, seven
+denials), including one injected 202 response-loss recovery with one exact intent;
+all four grants were revoked. The required isolated live regression passed.
+Browser rerun, successor facts/conditional cases, ordinary retirement/transfer,
+loaded-path cleanup, preservation and remaining/full regressions are pending.
+Quiet conditional-code restart preserved every result/grant timestamp at epoch 18/generation 27.
+The owned-copy generation-fence rehearsal and ordinary generation-1 publication passed.
+All fifteen non-expiry successor SIP cases and real expiry/revocation denials passed;
+read/keyboard/axe/reflow and both ordinary draft sign-in denials passed. Exact
+continuation recovered thirteen resolved intents and ran only two unsubmitted cases.
+No-call grant restart proof passed at owner 19, preserving exact ages/results.
+Ordinary 7701 replacement apply, exact c-artifact retirement and canonical A→B
+release/allocation passed. New-owner and restored-owner SIP/RTP/stale-owner proof passed; the same endpoint
+was returned canonically to A. All 54 ordinary intents resolved (15 permitted,
+39 denied), all grants revoked. First actual loaded-path removal and normal
+restart/discovery passed with unchanged evidence ages. No-call reuse passed with sixteen available cases and zero INVITE/REGISTER/RTP
+packets. Final reviewed cleanup and restart passed at owner 21/generation 61,
+artifact `a6152e67-1a7f-4a87-bb47-b1fda3f22bdd`. Exact unrelated rows, original
+artifact/reference bytes, ordinary HTTPS security, health and profile-aware PBX
+checks passed. The complete required sequential regression matrix is running.
+[Current ledger](../docs/status/p4-u2-dev-c-evidence.md).
+
+The Node rollout and geography timeout correction remain complete within the
+[recorded verification boundaries](../docs/status/node-22.23.5-rollout.md).
+
+## 2026-11-15 — P4-U2-DEV-c final regression and completion checkpoints
+
+The following pending states are historical and superseded by completed C-01–08
+and parent AC-01–12 on 2026-11-15 (+08:00). All twelve complete commands and final
+ordinary preservation passed.
+
+## In Progress
+
+**P4-U2-DEV-c — Ordinary-console calling and integrated acceptance**: implementation
+and actual ordinary acceptance are delivered; the complete required sequential
+regression matrix remains the final gate. Tenant-routing live/browser, allocation,
+binding, draft, trunk/gateway, routing and the full inventory retry passed.
+The owner explicitly approved the [exact fixture-access repair](../docs/planning/p4-u2-dev-c-fixture-access-replacement.md)
+after automatic review blocked the initial attempt. The fixed-role issuer swap
+passed with zero policy/role changes; all 28 test-owned credential generations and
+fixture tokens were cleaned up, native baseline restored and the original expired
+worker file restored byte-for-byte with exact ownership/mode/time. Full PBX
+revisions passed (native interruption matrix, retained provider, isolation, actual
+HTTPS/SIP browser and 19 unit checks). Platform HTTP auth passed with actual shared
+limits, authority/outage/fence boundaries and secure-cookie proof. The complete
+staff auth command also passed (including mobile contracts, actual HTTPS and
+credential/session/foundation coverage). All eleven feature commands passed;
+The first `./dev check` stopped at one unused test-fixture declaration in lint;
+that declaration was removed without changing behavior. The next attempt passed
+lint and stopped at evidence-document formatting; its mechanical correction is
+applied before another full retry. Final ordinary preservation also remains.
+
+Ordinary proof includes 54 resolved SIP intents (15 permitted/39 denied), real
+expiry/revocation, exact no-redial recovery, 7701 A→B→A guarded transfer, independent
+loaded cleanup, normal restart/unchanged ages and reusable sixteen-case discovery
+with zero INVITE/REGISTER/RTP traffic. Exact unrelated rows and original protected/
+reference bytes, ordinary HTTPS security, accessibility, health and profile-aware
+PBX checks passed. All nineteen grants are revoked; preparation is stopped and
+readiness is incomplete. [Evidence and provenance](../docs/status/p4-u2-dev-c-evidence.md).
+
+The Node 22.23.5 rollout and geography timeout correction remain complete within
+[their recorded verification boundaries](../docs/status/node-22.23.5-rollout.md).
+
+## Latest Completed Checkpoint — P4-U2-DEV-b
+
+B-01–07 passed, 2026-11-09 (Asia/Manila, +08:00). Approved dedicated drafts,
+three real provider-backed endpoint generations and eleven immutable cases are
+retained on the original installation. Exact/concurrent retries, stop/start,
+actual helper restart with explicit fresh-instance start, and independent normal
+console reads passed. Preparation/read/restart observed zero INVITE/REGISTER/RTP;
+no ordinary grant, test, result or authorization was created. Original canonical
+rows, retained artifacts/baseline, 20 pins and reference/profile bytes are preserved.
+All required focused/live/browser/provider/affected checks, complete `./dev check`,
+and final ordinary health/PBX/private HTTPS checks passed. Exact isolated fixtures
+and the passive observer were cleaned; the approved preparation remains started.
+[Final evidence and exact resource/case/cleanup handoff](../docs/status/p4-u2-dev-b-evidence.md).
+Child c owns full route application, ordinary calls, loaded-path removal and parent
+acceptance; setup availability is separate from tenant readiness.

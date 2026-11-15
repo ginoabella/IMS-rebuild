@@ -165,6 +165,7 @@ export async function backendRequest(
     (!uuid(path.nodeId) || !['GET', 'POST'].includes(method))
   )
     return safeError(400);
+  const startedAt = performance.now();
   try {
     return await fetch(
       `${config.backend}${typeof path === 'string' ? `/platform/auth/${path}` : path.consumer === 'tenant-telephony' ? `/platform/tenants/${path.tenantId}/telephony/${path.nodeId}${path.parts.length ? '/' + path.parts.join('/') : ''}` : path.consumer === 'artifact-retirements' ? `/platform/pbx-nodes/${path.nodeId}/artifact-retirements` : path.consumer === 'inventory' || path.consumer === 'peers' || path.consumer === 'routing' || path.consumer === 'revisions' ? `/platform/pbx-nodes/${path.nodeId}/${path.parts.join('/')}${path.query}` : path.consumer === 'allocations' || path.consumer === 'route-bindings' ? `/platform/tenants/${path.tenantId}/${path.consumer}/${path.nodeId}${path.parts.length ? '/' + path.parts.join('/') : ''}${path.query}` : path.consumer === 'pbx-nodes' ? `/platform/pbx-nodes${path.query}` : path.consumer === 'pbx-node' ? `/platform/pbx-nodes/${path.id}` : path.consumer === 'tenants' ? `/platform/tenants${path.query}` : path.consumer === 'tenant-configuration' ? `/platform/tenants/${path.id}/configuration` : path.consumer === 'credential-actions' ? `/platform/tenants/${path.id}/administrator/credential-actions${path.actionId ? `/${path.actionId}/cancel` : ''}` : `/platform/tenants/${path.id}`}`,
@@ -184,9 +185,47 @@ export async function backendRequest(
         ...(body === undefined ? {} : { body }),
       },
     );
-  } catch {
+  } catch (error) {
+    authTransportFailure('fetch', error, startedAt);
     return safeError(503);
   }
+}
+
+export function authTransportFailure(
+  phase: 'fetch' | 'response',
+  error: unknown,
+  startedAt: number,
+) {
+  const name = error instanceof Error ? error.name : '';
+  const cause =
+    error instanceof Error &&
+    error.cause &&
+    typeof error.cause === 'object' &&
+    'code' in error.cause
+      ? error.cause.code
+      : '';
+  console.error(
+    'PLATFORM_AUTH_TRANSPORT_FAILURE',
+    JSON.stringify({
+      phase,
+      error: ['TimeoutError', 'AbortError', 'TypeError'].includes(name)
+        ? name
+        : 'unavailable',
+      cause: [
+        'UND_ERR_SOCKET',
+        'UND_ERR_HEADERS_TIMEOUT',
+        'UND_ERR_BODY_TIMEOUT',
+        'ECONNRESET',
+        'ECONNREFUSED',
+        'UND_ERR_RES_CONTENT_LENGTH_MISMATCH',
+        'UND_ERR_REQ_CONTENT_LENGTH_MISMATCH',
+        'UND_ERR_ABORTED',
+      ].includes(typeof cause === 'string' ? cause : '')
+        ? cause
+        : 'unavailable',
+      elapsedMs: Math.round(performance.now() - startedAt),
+    }),
+  );
 }
 
 export function safeError(status: 400 | 401 | 403 | 429 | 503) {

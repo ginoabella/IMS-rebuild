@@ -1,4 +1,8 @@
-import { backendRequest, safeError } from '../../../auth/server';
+import {
+  backendRequest,
+  safeError,
+  authTransportFailure,
+} from '../../../auth/server';
 export const dynamic = 'force-dynamic';
 
 async function handle(
@@ -95,9 +99,11 @@ async function handle(
     return safeError(503);
   // Fixed backend DTOs only; arbitrary upstream response headers are never forwarded.
   let payload: string;
+  const startedAt = performance.now();
   try {
     payload = await upstream.text();
-  } catch {
+  } catch (error) {
+    authTransportFailure('response', error, startedAt);
     return safeError(503);
   }
   return new Response(payload, {

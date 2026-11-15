@@ -24,11 +24,14 @@ try {
       'restart',
       'stop',
       'disable',
+      'supersede',
     ].includes(action) ||
     !file ||
     (['start', 'restart', 'stop', 'disable'].includes(action)
       ? args.length !== 2
-      : args.length !== 0)
+      : action === 'supersede'
+        ? args.length !== 1
+        : args.length !== 0)
   )
     throw new Error('Invalid preparation command');
   const bytes = readFileSync(file);
@@ -45,7 +48,15 @@ try {
   const store = new PreparationStore(client, p);
   if (action === 'preview')
     console.log(JSON.stringify(await store.preview(), null, 2));
-  else if (action === 'status')
+  else if (action === 'supersede') {
+    const bytes = readFileSync(args[0]);
+    if (bytes.length > 65536) throw new Error('Successor plan too large');
+    const { publishSuccessor } =
+      await import('./tenant-call-preparation-supersession.mjs');
+    console.log(
+      JSON.stringify(await publishSuccessor(store, JSON.parse(bytes)), null, 2),
+    );
+  } else if (action === 'status')
     console.log(JSON.stringify(await store.status(), null, 2));
   else if (['start', 'restart', 'stop', 'disable'].includes(action)) {
     console.log(

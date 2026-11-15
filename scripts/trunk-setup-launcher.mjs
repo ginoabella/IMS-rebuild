@@ -28,7 +28,7 @@ const trust = spawnSync(
     '--rm',
     '--mount',
     `type=bind,src=${project}/.local/endpoint-credentials/ca.crt,dst=/ca,readonly`,
-    'node:22.23.3-bookworm-slim',
+    'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
     'node',
     '-e',
     "process.stdout.write(require('node:fs').readFileSync('/ca'))",
@@ -75,7 +75,7 @@ if (action === 'access') {
     `type=bind,src=${project}/.local/trunk-setup,dst=/output`,
     '--mount',
     `type=bind,src=${project}/scripts/openbao,dst=/scripts,readonly`,
-    'node:22.23.3-bookworm-slim',
+    'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
     'node',
     '/scripts/simple-trunk-access.mjs',
     installation,
@@ -167,7 +167,7 @@ if (action === 'access') {
       `MIGRATION_DATABASE_URL=postgresql://myims@postgres:5432/${database}`,
       '-e',
       'MIGRATION_DATABASE_PASSWORD_FILE=/database/postgres-password',
-      'node:22.23.3-bookworm-slim',
+      'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
       'node',
       ...(action === 'import'
         ? [

@@ -48,7 +48,13 @@ Structural validation checks profiles/capabilities, identities, references,
 patterns/transforms/reservations, group cycles, unavailable credentials and work
 bounds. It accepts no raw commands, application/context text or filesystem paths.
 Labels remain JSON data; configuration control-character injection rejects.
-Unsupported capability is an error. Live validation, exact material and calling
+Unsupported settings, kinds, signaling, codecs and media remain errors. For
+`tenant-routing-1`, an older capability revision on a profile with no enabled
+extension reference is retained as `inactive_profile_capability_stale` (blocker),
+not a local structural error: disabled stock is omitted by materialization. Any
+enabled reference, future capability revision or legacy-policy capture still
+requires the exact current capability revision. This preserves unrelated disabled
+stock and immutable profile history without allowing stale profiles into runtime. Live validation, exact material and calling
 eligibility remain explicit diagnostics independent of local structural success. Diagnostics are bounded to 512 entries with explicit truncation, while
 failure state remains independent of diagnostic truncation.
 

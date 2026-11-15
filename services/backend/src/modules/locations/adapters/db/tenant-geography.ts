@@ -188,8 +188,8 @@ export class TenantGeographyRepository implements TenantGeographyOwner {
       await tx.query<{ first_ordinal: number; second_ordinal: number }>(
         `
       WITH input AS (SELECT ST_GeomFromGeoJSON($1::text) collection),
-      shapes AS MATERIALIZED (SELECT ordinal,ST_GeometryN(collection,ordinal) geom FROM input CROSS JOIN LATERAL generate_series(1,ST_NumGeometries(collection)) AS x(ordinal))
-      SELECT a.ordinal first_ordinal,z.ordinal second_ordinal FROM shapes a JOIN shapes z ON a.ordinal<z.ordinal AND a.geom && z.geom WHERE ST_Relate(a.geom,z.geom,'2********') LIMIT 1`,
+      features AS (SELECT array_agg(ST_GeometryN(collection,ordinal) ORDER BY ordinal) items FROM input CROSS JOIN LATERAL generate_series(1,ST_NumGeometries(collection)) AS x(ordinal))
+      SELECT first_ordinal,second_ordinal FROM features CROSS JOIN LATERAL public.tenant_geography_interior_overlap(features.items) LIMIT 1`,
         [args[2]],
       )
     ).rows[0];

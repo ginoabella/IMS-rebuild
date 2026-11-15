@@ -1,6 +1,6 @@
 # Progress Tracker
 
-Last reconciled: 2026-11-09 (Asia/Manila, +08:00).
+Last reconciled: 2026-11-15 (Asia/Manila, +08:00).
 This file records current delivery state. Detailed earlier checkpoints and session
 notes are preserved in [progress-tracker-history.md](progress-tracker-history.md).
 Required behavior belongs to the [implementation plan](implementation-plan.md),
@@ -36,13 +36,15 @@ Exclusive desired allocation and canonical desired route bindings/permissions ar
 
 ## In Progress
 
-None. P4-U2-DEV-b is complete; P4-U2-DEV-c remains planned.
+None. P4-U2-DEV-c and parent acceptance are complete. The detailed manual-guide
+follow-up is complete; owner manual execution/sign-off and downstream units remain
+separate.
 
 ## Development Follow-up — P4-U2-DEV
 
-- **Completed:** a's retained profile upgrade/recovery (A-01–06) and b's persistent controlled-call preparation (B-01–07), with approved DEV-01–03 effects fulfilled. [a evidence](../docs/status/p4-u2-dev-a-evidence.md), [b evidence](../docs/status/p4-u2-dev-b-evidence.md).
-- **Retained state:** same node/installation and original baseline; artifact `e6ee0b86-da28-4ba9-bf42-a6c6e985c341`, digest `f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8`, compiler/policy `review-2` / `deny-unbound-1`; current epoch 14, routing generation 12, 20 pins and all ten required capabilities. Approved preparation remains started at lifecycle v4 with eleven available cases at final observation.
-- **Next boundary:** c owns the complete tenant-owned route graph/application, ordinary-console SIP/RTP/grant verification and actual loaded-path cleanup/parent acceptance. Tenant readiness remains incomplete. Historical P4-U2 acceptance and separate activation/production gates are unchanged.
+- **Completed:** a retained profile/recovery (A-01–06), b persistent preparation (B-01–07), c ordinary-console acceptance (C-01–08) and parent AC-01–12, with approved DEV-01–03 effects fulfilled. [Final reconciliation and limits](../docs/status/p4-u2-dev-c-evidence.md); [twelve-command ledger](../docs/status/p4-u2-dev-c-regressions.json).
+- **Retained state:** same node/installation, initial baseline and static profile digest `f3b7d794d9507250c7a532b3d06fc373c378cc864023f92cb8ad106874ebeca8`. Final installed/current/known-good cleanup artifact `a6152e67-1a7f-4a87-bb47-b1fda3f22bdd` (`tenant-review-1` / `tenant-routing-1`), owner epoch 22/generation 64 after final checks. Eleven artifacts and 183 retained pin references preserve the original three artifacts/twenty pins; only two exact c artifacts were retired. Preparation lifecycle v17 is stopped; four successor publications retain sixteen current cases plus original history. All 54 results and nineteen revoked grants remain unchanged after restart. The same endpoint was canonically returned to A with a fresh claim; all three controlled extensions and gateway/trunk are disabled after proved loaded-path removal. Reuse requires reviewed restoration, fresh publication/start and explicit grants.
+- **Next boundary:** owner manual review remains blank/pending. U3/U5 receive truthful incomplete readiness and historical exact provenance for separate activation/assignment gates; ordinary staff calling, operational ingress and production acceptance remain separate. No downstream unit started.
 - **History:** [prior handoff and completion checkpoints](progress-tracker-history.md#2026-11-09--p4-u2-dev-b-completion-and-prior-handoff). [Supported commands](../docs/runbooks/persistent-controlled-calls.md).
 
 ## Separate Operational Follow-up
@@ -67,21 +69,22 @@ All pre-simplification chronological checkpoints are in
 [tracker history](progress-tracker-history.md#2026-10-23--p3-u3-superseded-design-and-operational-checkpoints).
 This specification/archive step establishes no new runtime or production pass.
 
-## Latest Completed Checkpoint — P4-U2-DEV-b
+## Latest Completed Checkpoint — P4-U2-DEV-c and parent
 
-B-01–07 passed, 2026-11-09 (Asia/Manila, +08:00). Approved dedicated drafts,
-three real provider-backed endpoint generations and eleven immutable cases are
-retained on the original installation. Exact/concurrent retries, stop/start,
-actual helper restart with explicit fresh-instance start, and independent normal
-console reads passed. Preparation/read/restart observed zero INVITE/REGISTER/RTP;
-no ordinary grant, test, result or authorization was created. Original canonical
-rows, retained artifacts/baseline, 20 pins and reference/profile bytes are preserved.
-All required focused/live/browser/provider/affected checks, complete `./dev check`,
-and final ordinary health/PBX/private HTTPS checks passed. Exact isolated fixtures
-and the passive observer were cleaned; the approved preparation remains started.
-[Final evidence and exact resource/case/cleanup handoff](../docs/status/p4-u2-dev-b-evidence.md).
-Child c owns full route application, ordinary calls, loaded-path removal and parent
-acceptance; setup availability is separate from tenant readiness.
+C-01–08 and parent AC-01–12 passed, 2026-11-15 (Asia/Manila, +08:00).
+Actual ordinary HTTPS/SIP/RTP, expiry/revocation, exact no-redial recovery,
+A→B→A transfer/retirement, loaded cleanup, restart and zero-traffic reuse passed.
+All twelve full required commands and final ordinary health/PBX/HTTPS/custody/
+quiet/preservation passed. Original unrelated rows and immutable native/reference
+bytes remain exact. All 54 results and grant timestamps remain unchanged; nineteen
+grants are revoked, preparation is stopped and sixteen reusable cases remain.
+Final artifact a6152e67, owner epoch 22/generation 64, eleven retained artifacts
+and 183 references in 72 groups. The explicitly approved issuer repair preserved/
+restored the expired worker exactly and cleaned all 28 fixture generations.
+[Final evidence and acceptance mapping](../docs/status/p4-u2-dev-c-evidence.md);
+[full command ledger, including three initial failures](../docs/status/p4-u2-dev-c-regressions.json).
+User manual sign-off is blank; activation, assignment, operational ingress and
+production acceptance remain separate.
 
 ## Completed
 
@@ -91,6 +94,9 @@ the history preserves their full earlier checkpoints.
 
 | Unit | Verified outcome | Evidence |
 | --- | --- | --- |
+| NODE-22-PATCH-ROLLOUT | Node 22.23.5 Docker pins/runtime refresh; bounded geography SQL cost fix with unchanged rules/timeouts; final full session and ordinary HTTPS/PBX/data preservation verified. | [Rollout evidence](../docs/status/node-22.23.5-rollout.md) |
+| P4-U2-DEV — Persistent tenant calling | a/b/c and parent AC-01–12 passed: retained profile/recovery, persistent preparation and actual ordinary-console SIP/RTP, transfer/cleanup/reuse, all twelve complete commands and exact preservation. | [Final reconciliation](../docs/status/p4-u2-dev-c-evidence.md) |
+| P4-U2-DEV-c — Ordinary-console calling and integrated acceptance | C-01–08 passed: 54 real ordinary results, grant conditions, exact recovery/restart, A→B→A transfer, actual loaded cleanup and retained stopped cases; full checks and preservation. | [Evidence](../docs/status/p4-u2-dev-c-evidence.md), [command ledger](../docs/status/p4-u2-dev-c-regressions.json) |
 | P4-U2-DEV-b — Persistent controlled-call preparation | B-01–07 passed: immutable canonical setup, real scoped credentials, exact retry/reconciliation, bounded participant lifecycle, restart/console persistence, zero passive traffic and exact ordinary preservation. | [Final evidence](../docs/status/p4-u2-dev-b-evidence.md) |
 | P4-U2-DEV-a — Retained profile upgrade/recovery | A-01–06 passed: passive exact preflight, durable fenced profile transition/compatible recovery, 23 isolated scenarios, approved retained deployment, full checks and preserved original baseline/history. | [Final evidence](../docs/status/p4-u2-dev-a-evidence.md) |
 | P4-U2c / parent P4-U2 — Verified tenant routing | C-01–08 and AC-01–12 passed: exact tenant-aware runtime, bounded actual tests/readiness, audited retirement/reallocation, integrated regressions and ordinary preservation. | [Final evidence](../docs/status/p4-u2c-evidence.md) |
@@ -137,7 +143,7 @@ These are retained results, not a claim that fresh checks ran during this cleanu
 
 ## Next Up
 
-1. Implement the planned [P4-U2-DEV adopted sequence](feature-specs/p4-u2-dev-persistent-tenant-calling.md#split-assessment-and-adopted-implementation-order), continuing with c's ordinary-console two-tenant calling and integrated acceptance after completed a/b. DEV-02/03 are approved and b's exact resource/case handoff is published. The user-tested [Asterisk configuration reference](../reference/asterisk_config/) must inform profile/media compatibility without copying secrets or bypassing canonical tenant admission.
+1. Owner manual review of the retained [completed P4-U2-DEV environment](../docs/status/p4-u2-dev-c-evidence.md) using the [manual guide](../docs/guides/p4-u2-manual-testing.md). Manual cells remain blank. The stopped reusable setup requires explicit reviewed restoration, publication/start and grants for fresh calls; historical proof does not promise readiness.
 2. After ordinary-environment P4-U2 manual review, P4-U3 readiness/activation, consuming completed P4-U2a/b/c allocation, bindings and verified-routing evidence, then P4-U4/U5 tenant administration. Consume the [completed onboarding handoff](../docs/status/p4-u1b-3-evidence.md), explicit voice preference and canonical geography contracts, and the [P3-U5 handoff](../docs/status/p3-u5c-evidence.md#operator-and-downstream-handoff). Backup administration remains separate.
 
 | Unit / state | Requirement, scope and acceptance | Dependencies / required checks |
@@ -263,6 +269,8 @@ for their scope; creating a spec does not approve a proposal.
 
 ## Scoped follow-up
 
+- Prior maximum-feature geography timeout follow-up is **closed** by the November 14 Node rollout: additive bounded overlap search, unchanged limits/topology/2-second statement budget, focused and complete-session API passes and ordinary migration. [Resolution](../docs/status/node-22.23.5-rollout.md); [historical observation](../docs/status/node-22.23.4-docker-compatibility.md).
+
 - Pre-existing allocation preview copy prints a literal version-expression suffix instead of the version value (`apps/platform-console-web/app/allocations/node.tsx`). Confirmed in the baseline source while reviewing compact-selector screenshots. Numeric selection/preview identities and server version checks still work; correcting that separate preview-copy issue remains follow-up.
 
 - Pre-existing routing cold-entry return paths are absent from the literal sign-in
@@ -270,6 +278,12 @@ for their scope; creating a spec does not approve a proposal.
   this unit and does not affect authenticated routing navigation.
 
 ## Recent Session Notes
+
+- 2026-11-15 (Asia/Manila, +08:00) — `DOC-P4-U2-MANUAL` complete, per owner request. Expanded the [manual testing guide](../docs/guides/p4-u2-manual-testing.md) with DM01–DM10 for delivered P4-U2-DEV a/b/c: actual retained identities, sample fields, reviewed restore/publication/start, exact grant subsets, positive/negative SIP/RTP, real ten-second expiry/revocation, no-call counters/restart, current-rule A→B→A transfer and loaded cleanup. Added ordered navigation, troubleshooting, preservation snapshots and a copyable result template. Kept future activation/assignment/operational flows outside the checklist, removed the unset-admin password prerequisite and distinguished historical initial-transfer automation from current manual reuse. Docker formatting, 33 local paths/anchors, all 19 shell examples via syntax-only checks, actual command/sample/acceptance coverage and diff whitespace passed. All thirty manual sign-off cells remain blank. Documentation only; no services, credentials, resources or calls changed and no new manual/runtime pass is claimed.
+
+- 2026-11-14 (Asia/Manila, +08:00) — `NODE-22-PATCH-ROLLOUT` complete under user-requested Node-first priority. Updated active Docker/tooling/engine pins to current Node 22.23.5; all four ordinary Node runtimes refreshed. Restored documented Chromium prerequisites, reproduced and fixed the prior maximum-feature geography SQL timeout through an additive exact-semantics function migration, then passed focused/fresh-schema/complete-session checks. Ordinary platform/staff HTTPS, health, exact PBX/profile/provider proof and preservation passed: all original rows in 82 stable tables, three artifacts, 20 pins, protected/reference bytes and native history retained; one exact startup verification audit declared. No ordinary grants/tests/results or c effects. Eleven cases persist but require explicit fresh-instance start. [Full ledger and actual failed/rerun boundaries](../docs/status/node-22.23.5-rollout.md).
+
+- 2026-11-10 (Asia/Manila, +08:00) — `NODE-22-PATCH-COMPAT` complete within user-requested Docker build/integration evaluation. Tested Node 22.23.4/pnpm 10.12.1 in an isolated source copy and disposable services. All three candidate images, frozen install, quality/build stages, foundation/storage/client checks and final complete session/API/HTTPS browser/PBX-registry suite passed. Initial maximum-geography SQL timeout did not reproduce in focused 22.23.3/22.23.4 comparisons or the unchanged full rerun; retained as a performance follow-up. [Evidence, setup corrections and limits](../docs/status/node-22.23.4-docker-compatibility.md). Runtime pins and retained development services/data remain unchanged; applying the coordinated patch upgrade remains separate.
 
 - 2026-11-07 (Asia/Manila, +08:00) — User adopted the P4-U2-DEV split and requested child specs. Created [a: retained profile upgrade/recovery](feature-specs/p4-u2-dev-a-retained-pbx-profile-upgrade-and-recovery.md), [b: persistent controlled-call preparation](feature-specs/p4-u2-dev-b-persistent-controlled-call-preparation.md), and [c: ordinary-console calling/integrated acceptance](feature-specs/p4-u2-dev-c-ordinary-console-calling-and-integrated-acceptance.md), each with goal, dependencies, scope, child acceptance, verification and handoff. Parent AC-01–12 map to 21 child criteria, with final media/path-removal/live acceptance explicitly retained by c. Updated parent/plan/navigation/current tracker; DEV-01–03 remain unresolved and all children planned. User-tested Asterisk reference preserved. Documentation only; no implementation, service changes or calls.
 

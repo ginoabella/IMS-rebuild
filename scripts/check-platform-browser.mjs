@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 import { checkPbxBrowser } from './check-pbx-browser.mjs';
 import { checkDraftTenantBrowser } from './check-draft-tenant-browser.mjs';
 import { spawn } from 'node:child_process';
+import { performance } from 'node:perf_hooks';
 import { createServer, request } from 'node:http';
 import { once } from 'node:events';
 import { createHash, randomBytes } from 'node:crypto';
@@ -102,6 +103,7 @@ export async function checkPlatformBrowser({
       if (typeof req.headers[name] === 'string')
         forwarded[name] = req.headers[name];
     }
+    const transportStartedAt = performance.now();
     const upstream = request(
       `${ingress.selected().url}${req.url}`,
       { method: req.method, headers: forwarded },
@@ -110,6 +112,18 @@ export async function checkPlatformBrowser({
           transportEvents.push(
             `backend-${req.url.split('/').at(-1)}:${incoming.statusCode}`,
           );
+        if (req.url?.startsWith('/platform/auth/')) {
+          incoming.on('end', () =>
+            transportEvents.push(
+              `backend-${req.url.split('/').at(-1)}:complete@${Math.round(performance.now() - transportStartedAt)}`,
+            ),
+          );
+          incoming.on('aborted', () =>
+            transportEvents.push(
+              `backend-${req.url.split('/').at(-1)}:aborted@${Math.round(performance.now() - transportStartedAt)}`,
+            ),
+          );
+        }
         if (delayed) {
           incoming.pause();
           delayed.arrived(incoming.statusCode);
@@ -1179,6 +1193,11 @@ export async function checkPlatformBrowser({
         'Access denied',
         'Too many requests',
       ].find((value) => alert?.includes(value)) ?? 'no known feedback';
+    const diagnostics = output
+      .split('\n')
+      .filter((line) => line.startsWith('PLATFORM_AUTH_TRANSPORT_FAILURE'))
+      .slice(-5);
+    for (const line of diagnostics) console.error(line);
     // eslint-disable-next-line preserve-caught-error -- The caught Playwright error may contain passwords or headers.
     throw new Error(
       `Platform browser acceptance failed during ${phase}${location ? ` (${location})` : ''}; category ${category}${diagnostic}; statuses ${statuses.slice(-8).join(',')}; feedback ${safeState}; transport ${transportEvents.slice(-8).join(',')}; ingress ${ingress.events().join(',')}}`,

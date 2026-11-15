@@ -4,7 +4,7 @@ Prepared 2026-10-13, Asia/Manila (+08:00). This is a separate test application,
 `com.myims.responder.acceptance`; declared Android acceptance and final regressions passed on 2026-10-13. The procedure below is retained for reproduction; the completed fixture is retired and private 3445 runtime stopped.
 Use `Pixel_8_API_36`, serial `emulator-5554`, with a screen lock and enrolled
 fingerprint. Android Studio, its SDK/platform tools, a compatible JDK, Node
-22.23.3 and pnpm 10.12.1 must be available on the desktop.
+22.23.5 and pnpm 10.12.1 must be available on the desktop.
 
 ## Get the current source and public CA
 

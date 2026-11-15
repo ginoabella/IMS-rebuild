@@ -1,6 +1,6 @@
 # P4-U2-DEV — Persistent tenant calling in the development environment
 
-**Status:** partially implemented; children a/b are complete with approved retained deployment and dedicated setup, c remains planned and parent acceptance is incomplete.
+**Status:** completed 2026-11-15 (Asia/Manila, +08:00); children a/b/c and parent AC-01–12 passed within approved private development.
 **Prepared:** 2026-11-07 (Asia/Manila, +08:00).
 **Requirement:** development deployment follow-up to [P4-U2](p4-u2-allocate-inventory-and-verify-tenant-routing.md), supporting the [Phase 4 journey](../implementation-plan.md#phase-4--onboard-tenants-and-enable-tenant-administration).
 **Authorization:** the user requested the feature specification, then adopted the
@@ -11,7 +11,8 @@ DEV-02/03 dedicated setup was subsequently approved on 2026-11-08 (+08:00), with
 the exact resource/destination and existing-helper placement in the
 [b review](../../docs/planning/p4-u2-dev-b-preparation-review.md). Child b completed B-01–07 on 2026-11-09 (+08:00);
 [actual preparation evidence](../../docs/status/p4-u2-dev-b-evidence.md). Parent
-acceptance and child c remain incomplete. See also the
+acceptance and child c subsequently completed on 2026-11-15 (+08:00); see the
+[final ordinary evidence and AC-01–12 reconciliation](../../docs/status/p4-u2-dev-c-evidence.md). See also the
 [recorded DEV-01 decision](../../docs/planning/p4-u2-dev-a-profile-transition-review.md#recorded-dev-01-decision).
 
 ## Goal and expected result
@@ -251,8 +252,9 @@ recovery contract and maintenance effects; persistent participants have a separa
 provisioning/restart lifecycle; final ordinary-console proof depends on both.
 One large unit would hide which boundary is safe or still incomplete. Each
 unit below has its own observable outcome. Their completion does not substitute
-for the parent's live acceptance. Children a/b are complete with approved retained deployment
-and DEV-02/03 preparation; c remains planned.
+for the parent's live acceptance. Children a/b/c and parent AC-01–12 are complete
+with approved retained deployment/preparation and actual ordinary-console proof;
+the final evidence records all required commands and exact preservation.
 
 | Unit        | Goal and scope                                                                                                                                                                                                                               | Dependencies and decisions                                                                                          | Acceptance and handoff                                                                                                                                                                                              |
 | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -284,7 +286,8 @@ with separate read-only preflight, isolated rehearsal and explicit approved reta
 deployment/acceptance modes. The delivered commands are documented in the
 [profile runbook](../../docs/runbooks/development-container.md#retained-pbx-profile-transition-and-recovery)
 and [preparation runbook](../../docs/runbooks/persistent-controlled-calls.md).
-Child c still owns ordinary-call and integrated acceptance. Keep passive checks separate from mutations.
+Child c delivered ordinary-call and integrated acceptance; its final evidence keeps
+passive checks separate from mutations.
 Use the Docker workspace and existing shared PostgreSQL/Redis/HTTPS services.
 
 Before ordinary effects, retain the sanitized reference/current/proposed profile
@@ -332,5 +335,10 @@ recovery rehearsals pass. Those conditions were fulfilled: child a completed
 A-01–06 and its verified retained deployment; see the
 [final evidence](../../docs/status/p4-u2-dev-a-evidence.md). DEV-02/03 were subsequently approved and child b completed its
 [actual ordinary preparation acceptance](../../docs/status/p4-u2-dev-b-evidence.md).
-Child c and integrated parent acceptance remain incomplete. Approval alone does
-not substitute for runtime proof.
+Child c and integrated parent AC-01–12 subsequently passed with actual ordinary
+SIP/RTP, recovery/transfer/cleanup/reuse evidence, all twelve complete required
+commands and final exact preservation. See the
+[final evidence](../../docs/status/p4-u2-dev-c-evidence.md) and
+[sanitized command ledger](../../docs/status/p4-u2-dev-c-regressions.json). The final
+setup is stopped with grants revoked and cases retained; user manual sign-off,
+activation, assignment, operational ingress and production gates remain separate.

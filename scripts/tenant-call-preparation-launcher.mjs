@@ -6,7 +6,7 @@ import { manifest, uuid } from './tenant-call-preparation-store.mjs';
 const [action, file, ...args] = process.argv.slice(2);
 const project = process.env.STORAGE_HOST_PROJECT_ROOT ?? process.cwd();
 const image =
-  'node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c';
+  'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc';
 let stage = 'invalid_manifest';
 let workerContainer = null;
 function docker(argv, options = {}) {
@@ -222,11 +222,19 @@ try {
         'restart',
         'stop',
         'disable',
+        'supersede',
       ].includes(action)
     )
       throw new Error();
     if (
-      ['preview', 'prepare', 'reconcile', 'start', 'restart'].includes(action)
+      [
+        'preview',
+        'prepare',
+        'reconcile',
+        'start',
+        'restart',
+        'supersede',
+      ].includes(action)
     ) {
       stage = 'retained_profile_or_custody_unavailable';
       const native = spawnSync(
@@ -236,6 +244,8 @@ try {
       );
       if (native.status !== 0) throw new Error();
       const proof = JSON.parse(native.stdout);
+      if (action === 'supersede' && proof.activeChannels !== 0)
+        throw new Error();
       const materialProbeRequired = proof.blockers.includes(
         'exact_provider_material_probe_required',
       );

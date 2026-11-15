@@ -1,0 +1,211 @@
+{
+  "version": 1,
+  "status": "passed",
+  "publishedAt": "2026-11-15T03:28:26.717232+00:00",
+  "execution": "Sequential complete commands; trunk/routing ran while the initial inventory prerequisite was blocked. Inventory was repeated in full after explicit owner approval. Normal attempts stopped at an unused test-fixture declaration and subsequent evidence-document formatting. Both were corrected before a complete rerun; the declaration removal changes no behavior. No reduced PBX/provider selections.",
+  "requiredChecks": [
+    {
+      "check": "tenant-routing-live",
+      "command": ["./dev", "exec", "pnpm", "check:tenant-routing", "--live"],
+      "startedAt": "2026-11-14T20:20:47.263847+00:00",
+      "finishedAt": "2026-11-14T20:27:38.522469+00:00",
+      "seconds": 411.259,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-final-checks/tenant-routing-live.log"
+    },
+    {
+      "check": "tenant-routing-browser",
+      "command": ["./dev", "exec", "pnpm", "check:tenant-routing", "--browser"],
+      "startedAt": "2026-11-14T20:27:38.522875+00:00",
+      "finishedAt": "2026-11-14T20:52:02.043464+00:00",
+      "seconds": 1463.521,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-final-checks/tenant-routing-browser.log"
+    },
+    {
+      "check": "tenant-allocation",
+      "command": ["./dev", "exec", "pnpm", "check:tenant-allocation"],
+      "startedAt": "2026-11-14T20:52:02.043771+00:00",
+      "finishedAt": "2026-11-14T20:56:52.284788+00:00",
+      "seconds": 290.241,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-final-checks/tenant-allocation.log"
+    },
+    {
+      "check": "tenant-bindings",
+      "command": ["./dev", "exec", "pnpm", "check:tenant-bindings"],
+      "startedAt": "2026-11-14T20:56:52.285088+00:00",
+      "finishedAt": "2026-11-14T21:02:03.833791+00:00",
+      "seconds": 311.549,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-final-checks/tenant-bindings.log"
+    },
+    {
+      "check": "draft-tenant",
+      "command": ["./dev", "exec", "pnpm", "check:draft-tenant"],
+      "startedAt": "2026-11-14T21:02:03.834189+00:00",
+      "finishedAt": "2026-11-14T21:12:05.465671+00:00",
+      "seconds": 601.632,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-final-checks/draft-tenant.log"
+    },
+    {
+      "check": "extension-inventory",
+      "command": ["./dev", "exec", "pnpm", "check:extension-inventory"],
+      "startedAt": "2026-11-14T21:39:27.808169+00:00",
+      "finishedAt": "2026-11-14T21:59:36.166613+00:00",
+      "seconds": 1208.358,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-inventory-approved-retry.log"
+    },
+    {
+      "check": "trunk-gateways",
+      "command": ["./dev", "exec", "pnpm", "check:trunk-gateways"],
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-trunk-unaffected.log",
+      "completionEvidence": "launcher session 81335 returned exit 0; precise start/duration were not captured"
+    },
+    {
+      "check": "routing",
+      "command": ["./dev", "exec", "pnpm", "check:routing"],
+      "startedAt": "2026-11-14T21:28:28.335718+00:00",
+      "finishedAt": "2026-11-14T21:34:11.998650+00:00",
+      "seconds": 343.663,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-unaffected-checks/routing.log"
+    },
+    {
+      "check": "pbx-revisions",
+      "command": ["./dev", "exec", "pnpm", "check:pbx-revisions"],
+      "startedAt": "2026-11-14T22:00:31.010592+00:00",
+      "finishedAt": "2026-11-14T22:23:48.563140+00:00",
+      "seconds": 1397.553,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-unaffected-checks/pbx-revisions.log"
+    },
+    {
+      "check": "platform-auth-http",
+      "command": ["./dev", "exec", "pnpm", "check:platform-auth", "--http"],
+      "startedAt": "2026-11-14T22:24:25.003797+00:00",
+      "finishedAt": "2026-11-14T22:32:55.059973+00:00",
+      "seconds": 510.056,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-unaffected-checks/platform-auth-http.log"
+    },
+    {
+      "check": "staff-auth",
+      "command": ["./dev", "exec", "pnpm", "check:staff-auth"],
+      "startedAt": "2026-11-14T22:33:06.672682+00:00",
+      "finishedAt": "2026-11-14T22:58:43.378805+00:00",
+      "seconds": 1536.706,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-unaffected-checks/staff-auth.log"
+    },
+    {
+      "check": "full-dev-check",
+      "command": ["./dev", "check"],
+      "startedAt": "2026-11-15T02:37:00.017673+00:00",
+      "finishedAt": "2026-11-15T03:26:37.213387+00:00",
+      "seconds": 2977.196,
+      "exitCode": 0,
+      "log": ".local/verification/p4-c-unaffected-checks/full-dev-check-formatted-retry.log"
+    }
+  ],
+  "retainedFailedAttempts": [
+    {
+      "check": "extension-inventory",
+      "command": ["./dev", "exec", "pnpm", "check:extension-inventory"],
+      "startedAt": "2026-11-14T21:12:05.467621+00:00",
+      "finishedAt": "2026-11-14T21:14:42.919241+00:00",
+      "seconds": 157.452,
+      "exitCode": 1,
+      "log": ".local/verification/p4-c-final-checks/extension-inventory.log"
+    },
+    {
+      "check": "full-dev-check",
+      "command": ["./dev", "check"],
+      "startedAt": "2026-11-15T02:29:53.407628+00:00",
+      "finishedAt": "2026-11-15T02:30:40.583747+00:00",
+      "seconds": 47.176,
+      "exitCode": 1,
+      "log": ".local/verification/p4-c-unaffected-checks/full-dev-check.log"
+    },
+    {
+      "check": "full-dev-check",
+      "command": ["./dev", "check"],
+      "startedAt": "2026-11-15T02:31:52.492554+00:00",
+      "finishedAt": "2026-11-15T02:36:02.873799+00:00",
+      "seconds": 250.381,
+      "exitCode": 1,
+      "log": ".local/verification/p4-c-unaffected-checks/full-dev-check-retry.log"
+    }
+  ],
+  "fixtureAccessRepair": {
+    "approval": "Explicit current-conversation owner approval, 2026-11-15 Asia/Manila; docs/planning/p4-u2-dev-c-fixture-access-replacement.md",
+    "existingFixedRole": true,
+    "policyUpdates": 0,
+    "roleUpdates": 0,
+    "oldIssuerInvalid": true,
+    "temporaryCustodianRevoked": true,
+    "testOwnedGenerationsCleaned": 28,
+    "testTokensRevokedAndRemoved": true,
+    "nativeBaselineRestored": true,
+    "originalExpiredWorker": {
+      "state": "original_expired_worker_restored",
+      "sha256": "7470e07ad17ceebdcc5fedc77104f3e67de90818e6022d261fd2cb5aa1269013",
+      "uid": 1003,
+      "gid": 1003,
+      "mode": 384,
+      "mtime": "2026-11-08T14:14:51.913Z",
+      "lookupStatus": 403
+    }
+  },
+  "scope": "Regressions supplement the actual retained ordinary-console call/result/cleanup/preservation ledgers. Isolated and injected faults are identified in p4-u2-dev-c-evidence.md; user manual sign-off remains unclaimed.",
+  "finalOrdinaryVerification": {
+    "verifiedAt": "2026-11-15T03:33:09.536417+00:00",
+    "canonicalQuiet": {
+      "state": "canonical_quiet",
+      "artifact": "a6152e67-1a7f-4a87-bb47-b1fda3f22bdd",
+      "epoch": "22",
+      "generation": 64,
+      "sourceDigest": "b156fda50cda3e5d8a05c9645a414d09f4cb1992cdf25b3e91022259437818ee",
+      "evidence": {
+        "tests": 54,
+        "result_hash": "37d89510e77715f3eee53a2d22792204ba05a585708c2199b5c7960a8eed5175",
+        "grant_hash": "eaa73c6f9b4c618df9154472b857772c8c3fc372234585a02285fb624e3acfd6"
+      }
+    },
+    "health": {
+      "live": 200,
+      "ready": 200,
+      "database": "up",
+      "sessionRedis": "up",
+      "realtimeRedis": "up"
+    },
+    "profileAwarePbxCheck": "passed; exact protected/loaded match, original baseline/static digest, zero channels/no pending operation",
+    "platformHttpsCheck": "passed",
+    "staffHttpsCheck": "passed",
+    "ordinaryPassiveConsoleRead": {
+      "runId": "2ef0479a-60c7-4775-8d37-2957496bf8cc",
+      "passed": true,
+      "grantsCreated": 0,
+      "callsCreated": 0,
+      "temporarySessionRevoked": true
+    },
+    "loadedCleanupProof": "p4-u2-dev-c-cleanup-proof.json",
+    "exactPreservation": "p4-u2-dev-c-preservation.json",
+    "retainedState": {
+      "preparationLifecycleVersion": 17,
+      "preparationState": "stopped",
+      "currentCases": 16,
+      "results": 54,
+      "grants": 19,
+      "revokedGrants": 19,
+      "artifacts": 11,
+      "retainedPinReferences": 183,
+      "retainedPinGroups": 72,
+      "assignmentReady": false
+    },
+    "manualSignOff": "unclaimed; user cells remain blank"
+  }
+}

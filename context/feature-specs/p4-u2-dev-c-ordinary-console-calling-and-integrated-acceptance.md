@@ -1,9 +1,9 @@
 # P4-U2-DEV-c — Ordinary-console calling and integrated acceptance
 
-**Status:** planned; implementation not started.
+**Status:** completed 2026-11-15 (Asia/Manila, +08:00); C-01–08 and parent AC-01–12 passed within approved private development.
 **Prepared:** 2026-11-07 (Asia/Manila, +08:00).
 **Parent:** [P4-U2-DEV — Persistent tenant calling](p4-u2-dev-persistent-tenant-calling.md).
-**Split:** adopted by the user on 2026-11-07; dependent environment decisions remain open.
+**Split:** adopted by the user on 2026-11-07; DEV-01–03 decisions are recorded in the approved parent/a/b reviews.
 
 The parent owns common policy, AC-01–12 and final completion. This child proves
 the integrated persistent calling journey in the ordinary development environment.
@@ -94,8 +94,10 @@ historical disposable passes alone cannot close these parent requirements.
 ## Required verification
 
 Implement and document the parent's explicit ordinary deployment/acceptance mode,
-separate from read-only preflight and isolated rehearsal. Its command does not yet
-exist. An acceptance run must identify its actual environment and use persistent
+separate from read-only preflight and isolated rehearsal. The staged command is
+`./dev tenant-calls accept MANIFEST STAGE RUN_UUID`; supporting publication and
+loaded-proof commands are documented in the persistent-call runbook. An acceptance
+run must identify its actual environment and use persistent
 participants; it must not silently switch to fixture credentials or a disposable PBX.
 
 Run existing commands sequentially:
@@ -138,3 +140,14 @@ and exact inbound/outbound test IDs; no assignment writer is delivered here.
 P5-U3 retains operational ingress/provenance ownership. The ordinary environment
 is ready for repeatable controlled verification; ordinary staff calling and the
 Phase 4/production gates remain separate.
+
+## Completed implementation evidence
+
+[Final ordinary acceptance](../../docs/status/p4-u2-dev-c-evidence.md) maps every
+C-01–08 and parent AC-01–12 criterion. [All twelve complete required commands](../../docs/status/p4-u2-dev-c-regressions.json)
+passed, including full native/interruption/provider/isolation coverage and the
+normal check. Actual ordinary SIP/RTP, transfer, recovery, reviewed loaded cleanup,
+no-call reuse/restart and exact final preservation passed. Cases remain discoverable
+with preparation stopped and all grants revoked; fresh reviewed restoration and
+individual evidence are required for reuse. User manual cells remain blank, and
+activation/assignment/operational ingress/production gates remain separate.

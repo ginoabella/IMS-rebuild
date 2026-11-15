@@ -14,7 +14,7 @@ import uuid
 
 PROJECT = pathlib.Path(__file__).resolve().parents[2]
 IMAGE = 'quay.io/openbao/openbao:2.7.1@sha256:6d2b93856e3fcf7b18ad855a0b51eaba474dc8b79cf554379ea32034797d2acf'
-NODE = 'node:22.23.3-bookworm-slim'
+NODE = 'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc'
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--candidate', choices=['original', 'array'], default='array')
 parser.add_argument('--review-deadline', action='store_true', help='Also probe the experimental application deadline; separate evidence output')

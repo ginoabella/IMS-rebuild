@@ -57,7 +57,7 @@ function provision(command) {
     `${project}/scripts/provision-endpoint-credentials.mjs:/provision.mjs:ro`,
     '-v',
     `${project}/scripts/openbao:/openbao:ro`,
-    'node:22.23.3-bookworm-slim',
+    'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
     'node',
     '/provision.mjs',
     command,
@@ -138,7 +138,7 @@ function args(name, script, role = 'worker', scan = false) {
     ...(scan
       ? ['-v', 'myims-rebuild-dev_endpoint-secrets-audit:/provider-audit:ro']
       : []),
-    'node:22.23.3-bookworm-slim',
+    'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
     '/fixture.mjs',
   ];
 }

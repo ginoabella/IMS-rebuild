@@ -9,7 +9,7 @@ import { setTimeout as delay } from 'node:timers/promises';
 process.umask(0o077);
 const guard = resolve('scripts/openbao/recovery-deadline.mjs');
 const image =
-  'node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c';
+  'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc';
 const label = 'myims.openbao.recovery.operation';
 const containers = [],
   guards = [],

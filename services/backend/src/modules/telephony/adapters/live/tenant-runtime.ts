@@ -1,3 +1,4 @@
+import { setTimeout as delay } from 'node:timers/promises';
 import { reconcileRouteTest } from './test-reconciliation';
 import { Transaction } from '../../../../infrastructure/database/transaction';
 import { SafeLogger } from '../../../../infrastructure/execution/logging';
@@ -228,6 +229,7 @@ export class TenantRuntimeMonitor {
         expected_destination_id: string | null;
         expected_outcome: string;
         test_kind: string;
+        grant_id: string | null;
         allowed: boolean;
       }>(
         `SELECT i.*,p.state,p.deadline<=clock_timestamp() AS expired,(c.enabled AND public.tenant_case_preparation_available(c.id) AND (i.grant_id IS NULL OR EXISTS(SELECT 1 FROM public.tenant_verification_grants g JOIN public.tenant_verification_grant_cases gc ON gc.grant_id=g.id WHERE g.id=i.grant_id AND gc.case_id=i.case_id AND g.artifact_id=i.artifact_id AND g.source_digest=i.source_digest AND g.expires_at>clock_timestamp() AND NOT EXISTS(SELECT 1 FROM public.tenant_verification_revocations v WHERE v.grant_id=g.id)))) AS allowed,c.direction,c.route_id,c.source_id,c.dialled,c.expected_destination_id,c.expected_outcome,c.test_kind FROM public.tenant_route_test_intents i JOIN public.tenant_route_test_progress p ON p.intent_id=i.id JOIN public.tenant_route_test_cases c ON c.id=i.case_id WHERE i.node_id=$1 AND p.state IN ('queued','dispatching','admitted') ORDER BY i.created_at LIMIT 1`,
@@ -325,7 +327,7 @@ export class TenantRuntimeMonitor {
         return secret;
       };
       const endpoint = s.extensions.find((e) => e.id === row.source_id);
-      const destination = s.extensions.find(
+      let destination = s.extensions.find(
         (e) => e.id === row.expected_destination_id,
       );
       const route = s.outbound.find((r) => r.id === row.route_id),
@@ -345,12 +347,25 @@ export class TenantRuntimeMonitor {
             g.timeout > 15
           )
             throw new Error('Controlled two-leg graph required');
+          if (!destination && row.expected_outcome === 'denied')
+            destination = s.extensions.find(
+              (e) =>
+                e.id === g.memberIds[0] && e.administrativeStatus === 'enabled',
+            );
         } else if (
           row.expected_outcome === 'permitted' &&
           (target?.kind !== 'extension' ||
             target.id !== row.expected_destination_id)
         )
           throw new Error('Controlled destination required');
+        if (
+          !destination &&
+          row.expected_outcome === 'denied' &&
+          target?.kind === 'extension'
+        )
+          destination = s.extensions.find(
+            (e) => e.id === target.id && e.administrativeStatus === 'enabled',
+          );
       }
       if (
         row.direction === 'outbound' &&
@@ -395,6 +410,37 @@ export class TenantRuntimeMonitor {
               row.route_id)
       )
         throw new Error('Controlled positive graph required');
+      if (row.test_kind === 'expiry') {
+        if (row.expected_outcome !== 'denied' || !row.grant_id)
+          throw new Error('Conditional grant case unavailable');
+        const grantState = async () =>
+          (
+            await this.store.pool.query<{
+              remaining: number;
+              revoked: boolean;
+            }>(
+              `SELECT ceil(extract(epoch FROM (g.expires_at-clock_timestamp()))*1000)::integer AS remaining,EXISTS(SELECT 1 FROM public.tenant_verification_revocations v WHERE v.grant_id=g.id) AS revoked FROM public.tenant_verification_grants g WHERE g.id=$1 AND g.node_id=$2`,
+              [row.grant_id, this.nodeId],
+            )
+          ).rows[0];
+        let grant = await grantState();
+        if (!grant || grant.remaining > 15000)
+          throw new Error('Conditional grant window unavailable');
+        const deadline = performance.now() + 15000;
+        while (!grant.revoked && grant.remaining > 0) {
+          if (performance.now() >= deadline)
+            throw new Error('Conditional grant window unavailable');
+          await delay(Math.min(100, grant.remaining + 1));
+          grant = await grantState();
+          if (!grant) throw new Error('Conditional grant unavailable');
+        }
+        const owner = await this.store.pool.query(
+          'SELECT 1 FROM public.pbx_ownership WHERE node_id=$1 AND epoch=$2 AND expires_at>clock_timestamp()',
+          [this.nodeId, runtime.epoch],
+        );
+        if (!owner.rows.length)
+          throw new Error('Conditional grant owner changed');
+      }
       const result = await new ControlledSipCall().run({
         direction: row.direction,
         number: row.dialled,
@@ -424,14 +470,16 @@ export class TenantRuntimeMonitor {
         sinkPort: row.direction === 'outbound' ? trunk!.settings.port : 20021,
       });
       outcome = result.outcome;
+      const admitted =
+        (
+          await this.store.pool.query(
+            `SELECT 1 FROM public.tenant_route_test_progress WHERE intent_id=$1 AND state='admitted'`,
+            [row.id],
+          )
+        ).rows.length > 0;
+      // A transport rejection after authorization admission is not an isolation denial.
+      if (outcome === 'denied' && admitted) outcome = 'unknown';
       if (outcome === 'permitted') {
-        const admitted =
-          (
-            await this.store.pool.query(
-              `SELECT 1 FROM public.tenant_route_test_progress WHERE intent_id=$1 AND state='admitted'`,
-              [row.id],
-            )
-          ).rows.length > 0;
         if (!admitted || !result.destinationObserved || !result.mediaObserved)
           outcome = 'failed';
         else

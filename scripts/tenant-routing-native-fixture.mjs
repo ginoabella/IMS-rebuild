@@ -27,7 +27,7 @@ const { TenantAdmissionServer, TenantCallAdmission } = load(
 );
 const { ControlledSipCall } = load('./controlled-sip.js');
 let callDelay = 0,
-  suppressOutcome = false,
+  injectedOutcome = null,
   lastCall = null,
   admissionFacts = null,
   callCount = 0,
@@ -103,7 +103,7 @@ ControlledSipCall.prototype.run = async function (input) {
     ? await participantLoss(input)
     : await controlledRun.call(this, input);
   lastCall = result;
-  return suppressOutcome ? { ...result, outcome: 'unknown' } : result;
+  return injectedOutcome ? { ...result, outcome: injectedOutcome } : result;
 };
 const { TenantRuntimeMonitor } = load('./tenant-runtime.js');
 const { LiveExecutionStore } = load('./execution-store.js');
@@ -649,6 +649,8 @@ try {
     ).rows[0].outcome,
     'denied',
   );
+  assert.equal(lastCall.destinationObserved, false);
+  assert.equal(lastCall.outcome, 'denied');
   console.log(
     'PASS tenant-routing actual cross-tenant ingress denied ' +
       JSON.stringify({
@@ -749,112 +751,114 @@ try {
         artifactId: applied,
       }),
   );
-  const uncertainBody = {
-    requestId: randomUUID(),
-    artifactId: applied,
-    caseId: metadata.cases[0].id,
-    grantId: grants.get(own.id),
-  };
-  const uncertain = expect(
-    await http.verification.write(
-      p,
-      own.id,
-      metadata.nodeId,
-      'test',
-      uncertainBody,
-      randomUUID(),
-    ),
-    202,
-  );
-  suppressOutcome = true;
-  try {
+  for (const injected of ['unknown', 'denied']) {
+    const uncertainBody = {
+      requestId: randomUUID(),
+      artifactId: applied,
+      caseId: metadata.cases[0].id,
+      grantId: grants.get(own.id),
+    };
+    const uncertain = expect(
+      await http.verification.write(
+        p,
+        own.id,
+        metadata.nodeId,
+        'test',
+        uncertainBody,
+        randomUUID(),
+      ),
+      202,
+    );
+    injectedOutcome = injected;
+    try {
+      await monitor.tick();
+    } finally {
+      injectedOutcome = null;
+    }
+    assert.equal(lastCall.outcome, 'permitted');
+    assert.equal(
+      (
+        await store.pool.query(
+          'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+          [uncertain.id],
+        )
+      ).rows[0].state,
+      'unknown',
+    );
+    const dispatched = callCount;
+    expect(
+      await http.verification.write(
+        p,
+        own.id,
+        metadata.nodeId,
+        'test',
+        uncertainBody,
+        randomUUID(),
+      ),
+      200,
+    );
     await monitor.tick();
-  } finally {
-    suppressOutcome = false;
+    assert.equal(callCount, dispatched);
+    expect(
+      await http.verification.write(
+        p,
+        own.id,
+        metadata.nodeId,
+        'test',
+        { ...uncertainBody, requestId: randomUUID() },
+        randomUUID(),
+      ),
+      409,
+    );
+    const uncertainView = expect(
+      await http.verification.read(p, own.id, metadata.nodeId, {}),
+      200,
+    );
+    assert.notEqual(uncertainView.readiness.state, 'ready');
+    const reconcileBody = { requestId: randomUUID(), testId: uncertain.id };
+    const reconciliation = expect(
+      await http.verification.write(
+        p,
+        own.id,
+        metadata.nodeId,
+        'reconcile',
+        reconcileBody,
+        randomUUID(),
+      ),
+      202,
+    );
+    await monitor.tick();
+    assert.equal(
+      (
+        await store.pool.query(
+          'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
+          [uncertain.id],
+        )
+      ).rows[0].state,
+      'failed',
+    );
+    assert.equal(await barrier.idle(), true);
+    expect(
+      await http.verification.write(
+        p,
+        own.id,
+        metadata.nodeId,
+        'reconcile',
+        reconcileBody,
+        randomUUID(),
+      ),
+      200,
+    );
+    assert.equal(callCount, dispatched);
+    console.log(
+      `PASS tenant-routing injected ${injected === 'unknown' ? 'outcome-loss' : 'transport-denial classification after admission'} after actual successful SIP/RTP: unknown blocks readiness and new calls, exact replay never redials, explicit native idle reconciliation records failure ` +
+        JSON.stringify({
+          intentId: uncertain.id,
+          reconciliationId: reconciliation.id,
+          artifactId: applied,
+        }),
+    );
   }
-  assert.equal(lastCall.outcome, 'permitted');
-  assert.equal(
-    (
-      await store.pool.query(
-        'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
-        [uncertain.id],
-      )
-    ).rows[0].state,
-    'unknown',
-  );
-  const dispatched = callCount;
-  expect(
-    await http.verification.write(
-      p,
-      own.id,
-      metadata.nodeId,
-      'test',
-      uncertainBody,
-      randomUUID(),
-    ),
-    200,
-  );
-  await monitor.tick();
-  assert.equal(callCount, dispatched);
-  expect(
-    await http.verification.write(
-      p,
-      own.id,
-      metadata.nodeId,
-      'test',
-      { ...uncertainBody, requestId: randomUUID() },
-      randomUUID(),
-    ),
-    409,
-  );
-  const uncertainView = expect(
-    await http.verification.read(p, own.id, metadata.nodeId, {}),
-    200,
-  );
-  assert.notEqual(uncertainView.readiness.state, 'ready');
-  const reconcileBody = { requestId: randomUUID(), testId: uncertain.id };
-  const reconciliation = expect(
-    await http.verification.write(
-      p,
-      own.id,
-      metadata.nodeId,
-      'reconcile',
-      reconcileBody,
-      randomUUID(),
-    ),
-    202,
-  );
-  await monitor.tick();
-  assert.equal(
-    (
-      await store.pool.query(
-        'SELECT state FROM public.tenant_route_test_progress WHERE intent_id=$1',
-        [uncertain.id],
-      )
-    ).rows[0].state,
-    'failed',
-  );
-  assert.equal(await barrier.idle(), true);
-  expect(
-    await http.verification.write(
-      p,
-      own.id,
-      metadata.nodeId,
-      'reconcile',
-      reconcileBody,
-      randomUUID(),
-    ),
-    200,
-  );
-  assert.equal(callCount, dispatched);
-  console.log(
-    'PASS tenant-routing injected outcome-loss after actual successful SIP/RTP: unknown blocks readiness and new calls, exact replay never redials, explicit native idle reconciliation records failure ' +
-      JSON.stringify({
-        intentId: uncertain.id,
-        reconciliationId: reconciliation.id,
-        artifactId: applied,
-      }),
-  );
   const one = metadata.tenants[0];
   expect(
     await http.verification.write(

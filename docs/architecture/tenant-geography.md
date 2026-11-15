@@ -117,3 +117,25 @@ work only; it does not repair geometry, relax labels/ownership or persist a seco
 representation. The maximum-feature API check and direct final-feature null/forged/
 different municipality, duplicate ID and invalid-label checks cover this boundary.
 Apply it through the normal migration path before running updated replicas.
+
+### Bounded overlap search — 2026-11-14 (+08:00)
+
+Node patch verification reproduced the previously recorded maximum-feature timeout
+in the original pair search under the existing 2-second statement budget. Additive
+migration `20261114000000_tenant_geography_overlap_cost` now shares
+`tenant_geography_interior_overlap(geometry[])` between the CHECK and owner
+diagnostics. It accepts at most 1,000 features, caches numeric bounds once, sorts
+along the lower relative coverage axis and stops comparing when later bounds cannot
+intersect. The other axis rejects disjoint pairs before accessing geometry. Remaining
+candidates use the unchanged `&&` / `ST_Relate(...,'2********')` predicates.
+Returned diagnostics retain original one-based feature ordinals.
+
+All per-feature, coordinate, containment, metadata and exact topology checks remain
+in the owner CHECK; the helper is computation, not an independent validity/admission
+port. Local arrays add no stored representation, repair or tolerance. Existing
+4,096-position/1,000-feature bounds, safe errors and 2-second statement timeout are
+unchanged. Maximum-feature API acceptance, both strip axes, late original ordinals,
+shared edges, holes, multipart interiors and helper-cap checks passed in focused
+and complete session runs. Fresh-schema/rerun checks and normal ordinary migration
+also passed. Deploy this migration before refreshing updated owner diagnostics.
+See the [rollout ledger](../status/node-22.23.5-rollout.md) for commands and limits.

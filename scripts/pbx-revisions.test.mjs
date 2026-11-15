@@ -332,3 +332,84 @@ test('diagnostic truncation never masks a later structural failure', () => {
   );
   assert.equal(result.diagnostics.at(-1).code, 'diagnostics_truncated');
 });
+
+test('tenant capture preserves stale-capability disabled stock without admitting an enabled or unsupported profile', () => {
+  const s = snapshot();
+  s.schemaVersion = 'tenant-routing-1';
+  s.eligibility = {
+    allocations: 'captured',
+    bindings: 'captured',
+    sharedTrunkPermissions: 'captured',
+  };
+  s.tenantRouting = { tenants: [], allocations: [], authorizations: [] };
+  s.capability = {
+    id: s.node.installationId,
+    version: 2,
+    kinds: ['sip'],
+    signaling: ['udp'],
+    codecs: ['ulaw', 'alaw'],
+    media: ['none'],
+  };
+  const profile = {
+    id: randomUUID(),
+    version: 1,
+    name: 'Retained disabled stock',
+    kind: 'sip',
+    settings: settings('sip'),
+    capabilityRevision: 1,
+  };
+  s.profiles.push(profile);
+  const id = randomUUID(),
+    prefix =
+      s.node.installationId.replaceAll('-', '') + '-' + id.replaceAll('-', '');
+  s.extensions.push({
+    id,
+    version: 1,
+    number: '1000',
+    kind: 'sip',
+    profileId: profile.id,
+    profileVersion: 1,
+    administrativeStatus: 'disabled',
+    generationId: null,
+    endpointKey: `ims-e-${prefix}`,
+    authKey: `ims-a-${prefix}`,
+    aorKey: `ims-r-${prefix}`,
+  });
+  const before = structuredClone(s);
+  const result = compileRevision(s);
+  assert.equal(result.local, 'passed');
+  assert.ok(
+    result.diagnostics.some(
+      (d) =>
+        d.code === 'inactive_profile_capability_stale' &&
+        d.resourceId === profile.id &&
+        d.severity === 'blocker',
+    ),
+  );
+  assert.deepEqual(s, before);
+  const { materializeRevision } = backend(
+    './dist/modules/telephony/adapters/live/materialize.js',
+  );
+  const rendered = materializeRevision(s, randomUUID(), {
+    endpoints: new Map(),
+    trunks: new Map(),
+  });
+  assert.ok(!rendered.pjsip.toString().includes(s.extensions[0].endpointKey));
+  s.extensions[0].administrativeStatus = 'enabled';
+  assert.equal(compileRevision(s).local, 'failed');
+  s.extensions[0].administrativeStatus = 'disabled';
+  profile.capabilityRevision = 3;
+  assert.equal(compileRevision(s).local, 'failed');
+  profile.capabilityRevision = 1;
+  profile.settings.codecs = ['opus'];
+  assert.equal(compileRevision(s).local, 'failed');
+  profile.settings = settings('sip');
+  delete s.schemaVersion;
+  delete s.tenantRouting;
+  s.eligibility = {
+    allocations: 'unavailable',
+    bindings: 'unavailable',
+    sharedTrunkPermissions: 'unavailable',
+  };
+  assert.equal(compileRevision(s).local, 'failed');
+});

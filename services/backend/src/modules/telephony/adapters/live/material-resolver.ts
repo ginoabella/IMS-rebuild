@@ -18,8 +18,8 @@ export class LiveMaterialResolver {
     const deadline = performance.now() + 60000;
     await this.consumer.access();
     const preparations = (
-      await this.pool.query<{ id: string }>(
-        `SELECT p.id FROM public.tenant_call_preparations p LEFT JOIN LATERAL (SELECT action FROM public.tenant_call_preparation_events e WHERE e.preparation_id=p.id ORDER BY version DESC LIMIT 1) e ON true WHERE p.node_id=$1 AND e.action IS DISTINCT FROM 'disable' AND EXISTS(SELECT 1 FROM public.tenant_call_preparation_steps s WHERE s.preparation_id=p.id AND s.step='cases' AND s.phase='outcome') ORDER BY p.id LIMIT 17`,
+      await this.pool.query<{ id: string; generation: number }>(
+        `SELECT p.id,coalesce((SELECT max(g.generation) FROM public.tenant_call_preparation_fact_sets g WHERE g.preparation_id=p.id),0) AS generation FROM public.tenant_call_preparations p LEFT JOIN LATERAL (SELECT action FROM public.tenant_call_preparation_events e WHERE e.preparation_id=p.id ORDER BY version DESC LIMIT 1) e ON true WHERE p.node_id=$1 AND e.action IS DISTINCT FROM 'disable' AND EXISTS(SELECT 1 FROM public.tenant_call_preparation_steps s WHERE s.preparation_id=p.id AND s.step='cases' AND s.phase='outcome') ORDER BY p.id LIMIT 17`,
         [nodeId],
       )
     ).rows;
@@ -45,7 +45,7 @@ export class LiveMaterialResolver {
         await this.consumer.endpoint(operation);
       }
     }
-    return preparations.map((p) => p.id);
+    return preparations.map((p) => `${p.id}:${p.generation}`);
   }
   async resolve(
     snapshot: RevisionSnapshot,

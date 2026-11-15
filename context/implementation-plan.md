@@ -424,16 +424,20 @@ manage their people and assign only verified extensions owned by their organizat
 #### Development deployment follow-up — P4-U2-DEV
 
 [Persistent tenant calling in the development environment](feature-specs/p4-u2-dev-persistent-tenant-calling.md)
-is planned separately from completed P4-U2 acceptance. It covers a safe retained-PBX
+is tracked separately from completed P4-U2 acceptance. It covers a safe retained-PBX
 static-profile transition, persistent controlled-call preparation and actual
 ordinary-console two-tenant verification. The adopted sequential children are
 [a: profile upgrade/recovery](feature-specs/p4-u2-dev-a-retained-pbx-profile-upgrade-and-recovery.md),
 [b: persistent call preparation](feature-specs/p4-u2-dev-b-persistent-controlled-call-preparation.md),
 and [c: ordinary-console integrated acceptance](feature-specs/p4-u2-dev-c-ordinary-console-calling-and-integrated-acceptance.md).
-Child a is complete with approved retained deployment and preserved exact historical
-recovery; see its [final evidence](../docs/status/p4-u2-dev-a-evidence.md). Children
-b/c remain planned. DEV-01 is resolved; DEV-02/03 exact persistent environment/resource
-decisions remain unresolved before their dependent effects.
+Children a/b are complete with approved retained deployment, preserved historical
+recovery and dedicated persistent preparation; see their [a evidence](../docs/status/p4-u2-dev-a-evidence.md)
+and [b evidence](../docs/status/p4-u2-dev-b-evidence.md). DEV-01–03 are approved.
+Child c and parent AC-01–12 are complete within approved private development:
+actual ordinary SIP/RTP, recovery/transfer/loaded cleanup, reusable stopped setup,
+all twelve full required commands and exact preservation passed; see the
+[final evidence](../docs/status/p4-u2-dev-c-evidence.md). User manual sign-off remains
+separate and blank.
 Complete this follow-up before relying on ordinary-environment calling evidence for
 P4-U3 activation acceptance. Draft verification remains bounded; lifecycle, staff
 assignment and operational ingestion keep their existing owners.

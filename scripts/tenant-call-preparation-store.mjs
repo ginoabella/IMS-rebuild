@@ -448,7 +448,7 @@ export class PreparationStore {
       ).rows[0];
       if (action === 'start') {
         const unavailable = await this.client.query(
-          'SELECT 1 FROM public.tenant_call_preparation_cases c WHERE c.preparation_id=$1 AND NOT public.tenant_case_preparation_available(c.case_id) LIMIT 1',
+          'SELECT 1 FROM public.tenant_call_preparation_cases c WHERE c.preparation_id=$1 AND NOT EXISTS(SELECT 1 FROM public.tenant_route_case_disables d WHERE d.case_id=c.case_id) AND NOT public.tenant_case_preparation_available(c.case_id) LIMIT 1',
           [this.input.requestId],
         );
         if (unavailable.rows.length)
@@ -514,10 +514,17 @@ export class PreparationStore {
       ).rows[0] ?? null;
     const cases = (
       await this.client.query(
-        'SELECT c.case_id,public.tenant_case_preparation_available(c.case_id) AS available FROM public.tenant_call_preparation_cases c WHERE c.preparation_id=$1 ORDER BY c.case_id',
+        'SELECT c.case_id,public.tenant_case_preparation_available(c.case_id) AS available,EXISTS(SELECT 1 FROM public.tenant_route_case_disables d WHERE d.case_id=c.case_id) AS disabled FROM public.tenant_call_preparation_cases c WHERE c.preparation_id=$1 ORDER BY c.case_id',
         [row.id],
       )
     ).rows;
+    const publication =
+      (
+        await this.client.query(
+          'SELECT generation,request_id,source_digest,created_at FROM public.tenant_call_preparation_fact_sets WHERE preparation_id=$1 ORDER BY generation DESC LIMIT 1',
+          [row.id],
+        )
+      ).rows[0] ?? null;
     const blockers = [];
     if (!steps.some((s) => s.step === 'cases' && s.phase === 'outcome'))
       blockers.push('setup_incomplete');
@@ -536,7 +543,7 @@ export class PreparationStore {
       blockers.push('native_restarted');
     if (!custody?.current)
       blockers.push('protected_custody_unavailable_or_stale');
-    if (cases.some((c) => !c.available) && !blockers.length)
+    if (cases.some((c) => !c.disabled && !c.available) && !blockers.length)
       blockers.push('resource_versions_or_authority_stale');
     if (
       (
@@ -555,6 +562,8 @@ export class PreparationStore {
       event,
       steps: safeSteps,
       inventory,
+      caseGeneration: publication?.generation ?? 0,
+      successorPublication: publication,
       custody,
       blockers,
       cases,

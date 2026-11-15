@@ -73,7 +73,7 @@ Hosted CI invokes these checks; a local pass does not prove hosted CI execution.
 
 ## Optional host workflow
 
-The previous workflow remains available with Node 22.23.3 and pnpm 10.12.1:
+The previous workflow remains available with Node 22.23.5 and pnpm 10.12.1:
 `pnpm install --frozen-lockfile`, `pnpm check`, and `pnpm dev:command` (port 3000).
 Use `pnpm services:up/status/check/down` to manage shared services only.
 Host backend startup requires the configuration documented in the backend runbook.

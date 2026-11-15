@@ -20,7 +20,7 @@ cd IMS-rebuild
 ```
 
 Open http://localhost:3100. `up` prepares local credentials, builds the pinned
-Node 22.23.3/pnpm 10.12.1 workspace, waits for five healthy shared services and provisions private Garage storage, and
+Node 22.23.5/pnpm 10.12.1 workspace, waits for five healthy shared services and provisions private Garage storage, and
 installs dependencies from the frozen lockfile inside Docker. It is safe to rerun.
 The backend starts automatically after its baseline migration. Web/mobile processes
 start when you run their command, in the foreground.
@@ -205,7 +205,8 @@ Persistent source, dependency/cache volumes and private development files remain
 processes and packages/browser binaries installed only in the old container do not.
 
 Restore the existing Playwright verification environment using the same commands
-as CI before browser regressions after such a recreation:
+as CI before browser regressions after such a recreation. This also applies to
+workspace recreation for Node patch updates:
 
 ```sh
 ./dev exec pnpm exec playwright install chromium

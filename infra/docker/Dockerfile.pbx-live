@@ -1,6 +1,6 @@
 # Opt-in P3-U5b private native tooling; activation requires verified deployment gates.
 FROM andrius/asterisk:22.10.1_debian-trixie@sha256:212326bd3f973a597be9e4747be5d6653802e4950159e95aa7d728e394de2012
-COPY --from=node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c /usr/local/bin/node /usr/local/bin/node
+COPY --from=node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc /usr/local/bin/node /usr/local/bin/node
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends nftables libstdc++6 \
     && rm -rf /var/lib/apt/lists/* \

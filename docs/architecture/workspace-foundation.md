@@ -4,8 +4,10 @@ Decision date: 2026-10-04, Asia/Manila (+08:00).
 Status: implemented as routine P1-U2 choices under the user's request to start
 building with a simpler process. Product contract drafts remain unapproved.
 
-Use pnpm recursive dependency ordering without Turbo. Pin Node.js 22.23.3 and
+Use pnpm recursive dependency ordering without Turbo. Pin Node.js 22.23.5 and
 pnpm 10.12.1, with exact direct dependency versions and a committed lockfile.
+The Node patch pin was updated on 2026-11-14 (+08:00); see the
+[rollout evidence](../status/node-22.23.5-rollout.md).
 Use Next.js 16, NestJS 11, Expo SDK 55, React 19.2 and TypeScript 5.9. Existing
 architecture specifies these framework families; no new service is added.
 

@@ -437,6 +437,75 @@ export async function checkTenantGeography({
     maximumFeatures.data.current.tenant.geography.barangays.length,
     1000,
   );
+  // Exact topology after sweep sorting: retain original ordinals, compare touching
+  // boxes with the unchanged interior predicate, and prune either spatial axis.
+  const overlaps = async (geometries) =>
+    (
+      await runtime.query(
+        `SELECT * FROM public.tenant_geography_interior_overlap(ARRAY(SELECT ST_GeomFromGeoJSON(value::text) FROM jsonb_array_elements($1::jsonb)))`,
+        [JSON.stringify(geometries)],
+      )
+    ).rows;
+  const triangle = (x, y, size = 0.01) => ({
+    type: 'Polygon',
+    coordinates: [
+      [
+        [x, y],
+        [x + size, y],
+        [x, y + size],
+        [x, y],
+      ],
+    ],
+  });
+  assert.deepEqual(
+    await overlaps([polygon(9, 9, 1), polygon(0, 0, 1), polygon(0.5, 0.5, 1)]),
+    [{ first_ordinal: 2, second_ordinal: 3 }],
+  );
+  assert.deepEqual(await overlaps([polygon(), polygon(10, 0)]), []);
+  const holed = polygon();
+  holed.coordinates.push([
+    [2, 2],
+    [2, 8],
+    [8, 8],
+    [8, 2],
+    [2, 2],
+  ]);
+  assert.deepEqual(await overlaps([holed, polygon(3, 3, 1)]), []);
+  assert.deepEqual(
+    await overlaps([
+      {
+        type: 'MultiPolygon',
+        coordinates: [
+          polygon(20, 0, 1).coordinates,
+          polygon(0, 0, 1).coordinates,
+        ],
+      },
+      polygon(0.5, 0.5, 1),
+    ]),
+    [{ first_ordinal: 1, second_ordinal: 2 }],
+  );
+  for (const vertical of [false, true]) {
+    const strip = Array.from({ length: 1000 }, (_, i) =>
+      triangle(vertical ? 0 : i * 0.1, vertical ? i * 0.05 : 0),
+    );
+    assert.deepEqual(await overlaps(strip), []);
+    strip[998] = triangle(-2, -2, 0.25);
+    strip[999] = triangle(-1.9, -2, 0.25);
+    assert.deepEqual(await overlaps(strip), [
+      { first_ordinal: 999, second_ordinal: 1000 },
+    ]);
+  }
+  await assert.rejects(
+    runtime.query(
+      `SELECT * FROM public.tenant_geography_interior_overlap(array_fill(ST_GeomFromText('POLYGON((0 0,1 0,0 1,0 0))',4326),ARRAY[1001]))`,
+    ),
+    (error) =>
+      error.code === '22023' &&
+      error.message === 'Invalid geography overlap input',
+  );
+  console.log(
+    'PASS geography bounded overlap: maximum grid API, both strip axes, original late-pair ordinals, shared edges, holes, multipart interiors and helper cap; unchanged topology and statement budget',
+  );
   // The optimized CHECK must still reject corrupted final-feature metadata directly,
   // including a null/different municipality after earlier valid shared metadata.
   for (const replacement of [

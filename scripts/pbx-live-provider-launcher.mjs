@@ -68,7 +68,7 @@ try {
       `type=volume,src=myims-rebuild-dev_${source},dst=${target},readonly`,
     );
   args.push(
-    'node:22.23.3-bookworm-slim@sha256:43ac6c60b8f89723f746e8a92ce91abd5017e627ce1ddfe4238355d3a30b772c',
+    'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
     'node',
     socket ? '/owner-check.mjs' : '/provider-check.mjs',
     ...(process.argv[2] ? [process.argv[2]] : []),

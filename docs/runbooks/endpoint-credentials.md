@@ -132,7 +132,7 @@ retained data or delete custody to make a rerun pass.
 docker run --rm --user 1003:1003 --network myims-rebuild-dev_endpoint-credentials \
   -v "$PWD/.local/endpoint-credentials:/custody" \
   -v "$PWD/scripts/provision-endpoint-credentials.mjs:/provision.mjs:ro" \
-  node:22.23.3-bookworm-slim node /provision.mjs unseal
+  node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc node /provision.mjs unseal
 ```
 
 Verify both endpoint networks report `Internal=true` with

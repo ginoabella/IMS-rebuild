@@ -1,0 +1,352 @@
+{
+  "state": "passed",
+  "exactOriginalUnrelatedRowsPreserved": true,
+  "originalImmutableNativeAndReferenceBytesPreserved": true,
+  "declaredChangedOriginalRows": {
+    "extensions": 3,
+    "inbound_rules": 2,
+    "sip_gateways": 1,
+    "sip_trunks": 1,
+    "tenant_inventory_claims": 1
+  },
+  "tables": {
+    "audit_events": {
+      "before": 347,
+      "after": 729
+    },
+    "credential_actions": {
+      "before": 10,
+      "after": 10
+    },
+    "draft_tenant_receipts": {
+      "before": 4,
+      "after": 4
+    },
+    "endpoint_capabilities": {
+      "before": 1,
+      "after": 1
+    },
+    "endpoint_credential_operations": {
+      "before": 3,
+      "after": 3
+    },
+    "endpoint_profile_versions": {
+      "before": 2,
+      "after": 2
+    },
+    "endpoint_profiles": {
+      "before": 2,
+      "after": 2
+    },
+    "extensions": {
+      "before": 24,
+      "after": 24
+    },
+    "inbound_rules": {
+      "before": 4,
+      "after": 5
+    },
+    "inventory_receipts": {
+      "before": 7,
+      "after": 7
+    },
+    "number_reservations": {
+      "before": 1,
+      "after": 1
+    },
+    "operator_bootstrap_provenance": {
+      "before": 1,
+      "after": 1
+    },
+    "outbound_number_domains": {
+      "before": 4,
+      "after": 4
+    },
+    "outbound_rules": {
+      "before": 2,
+      "after": 2
+    },
+    "outbox_work": {
+      "before": 4,
+      "after": 66
+    },
+    "pbx_artifact_profiles": {
+      "before": 3,
+      "after": 11
+    },
+    "pbx_artifact_retirement_intents": {
+      "before": 0,
+      "after": 2
+    },
+    "pbx_artifact_retirement_progress": {
+      "before": 0,
+      "after": 2
+    },
+    "pbx_artifact_retirements": {
+      "before": 0,
+      "after": 2
+    },
+    "pbx_create_receipts": {
+      "before": 1,
+      "after": 1
+    },
+    "pbx_live_artifacts": {
+      "before": 3,
+      "after": 11
+    },
+    "pbx_live_operations": {
+      "before": 1,
+      "after": 9
+    },
+    "pbx_live_pins": {
+      "before": 20,
+      "after": 251
+    },
+    "pbx_live_progress": {
+      "before": 1,
+      "after": 9
+    },
+    "pbx_nodes": {
+      "before": 1,
+      "after": 1
+    },
+    "pbx_profile_artifact_bindings": {
+      "before": 0,
+      "after": 8
+    },
+    "pbx_profile_operations": {
+      "before": 1,
+      "after": 1
+    },
+    "pbx_profile_progress": {
+      "before": 1,
+      "after": 1
+    },
+    "pbx_revision_receipts": {
+      "before": 3,
+      "after": 12
+    },
+    "pbx_revision_validations": {
+      "before": 3,
+      "after": 12
+    },
+    "pbx_revisions": {
+      "before": 3,
+      "after": 12
+    },
+    "pbx_static_profiles": {
+      "before": 2,
+      "after": 2
+    },
+    "platform_operators": {
+      "before": 1,
+      "after": 1
+    },
+    "ring_group_members": {
+      "before": 3,
+      "after": 3
+    },
+    "ring_groups": {
+      "before": 1,
+      "after": 1
+    },
+    "routing_receipts": {
+      "before": 8,
+      "after": 9
+    },
+    "sample_delivery_sink": {
+      "before": 0,
+      "after": 0
+    },
+    "session_fences": {
+      "before": 79,
+      "after": 114
+    },
+    "sip_credential_imports": {
+      "before": 5,
+      "after": 5
+    },
+    "sip_credential_versions": {
+      "before": 5,
+      "after": 5
+    },
+    "sip_credentials": {
+      "before": 3,
+      "after": 3
+    },
+    "sip_dids": {
+      "before": 3,
+      "after": 3
+    },
+    "sip_gateway_sources": {
+      "before": 2,
+      "after": 2
+    },
+    "sip_gateways": {
+      "before": 2,
+      "after": 2
+    },
+    "sip_peer_receipts": {
+      "before": 7,
+      "after": 7
+    },
+    "sip_trunks": {
+      "before": 2,
+      "after": 2
+    },
+    "spatial_ref_sys": {
+      "before": 8500,
+      "after": 8500
+    },
+    "staff_users": {
+      "before": 13,
+      "after": 13
+    },
+    "telephony_number_claims": {
+      "before": 25,
+      "after": 25
+    },
+    "tenant_call_preparation_cases": {
+      "before": 11,
+      "after": 71
+    },
+    "tenant_call_preparation_events": {
+      "before": 4,
+      "after": 17
+    },
+    "tenant_call_preparation_fact_sets": {
+      "before": 0,
+      "after": 4
+    },
+    "tenant_call_preparation_facts": {
+      "before": 16,
+      "after": 16
+    },
+    "tenant_call_preparation_steps": {
+      "before": 66,
+      "after": 66
+    },
+    "tenant_call_preparations": {
+      "before": 1,
+      "after": 1
+    },
+    "tenant_edit_receipts": {
+      "before": 12,
+      "after": 12
+    },
+    "tenant_geography": {
+      "before": 1,
+      "after": 1
+    },
+    "tenant_inventory_claims": {
+      "before": 6,
+      "after": 8
+    },
+    "tenant_inventory_history": {
+      "before": 6,
+      "after": 10
+    },
+    "tenant_inventory_receipts": {
+      "before": 4,
+      "after": 8
+    },
+    "tenant_route_authorizations": {
+      "before": 0,
+      "after": 18
+    },
+    "tenant_route_case_disables": {
+      "before": 0,
+      "after": 55
+    },
+    "tenant_route_history": {
+      "before": 0,
+      "after": 36
+    },
+    "tenant_route_receipts": {
+      "before": 0,
+      "after": 36
+    },
+    "tenant_route_test_cases": {
+      "before": 11,
+      "after": 71
+    },
+    "tenant_route_test_intents": {
+      "before": 0,
+      "after": 54
+    },
+    "tenant_route_test_progress": {
+      "before": 0,
+      "after": 54
+    },
+    "tenant_route_test_reconciliation_intents": {
+      "before": 0,
+      "after": 0
+    },
+    "tenant_route_test_reconciliation_results": {
+      "before": 0,
+      "after": 0
+    },
+    "tenant_route_test_results": {
+      "before": 0,
+      "after": 54
+    },
+    "tenant_verification_grant_cases": {
+      "before": 0,
+      "after": 57
+    },
+    "tenant_verification_grants": {
+      "before": 0,
+      "after": 19
+    },
+    "tenant_verification_receipts": {
+      "before": 0,
+      "after": 93
+    },
+    "tenant_verification_revocations": {
+      "before": 0,
+      "after": 19
+    },
+    "tenants": {
+      "before": 7,
+      "after": 7
+    },
+    "trunk_credential_audit_transactions": {
+      "before": 0,
+      "after": 0
+    },
+    "trunk_credential_bindings": {
+      "before": 0,
+      "after": 0
+    },
+    "trunk_credential_generations": {
+      "before": 0,
+      "after": 0
+    },
+    "trunk_credential_peer_scopes": {
+      "before": 0,
+      "after": 0
+    },
+    "trunk_credential_reservation_history": {
+      "before": 0,
+      "after": 0
+    },
+    "trunk_credential_reservations": {
+      "before": 0,
+      "after": 0
+    },
+    "work_receipts": {
+      "before": 3,
+      "after": 3
+    },
+    "work_results": {
+      "before": 3,
+      "after": 3
+    }
+  },
+  "originalArtifacts": [
+    "4b475c04-b573-4cc1-9d86-1c81b65f4060",
+    "add6bfc1-ee2f-42a7-a68a-5cdba67b95d7",
+    "e6ee0b86-da28-4ba9-bf42-a6c6e985c341"
+  ],
+  "additionalRetiredCArtifactBytesPreserved": "391331e6-dfab-4b35-b968-652261a82fba"
+}

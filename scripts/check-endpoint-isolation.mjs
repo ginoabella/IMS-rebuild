@@ -47,7 +47,7 @@ const denied = docker([
   'myims-rebuild-dev_endpoint-credentials',
   '-v',
   `${project}/.local/endpoint-credentials/ca.crt:/ca.crt:ro`,
-  'node:22.23.3-bookworm-slim',
+  'node:22.23.5-bookworm-slim@sha256:47725aca53d3295ec2d3be8f62726599b3033cc262edc2c7e429909b3ac599fc',
   'node',
   '-e',
   `const https=require('https'),fs=require('fs');Promise.all([['myims-endpoint/data/installations/00000000-0000-0000-0000-000000000000/extensions/00000000-0000-0000-0000-000000000000/operations/00000000-0000-0000-0000-000000000000',403],['sys/generate-root/attempt',405]].map(([path,status])=>new Promise((resolve,reject)=>https.get('https://endpoint-secrets:8200/v1/'+path,{ca:fs.readFileSync('/ca.crt')},r=>{r.resume();r.on('end',()=>r.statusCode===status?resolve():reject())}).on('error',reject)))).then(()=>console.log('denied')).catch(()=>process.exit(1))`,

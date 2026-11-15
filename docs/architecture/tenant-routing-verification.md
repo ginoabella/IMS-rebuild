@@ -240,3 +240,45 @@ actual removal proof. Disable/stop/revocation preserves desired resources, audit
 credentials and pins; removing loaded paths still requires reviewed apply and
 independent loaded dialplan/PJSIP absence proof under the existing retirement and
 release contracts. No volume pruning or whole-tenant deletion is introduced.
+
+## Retained preparation successor cases
+
+Ordinary transfer may change approved resource/claim versions. Original preparation
+facts and cases remain immutable. Trusted deployment may explicitly supersede the
+active catalog while that preparation is stopped, runtime is verified/quiet and
+no active grant or unresolved test exists. Publication appends a bounded fact set
+with exact canonical versions, its source digest/operator/request provenance and
+new immutable cases, and appends disablement for the old cases atomically under
+the node/preparation locks. No HTTP writer or SQL fixture path publishes this data.
+
+Successors stay within the original two tenants, three endpoint identities/provider
+generations, controlled gateway/trunk/DID/number envelope and profile. Their facts
+must equal a freshly read canonical dependency closure; caller-supplied versions
+cannot override current ownership. Positive cases require the actual owned graph.
+At most sixteen active cases per tenant remain. Original facts, case IDs, grants,
+results and audit are retained. Exact duplicate publication recovers its outcome;
+changed payloads, stale facts/lifecycle/generation, active/unknown work and foreign
+resources reject. Publication creates no grant, SIP traffic or readiness.
+
+Availability evaluates the latest append-only fact set, falling back to original
+facts when no successor exists. Disabled cases remain historical and cannot block
+an explicit start of their valid successors. The existing consumer still verifies
+the same three exact approved provider generations; supersession cannot replace
+or rotate them. Its publication fence compares preparation identity and fact-set
+generation under the node lock, so an old in-flight GET cannot restore proof
+after supersession. A subsequent explicit start binds the current owner/participant
+instance, and fresh runtime/proof/grants/call evidence remain necessary.
+
+An explicitly selected `expiry` case may wait at most fifteen seconds after its
+single durable dispatch for the real grant to expire or be revoked, then send its
+one ordinary SIP request. It requires an initially current grant already within
+that window, a denied expectation and fresh ownership immediately before sending.
+The existing thirty-second dispatch deadline is unchanged. No grant/evidence age
+is changed. The console offers an explicit ten-second verification lifetime for
+these bounded conditional checks; ordinary longer lifetimes remain available.
+
+Inbound negative cases observe the actual saved direct/single-member destination
+when enabled, even though their denied expectation has no destination ID. This
+allows an accidental permitted path to be observed independently. A SIP transport
+rejection after canonical nonce admission is unknown, never an authorization-denial
+pass; it requires the existing quiet reconciliation and cannot promote readiness.
